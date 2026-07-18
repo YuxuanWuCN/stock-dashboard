@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🏠 家庭股票自动看板</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <!-- 引入 ECharts 5.5.1 CDN -->
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部状态栏 -->
+        <header class="header">
+            <div class="header-main">
+                <h1>🏠 家庭股票自动看板</h1>
+                <p class="subtitle">每日收盘自动更新，方便随时查看</p>
+            </div>
+            <div id="status-bar" class="status-bar loading">
+                <span class="status-indicator"></span>
+                <span id="status-text">正在加载运行信息...</span>
+            </div>
+        </header>
+
+        <!-- 主布局 -->
+        <div class="dashboard-layout">
+            <!-- 左侧/上方 自选股概览列表 -->
+            <aside class="stock-sidebar">
+                <div class="sidebar-header">
+                    <h2>自选股列表</h2>
+                    <span class="tip">点击股票查看走势图</span>
+                </div>
+                <div id="stock-list" class="stock-list-container">
+                    <div class="list-loading">正在加载自选股...</div>
+                </div>
+            </aside>
+
+            <!-- 右侧/下方 K线图详情区域 -->
+            <main class="chart-container-wrapper">
+                <!-- 选中股票的大字概要 -->
+                <div id="detail-header" class="detail-header" style="display: none;">
+                    <div class="detail-title-row">
+                        <div class="stock-info">
+                            <span id="detail-name" class="detail-name">--</span>
+                            <span id="detail-code" class="detail-code">------</span>
+                            <span id="detail-type-badge" class="type-badge">--</span>
+                        </div>
+                        <div class="stock-price-block">
+                            <span id="detail-price" class="detail-price">--</span>
+                            <span id="detail-change" class="detail-change">--</span>
+                        </div>
+                    </div>
+                    <div class="detail-meta-row">
+                        <span id="detail-date-label">交易日期：--</span>
+                        <span id="detail-adjust-label">复权方式：前复权</span>
+                    </div>
+                </div>
+
+                <!-- 图表渲染容器 -->
+                <div class="chart-card">
+                    <div id="kline-chart" class="chart-element"></div>
+                    <div id="chart-overlay" class="chart-overlay">
+                        <div class="overlay-content">请从左侧选择股票以查看 K 线图</div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- 备用 CDN 兜底逻辑 -->
+    <script>
+        if (typeof echarts === 'undefined') {
+            console.warn('Primary ECharts CDN failed, switching to backup CDN...');
+            var backupScript = document.createElement('script');
+            backupScript.src = 'https://cdn.bootcdn.net/ajax/libs/echarts/5.5.1/echarts.min.js';
+            document.head.appendChild(backupScript);
+        }
+    </script>
+    <!-- 引入前端交互脚本 -->
+    <script src="assets/app.js"></script>
+</body>
+</html>
