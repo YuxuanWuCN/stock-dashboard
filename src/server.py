@@ -44,7 +44,24 @@ from fetch_data import fetch_one, compute_derived, build_kline_json
 
 logger = setup_logging()
 app = Flask(__name__)
-CORS(app)
+
+DEFAULT_CORS_ORIGINS = (
+    "https://yuxuanwucn.github.io",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+)
+ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "CORS_ORIGINS", ",".join(DEFAULT_CORS_ORIGINS)
+    ).split(",")
+    if origin.strip()
+]
+WATCHLIST_WRITE_ENABLED = os.environ.get(
+    "ALLOW_WATCHLIST_WRITE", "true"
+).lower() in ("1", "true", "yes")
+
+CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
 
 # ============================================================
 # 股票代码 → 大盘指数映射
@@ -281,14 +298,21 @@ def index():
     })
 
 
+@app.route("/api/health")
+def api_health():
+    return jsonify({
+        "status": "ok",
+        "service": "stock-dashboard-api",
+        "watchlist_write_enabled": WATCHLIST_WRITE_ENABLED,
+    })
+
+
 # ============================================================
 # 自选股管理 API
 # ============================================================
 
 import csv as _csv
 import tempfile as _tempfile
-import shutil as _shutil
-
 _WATCHLIST_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "watchlist.csv")
 _WATCHLIST_HEADER = ["code", "name", "type", "category"]
 
@@ -296,6 +320,11 @@ _WATCHLIST_HEADER = ["code", "name", "type", "category"]
 @app.route("/api/watchlist/add", methods=["POST"])
 def api_watchlist_add():
     """添加/更新自选股列表。已存在的 code 会更新 name/type/category。"""
+    if not WATCHLIST_WRITE_ENABLED:
+        return jsonify({
+            "error": "线上服务不直接修改仓库文件，请使用网页中的 CSV 下载功能"
+        }), 503
+
     data = request.get_json(silent=True)
     if not data:
         return jsonify({"error": "请求体格式不正确，需要 JSON"}), 400
@@ -374,9 +403,13 @@ def api_watchlist_add():
 # ============================================================
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", "5000"))
+    debug = os.environ.get("FLASK_DEBUG", "false").lower() in (
+        "1", "true", "yes"
+    )
     logger.info("=" * 50)
     logger.info("🏠 股票看板 API 服务启动中...")
-    logger.info("访问 http://127.0.0.1:5000 确认服务状态")
-    logger.info("查询示例: http://127.0.0.1:5000/api/query?code=600519&start_date=2025-07-01")
+    logger.info("访问 http://127.0.0.1:%d/api/health 确认服务状态", port)
+    logger.info("查询示例: http://127.0.0.1:%d/api/query?code=600519&start_date=2025-07-01", port)
     logger.info("=" * 50)
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=port, debug=debug)
