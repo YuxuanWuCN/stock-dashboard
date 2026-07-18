@@ -146,6 +146,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const typeLabel = item.type === 'etf' ? '基金' : '股票';
             const typeClass = item.type === 'etf' ? 'etf' : 'stock';
 
+            // 失败或节假日数据可能没有价格/涨跌幅，仍然渲染卡片。
+            const hasClose = Number.isFinite(item.last_close);
+            const hasChange = Number.isFinite(item.change_pct);
+            const closeText = hasClose ? item.last_close.toFixed(2) : '--';
+            const changeText = hasChange ? `${changeSign}${item.change_pct.toFixed(2)}% ${arrow}` : '--';
+            const changeBg = hasChange ? (item.change_pct >= 0 ? 'up' : 'down') : 'flat';
+
             // 构建卡片 HTML
             card.innerHTML = `
                 <div class="stock-item-left">
@@ -156,8 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="stock-item-right">
-                    <span class="stock-item-price ${changeClass}">${item.last_close.toFixed(2)}</span>
-                    <span class="stock-item-pct bg-${item.change_pct >= 0 ? 'up' : 'down'}">${changeSign}${item.change_pct.toFixed(2)}% ${arrow}</span>
+                    <span class="stock-item-price ${changeClass}">${closeText}</span>
+                    <span class="stock-item-pct bg-${changeBg}">${changeText}</span>
                 </div>
             `;
 
