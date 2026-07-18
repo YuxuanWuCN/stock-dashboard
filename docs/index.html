@@ -22,12 +22,44 @@
             </div>
         </header>
 
+        <!-- 单股查询栏 -->
+        <div class="query-bar" id="query-bar">
+            <div class="query-bar-inner">
+                <label class="query-label" for="query-code-input">🔍 单股查询对比</label>
+                <div class="query-controls">
+                    <input
+                        type="text"
+                        id="query-code-input"
+                        class="query-input code-input"
+                        placeholder="股票代码 (6位)"
+                        maxlength="6"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        autocomplete="off"
+                    >
+                    <input
+                        type="date"
+                        id="query-date-input"
+                        class="query-input date-input"
+                        title="数据起始日期"
+                    >
+                    <button id="query-go-btn" class="query-go-btn" type="button">查询对比</button>
+                </div>
+                <div class="query-hint" id="query-hint">
+                    📌 6开头→上证指数｜0开头→深证成指｜3开头→创业板指｜688开头→科创50
+                </div>
+            </div>
+        </div>
+
         <!-- 主布局 -->
         <div class="dashboard-layout">
             <!-- 左侧/上方 自选股概览列表 -->
             <aside class="stock-sidebar">
                 <div class="sidebar-header">
-                    <h2>自选股列表</h2>
+                    <div class="sidebar-title-row">
+                        <h2>自选股列表</h2>
+                        <button id="open-editor-btn" class="editor-btn" type="button">✏️ 编辑列表</button>
+                    </div>
                     <span class="tip">点击股票查看走势图</span>
                 </div>
                 <div id="stock-list" class="stock-list-container">
@@ -63,6 +95,28 @@
                         <div class="overlay-content">请从左侧选择股票以查看 K 线图</div>
                     </div>
                 </div>
+
+                <!-- 查询结果股票概要 -->
+                <div id="query-result-header" class="detail-header" style="display: none;">
+                    <div class="detail-title-row">
+                        <div class="stock-info">
+                            <span id="query-stock-name" class="detail-name">--</span>
+                            <span id="query-stock-code" class="detail-code">------</span>
+                        </div>
+                        <div class="query-result-actions">
+                            <button id="add-to-watchlist-btn" class="add-watchlist-btn" type="button" title="添加到自选股">➕ 加到自选股</button>
+                            <span id="query-result-hint" class="query-result-hint"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 指数对比图表容器（查询模式下显示） -->
+                <div class="chart-card index-chart-card" id="index-chart-card" style="display: none;">
+                    <div class="index-chart-header">
+                        <span id="index-chart-label">📊 大盘指数对比</span>
+                    </div>
+                    <div id="index-chart" class="chart-element index-chart-element"></div>
+                </div>
             </main>
         </div>
     </div>
@@ -76,7 +130,113 @@
             document.head.appendChild(backupScript);
         }
     </script>
+    <!-- 编辑自选股模态面板 -->
+    <div id="editor-modal" class="editor-modal" style="display: none;">
+        <div class="editor-overlay"></div>
+        <div class="editor-panel">
+            <div class="editor-panel-header">
+                <h2>✏️ 编辑自选股列表</h2>
+                <button id="editor-close-btn" class="editor-close-btn" type="button">✕</button>
+            </div>
+            <div class="editor-body">
+                <table class="editor-table">
+                    <thead>
+                        <tr>
+                            <th class="col-name">名称</th>
+                            <th class="col-code">代码</th>
+                            <th class="col-type">类型</th>
+                            <th class="col-del"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="editor-tbody">
+                        <!-- JS 动态填充 -->
+                    </tbody>
+                </table>
+                <button id="editor-add-row-btn" class="editor-add-btn" type="button">+ 添加一行</button>
+            </div>
+            <div class="editor-footer">
+                <div class="editor-warn" id="editor-warn" style="display:none;"></div>
+                <p class="editor-hint">📋 编辑完成后，点击「复制」或「下载」获得新的 watchlist.csv 文件。<br>把文件粘贴到你的 GitHub 仓库根目录，GitHub Actions 将自动抓取新数据。</p>
+                <div class="editor-actions">
+                    <button id="editor-copy-btn" class="editor-action-btn primary" type="button">📋 复制为 watchlist.csv</button>
+                    <button id="editor-download-btn" class="editor-action-btn" type="button">💾 下载 watchlist.csv</button>
+                    <button id="editor-cancel-btn" class="editor-action-btn secondary" type="button">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加到自选股分类弹窗 -->
+    <div id="add-watchlist-modal" class="editor-modal" style="display: none;">
+        <div class="editor-overlay"></div>
+        <div class="editor-panel add-watchlist-panel">
+            <div class="editor-panel-header">
+                <h2>➕ 添加到自选股</h2>
+                <button id="add-watchlist-close-btn" class="editor-close-btn" type="button">✕</button>
+            </div>
+            <div class="editor-body">
+                <div class="add-watchlist-info" id="add-watchlist-info">
+                    <span class="add-watchlist-stock-name">--</span>
+                    <span class="add-watchlist-stock-code">(--)</span>
+                </div>
+                <div class="add-watchlist-field">
+                    <label class="add-watchlist-label" for="add-category-select">📂 分类标签</label>
+                    <div class="add-watchlist-category-row">
+                        <input
+                            type="text"
+                            id="add-category-select"
+                            class="query-input category-input"
+                            placeholder="输入或选择分类"
+                            list="category-datalist"
+                            autocomplete="off"
+                        >
+                        <datalist id="category-datalist">
+                            <option value="白酒">
+                            <option value="科技">
+                            <option value="银行">
+                            <option value="新能源">
+                            <option value="医药">
+                            <option value="消费">
+                            <option value="汽车">
+                            <option value="半导体">
+                            <option value="军工">
+                            <option value="券商">
+                            <option value="保险">
+                            <option value="地产">
+                            <option value="电力">
+                            <option value="农业">
+                            <option value="ETF">
+                            <option value="其他">
+                        </datalist>
+                    </div>
+                </div>
+                <div class="category-presets">
+                    <span class="preset-label">快捷选择：</span>
+                    <span class="preset-chip" data-cat="白酒">白酒</span>
+                    <span class="preset-chip" data-cat="科技">科技</span>
+                    <span class="preset-chip" data-cat="银行">银行</span>
+                    <span class="preset-chip" data-cat="新能源">新能源</span>
+                    <span class="preset-chip" data-cat="医药">医药</span>
+                    <span class="preset-chip" data-cat="消费">消费</span>
+                    <span class="preset-chip" data-cat="汽车">汽车</span>
+                    <span class="preset-chip" data-cat="半导体">半导体</span>
+                    <span class="preset-chip" data-cat="军工">军工</span>
+                    <span class="preset-chip" data-cat="券商">券商</span>
+                    <span class="preset-chip" data-cat="ETF">ETF</span>
+                    <span class="preset-chip" data-cat="其他">其他</span>
+                </div>
+            </div>
+            <div class="editor-footer">
+                <div class="editor-warn" id="add-watchlist-warn" style="display:none;"></div>
+                <div class="editor-actions">
+                    <button id="add-watchlist-confirm-btn" class="editor-action-btn primary" type="button">✅ 确认添加</button>
+                    <button id="add-watchlist-cancel-btn" class="editor-action-btn secondary" type="button">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 引入前端交互脚本 -->
-    <script src="assets/app.js?v=244311f"></script>
+    <script src="assets/app.js?v=3dual"></script>
 </body>
 </html>
