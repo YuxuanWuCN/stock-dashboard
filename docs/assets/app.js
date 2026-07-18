@@ -590,8 +590,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // 查询模块 —— 单股查询 + 大盘对比
     // ============================================================
 
-    // API 地址：本地开发用 127.0.0.1，部署时改为你的后端地址
-    var API_BASE = 'http://127.0.0.1:5000';
+    // 本地联调使用 Flask 开发服务，GitHub Pages 使用独立部署的 API。
+    var isLocal = window.location.hostname === '127.0.0.1'
+        || window.location.hostname === 'localhost';
+    var API_BASE = isLocal
+        ? 'http://127.0.0.1:5000'
+        : 'https://yuxuanwucn-stock-dashboard-api.onrender.com';
     var queryMeta = null; // 缓存最近一次查询的 meta 信息
 
     function initQueryBar() {
@@ -699,7 +703,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.queryGoBtn.disabled = false;
                 el.queryGoBtn.textContent = '查询对比';
                 hideOverlay();
-                showQueryHint('❌ ' + (err.message || '查询失败，请检查网络连接或后端服务'));
+                var detail = err.message || '查询失败，请检查网络连接或后端服务';
+                if (!isLocal && detail === 'Failed to fetch') {
+                    detail = '在线查询服务暂不可用，请稍后重试';
+                }
+                showQueryHint('❌ ' + detail);
                 console.error('Query error:', err);
             });
     }
