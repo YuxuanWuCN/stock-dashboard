@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: yuxuanwucn-stock-dashboard-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --chdir src server:app --bind 0.0.0.0:$PORT --workers 1 --threads 4 --timeout 120
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.11
+      - key: CORS_ORIGINS
+        value: https://yuxuanwucn.github.io
+      - key: ALLOW_WATCHLIST_WRITE
+        value: "false"
