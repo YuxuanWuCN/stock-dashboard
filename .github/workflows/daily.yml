@@ -1,0 +1,60 @@
+# daily.yml —— 每个交易日北京时间 18:30 自动抓取股票数据
+#
+# 触发方式：
+#   1. 定时：周一至周五 UTC 10:30（= 北京时间 18:30）
+#   2. 手动：在 GitHub Actions 页面点击 "Run workflow"
+
+name: Daily Stock Data Update
+
+on:
+  schedule:
+    # 北京时间 18:30 = UTC 10:30，周一至周五
+    - cron: "30 10 * * 1-5"
+  workflow_dispatch:   # 允许手动触发
+
+# 需要写权限以自动提交数据
+permissions:
+  contents: write
+
+jobs:
+  fetch-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 仓库代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装 Python 依赖
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 运行数据抓取脚本
+        id: fetch
+        run: python src/fetch_data.py
+        # 脚本内部已处理节假日识别和部分失败容错
+        # 仅真正失败时返回非零退出码
+
+      - name: 提交并推送数据更新
+        if: success() || failure()  # 数据有变化就提交（即使部分失败也提交已成功的）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 获取北京日期用于提交信息
+          BEIJING_DATE=$(TZ='Asia/Shanghai' date '+%Y-%m-%d')
+
+          git add docs/data/
+
+          # 仅在有变更时提交
+          if git diff --cached --quiet; then
+            echo "数据无变化，跳过提交"
+          else
+            git commit -m "chore(data): update dashboard data for ${BEIJING_DATE}"
+            git push
+          fi
