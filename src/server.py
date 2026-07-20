@@ -324,6 +324,37 @@ _WATCHLIST_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(_
 _WATCHLIST_HEADER = ["code", "name", "type", "category"]
 
 
+def _read_watchlist() -> list[dict]:
+    items: list[dict] = []
+    if not os.path.exists(_WATCHLIST_PATH):
+        return items
+
+    with open(_WATCHLIST_PATH, "r", encoding="utf-8-sig") as f:
+        reader = _csv.DictReader(f)
+        for row in reader:
+            if not row or all((value or "").strip() == "" for value in row.values()):
+                continue
+            code = (row.get("code") or "").strip()
+            if not code or code.startswith("#"):
+                continue
+            items.append({
+                "code": code,
+                "name": (row.get("name") or code).strip(),
+                "type": (row.get("type") or "stock").strip().lower(),
+                "category": (row.get("category") or "").strip(),
+            })
+    return items
+
+
+@app.route("/api/watchlist")
+def api_watchlist():
+    """Return configured symbols so the frontend can show newly added rows."""
+    return jsonify({
+        "items": _read_watchlist(),
+        "write_enabled": WATCHLIST_WRITE_ENABLED,
+    })
+
+
 @app.route("/api/watchlist/add", methods=["POST"])
 def api_watchlist_add():
     """添加/更新自选股列表。已存在的 code 会更新 name/type/category。"""
@@ -352,32 +383,20 @@ def api_watchlist_add():
     logger.info("添加自选股: %s(%s) type=%s category=%s", name, code, typ, category)
 
     # ---- 读取现有 watchlist ----
-    existing: list[dict] = []
+    existing = _read_watchlist()
     found = False
     watchlist_path = _WATCHLIST_PATH
 
-    if os.path.exists(watchlist_path):
-        with open(watchlist_path, "r", encoding="utf-8-sig") as f:
-            reader = _csv.DictReader(f)
-            raw_fields = reader.fieldnames or []
-            for row in reader:
-                if not row or all(v.strip() == "" for v in row.values()):
-                    continue
-                c = (row.get("code") or "").strip()
-                if c.startswith("#") or not c:
-                    continue
-                n = (row.get("name") or "").strip()
-                t = (row.get("type") or "stock").strip().lower()
-                cat = (row.get("category") or "").strip()
-                if c == code:
-                    # 更新现有
-                    existing.append({"code": c, "name": name, "type": typ, "category": category})
-                    found = True
-                else:
-                    existing.append({"code": c, "name": n, "type": t, "category": cat})
-    else:
-        # 文件不存在，从现有数据目录中推断已有代码
-        pass
+    for index, row in enumerate(existing):
+        if row["code"] == code:
+            existing[index] = {
+                "code": code,
+                "name": name,
+                "type": typ,
+                "category": category,
+            }
+            found = True
+            break
 
     if not found:
         existing.append({"code": code, "name": name, "type": typ, "category": category})
@@ -402,7 +421,12 @@ def api_watchlist_add():
 
     action = "updated" if found else "added"
     logger.info("自选股 %s %s: %s(%s)", code, action, name, category)
-    return jsonify({"success": True, "action": action, "code": code, "name": name})
+    return jsonify({
+        "success": True,
+        "action": action,
+        "item": {"code": code, "name": name, "type": typ, "category": category},
+        "items": existing,
+    })
 
 
 # ============================================================

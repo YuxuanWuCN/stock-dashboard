@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
         rankingSortDirection: 'desc',
         analysisSelectedCode: null,
         analysisCache: {},
+        watchlist: [],
+        lastQueryStock: null,
         // 当前选中的股票切片数据，供 tooltip 使用
         activeData: {
             dates: [],
@@ -26,6 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
             ma60: []
         }
     };
+
+    const isLocal = window.location.hostname === '127.0.0.1'
+        || window.location.hostname === 'localhost';
+    const API_BASE = isLocal
+        ? 'http://127.0.0.1:5000'
+        : 'https://yuxuanwucn-stock-dashboard-api.onrender.com';
+    const BROWSER_WATCHLIST_KEY = 'stock-dashboard-browser-watchlist-v1';
 
     // DOM 元素缓存
     const el = {
@@ -76,11 +85,128 @@ document.addEventListener('DOMContentLoaded', () => {
         analysisDisclaimer: document.getElementById('analysis-disclaimer')
     };
 
+    function readBrowserWatchlist() {
+        try {
+            var parsed = JSON.parse(localStorage.getItem(BROWSER_WATCHLIST_KEY) || '[]');
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn('读取浏览器自选股失败:', error);
+            return [];
+        }
+    }
+
+    function saveBrowserWatchlist(items) {
+        try {
+            localStorage.setItem(BROWSER_WATCHLIST_KEY, JSON.stringify(items));
+        } catch (error) {
+            console.warn('保存浏览器自选股失败:', error);
+        }
+    }
+
+    function combineWatchlists() {
+        var byCode = {};
+        Array.prototype.slice.call(arguments).forEach(function (items) {
+            if (!Array.isArray(items)) return;
+            items.forEach(function (item) {
+                if (!item || !/^\d{6}$/.test(item.code || '')) return;
+                byCode[item.code] = Object.assign({}, byCode[item.code] || {}, item);
+            });
+        });
+        return Object.keys(byCode).map(function (code) { return byCode[code]; });
+    }
+
+    function mergeWatchlistIntoSummary() {
+        if (!state.summary) state.summary = {items: []};
+        if (!Array.isArray(state.summary.items)) state.summary.items = [];
+
+        state.watchlist.forEach(function (item) {
+            var existing = state.summary.items.find(function (summaryItem) {
+                return summaryItem.code === item.code;
+            });
+            if (existing) {
+                existing.name = item.name || existing.name;
+                existing.type = item.type || existing.type;
+                existing.category = item.category || existing.category || '';
+                return;
+            }
+            state.summary.items.push({
+                code: item.code,
+                name: item.name || item.code,
+                type: item.type || 'stock',
+                category: item.category || '',
+                last_close: null,
+                change_pct: null,
+                change_amt: null,
+                last_date: null,
+                status: 'pending',
+                dynamic_only: true,
+                storage: item.storage || 'server'
+            });
+        });
+    }
+
+    function buildSummaryFromQuery(item, stockData) {
+        var dates = stockData && Array.isArray(stockData.dates) ? stockData.dates : [];
+        var kline = stockData && Array.isArray(stockData.kline) ? stockData.kline : [];
+        var lastCandle = kline.length ? kline[kline.length - 1] : null;
+        var previousCandle = kline.length > 1 ? kline[kline.length - 2] : null;
+        var lastClose = lastCandle && Number.isFinite(lastCandle[1]) ? lastCandle[1] : null;
+        var previousClose = previousCandle && Number.isFinite(previousCandle[1]) ? previousCandle[1] : null;
+        var changeAmount = lastClose !== null && previousClose !== null ? lastClose - previousClose : null;
+        var changePct = changeAmount !== null && previousClose
+            ? changeAmount / previousClose * 100
+            : null;
+        return {
+            code: item.code,
+            name: item.name || item.code,
+            type: item.type || 'stock',
+            category: item.category || '',
+            last_close: lastClose,
+            change_pct: changePct,
+            change_amt: changeAmount,
+            last_date: dates.length ? dates[dates.length - 1] : null,
+            status: 'pending',
+            dynamic_only: true,
+            storage: item.storage || 'server'
+        };
+    }
+
+    function upsertWatchlistItem(item, stockData, saveInBrowser) {
+        var normalized = {
+            code: item.code,
+            name: item.name || item.code,
+            type: item.type || 'stock',
+            category: item.category || '',
+            storage: saveInBrowser ? 'browser' : (item.storage || 'server')
+        };
+        state.watchlist = combineWatchlists(state.watchlist, [normalized]);
+
+        if (saveInBrowser) {
+            var browserItems = combineWatchlists(readBrowserWatchlist(), [normalized]);
+            saveBrowserWatchlist(browserItems);
+        }
+
+        if (!state.summary) state.summary = {items: []};
+        var existing = state.summary.items.find(function (summaryItem) {
+            return summaryItem.code === normalized.code;
+        });
+        if (existing && !existing.dynamic_only) {
+            existing.name = normalized.name;
+            existing.type = normalized.type;
+            existing.category = normalized.category;
+        } else {
+            var summaryItem = buildSummaryFromQuery(normalized, stockData);
+            if (existing) Object.assign(existing, summaryItem);
+            else state.summary.items.push(summaryItem);
+        }
+        renderStockList();
+    }
+
     // 初始化应用
     async function init() {
         try {
             // 并行加载元数据、汇总与 2.0 排行榜数据
-            const [metaRes, summaryRes, rankingRes] = await Promise.all([
+            const [metaRes, summaryRes, rankingRes, watchlistRes] = await Promise.all([
                 fetch('data/meta.json').then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
                     return null;
@@ -95,12 +221,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).catch(err => {
                     console.error('Failed to fetch ranking.json:', err);
                     return null;
+                }),
+                fetch(API_BASE + '/api/watchlist').then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.json();
+                }).catch(err => {
+                    console.warn('Failed to fetch configured watchlist:', err);
+                    return null;
                 })
             ]);
 
             state.meta = metaRes;
             state.summary = summaryRes;
             state.ranking = rankingRes;
+            state.watchlist = combineWatchlists(
+                watchlistRes && watchlistRes.items,
+                readBrowserWatchlist()
+            );
+            mergeWatchlistIntoSummary();
 
             // 渲染状态栏
             renderStatusBar();
@@ -231,7 +369,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 点击事件
             card.addEventListener('click', () => {
-                selectTrackedStock(item.code);
+                if (item.dynamic_only) {
+                    el.queryCodeInput.value = item.code;
+                    doQuery();
+                } else {
+                    selectTrackedStock(item.code);
+                }
                 // 移动端体验：点击卡片后平滑滚动到图表区域
                 if (window.innerWidth < 900) {
                     el.detailHeader.scrollIntoView({ behavior: 'smooth' });
@@ -1116,11 +1259,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================================
 
     // 本地联调使用 Flask 开发服务，GitHub Pages 使用独立部署的 API。
-    var isLocal = window.location.hostname === '127.0.0.1'
-        || window.location.hostname === 'localhost';
-    var API_BASE = isLocal
-        ? 'http://127.0.0.1:5000'
-        : 'https://yuxuanwucn-stock-dashboard-api.onrender.com';
     var queryMeta = null; // 缓存最近一次查询的 meta 信息
 
     function initQueryBar() {
@@ -1193,6 +1331,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 缓存 meta 供添加到自选股使用
                 queryMeta = data.meta;
                 queryMeta.stock_type = data.stock.type;
+                state.lastQueryStock = data.stock;
 
                 // 更新查询结果概要
                 el.queryResultHeader.style.display = 'block';
@@ -1618,7 +1757,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(function (resp) {
             if (!resp.ok) {
                 return resp.json().then(function (data) {
-                    throw new Error(data.error || ('HTTP ' + resp.status));
+                    var error = new Error(data.error || ('HTTP ' + resp.status));
+                    error.status = resp.status;
+                    throw error;
                 });
             }
             return resp.json();
@@ -1628,32 +1769,38 @@ document.addEventListener('DOMContentLoaded', () => {
             addWlModal.confirmBtn.textContent = '✅ 确认添加';
             closeAddWatchlistModal();
             var verb = data.action === 'updated' ? '已更新' : '已添加';
+            upsertWatchlistItem(
+                data.item || {
+                    code: addWlPending.code,
+                    name: addWlPending.name,
+                    type: addWlPending.type,
+                    category: category
+                },
+                state.lastQueryStock,
+                false
+            );
             showQueryHint('✅ ' + verb + ' —— ' + addWlPending.name + ' (' + addWlPending.code + ') → 自选股列表');
-            // 刷新自选股侧边栏（重新 fetch summary）
-            refreshStockList();
         })
         .catch(function (err) {
             addWlModal.confirmBtn.disabled = false;
             addWlModal.confirmBtn.textContent = '✅ 确认添加';
+            if (!isLocal) {
+                var browserItem = {
+                    code: addWlPending.code,
+                    name: addWlPending.name,
+                    type: addWlPending.type,
+                    category: category,
+                    storage: 'browser'
+                };
+                upsertWatchlistItem(browserItem, state.lastQueryStock, true);
+                closeAddWatchlistModal();
+                showQueryHint('✅ 已保存到当前浏览器 —— ' + addWlPending.name + ' (' + addWlPending.code + ')');
+                return;
+            }
             addWlModal.warn.textContent = '❌ ' + (err.message || '操作失败');
             addWlModal.warn.style.display = 'block';
             console.error('Add to watchlist error:', err);
         });
-    }
-
-    function refreshStockList() {
-        fetch('data/summary.json')
-            .then(function (r) { return r.json(); })
-            .then(function (data) {
-                if (data && data.items) {
-                    state.summary = data;
-                    renderStockList();
-                }
-            })
-            .catch(function (err) {
-                console.warn('刷新自选股列表失败:', err);
-                // 本地数据无变化时仍然能用旧列表
-            });
     }
 
     // 弹窗事件绑定
@@ -1706,11 +1853,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 var rankingItem = state.ranking && state.ranking.items
                     ? state.ranking.items.find(function (ranked) { return ranked.code === it.code; })
                     : null;
+                var watchlistItem = state.watchlist.find(function (configured) {
+                    return configured.code === it.code;
+                });
                 addEditorRow({
                     code: it.code,
                     name: it.name,
                     type: it.type,
-                    category: rankingItem ? rankingItem.category : ''
+                    category: watchlistItem
+                        ? watchlistItem.category
+                        : (rankingItem ? rankingItem.category : '')
                 });
             });
         }
