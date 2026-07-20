@@ -38,9 +38,14 @@ from flask_cors import CORS
 import akshare as ak
 import pandas as pd
 
-from config import ADJUST, PERIOD, MA_WINDOWS, LOOKBACK_DAYS
-from utils import setup_logging, validate_ohlcv, calc_ma, beijing_today
-from fetch_data import fetch_one, compute_derived, build_kline_json
+try:
+    from .config import ADJUST, PERIOD, MA_WINDOWS, LOOKBACK_DAYS
+    from .utils import setup_logging, validate_ohlcv, calc_ma, beijing_today
+    from .fetch_data import fetch_one, compute_derived, build_kline_json
+except ImportError:  # Support direct execution from src/.
+    from config import ADJUST, PERIOD, MA_WINDOWS, LOOKBACK_DAYS
+    from utils import setup_logging, validate_ohlcv, calc_ma, beijing_today
+    from fetch_data import fetch_one, compute_derived, build_kline_json
 
 logger = setup_logging()
 app = Flask(__name__)
@@ -49,6 +54,8 @@ DEFAULT_CORS_ORIGINS = (
     "https://yuxuanwucn.github.io",
     "http://127.0.0.1:8000",
     "http://localhost:8000",
+    "http://127.0.0.1:8001",
+    "http://localhost:8001",
 )
 ALLOWED_ORIGINS = [
     origin.strip()

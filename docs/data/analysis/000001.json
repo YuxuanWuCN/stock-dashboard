@@ -1,0 +1,106 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-07-20 01:02:27+08:00",
+  "trade_date": "2026-07-17",
+  "code": "000001",
+  "name": "平安银行",
+  "type": "stock",
+  "category": "银行",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 33.7,
+    "risk": 71.9,
+    "technical": 93.0,
+    "industry": 42.0
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 18.64,
+    "max_drawdown_60d_pct": -10.59,
+    "atr14_pct": 1.93,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 93.8,
+        "value": 18.64
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 75.0,
+        "value": -10.59
+      },
+      {
+        "name": "ATR百分比",
+        "score": 87.5,
+        "value": 1.93
+      },
+      {
+        "name": "量价异常",
+        "score": 75.0,
+        "value": 0.98
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 38.52
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.04,
+    "return_5d_pct": 0.54,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 10.724,
+    "ma10": 10.613,
+    "ma20": 10.4835,
+    "ma60": 10.643166666666668,
+    "rsi14": 57.3,
+    "macd_dif": 0.03443494066033992,
+    "macd_dea": -0.020781966534558032,
+    "macd_hist": 0.11043381438979591,
+    "atr14_pct": 1.9326752353582437,
+    "boll_position": 0.8424865452715363,
+    "return_5d_pct": 3.157894736842115,
+    "return_20d_pct": 2.471482889733845,
+    "volume_ratio_5d": 0.98
+  },
+  "industry": {
+    "name": "银行",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -8.9,
+    "return_20d_pct": -14.5,
+    "return_60d_pct": -8.42,
+    "relative_strength_20d_pct": null
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.04,
+      "median_return_pct": -0.41,
+      "best_return_pct": 13.44,
+      "worst_return_pct": -4.93
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.54,
+      "median_return_pct": -0.47,
+      "best_return_pct": 17.92,
+      "worst_return_pct": -5.53
+    }
+  },
+  "reasons": [],
+  "kline_file": "../kline/000001.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

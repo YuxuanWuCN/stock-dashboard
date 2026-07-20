@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🏠 家庭股票自动看板</title>
-    <link rel="stylesheet" href="assets/style.css">
+    <title>股票研究看板 2.0</title>
+    <link rel="stylesheet" href="assets/style.css?v=2.0">
     <!-- 引入 ECharts 5.5.1 CDN -->
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
@@ -13,8 +13,8 @@
         <!-- 顶部状态栏 -->
         <header class="header">
             <div class="header-main">
-                <h1>🏠 家庭股票自动看板</h1>
-                <p class="subtitle">每日收盘自动更新，方便随时查看</p>
+                <h1>股票研究看板 2.0</h1>
+                <p class="subtitle">每日收盘分析自选股的短线风险与历史统计收益</p>
             </div>
             <div id="status-bar" class="status-bar loading">
                 <span class="status-indicator"></span>
@@ -50,6 +50,49 @@
                 </div>
             </div>
         </div>
+
+        <!-- 2.0 风险收益排行榜 -->
+        <section class="ranking-section" aria-labelledby="ranking-title">
+            <div class="ranking-heading-row">
+                <div>
+                    <h2 id="ranking-title">自选股短线排行榜</h2>
+                    <p id="ranking-meta" class="ranking-meta">正在读取分析数据...</p>
+                </div>
+                <div class="ranking-filters">
+                    <label class="sr-only" for="ranking-search">搜索股票</label>
+                    <input id="ranking-search" class="ranking-search" type="search" placeholder="搜索名称或代码" autocomplete="off">
+                    <label class="sr-only" for="ranking-industry-filter">筛选行业</label>
+                    <select id="ranking-industry-filter" class="ranking-industry-filter">
+                        <option value="">全部行业</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="ranking-tabs" role="tablist" aria-label="排行榜类型">
+                <button class="ranking-tab active" type="button" role="tab" aria-selected="true" data-mode="balanced">风险收益榜</button>
+                <button class="ranking-tab" type="button" role="tab" aria-selected="false" data-mode="return">收益预估榜</button>
+                <button class="ranking-tab" type="button" role="tab" aria-selected="false" data-mode="risk">低风险榜</button>
+            </div>
+
+            <div id="ranking-state" class="ranking-state">分析数据加载中...</div>
+            <div id="ranking-table-wrap" class="ranking-table-wrap" hidden>
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">排名</th>
+                            <th>股票</th>
+                            <th><button type="button" data-sort="risk_adjusted_score">风险收益分</button></th>
+                            <th><button type="button" data-sort="return_3d_pct">3日统计收益</button></th>
+                            <th><button type="button" data-sort="return_5d_pct">5日统计收益</button></th>
+                            <th><button type="button" data-sort="risk_score">风险</button></th>
+                            <th>主要依据</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-tbody"></tbody>
+                </table>
+            </div>
+            <div id="ranking-mobile-list" class="ranking-mobile-list" hidden></div>
+        </section>
 
         <!-- 主布局 -->
         <div class="dashboard-layout">
@@ -87,6 +130,62 @@
                         <span id="detail-adjust-label">复权方式：前复权</span>
                     </div>
                 </div>
+
+                <!-- 2.0 个股研究摘要 -->
+                <section id="analysis-detail" class="analysis-detail" hidden aria-labelledby="analysis-title">
+                    <div class="analysis-detail-header">
+                        <div>
+                            <span class="analysis-kicker">3–5 个交易日研究</span>
+                            <h2 id="analysis-title">短线风险收益分析</h2>
+                            <p id="analysis-summary" class="analysis-summary">--</p>
+                        </div>
+                        <div id="analysis-risk-badge" class="risk-badge risk-medium">中等风险</div>
+                    </div>
+
+                    <div class="analysis-score-grid">
+                        <div class="analysis-score-item">
+                            <span>风险收益分</span>
+                            <strong id="analysis-composite-score">--</strong>
+                        </div>
+                        <div class="analysis-score-item">
+                            <span>风险分</span>
+                            <strong id="analysis-risk-score">--</strong>
+                        </div>
+                        <div class="analysis-score-item">
+                            <span>3日统计收益</span>
+                            <strong id="analysis-return-3d">--</strong>
+                        </div>
+                        <div class="analysis-score-item">
+                            <span>5日统计收益</span>
+                            <strong id="analysis-return-5d">--</strong>
+                        </div>
+                        <div class="analysis-score-item">
+                            <span>5日上涨样本比例</span>
+                            <strong id="analysis-up-probability">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="analysis-columns">
+                        <section class="analysis-block" aria-labelledby="analysis-reasons-title">
+                            <h3 id="analysis-reasons-title">主要评分依据</h3>
+                            <div id="analysis-reasons" class="analysis-reasons"></div>
+                        </section>
+                        <section class="analysis-block" aria-labelledby="analysis-market-title">
+                            <h3 id="analysis-market-title">技术与行业</h3>
+                            <dl id="analysis-market-metrics" class="analysis-metric-list"></dl>
+                        </section>
+                    </div>
+
+                    <section class="similarity-section" aria-labelledby="similarity-title">
+                        <div class="similarity-heading">
+                            <h3 id="similarity-title">历史相似走势</h3>
+                            <span id="similarity-confidence" class="confidence-badge">--</span>
+                        </div>
+                        <div id="similarity-grid" class="similarity-grid"></div>
+                    </section>
+
+                    <p id="analysis-disclaimer" class="analysis-disclaimer"></p>
+                </section>
 
                 <!-- 图表渲染容器 -->
                 <div class="chart-card">
@@ -145,6 +244,7 @@
                             <th class="col-name">名称</th>
                             <th class="col-code">代码</th>
                             <th class="col-type">类型</th>
+                            <th class="col-category">行业</th>
                             <th class="col-del"></th>
                         </tr>
                     </thead>
@@ -237,6 +337,6 @@
     </div>
 
     <!-- 引入前端交互脚本 -->
-    <script src="assets/app.js?v=cloud-api"></script>
+    <script src="assets/app.js?v=2.0"></script>
 </body>
 </html>

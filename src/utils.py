@@ -9,7 +9,10 @@ from datetime import date, datetime, timedelta
 from typing import Any, Optional
 from zoneinfo import ZoneInfo
 
-from config import TIMEZONE_NAME, LOG_FORMAT, LOG_DATE_FORMAT
+try:
+    from .config import TIMEZONE_NAME, LOG_FORMAT, LOG_DATE_FORMAT
+except ImportError:  # Support direct execution from src/.
+    from config import TIMEZONE_NAME, LOG_FORMAT, LOG_DATE_FORMAT
 
 # ============================================================
 # 日志

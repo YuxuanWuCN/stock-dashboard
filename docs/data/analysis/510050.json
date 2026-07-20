@@ -1,0 +1,106 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-07-20 01:02:27+08:00",
+  "trade_date": "2026-07-17",
+  "code": "510050",
+  "name": "上证50ETF",
+  "type": "etf",
+  "category": "",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 35.1,
+    "risk": 64.1,
+    "technical": 50.0,
+    "industry": 42.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 27.4,
+    "max_drawdown_60d_pct": -7.11,
+    "atr14_pct": 2.05,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 75.0,
+        "value": 27.4
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 93.8,
+        "value": -7.11
+      },
+      {
+        "name": "ATR百分比",
+        "score": 81.2,
+        "value": 2.05
+      },
+      {
+        "name": "量价异常",
+        "score": 18.8,
+        "value": 1.33
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 38.52
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.61,
+    "return_5d_pct": 0.95,
+    "up_probability_3d_pct": 63.3,
+    "up_probability_5d_pct": 63.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 3.0136000000000003,
+    "ma10": 3.0281,
+    "ma20": 3.0366,
+    "ma60": 3.022383333333333,
+    "rsi14": 40.9,
+    "macd_dif": -0.0015530432973913655,
+    "macd_dea": 0.007416583164885347,
+    "macd_hist": -0.017939252924553423,
+    "atr14_pct": 2.0491054766220143,
+    "boll_position": -0.15631042085241756,
+    "return_5d_pct": -4.121687929342488,
+    "return_20d_pct": -2.8505137553861415,
+    "volume_ratio_5d": 1.33
+  },
+  "industry": {
+    "name": "深证成指",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -8.9,
+    "return_20d_pct": -14.5,
+    "return_60d_pct": -8.42,
+    "relative_strength_20d_pct": null
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.61,
+      "median_return_pct": 0.35,
+      "best_return_pct": 5.25,
+      "worst_return_pct": -1.49
+    },
+    "horizon_5d": {
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.95,
+      "median_return_pct": 0.63,
+      "best_return_pct": 6.33,
+      "worst_return_pct": -3.2
+    }
+  },
+  "reasons": [],
+  "kline_file": "../kline/510050.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

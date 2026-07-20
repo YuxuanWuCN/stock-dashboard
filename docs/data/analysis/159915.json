@@ -1,0 +1,125 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-07-20 01:02:27+08:00",
+  "trade_date": "2026-07-17",
+  "code": "159915",
+  "name": "创业板ETF",
+  "type": "etf",
+  "category": "",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 57.0,
+    "risk": 10.6,
+    "technical": 42.0,
+    "industry": 42.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 49.95,
+    "max_drawdown_60d_pct": -21.21,
+    "atr14_pct": 4.81,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 12.5,
+        "value": 49.95
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 25.0,
+        "value": -21.21
+      },
+      {
+        "name": "ATR百分比",
+        "score": 0.0,
+        "value": 4.81
+      },
+      {
+        "name": "量价异常",
+        "score": 6.2,
+        "value": 1.39
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 38.52
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.11,
+    "return_5d_pct": 2.11,
+    "up_probability_3d_pct": 70.0,
+    "up_probability_5d_pct": 60.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 3.7263999999999995,
+    "ma10": 3.8303,
+    "ma20": 4.035349999999999,
+    "ma60": 3.9600500000000003,
+    "rsi14": 33.0,
+    "macd_dif": -0.09848674683891678,
+    "macd_dea": -0.034380737221723245,
+    "macd_hist": -0.12821201923438708,
+    "atr14_pct": 4.811256762320753,
+    "boll_position": -0.08036217584492944,
+    "return_5d_pct": -10.331434489901604,
+    "return_20d_pct": -18.88029983602717,
+    "volume_ratio_5d": 1.39
+  },
+  "industry": {
+    "name": "深证成指",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -8.9,
+    "return_20d_pct": -14.5,
+    "return_60d_pct": -8.42,
+    "relative_strength_20d_pct": null
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 70.0,
+      "average_return_pct": 1.11,
+      "median_return_pct": 0.94,
+      "best_return_pct": 5.7,
+      "worst_return_pct": -3.0
+    },
+    "horizon_5d": {
+      "up_probability_pct": 60.0,
+      "average_return_pct": 2.11,
+      "median_return_pct": 1.84,
+      "best_return_pct": 10.41,
+      "worst_return_pct": -4.42
+    }
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 21.2%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 21.2%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 50.0%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/159915.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

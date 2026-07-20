@@ -1,0 +1,125 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-07-20 01:02:27+08:00",
+  "trade_date": "2026-07-17",
+  "code": "002594",
+  "name": "比亚迪",
+  "type": "stock",
+  "category": "汽车",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 40.3,
+    "risk": 30.0,
+    "technical": 93.0,
+    "industry": 42.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 42.86,
+    "max_drawdown_60d_pct": -25.81,
+    "atr14_pct": 3.55,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 31.2,
+        "value": 42.86
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 12.5,
+        "value": -25.81
+      },
+      {
+        "name": "ATR百分比",
+        "score": 43.8,
+        "value": 3.55
+      },
+      {
+        "name": "量价异常",
+        "score": 87.5,
+        "value": 1.01
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 38.52
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.16,
+    "return_5d_pct": 0.1,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 46.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 91.30600000000001,
+    "ma10": 89.50000000000001,
+    "ma20": 86.16650000000001,
+    "ma60": 92.76833333333335,
+    "rsi14": 59.4,
+    "macd_dif": 0.5548161249693493,
+    "macd_dea": -0.8661742423462238,
+    "macd_hist": 2.841980734631146,
+    "atr14_pct": 3.55210782044195,
+    "boll_position": 0.907103403253116,
+    "return_5d_pct": 3.8555555555555454,
+    "return_20d_pct": 6.059230681947136,
+    "volume_ratio_5d": 1.01
+  },
+  "industry": {
+    "name": "汽车",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -8.9,
+    "return_20d_pct": -14.5,
+    "return_60d_pct": -8.42,
+    "relative_strength_20d_pct": null
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.16,
+      "median_return_pct": -0.65,
+      "best_return_pct": 17.19,
+      "worst_return_pct": -10.5
+    },
+    "horizon_5d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.1,
+      "median_return_pct": -0.73,
+      "best_return_pct": 16.56,
+      "worst_return_pct": -13.14
+    }
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 25.8%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 25.8%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 42.9%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/002594.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

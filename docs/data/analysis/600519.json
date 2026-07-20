@@ -1,0 +1,119 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-07-20 01:02:27+08:00",
+  "trade_date": "2026-07-17",
+  "code": "600519",
+  "name": "贵州茅台",
+  "type": "stock",
+  "category": "白酒",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 26.6,
+    "risk": 55.3,
+    "technical": 100.0,
+    "industry": 42.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 21.48,
+    "max_drawdown_60d_pct": -18.3,
+    "atr14_pct": 2.35,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 81.2,
+        "value": 21.48
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 43.8,
+        "value": -18.3
+      },
+      {
+        "name": "ATR百分比",
+        "score": 75.0,
+        "value": 2.35
+      },
+      {
+        "name": "量价异常",
+        "score": 50.0,
+        "value": 1.12
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 38.52
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -1.12,
+    "return_5d_pct": -0.79,
+    "up_probability_3d_pct": 30.0,
+    "up_probability_5d_pct": 33.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 1237.784,
+    "ma10": 1217.11,
+    "ma20": 1204.1100000000001,
+    "ma60": 1265.3926666666666,
+    "rsi14": 57.9,
+    "macd_dif": -0.5868437966553302,
+    "macd_dea": -11.76558143013373,
+    "macd_hist": 22.3574752669568,
+    "atr14_pct": 2.354160386334379,
+    "boll_position": 1.0074650784793622,
+    "return_5d_pct": 3.985128383873593,
+    "return_20d_pct": 5.562014524254821,
+    "volume_ratio_5d": 1.12
+  },
+  "industry": {
+    "name": "白酒",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -8.9,
+    "return_20d_pct": -14.5,
+    "return_60d_pct": -8.42,
+    "relative_strength_20d_pct": null
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 30.0,
+      "average_return_pct": -1.12,
+      "median_return_pct": -1.39,
+      "best_return_pct": 5.4,
+      "worst_return_pct": -6.02
+    },
+    "horizon_5d": {
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.79,
+      "median_return_pct": -1.27,
+      "best_return_pct": 6.08,
+      "worst_return_pct": -7.31
+    }
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 18.3%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 18.3%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/600519.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

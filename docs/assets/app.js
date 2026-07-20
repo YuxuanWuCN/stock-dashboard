@@ -9,6 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
         chart: null,
         indexChart: null,
         queryActive: false,
+        ranking: null,
+        rankingMode: 'balanced',
+        rankingSortKey: 'risk_adjusted_score',
+        rankingSortDirection: 'desc',
+        analysisSelectedCode: null,
+        analysisCache: {},
         // 当前选中的股票切片数据，供 tooltip 使用
         activeData: {
             dates: [],
@@ -47,14 +53,34 @@ document.addEventListener('DOMContentLoaded', () => {
         addToWatchlistBtn: document.getElementById('add-to-watchlist-btn'),
         indexChartCard: document.getElementById('index-chart-card'),
         indexChartElement: document.getElementById('index-chart'),
-        indexChartLabel: document.getElementById('index-chart-label')
+        indexChartLabel: document.getElementById('index-chart-label'),
+        rankingMeta: document.getElementById('ranking-meta'),
+        rankingState: document.getElementById('ranking-state'),
+        rankingTableWrap: document.getElementById('ranking-table-wrap'),
+        rankingTbody: document.getElementById('ranking-tbody'),
+        rankingMobileList: document.getElementById('ranking-mobile-list'),
+        rankingSearch: document.getElementById('ranking-search'),
+        rankingIndustryFilter: document.getElementById('ranking-industry-filter'),
+        analysisDetail: document.getElementById('analysis-detail'),
+        analysisSummary: document.getElementById('analysis-summary'),
+        analysisRiskBadge: document.getElementById('analysis-risk-badge'),
+        analysisCompositeScore: document.getElementById('analysis-composite-score'),
+        analysisRiskScore: document.getElementById('analysis-risk-score'),
+        analysisReturn3d: document.getElementById('analysis-return-3d'),
+        analysisReturn5d: document.getElementById('analysis-return-5d'),
+        analysisUpProbability: document.getElementById('analysis-up-probability'),
+        analysisReasons: document.getElementById('analysis-reasons'),
+        analysisMarketMetrics: document.getElementById('analysis-market-metrics'),
+        similarityConfidence: document.getElementById('similarity-confidence'),
+        similarityGrid: document.getElementById('similarity-grid'),
+        analysisDisclaimer: document.getElementById('analysis-disclaimer')
     };
 
     // 初始化应用
     async function init() {
         try {
-            // 并行加载元数据与汇总数据
-            const [metaRes, summaryRes] = await Promise.all([
+            // 并行加载元数据、汇总与 2.0 排行榜数据
+            const [metaRes, summaryRes, rankingRes] = await Promise.all([
                 fetch('data/meta.json').then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
                     return null;
@@ -62,11 +88,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch('data/summary.json').then(r => r.json()).catch(err => {
                     console.error('Failed to fetch summary.json:', err);
                     return null;
+                }),
+                fetch('data/analysis/ranking.json').then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.json();
+                }).catch(err => {
+                    console.error('Failed to fetch ranking.json:', err);
+                    return null;
                 })
             ]);
 
             state.meta = metaRes;
             state.summary = summaryRes;
+            state.ranking = rankingRes;
 
             // 渲染状态栏
             renderStatusBar();
@@ -75,12 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state.summary && state.summary.items && state.summary.items.length > 0) {
                 renderStockList();
                 
-                // 默认选择第一只股票
-                const firstItem = state.summary.items[0];
-                selectStock(firstItem.code);
             } else {
                 el.stockList.innerHTML = '<div class="list-loading text-down">暂无自选股数据</div>';
                 showOverlay('未找到自选股汇总数据，请检查后台运行状态。');
+            }
+
+            initRankingModule();
+
+            const firstRankingItem = state.ranking && state.ranking.items && state.ranking.items[0];
+            const firstSummaryItem = state.summary && state.summary.items && state.summary.items[0];
+            const initialCode = firstRankingItem ? firstRankingItem.code : (firstSummaryItem ? firstSummaryItem.code : null);
+            if (initialCode) {
+                await selectTrackedStock(initialCode);
             }
         } catch (error) {
             console.error('Initialization error:', error);
@@ -191,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 点击事件
             card.addEventListener('click', () => {
-                selectStock(item.code);
+                selectTrackedStock(item.code);
                 // 移动端体验：点击卡片后平滑滚动到图表区域
                 if (window.innerWidth < 900) {
                     el.detailHeader.scrollIntoView({ behavior: 'smooth' });
@@ -206,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 选中并加载特定股票
     async function selectStock(code) {
-        if (state.selectedCode === code) return;
+            if (state.selectedCode === code) return;
         state.selectedCode = code;
 
         // 更新列表卡片高亮状态
@@ -583,6 +623,491 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 
+    // ============================================================
+    // 2.0 排行榜与个股研究模块
+    // ============================================================
+
+    function initRankingModule() {
+        bindRankingControls();
+
+        if (!state.ranking) {
+            showRankingState('分析数据尚未生成，请先运行每日分析任务。', true);
+            el.rankingMeta.textContent = '排行榜不可用';
+            return;
+        }
+
+        var schemaMajor = String(state.ranking.schema_version || '').split('.')[0];
+        if (schemaMajor !== '2') {
+            showRankingState('分析数据版本不兼容，请重新生成 2.0 数据。', true);
+            el.rankingMeta.textContent = '数据版本不兼容';
+            return;
+        }
+
+        var items = Array.isArray(state.ranking.items) ? state.ranking.items : [];
+        populateIndustryFilter(items);
+
+        var generated = state.ranking.generated_at || '--';
+        var statusText = state.ranking.status === 'partial'
+            ? '部分标的使用旧数据'
+            : '全部分析完成';
+        el.rankingMeta.textContent = '交易日 ' + (state.ranking.trade_date || '--')
+            + ' · ' + items.length + ' 只自选股 · ' + statusText
+            + ' · 生成于 ' + generated.substring(0, 16);
+
+        renderRanking();
+    }
+
+    function bindRankingControls() {
+        if (el.rankingSearch.dataset.bound === 'true') return;
+        el.rankingSearch.dataset.bound = 'true';
+
+        document.querySelectorAll('.ranking-tab').forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                state.rankingMode = tab.dataset.mode;
+                if (state.rankingMode === 'return') {
+                    state.rankingSortKey = 'return_5d_pct';
+                    state.rankingSortDirection = 'desc';
+                } else if (state.rankingMode === 'risk') {
+                    state.rankingSortKey = 'risk_score';
+                    state.rankingSortDirection = 'asc';
+                } else {
+                    state.rankingSortKey = 'risk_adjusted_score';
+                    state.rankingSortDirection = 'desc';
+                }
+
+                document.querySelectorAll('.ranking-tab').forEach(function (item) {
+                    var active = item === tab;
+                    item.classList.toggle('active', active);
+                    item.setAttribute('aria-selected', active ? 'true' : 'false');
+                });
+                renderRanking();
+            });
+        });
+
+        document.querySelectorAll('.ranking-table th button[data-sort]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var key = button.dataset.sort;
+                if (state.rankingSortKey === key) {
+                    state.rankingSortDirection = state.rankingSortDirection === 'desc' ? 'asc' : 'desc';
+                } else {
+                    state.rankingSortKey = key;
+                    state.rankingSortDirection = key === 'risk_score' ? 'asc' : 'desc';
+                }
+                renderRanking();
+            });
+        });
+
+        el.rankingSearch.addEventListener('input', renderRanking);
+        el.rankingIndustryFilter.addEventListener('change', renderRanking);
+    }
+
+    function populateIndustryFilter(items) {
+        while (el.rankingIndustryFilter.options.length > 1) {
+            el.rankingIndustryFilter.remove(1);
+        }
+        var categories = Array.from(new Set(items.map(displayCategory))).filter(Boolean).sort();
+        categories.forEach(function (category) {
+            var option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            el.rankingIndustryFilter.appendChild(option);
+        });
+    }
+
+    function displayCategory(item) {
+        if (item.category) return item.category;
+        if (item.type === 'etf') return 'ETF';
+        return (item.industry && item.industry.name) || '未分类';
+    }
+
+    function showRankingState(message, isError) {
+        el.rankingState.hidden = false;
+        el.rankingState.textContent = message;
+        el.rankingState.classList.toggle('error', Boolean(isError));
+        el.rankingTableWrap.hidden = true;
+        el.rankingMobileList.hidden = true;
+    }
+
+    function getRankingValue(item, key) {
+        if (key === 'return_3d_pct') return item.forecast && item.forecast.return_3d_pct;
+        if (key === 'return_5d_pct') return item.forecast && item.forecast.return_5d_pct;
+        if (key === 'risk_score') return item.risk && item.risk.score;
+        return item.risk_adjusted_score;
+    }
+
+    function getVisibleRankingItems() {
+        var items = state.ranking && Array.isArray(state.ranking.items)
+            ? state.ranking.items.slice()
+            : [];
+        var search = el.rankingSearch.value.trim().toLowerCase();
+        var category = el.rankingIndustryFilter.value;
+
+        items = items.filter(function (item) {
+            var matchesSearch = !search
+                || String(item.code).toLowerCase().includes(search)
+                || String(item.name).toLowerCase().includes(search);
+            var matchesCategory = !category || displayCategory(item) === category;
+            return matchesSearch && matchesCategory;
+        });
+
+        var direction = state.rankingSortDirection === 'asc' ? 1 : -1;
+        items.sort(function (a, b) {
+            var av = getRankingValue(a, state.rankingSortKey);
+            var bv = getRankingValue(b, state.rankingSortKey);
+            var aMissing = !Number.isFinite(av);
+            var bMissing = !Number.isFinite(bv);
+            if (aMissing && bMissing) return String(a.code).localeCompare(String(b.code));
+            if (aMissing) return 1;
+            if (bMissing) return -1;
+            if (av === bv) return String(a.code).localeCompare(String(b.code));
+            return (av - bv) * direction;
+        });
+        return items;
+    }
+
+    function renderRanking() {
+        if (!state.ranking || !Array.isArray(state.ranking.items)) return;
+        var items = getVisibleRankingItems();
+
+        document.querySelectorAll('.ranking-table th button[data-sort]').forEach(function (button) {
+            var active = button.dataset.sort === state.rankingSortKey;
+            button.classList.toggle('active', active);
+            button.textContent = button.textContent.replace(/[↑↓]\s*$/, '')
+                + (active ? (state.rankingSortDirection === 'asc' ? ' ↑' : ' ↓') : '');
+        });
+
+        if (items.length === 0) {
+            showRankingState('没有符合当前筛选条件的股票。', false);
+            return;
+        }
+
+        el.rankingState.hidden = true;
+        el.rankingTableWrap.hidden = false;
+        el.rankingMobileList.hidden = false;
+        el.rankingTbody.innerHTML = '';
+        el.rankingMobileList.innerHTML = '';
+
+        items.forEach(function (item, index) {
+            renderRankingTableRow(item, index + 1);
+            renderRankingMobileRow(item, index + 1);
+        });
+        highlightRankingSelection();
+    }
+
+    function renderRankingTableRow(item, rank) {
+        var tr = document.createElement('tr');
+        tr.tabIndex = 0;
+        tr.setAttribute('role', 'button');
+        tr.dataset.analysisCode = item.code;
+        var firstReason = item.reasons && item.reasons[0];
+        var reasonText = firstReason ? firstReason.title + '：' + firstReason.detail : '暂无明确加减分项';
+        var risk = item.risk || {};
+
+        tr.innerHTML = '<td class="ranking-number ' + (rank <= 3 ? 'top-three' : '') + '">' + rank + '</td>'
+            + '<td><span class="ranking-stock-name">' + escapeHtml(item.name) + '</span>'
+            + '<span class="ranking-stock-meta"><span>' + escapeHtml(item.code) + '</span><span>' + escapeHtml(displayCategory(item)) + '</span></span></td>'
+            + '<td><span class="score-value">' + formatScore(item.risk_adjusted_score) + '</span></td>'
+            + '<td>' + formatForecastHtml(item.forecast && item.forecast.return_3d_pct) + '</td>'
+            + '<td>' + formatForecastHtml(item.forecast && item.forecast.return_5d_pct) + '</td>'
+            + '<td><span class="risk-badge ' + riskClass(risk.level) + '">' + escapeHtml(risk.label || '未知风险') + ' ' + formatScore(risk.score) + '</span></td>'
+            + '<td><span class="ranking-reason">' + escapeHtml(reasonText) + '</span></td>';
+
+        tr.addEventListener('click', function () { selectTrackedStock(item.code, true); });
+        tr.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                selectTrackedStock(item.code, true);
+            }
+        });
+        el.rankingTbody.appendChild(tr);
+    }
+
+    function renderRankingMobileRow(item, rank) {
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ranking-mobile-card';
+        button.dataset.analysisCode = item.code;
+        var risk = item.risk || {};
+        button.innerHTML = '<div class="ranking-mobile-top">'
+            + '<div class="ranking-mobile-name">' + rank + '. ' + escapeHtml(item.name)
+            + '<small>' + escapeHtml(item.code) + ' · ' + escapeHtml(displayCategory(item)) + '</small></div>'
+            + '<span class="risk-badge ' + riskClass(risk.level) + '">' + escapeHtml(risk.label || '未知风险') + '</span>'
+            + '</div>'
+            + '<div class="ranking-mobile-metrics">'
+            + mobileMetric('风险收益分', formatScore(item.risk_adjusted_score), '')
+            + mobileMetric('3日统计', formatPct(item.forecast && item.forecast.return_3d_pct), returnClass(item.forecast && item.forecast.return_3d_pct))
+            + mobileMetric('5日统计', formatPct(item.forecast && item.forecast.return_5d_pct), returnClass(item.forecast && item.forecast.return_5d_pct))
+            + '</div>';
+        button.addEventListener('click', function () { selectTrackedStock(item.code, true); });
+        el.rankingMobileList.appendChild(button);
+    }
+
+    function mobileMetric(label, value, className) {
+        return '<div class="ranking-mobile-metric"><span>' + label + '</span><strong class="' + className + '">' + value + '</strong></div>';
+    }
+
+    function formatScore(value) {
+        return Number.isFinite(value) ? Number(value).toFixed(1) : '--';
+    }
+
+    function formatPct(value) {
+        if (!Number.isFinite(value)) return '样本不足';
+        return (value > 0 ? '+' : '') + Number(value).toFixed(2) + '%';
+    }
+
+    function formatProbability(value) {
+        return Number.isFinite(value) ? Number(value).toFixed(1) + '%' : '样本不足';
+    }
+
+    function returnClass(value) {
+        if (!Number.isFinite(value) || value === 0) return 'text-flat';
+        return value > 0 ? 'text-up' : 'text-down';
+    }
+
+    function formatForecastHtml(value) {
+        if (!Number.isFinite(value)) return '<span class="forecast-empty">样本不足</span>';
+        return '<span class="forecast-value ' + returnClass(value) + '">' + formatPct(value) + '</span>';
+    }
+
+    function riskClass(level) {
+        if (level === 'low') return 'risk-low';
+        if (level === 'high') return 'risk-high';
+        return 'risk-medium';
+    }
+
+    function confidenceLabel(confidence) {
+        if (confidence === 'high') return '高置信';
+        if (confidence === 'medium') return '中等置信';
+        return '低置信';
+    }
+
+    function trendLabel(trend) {
+        var labels = {
+            strong_uptrend: '强势上升',
+            uptrend: '上升趋势',
+            range: '震荡整理',
+            rebound: '反弹修复',
+            downtrend: '下降趋势',
+            insufficient: '数据不足'
+        };
+        return labels[trend] || '趋势未明';
+    }
+
+    async function selectTrackedStock(code, scrollToDetail) {
+        state.queryActive = false;
+        el.queryResultHeader.style.display = 'none';
+        el.indexChartCard.style.display = 'none';
+
+        var summaryItem = state.summary && state.summary.items
+            ? state.summary.items.find(function (item) { return item.code === code; })
+            : null;
+        if (summaryItem) updateDetailHeader(summaryItem);
+
+        await Promise.all([selectStock(code), loadAnalysisDetail(code)]);
+
+        if (scrollToDetail && window.innerWidth < 900) {
+            el.analysisDetail.scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+    }
+
+    async function loadAnalysisDetail(code) {
+        state.analysisSelectedCode = code;
+        highlightRankingSelection();
+        showAnalysisLoading();
+
+        try {
+            var detail = state.analysisCache[code];
+            if (!detail) {
+                var response = await fetch('data/analysis/' + encodeURIComponent(code) + '.json');
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                detail = await response.json();
+                if (String(detail.schema_version || '').split('.')[0] !== '2') {
+                    throw new Error('分析数据版本不兼容');
+                }
+                state.analysisCache[code] = detail;
+            }
+
+            if (state.analysisSelectedCode === code) renderAnalysisDetail(detail);
+        } catch (error) {
+            console.error('Failed to load analysis for ' + code + ':', error);
+            if (state.analysisSelectedCode === code) showAnalysisError('该股票的分析详情暂时无法读取。');
+        }
+    }
+
+    function showAnalysisLoading() {
+        el.analysisDetail.hidden = false;
+        el.analysisSummary.textContent = '正在读取风险、行业和历史相似走势...';
+        el.analysisRiskBadge.className = 'risk-badge risk-medium';
+        el.analysisRiskBadge.textContent = '分析中';
+        [el.analysisCompositeScore, el.analysisRiskScore, el.analysisReturn3d,
+            el.analysisReturn5d, el.analysisUpProbability].forEach(function (node) {
+                node.textContent = '--';
+                node.className = '';
+            });
+        el.analysisReasons.textContent = '';
+        el.analysisMarketMetrics.textContent = '';
+        el.similarityGrid.textContent = '';
+        el.similarityConfidence.textContent = '--';
+        el.analysisDisclaimer.textContent = '';
+    }
+
+    function showAnalysisError(message) {
+        showAnalysisLoading();
+        el.analysisSummary.textContent = message;
+        el.analysisRiskBadge.textContent = '分析不可用';
+    }
+
+    function renderAnalysisDetail(detail) {
+        var forecast = detail.forecast || {};
+        var risk = detail.risk || {};
+        var scores = detail.scores || {};
+        var similarity = detail.similarity || {};
+        var fiveDayReturn = forecast.return_5d_pct;
+        var fiveDayProbability = forecast.up_probability_5d_pct;
+
+        el.analysisDetail.hidden = false;
+        if (Number.isFinite(fiveDayReturn)) {
+            el.analysisSummary.textContent = '历史相似样本中，未来 5 日平均收益为 '
+                + formatPct(fiveDayReturn) + '，上涨样本占 ' + formatProbability(fiveDayProbability)
+                + '；当前技术状态为' + trendLabel(detail.technical && detail.technical.trend) + '。';
+        } else {
+            el.analysisSummary.textContent = '历史相似样本不足，当前仅展示风险和技术状态。';
+        }
+
+        el.analysisRiskBadge.className = 'risk-badge ' + riskClass(risk.level);
+        el.analysisRiskBadge.textContent = (risk.label || '未知风险') + ' ' + formatScore(scores.risk);
+        el.analysisCompositeScore.textContent = formatScore(scores.risk_adjusted);
+        el.analysisRiskScore.textContent = formatScore(scores.risk);
+        setReturnMetric(el.analysisReturn3d, forecast.return_3d_pct);
+        setReturnMetric(el.analysisReturn5d, forecast.return_5d_pct);
+        el.analysisUpProbability.textContent = formatProbability(forecast.up_probability_5d_pct);
+
+        renderAnalysisReasons(detail.reasons || []);
+        renderMarketMetrics(detail);
+        renderSimilarity(similarity);
+        el.analysisDisclaimer.textContent = detail.disclaimer
+            || '基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。';
+    }
+
+    function setReturnMetric(node, value) {
+        node.textContent = formatPct(value);
+        node.className = returnClass(value);
+    }
+
+    function renderAnalysisReasons(reasons) {
+        el.analysisReasons.textContent = '';
+        var seen = new Set();
+        var unique = reasons.filter(function (reason) {
+            var titleText = String(reason.title || '');
+            var key = titleText.includes('回撤') ? '回撤'
+                : (titleText.includes('波动') ? '波动' : titleText + '|' + String(reason.detail || ''));
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        }).slice(0, 5);
+
+        if (unique.length === 0) {
+            var empty = document.createElement('p');
+            empty.className = 'analysis-summary';
+            empty.textContent = '当前没有形成贡献度明显的加分或扣分项。';
+            el.analysisReasons.appendChild(empty);
+            return;
+        }
+
+        unique.forEach(function (reason) {
+            var item = document.createElement('div');
+            item.className = 'analysis-reason-item ' + (reason.type || 'warning');
+            var title = document.createElement('strong');
+            title.textContent = reason.title || '评分依据';
+            var detail = document.createElement('p');
+            detail.textContent = reason.detail || '';
+            item.appendChild(title);
+            item.appendChild(detail);
+            el.analysisReasons.appendChild(item);
+        });
+    }
+
+    function renderMarketMetrics(detail) {
+        el.analysisMarketMetrics.textContent = '';
+        var technical = detail.technical || {};
+        var industry = detail.industry || {};
+        var risk = detail.risk || {};
+        var scores = detail.scores || {};
+        var reference = industry.reference_type === 'industry' ? '行业板块' : '指数参照';
+        var metrics = [
+            ['技术状态', trendLabel(technical.trend)],
+            ['技术分', formatScore(scores.technical)],
+            ['RSI14', Number.isFinite(technical.rsi14) ? Number(technical.rsi14).toFixed(1) : '--'],
+            ['近20日收益', formatPct(technical.return_20d_pct)],
+            ['近5日量能比', Number.isFinite(technical.volume_ratio_5d) ? Number(technical.volume_ratio_5d).toFixed(2) + '倍' : '--'],
+            ['行业/参照', (industry.name || '未分类') + ' · ' + reference],
+            ['行业分', formatScore(scores.industry)],
+            ['行业20日表现', formatPct(industry.return_20d_pct)],
+            ['20日年化波动', formatUnsignedPct(risk.annualized_volatility_20d_pct)],
+            ['60日最大回撤', formatPct(risk.max_drawdown_60d_pct)]
+        ];
+
+        metrics.forEach(function (metric) {
+            var row = document.createElement('div');
+            row.className = 'analysis-metric-row';
+            var term = document.createElement('dt');
+            var value = document.createElement('dd');
+            term.textContent = metric[0];
+            value.textContent = metric[1];
+            row.appendChild(term);
+            row.appendChild(value);
+            el.analysisMarketMetrics.appendChild(row);
+        });
+    }
+
+    function formatUnsignedPct(value) {
+        return Number.isFinite(value) ? Number(value).toFixed(2) + '%' : '--';
+    }
+
+    function renderSimilarity(similarity) {
+        el.similarityGrid.textContent = '';
+        var sampleSize = similarity.sample_size || 0;
+        el.similarityConfidence.textContent = confidenceLabel(similarity.confidence)
+            + ' · ' + sampleSize + ' 个样本';
+        el.similarityGrid.appendChild(createSimilarityHorizon('未来 3 日', similarity.horizon_3d || {}));
+        el.similarityGrid.appendChild(createSimilarityHorizon('未来 5 日', similarity.horizon_5d || {}));
+    }
+
+    function createSimilarityHorizon(label, data) {
+        var block = document.createElement('div');
+        block.className = 'similarity-horizon';
+        var title = document.createElement('h4');
+        title.textContent = label;
+        block.appendChild(title);
+        var values = document.createElement('div');
+        values.className = 'similarity-values';
+        [
+            ['上涨样本', formatProbability(data.up_probability_pct)],
+            ['平均收益', formatPct(data.average_return_pct)],
+            ['中位收益', formatPct(data.median_return_pct)],
+            ['最好结果', formatPct(data.best_return_pct)],
+            ['最差结果', formatPct(data.worst_return_pct)]
+        ].forEach(function (entry) {
+            var cell = document.createElement('div');
+            cell.className = 'similarity-value';
+            var name = document.createElement('span');
+            var value = document.createElement('strong');
+            name.textContent = entry[0];
+            value.textContent = entry[1];
+            cell.appendChild(name);
+            cell.appendChild(value);
+            values.appendChild(cell);
+        });
+        block.appendChild(values);
+        return block;
+    }
+
+    function highlightRankingSelection() {
+        document.querySelectorAll('[data-analysis-code]').forEach(function (node) {
+            node.classList.toggle('active', node.dataset.analysisCode === state.analysisSelectedCode);
+        });
+    }
+
     // 运行初始化
     init();
 
@@ -642,6 +1167,9 @@ document.addEventListener('DOMContentLoaded', () => {
         showQueryHint('⏳ 正在查询数据，请稍候...');
         el.queryGoBtn.disabled = true;
         el.queryGoBtn.textContent = '查询中...';
+        el.analysisDetail.hidden = true;
+        state.analysisSelectedCode = null;
+        highlightRankingSelection();
         showLoadingOverlay();
 
         var url = API_BASE + '/api/query?code=' + encodeURIComponent(code) + '&start_date=' + encodeURIComponent(startDate);
@@ -1174,7 +1702,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // 无数据时给一行空白
             addEditorRow('');
         } else {
-            items.forEach(it => addEditorRow({code: it.code, name: it.name, type: it.type}));
+            items.forEach(function (it) {
+                var rankingItem = state.ranking && state.ranking.items
+                    ? state.ranking.items.find(function (ranked) { return ranked.code === it.code; })
+                    : null;
+                addEditorRow({
+                    code: it.code,
+                    name: it.name,
+                    type: it.type,
+                    category: rankingItem ? rankingItem.category : ''
+                });
+            });
         }
         editorEl.modal.style.display = 'flex';
     }
@@ -1191,6 +1729,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var tr = document.createElement('tr');
         var code = escapeHtml(item.code || '');
         var name = escapeHtml(item.name || '');
+        var category = escapeHtml(item.category || '');
         var typeSel = item.type === 'etf' ? 'etf' : 'stock';
 
         tr.innerHTML =
@@ -1199,7 +1738,8 @@ document.addEventListener('DOMContentLoaded', () => {
             '<td><select class="editor-type">' +
                 '<option value="stock"' + (typeSel === 'stock' ? ' selected' : '') + '>股票</option>' +
                 '<option value="etf"'   + (typeSel === 'etf'   ? ' selected' : '') + '>ETF</option>' +
-            '</select></td>' +
+                '</select></td>' +
+            '<td><input class="editor-category" type="text" value="' + category + '" placeholder="如：银行" maxlength="20"></td>' +
             '<td><button class="editor-del-btn" type="button" title="删除此行">✕</button></td>';
 
         // 删除事件
@@ -1227,10 +1767,12 @@ document.addEventListener('DOMContentLoaded', () => {
             var nameInput = tr.querySelector('.editor-name');
             var codeInput = tr.querySelector('.editor-code');
             var typeSelect = tr.querySelector('.editor-type');
+            var categoryInput = tr.querySelector('.editor-category');
             rows.push({
                 name: (nameInput.value || '').trim(),
                 code: (codeInput.value || '').trim(),
                 type: typeSelect.value,
+                category: (categoryInput.value || '').trim(),
                 nameInput: nameInput,
                 codeInput: codeInput,
             });
@@ -1270,10 +1812,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buildWatchlistCsv(rows) {
-        var lines = ['code,name,type'];
+        var lines = ['code,name,type,category'];
         rows.forEach(function (row) {
             if (row.code || row.name) {
-                lines.push(row.code + ',' + row.name + ',' + row.type);
+                lines.push(row.code + ',' + row.name + ',' + row.type + ',' + row.category);
             }
         });
         return lines.join('\n');

@@ -1,0 +1,125 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-07-20 01:02:27+08:00",
+  "trade_date": "2026-07-17",
+  "code": "601012",
+  "name": "隆基绿能",
+  "type": "stock",
+  "category": "新能源",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 39.8,
+    "risk": 25.0,
+    "technical": 60.0,
+    "industry": 42.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 35.73,
+    "max_drawdown_60d_pct": -33.88,
+    "atr14_pct": 4.02,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 50.0,
+        "value": 35.73
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 0.0,
+        "value": -33.88
+      },
+      {
+        "name": "ATR百分比",
+        "score": 31.2,
+        "value": 4.02
+      },
+      {
+        "name": "量价异常",
+        "score": 37.5,
+        "value": 0.79
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 38.52
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.69,
+    "return_5d_pct": 0.25,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 56.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 11.794,
+    "ma10": 11.921,
+    "ma20": 12.361500000000001,
+    "ma60": 14.160833333333334,
+    "rsi14": 35.9,
+    "macd_dif": -0.5289446102542978,
+    "macd_dea": -0.5537762787979491,
+    "macd_hist": 0.04966333708730253,
+    "atr14_pct": 4.016236498149234,
+    "boll_position": 0.19724621175325802,
+    "return_5d_pct": -2.9727497935590375,
+    "return_20d_pct": -8.489096573208721,
+    "volume_ratio_5d": 0.79
+  },
+  "industry": {
+    "name": "新能源",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -8.9,
+    "return_20d_pct": -14.5,
+    "return_60d_pct": -8.42,
+    "relative_strength_20d_pct": null
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.69,
+      "median_return_pct": 0.74,
+      "best_return_pct": 11.73,
+      "worst_return_pct": -7.27
+    },
+    "horizon_5d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.25,
+      "median_return_pct": 0.33,
+      "best_return_pct": 11.7,
+      "worst_return_pct": -10.52
+    }
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 33.9%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 33.9%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/601012.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

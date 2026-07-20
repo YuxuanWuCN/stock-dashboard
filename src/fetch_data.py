@@ -38,33 +38,28 @@ _requests.Session.__init__ = _patched_session_init  # type: ignore[method-assign
 import akshare as ak
 import pandas as pd
 
-from config import (
-    LOOKBACK_DAYS,
-    ADJUST,
-    PERIOD,
-    REQUEST_INTERVAL,
-    REQUEST_TIMEOUT,
-    MAX_RETRIES,
-    MIN_VALID_ROWS,
-    MA_WINDOWS,
-    WATCHLIST_PATH,
-    DATA_DIR,
-    KLINE_DIR,
-    SUMMARY_PATH,
-    META_PATH,
-)
-from utils import (
-    setup_logging,
-    beijing_now,
-    beijing_today,
-    beijing_date_str,
-    beijing_datetime_str,
-    calc_start_date,
-    validate_ohlcv,
-    calc_ma,
-    atomic_write_json,
-    has_existing_data,
-)
+try:
+    from .config import (
+        LOOKBACK_DAYS, ADJUST, PERIOD, REQUEST_INTERVAL, REQUEST_TIMEOUT,
+        MAX_RETRIES, MIN_VALID_ROWS, MA_WINDOWS, WATCHLIST_PATH, DATA_DIR,
+        KLINE_DIR, SUMMARY_PATH, META_PATH,
+    )
+    from .utils import (
+        setup_logging, beijing_now, beijing_today, beijing_date_str,
+        beijing_datetime_str, calc_start_date, validate_ohlcv, calc_ma,
+        atomic_write_json, has_existing_data,
+    )
+except ImportError:  # Support direct execution from src/.
+    from config import (
+        LOOKBACK_DAYS, ADJUST, PERIOD, REQUEST_INTERVAL, REQUEST_TIMEOUT,
+        MAX_RETRIES, MIN_VALID_ROWS, MA_WINDOWS, WATCHLIST_PATH, DATA_DIR,
+        KLINE_DIR, SUMMARY_PATH, META_PATH,
+    )
+    from utils import (
+        setup_logging, beijing_now, beijing_today, beijing_date_str,
+        beijing_datetime_str, calc_start_date, validate_ohlcv, calc_ma,
+        atomic_write_json, has_existing_data,
+    )
 
 logger = setup_logging()
 

@@ -10,6 +10,9 @@ import os
 # 历史数据窗口：往前推的自然日数（保证覆盖约 250 个交易日 + MA60 余量）
 LOOKBACK_DAYS = 400
 
+# 分析系统历史数据窗口（5 年 ≈ 1825 天，用于相似走势匹配）
+LOOKBACK_DAYS_5Y = 1825
+
 # 复权方式（本项目固定前复权）
 ADJUST = "qfq"
 
@@ -55,6 +58,7 @@ WATCHLIST_PATH = os.path.join(ROOT_DIR, "watchlist.csv")
 # 数据输出目录
 DATA_DIR = os.path.join(ROOT_DIR, "docs", "data")
 KLINE_DIR = os.path.join(DATA_DIR, "kline")
+ANALYSIS_DIR = os.path.join(DATA_DIR, "analysis")
 
 # 摘要与元信息文件
 SUMMARY_PATH = os.path.join(DATA_DIR, "summary.json")

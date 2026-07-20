@@ -1,0 +1,69 @@
+# analysis.yml —— 每个交易日北京时间 17:30 生成短线风险收益排行榜
+#
+# 触发方式：
+#   1. 定时：周一至周五 UTC 9:30（= 北京时间 17:30）
+#   2. 手动：在 GitHub Actions 页面点击 "Run workflow"
+
+name: Daily Stock Analysis
+
+on:
+  schedule:
+    # 北京时间 17:30 = UTC 9:30，周一至周五
+    - cron: "30 9 * * 1-5"
+  workflow_dispatch:   # 允许手动触发
+
+# 需要写权限以自动提交数据
+permissions:
+  contents: write
+
+# 防止并发
+concurrency:
+  group: analysis-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  run-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 仓库代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装 Python 依赖
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 运行分析系统测试
+        run: python -m unittest tests/test_analysis.py -v
+
+      - name: 运行排行榜分析
+        id: analysis
+        run: python -m src.build_ranking
+        # 部分失败时也继续提交（已成功的部分）
+
+      - name: 提交并推送分析数据
+        if: success() || failure()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # 获取北京日期用于提交信息
+          BEIJING_DATE=$(TZ='Asia/Shanghai' date '+%Y-%m-%d')
+
+          # 统一添加数据和 K 线的变化
+          git add docs/data/
+
+          # 仅在有变更时提交
+          if git diff --cached --quiet; then
+            echo "数据无变化，跳过提交"
+          else
+            TRADE_DATE="${BEIJING_DATE}"
+            git commit -m "chore(analysis): update ranking data for ${TRADE_DATE}"
+            git push
+          fi
