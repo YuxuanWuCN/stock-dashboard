@@ -537,7 +537,13 @@ def build_ranking(
 
     # ---- 为每只标的重算风险分（使用全局百分位）----
     for code, r in results.items():
-        if r is None or not r.get("latest"):
+        if r is None:
+            continue
+
+        # stale 数据（旧详情 JSON）没有 latest/composite 等内部字段，
+        # 先从旧 scores 结构补齐，让它能正常参与排序和输出。
+        if not r.get("latest"):
+            _normalize_stale_result(r)
             continue
 
         # 风险分（需要全局 latest 列表）
@@ -696,6 +702,56 @@ def build_ranking(
     }
 
     return ranking
+
+
+def _normalize_stale_result(r: dict) -> None:
+    """
+    将 stale 数据（旧详情 JSON，由 _load_stale_result 加载）
+    补齐为 build_ranking 需要的内部字段：
+    composite / risk_result / industry_info / industry_scoring / technical.score。
+
+    旧详情文件是 build_stock_detail 的输出，字段与 analyze_single 的
+    内部结构不同，必须做兼容转换，否则排序时会 KeyError 崩溃。
+    """
+    scores = r.get("scores", {}) or {}
+    risk = r.get("risk", {}) or {}
+    tech = r.get("technical", {}) or {}
+    ind = r.get("industry", {}) or {}
+
+    # composite：风险调整分直接用旧 scores
+    r["composite"] = {
+        "risk_adjusted": scores.get("risk_adjusted"),
+        "risk": scores.get("risk"),
+        "technical": scores.get("technical"),
+        "industry": scores.get("industry"),
+    }
+
+    # risk_result：旧 risk 块没有 score（score 在 scores.risk），补上
+    r["risk_result"] = {
+        "score": scores.get("risk"),
+        "level": risk.get("level"),
+        "label": risk.get("label"),
+        "factors": risk.get("factors", []),
+    }
+
+    # technical：补 score
+    r["technical"] = dict(tech)
+    r["technical"]["score"] = scores.get("technical")
+
+    # industry_info / industry_scoring：旧 industry 块拆成两个结构
+    r["industry_info"] = {
+        "name": ind.get("name"),
+        "reference_type": ind.get("reference_type"),
+        "benchmark_code": ind.get("benchmark_code"),
+        "return_5d_pct": ind.get("return_5d_pct"),
+        "return_20d_pct": ind.get("return_20d_pct"),
+        "return_60d_pct": ind.get("return_60d_pct"),
+        "relative_strength_20d_pct": ind.get("relative_strength_20d_pct"),
+    }
+    r["industry_scoring"] = dict(ind)
+    r["industry_scoring"]["score"] = scores.get("industry")
+
+    r["stale"] = True
 
 
 def _get_last_success_date(code: str) -> Optional[str]:
