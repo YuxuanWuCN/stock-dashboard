@@ -204,6 +204,57 @@ def fetch_index(
 
 
 # ============================================================
+# 股票代码 → 名称 自动解析（腾讯行情接口，轻量快速）
+# ============================================================
+
+_STOCK_NAME_CACHE: dict[str, str] = {}
+
+
+def resolve_stock_name(code: str) -> str:
+    """根据 6 位股票代码自动查询真实名称（如 000021 → 深科技）。
+
+    优先使用内存缓存；查询失败时返回代码本身，保证流程不中断。
+    支持 A 股股票与场内 ETF。
+    """
+    code = (code or "").strip()
+    if not code or not code.isdigit() or len(code) != 6:
+        return code
+
+    cached = _STOCK_NAME_CACHE.get(code)
+    if cached:
+        return cached
+
+    # 根据代码前缀判断交易所：6/5/9 开头 → 上海，其余 → 深圳
+    if code.startswith(("5", "6", "9")):
+        prefix = "sh"
+    else:
+        prefix = "sz"
+
+    name = code
+    try:
+        url = f"https://qt.gtimg.cn/q={prefix}{code}"
+        resp = _requests.get(url, timeout=6)
+        resp.encoding = "gbk"
+        text = resp.text or ""
+        # 腾讯行情返回格式: v_sz000021="51~深科技~000021~...~...";
+        # 名称位于第 2 个字段（按 ~ 分割后下标 1）
+        if '~' in text:
+            parts = text.split("~")
+            if len(parts) > 1 and parts[1].strip():
+                candidate = parts[1].strip()
+                # 过滤明显无效的占位（避免把代码当名称）
+                if candidate.isdigit() is False:
+                    name = candidate
+        if name != code:
+            _STOCK_NAME_CACHE[code] = name
+            logger.info("解析股票名称: %s → %s", code, name)
+    except Exception:
+        logger.debug("解析股票名称失败 %s: %s", code, traceback.format_exc())
+
+    return name
+
+
+# ============================================================
 # API 路由
 # ============================================================
 
@@ -238,11 +289,11 @@ def api_query():
     )
 
     # ---- 1. 抓取个股 ----
-    # 自动识别 ETF（代码以5/1开头）
+    # 自动识别 ETF（代码以5/1开头），并自动解析真实名称
     if code.startswith(("5", "1")):
-        stock_item = {"code": code, "name": code, "type": "etf"}
+        stock_item = {"code": code, "name": resolve_stock_name(code), "type": "etf"}
     else:
-        stock_item = {"code": code, "name": code, "type": "stock"}
+        stock_item = {"code": code, "name": resolve_stock_name(code), "type": "stock"}
 
     try:
         df_stock = fetch_one(stock_item, start_yyyymmdd, end_yyyymmdd)
@@ -375,6 +426,10 @@ def api_watchlist_add():
     # ---- 校验 ----
     if not code or not code.isdigit() or len(code) != 6:
         return jsonify({"error": "股票代码格式不正确"}), 400
+
+    # 名称未填写时，自动从行情接口解析真实名称（如 000021 → 深科技）
+    if not name or name == code:
+        name = resolve_stock_name(code)
     if not name:
         return jsonify({"error": "股票名称不能为空"}), 400
     if typ not in ("stock", "etf"):
