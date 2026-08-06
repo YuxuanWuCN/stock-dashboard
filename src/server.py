@@ -16,24 +16,14 @@ from typing import Optional
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # ---- 清除系统代理 ----
-for _key in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy",
-             "ALL_PROXY", "all_proxy", "FTP_PROXY", "ftp_proxy"):
-    os.environ.pop(_key, None)
-os.environ["NO_PROXY"] = "*"
+try:
+    from .proxy import configure_proxy_from_system
+except ImportError:  # Support direct execution from src/.
+    from proxy import configure_proxy_from_system
 
-import requests as _requests
+configure_proxy_from_system()
 
-_orig_init = _requests.Session.__init__
-
-
-def _patched_session_init(self, *args, **kwargs):
-    _orig_init(self, *args, **kwargs)
-    self.trust_env = False
-
-
-_requests.Session.__init__ = _patched_session_init  # type: ignore[method-assign]
-
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import akshare as ak
 import pandas as pd
@@ -214,6 +204,7 @@ def resolve_stock_name(code: str) -> str:
     """根据 6 位股票代码自动查询真实名称（如 000021 → 深科技）。
 
     优先使用内存缓存；查询失败时返回代码本身，保证流程不中断。
+    依次尝试腾讯行情接口与 akshare 东方财富接口，任一成功即返回。
     支持 A 股股票与场内 ETF。
     """
     code = (code or "").strip()
@@ -230,10 +221,24 @@ def resolve_stock_name(code: str) -> str:
     else:
         prefix = "sz"
 
-    name = code
+    name = _resolve_via_tencent(code, prefix)
+    if name == code:
+        name = _resolve_via_akshare(code)
+
+    if name != code:
+        _STOCK_NAME_CACHE[code] = name
+        logger.info("解析股票名称: %s → %s", code, name)
+    else:
+        logger.warning("股票名称解析失败，回退为代码: %s", code)
+
+    return name
+
+
+def _resolve_via_tencent(code: str, prefix: str) -> str:
+    """通过腾讯行情接口解析名称；失败时返回 code 本身。"""
     try:
         url = f"https://qt.gtimg.cn/q={prefix}{code}"
-        resp = _requests.get(url, timeout=6)
+        resp = _requests.get(url, timeout=10)
         resp.encoding = "gbk"
         text = resp.text or ""
         # 腾讯行情返回格式: v_sz000021="51~深科技~000021~...~...";
@@ -244,14 +249,27 @@ def resolve_stock_name(code: str) -> str:
                 candidate = parts[1].strip()
                 # 过滤明显无效的占位（避免把代码当名称）
                 if candidate.isdigit() is False:
-                    name = candidate
-        if name != code:
-            _STOCK_NAME_CACHE[code] = name
-            logger.info("解析股票名称: %s → %s", code, name)
+                    return candidate
     except Exception:
-        logger.debug("解析股票名称失败 %s: %s", code, traceback.format_exc())
+        logger.debug("腾讯行情解析股票名称失败 %s: %s", code, traceback.format_exc())
+    return code
 
-    return name
+
+def _resolve_via_akshare(code: str) -> str:
+    """通过 akshare 东方财富接口解析名称；失败时返回 code 本身。"""
+    try:
+        info_df = ak.stock_individual_info_em(symbol=code)
+        if info_df is not None and not info_df.empty:
+            item_col = info_df.columns[0]
+            val_col = info_df.columns[1]
+            for _, row in info_df.iterrows():
+                if str(row[item_col]).strip() == "股票简称":
+                    candidate = str(row[val_col]).strip()
+                    if candidate and candidate.isdigit() is False:
+                        return candidate
+    except Exception:
+        logger.debug("akshare 解析股票名称失败 %s: %s", code, traceback.format_exc())
+    return code
 
 
 # ============================================================

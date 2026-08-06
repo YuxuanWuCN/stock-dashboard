@@ -1695,3 +1695,157 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================================
+   基本面分析卡片
+   ============================================================ */
+
+.fundamental-section {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    background: #fafafa;
+}
+
+.fundamental-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.fundamental-heading h3 {
+    margin: 0;
+    font-size: 17px;
+}
+
+.fundamental-report-date {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.fundamental-dimensions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 20px;
+    margin-bottom: 14px;
+}
+
+.fundamental-dim {
+    display: grid;
+    grid-template-columns: 80px 1fr 44px;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.fundamental-dim > span {
+    color: #4b5563;
+}
+
+.fundamental-dim > strong {
+    text-align: right;
+    font-size: 14px;
+}
+
+.fundamental-bar-wrap {
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.fundamental-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.fundamental-bar.score-high,
+.confidence-badge.score-high { background: #e63946; color: #fff; }
+.fundamental-bar.score-mid,
+.confidence-badge.score-mid { background: #f59e0b; color: #fff; }
+.fundamental-bar.score-low,
+.confidence-badge.score-low { background: #10b981; color: #fff; }
+
+.confidence-badge.score-high,
+.confidence-badge.score-mid,
+.confidence-badge.score-low {
+    border: none;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.fundamental-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.fundamental-metric {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.fundamental-metric span {
+    display: block;
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.fundamental-metric strong {
+    font-size: 14px;
+    color: #1f2937;
+}
+
+.fundamental-views {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.fundamental-view {
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.fundamental-view h4 {
+    margin: 0 0 6px;
+    font-size: 14px;
+}
+
+.fundamental-view p {
+    margin: 0;
+    color: #374151;
+}
+
+.positive-view {
+    background: rgba(230, 57, 70, 0.06);
+    border: 1px solid rgba(230, 57, 70, 0.25);
+}
+
+.negative-view {
+    background: rgba(16, 185, 129, 0.06);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+@media (max-width: 900px) {
+    .fundamental-dimensions {
+        grid-template-columns: 1fr;
+    }
+    .fundamental-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .fundamental-views {
+        grid-template-columns: 1fr;
+    }
+}

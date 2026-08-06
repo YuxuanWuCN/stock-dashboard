@@ -63,8 +63,9 @@ def make_test_df(n_days: int = 300, seed: int = 42) -> pd.DataFrame:
     np.random.seed(seed)
 
     dates = pd.date_range(start="2020-01-01", periods=n_days, freq="B")
-    # 随机游走价格序列
-    changes = np.random.randn(n_days) * 2.0
+    # 随机游走价格序列：2% 的日对数波动可保持长样本价格有限，
+    # 避免测试数据自身指数溢出并污染相似度数值稳定性检查。
+    changes = np.random.randn(n_days) * 0.02
     log_price = np.cumsum(changes) + np.log(100.0)
     close = np.exp(log_price)
 

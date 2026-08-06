@@ -14,26 +14,17 @@ import os
 import sys
 import time
 import traceback
+import urllib.request
 from datetime import date, datetime
 from typing import Optional
 
 # ---- 在 import akshare 之前清除系统代理 ----
-for _key in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy",
-             "ALL_PROXY", "all_proxy", "FTP_PROXY", "ftp_proxy"):
-    os.environ.pop(_key, None)
-os.environ["NO_PROXY"] = "*"
+try:
+    from .proxy import configure_proxy_from_system
+except ImportError:  # Support direct execution from src/.
+    from proxy import configure_proxy_from_system
 
-import requests as _requests
-
-_orig_init = _requests.Session.__init__
-
-
-def _patched_session_init(self, *args, **kwargs):
-    _orig_init(self, *args, **kwargs)
-    self.trust_env = False
-
-
-_requests.Session.__init__ = _patched_session_init  # type: ignore[method-assign]
+configure_proxy_from_system()
 
 import akshare as ak
 import pandas as pd
@@ -231,6 +222,10 @@ def _fetch_etf_hist_em(
     ETF 在新浪也用 stock_zh_a_daily 接口（加交易所前缀），
     与股票备用源一致，已验证可绕开本机代理问题。
     """
+    df = _fetch_tencent_kline(code, start_date, end_date, count=500)
+    if df is not None and not df.empty:
+        return df
+
     if attempt == 0:
         # 主源：东财 fund_etf_hist_em
         df = ak.fund_etf_hist_em(
@@ -256,6 +251,18 @@ def _fetch_etf_hist_em(
         except Exception:
             df = None
 
+    # 第三备用源：新浪 fund_etf_hist_sina（与 build_ranking.py 保持一致）
+    if df is None or df.empty:
+        try:
+            logger.info("ETF %s 尝试备用源 fund_etf_hist_sina", code)
+            df = ak.fund_etf_hist_sina(symbol=code)
+        except Exception:
+            df = None
+
+    if df is None or df.empty:
+        logger.info("ETF %s 尝试备用源 Tencent qfqday", code)
+        df = _fetch_tencent_kline(code, start_date, end_date, count=500)
+
     if df is None or df.empty:
         return None
 
@@ -268,6 +275,38 @@ def _fetch_etf_hist_em(
     }
     df = df.rename(columns=col_map)
     return df
+
+
+def _fetch_tencent_kline(
+    code: str,
+    start_date: str,
+    end_date: str,
+    count: int = 500,
+) -> Optional[pd.DataFrame]:
+    """Fetch qfq daily K-line data from Tencent as a fallback source."""
+    market = "sh" if code.startswith(("5", "6")) else "sz"
+    symbol = f"{market}{code}"
+    url = f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={symbol},day,,,{count},qfq"
+
+    try:
+        request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        with opener.open(request, timeout=20) as response:
+            payload = response.read().decode("utf-8")
+
+        data = json.loads(payload)
+        rows = data.get("data", {}).get(symbol, {}).get("qfqday") or []
+        if not rows:
+            return None
+
+        df = pd.DataFrame(rows, columns=["date", "open", "close", "high", "low", "volume"])
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
+        return df
+    except Exception:
+        logger.warning("ETF %s Tencent 备用源失败: %s", code, traceback.format_exc())
+        return None
 
 
 def _clean_and_validate(

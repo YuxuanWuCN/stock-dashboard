@@ -113,7 +113,7 @@ def compute_risk_score(
 
     # 1. 波动率因子 (30%)
     if vol is not None:
-        vol_sub = _sub_score_percentile(vol, all_vol, invert=True)
+        vol_sub = _sub_score_percentile(vol, all_vol, invert=False)
     else:
         vol_sub = 50.0
     factors.append({"name": "20日波动率", "score": round(vol_sub, 1), "value": round(vol, 2) if vol else None})
@@ -121,14 +121,14 @@ def compute_risk_score(
     # 2. 最大回撤因子 (25%)
     if mdd is not None:
         # max_drawdown 是负数，越小（越负）风险越大
-        mdd_sub = _sub_score_percentile(abs(mdd), [abs(v) if v else 0 for v in all_mdd], invert=True)
+        mdd_sub = _sub_score_percentile(abs(mdd), [abs(v) if v else 0 for v in all_mdd], invert=False)
     else:
         mdd_sub = 50.0
     factors.append({"name": "60日最大回撤", "score": round(mdd_sub, 1), "value": round(mdd, 2) if mdd else None})
 
     # 3. ATR 百分比因子 (20%)
     if atr_pct is not None:
-        atr_sub = _sub_score_percentile(atr_pct, all_atr, invert=True)
+        atr_sub = _sub_score_percentile(atr_pct, all_atr, invert=False)
     else:
         atr_sub = 50.0
     factors.append({"name": "ATR百分比", "score": round(atr_sub, 1), "value": round(atr_pct, 2) if atr_pct else None})
@@ -138,7 +138,7 @@ def compute_risk_score(
         # 量比偏离 1.0 过多（无论方向）可能表示异常
         vr_deviation = abs(vr - 1.0) if vr else 0
         all_vr_dev = [abs(v - 1.0) if v else 0 for v in all_vratio]
-        vr_sub = _sub_score_percentile(vr_deviation, all_vr_dev, invert=True)
+        vr_sub = _sub_score_percentile(vr_deviation, all_vr_dev, invert=False)
     else:
         vr_sub = 50.0
     factors.append({"name": "量价异常", "score": round(vr_sub, 1), "value": round(vr, 2) if vr else None})
@@ -146,7 +146,7 @@ def compute_risk_score(
     # 5. 行业风险因子 (15%)
     ind_vol = latest.get("industry_volatility_20d")
     if ind_vol is not None:
-        ind_sub = _sub_score_percentile(ind_vol, all_ind_vol, invert=True)
+        ind_sub = _sub_score_percentile(ind_vol, all_ind_vol, invert=False)
     else:
         ind_sub = 50.0
     factors.append({"name": "行业波动", "score": round(ind_sub, 1), "value": round(ind_vol, 2) if ind_vol else None})

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "source_roots": ["src", "tests", "tools", "docs/assets"],
+  "source_extensions": [".py", ".js"],
+  "exclude_directories": [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".quality-state",
+    "bug合集"
+  ],
+  "commands": {
+    "small": [
+      "\"{python}\" -m pytest -q tests/test_fundamental.py tests/test_quality_gate.py"
+    ],
+    "medium": [
+      "\"{python}\" -m pytest -q tests/test_integration_pipeline.py"
+    ],
+    "heavy": [
+      "\"{python}\" -m pytest -q tests/test_reproducibility_pipeline.py",
+      "\"{python}\" -m pytest -q"
+    ]
+  }
+}

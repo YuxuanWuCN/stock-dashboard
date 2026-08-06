@@ -82,7 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
         analysisMarketMetrics: document.getElementById('analysis-market-metrics'),
         similarityConfidence: document.getElementById('similarity-confidence'),
         similarityGrid: document.getElementById('similarity-grid'),
-        analysisDisclaimer: document.getElementById('analysis-disclaimer')
+        analysisDisclaimer: document.getElementById('analysis-disclaimer'),
+        fundamentalSection: document.getElementById('fundamental-section'),
+        fundamentalReportDate: document.getElementById('fundamental-report-date'),
+        fundamentalScoreBadge: document.getElementById('fundamental-score-badge'),
+        fundamentalDimensions: document.getElementById('fundamental-dimensions'),
+        fundamentalMetrics: document.getElementById('fundamental-metrics'),
+        fundamentalPositiveView: document.getElementById('fundamental-positive-view'),
+        fundamentalNegativeView: document.getElementById('fundamental-negative-view'),
     };
 
     function readBrowserWatchlist() {
@@ -124,7 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return summaryItem.code === item.code;
             });
             if (existing) {
-                existing.name = item.name || existing.name;
+                existing.name = (item.name && item.name !== item.code)
+                    ? item.name
+                    : (existing.name || item.name);
                 existing.type = item.type || existing.type;
                 existing.category = item.category || existing.category || '';
                 return;
@@ -352,10 +361,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const changeText = hasChange ? `${changeSign}${item.change_pct.toFixed(2)}% ${arrow}` : '--';
             const changeBg = hasChange ? (item.change_pct >= 0 ? 'up' : 'down') : 'flat';
 
+            // 名称未识别时给出提示（name === code）
+            const displayName = item.name === item.code
+                ? `${item.code} (名称未识别)`
+                : item.name;
             // 构建卡片 HTML
             card.innerHTML = `
                 <div class="stock-item-left">
-                    <span class="stock-item-name">${item.name}</span>
+                    <span class="stock-item-name">${displayName}</span>
                     <div class="stock-item-meta">
                         <span class="stock-item-code">${item.code}</span>
                         <span class="type-badge ${typeClass}">${typeLabel}</span>
@@ -1091,6 +1104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         el.analysisMarketMetrics.textContent = '';
         el.similarityGrid.textContent = '';
         el.similarityConfidence.textContent = '--';
+        el.fundamentalSection.hidden = true;
         el.analysisDisclaimer.textContent = '';
     }
 
@@ -1128,8 +1142,99 @@ document.addEventListener('DOMContentLoaded', () => {
         renderAnalysisReasons(detail.reasons || []);
         renderMarketMetrics(detail);
         renderSimilarity(similarity);
+        renderFundamental(detail.fundamental);
         el.analysisDisclaimer.textContent = detail.disclaimer
             || '基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。';
+    }
+
+    // ---- 基本面渲染 ----
+    function renderFundamental(fundamental) {
+        el.fundamentalSection.hidden = true;
+        el.fundamentalDimensions.innerHTML = '';
+        el.fundamentalMetrics.innerHTML = '';
+
+        if (!fundamental || typeof fundamental.score !== 'number') {
+            el.fundamentalSection.hidden = true;
+            return;
+        }
+
+        el.fundamentalSection.hidden = false;
+
+        var reportDate = fundamental.report_date || '--';
+        el.fundamentalReportDate.textContent = '财务报告期：' + reportDate
+            + (fundamental.dual_view && fundamental.dual_view.cycle_note ? ' · ' + fundamental.dual_view.cycle_note : '');
+
+        el.fundamentalScoreBadge.textContent = '基本面 ' + fundamental.score.toFixed(1);
+        el.fundamentalScoreBadge.className = 'confidence-badge'
+            + (fundamental.score >= 60 ? ' score-high'
+                : fundamental.score >= 40 ? ' score-mid' : ' score-low');
+
+        // 四维度
+        var dims = fundamental.dimensions || {};
+        var dimLabels = {
+            asset_quality: '资产质量',
+            liability_safety: '负债安全',
+            profit_quality: '盈利质量',
+            cash_health: '现金健康'
+        };
+        Object.keys(dimLabels).forEach(function (key) {
+            var val = dims[key];
+            var block = document.createElement('div');
+            block.className = 'fundamental-dim';
+            var label = document.createElement('span');
+            label.textContent = dimLabels[key];
+            var barWrap = document.createElement('div');
+            barWrap.className = 'fundamental-bar-wrap';
+            var bar = document.createElement('div');
+            bar.className = 'fundamental-bar ' + (val >= 60 ? 'score-high' : val >= 40 ? 'score-mid' : 'score-low');
+            bar.style.width = (Number.isFinite(val) ? val : 0) + '%';
+            barWrap.appendChild(bar);
+            var value = document.createElement('strong');
+            value.textContent = Number.isFinite(val) ? val.toFixed(1) : '--';
+            block.appendChild(label);
+            block.appendChild(barWrap);
+            block.appendChild(value);
+            el.fundamentalDimensions.appendChild(block);
+        });
+
+        // 关键指标
+        var m = fundamental.metrics || {};
+        var metricRows = [
+            ['资产负债率', fmtRatio(m.debt_ratio)],
+            ['存货+预付占总资产', fmtRatio(m.inventory_prepay_ratio)],
+            ['应收账款/营收', fmtRatio(m.receivable_revenue)],
+            ['ROE', fmtPercent(m.roe !== null && m.roe !== undefined ? m.roe * 100 : null)],
+            ['毛利率', fmtPercent(m.gross_margin)],
+            ['净利润同比', fmtPercent(m.netprofit_yoy)],
+            ['经营现金流/净利润', Number.isFinite(m.ocf_np_ratio) ? Number(m.ocf_np_ratio).toFixed(2) : '--'],
+            ['总资产同比', fmtPercent(m.total_assets_yoy)],
+            ['未分配利润/归母权益', fmtRatio(m.retained_profit_equity)]
+        ];
+        metricRows.forEach(function (row) {
+            var cell = document.createElement('div');
+            cell.className = 'fundamental-metric';
+            var name = document.createElement('span');
+            var value = document.createElement('strong');
+            name.textContent = row[0];
+            value.textContent = row[1];
+            cell.appendChild(name);
+            cell.appendChild(value);
+            el.fundamentalMetrics.appendChild(cell);
+        });
+
+        // 两面解读
+        if (fundamental.dual_view) {
+            el.fundamentalPositiveView.textContent = fundamental.dual_view.positive_view || '--';
+            el.fundamentalNegativeView.textContent = fundamental.dual_view.negative_view || '--';
+        }
+    }
+
+    function fmtRatio(v) {
+        return Number.isFinite(v) ? (Number(v) * 100).toFixed(1) + '%' : '--';
+    }
+
+    function fmtPercent(v) {
+        return Number.isFinite(v) ? (Number(v) > 0 ? '+' : '') + Number(v).toFixed(1) + '%' : '--';
     }
 
     function setReturnMetric(node, value) {

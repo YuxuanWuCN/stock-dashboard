@@ -13,26 +13,14 @@ import sys
 import time
 import traceback
 from datetime import date, datetime
+from multiprocessing import Process, Queue
 from pathlib import Path
 from typing import Optional
 
 # ---- 清理代理环境变量 ----
-for _key in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy",
-             "ALL_PROXY", "all_proxy", "FTP_PROXY", "ftp_proxy"):
-    os.environ.pop(_key, None)
-os.environ["NO_PROXY"] = "*"
+from src.proxy import configure_proxy_from_system
 
-import requests as _requests
-
-_orig_init = _requests.Session.__init__
-
-
-def _patched_session_init(self, *args, **kwargs):
-    _orig_init(self, *args, **kwargs)
-    self.trust_env = False
-
-
-_requests.Session.__init__ = _patched_session_init
+configure_proxy_from_system()
 
 import akshare as ak
 import pandas as pd
@@ -63,7 +51,13 @@ from src.utils import (
     atomic_write_json,
     has_existing_data,
 )
-from src.fetch_data import read_watchlist, fetch_one, compute_derived, build_kline_json
+from src.fetch_data import (
+    read_watchlist,
+    fetch_one,
+    compute_derived,
+    build_kline_json,
+    _fetch_tencent_kline,
+)
 
 from src.analysis.config import (
     LOOKBACK_DAYS_5Y,
@@ -85,6 +79,8 @@ from src.analysis.indicators import (
 )
 from src.analysis.industry import IndustryProvider
 from src.analysis.similarity import find_similar_samples
+from src.analysis.fundamental import FundamentalAnalyzer
+from src.analysis.fundamental_config import FUNDAMENTAL_WEIGHT, TECHNICAL_WEIGHT
 from src.analysis.scoring import (
     compute_risk_score,
     compute_technical_score,
@@ -94,6 +90,7 @@ from src.analysis.scoring import (
 from src.analysis.schema import validate_ranking, validate_stock_detail
 
 logger = setup_logging()
+FUNDAMENTAL_TIMEOUT_SECONDS = 8
 
 # 输出路径
 ANALYSIS_DIR = os.path.join(DATA_DIR, ANALYSIS_DIR_NAME)
@@ -166,6 +163,10 @@ def _fetch_stock_5y(code: str, start_date: str, end_date: str, attempt: int) -> 
         )
 
     if df is None or df.empty:
+        logger.info("ETF %s 尝试备用源 Tencent qfqday", code)
+        df = _fetch_tencent_kline(code, start_date, end_date, count=1500)
+
+    if df is None or df.empty:
         return None
 
     col_map = {
@@ -179,6 +180,10 @@ def _fetch_stock_5y(code: str, start_date: str, end_date: str, attempt: int) -> 
 
 def _fetch_etf_5y(code: str, start_date: str, end_date: str, attempt: int) -> Optional[pd.DataFrame]:
     """抓取 ETF 5 年历史数据。修复 ETF 数据抓取问题。"""
+    df = _fetch_tencent_kline(code, start_date, end_date, count=1500)
+    if df is not None and not df.empty:
+        return df
+
     if attempt == 0:
         try:
             df = ak.fund_etf_hist_em(
@@ -337,6 +342,8 @@ def analyze_single(
         ),
         # 行业波动
         "industry_volatility_20d": get_latest_value(ind_indicators.get("volatility_20d")),
+        # 行业相对强度（KNN 特征与行业评分所需）
+        "industry_rs_20d": get_latest_value(df.get("industry_rs_20d")),
     }
 
     # ---- 2.4 历史相似走势 ----
@@ -380,6 +387,12 @@ def analyze_single(
     # 将最新值加入全局列表（用于跨标的百分位排名）
     all_latest_values.append(latest)
 
+    # ---- 2.8 基本面分析 ----
+    # 周期判断只能基于真实行业板块；宽基指数仅可用于技术面的市场参照。
+    cycle_close = industry_close if ref_type == "industry" else None
+    fundamental_result = _analyze_fundamental_with_timeout(
+        code, name, category, cycle_close
+    )
     # ---- 2.8 收集 reasons ----
     tech_reasons = _collect_technical_reasons(latest, technical)
     ind_reasons = industry_scoring.get("_reasons", [])
@@ -411,12 +424,75 @@ def analyze_single(
         "industry_info": industry_info,
         "industry_scoring": industry_scoring,
         "similarity": similarity,
+        "fundamental": fundamental_result,
         "reasons": reasons,
         # kline_file 指向已有 K 线数据
         "kline_file": f"../kline/{code}.json",
     }
 
     return result
+
+
+def _analyze_fundamental_with_timeout(
+    code: str,
+    name: str,
+    category: str,
+    industry_close: Optional[pd.Series],
+) -> Optional[dict]:
+    """Run fundamental analysis with a timeout so external APIs cannot stall ranking."""
+    if code.startswith(("5", "1")):
+        return None
+
+    queue: Queue = Queue(maxsize=1)
+    process = Process(
+        target=_fundamental_worker,
+        args=(queue, code, name, category, industry_close),
+    )
+    process.start()
+    process.join(FUNDAMENTAL_TIMEOUT_SECONDS)
+
+    if process.is_alive():
+        process.terminate()
+        process.join(2)
+        logger.warning(
+            "%s(%s) 基本面分析超过 %d 秒，跳过本次基本面评分",
+            name,
+            code,
+            FUNDAMENTAL_TIMEOUT_SECONDS,
+        )
+        return None
+
+    try:
+        if queue.empty():
+            return None
+        ok, payload = queue.get_nowait()
+        if ok:
+            return payload
+        logger.warning("%s(%s) 基本面分析异常: %s", name, code, payload)
+        return None
+    except Exception:
+        logger.warning("%s(%s) 基本面分析异常: %s", name, code, traceback.format_exc())
+        return None
+
+
+def _fundamental_worker(
+    queue: Queue,
+    code: str,
+    name: str,
+    category: str,
+    industry_close: Optional[pd.Series],
+) -> None:
+    """Worker process for timeout-protected fundamental analysis."""
+    try:
+        result = FundamentalAnalyzer().analyze(
+            code,
+            name,
+            category,
+            industry_close=industry_close,
+        )
+        queue.put((True, result))
+    except Exception:
+        queue.put((False, traceback.format_exc()))
 
 
 def _collect_technical_reasons(latest: dict, technical: dict) -> list:
@@ -617,6 +693,22 @@ def build_ranking(
         fc_3d = sim.get("horizon_3d", {})
         fc_5d = sim.get("horizon_5d", {})
 
+        # 技术面综合分：风险调整后综合评分（现有 risk_adjusted）
+        technical_composite = comp.get("risk_adjusted")
+
+        # 基本面综合分（可能为 None）
+        fundamental = r.get("fundamental")
+        fundamental_score = fundamental.get("score") if fundamental else None
+
+        # 融合总分：技术面 × 0.5 + 基本面 × 0.5（基本面缺失时退化为技术面）
+        total_score = technical_composite
+        if fundamental_score is not None and technical_composite is not None:
+            total_score = (
+                TECHNICAL_WEIGHT * technical_composite
+                + FUNDAMENTAL_WEIGHT * fundamental_score
+            )
+            total_score = round(max(0.0, min(100.0, total_score)), 1)
+
         item_entry = {
             "rank": rank_idx,
             "code": code,
@@ -625,7 +717,9 @@ def build_ranking(
             "category": r.get("category", ""),
             "trade_date": r["trade_date"],
             "stale": r.get("stale", False),
-            "risk_adjusted_score": comp["risk_adjusted"],
+            "risk_adjusted_score": technical_composite,
+            "fundamental_score": fundamental_score,
+            "total_score": total_score,
             "risk": {
                 "score": risk["score"],
                 "level": risk["level"],
@@ -654,6 +748,7 @@ def build_ranking(
                 "return_20d_pct": ind_score.get("return_20d_pct"),
                 "relative_strength_20d_pct": ind_score.get("relative_strength_20d_pct"),
             },
+            "fundamental": fundamental,
             "reasons": r["reasons"],
         }
 
@@ -860,6 +955,7 @@ def build_stock_detail(r: dict, generated_at: str) -> dict:
                 "worst_return_pct": fc_5d.get("worst_return_pct"),
             },
         },
+        "fundamental": r.get("fundamental"),
         "reasons": r["reasons"],
         "kline_file": r["kline_file"],
         "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
