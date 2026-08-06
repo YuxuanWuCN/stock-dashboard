@@ -64,7 +64,7 @@ def check_dependencies() -> list[str]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Start Stock Dashboard 2.0 locally")
+    parser = argparse.ArgumentParser(description="Start Stock Dashboard 2.1 locally")
     parser.add_argument(
         "--no-browser",
         action="store_true",
@@ -116,7 +116,7 @@ def main() -> int:
             return 1
 
         print()
-        print("Stock Dashboard 2.0 is running:")
+        print("Stock Dashboard 2.1 is running:")
         print(f"  Dashboard: {WEB_URL}")
         print(f"  API health: {API_HEALTH_URL}")
         print("Press Ctrl+C to stop both services.")
@@ -133,7 +133,7 @@ def main() -> int:
             return failed.returncode or 1
         return 0
     except KeyboardInterrupt:
-        print("\nStopping Stock Dashboard 2.0...")
+        print("\nStopping Stock Dashboard 2.1...")
         return 0
     finally:
         stop_processes(processes)

@@ -1,6 +1,6 @@
 @echo off
 cd /d "%~dp0"
-title Stock Dashboard 2.0
+title Stock Dashboard 2.1
 python start_local.py
 if errorlevel 1 (
     echo.

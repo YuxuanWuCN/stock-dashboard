@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化应用
     async function init() {
         try {
-            // 并行加载元数据、汇总与 2.0 排行榜数据
+            // 并行加载元数据、汇总与 2.1 排行榜数据
             const [metaRes, summaryRes, rankingRes, watchlistRes] = await Promise.all([
                 fetch('data/meta.json').then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
@@ -780,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================================
-    // 2.0 排行榜与个股研究模块
+    // 2.1 排行榜与个股研究模块
     // ============================================================
 
     function initRankingModule() {
@@ -794,7 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         var schemaMajor = String(state.ranking.schema_version || '').split('.')[0];
         if (schemaMajor !== '2') {
-            showRankingState('分析数据版本不兼容，请重新生成 2.0 数据。', true);
+            showRankingState('分析数据版本不兼容，请重新生成当前版本数据。', true);
             el.rankingMeta.textContent = '数据版本不兼容';
             return;
         }
