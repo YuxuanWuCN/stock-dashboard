@@ -1,83 +1,83 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-07-20 01:02:27+08:00",
-  "trade_date": "2026-07-17",
+  "generated_at": "2026-08-06 19:42:00+08:00",
+  "trade_date": "2026-08-06",
   "code": "601318",
   "name": "中国平安",
   "type": "stock",
   "category": "保险",
   "stale": false,
   "scores": {
-    "risk_adjusted": 54.2,
-    "risk": 39.1,
-    "technical": 93.0,
-    "industry": 42.0
+    "risk_adjusted": 53.7,
+    "risk": 53.4,
+    "technical": 100.0,
+    "industry": 47.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 36.18,
-    "max_drawdown_60d_pct": -19.06,
-    "atr14_pct": 2.75,
+    "annualized_volatility_20d_pct": 27.43,
+    "max_drawdown_60d_pct": -14.21,
+    "atr14_pct": 2.57,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 43.8,
-        "value": 36.18
+        "score": 76.9,
+        "value": 27.43
       },
       {
         "name": "60日最大回撤",
-        "score": 31.2,
-        "value": -19.06
+        "score": 53.8,
+        "value": -14.21
       },
       {
         "name": "ATR百分比",
-        "score": 56.2,
-        "value": 2.75
+        "score": 69.2,
+        "value": 2.57
       },
       {
         "name": "量价异常",
-        "score": 68.8,
-        "value": 0.96
+        "score": 30.8,
+        "value": 0.87
       },
       {
         "name": "行业波动",
         "score": 0.0,
-        "value": 38.52
+        "value": 42.82
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.11,
+    "return_3d_pct": 1.32,
     "return_5d_pct": 1.95,
-    "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 56.7,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 66.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 50.29,
-    "ma10": 49.935,
-    "ma20": 49.563,
-    "ma60": 52.535666666666664,
-    "rsi14": 51.3,
-    "macd_dif": -0.3843935232490878,
-    "macd_dea": -0.7233800116757787,
-    "macd_hist": 0.6779729768533818,
-    "atr14_pct": 2.754316660309921,
-    "boll_position": 0.7712695726436585,
-    "return_5d_pct": 2.4656426839126944,
-    "return_20d_pct": 2.6731470230862753,
-    "volume_ratio_5d": 0.96
+    "trend": "uptrend",
+    "ma5": 54.379999999999995,
+    "ma10": 54.363,
+    "ma20": 52.9465,
+    "ma60": 51.8645,
+    "rsi14": 53.2,
+    "macd_dif": 0.9191876963983319,
+    "macd_dea": 0.8806637676328668,
+    "macd_hist": 0.07704785753093013,
+    "atr14_pct": 2.5719124831529308,
+    "boll_position": 0.570087213142983,
+    "return_5d_pct": -4.121863799283155,
+    "return_20d_pct": 8.102646999393803,
+    "volume_ratio_5d": 0.87
   },
   "industry": {
     "name": "保险",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -8.9,
-    "return_20d_pct": -14.5,
-    "return_60d_pct": -8.42,
+    "return_5d_pct": 6.2,
+    "return_20d_pct": -8.37,
+    "return_60d_pct": -12.3,
     "relative_strength_20d_pct": null
   },
   "similarity": {
@@ -86,32 +86,26 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 1.11,
-      "median_return_pct": -0.08,
-      "best_return_pct": 16.29,
-      "worst_return_pct": -4.5
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.32,
+      "median_return_pct": 0.17,
+      "best_return_pct": 12.36,
+      "worst_return_pct": -5.93
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
+      "up_probability_pct": 66.7,
       "average_return_pct": 1.95,
-      "median_return_pct": 0.69,
-      "best_return_pct": 33.45,
-      "worst_return_pct": -8.01
+      "median_return_pct": 1.49,
+      "best_return_pct": 16.78,
+      "worst_return_pct": -5.69
     }
   },
   "reasons": [
     {
-      "type": "negative",
-      "title": "近期回撤较大",
-      "detail": "近60日最大回撤 19.1%，风险偏高。",
-      "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "回撤风险",
-      "detail": "近60日最大回撤 19.1%，风险扣分。",
-      "contribution": -7.0
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     }
   ],
   "kline_file": "../kline/601318.json",

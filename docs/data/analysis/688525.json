@@ -1,0 +1,131 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-06 19:42:00+08:00",
+  "trade_date": "2026-08-06",
+  "code": "688525",
+  "name": "佰维存储",
+  "type": "stock",
+  "category": "科技",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 68.7,
+    "risk": 9.2,
+    "technical": 73.0,
+    "industry": 47.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 122.02,
+    "max_drawdown_60d_pct": -59.21,
+    "atr14_pct": 12.21,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 0.0,
+        "value": 122.02
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 0.0,
+        "value": -59.21
+      },
+      {
+        "name": "ATR百分比",
+        "score": 0.0,
+        "value": 12.21
+      },
+      {
+        "name": "量价异常",
+        "score": 92.3,
+        "value": 0.98
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 42.82
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 3.12,
+    "return_5d_pct": 4.66,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 60.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 223.266,
+    "ma10": 223.538,
+    "ma20": 259.6455,
+    "ma60": 329.39099999999996,
+    "rsi14": 39.4,
+    "macd_dif": -37.88603939732724,
+    "macd_dea": -38.280289499577734,
+    "macd_hist": 0.7885002045009912,
+    "atr14_pct": 12.205449266845351,
+    "boll_position": 0.3682542828497279,
+    "return_5d_pct": 5.9588791848617095,
+    "return_20d_pct": -44.389801375095495,
+    "volume_ratio_5d": 0.98
+  },
+  "industry": {
+    "name": "科技",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 6.2,
+    "return_20d_pct": -8.37,
+    "return_60d_pct": -12.3,
+    "relative_strength_20d_pct": null
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 66.7,
+      "average_return_pct": 3.12,
+      "median_return_pct": 2.54,
+      "best_return_pct": 23.47,
+      "worst_return_pct": -8.83
+    },
+    "horizon_5d": {
+      "up_probability_pct": 60.0,
+      "average_return_pct": 4.66,
+      "median_return_pct": 1.17,
+      "best_return_pct": 37.47,
+      "worst_return_pct": -14.24
+    }
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 59.2%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 59.2%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 122.0%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/688525.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}
