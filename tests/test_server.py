@@ -3,6 +3,8 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
+import pandas as pd
+
 from src import server
 
 
@@ -27,6 +29,49 @@ class ServerTestCase(unittest.TestCase):
         )
 
         self.assertEqual(response.status_code, 400)
+
+    def test_resolve_stock_name_uses_tencent_quote(self):
+        response = type(
+            "QuoteResponse",
+            (),
+            {"text": 'v_sz000021="51~深科技~000021~...";'},
+        )()
+
+        with (
+            patch.dict(server._STOCK_NAME_CACHE, {}, clear=True),
+            patch.object(server._requests, "get", return_value=response) as get,
+        ):
+            name = server.resolve_stock_name("000021")
+
+        self.assertEqual(name, "深科技")
+        get.assert_called_once_with(
+            "https://qt.gtimg.cn/q=sz000021", timeout=10
+        )
+
+    def test_query_returns_resolved_name_in_both_payload_sections(self):
+        with (
+            patch.object(server, "resolve_stock_name", return_value="深科技"),
+            patch.object(
+                server,
+                "fetch_one",
+                return_value=pd.DataFrame({"close": [10.0]}),
+            ),
+            patch.object(server, "compute_derived", side_effect=lambda frame: frame),
+            patch.object(
+                server,
+                "build_kline_json",
+                return_value={"code": "000021", "name": "深科技", "type": "stock"},
+            ),
+            patch.object(server, "fetch_index", return_value=None),
+        ):
+            response = self.client.get(
+                "/api/query?code=000021&start_date=2026-01-01"
+            )
+
+        data = response.get_json()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["stock"]["name"], "深科技")
+        self.assertEqual(data["meta"]["stock_name"], "深科技")
 
     def test_cloud_watchlist_write_is_disabled(self):
         with patch.object(server, "WATCHLIST_WRITE_ENABLED", False):

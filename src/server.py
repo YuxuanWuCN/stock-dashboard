@@ -27,6 +27,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import akshare as ak
 import pandas as pd
+import requests as _requests
 
 try:
     from .config import ADJUST, PERIOD, MA_WINDOWS, LOOKBACK_DAYS
@@ -328,12 +329,15 @@ def api_query():
         }), 404
 
     df_stock = compute_derived(df_stock)
-    stock_json = build_kline_json(stock_item, df_stock)
 
-    # 尝试从数据中获取更多信息
+    # 尝试从数据中获取更多信息；无效的名称不能覆盖已解析的名称。
     stock_name = stock_item["name"]
-    if "name" in df_stock.columns and df_stock.iloc[-1].get("name"):
-        stock_name = str(df_stock.iloc[-1]["name"])
+    if "name" in df_stock.columns and not df_stock.empty:
+        candidate_name = str(df_stock.iloc[-1].get("name") or "").strip()
+        if candidate_name and candidate_name != code and not candidate_name.isdigit():
+            stock_name = candidate_name
+    stock_item = {**stock_item, "name": stock_name}
+    stock_json = build_kline_json(stock_item, df_stock)
 
     # ---- 2. 抓取对应大盘指数 ----
     index_info = get_index_for_code(code)
