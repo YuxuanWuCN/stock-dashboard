@@ -228,7 +228,8 @@ def _generate_reports_inner(
         details = _load_all_details(all_codes)
 
     if top_k and not codes:
-        # 按排名排序后取前 K（ranking.json 中有 rank）
+        # 按排名排序后取前 K（ranking.json 中有 rank）。
+        # top_k=0 表示全部自选股（v2.5 默认）。
         ranking_path = os.path.join(DATA_DIR, ANALYSIS_DIR_NAME, "ranking.json")
         if os.path.exists(ranking_path):
             try:

@@ -220,3 +220,46 @@ def test_generate_reports_handles_failure(tmp_path):
     assert result["total"] == 0
     assert result["generated"] == 0
     assert result["failed"] == []
+
+
+def test_top_k_zero_generates_all_details(tmp_path):
+    """top_k=0 应对全部自选股生成报告（v2.5 默认全量覆盖）。"""
+    with patch.object(generate_reports, "DATA_DIR", str(tmp_path)):
+        with patch.object(generate_reports, "REPORT_DIR", str(tmp_path / "reports")):
+            _make_detail(tmp_path, code="688525")
+            _make_detail(tmp_path, code="600519")
+            _make_detail(tmp_path, code="300750")
+            # 构造 ranking.json（3 只都在）
+            ranking = {"items": [{"code": "600519"}, {"code": "688525"}, {"code": "300750"}]}
+            ranking_path = tmp_path / "analysis" / "ranking.json"
+            ranking_path.parent.mkdir(parents=True, exist_ok=True)
+            ranking_path.write_text(json.dumps(ranking, ensure_ascii=False), encoding="utf-8")
+            result = run_generate_reports(
+                top_k=0,  # 全部
+                use_llm=False,
+                news_enabled=False,
+                feedback_path=str(tmp_path / "feedback.json"),
+            )
+    assert result["total"] == 3
+    assert result["generated"] == 3
+
+
+def test_top_k_two_limits_to_ranked_two(tmp_path):
+    """top_k=2 只处理排名前 2。"""
+    with patch.object(generate_reports, "DATA_DIR", str(tmp_path)):
+        with patch.object(generate_reports, "REPORT_DIR", str(tmp_path / "reports")):
+            _make_detail(tmp_path, code="688525")
+            _make_detail(tmp_path, code="600519")
+            _make_detail(tmp_path, code="300750")
+            ranking = {"items": [{"code": "600519"}, {"code": "688525"}, {"code": "300750"}]}
+            ranking_path = tmp_path / "analysis" / "ranking.json"
+            ranking_path.parent.mkdir(parents=True, exist_ok=True)
+            ranking_path.write_text(json.dumps(ranking, ensure_ascii=False), encoding="utf-8")
+            result = run_generate_reports(
+                top_k=2,
+                use_llm=False,
+                news_enabled=False,
+                feedback_path=str(tmp_path / "feedback.json"),
+            )
+    assert result["total"] == 2
+    assert result["generated"] == 2

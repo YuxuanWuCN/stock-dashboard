@@ -126,3 +126,145 @@ class ServerTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GitHubSyncTest(unittest.TestCase):
+    """v2.5：网页加自选股自动入库 GitHub（Contents API）。"""
+
+    def setUp(self):
+        self.client = server.app.test_client()
+
+    def _set_github_env(self):
+        patch.object(server, "GITHUB_TOKEN", "ghp_test_token")
+        patch.object(server, "GITHUB_REPO", "user/stock-dashboard")
+        patch.object(server, "GITHUB_SYNC_ENABLED", True).start()
+        return patch.object(server, "GITHUB_TOKEN", "ghp_test_token").start() or None
+
+    def test_sync_disabled_without_token(self):
+        """未配置 token 时同步关闭，api_watchlist_add 返回 github_sync 缺失。"""
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            watchlist_path = Path(tmp_dir) / "watchlist.csv"
+            watchlist_path.write_text(
+                "code,name,type,category\n600519,贵州茅台,stock,白酒\n",
+                encoding="utf-8",
+            )
+            with (
+                patch.object(server, "_WATCHLIST_PATH", str(watchlist_path)),
+                patch.object(server, "WATCHLIST_WRITE_ENABLED", True),
+                patch.object(server, "GITHUB_SYNC_ENABLED", False),
+            ):
+                response = self.client.post(
+                    "/api/watchlist/add",
+                    json={"code": "688525", "name": "佰维存储", "type": "stock"},
+                )
+        body = response.get_json()
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("github_sync", body)
+        self.assertFalse(body["github_sync"]["success"])
+        self.assertEqual(body["github_sync"]["error"], "github_sync_not_configured")
+
+    def test_sync_push_uses_sha_and_commits(self):
+        """配置 token 时调用 GitHub Contents API（GET SHA → PUT 提交）。"""
+        from unittest.mock import Mock
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            watchlist_path = Path(tmp_dir) / "watchlist.csv"
+            watchlist_path.write_text(
+                "code,name,type,category\n600519,贵州茅台,stock,白酒\n",
+                encoding="utf-8",
+            )
+            get_resp = Mock(status_code=200)
+            get_resp.json.return_value = {"sha": "abc123sha"}
+            put_resp = Mock(status_code=201)
+            put_resp.json.return_value = {"commit": {"sha": "def456commit"}}
+            requests_mock = Mock()
+            requests_mock.get.return_value = get_resp
+            requests_mock.put.return_value = put_resp
+
+            with (
+                patch.object(server, "_WATCHLIST_PATH", str(watchlist_path)),
+                patch.object(server, "WATCHLIST_WRITE_ENABLED", True),
+                patch.object(server, "GITHUB_TOKEN", "ghp_test_token"),
+                patch.object(server, "GITHUB_REPO", "user/stock-dashboard"),
+                patch.object(server, "GITHUB_SYNC_ENABLED", True),
+                patch.object(server, "_requests", requests_mock),
+            ):
+                response = self.client.post(
+                    "/api/watchlist/add",
+                    json={"code": "688525", "name": "佰维存储", "type": "stock"},
+                )
+                # 验证 PUT 请求带 SHA 与 base64 内容
+                put_kwargs = requests_mock.put.call_args
+                self.assertEqual(put_kwargs[0][0],
+                                 "https://api.github.com/repos/user/stock-dashboard/contents/watchlist.csv")
+                payload = put_kwargs[1]["json"]
+                self.assertEqual(payload["sha"], "abc123sha")
+                self.assertIn("message", payload)
+                self.assertIn("content", payload)  # base64
+                import base64
+                decoded = base64.b64decode(payload["content"]).decode("utf-8")
+                self.assertIn("688525,佰维存储", decoded)
+                self.assertIn("600519,贵州茅台", decoded)
+
+        body = response.get_json()
+        self.assertEqual(body["github_sync"]["success"], True)
+        self.assertEqual(body["github_sync"]["commit_sha"], "def456commit")
+
+    def test_sync_read_404_still_creates_file(self):
+        """仓库无文件时（404）不带 SHA 直接创建。"""
+        from unittest.mock import Mock
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            watchlist_path = Path(tmp_dir) / "watchlist.csv"
+            watchlist_path.write_text("code,name,type,category\n", encoding="utf-8")
+            get_resp = Mock(status_code=404)
+            put_resp = Mock(status_code=201)
+            put_resp.json.return_value = {"commit": {"sha": "newcommit"}}
+            requests_mock = Mock()
+            requests_mock.get.return_value = get_resp
+            requests_mock.put.return_value = put_resp
+
+            with (
+                patch.object(server, "_WATCHLIST_PATH", str(watchlist_path)),
+                patch.object(server, "WATCHLIST_WRITE_ENABLED", True),
+                patch.object(server, "GITHUB_TOKEN", "ghp_test_token"),
+                patch.object(server, "GITHUB_REPO", "user/stock-dashboard"),
+                patch.object(server, "GITHUB_SYNC_ENABLED", True),
+                patch.object(server, "_requests", requests_mock),
+            ):
+                self.client.post(
+                    "/api/watchlist/add",
+                    json={"code": "000001", "name": "平安银行", "type": "stock"},
+                )
+                payload = requests_mock.put.call_args[1]["json"]
+                self.assertNotIn("sha", payload)  # 404 时无 SHA
+
+    def test_sync_failure_does_not_block_add(self):
+        """GitHub 同步失败不应阻断本地添加（降级）。"""
+        from unittest.mock import Mock
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            watchlist_path = Path(tmp_dir) / "watchlist.csv"
+            watchlist_path.write_text("code,name,type,category\n", encoding="utf-8")
+            requests_mock = Mock()
+            requests_mock.get.side_effect = RuntimeError("network down")
+            with (
+                patch.object(server, "_WATCHLIST_PATH", str(watchlist_path)),
+                patch.object(server, "WATCHLIST_WRITE_ENABLED", True),
+                patch.object(server, "GITHUB_TOKEN", "ghp_test_token"),
+                patch.object(server, "GITHUB_REPO", "user/stock-dashboard"),
+                patch.object(server, "GITHUB_SYNC_ENABLED", True),
+                patch.object(server, "_requests", requests_mock),
+            ):
+                response = self.client.post(
+                    "/api/watchlist/add",
+                    json={"code": "600036", "name": "招商银行", "type": "stock"},
+                )
+        body = response.get_json()
+        self.assertEqual(response.status_code, 200)  # 本地添加成功
+        self.assertFalse(body["github_sync"]["success"])
+        self.assertIn("error", body["github_sync"])
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -34,7 +34,8 @@ LLM_ENABLED = _env_flag("LLM_ENABLED", True)
 # 关闭时既不读取本地密钥，也不会发起新闻或 LLM 请求。
 LLM_REPORTS_ENABLED = _env_flag("LLM_REPORTS_ENABLED", True)
 # 每次主分析最多生成前 K 名的报告，控制每日 API 与新闻抓取成本。
-LLM_REPORTS_TOP_K = max(1, int(os.environ.get("LLM_REPORTS_TOP_K", "5")))
+# 设为 0 表示对全部自选股生成报告（v2.5：默认全量覆盖）。
+LLM_REPORTS_TOP_K = max(0, int(os.environ.get("LLM_REPORTS_TOP_K", "0")))
 # 已有合格的 DeepSeek 报告时默认跳过，支持中断后的低成本续跑。
 LLM_REPORTS_SKIP_EXISTING = _env_flag("LLM_REPORTS_SKIP_EXISTING", True)
 # RAG 检索开关

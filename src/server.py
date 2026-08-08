@@ -59,6 +59,15 @@ WATCHLIST_WRITE_ENABLED = os.environ.get(
     "ALLOW_WATCHLIST_WRITE", "true"
 ).lower() in ("1", "true", "yes")
 
+# ---- GitHub 自动入库配置（v2.5：网页加的自选股直接提交回仓库） ----
+# GITHUB_TOKEN：GitHub Personal Access Token（仅需仓库 contents 读写权限）
+# GITHUB_REPO：仓库名，格式 "owner/repo"，如 "yuxuanwucn/stock-dashboard"
+# GITHUB_WATCHLIST_PATH：仓库内 watchlist.csv 路径，默认根目录
+GITHUB_TOKEN = os.environ.get("GITHUB_TOKEN", "").strip()
+GITHUB_REPO = os.environ.get("GITHUB_REPO", "").strip()
+GITHUB_WATCHLIST_PATH = os.environ.get("GITHUB_WATCHLIST_PATH", "watchlist.csv").strip()
+GITHUB_SYNC_ENABLED = bool(GITHUB_TOKEN and GITHUB_REPO)
+
 CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
 
 # ============================================================
@@ -430,7 +439,11 @@ def api_watchlist():
 
 @app.route("/api/watchlist/add", methods=["POST"])
 def api_watchlist_add():
-    """添加/更新自选股列表。已存在的 code 会更新 name/type/category。"""
+    """添加/更新自选股列表。已存在的 code 会更新 name/type/category。
+
+    配置了 GITHUB_TOKEN/GITHUB_REPO 时，会通过 GitHub Contents API
+    把最新列表提交回仓库（v2.5 自动入库），使新自选股参与每日自动分析。
+    """
     if not WATCHLIST_WRITE_ENABLED:
         return jsonify({
             "error": "线上服务不直接修改仓库文件，请使用网页中的 CSV 下载功能"
@@ -498,12 +511,76 @@ def api_watchlist_add():
 
     action = "updated" if found else "added"
     logger.info("自选股 %s %s: %s(%s)", code, action, name, category)
+
+    # ---- v2.5：同步提交 GitHub 仓库（自动入库） ----
+    if GITHUB_SYNC_ENABLED:
+        github_sync = _sync_watchlist_to_github(existing)
+        if not github_sync.get("success"):
+            logger.warning("GitHub 自选股同步失败: %s", github_sync.get("error"))
+    else:
+        github_sync = {"success": False, "error": "github_sync_not_configured"}
+
     return jsonify({
         "success": True,
         "action": action,
         "item": {"code": code, "name": name, "type": typ, "category": category},
         "items": existing,
+        "github_sync": github_sync,
     })
+
+
+def _sync_watchlist_to_github(rows: list[dict]) -> dict:
+    """通过 GitHub Contents API 把最新自选股列表提交回仓库。
+
+    用 GET 读取当前文件 SHA，再 PUT 提交（避免覆盖他人并发修改）。
+    返回 {"success": bool, "commit_sha": 或 "error": ...}
+    """
+    if not GITHUB_SYNC_ENABLED:
+        return {"success": False, "error": "github_sync_not_configured"}
+
+    import io
+
+    buf = io.StringIO()
+    writer = _csv.DictWriter(buf, fieldnames=_WATCHLIST_HEADER, extrasaction="ignore")
+    writer.writeheader()
+    for row in rows:
+        writer.writerow({k: row.get(k, "") for k in _WATCHLIST_HEADER})
+    content = buf.getvalue()
+
+    api = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_WATCHLIST_PATH}"
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    # 先读现有 SHA
+    sha = None
+    try:
+        get_resp = _requests.get(api, headers=headers, timeout=15)
+        if get_resp.status_code == 200:
+            sha = get_resp.json().get("sha")
+        elif get_resp.status_code != 404:
+            return {"success": False, "error": f"read_failed:{get_resp.status_code}"}
+    except Exception as exc:
+        return {"success": False, "error": f"read_exception:{exc.__class__.__name__}"}
+
+    import base64
+
+    payload = {
+        "message": f"chore(watchlist): update watchlist ({len(rows)} items)",
+        "content": base64.b64encode(content.encode("utf-8")).decode("ascii"),
+    }
+    if sha:
+        payload["sha"] = sha
+    try:
+        put_resp = _requests.put(api, json=payload, headers=headers, timeout=30)
+        if put_resp.status_code in (200, 201):
+            commit_sha = put_resp.json().get("commit", {}).get("sha", "")
+            logger.info("GitHub 自选股已同步，commit=%s", commit_sha[:12])
+            return {"success": True, "commit_sha": commit_sha}
+        return {"success": False, "error": f"write_failed:{put_resp.status_code}"}
+    except Exception as exc:
+        return {"success": False, "error": f"write_exception:{exc.__class__.__name__}"}
 
 
 # ============================================================

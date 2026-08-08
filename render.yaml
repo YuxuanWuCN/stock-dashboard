@@ -12,4 +12,7 @@ services:
       - key: CORS_ORIGINS
         value: https://yuxuanwucn.github.io
       - key: ALLOW_WATCHLIST_WRITE
-        value: "false"
+        value: "true"
+      # v2.5 新自选股自动入库：配置后在 Render 控制台填写
+      # GITHUB_TOKEN（PAT，contents 读写）、GITHUB_REPO（owner/repo）
+      # 未配置时同步自动关闭，网页加自选股仅保存在浏览器。
