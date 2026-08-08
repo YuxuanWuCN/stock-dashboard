@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>股票研究看板 2.1</title>
-    <link rel="stylesheet" href="assets/style.css?v=2.1">
+    <title>股票研究看板 2.5</title>
+    <link rel="stylesheet" href="assets/style.css?v=2.5">
     <!-- 引入 ECharts 5.5.1 CDN -->
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
@@ -13,7 +13,7 @@
         <!-- 顶部状态栏 -->
         <header class="header">
             <div class="header-main">
-                <h1>股票研究看板 2.1</h1>
+                <h1>股票研究看板 2.5</h1>
                 <p class="subtitle">每日收盘分析自选股的短线风险与历史统计收益</p>
             </div>
             <div id="status-bar" class="status-bar loading">
@@ -21,6 +21,30 @@
                 <span id="status-text">正在加载运行信息...</span>
             </div>
         </header>
+
+        <!-- v2.5 市场温度条 -->
+        <section id="market-temp-bar" class="market-temp-bar" aria-labelledby="market-temp-title" hidden>
+            <div class="market-temp-info">
+                <span class="market-temp-label">今日市场温度</span>
+                <strong id="market-temp-value" class="market-temp-value">--</strong>
+                <span id="market-temp-status" class="market-temp-status">--</span>
+            </div>
+            <div class="market-temp-scale" role="img" aria-label="市场温度刻度">
+                <div class="market-temp-scale-fill" id="market-temp-fill"></div>
+            </div>
+            <span id="market-temp-ratio" class="market-temp-ratio">仓位参考 --</span>
+        </section>
+
+        <!-- v2.5 今日可买（置顶，老年友好大字号） -->
+        <section id="buy-today-section" class="buy-today-section" aria-labelledby="buy-today-title" hidden>
+            <div class="buy-today-heading">
+                <h2 id="buy-today-title">💰 今日可以关注</h2>
+                <p class="buy-today-subtitle">策略选出、靠近支撑位的标的（研究参考，不构成买卖建议）</p>
+            </div>
+            <div id="buy-today-list" class="buy-today-list">
+                <div class="buy-today-empty">今日没有策略信号，可继续查看下方排行榜</div>
+            </div>
+        </section>
 
         <!-- 单股查询栏 -->
         <div class="query-bar" id="query-bar">

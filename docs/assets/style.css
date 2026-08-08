@@ -2063,3 +2063,263 @@ body {
     border: 1px solid rgba(107, 114, 128, 0.3);
 }
 
+
+/* ============================================================
+   v2.5 市场温度条 + 今日可买（老年友好：大字号、高对比）
+   ============================================================ */
+
+/* 市场温度条 */
+.market-temp-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    background: #f8fafc;
+    border: 2px solid #d1d5db;
+    border-radius: 12px;
+}
+
+.market-temp-info {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.market-temp-label {
+    font-size: 17px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.market-temp-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.market-temp-status {
+    font-size: 17px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.market-temp-scale {
+    flex: 1;
+    height: 18px;
+    background: #e5e7eb;
+    border-radius: 9px;
+    overflow: hidden;
+    min-width: 80px;
+}
+
+.market-temp-scale-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 9px;
+    transition: width 0.6s ease;
+}
+
+.market-temp-ratio {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    white-space: nowrap;
+}
+
+/* 今日可以关注（置顶） */
+.buy-today-section {
+    margin: 12px 0 18px;
+    padding: 16px 18px;
+    background: #fffdf5;
+    border: 2px solid #f0d67a;
+    border-radius: 12px;
+}
+
+.buy-today-heading h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 4px;
+}
+
+.buy-today-subtitle {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0 0 12px;
+}
+
+.buy-today-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.buy-today-empty {
+    font-size: 17px;
+    color: #6b7280;
+    padding: 8px 0;
+}
+
+.buy-today-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 18px;
+    background: #ffffff;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    min-width: 200px;
+}
+
+.buy-today-card:hover {
+    border-color: #f0d67a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.buy-today-card-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.buy-today-card-name {
+    font-size: 22px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.buy-today-card-code {
+    font-size: 16px;
+    color: #6b7280;
+}
+
+.buy-today-zone {
+    font-size: 15px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.buy-today-zone-hot {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.buy-today-zone-warn {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fde68a;
+}
+
+.buy-today-zone-far {
+    background: #e5e7eb;
+    color: #4b5563;
+}
+
+.buy-today-card-detail {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.buy-today-card-reasons {
+    font-size: 15px;
+    color: #374151;
+}
+
+.buy-today-card-dist {
+    font-size: 16px;
+    font-weight: 700;
+    color: #b91c1c;
+}
+
+/* 老年友好：全局基础字号微调（不破坏现有布局） */
+@media (min-width: 768px) {
+    .ranking-table th,
+    .ranking-table td {
+        font-size: 15px;
+    }
+    .stock-list-item-name {
+        font-size: 16px;
+    }
+}
+
+/* ============================================================
+   v2.5 老年友好增强：关键组件字号统一上调（覆盖层，不破坏布局）
+   ============================================================ */
+
+/* 排行榜表格：行高与字号加大 */
+.ranking-table th,
+.ranking-table td {
+    font-size: 15px;
+    padding: 10px 10px;
+}
+
+.ranking-stock-name {
+    font-size: 16px;
+}
+
+.risk-badge,
+.ranking-reason {
+    font-size: 14px;
+}
+
+/* 状态栏与摘要 */
+.status-bar {
+    font-size: 15px;
+}
+
+.ranking-summary,
+.analysis-summary {
+    font-size: 15px;
+}
+
+/* 个股详情关键数据 */
+.detail-price {
+    font-size: 30px;
+}
+
+.detail-change {
+    font-size: 18px;
+}
+
+/* 分析结论（短线观察建议） */
+.analysis-observation-reason {
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* 按钮：更大触达面积 */
+.query-go-btn,
+.editor-btn,
+.ranking-tab {
+    font-size: 15px;
+    padding: 8px 14px;
+}
+
+/* 自选股列表 */
+.stock-list-item-name {
+    font-size: 16px;
+}
+
+/* 研究报告正文 */
+.report-section-body {
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+/* 免责声明：高对比而非淡灰 */
+.report-disclaimer,
+.buy-today-subtitle {
+    color: #4b5563;
+    font-size: 14px;
+}

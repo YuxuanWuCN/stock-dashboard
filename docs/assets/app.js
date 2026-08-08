@@ -17,6 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
         analysisCache: {},
         watchlist: [],
         lastQueryStock: null,
+        // v2.5 策略数据
+        selection: null,
+        huntingGround: null,
+        marketTemperature: null,
         // 当前选中的股票切片数据，供 tooltip 使用
         activeData: {
             dates: [],
@@ -40,6 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = {
         statusBar: document.getElementById('status-bar'),
         statusText: document.getElementById('status-text'),
+        // v2.5 市场温度与今日可买
+        marketTempBar: document.getElementById('market-temp-bar'),
+        marketTempValue: document.getElementById('market-temp-value'),
+        marketTempStatus: document.getElementById('market-temp-status'),
+        marketTempFill: document.getElementById('market-temp-fill'),
+        marketTempRatio: document.getElementById('market-temp-ratio'),
+        buyTodaySection: document.getElementById('buy-today-section'),
+        buyTodayList: document.getElementById('buy-today-list'),
         stockList: document.getElementById('stock-list'),
         detailHeader: document.getElementById('detail-header'),
         detailName: document.getElementById('detail-name'),
@@ -227,8 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化应用
     async function init() {
         try {
-            // 并行加载元数据、汇总与 2.1 排行榜数据
-            const [metaRes, summaryRes, rankingRes, watchlistRes] = await Promise.all([
+            // 并行加载元数据、汇总、排行榜、自选股与 v2.5 策略数据
+            const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes] = await Promise.all([
                 fetch('data/meta.json').then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
                     return null;
@@ -250,12 +262,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).catch(err => {
                     console.warn('Failed to fetch configured watchlist:', err);
                     return null;
+                }),
+                fetch('data/strategy/selection.json').then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.json();
+                }).catch(err => {
+                    console.warn('v2.5 选股数据未加载（可跳过）:', err);
+                    return null;
+                }),
+                fetch('data/strategy/hunting_ground.json').then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.json();
+                }).catch(err => {
+                    console.warn('v2.5 狩猎场数据未加载（可跳过）:', err);
+                    return null;
+                }),
+                fetch('data/strategy/market_temperature.json').then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.json();
+                }).catch(err => {
+                    console.warn('v2.5 市场温度未加载（可跳过）:', err);
+                    return null;
                 })
             ]);
 
             state.meta = metaRes;
             state.summary = summaryRes;
             state.ranking = rankingRes;
+            state.selection = selectionRes;
+            state.huntingGround = huntingRes;
+            state.marketTemperature = tempRes;
             state.watchlist = combineWatchlists(
                 watchlistRes && watchlistRes.items,
                 readBrowserWatchlist()
@@ -265,10 +301,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // 渲染状态栏
             renderStatusBar();
 
+            // 渲染 v2.5 市场温度与今日可买
+            renderMarketTemperature();
+            renderBuyToday();
+
             // 渲染自选股列表
             if (state.summary && state.summary.items && state.summary.items.length > 0) {
                 renderStockList();
-                
+
             } else {
                 el.stockList.innerHTML = '<div class="list-loading text-down">暂无自选股数据</div>';
                 showOverlay('未找到自选股汇总数据，请检查后台运行状态。');
@@ -300,6 +340,131 @@ document.addEventListener('DOMContentLoaded', () => {
         // 初始化查询栏
         initQueryBar();
     }
+
+    // v2.5 渲染市场温度条
+    function renderMarketTemperature() {
+        const temp = state.marketTemperature;
+        if (!temp || typeof temp.temperature !== 'number') {
+            return; // 无数据则保持 hidden
+        }
+        el.marketTempBar.hidden = false;
+        el.marketTempValue.textContent = temp.temperature.toFixed(1);
+        el.marketTempStatus.textContent = '（' + (temp.status || '--') + '）';
+        el.marketTempFill.style.width = Math.max(0, Math.min(100, temp.temperature)) + '%';
+        el.marketTempRatio.textContent = '仓位参考：' + (temp.position_ratio != null ? (temp.position_ratio * 100) + '%' : '--');
+        // 颜色：活跃=红/正常=橙/偏冷=蓝/寒冷以下=灰
+        const status = temp.status || '';
+        let color = '#8a8a8a';
+        if (status === '活跃') color = '#e05252';
+        else if (status === '正常') color = '#e8963c';
+        else if (status === '偏冷') color = '#3c7fe8';
+        el.marketTempFill.style.background = color;
+    }
+
+    // v2.5 渲染"今日可以关注"（策略信号 + 关注区间，置顶大字号）
+    function renderBuyToday() {
+        const sel = state.selection;
+        const hunt = state.huntingGround;
+        if (!sel || !hunt) {
+            return; // 无数据保持 hidden
+        }
+        const huntingMap = {};
+        const huntingData = hunt.hunting_ground || {};
+        Object.keys(huntingData).forEach(strategyName => {
+            (huntingData[strategyName] || []).forEach(entry => {
+                if (!huntingMap[entry.code]) {
+                    huntingMap[entry.code] = [];
+                }
+                huntingMap[entry.code].push(entry);
+            });
+        });
+
+        // 收集所有策略命中的标的（去重，按买点距离升序）
+        const seen = new Set();
+        const items = [];
+        const results = sel.results || {};
+        Object.keys(results).forEach(strategyName => {
+            (results[strategyName] || []).forEach(item => {
+                if (seen.has(item.code)) return;
+                seen.add(item.code);
+                const entries = huntingMap[item.code] || [];
+                // 取该标的最优买点判断（距离最近的）
+                let best = null;
+                entries.forEach(entry => {
+                    const judge = entry.buy_judge || {};
+                    if (judge.distance_pct == null) return;
+                    if (!best || judge.distance_pct < best.distance_pct) best = judge;
+                });
+                items.push({
+                    code: item.code,
+                    name: item.name || item.code,
+                    signals: item.signals || [],
+                    buyJudge: best,
+                    strategies: entries.map(e => e.support_method || '')
+                });
+            });
+        });
+
+        if (items.length === 0) {
+            el.buyTodaySection.hidden = false;
+            el.buyTodayList.innerHTML = '<div class="buy-today-empty">今日没有策略信号，可继续查看下方排行榜</div>';
+            return;
+        }
+
+        // 排序：关注区间内的优先，其次距离近的
+        items.sort((a, b) => {
+            const aZone = a.buyJudge && a.buyJudge.in_buy_zone ? 0 : 1;
+            const bZone = b.buyJudge && b.buyJudge.in_buy_zone ? 0 : 1;
+            if (aZone !== bZone) return aZone - bZone;
+            const aDist = a.buyJudge && a.buyJudge.distance_pct != null ? a.buyJudge.distance_pct : 999;
+            const bDist = b.buyJudge && b.buyJudge.distance_pct != null ? b.buyJudge.distance_pct : 999;
+            return aDist - bDist;
+        });
+
+        el.buyTodaySection.hidden = false;
+        el.buyTodayList.innerHTML = items.map(item => {
+            const judge = item.buyJudge;
+            const reasons = (item.signals.length > 0 ? item.signals[0].reasons : ['策略命中']) || [];
+            const reasonText = reasons.join('、');
+            let zoneHtml = '';
+            if (judge && judge.in_buy_zone) {
+                zoneHtml = '<span class="buy-today-zone buy-today-zone-hot">✓ 在关注区间</span>';
+            } else if (judge && judge.action === 'near_support') {
+                zoneHtml = '<span class="buy-today-zone">接近支撑位</span>';
+            } else if (judge && judge.action === 'below_support') {
+                zoneHtml = '<span class="buy-today-zone buy-today-zone-warn">跌破支撑位</span>';
+            } else if (judge) {
+                zoneHtml = '<span class="buy-today-zone buy-today-zone-far">离支撑较远</span>';
+            } else {
+                zoneHtml = '<span class="buy-today-zone">--</span>';
+            }
+            const distText = judge && judge.distance_pct != null
+                ? '距支撑 ' + judge.distance_pct.toFixed(1) + '%'
+                : '';
+            return `
+                <div class="buy-today-card" data-code="${item.code}">
+                    <div class="buy-today-card-main">
+                        <div class="buy-today-card-name">${escapeHtml(item.name)}</div>
+                        <div class="buy-today-card-code">${item.code}</div>
+                        ${zoneHtml}
+                    </div>
+                    <div class="buy-today-card-detail">
+                        <div class="buy-today-card-reasons">${escapeHtml(reasonText)}</div>
+                        <div class="buy-today-card-dist">${distText}</div>
+                    </div>
+                </div>`;
+        }).join('');
+
+        // 点击卡片 → 选中该股查看详情
+        el.buyTodayList.querySelectorAll('.buy-today-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const code = card.dataset.code;
+                if (code) selectTrackedStock(code);
+            });
+        });
+    }
+
+    // HTML 转义（防止策略内容注入）—— 使用文件底部已有的 escapeHtml
 
     // 渲染顶部状态栏
     function renderStatusBar() {
