@@ -15,7 +15,7 @@ import traceback
 from datetime import date, datetime
 from multiprocessing import Process, Queue
 from pathlib import Path
-from typing import Optional
+from typing import Callable, Optional
 
 # ---- 清理代理环境变量 ----
 from src.proxy import configure_proxy_from_system
@@ -966,6 +966,65 @@ def build_stock_detail(r: dict, generated_at: str) -> dict:
 # 5. 主流程
 # ============================================================
 
+def _run_llm_report_generation(
+    report_runner: Optional[Callable[..., dict]] = None,
+) -> dict:
+    """在排行榜落盘后非阻塞地调度 FinGPT 风格 DeepSeek 研究报告。
+
+    报告只读取已经校验并写入的详情数据，绝不回写规则评分或影响排行榜状态。
+    此处不直接读取 API Key；密钥解析与固定模型校验由 ``src.llm`` 负责。
+    """
+    try:
+        from src.llm.config import (
+            LLM_REPORTS_ENABLED,
+            LLM_REPORTS_SKIP_EXISTING,
+            LLM_REPORTS_TOP_K,
+            NEWS_ENABLED,
+        )
+    except Exception:
+        logger.warning("LLM 报告配置读取失败，已隔离，排行榜数据保持可用")
+        return {"status": "failed", "reason": "report_configuration_failed"}
+
+    if not LLM_REPORTS_ENABLED:
+        logger.info("LLM 报告调度已关闭，跳过本次生成")
+        return {"status": "skipped", "reason": "disabled_by_config"}
+
+    try:
+        if report_runner is None:
+            from src.llm.generate_reports import generate_reports
+
+            report_runner = generate_reports
+        result = report_runner(
+            top_k=LLM_REPORTS_TOP_K,
+            use_llm=True,
+            news_enabled=NEWS_ENABLED,
+            skip_existing=LLM_REPORTS_SKIP_EXISTING,
+            require_live_llm=True,
+        )
+    except Exception:
+        # 不能记录原始异常文本：第三方 SDK 的异常可能包含敏感请求信息。
+        logger.warning("LLM 报告生成异常已隔离，排行榜数据保持可用")
+        return {"status": "failed", "reason": "report_generation_failed"}
+
+    if not isinstance(result, dict):
+        logger.warning("LLM 报告生成返回结构无效，排行榜数据保持可用")
+        return {"status": "failed", "reason": "invalid_report_result"}
+
+    if result.get("status") == "skipped":
+        logger.info("LLM 报告本次跳过（原因=%s）", result.get("reason", "unknown"))
+        return result
+
+    failed = result.get("failed", [])
+    failed_count = len(failed) if isinstance(failed, list) else 0
+    logger.info(
+        "LLM 报告阶段完成：处理 %s，新增 %s，失败 %d",
+        result.get("total", 0),
+        result.get("generated", 0),
+        failed_count,
+    )
+    return result
+
+
 def main() -> int:
     run_start = beijing_now()
     logger.info("=" * 60)
@@ -1066,7 +1125,11 @@ def main() -> int:
     logger.info("写入排行榜文件...")
     atomic_write_json(ranking, RANKING_PATH, logger)
 
-    # ---- 5.9 汇总 ----
+    # ---- 5.9 FinGPT 风格报告（非阻塞附加阶段） ----
+    # 详情和排名均已落盘，报告只能消费它们；任何失败都不影响主分析结果。
+    _run_llm_report_generation()
+
+    # ---- 5.10 汇总 ----
     elapsed = (beijing_now() - run_start).total_seconds()
     logger.info("=" * 60)
     logger.info("排行榜分析完成！总 %d / 成功 %d / 失败 %d / 耗时 %.1f 秒",

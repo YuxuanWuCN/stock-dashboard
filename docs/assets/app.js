@@ -71,6 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         rankingSearch: document.getElementById('ranking-search'),
         rankingIndustryFilter: document.getElementById('ranking-industry-filter'),
         analysisDetail: document.getElementById('analysis-detail'),
+        analysisObservation: document.getElementById('analysis-observation'),
+        analysisObservationStatus: document.getElementById('analysis-observation-status'),
+        analysisObservationReason: document.getElementById('analysis-observation-reason'),
         analysisSummary: document.getElementById('analysis-summary'),
         analysisRiskBadge: document.getElementById('analysis-risk-badge'),
         analysisCompositeScore: document.getElementById('analysis-composite-score'),
@@ -90,6 +93,16 @@ document.addEventListener('DOMContentLoaded', () => {
         fundamentalMetrics: document.getElementById('fundamental-metrics'),
         fundamentalPositiveView: document.getElementById('fundamental-positive-view'),
         fundamentalNegativeView: document.getElementById('fundamental-negative-view'),
+        // AI 研究报告
+        reportSection: document.getElementById('report-section'),
+        reportMeta: document.getElementById('report-meta'),
+        reportConfidence: document.getElementById('report-confidence'),
+        reportStatus: document.getElementById('report-status'),
+        reportElder: document.getElementById('report-elder'),
+        reportSections: document.getElementById('report-sections'),
+        reportCitations: document.getElementById('report-citations'),
+        reportCitationList: document.getElementById('report-citation-list'),
+        reportDisclaimer: document.getElementById('report-disclaimer'),
     };
 
     function readBrowserWatchlist() {
@@ -1083,15 +1096,288 @@ document.addEventListener('DOMContentLoaded', () => {
                 state.analysisCache[code] = detail;
             }
 
-            if (state.analysisSelectedCode === code) renderAnalysisDetail(detail);
+            if (state.analysisSelectedCode === code) {
+                renderAnalysisDetail(detail);
+                loadResearchReport(code, detail.trade_date);
+            }
         } catch (error) {
             console.error('Failed to load analysis for ' + code + ':', error);
             if (state.analysisSelectedCode === code) showAnalysisError('该股票的分析详情暂时无法读取。');
         }
     }
 
+    // ---- AI 研究报告渲染（模块四） ----
+    function isNonNegativeNumber(value) {
+        return typeof value === 'number' && Number.isFinite(value) && value >= 0;
+    }
+
+    function isCompatibleResearchReport(report) {
+        var researchReport = report && report.research_report;
+        var audit = report && report.citation_audit;
+        var metadata = report && report.llm_metadata;
+        if (!report || typeof report !== 'object' || !researchReport || typeof researchReport !== 'object') {
+            return false;
+        }
+        if (String(report.schema_version || '').split('.')[0] !== '2') return false;
+        if (typeof report.code !== 'string' || !report.code.trim()
+            || typeof report.name !== 'string' || !report.name.trim()
+            || typeof report.trade_date !== 'string' || !report.trade_date.trim()
+            || typeof report.disclaimer !== 'string') {
+            return false;
+        }
+        if (typeof researchReport.summary !== 'string'
+            || (researchReport.elder_friendly !== undefined
+                && typeof researchReport.elder_friendly !== 'string')
+            || !Array.isArray(researchReport.sections)) {
+            return false;
+        }
+        if (!researchReport.sections.every(function (section) {
+            if (!section || typeof section.heading !== 'string' || typeof section.content !== 'string') {
+                return false;
+            }
+            return section.citations === undefined || (Array.isArray(section.citations)
+                && section.citations.every(function (citation) {
+                    return citation && typeof citation.source === 'string';
+                }));
+        })) {
+            return false;
+        }
+        if (!audit || typeof audit !== 'object'
+            || !isNonNegativeNumber(audit.total)
+            || !isNonNegativeNumber(audit.evidence)
+            || !isNonNegativeNumber(audit.inference)
+            || !isNonNegativeNumber(audit.uncertain)) {
+            return false;
+        }
+        return !!metadata && typeof metadata === 'object'
+            && typeof metadata.backend === 'string'
+            && typeof metadata.mode === 'string'
+            && typeof metadata.model === 'string'
+            && typeof metadata.pipeline === 'string';
+    }
+
+    function isSafeCitationUrl(value) {
+        if (typeof value !== 'string') return false;
+        try {
+            var url = new URL(value);
+            return url.protocol === 'https:' || url.protocol === 'http:';
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function hideResearchReport() {
+        el.reportSection.hidden = true;
+        el.reportStatus.hidden = true;
+        el.reportStatus.textContent = '';
+        el.reportMeta.textContent = '--';
+        el.reportConfidence.textContent = '--';
+        el.reportConfidence.className = 'confidence-badge';
+        el.reportElder.hidden = true;
+        el.reportElder.textContent = '';
+        el.reportSections.textContent = '';
+        el.reportCitations.hidden = true;
+        el.reportCitationList.textContent = '';
+        el.reportDisclaimer.textContent = '';
+    }
+
+    function showResearchReportUnavailable(message) {
+        el.reportSection.hidden = false;
+        el.reportMeta.textContent = '研究报告';
+        el.reportConfidence.textContent = '暂不可用';
+        el.reportConfidence.className = 'confidence-badge confidence-low';
+        el.reportStatus.hidden = false;
+        el.reportStatus.textContent = message;
+        el.reportElder.hidden = true;
+        el.reportSections.textContent = '';
+        el.reportCitations.hidden = true;
+        el.reportCitationList.textContent = '';
+        el.reportDisclaimer.textContent = '研究报告无法使用，不影响既有风险收益分析。';
+    }
+
+    function appendCitationDetail(container, citation) {
+        if (!citation || typeof citation.source !== 'string' || !citation.source.trim()) return;
+        var details = document.createElement('details');
+        details.className = 'report-citation-detail';
+        var summary = document.createElement('summary');
+        summary.textContent = '来源：' + citation.source
+            + (typeof citation.date === 'string' && citation.date ? ' · ' + citation.date : '');
+        details.appendChild(summary);
+
+        if (typeof citation.claim === 'string' && citation.claim.trim()) {
+            var claim = document.createElement('p');
+            claim.className = 'report-citation-claim';
+            claim.textContent = citation.claim;
+            details.appendChild(claim);
+        }
+        if (typeof citation.snippet === 'string' && citation.snippet.trim()) {
+            var snippet = document.createElement('p');
+            snippet.className = 'report-citation-snippet';
+            snippet.textContent = citation.snippet;
+            details.appendChild(snippet);
+        }
+        if (isSafeCitationUrl(citation.url)) {
+            var link = document.createElement('a');
+            link.className = 'report-citation-link';
+            link.href = citation.url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = '打开原文';
+            details.appendChild(link);
+        }
+        container.appendChild(details);
+    }
+    async function loadResearchReport(code, tradeDate) {
+        if (typeof tradeDate !== 'string' || !tradeDate.trim()) {
+            if (state.analysisSelectedCode === code) hideResearchReport();
+            return;
+        }
+        try {
+            var reportPath = 'data/llm/reports/' + encodeURIComponent(code)
+                + '_' + encodeURIComponent(tradeDate) + '.json';
+            var resp = await fetch(reportPath);
+            if (!resp.ok) {
+                if (resp.status === 404) {
+                    if (state.analysisSelectedCode === code) hideResearchReport();
+                    return;
+                }
+                throw new Error('HTTP ' + resp.status);
+            }
+            var report = await resp.json();
+            if (!isCompatibleResearchReport(report)) {
+                if (state.analysisSelectedCode === code) {
+                    showResearchReportUnavailable('研究报告数据版本不兼容或结构不完整。');
+                }
+                return;
+            }
+            if (state.analysisSelectedCode === code) renderResearchReport(report);
+        } catch (error) {
+            if (state.analysisSelectedCode === code) {
+                showResearchReportUnavailable('研究报告暂时无法读取。');
+            }
+        }
+    }
+    function renderResearchReport(report) {
+        var rr = report.research_report || {};
+        el.reportSection.hidden = false;
+        el.reportStatus.hidden = true;
+        el.reportStatus.textContent = '';
+
+        // 元信息
+        el.reportMeta.textContent = report.name + '（' + report.code + '）'
+            + (report.trade_date ? ' · ' + report.trade_date : '');
+        var conf = ['high', 'medium', 'low'].indexOf(report.confidence) >= 0
+            ? report.confidence : 'low';
+        el.reportConfidence.textContent = '置信度 ' + confLabel(conf);
+        el.reportConfidence.className = 'confidence-badge confidence-' + conf;
+
+        // 父母版简明摘要
+        el.reportElder.hidden = !(rr.elder_friendly || rr.summary);
+        el.reportElder.textContent = rr.elder_friendly || rr.summary || '';
+
+        // 章节
+        el.reportSections.textContent = '';
+        var sections = rr.sections || [];
+        sections.forEach(function (sec) {
+            if (!sec || !sec.content) return;
+            var block = document.createElement('div');
+            block.className = 'report-section-block';
+            var h = document.createElement('h4');
+            h.textContent = sec.heading || '说明';
+            block.appendChild(h);
+            var p = document.createElement('p');
+            p.textContent = sec.content;
+            block.appendChild(p);
+            if (sec.citations && sec.citations.length) {
+                var citList = document.createElement('div');
+                citList.className = 'report-section-citations';
+                sec.citations.forEach(function (citation) {
+                    appendCitationDetail(citList, citation);
+                });
+                if (citList.childElementCount) block.appendChild(citList);
+            }
+            el.reportSections.appendChild(block);
+        });
+
+        // 来源引用
+        var audit = report.citation_audit || {};
+        el.reportCitations.hidden = true;
+        el.reportCitationList.textContent = '';
+        if (audit.total > 0) {
+            el.reportCitations.hidden = false;
+            var info = document.createElement('p');
+            info.className = 'report-cite-stat';
+            info.textContent = '共 ' + audit.total + ' 条引用：可核验证据 ' + audit.evidence
+                + '、推断 ' + audit.inference + '、不确定 ' + audit.uncertain;
+            el.reportCitationList.appendChild(info);
+            if (audit.evidence === 0) {
+                var caution = document.createElement('p');
+                caution.className = 'report-cite-caution';
+                caution.textContent = '当前没有可核验证据，相关表述应视为不确定信息。';
+                el.reportCitationList.appendChild(caution);
+            }
+        }
+
+        // 免责声明
+        el.reportDisclaimer.textContent = report.disclaimer || '';
+    }
+
+    function confLabel(conf) {
+        return { high: '较高', medium: '中等', low: '较低' }[conf] || '未知';
+    }
+
+    function deriveObservationAdvice(detail) {
+        var forecast = detail && detail.forecast ? detail.forecast : {};
+        var risk = detail && detail.risk ? detail.risk : {};
+        var fiveDayReturn = forecast.return_5d_pct;
+
+        if (risk.level === 'high') {
+            return {
+                tone: 'high',
+                status: '高风险',
+                reason: '模型标为高风险，历史波动与回撤可能较大；本页仅提示重点观察风险变化。'
+            };
+        }
+        if (!Number.isFinite(fiveDayReturn) || forecast.confidence === 'low') {
+            return {
+                tone: 'medium',
+                status: '谨慎观察',
+                reason: '5 日统计收益不可用或样本置信度较低，无法形成稳定的短线参考。'
+            };
+        }
+        if (risk.level === 'low' && fiveDayReturn > 0) {
+            return {
+                tone: 'low',
+                status: '低风险观察',
+                reason: '风险等级较低，历史相似样本的 5 日平均收益为 ' + formatPct(fiveDayReturn)
+                    + '；仍需结合新数据与正式公告持续观察。'
+            };
+        }
+        return {
+            tone: 'medium',
+            status: '谨慎观察',
+            reason: '风险或统计收益尚未同时满足低风险正收益条件，建议结合风险、样本和公告继续观察。'
+        };
+    }
+
+    function resetObservationAdvice() {
+        el.analysisObservation.hidden = true;
+        el.analysisObservation.className = 'analysis-observation';
+        el.analysisObservationStatus.textContent = '--';
+        el.analysisObservationReason.textContent = '--';
+    }
+
+    function renderObservationAdvice(detail) {
+        var advice = deriveObservationAdvice(detail);
+        el.analysisObservation.hidden = false;
+        el.analysisObservation.className = 'analysis-observation observation-' + advice.tone;
+        el.analysisObservationStatus.textContent = advice.status;
+        el.analysisObservationReason.textContent = advice.reason;
+    }
+
     function showAnalysisLoading() {
         el.analysisDetail.hidden = false;
+        resetObservationAdvice();
         el.analysisSummary.textContent = '正在读取风险、行业和历史相似走势...';
         el.analysisRiskBadge.className = 'risk-badge risk-medium';
         el.analysisRiskBadge.textContent = '分析中';
@@ -1105,6 +1391,7 @@ document.addEventListener('DOMContentLoaded', () => {
         el.similarityGrid.textContent = '';
         el.similarityConfidence.textContent = '--';
         el.fundamentalSection.hidden = true;
+        hideResearchReport();
         el.analysisDisclaimer.textContent = '';
     }
 
@@ -1123,6 +1410,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var fiveDayProbability = forecast.up_probability_5d_pct;
 
         el.analysisDetail.hidden = false;
+        renderObservationAdvice(detail);
         if (Number.isFinite(fiveDayReturn)) {
             el.analysisSummary.textContent = '历史相似样本中，未来 5 日平均收益为 '
                 + formatPct(fiveDayReturn) + '，上涨样本占 ' + formatProbability(fiveDayProbability)

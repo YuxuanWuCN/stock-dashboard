@@ -155,6 +155,63 @@ python src/fetch_data.py
 
 ---
 
+## FinGPT 风格流程 + DeepSeek V4 Flash
+
+本项目已经接入的是“FinGPT 方法论流程 + DeepSeek API 推理”：
+
+1. 从现有规则引擎读取技术、风险、行业和基本面评分，模型不得修改这些数值。
+2. 按 FinGPT 的采样思路对新闻做批量情感分析，同一批新闻只调用一次 API。
+3. 用 RAG 检索新闻和公告证据，并由程序绑定来源、日期和原文片段。
+4. 排行榜的详情和排名 JSON 落盘后，主流程自动调度前 5 名的报告；模型固定为
+   `deepseek-v4-flash`，不接受环境变量静默切换。
+5. 没有可用 DeepSeek 密钥或显式关闭时，主流程安全跳过报告阶段，不抓新闻也不覆盖
+   已有深度报告；实际 API 调用失败时，核心流程拒绝保存模板降级产物或市场反馈，
+   但不会中断排行榜。手动独立运行仍可使用模板降级路径。
+6. 保存 `pipeline/backend/model/mode/fallback_reason` 等非敏感元数据，便于核对实际运行路径。
+
+这里没有把 FinGPT 的 LoRA/QLoRA 权重上传给 DeepSeek。DeepSeek API 不能直接加载本地
+FinGPT 权重；本项目复用的是 FinGPT 的数据、RAG、情感和市场反馈方法。以后若需要运行
+真实 FinGPT 权重，应单独部署带 GPU 的本地推理服务。
+
+### 本地密钥配置
+
+推荐在项目根目录创建 `api-key.txt`，文件只放一行 DeepSeek API Key：
+
+```text
+sk-你的密钥
+```
+
+该文件和 `.env` 已被 `.gitignore` 排除。程序优先读取环境变量
+`DEEPSEEK_API_KEY`，没有时才读取本地 `api-key.txt`；任何报告和日志都不会保存密钥。
+完整配置占位见 `.env.example`。
+
+运行 `python -m src.build_ranking` 时，核心分析会在写完排行榜后自动处理前 5 名。
+可在 `.env` 或运行环境中调整：
+
+```text
+LLM_REPORTS_ENABLED=true
+LLM_REPORTS_TOP_K=5
+LLM_REPORTS_SKIP_EXISTING=true
+```
+
+手动补跑当前排行榜前 5 名的研究报告：
+
+```bash
+python -m src.llm.generate_reports --top-k 5
+```
+
+强制离线、不读取密钥也不调用 API：
+
+```bash
+python -m src.llm.generate_reports --top-k 5 --no-llm --no-news
+```
+
+在 GitHub Actions 中，请到仓库 `Settings → Secrets and variables → Actions` 新建
+`DEEPSEEK_API_KEY`。工作流只运行核心排行榜命令；模型固定和报告异常隔离由核心代码
+保证，不会重复调用报告流程。
+
+---
+
 ## 如何修改自选股列表
 
 自选股列表存储在 `watchlist.csv` 文件中，用 Excel 或记事本都能编辑。
@@ -209,7 +266,8 @@ code,name,type
 ## 常见问题 FAQ
 
 **Q：需要花钱吗？**
-A：完全免费。GitHub Actions 每月有 2000 分钟免费额度，本项目每天只跑几分钟。GitHub Pages 免费托管公开仓库。
+A：基础看板、GitHub Pages 和公开数据流程可以免费运行；启用 DeepSeek 研究报告时，
+API 费用以你的 DeepSeek 账户计费规则为准。项目通过批量情感、Top-K 和每进程调用上限控制成本。
 
 **Q：能不能加港股/美股？**
 A：当前版本只支持 A 股和场内基金。港股/美股是计划中的扩展项。

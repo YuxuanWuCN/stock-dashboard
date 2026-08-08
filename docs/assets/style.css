@@ -1364,6 +1364,47 @@ body {
     background: var(--card-bg);
 }
 
+.analysis-observation {
+    margin: 0 0 16px;
+    padding: 0 0 12px 12px;
+    border-bottom: 1px solid var(--border-color);
+    border-left: 4px solid #64748b;
+}
+
+.analysis-observation-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.analysis-observation-status {
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.analysis-observation-reason {
+    margin: 6px 0 0;
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.6;
+}
+
+.analysis-observation-note {
+    margin: 6px 0 0;
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    line-height: 1.5;
+}
+
+.observation-low { border-left-color: var(--risk-low); }
+.observation-low .analysis-observation-status { color: var(--risk-low); }
+.observation-medium { border-left-color: var(--risk-medium); }
+.observation-medium .analysis-observation-status { color: var(--risk-medium); }
+.observation-high { border-left-color: var(--risk-high); }
+.observation-high .analysis-observation-status { color: var(--risk-high); }
+
 .analysis-detail-header {
     display: flex;
     align-items: flex-start;
@@ -1849,3 +1890,176 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================================
+   AI 研究报告（模块四：LLM + RAG）
+   ============================================================ */
+
+.report-section {
+    margin-top: 18px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.report-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.report-heading h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #111827;
+}
+
+.report-meta {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.report-status {
+    margin: 12px 0;
+    padding: 8px 0 8px 10px;
+    border-left: 3px solid var(--risk-medium);
+    color: #92400e;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* 父母版简明摘要：大字号、通俗 */
+.report-elder {
+    margin-bottom: 14px;
+    padding: 14px 16px;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #111827;
+    background: rgba(30, 64, 175, 0.06);
+    border: 1px solid rgba(30, 64, 175, 0.2);
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.report-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.report-section-block {
+    padding: 12px 0 12px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    border-left: 3px solid #cbd5e1;
+}
+
+.report-section-block h4 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    color: #374151;
+}
+
+.report-section-block p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #374151;
+    white-space: pre-wrap;
+}
+
+.report-section-citations {
+    margin-top: 10px;
+}
+
+.report-citations {
+    margin-top: 14px;
+    padding: 12px 0 0 12px;
+    border-top: 1px solid #e5e7eb;
+    border-left: 3px solid #cbd5e1;
+}
+
+.report-citations h4 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: #374151;
+}
+
+.report-cite-stat {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.report-cite-caution {
+    margin: 6px 0 0;
+    color: var(--risk-medium);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.report-citation-detail {
+    margin-top: 8px;
+    padding: 8px 0 0;
+    border-top: 1px dashed #d1d5db;
+}
+
+.report-citation-detail summary {
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.report-citation-claim,
+.report-citation-snippet {
+    margin: 7px 0 0;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.report-citation-claim {
+    color: #374151;
+}
+
+.report-citation-snippet {
+    color: #6b7280;
+}
+
+.report-citation-link {
+    display: inline-block;
+    margin-top: 7px;
+    color: #1d4ed8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.report-disclaimer {
+    margin-top: 14px;
+    font-size: 12px;
+    color: #9ca3af;
+    line-height: 1.5;
+}
+
+/* 置信度徽章 */
+.confidence-high {
+    background: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.confidence-medium {
+    background: rgba(245, 158, 11, 0.12);
+    color: #b45309;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.confidence-low {
+    background: rgba(107, 114, 128, 0.12);
+    color: #6b7280;
+    border: 1px solid rgba(107, 114, 128, 0.3);
+}
+

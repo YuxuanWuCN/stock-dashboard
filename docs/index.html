@@ -133,6 +133,14 @@
 
                 <!-- 2.1 个股研究摘要 -->
                 <section id="analysis-detail" class="analysis-detail" hidden aria-labelledby="analysis-title">
+                    <section id="analysis-observation" class="analysis-observation" hidden aria-labelledby="analysis-observation-title">
+                        <div class="analysis-observation-heading">
+                            <span id="analysis-observation-title" class="analysis-kicker">短线观察建议</span>
+                            <strong id="analysis-observation-status" class="analysis-observation-status">--</strong>
+                        </div>
+                        <p id="analysis-observation-reason" class="analysis-observation-reason">--</p>
+                        <p class="analysis-observation-note">由历史风险与样本统计自动归纳，仅供学习和研究，不构成投资建议。</p>
+                    </section>
                     <div class="analysis-detail-header">
                         <div>
                             <span class="analysis-kicker">3–5 个交易日研究</span>
@@ -205,6 +213,25 @@
                                 <p id="fundamental-negative-view">--</p>
                             </div>
                         </div>
+                    </section>
+
+                    <!-- AI 研究报告（模块四：LLM + RAG） -->
+                    <section id="report-section" class="report-section" aria-labelledby="report-title" hidden>
+                        <div class="report-heading">
+                            <div>
+                                <h3 id="report-title">AI 研究报告</h3>
+                                <p id="report-meta" class="report-meta">--</p>
+                            </div>
+                            <span id="report-confidence" class="confidence-badge">--</span>
+                        </div>
+                        <p id="report-status" class="report-status" hidden></p>
+                        <div id="report-elder" class="report-elder" hidden></div>
+                        <div id="report-sections" class="report-sections"></div>
+                        <div id="report-citations" class="report-citations" hidden>
+                            <h4>🔗 来源引用</h4>
+                            <div id="report-citation-list" class="report-citation-list"></div>
+                        </div>
+                        <div id="report-disclaimer" class="report-disclaimer"></div>
                     </section>
 
                     <p id="analysis-disclaimer" class="analysis-disclaimer"></p>

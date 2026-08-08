@@ -24,6 +24,13 @@ concurrency:
 jobs:
   run-analysis:
     runs-on: ubuntu-latest
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      LLM_BACKEND: deepseek
+      # 模型由 src.llm.config 固定为 deepseek-v4-flash，不接受环境变量覆盖。
+      LLM_REPORTS_ENABLED: "true"
+      LLM_REPORTS_TOP_K: "5"
+      LLM_REPORTS_SKIP_EXISTING: "true"
 
     steps:
       - name: Checkout 仓库代码

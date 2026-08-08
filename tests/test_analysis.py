@@ -9,6 +9,7 @@ import sys
 import unittest
 from datetime import date, datetime
 from pathlib import Path
+from unittest.mock import Mock, patch
 
 import numpy as np
 import pandas as pd
@@ -774,6 +775,103 @@ class TestIndustryFallback(unittest.TestCase):
         provider = IndustryProvider()
         # 未知类别原样返回
         self.assertEqual(provider.resolve_category("量子计算"), "量子计算")
+
+
+# ============================================================
+# 测试核心分析到 LLM 报告的调度边界
+# ============================================================
+
+class TestLLMCoreOrchestration(unittest.TestCase):
+
+    def test_report_bridge_uses_configured_live_report_contract(self):
+        """核心调度必须固定请求真实 DeepSeek 路径，且不让报告决定评分。"""
+        from src import build_ranking as ranking_module
+        from src.llm import config as llm_config
+
+        report_runner = Mock(return_value={"total": 3, "generated": 2, "failed": []})
+        with (
+            patch.object(llm_config, "LLM_REPORTS_ENABLED", True),
+            patch.object(llm_config, "LLM_REPORTS_TOP_K", 3),
+            patch.object(llm_config, "LLM_REPORTS_SKIP_EXISTING", True),
+            patch.object(llm_config, "NEWS_ENABLED", False),
+        ):
+            result = ranking_module._run_llm_report_generation(report_runner=report_runner)
+
+        report_runner.assert_called_once_with(
+            top_k=3,
+            use_llm=True,
+            news_enabled=False,
+            skip_existing=True,
+            require_live_llm=True,
+        )
+        self.assertEqual(result["generated"], 2)
+
+    def test_report_bridge_skips_runner_when_disabled(self):
+        """显式关闭时不得导入或调用报告阶段。"""
+        from src import build_ranking as ranking_module
+        from src.llm import config as llm_config
+
+        report_runner = Mock()
+        with patch.object(llm_config, "LLM_REPORTS_ENABLED", False):
+            result = ranking_module._run_llm_report_generation(report_runner=report_runner)
+
+        report_runner.assert_not_called()
+        self.assertEqual(result, {"status": "skipped", "reason": "disabled_by_config"})
+
+    def test_report_bridge_hides_runner_exception_from_result(self):
+        """报告异常不可传播到主流程，也不可回传潜在敏感异常文本。"""
+        from src import build_ranking as ranking_module
+        from src.llm import config as llm_config
+
+        report_runner = Mock(side_effect=RuntimeError("secret-like-provider-error"))
+        with patch.object(llm_config, "LLM_REPORTS_ENABLED", True):
+            result = ranking_module._run_llm_report_generation(report_runner=report_runner)
+
+        self.assertEqual(result, {"status": "failed", "reason": "report_generation_failed"})
+        self.assertNotIn("secret-like-provider-error", str(result))
+
+    def test_main_runs_report_bridge_after_analysis_artifacts_are_written(self):
+        """报告只能读取已完成的详情和排名产物，且不影响成功退出码。"""
+        from src import build_ranking as ranking_module
+
+        writes = []
+
+        def record_write(_data, path, *_args):
+            writes.append(Path(path).name)
+
+        def run_reports():
+            self.assertEqual(writes, ["000001.json", "ranking.json"])
+            return {"total": 1, "generated": 0, "failed": []}
+
+        stock = {"code": "000001", "name": "测试标的", "type": "stock"}
+        ranking = {
+            "generated_at": "2026-08-08T17:30:00+08:00",
+            "total": 1,
+            "succeeded": 1,
+            "failed": 0,
+            "status": "success",
+            "items": [],
+        }
+        report_bridge = Mock(side_effect=run_reports)
+
+        with (
+            patch.object(ranking_module, "read_watchlist", return_value=[stock]),
+            patch.object(ranking_module, "_read_watchlist_with_category", return_value=[]),
+            patch.object(ranking_module, "IndustryProvider"),
+            patch.object(ranking_module, "fetch_5y_data", return_value=object()),
+            patch.object(ranking_module, "analyze_single", return_value={"stale": False}),
+            patch.object(ranking_module, "build_ranking", return_value=ranking),
+            patch.object(ranking_module, "validate_ranking", return_value=[]),
+            patch.object(ranking_module, "build_stock_detail", return_value={"code": "000001"}),
+            patch.object(ranking_module, "validate_stock_detail", return_value=[]),
+            patch.object(ranking_module, "atomic_write_json", side_effect=record_write),
+            patch.object(ranking_module, "_run_llm_report_generation", report_bridge),
+            patch.object(ranking_module.os, "makedirs"),
+        ):
+            exit_code = ranking_module.main()
+
+        self.assertEqual(exit_code, 0)
+        report_bridge.assert_called_once_with()
 
 
 # ============================================================
