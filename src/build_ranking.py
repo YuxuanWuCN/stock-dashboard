@@ -90,16 +90,51 @@ from src.analysis.scoring import (
 from src.analysis.schema import validate_ranking, validate_stock_detail
 
 logger = setup_logging()
-FUNDAMENTAL_TIMEOUT_SECONDS = 8
+# 基本面抓取（东方财富三张表）实测较慢（约 15-60 秒），8 秒超时会导致结果为空。
+# 可通过 FUNDAMENTAL_TIMEOUT_SECONDS 环境变量覆盖。
+FUNDAMENTAL_TIMEOUT_SECONDS = int(os.environ.get("FUNDAMENTAL_TIMEOUT_SECONDS", "90"))
 
 # 输出路径
 ANALYSIS_DIR = os.path.join(DATA_DIR, ANALYSIS_DIR_NAME)
 RANKING_PATH = os.path.join(ANALYSIS_DIR, "ranking.json")
+FUNDAMENTAL_CACHE_DIR = os.path.join(DATA_DIR, "fundamental")
 
 
 # ============================================================
 # 1. 5 年数据抓取
 # ============================================================
+
+
+def _load_cached_kline(code: str) -> Optional[pd.DataFrame]:
+    """读取 docs/data/kline/{code}.json 缓存，转为分析用 DataFrame。
+
+    kline JSON 中每根 K 线为 [开盘, 收盘, 最低, 最高]。
+    """
+    try:
+        with open(os.path.join(KLINE_DIR, f"{code}.json"), "r", encoding="utf-8") as f:
+            data = json.load(f)
+        dates = data.get("dates") or []
+        kline = data.get("kline") or []
+        volume = data.get("volume") or []
+        if not dates or len(dates) != len(kline):
+            return None
+        rows = []
+        for i, d in enumerate(dates):
+            bar = kline[i]
+            if not isinstance(bar, list) or len(bar) < 4:
+                continue
+            rows.append({
+                "date": d,
+                "open": bar[0],
+                "high": bar[3],
+                "low": bar[2],
+                "close": bar[1],
+                "volume": volume[i] if i < len(volume) else 0,
+            })
+        return pd.DataFrame(rows) if rows else None
+    except Exception:
+        logger.warning("%s 读取本地 K 线缓存失败: %s", code, traceback.format_exc())
+        return None
 
 def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
     """
@@ -141,6 +176,14 @@ def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
 
         if attempt < MAX_RETRIES:
             time.sleep(REQUEST_INTERVAL)
+
+    # 兜底：在线源全部失败时读取本地已抓取的 K 线缓存（场外基金/网络波动场景）
+    cached_df = _load_cached_kline(code)
+    if cached_df is not None and not cached_df.empty:
+        cleaned = _clean_dataframe(cached_df, code, item.get("name", code))
+        if cleaned is not None:
+            logger.info("%s(%s) 使用本地 K 线缓存（%d 行）", item.get("name", code), code, len(cleaned))
+            return cleaned.sort_values("date").reset_index(drop=True)
 
     logger.error("%s(%s) 5Y 数据全部尝试失败", item["name"], code)
     return None
@@ -433,6 +476,33 @@ def analyze_single(
     return result
 
 
+
+def _fundamental_cache_path(code: str) -> str:
+    """基本面缓存文件路径。"""
+    return os.path.join(FUNDAMENTAL_CACHE_DIR, f"{code}.json")
+
+
+def _load_fundamental_cache(code: str) -> Optional[dict]:
+    """读取基本面缓存；结构完整且带评分时直接复用，避免云端抓取东财超时。"""
+    try:
+        with open(_fundamental_cache_path(code), "r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, dict) and isinstance(data.get("score"), (int, float)):
+            return data
+    except (OSError, ValueError):
+        pass
+    return None
+
+
+def _write_fundamental_cache(code: str, result: dict) -> None:
+    """把抓取成功的基本面结果写入缓存（供后续云端运行复用）。"""
+    try:
+        payload = dict(result)
+        payload.setdefault("cached_at", beijing_datetime_str())
+        atomic_write_json(payload, _fundamental_cache_path(code), logger)
+    except Exception:
+        logger.warning("%s(%s) 基本面缓存写入失败: %s", code, code, traceback.format_exc())
+
 def _analyze_fundamental_with_timeout(
     code: str,
     name: str,
@@ -442,6 +512,10 @@ def _analyze_fundamental_with_timeout(
     """Run fundamental analysis with a timeout so external APIs cannot stall ranking."""
     if code.startswith(("5", "1")):
         return None
+
+    cached = _load_fundamental_cache(code)
+    if cached is not None:
+        return cached
 
     queue: Queue = Queue(maxsize=1)
     process = Process(
@@ -467,6 +541,8 @@ def _analyze_fundamental_with_timeout(
             return None
         ok, payload = queue.get_nowait()
         if ok:
+            if payload is not None:
+                _write_fundamental_cache(code, payload)
             return payload
         logger.warning("%s(%s) 基本面分析异常: %s", name, code, payload)
         return None

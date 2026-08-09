@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-08 22:28:27+08:00",
+  "generated_at": "2026-08-09 09:55:11+08:00",
   "trade_date": "2026-08-07",
   "code": "300812",
   "name": "易天股份",
@@ -8,8 +8,8 @@
   "category": "科技",
   "stale": false,
   "scores": {
-    "risk_adjusted": 26.7,
-    "risk": 61.4,
+    "risk_adjusted": 26.5,
+    "risk": 62.5,
     "technical": 86.0,
     "industry": 32.0
   },
@@ -22,22 +22,22 @@
     "factors": [
       {
         "name": "20日波动率",
-        "score": 76.2,
+        "score": 77.3,
         "value": 75.0
       },
       {
         "name": "60日最大回撤",
-        "score": 85.7,
+        "score": 86.4,
         "value": -49.56
       },
       {
         "name": "ATR百分比",
-        "score": 76.2,
+        "score": 77.3,
         "value": 7.02
       },
       {
         "name": "量价异常",
-        "score": 19.0,
+        "score": 22.7,
         "value": 0.95
       },
       {
@@ -66,7 +66,7 @@
     "macd_dea": -2.02794650394983,
     "macd_hist": 1.1556334931597023,
     "atr14_pct": 7.0212976330382215,
-    "boll_position": 0.752989671775159,
+    "boll_position": 0.7529896717751592,
     "return_5d_pct": 15.27777777777779,
     "return_20d_pct": -12.593242650285196,
     "volume_ratio_5d": 0.95
@@ -100,7 +100,127 @@
       "worst_return_pct": -15.55
     }
   },
-  "fundamental": null,
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 35.0,
+    "dimensions": {
+      "asset_quality": 27.0,
+      "liability_safety": 52.5,
+      "profit_quality": 3.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 1343827231.81,
+      "total_assets_yoy": -7.3466601003,
+      "inventory": 500487958.32,
+      "prepayment": 1696009.96,
+      "receivable": 241681555.12,
+      "inventory_prepay_ratio": 0.37369682381239494,
+      "receivable_revenue": 3.753684920650551,
+      "goodwill_equity": null,
+      "debt_ratio": 0.408456751684287,
+      "short_debt_ratio": 0.018787793115715122,
+      "roe": 0.01139225172302225,
+      "gross_margin": 9.588636103024987,
+      "deduct_ratio": 0.9727578295110096,
+      "netprofit_yoy": -62.8637833013,
+      "ocf_np_ratio": 2.450517630613518,
+      "financing_debt": -0.038704739483979726,
+      "retained_profit_equity": 0.29382579029233785
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +-7.3%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "warning",
+          "title": "周期数据不足",
+          "detail": "存货+预付占总资产 37.4%；未取得真实行业周期数据，不将其计为利好。",
+          "contribution": 0.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 375.4%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "warning",
+          "title": "杠杆中等",
+          "detail": "资产负债率 40.8%，处于中间区间。",
+          "contribution": -0.5
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 1.9%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 1.1%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "negative",
+          "title": "利润下滑",
+          "detail": "净利润同比 -62.9%，盈利收缩。",
+          "contribution": -12.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 97.3%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "negative",
+          "title": "毛利率偏低",
+          "detail": "毛利率 9.6%，产品竞争力或成本控制存疑。",
+          "contribution": -8.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 2.45，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -3.9%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "经营现金流/净利润 2.45，利润含金量高",
+      "negative_view": "存货+预付占总资产 37.4%，缺少行业周期数据，不能判断备货是否受益；应收账款/营收 375.4%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-09 09:34:12"
+  },
   "reasons": [
     {
       "type": "negative",

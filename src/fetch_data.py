@@ -264,6 +264,11 @@ def _fetch_etf_hist_em(
         df = _fetch_tencent_kline(code, start_date, end_date, count=500)
 
     if df is None or df.empty:
+        # 场外基金兜底源：东财天天基金历史净值（单位净值）
+        logger.info("ETF/基金 %s 尝试场外基金净值源 fund_nav", code)
+        df = _fetch_fund_nav(code, start_date, end_date)
+
+    if df is None or df.empty:
         return None
 
     # 统一列名映射
@@ -276,6 +281,74 @@ def _fetch_etf_hist_em(
     df = df.rename(columns=col_map)
     return df
 
+
+
+def _fetch_fund_nav(
+    code: str, start_date: str, end_date: str
+) -> Optional[pd.DataFrame]:
+    """场外基金兜底源：东财天天基金历史净值（单位净值）。
+
+    场外基金没有 OHLC 行情，只有每日净值：
+    开盘=最高=最低=收盘=净值，成交量记 0。
+    """
+    try:
+        import requests
+        headers = {
+            "Referer": "https://fundf10.eastmoney.com/",
+            "User-Agent": "Mozilla/5.0",
+        }
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        rows_all: list = []
+        page = 1
+        while page <= 30:
+            url = (
+                "https://api.fund.eastmoney.com/f10/lsjz"
+                f"?fundCode={code}&pageIndex={page}&pageSize=200"
+            )
+            resp = requests.get(url, headers=headers, timeout=15)
+            resp.raise_for_status()
+            payload = resp.json()
+            rows = ((payload.get("Data") or {}).get("LSJZList")) or []
+            if not rows:
+                break
+            rows_all.extend(rows)
+            # 已覆盖到 start_date 之前即可停止
+            last_date = rows[-1].get("FSRQ", "")
+            if last_date <= start_fmt:
+                break
+            page += 1
+
+        if not rows_all:
+            return None
+        rows_all.sort(key=lambda r: r.get("FSRQ", ""))
+        data_rows = []
+        for r in rows_all:
+            fsrq = r.get("FSRQ", "")
+            nav = r.get("DWJZ")
+            if not fsrq or nav in (None, ""):
+                continue
+            try:
+                nav_f = float(nav)
+            except (TypeError, ValueError):
+                continue
+            data_rows.append({
+                "日期": fsrq,
+                "开盘": nav_f,
+                "收盘": nav_f,
+                "最高": nav_f,
+                "最低": nav_f,
+                "成交量": 0,
+            })
+        df = pd.DataFrame(data_rows)
+        if df.empty:
+            return None
+        # 过滤到请求日期范围
+        df = df[(df["日期"] >= start_fmt) & (df["日期"] <= end_fmt)]
+        return df if not df.empty else None
+    except Exception:
+        logger.warning("%s 场外基金净值抓取失败: %s", code, traceback.format_exc())
+        return None
 
 def _fetch_tencent_kline(
     code: str,

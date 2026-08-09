@@ -192,10 +192,31 @@ def test_temperature_cold_market(monkeypatch):
 
 
 def test_temperature_api_error(monkeypatch):
-    """API 失败抛 DataNotAvailableError。"""
+    """主源与兜底源都失败时抛 DataNotAvailableError。"""
     def _fail():
         raise RuntimeError("network down")
 
     monkeypatch.setattr(ak, "stock_zh_a_spot_em", _fail)
+    monkeypatch.setattr(ak, "stock_market_activity_legu", _fail)
     with pytest.raises(MarketTemperatureError):
         MarketTemperature().calculate()
+
+
+def test_temperature_legu_fallback(monkeypatch):
+    """东财失败时自动切换到乐咕+腾讯兜底源。"""
+    def _fail():
+        raise RuntimeError("network down")
+
+    activity = pd.DataFrame({
+        "item": ["上涨", "下跌", "跌停", "真实涨停", "平盘", "停牌"],
+        "value": [400.0, 100.0, 0.0, 8.0, 0.0, 0.0],
+    })
+    monkeypatch.setattr(ak, "stock_zh_a_spot_em", _fail)
+    monkeypatch.setattr(ak, "stock_market_activity_legu", lambda: activity)
+    monkeypatch.setattr(MarketTemperature, "_fetch_market_amount", staticmethod(lambda: None))
+
+    result = MarketTemperature().calculate()
+    assert result["source"] == "akshare_legu+tencent"
+    assert result["dimensions"]["up_count"] == 400
+    assert result["dimensions"]["down_count"] == 100
+    assert result["temperature"] >= 0

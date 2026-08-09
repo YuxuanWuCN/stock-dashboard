@@ -5,6 +5,8 @@
 """
 
 import logging
+import time
+import traceback
 from typing import Dict, Optional
 
 import akshare as ak
@@ -41,16 +43,29 @@ class MarketTemperature:
     ]
 
     def calculate(self) -> Dict:
-        """计算当日市场温度（基于东财实时全市场行情）。"""
-        try:
-            spot = ak.stock_zh_a_spot_em()
-        except Exception as exc:
-            raise DataNotAvailableError(f"获取全市场行情失败: {exc}") from exc
-
+        """计算当日市场温度（优先东财实时全市场行情，失败时用乐咕+腾讯兜底）。"""
+        spot = self._try_fetch_spot_em()
         if spot is None or spot.empty:
-            raise DataNotAvailableError("全市场行情为空")
+            logger.warning("东财全市场行情不可用，切换乐咕+腾讯兜底源")
+            return self._calculate_legu_fallback()
+        return self._calculate_from_spot(spot)
 
-        # 涨跌家数比（权重 35%）
+    @staticmethod
+    def _try_fetch_spot_em() -> Optional[pd.DataFrame]:
+        """东财全市场实时行情（失败返回 None，最多重试 2 次）。"""
+        for attempt in range(3):
+            try:
+                spot = ak.stock_zh_a_spot_em()
+                if spot is not None and not spot.empty:
+                    return spot
+            except Exception:
+                logger.warning("东财全市场行情第 %d 次获取失败: %s", attempt + 1, traceback.format_exc().splitlines()[-1] if traceback.format_exc().splitlines() else "")
+                if attempt < 2:
+                    time.sleep(1)
+        return None
+
+    def _calculate_from_spot(self, spot: pd.DataFrame) -> Dict:
+        """基于东财全市场快照计算四维度温度。"""
         up_count = int((spot["涨跌幅"] > 0).sum())
         down_count = int((spot["涨跌幅"] < 0).sum())
         total = up_count + down_count
@@ -94,6 +109,91 @@ class MarketTemperature:
             },
             "source": "akshare_stock_zh_a_spot_em",
         }
+
+    def _calculate_legu_fallback(self) -> Dict:
+        """乐咕市场活跃度 + 腾讯指数成交额 兜底计算（东财不可用时）。"""
+        try:
+            activity = ak.stock_market_activity_legu()
+        except Exception as exc:
+            raise DataNotAvailableError(f"乐咕市场活跃度获取失败: {exc}") from exc
+        if activity is None or activity.empty:
+            raise DataNotAvailableError("乐咕市场活跃度为空")
+
+        def _value(name: str) -> float:
+            row = activity[activity["item"] == name]
+            if row.empty:
+                return 0.0
+            try:
+                return float(row.iloc[0]["value"])
+            except (TypeError, ValueError):
+                return 0.0
+
+        up_count = int(_value("上涨"))
+        down_count = int(_value("下跌"))
+        limit_down_count = int(_value("跌停"))
+        limit_up_count = int(_value("真实涨停"))
+        total = up_count + down_count
+        up_down_ratio = up_count / total if total > 0 else 0.5
+        ratio_score = max(0.0, min(100.0, (up_down_ratio - 0.3) / 0.4 * 100.0))
+        limit_down_score = max(0.0, 100.0 - limit_down_count * 10.0)
+
+        amount_yuan = self._fetch_market_amount()
+        if amount_yuan is None:
+            volume_score = 50.0  # 无成交额时给中性分
+        else:
+            volume_score = max(0.0, min(100.0, amount_yuan / 1.0e12 * 100.0))
+
+        # 用真实涨停家数近似“涨停表现”强度
+        limit_up_perf_score = max(0.0, min(100.0, 50.0 + limit_up_count * 0.6))
+
+        temperature = (
+            self.WEIGHT_UP_DOWN_RATIO * ratio_score
+            + self.WEIGHT_LIMIT_DOWN * limit_down_score
+            + self.WEIGHT_LIMIT_UP_PERFORMANCE * limit_up_perf_score
+            + self.WEIGHT_VOLUME * volume_score
+        )
+
+        status, position_ratio = self._status_for(temperature)
+
+        return {
+            "temperature": round(temperature, 1),
+            "status": status,
+            "position_ratio": position_ratio,
+            "dimensions": {
+                "up_down_ratio": round(up_down_ratio, 4),
+                "up_count": up_count,
+                "down_count": down_count,
+                "limit_down_count": limit_down_count,
+                "top_gainers_avg": round(limit_up_count * 0.12, 2),
+                "total_amount_yi": round(amount_yuan / 1.0e8, 0) if amount_yuan else None,
+            },
+            "source": "akshare_legu+tencent",
+        }
+
+    @staticmethod
+    def _fetch_market_amount() -> Optional[float]:
+        """腾讯行情接口获取沪深两市成交额（元）；失败返回 None。"""
+        try:
+            import requests
+            resp = requests.get(
+                "https://qt.gtimg.cn/q=sh000001,sz399001",
+                timeout=10,
+            )
+            resp.raise_for_status()
+            total = 0.0
+            for line in resp.text.strip().split(";"):
+                if "=" not in line:
+                    continue
+                parts = line.split("~")
+                if len(parts) <= 35:
+                    continue
+                tail = parts[35].split("/")
+                if len(tail) >= 3:
+                    total += float(tail[2])
+            return total if total > 0 else None
+        except Exception:
+            logger.warning("腾讯指数成交额获取失败: %s", traceback.format_exc().splitlines()[-1] if traceback.format_exc().splitlines() else "")
+            return None
 
     @staticmethod
     def _status_for(temperature: float):
