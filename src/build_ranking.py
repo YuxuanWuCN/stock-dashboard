@@ -59,6 +59,7 @@ from src.fetch_data import (
     _fetch_tencent_kline,
     _fetch_us_kline,
     _fetch_kr_kline,
+    _fetch_hk_kline,
 )
 
 from src.analysis.config import (
@@ -160,6 +161,8 @@ def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
                 df = _fetch_us_5y(code, start_date_str, end_date_str, attempt)
             elif typ == "kr":
                 df = _fetch_kr_5y(code, start_date_str, end_date_str, attempt)
+            elif typ == "hk":
+                df = _fetch_hk_5y(code, start_date_str, end_date_str, attempt)
             else:
                 df = _fetch_etf_5y(code, start_date_str, end_date_str, attempt)
 
@@ -211,6 +214,17 @@ def _fetch_us_5y(code: str, start_date: str, end_date: str, attempt: int) -> Opt
 def _fetch_kr_5y(code: str, start_date: str, end_date: str, attempt: int) -> Optional[pd.DataFrame]:
     """韩股 5 年历史数据（Naver）。"""
     df = _fetch_kr_kline(code, start_date, end_date, count=1500)
+    if df is None or df.empty:
+        return None
+    col_map = {
+        "日期": "date", "开盘": "open", "收盘": "close",
+        "最高": "high", "最低": "low", "成交量": "volume",
+    }
+    return df.rename(columns=col_map)
+
+def _fetch_hk_5y(code: str, start_date: str, end_date: str, attempt: int) -> Optional[pd.DataFrame]:
+    """港股 5 年历史数据（腾讯行情，hk 前缀）。"""
+    df = _fetch_hk_kline(code, start_date, end_date, count=1500)
     if df is None or df.empty:
         return None
     col_map = {

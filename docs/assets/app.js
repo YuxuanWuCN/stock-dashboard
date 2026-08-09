@@ -23,6 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
         marketTemperature: null,
         // v2.10 明日重点关注
         dailyBrief: null,
+        // v2.11 自选股分区筛选
+        watchlistRegion: 'all',
         // 当前选中的股票切片数据，供 tooltip 使用
         activeData: {
             dates: [],
@@ -68,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dailyBriefPosition: document.getElementById('daily-brief-position'),
         dailyBriefDisclaimer: document.getElementById('daily-brief-disclaimer'),
         stockList: document.getElementById('stock-list'),
+        watchlistFilter: document.getElementById('watchlist-filter'),
         detailHeader: document.getElementById('detail-header'),
         detailName: document.getElementById('detail-name'),
         detailCode: document.getElementById('detail-code'),
@@ -386,6 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 渲染自选股列表
             if (state.summary && state.summary.items && state.summary.items.length > 0) {
                 renderStockList();
+                initWatchlistFilter();
 
             } else {
                 el.stockList.innerHTML = '<div class="list-loading text-down">暂无自选股数据</div>';
@@ -619,82 +623,126 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 渲染股票列表
-    function renderStockList() {
-        el.stockList.innerHTML = ''; // 清空加载状态
-        
-        state.summary.items.forEach(item => {
-            const card = document.createElement('div');
-            
-            // 基础样式和状态标记
-            card.className = 'stock-item';
-            if (item.status === 'stale') {
-                card.classList.add('stale-stock');
-            } else if (item.status === 'failed') {
-                card.classList.add('failed-stock');
-            }
-
-            // 涨跌判断
-            let changeClass = 'text-flat';
-            let changeSign = '';
-            let arrow = '';
-            if (item.change_pct > 0) {
-                changeClass = 'text-up';
-                changeSign = '+';
-                arrow = '↑';
-            } else if (item.change_pct < 0) {
-                changeClass = 'text-down';
-                changeSign = '';
-                arrow = '↓';
-            }
-
-            // 类型标签 (股票/ETF)
-            const typeLabel = item.type === 'etf' ? '基金' : item.type === 'us' ? '美股' : item.type === 'kr' ? '韩股' : '股票';
-            const typeClass = item.type === 'etf' ? 'etf' : 'stock';
-
-            // 失败或节假日数据可能没有价格/涨跌幅，仍然渲染卡片。
-            const hasClose = Number.isFinite(item.last_close);
-            const hasChange = Number.isFinite(item.change_pct);
-            const closeText = hasClose ? item.last_close.toFixed(2) : '--';
-            const changeText = hasChange ? `${changeSign}${item.change_pct.toFixed(2)}% ${arrow}` : '--';
-            const changeBg = hasChange ? (item.change_pct >= 0 ? 'up' : 'down') : 'flat';
-
-            // 名称未识别时给出提示（name === code）
-            const displayName = item.name === item.code
-                ? `${item.code} (名称未识别)`
-                : item.name;
-            // 构建卡片 HTML
-            card.innerHTML = `
-                <div class="stock-item-left">
-                    <span class="stock-item-name">${displayName}</span>
-                    <div class="stock-item-meta">
-                        <span class="stock-item-code">${item.code}</span>
-                        <span class="type-badge ${typeClass}">${typeLabel}</span>
-                    </div>
-                </div>
-                <div class="stock-item-right">
-                    <span class="stock-item-price ${changeClass}">${closeText}</span>
-                    <span class="stock-item-pct bg-${changeBg}">${changeText}</span>
-                </div>
-            `;
-
-            // 点击事件
-            card.addEventListener('click', () => {
-                if (item.dynamic_only) {
-                    el.queryCodeInput.value = item.code;
-                    doQuery();
-                } else {
-                    selectTrackedStock(item.code);
-                }
-                // 移动端体验：点击卡片后平滑滚动到图表区域
-                if (window.innerWidth < 900) {
-                    el.detailHeader.scrollIntoView({ behavior: 'smooth' });
-                }
+    // v2.11 自选股分区筛选（顶部标签切换）
+    function initWatchlistFilter() {
+        if (!el.watchlistFilter) return;
+        el.watchlistFilter.querySelectorAll('.watchlist-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                state.watchlistRegion = btn.dataset.region || 'all';
+                el.watchlistFilter.querySelectorAll('.watchlist-filter-btn').forEach(b => {
+                    b.classList.toggle('active', b === btn);
+                });
+                renderStockList();
             });
+        });
+    }
+    // 渲染股票列表（v2.11 分区：A股/港股/美股/韩股/基金）
+    function renderStockList() {
+        const regionOrder = ['stock', 'hk', 'us', 'kr', 'etf'];
+        const regionLabels = { stock: 'A股', hk: '港股', us: '美股', kr: '韩股', etf: '基金' };
+        const regionOf = function (item) {
+            const t = item.type || 'stock';
+            return (t === 'etf' || t === 'fund') ? 'etf' : t;
+        };
 
-            // 暂存 DOM 引用，方便高亮切换
-            card.dataset.code = item.code;
-            el.stockList.appendChild(card);
+        el.stockList.innerHTML = ''; // 清空加载状态
+
+        // 按分区分组（尊重顶部筛选）
+        const groups = {};
+        state.summary.items.forEach(item => {
+            const region = regionOf(item);
+            if (state.watchlistRegion !== 'all' && region !== state.watchlistRegion) return;
+            if (!groups[region]) groups[region] = [];
+            groups[region].push(item);
+        });
+        const orderedRegions = Object.keys(groups).sort((a, b) => regionOrder.indexOf(a) - regionOrder.indexOf(b));
+
+        if (orderedRegions.length === 0) {
+            el.stockList.innerHTML = '<div class="list-loading">该分区暂无股票</div>';
+            return;
+        }
+
+        orderedRegions.forEach(region => {
+            // 分区标题
+            const title = document.createElement('div');
+            title.className = 'watchlist-section-title';
+            title.innerHTML = '<span class="watchlist-section-name">' + (regionLabels[region] || region) + '</span>'
+                + '<span class="watchlist-section-count">' + groups[region].length + ' 只</span>';
+            el.stockList.appendChild(title);
+
+            groups[region].forEach(item => {
+                const card = document.createElement('div');
+
+                // 基础样式和状态标记
+                card.className = 'stock-item';
+                if (item.status === 'stale') {
+                    card.classList.add('stale-stock');
+                } else if (item.status === 'failed') {
+                    card.classList.add('failed-stock');
+                }
+
+                // 涨跌判断
+                let changeClass = 'text-flat';
+                let changeSign = '';
+                let arrow = '';
+                if (item.change_pct > 0) {
+                    changeClass = 'text-up';
+                    changeSign = '+';
+                    arrow = '↑';
+                } else if (item.change_pct < 0) {
+                    changeClass = 'text-down';
+                    changeSign = '';
+                    arrow = '↓';
+                }
+
+                // 类型标签 (股票/ETF/美股/港股/韩股)
+                const typeLabel = item.type === 'etf' ? '基金' : item.type === 'us' ? '美股' : item.type === 'kr' ? '韩股' : item.type === 'hk' ? '港股' : '股票';
+                const typeClass = item.type === 'etf' ? 'etf' : 'stock';
+
+                // 失败或节假日数据可能没有价格/涨跌幅，仍然渲染卡片。
+                const hasClose = Number.isFinite(item.last_close);
+                const hasChange = Number.isFinite(item.change_pct);
+                const closeText = hasClose ? item.last_close.toFixed(2) : '--';
+                const changeText = hasChange ? `${changeSign}${item.change_pct.toFixed(2)}% ${arrow}` : '--';
+                const changeBg = hasChange ? (item.change_pct >= 0 ? 'up' : 'down') : 'flat';
+
+                // 名称未识别时给出提示（name === code）
+                const displayName = item.name === item.code
+                    ? `${item.code} (名称未识别)`
+                    : item.name;
+                // 构建卡片 HTML
+                card.innerHTML = `
+                    <div class="stock-item-left">
+                        <span class="stock-item-name">${displayName}</span>
+                        <div class="stock-item-meta">
+                            <span class="stock-item-code">${item.code}</span>
+                            <span class="type-badge ${typeClass}">${typeLabel}</span>
+                        </div>
+                    </div>
+                    <div class="stock-item-right">
+                        <span class="stock-item-price ${changeClass}">${closeText}</span>
+                        <span class="stock-item-pct bg-${changeBg}">${changeText}</span>
+                    </div>
+                `;
+
+                // 点击事件
+                card.addEventListener('click', () => {
+                    if (item.dynamic_only) {
+                        el.queryCodeInput.value = item.code;
+                        doQuery();
+                    } else {
+                        selectTrackedStock(item.code);
+                    }
+                    // 移动端体验：点击卡片后平滑滚动到图表区域
+                    if (window.innerWidth < 900) {
+                        el.detailHeader.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+
+                // 暂存 DOM 引用，方便高亮切换
+                card.dataset.code = item.code;
+                el.stockList.appendChild(card);
+            });
         });
     }
 

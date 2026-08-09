@@ -246,6 +246,63 @@ body {
     color: var(--text-secondary);
 }
 
+/* v2.11 自选股分区筛选 */
+.watchlist-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.watchlist-filter-btn {
+    padding: 6px 14px;
+    font-size: 15px;
+    font-weight: 600;
+    border: 2px solid #d1d5db;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.watchlist-filter-btn:hover {
+    border-color: #9cc3ef;
+    color: #1d4ed8;
+}
+
+.watchlist-filter-btn.active {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    color: #ffffff;
+}
+
+.watchlist-section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 8px 2px 2px;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 4px;
+}
+
+.watchlist-section-name {
+    font-size: 17px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.watchlist-section-count {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* 移动端网格下分区标题占满整行 */
+@media (max-width: 899px) {
+    .watchlist-section-title {
+        grid-column: 1 / -1;
+    }
+}
 /* 自选股卡片项 */
 .stock-item {
     background-color: #f9fafb;

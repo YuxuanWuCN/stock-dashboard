@@ -97,6 +97,10 @@ def read_watchlist(path: str) -> list[dict]:
                 if not re.fullmatch(r"[A-Za-z]{1,6}", code):
                     logger.warning("第 %d 行美股代码 '%s' 非法，跳过", line_no, code)
                     continue
+            elif typ == "hk":
+                if not re.fullmatch(r"\d{5}", code):
+                    logger.warning("第 %d 行港股代码 '%s' 非法，跳过", line_no, code)
+                    continue
             elif typ == "kr":
                 if not code.isdigit() or len(code) != 6:
                     logger.warning("第 %d 行韩股代码 '%s' 非法，跳过", line_no, code)
@@ -108,7 +112,7 @@ def read_watchlist(path: str) -> list[dict]:
                 continue
 
             # 类型校验
-            if typ not in ("stock", "etf", "us", "kr"):
+            if typ not in ("stock", "etf", "us", "kr", "hk"):
                 logger.warning(
                     "第 %d 行 type='%s' 非法，按 stock 处理", line_no, typ
                 )
@@ -156,9 +160,18 @@ def fetch_one(
                 df = _fetch_us_kline(code, start_date, end_date, count=1500)
                 if df is None:
                     continue
+            elif typ == "hk":
+                if not re.fullmatch(r"\d{5}", code):
+                    logger.warning("第 %d 行港股代码 '%s' 非法，跳过", line_no, code)
+                    continue
             elif typ == "kr":
                 # ---- 韩股（Naver Finance 日线） ----
                 df = _fetch_kr_kline(code, start_date, end_date, count=1500)
+                if df is None:
+                    continue
+            elif typ == "hk":
+                # ---- 港股（腾讯行情，hk 前缀） ----
+                df = _fetch_hk_kline(code, start_date, end_date, count=1500)
                 if df is None:
                     continue
             else:
@@ -504,6 +517,52 @@ def _fetch_kr_kline(
         return df if not df.empty else None
     except Exception:
         logger.warning("%s 韩股行情抓取失败: %s", code, traceback.format_exc())
+        return None
+
+def _fetch_hk_kline(
+    code: str, start_date: str, end_date: str, count: int = 1500
+) -> Optional[pd.DataFrame]:
+    """港股日线（腾讯行情，hk 前缀，直连）。
+
+    返回列名与 A 股一致（日期/开盘/收盘/最高/最低/成交量）。
+    """
+    try:
+        import requests
+        headers = {"User-Agent": "Mozilla/5.0"}
+        symbol = f"hk{code}"
+        url = f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={symbol},day,,,{count},qfq"
+        resp = requests.get(url, headers=headers, timeout=15, proxies={"http": None, "https": None})
+        resp.raise_for_status()
+        payload = resp.json()
+        day = ((payload.get("data") or {}).get(symbol) or {}).get("day") or []
+        rows = []
+        for bar in day:
+            if not isinstance(bar, list) or len(bar) < 6:
+                continue
+            try:
+                rows.append({
+                    "日期": bar[0],
+                    "开盘": float(bar[1]),
+                    "收盘": float(bar[2]),
+                    "最高": float(bar[3]),
+                    "最低": float(bar[4]),
+                    "成交量": float(bar[5]),
+                })
+            except (TypeError, ValueError):
+                continue
+        if not rows:
+            return None
+        df = pd.DataFrame(rows)
+        df = df.rename(columns={
+            "日期": "date", "开盘": "open", "收盘": "close",
+            "最高": "high", "最低": "low", "成交量": "volume",
+        })
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
+        return df if not df.empty else None
+    except Exception:
+        logger.warning("港股 %s 行情抓取失败: %s", code, traceback.format_exc())
         return None
 
 def _clean_and_validate(
