@@ -2242,6 +2242,100 @@ body {
     color: #b91c1c;
 }
 
+/* v2.10 明日重点关注（AI 每日总结） */
+.daily-brief-section {
+    margin: 12px 0 18px;
+    padding: 16px 18px;
+    background: #f0f7ff;
+    border: 2px solid #9cc3ef;
+    border-radius: 12px;
+}
+
+.daily-brief-heading h2 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #111827;
+    margin: 0 0 4px;
+}
+
+.daily-brief-meta {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 10px;
+}
+
+.daily-brief-summary {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #1f2937;
+    margin: 0 0 12px;
+    white-space: pre-line;
+}
+
+.daily-brief-focus {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+}
+
+.daily-brief-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    background: #ffffff;
+    border: 2px solid #dbe7f5;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.daily-brief-item:hover {
+    border-color: #9cc3ef;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.daily-brief-item-main {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.daily-brief-item-name {
+    font-size: 20px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.daily-brief-item-code {
+    font-size: 15px;
+    color: #6b7280;
+}
+
+.daily-brief-item-reason {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #1f2937;
+}
+
+.daily-brief-item-risk {
+    font-size: 14px;
+    color: #b45309;
+}
+
+.daily-brief-position {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin: 12px 0 4px;
+}
+
+.daily-brief-disclaimer {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 6px 0 0;
+}
 /* 老年友好：全局基础字号微调（不破坏现有布局） */
 @media (min-width: 768px) {
     .ranking-table th,

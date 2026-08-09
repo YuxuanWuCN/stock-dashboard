@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         selection: null,
         huntingGround: null,
         marketTemperature: null,
+        // v2.10 明日重点关注
+        dailyBrief: null,
         // 当前选中的股票切片数据，供 tooltip 使用
         activeData: {
             dates: [],
@@ -35,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isLocal = window.location.hostname === '127.0.0.1'
         || window.location.hostname === 'localhost';
-    const DATA_VERSION = '2.9';
+    const DATA_VERSION = '2.10';
     function dataUrl(path) {
         return path + (path.indexOf('?') === -1 ? '?v=' + DATA_VERSION : '&v=' + DATA_VERSION);
     }
@@ -57,6 +59,14 @@ document.addEventListener('DOMContentLoaded', () => {
         marketTempRatio: document.getElementById('market-temp-ratio'),
         buyTodaySection: document.getElementById('buy-today-section'),
         buyTodayList: document.getElementById('buy-today-list'),
+        // v2.10 明日重点关注
+        dailyBriefSection: document.getElementById('daily-brief-section'),
+        dailyBriefTitle: document.getElementById('daily-brief-title'),
+        dailyBriefMeta: document.getElementById('daily-brief-meta'),
+        dailyBriefSummary: document.getElementById('daily-brief-summary'),
+        dailyBriefFocus: document.getElementById('daily-brief-focus'),
+        dailyBriefPosition: document.getElementById('daily-brief-position'),
+        dailyBriefDisclaimer: document.getElementById('daily-brief-disclaimer'),
         stockList: document.getElementById('stock-list'),
         detailHeader: document.getElementById('detail-header'),
         detailName: document.getElementById('detail-name'),
@@ -299,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function init() {
         try {
             // 并行加载元数据、汇总、排行榜、自选股与 v2.5 策略数据
-            const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes] = await Promise.all([
+            const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes, briefRes] = await Promise.all([
                 fetch(dataUrl('data/meta.json')).then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
                     return null;
@@ -342,6 +352,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).catch(err => {
                     console.warn('v2.5 市场温度未加载（可跳过）:', err);
                     return null;
+                }),
+                fetch(dataUrl('data/strategy/daily_brief.json')).then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.json();
+                }).catch(err => {
+                    console.warn('v2.10 明日重点关注未加载（可跳过）:', err);
+                    return null;
                 })
             ]);
 
@@ -351,6 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
             state.selection = selectionRes;
             state.huntingGround = huntingRes;
             state.marketTemperature = tempRes;
+            state.dailyBrief = briefRes;
             state.watchlist = combineWatchlists(
                 watchlistRes && watchlistRes.items,
                 readBrowserWatchlist()
@@ -362,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 渲染 v2.5 市场温度与今日可买
             renderMarketTemperature();
+            renderDailyBrief();
             renderBuyToday();
 
             // 渲染自选股列表
@@ -422,6 +441,46 @@ document.addEventListener('DOMContentLoaded', () => {
         el.marketTempFill.style.background = color;
     }
 
+    // v2.10 渲染"明日重点关注"（AI 每日总结，置顶）
+    function renderDailyBrief() {
+        const brief = state.dailyBrief;
+        if (!brief || !brief.summary) {
+            return; // 无数据保持 hidden
+        }
+        el.dailyBriefSection.hidden = false;
+        if (brief.title) el.dailyBriefTitle.textContent = brief.title;
+        const modeText = (brief.mode === 'deepseek_api') ? 'AI 生成' : '自动生成';
+        el.dailyBriefMeta.textContent = '数据截至 ' + (brief.trade_date || '--') + ' 收盘 · ' + modeText + '（研究参考，不构成买卖建议）';
+        el.dailyBriefSummary.textContent = brief.summary;
+        const focus = brief.focus || [];
+        if (focus.length > 0) {
+            el.dailyBriefFocus.innerHTML = focus.map(item => {
+                const code = escapeHtml(item.code || '');
+                const name = escapeHtml(item.name || item.code || '');
+                const reason = escapeHtml(item.reason || '');
+                const risk = escapeHtml(item.risk || '');
+                return `
+                    <div class="daily-brief-item" data-code="${escapeHtml(item.code || '')}">
+                        <div class="daily-brief-item-main">
+                            <span class="daily-brief-item-name">${name}</span>
+                            <span class="daily-brief-item-code">${code}</span>
+                        </div>
+                        <div class="daily-brief-item-reason">${reason}</div>
+                        <div class="daily-brief-item-risk">${risk}</div>
+                    </div>`;
+            }).join('');
+            el.dailyBriefFocus.querySelectorAll('.daily-brief-item').forEach(card => {
+                card.addEventListener('click', () => {
+                    const code = card.dataset.code;
+                    if (code) selectTrackedStock(code);
+                });
+            });
+        } else {
+            el.dailyBriefFocus.innerHTML = '';
+        }
+        el.dailyBriefPosition.textContent = brief.position_hint || '';
+        el.dailyBriefDisclaimer.textContent = brief.disclaimer || '';
+    }
     // v2.5 渲染"今日可以关注"（策略信号 + 关注区间，置顶大字号）
     function renderBuyToday() {
         const sel = state.selection;

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>股票研究看板 2.5</title>
-    <link rel="stylesheet" href="assets/style.css?v=2.6">
+    <link rel="stylesheet" href="assets/style.css?v=2.10">
     <!-- 引入 ECharts 5.5.1 CDN -->
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
@@ -60,6 +60,17 @@
             <span id="market-temp-ratio" class="market-temp-ratio">仓位参考 --</span>
         </section>
 
+        <!-- v2.10 明日重点关注（AI 每日总结，置顶） -->
+        <section id="daily-brief-section" class="daily-brief-section" aria-labelledby="daily-brief-title" hidden>
+            <div class="daily-brief-heading">
+                <h2 id="daily-brief-title">📋 明日重点关注</h2>
+                <p id="daily-brief-meta" class="daily-brief-meta"></p>
+            </div>
+            <p id="daily-brief-summary" class="daily-brief-summary"></p>
+            <div id="daily-brief-focus" class="daily-brief-focus"></div>
+            <p id="daily-brief-position" class="daily-brief-position"></p>
+            <p id="daily-brief-disclaimer" class="daily-brief-disclaimer"></p>
+        </section>
         <!-- v2.5 今日可买（置顶，老年友好大字号） -->
         <section id="buy-today-section" class="buy-today-section" aria-labelledby="buy-today-title" hidden>
             <div class="buy-today-heading">
@@ -456,6 +467,6 @@
     </div>
 
     <!-- 引入前端交互脚本 -->
-    <script src="assets/app.js?v=2.9"></script>
+    <script src="assets/app.js?v=2.10"></script>
 </body>
 </html>
