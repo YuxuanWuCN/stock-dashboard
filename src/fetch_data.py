@@ -325,7 +325,7 @@ def _fetch_fund_nav(
                 "https://api.fund.eastmoney.com/f10/lsjz"
                 f"?fundCode={code}&pageIndex={page}&pageSize=200"
             )
-            resp = requests.get(url, headers=headers, timeout=15)
+            resp = requests.get(url, headers=headers, timeout=15, proxies={"http": None, "https": None})
             resp.raise_for_status()
             payload = resp.json()
             rows = ((payload.get("Data") or {}).get("LSJZList")) or []
@@ -416,7 +416,7 @@ def _fetch_us_kline(
         for sym in symbols:
             try:
                 url = f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={sym},day,,,{count},qfq"
-                resp = requests.get(url, headers=headers, timeout=15)
+                resp = requests.get(url, headers=headers, timeout=15, proxies={"http": None, "https": None})
                 resp.raise_for_status()
                 payload = resp.json()
                 day = ((payload.get("data") or {}).get(sym) or {}).get("day") or []
@@ -439,9 +439,13 @@ def _fetch_us_kline(
                         continue
                 if rows:
                     df = pd.DataFrame(rows)
+                    df = df.rename(columns={
+                        "日期": "date", "开盘": "open", "收盘": "close",
+                        "最高": "high", "最低": "low", "成交量": "volume",
+                    })
                     start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
                     end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
-                    df = df[(df["日期"] >= start_fmt) & (df["日期"] <= end_fmt)]
+                    df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
                     return df if not df.empty else None
             except Exception as exc:
                 logger.warning("%s 美股源 %s 失败: %s", code, sym, exc)
@@ -465,7 +469,7 @@ def _fetch_kr_kline(
             "Referer": "https://finance.naver.com/",
         }
         url = f"https://fchart.stock.naver.com/sise.nhn?symbol={code}&timeframe=day&count={count}&requestType=0"
-        resp = requests.get(url, headers=headers, timeout=15)
+        resp = requests.get(url, headers=headers, timeout=15, proxies={"http": None, "https": None})
         resp.raise_for_status()
         resp.encoding = "euc-kr"
         rows = []
@@ -488,11 +492,15 @@ def _fetch_kr_kline(
         if not rows:
             return None
         df = pd.DataFrame(rows)
+        df = df.rename(columns={
+            "日期": "date", "开盘": "open", "收盘": "close",
+            "最高": "high", "最低": "low", "成交量": "volume",
+        })
         # Naver 日期为 YYYYMMDD，转 YYYY-MM-DD 后按范围过滤
-        df["日期"] = df["日期"].str.replace(r"(\d{4})(\d{2})(\d{2})", r"\1-\2-\3", regex=True)
+        df["date"] = df["date"].str.replace(r"(\d{4})(\d{2})(\d{2})", r"\1-\2-\3", regex=True)
         start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
         end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
-        df = df[(df["日期"] >= start_fmt) & (df["日期"] <= end_fmt)]
+        df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
         return df if not df.empty else None
     except Exception:
         logger.warning("%s 韩股行情抓取失败: %s", code, traceback.format_exc())
