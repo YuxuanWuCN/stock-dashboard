@@ -20,7 +20,14 @@ from typing import Callable, Optional
 # ---- 清理代理环境变量 ----
 from src.proxy import configure_proxy_from_system
 
-configure_proxy_from_system()
+if os.environ.get("STOCK_PROXY", "").strip().lower() == "direct":
+    # 直连模式：绕过系统/Clash 代理（与 fetch_data.py 保持一致）
+    for _k in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"):
+        os.environ.pop(_k, None)
+    os.environ["NO_PROXY"] = "*"
+    os.environ["no_proxy"] = "*"
+else:
+    configure_proxy_from_system()
 
 import akshare as ak
 import pandas as pd
@@ -236,17 +243,19 @@ def _fetch_hk_5y(code: str, start_date: str, end_date: str, attempt: int) -> Opt
 def _fetch_stock_5y(code: str, start_date: str, end_date: str, attempt: int) -> Optional[pd.DataFrame]:
     """抓取 A 股 5 年历史数据。"""
     if attempt == 0:
-        df = ak.stock_zh_a_hist(
-            symbol=code, period=PERIOD,
-            start_date=start_date, end_date=end_date, adjust=ADJUST,
-        )
-    else:
+        # 主源：新浪（直连稳定）
         start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
         end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
         prefix = "sh" if code.startswith("6") else "sz"
         df = ak.stock_zh_a_daily(
             symbol=f"{prefix}{code}",
             start_date=start_fmt, end_date=end_fmt, adjust=ADJUST,
+        )
+    else:
+        # 备用源：东财
+        df = ak.stock_zh_a_hist(
+            symbol=code, period=PERIOD,
+            start_date=start_date, end_date=end_date, adjust=ADJUST,
         )
 
     if df is None or df.empty:

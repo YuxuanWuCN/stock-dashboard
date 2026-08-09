@@ -25,7 +25,14 @@ try:
 except ImportError:  # Support direct execution from src/.
     from proxy import configure_proxy_from_system
 
-configure_proxy_from_system()
+if os.environ.get("STOCK_PROXY", "").strip().lower() == "direct":
+    # 直连模式：绕过系统/Clash 代理，A股东财与腾讯备用源均直连
+    for _k in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"):
+        os.environ.pop(_k, None)
+    os.environ["NO_PROXY"] = "*"
+    os.environ["no_proxy"] = "*"
+else:
+    configure_proxy_from_system()
 
 import akshare as ak
 import pandas as pd
@@ -213,21 +220,22 @@ def _fetch_stock_zh_a_hist(
     end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
 
     if attempt == 0:
-        # 主源：东财（使用 YYYYMMDD）
+        # 主源：新浪 stock_zh_a_daily（直连稳定，支持 qfq，日期格式 YYYY-MM-DD）
+        logger.info("主源 stock_zh_a_daily 尝试 %s", code)
+        df = ak.stock_zh_a_daily(
+            symbol=f"sh{code}" if code.startswith("6") else f"sz{code}",
+            start_date=start_fmt,
+            end_date=end_fmt,
+            adjust=ADJUST,
+        )
+    else:
+        # 备用源：东财（使用 YYYYMMDD）
+        logger.info("切换备用源东财尝试 %s", code)
         df = ak.stock_zh_a_hist(
             symbol=code,
             period=PERIOD,
             start_date=start_date,
             end_date=end_date,
-            adjust=ADJUST,
-        )
-    else:
-        # 备用源：新浪 stock_zh_a_daily（支持 qfq，日期格式 YYYY-MM-DD）
-        logger.info("切换备用源 stock_zh_a_daily 尝试 %s", code)
-        df = ak.stock_zh_a_daily(
-            symbol=f"sh{code}" if code.startswith("6") else f"sz{code}",
-            start_date=start_fmt,
-            end_date=end_fmt,
             adjust=ADJUST,
         )
 
