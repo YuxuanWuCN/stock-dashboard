@@ -145,6 +145,13 @@ def _hardcoded_control_file_paths() -> list[Path]:
         ROOT / ".claude" / "settings.json",
         ROOT / "tools" / "run_quality.ps1",
         ROOT / "tools" / "install_hooks.ps1",
+        ROOT / "tools" / "assert_scanner.py",
+        ROOT / "tools" / "verdict.py",
+        ROOT / "tools" / "mut_runner.py",
+        ROOT / "tools" / "manifest_gate.py",
+        ROOT / "tools" / "bypass.py",
+        ROOT / "tools" / "ide_registry.py",
+        ROOT / "tools" / "install_ide_hooks.ps1",
         ROOT / ".githooks" / "pre-commit",
         ROOT / ".githooks" / "commit-msg",
         ROOT / ".githooks" / "pre-push",
@@ -1016,6 +1023,7 @@ def run_checks(level: str, target: str | None = None) -> list[dict[str, Any]]:
                 dependency_check(),
             )
         )
+        checks.append(weak_assert_check())
         levels.append("heavy")
     checks.extend(custom_checks(levels))
     return checks
@@ -1795,6 +1803,17 @@ def command_hook_pre_bash(_: argparse.Namespace) -> int:
             hook_json("PreToolUse", deny=reason)
             return 0
 
+    # v2：Manifest 门禁拦截层（命令级 grep gate，scope="command"）
+    try:
+        from tools import manifest_gate  # type: ignore
+
+        deny, reason = manifest_gate.manifest_hook_layer(raw, ROOT)
+        if deny:
+            hook_json("PreToolUse", deny=reason)
+            return 0
+    except Exception:
+        pass  # 自身异常 fail-open（信任红线）
+
     # If we get here and there's an active unit, inject context
     if active:
         hook_json(
@@ -2017,10 +2036,135 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers.add_parser("hook-failure").set_defaults(handler=command_hook_failure)
     subparsers.add_parser("hook-stop").set_defaults(handler=command_hook_stop)
     subparsers.add_parser("status").set_defaults(handler=command_status)
+
+    # --- v2 新增子命令 ---
+    scan_asserts = subparsers.add_parser("scan-asserts", help="弱断言扫描（v2）")
+    scan_asserts.add_argument("--json", action="store_true")
+    scan_asserts.set_defaults(handler=command_scan_asserts)
+
+    verdict_p = subparsers.add_parser("verdict", help="汇聚三层报告+扫描为单一裁决（v2）")
+    verdict_p.add_argument("--strict", action="store_true")
+    verdict_p.add_argument("--no-scans", action="store_true")
+    verdict_p.set_defaults(handler=command_verdict)
+
+    mut_p = subparsers.add_parser("mut", help="变异测试（仅 heavy 阶段自动跑，v2）")
+    mut_p.set_defaults(handler=command_mut)
+
+    manifest_p = subparsers.add_parser("manifest", help="Manifest 三原语门禁（v2）")
+    manifest_p.set_defaults(handler=command_manifest)
+
+    bypass_p = subparsers.add_parser("bypass", help="签发一次性放行 token（v2）")
+    bypass_p.add_argument("--reason", required=True)
+    bypass_p.add_argument("--sop", default="default")
+    bypass_p.set_defaults(handler=command_bypass)
+
+    bypass_c = subparsers.add_parser("bypass-consume", help="消费一次性放行 token（v2）")
+    bypass_c.add_argument("token")
+    bypass_c.add_argument("--context", required=True)
+    bypass_c.set_defaults(handler=command_bypass_consume)
     return parser
 
 
+# ---------------------------------------------------------------------------
+# v2 增强：弱断言 / 变异测试 / verdict / manifest / bypass 胶水
+# 所有新模块惰性 import（避免加载开销与循环依赖），全部 UTF-8，不读 stdin。
+# ---------------------------------------------------------------------------
+
+
+def weak_assert_check() -> dict[str, Any]:
+    """heavy 阶段的弱断言扫描检查项（v2）。"""
+    try:
+        from tools import assert_scanner  # type: ignore
+
+        findings = assert_scanner.scan_tests(ROOT / "tests")
+        total = assert_scanner.count_total_asserts(ROOT / "tests")
+        return assert_scanner.as_result(findings, total)
+    except Exception as exc:  # fail-open（信任红线）
+        return result("弱断言扫描", True, f"扫描器不可用，跳过（TRUST RED LINE）：{exc}", "test")
+
+
+def _business_code_dirs() -> list[Path]:
+    """业务代码目录列表（project_code_roots 中存在文件的目录）。"""
+    files = project_code_files(selected_files())
+    dirs: list[Path] = []
+    for f in files:
+        parent = f.parent
+        if parent not in dirs:
+            dirs.append(parent)
+    return dirs
+
+
+def mutation_check() -> dict[str, Any]:
+    """heavy 阶段的变异测试检查项（v2）。"""
+    try:
+        from tools import mut_runner  # type: ignore
+
+        code_dirs = _business_code_dirs()
+        if not code_dirs:
+            return result("变异测试 kill rate", True, "无业务代码目录，跳过变异测试", "test")
+        report = mut_runner.run_mutation([str(p) for p in code_dirs], workdir=ROOT)
+        return mut_runner.as_result(report, threshold=mut_runner.MUT_KILL_THRESHOLD)
+    except Exception as exc:  # fail-open（信任红线）
+        return result("变异测试 kill rate", True, f"变异测试不可用，跳过（TRUST RED LINE）：{exc}", "test")
+
+
+def command_scan_asserts(args: argparse.Namespace) -> int:
+    from tools import assert_scanner  # type: ignore
+
+    findings = assert_scanner.scan_tests(ROOT / "tests")
+    total = assert_scanner.count_total_asserts(ROOT / "tests")
+    if args.json:
+        print(json.dumps(
+            {"findings": findings, "summary": assert_scanner.summarize(findings), "total_asserts": total},
+            ensure_ascii=False, indent=2,
+        ))
+    else:
+        summary = assert_scanner.summarize(findings)
+        print(f"弱断言扫描: {summary['total']} 条（error {summary['by_severity'].get('error', 0)} / warn {summary['by_severity'].get('warn', 0)}）")
+        for f in findings:
+            print(f"  {f['file']}:{f['line']} [{f['severity']}] {f['pattern']}: {f['code']}")
+    return 0
+
+
+def command_verdict(args: argparse.Namespace) -> int:
+    from tools import verdict  # type: ignore
+
+    return verdict.command_verdict(args)
+
+
+def command_mut(_: argparse.Namespace) -> int:
+    from tools import mut_runner  # type: ignore
+
+    code_dirs = _business_code_dirs()
+    if not code_dirs:
+        print("无业务代码目录，跳过变异测试")
+        return 0
+    report = mut_runner.run_mutation([str(p) for p in code_dirs], workdir=ROOT)
+    res = mut_runner.as_result(report, threshold=mut_runner.MUT_KILL_THRESHOLD)
+    print(res["details"])
+    return 0 if res["passed"] else 1
+
+
+def command_manifest(args: argparse.Namespace) -> int:
+    from tools import manifest_gate  # type: ignore
+
+    return manifest_gate.command_manifest(args)
+
+
+def command_bypass(args: argparse.Namespace) -> int:
+    from tools import bypass  # type: ignore
+
+    return bypass.command_bypass(args)
+
+
+def command_bypass_consume(args: argparse.Namespace) -> int:
+    from tools import bypass  # type: ignore
+
+    return bypass.command_bypass_consume(args)
+
+
 def main() -> int:
+    sys.path.insert(0, str(ROOT))  # 使 tools 子包可导入（v2 新模块）
     ensure_layout()
     parser = build_parser()
     args = parser.parse_args()
