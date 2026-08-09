@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "01299",
+  "name": "友邦保险",
+  "type": "hk",
+  "category": "保险",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 43.4,
+    "risk": 50.6,
+    "technical": 65.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 28.57,
+    "max_drawdown_60d_pct": -19.9,
+    "atr14_pct": 3.06,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 35.1,
+        "value": 28.57
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 52.5,
+        "value": -19.9
+      },
+      {
+        "name": "ATR百分比",
+        "score": 46.0,
+        "value": 3.06
+      },
+      {
+        "name": "量价异常",
+        "score": 97.0,
+        "value": 1.52
+      },
+      {
+        "name": "行业波动",
+        "score": 53.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.71,
+    "return_5d_pct": 0.52,
+    "up_probability_3d_pct": 60.0,
+    "up_probability_5d_pct": 53.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 76.33,
+    "ma10": 77.455,
+    "ma20": 76.75999999999999,
+    "ma60": 77.28500000000001,
+    "rsi14": 41.4,
+    "macd_dif": 0.17073399392900512,
+    "macd_dea": 0.530649454639266,
+    "macd_hist": -0.7198309214205219,
+    "atr14_pct": 3.056292429058857,
+    "boll_position": 0.17261857901796784,
+    "return_5d_pct": -6.435331230283903,
+    "return_20d_pct": 2.0646937370956575,
+    "volume_ratio_5d": 1.52
+  },
+  "industry": {
+    "name": "保险",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 6.95
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.71,
+      "median_return_pct": 1.46,
+      "best_return_pct": 9.85,
+      "worst_return_pct": -9.87
+    },
+    "horizon_5d": {
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.52,
+      "median_return_pct": 0.15,
+      "best_return_pct": 8.11,
+      "worst_return_pct": -13.52
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 19.9%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 19.9%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.52倍。",
+      "contribution": 2.0
+    }
+  ],
+  "kline_file": "../kline/01299.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

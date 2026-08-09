@@ -1,0 +1,126 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-01-14",
+  "code": "00011",
+  "name": "恒生银行",
+  "type": "hk",
+  "category": "银行",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 67.2,
+    "risk": 10.0,
+    "technical": 87.0,
+    "industry": 49.8
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 2.35,
+    "max_drawdown_60d_pct": -0.72,
+    "atr14_pct": 0.27,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 0.0,
+        "value": 2.35
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 0.0,
+        "value": -0.72
+      },
+      {
+        "name": "ATR百分比",
+        "score": 0.0,
+        "value": 0.27
+      },
+      {
+        "name": "量价异常",
+        "score": 99.5,
+        "value": 3.2
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 18.27
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.6,
+    "return_5d_pct": 1.46,
+    "up_probability_3d_pct": 63.3,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 154.28,
+    "ma10": 154.06,
+    "ma20": 153.865,
+    "ma60": 152.66333333333333,
+    "rsi14": 70.7,
+    "macd_dif": 0.6355572628609423,
+    "macd_dea": 0.7328071939976384,
+    "macd_hist": -0.19449986227339222,
+    "atr14_pct": 0.26759259089631904,
+    "boll_position": 0.8523220197360495,
+    "return_5d_pct": 0.32509752925877766,
+    "return_20d_pct": 0.8496732026143761,
+    "volume_ratio_5d": 3.2
+  },
+  "industry": {
+    "name": "银行",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 1.55,
+    "return_20d_pct": 8.38,
+    "return_60d_pct": 8.61,
+    "relative_strength_20d_pct": -6.62
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.6,
+      "median_return_pct": 0.64,
+      "best_return_pct": 10.34,
+      "worst_return_pct": -7.21
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.46,
+      "median_return_pct": -0.1,
+      "best_return_pct": 26.41,
+      "worst_return_pct": -8.1
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期3.20倍。",
+      "contribution": 5.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=70.7，短期超买。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/00011.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

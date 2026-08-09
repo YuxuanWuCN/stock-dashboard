@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "IBM",
+  "name": "IBM",
+  "type": "us",
+  "category": "科技",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 35.0,
+    "risk": 82.9,
+    "technical": 91.0,
+    "industry": 32.0
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 96.35,
+    "max_drawdown_60d_pct": -37.5,
+    "atr14_pct": 4.32,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 90.6,
+        "value": 96.35
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 84.7,
+        "value": -37.5
+      },
+      {
+        "name": "ATR百分比",
+        "score": 69.8,
+        "value": 4.32
+      },
+      {
+        "name": "量价异常",
+        "score": 98.5,
+        "value": 0.43
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.36,
+    "return_5d_pct": 0.67,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 53.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 233.618,
+    "ma10": 228.375,
+    "ma20": 224.204,
+    "ma60": 254.7895,
+    "rsi14": 49.8,
+    "macd_dif": -6.573560813646111,
+    "macd_dea": -10.061871849439184,
+    "macd_hist": 6.976622071586146,
+    "atr14_pct": 4.3206253682371045,
+    "boll_position": 0.6826916904465056,
+    "return_5d_pct": 6.094343840822702,
+    "return_20d_pct": -17.485046598970655,
+    "volume_ratio_5d": 0.43
+  },
+  "industry": {
+    "name": "科技",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": -12.6
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.36,
+      "median_return_pct": -0.0,
+      "best_return_pct": 11.42,
+      "worst_return_pct": -10.07
+    },
+    "horizon_5d": {
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.67,
+      "median_return_pct": 0.95,
+      "best_return_pct": 17.43,
+      "worst_return_pct": -11.71
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 37.5%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 37.5%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 96.3%，波动偏高。",
+      "contribution": -5.0
+    },
+    {
+      "type": "warning",
+      "title": "成交缩量",
+      "detail": "近5日量能仅为前期0.43倍。",
+      "contribution": -3.0
+    }
+  ],
+  "kline_file": "../kline/IBM.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

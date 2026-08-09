@@ -1,0 +1,138 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "MSFT",
+  "name": "微软",
+  "type": "us",
+  "category": "科技",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 35.1,
+    "risk": 62.0,
+    "technical": 100.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 59.95,
+    "max_drawdown_60d_pct": -23.38,
+    "atr14_pct": 3.16,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 77.2,
+        "value": 59.95
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 60.4,
+        "value": -23.38
+      },
+      {
+        "name": "ATR百分比",
+        "score": 49.0,
+        "value": 3.16
+      },
+      {
+        "name": "量价异常",
+        "score": 31.2,
+        "value": 1.09
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.62,
+    "return_5d_pct": -0.75,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 493.554,
+    "ma10": 455.658,
+    "ma20": 423.8355,
+    "ma60": 408.59233333333333,
+    "rsi14": 78.1,
+    "macd_dif": 27.561648235890175,
+    "macd_dea": 16.26223133329247,
+    "macd_hist": 22.59883380519541,
+    "atr14_pct": 3.163085007350043,
+    "boll_position": 0.9217814174189598,
+    "return_5d_pct": 7.589516267860219,
+    "return_20d_pct": 29.833809400155808,
+    "volume_ratio_5d": 1.09
+  },
+  "industry": {
+    "name": "科技",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 34.72
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.62,
+      "median_return_pct": -0.15,
+      "best_return_pct": 10.35,
+      "worst_return_pct": -7.19
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.75,
+      "median_return_pct": -0.02,
+      "best_return_pct": 10.81,
+      "worst_return_pct": -10.59
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 23.4%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 23.4%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=78.1，短期超买。",
+      "contribution": -5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 60.0%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/MSFT.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

@@ -1,0 +1,233 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "000538",
+  "name": "云南白药",
+  "type": "stock",
+  "category": "医药",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 58.8,
+    "risk": 13.5,
+    "technical": 65.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 19.52,
+    "max_drawdown_60d_pct": -7.66,
+    "atr14_pct": 2.05,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 8.9,
+        "value": 19.52
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 8.9,
+        "value": -7.66
+      },
+      {
+        "name": "ATR百分比",
+        "score": 14.9,
+        "value": 2.05
+      },
+      {
+        "name": "量价异常",
+        "score": 55.4,
+        "value": 0.84
+      },
+      {
+        "name": "行业波动",
+        "score": 0.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.6,
+    "return_5d_pct": 0.71,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 60.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "rebound",
+    "ma5": 51.267999999999994,
+    "ma10": 51.638999999999996,
+    "ma20": 51.4105,
+    "ma60": 49.926,
+    "rsi14": 48.9,
+    "macd_dif": 0.40999846470626977,
+    "macd_dea": 0.578860777353378,
+    "macd_hist": -0.33772462529421654,
+    "atr14_pct": 2.0498255185097904,
+    "boll_position": 0.2946933458047882,
+    "return_5d_pct": -3.9727582292849117,
+    "return_20d_pct": 3.973781237197871,
+    "volume_ratio_5d": 0.84
+  },
+  "industry": {
+    "name": "医药",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.11,
+    "relative_strength_20d_pct": 8.86
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 66.7,
+      "average_return_pct": 0.6,
+      "median_return_pct": 0.78,
+      "best_return_pct": 6.49,
+      "worst_return_pct": -3.65
+    },
+    "horizon_5d": {
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.71,
+      "median_return_pct": 0.8,
+      "best_return_pct": 9.38,
+      "worst_return_pct": -4.13
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 41.3,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 63.0,
+      "profit_quality": 38.0,
+      "cash_health": 32.2
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 56457228477.67,
+      "total_assets_yoy": 4.0628188133,
+      "inventory": 6155429415.3,
+      "prepayment": 289889068.24,
+      "receivable": 11919208586.4,
+      "inventory_prepay_ratio": 0.11416285668520297,
+      "receivable_revenue": 2.105398178402459,
+      "goodwill_equity": 0.007145622761839142,
+      "debt_ratio": 0.25306918961282404,
+      "short_debt_ratio": 0.007353781016095289,
+      "roe": 0.04839612562046297,
+      "gross_margin": 18.333716722190747,
+      "deduct_ratio": 0.9645932207716044,
+      "netprofit_yoy": 5.3473101066,
+      "ocf_np_ratio": 0.4069176237829041,
+      "financing_debt": -0.012997408797075357,
+      "retained_profit_equity": 0.4807911237187612
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +4.1%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 11.4%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 210.5%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 25.3%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 0.7%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 4.8%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +5.3%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 96.5%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 48.1%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "warning",
+          "title": "现金流偏弱",
+          "detail": "经营现金流/净利润 0.41，利润兑现能力一般。",
+          "contribution": -20.8
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -1.3%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "净利润同比 +5.3%",
+      "negative_view": "经营现金流/净利润 0.41，利润兑现存疑；应收账款/营收 210.5%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    }
+  },
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    }
+  ],
+  "kline_file": "../kline/000538.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

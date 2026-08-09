@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "09866",
+  "name": "蔚来-SW",
+  "type": "hk",
+  "category": "汽车",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 25.8,
+    "risk": 55.6,
+    "technical": 68.0,
+    "industry": 47.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 54.41,
+    "max_drawdown_60d_pct": -27.5,
+    "atr14_pct": 4.22,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 72.3,
+        "value": 54.41
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 71.8,
+        "value": -27.5
+      },
+      {
+        "name": "ATR百分比",
+        "score": 66.8,
+        "value": 4.22
+      },
+      {
+        "name": "量价异常",
+        "score": 25.7,
+        "value": 1.06
+      },
+      {
+        "name": "行业波动",
+        "score": 0.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.52,
+    "return_5d_pct": -1.16,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 33.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 37.62,
+    "ma10": 37.592,
+    "ma20": 38.084,
+    "ma60": 40.808,
+    "rsi14": 43.4,
+    "macd_dif": -0.6792457143340016,
+    "macd_dea": -0.7423314530683902,
+    "macd_hist": 0.12617147746877722,
+    "atr14_pct": 4.223706199614139,
+    "boll_position": 0.2448816259613915,
+    "return_5d_pct": -5.048943843379705,
+    "return_20d_pct": -4.655975168132431,
+    "volume_ratio_5d": 1.06
+  },
+  "industry": {
+    "name": "汽车",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 0.23
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.52,
+      "median_return_pct": -0.39,
+      "best_return_pct": 8.48,
+      "worst_return_pct": -10.03
+    },
+    "horizon_5d": {
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.16,
+      "median_return_pct": -1.91,
+      "best_return_pct": 9.96,
+      "worst_return_pct": -10.98
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 27.5%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 27.5%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 54.4%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/09866.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

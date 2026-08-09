@@ -1,0 +1,126 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "WMT",
+  "name": "沃尔玛",
+  "type": "us",
+  "category": "消费",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 58.7,
+    "risk": 34.9,
+    "technical": 81.0,
+    "industry": 56.3
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 20.0,
+    "max_drawdown_60d_pct": -19.23,
+    "atr14_pct": 2.43,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 9.9,
+        "value": 20.0
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 51.0,
+        "value": -19.23
+      },
+      {
+        "name": "ATR百分比",
+        "score": 28.7,
+        "value": 2.43
+      },
+      {
+        "name": "量价异常",
+        "score": 26.7,
+        "value": 1.07
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.01,
+    "return_5d_pct": 0.9,
+    "up_probability_3d_pct": 70.0,
+    "up_probability_5d_pct": 70.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 111.704,
+    "ma10": 111.98799999999999,
+    "ma20": 111.9935,
+    "ma60": 116.7195,
+    "rsi14": 46.8,
+    "macd_dif": -0.9084730501049307,
+    "macd_dea": -1.250812654441796,
+    "macd_hist": 0.6846792086737303,
+    "atr14_pct": 2.42510463489497,
+    "boll_position": 0.4798515546806356,
+    "return_5d_pct": 0.5845323741007213,
+    "return_20d_pct": -1.7998244073748948,
+    "volume_ratio_5d": 1.07
+  },
+  "industry": {
+    "name": "消费",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 3.09
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 70.0,
+      "average_return_pct": 1.01,
+      "median_return_pct": 1.27,
+      "best_return_pct": 8.0,
+      "worst_return_pct": -4.3
+    },
+    "horizon_5d": {
+      "up_probability_pct": 70.0,
+      "average_return_pct": 0.9,
+      "median_return_pct": 1.31,
+      "best_return_pct": 8.84,
+      "worst_return_pct": -8.51
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 19.2%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 19.2%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/WMT.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "BAC",
+  "name": "美国银行",
+  "type": "us",
+  "category": "金融",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 47.2,
+    "risk": 19.9,
+    "technical": 90.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 16.13,
+    "max_drawdown_60d_pct": -2.74,
+    "atr14_pct": 1.72,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 2.5,
+        "value": 16.13
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 0.5,
+        "value": -2.74
+      },
+      {
+        "name": "ATR百分比",
+        "score": 6.4,
+        "value": 1.72
+      },
+      {
+        "name": "量价异常",
+        "score": 69.8,
+        "value": 0.79
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.41,
+    "return_5d_pct": -0.26,
+    "up_probability_3d_pct": 33.3,
+    "up_probability_5d_pct": 46.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 62.96,
+    "ma10": 62.43000000000001,
+    "ma20": 61.76800000000001,
+    "ma60": 57.133500000000005,
+    "rsi14": 66.6,
+    "macd_dif": 1.2918560779240877,
+    "macd_dea": 1.3511550602482436,
+    "macd_hist": -0.11859796464831174,
+    "atr14_pct": 1.7207332079535276,
+    "boll_position": 0.8682084291356995,
+    "return_5d_pct": 1.969330104923328,
+    "return_20d_pct": 5.865594100888227,
+    "volume_ratio_5d": 0.79
+  },
+  "industry": {
+    "name": "金融",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 10.75
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.41,
+      "median_return_pct": -1.03,
+      "best_return_pct": 9.3,
+      "worst_return_pct": -5.14
+    },
+    "horizon_5d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.26,
+      "median_return_pct": -0.21,
+      "best_return_pct": 9.01,
+      "worst_return_pct": -8.08
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/BAC.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

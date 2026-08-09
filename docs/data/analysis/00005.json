@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "00005",
+  "name": "汇丰控股",
+  "type": "hk",
+  "category": "银行",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 63.8,
+    "risk": 22.2,
+    "technical": 80.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 19.04,
+    "max_drawdown_60d_pct": -8.08,
+    "atr14_pct": 1.96,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 6.4,
+        "value": 19.04
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 9.4,
+        "value": -8.08
+      },
+      {
+        "name": "ATR百分比",
+        "score": 12.4,
+        "value": 1.96
+      },
+      {
+        "name": "量价异常",
+        "score": 74.3,
+        "value": 1.24
+      },
+      {
+        "name": "行业波动",
+        "score": 53.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.86,
+    "return_5d_pct": 0.82,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 73.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 163.61999999999998,
+    "ma10": 164.03,
+    "ma20": 160.595,
+    "ma60": 150.62166666666664,
+    "rsi14": 56.0,
+    "macd_dif": 3.3446138001816905,
+    "macd_dea": 3.931505806898455,
+    "macd_hist": -1.1737840134335293,
+    "atr14_pct": 1.9639127850844547,
+    "boll_position": 0.5343967936129229,
+    "return_5d_pct": -4.161712247324612,
+    "return_20d_pct": 5.016286644951129,
+    "volume_ratio_5d": 1.24
+  },
+  "industry": {
+    "name": "银行",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 9.91
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 66.7,
+      "average_return_pct": 0.86,
+      "median_return_pct": 1.31,
+      "best_return_pct": 8.87,
+      "worst_return_pct": -5.77
+    },
+    "horizon_5d": {
+      "up_probability_pct": 73.3,
+      "average_return_pct": 0.82,
+      "median_return_pct": 1.92,
+      "best_return_pct": 5.01,
+      "worst_return_pct": -10.39
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/00005.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

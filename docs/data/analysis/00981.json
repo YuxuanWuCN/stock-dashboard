@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "00981",
+  "name": "中芯国际",
+  "type": "hk",
+  "category": "科技",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 17.5,
+    "risk": 77.0,
+    "technical": 71.0,
+    "industry": 32.0
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 65.81,
+    "max_drawdown_60d_pct": -30.65,
+    "atr14_pct": 7.77,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 81.7,
+        "value": 65.81
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 75.7,
+        "value": -30.65
+      },
+      {
+        "name": "ATR百分比",
+        "score": 88.6,
+        "value": 7.77
+      },
+      {
+        "name": "量价异常",
+        "score": 78.2,
+        "value": 0.75
+      },
+      {
+        "name": "行业波动",
+        "score": 53.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -1.37,
+    "return_5d_pct": -2.51,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 30.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 65.55,
+    "ma10": 65.995,
+    "ma20": 69.80499999999999,
+    "ma60": 75.26583333333335,
+    "rsi14": 44.7,
+    "macd_dif": -3.033837613594713,
+    "macd_dea": -2.8722471970311148,
+    "macd_hist": -0.32318083312719637,
+    "atr14_pct": 7.770224203075481,
+    "boll_position": 0.35306671444914944,
+    "return_5d_pct": 5.770750988142304,
+    "return_20d_pct": -16.0075329566855,
+    "volume_ratio_5d": 0.75
+  },
+  "industry": {
+    "name": "科技",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": -11.12
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": -1.37,
+      "median_return_pct": -1.9,
+      "best_return_pct": 8.37,
+      "worst_return_pct": -7.55
+    },
+    "horizon_5d": {
+      "up_probability_pct": 30.0,
+      "average_return_pct": -2.51,
+      "median_return_pct": -2.14,
+      "best_return_pct": 10.92,
+      "worst_return_pct": -21.46
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 30.6%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 30.6%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 65.8%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/00981.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

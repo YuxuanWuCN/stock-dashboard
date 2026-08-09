@@ -1,0 +1,126 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "AVGO",
+  "name": "博通",
+  "type": "us",
+  "category": "科技",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 33.9,
+    "risk": 60.0,
+    "technical": 85.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 43.02,
+    "max_drawdown_60d_pct": -25.15,
+    "atr14_pct": 3.88,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 61.4,
+        "value": 43.02
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 66.3,
+        "value": -25.15
+      },
+      {
+        "name": "ATR百分比",
+        "score": 63.4,
+        "value": 3.88
+      },
+      {
+        "name": "量价异常",
+        "score": 15.8,
+        "value": 0.97
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.32,
+    "return_5d_pct": -0.32,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 40.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 415.4,
+    "ma10": 398.857,
+    "ma20": 391.85749999999996,
+    "ma60": 399.2653333333334,
+    "rsi14": 64.8,
+    "macd_dif": 7.560999604769165,
+    "macd_dea": 2.1796252449243156,
+    "macd_hist": 10.7627487196897,
+    "atr14_pct": 3.8807810586592923,
+    "boll_position": 1.0490865443749207,
+    "return_5d_pct": 9.88491574188246,
+    "return_20d_pct": 6.948021101582613,
+    "volume_ratio_5d": 0.97
+  },
+  "industry": {
+    "name": "科技",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 11.84
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": 0.32,
+      "median_return_pct": -1.53,
+      "best_return_pct": 36.46,
+      "worst_return_pct": -17.72
+    },
+    "horizon_5d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.32,
+      "median_return_pct": -1.37,
+      "best_return_pct": 22.06,
+      "worst_return_pct": -21.05
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 25.2%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 25.1%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 43.0%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/AVGO.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

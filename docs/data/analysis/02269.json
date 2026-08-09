@@ -1,0 +1,138 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "02269",
+  "name": "药明生物",
+  "type": "hk",
+  "category": "医药",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 29.4,
+    "risk": 63.0,
+    "technical": 100.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 52.78,
+    "max_drawdown_60d_pct": -15.48,
+    "atr14_pct": 4.42,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 71.8,
+        "value": 52.78
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 39.6,
+        "value": -15.48
+      },
+      {
+        "name": "ATR百分比",
+        "score": 71.3,
+        "value": 4.42
+      },
+      {
+        "name": "量价异常",
+        "score": 93.1,
+        "value": 1.37
+      },
+      {
+        "name": "行业波动",
+        "score": 53.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -3.36,
+    "return_5d_pct": -0.92,
+    "up_probability_3d_pct": 23.3,
+    "up_probability_5d_pct": 23.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 41.42399999999999,
+    "ma10": 40.028,
+    "ma20": 39.295,
+    "ma60": 35.22966666666666,
+    "rsi14": 77.1,
+    "macd_dif": 1.7331301204138114,
+    "macd_dea": 1.3544739461034547,
+    "macd_hist": 0.7573123486207134,
+    "atr14_pct": 4.424677951483857,
+    "boll_position": 1.4012043523825677,
+    "return_5d_pct": 18.378936499741872,
+    "return_20d_pct": 20.8113804004215,
+    "volume_ratio_5d": 1.37
+  },
+  "industry": {
+    "name": "医药",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 25.7
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 23.3,
+      "average_return_pct": -3.36,
+      "median_return_pct": -4.19,
+      "best_return_pct": 17.27,
+      "worst_return_pct": -18.62
+    },
+    "horizon_5d": {
+      "up_probability_pct": 23.3,
+      "average_return_pct": -0.92,
+      "median_return_pct": -2.87,
+      "best_return_pct": 42.99,
+      "worst_return_pct": -14.94
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 15.5%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 15.5%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=77.1，短期超买。",
+      "contribution": -5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 52.8%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/02269.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

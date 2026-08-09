@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "HD",
+  "name": "家得宝",
+  "type": "us",
+  "category": "消费",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 44.7,
+    "risk": 33.7,
+    "technical": 100.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 27.32,
+    "max_drawdown_60d_pct": -9.27,
+    "atr14_pct": 2.45,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 31.7,
+        "value": 27.32
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 11.4,
+        "value": -9.27
+      },
+      {
+        "name": "ATR百分比",
+        "score": 29.2,
+        "value": 2.45
+      },
+      {
+        "name": "量价异常",
+        "score": 47.0,
+        "value": 0.86
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.32,
+    "return_5d_pct": -0.38,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 349.308,
+    "ma10": 343.068,
+    "ma20": 339.382,
+    "ma60": 330.02549999999997,
+    "rsi14": 61.3,
+    "macd_dif": 3.6980586969779665,
+    "macd_dea": 1.9078994233693045,
+    "macd_hist": 3.580318547217324,
+    "atr14_pct": 2.448567544020598,
+    "boll_position": 1.0092391125867268,
+    "return_5d_pct": 7.127364742740094,
+    "return_20d_pct": 3.5886979318380474,
+    "volume_ratio_5d": 0.86
+  },
+  "industry": {
+    "name": "消费",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 8.48
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.32,
+      "median_return_pct": -0.26,
+      "best_return_pct": 5.61,
+      "worst_return_pct": -4.93
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.38,
+      "median_return_pct": -0.03,
+      "best_return_pct": 5.45,
+      "worst_return_pct": -7.0
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/HD.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

@@ -1,0 +1,245 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "600938",
+  "name": "中国海油",
+  "type": "stock",
+  "category": "能源",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 47.3,
+    "risk": 58.1,
+    "technical": 80.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 48.59,
+    "max_drawdown_60d_pct": -28.82,
+    "atr14_pct": 3.3,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 67.8,
+        "value": 48.59
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 73.8,
+        "value": -28.82
+      },
+      {
+        "name": "ATR百分比",
+        "score": 54.0,
+        "value": 3.3
+      },
+      {
+        "name": "量价异常",
+        "score": 84.7,
+        "value": 0.71
+      },
+      {
+        "name": "行业波动",
+        "score": 0.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.9,
+    "return_5d_pct": 0.84,
+    "up_probability_3d_pct": 60.0,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 31.278000000000002,
+    "ma10": 31.555,
+    "ma20": 31.084999999999997,
+    "ma60": 31.501666666666665,
+    "rsi14": 52.5,
+    "macd_dif": 0.33843564941508575,
+    "macd_dea": 0.340688484487731,
+    "macd_hist": -0.0045056701452904635,
+    "atr14_pct": 3.295630201512386,
+    "boll_position": 0.5500980804265512,
+    "return_5d_pct": -2.8828270303781767,
+    "return_20d_pct": 11.296625222024858,
+    "volume_ratio_5d": 0.71
+  },
+  "industry": {
+    "name": "能源",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.11,
+    "relative_strength_20d_pct": 16.19
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.9,
+      "median_return_pct": 1.01,
+      "best_return_pct": 9.54,
+      "worst_return_pct": -6.51
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.84,
+      "median_return_pct": -0.06,
+      "best_return_pct": 12.18,
+      "worst_return_pct": -10.54
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 47.9,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 63.0,
+      "profit_quality": 38.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 1151563000000.0,
+      "total_assets_yoy": 4.4306460652,
+      "inventory": 5545000000.0,
+      "prepayment": 5071000000.0,
+      "receivable": 55140000000.0,
+      "inventory_prepay_ratio": 0.009218774830382706,
+      "receivable_revenue": 0.9500684878401778,
+      "goodwill_equity": 0.017576113783027637,
+      "debt_ratio": 0.27092482130808304,
+      "short_debt_ratio": 0.012051784208957424,
+      "roe": 0.04676132657668958,
+      "gross_margin": 44.75314225656665,
+      "deduct_ratio": 0.9972920498671571,
+      "netprofit_yoy": 7.0571842299,
+      "ocf_np_ratio": 1.4088493766605354,
+      "financing_debt": -0.005253424020872664,
+      "retained_profit_equity": 0.8254824382213876
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +4.4%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 0.9%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 95.0%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 27.1%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 1.2%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 4.7%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +7.1%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 99.7%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 82.5%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 1.41，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -0.5%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "净利润同比 +7.1%；经营现金流/净利润 1.41，利润含金量高",
+      "negative_view": "应收账款/营收 95.0%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    }
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 28.8%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 28.8%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 48.6%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/600938.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

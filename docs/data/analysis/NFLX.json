@@ -1,0 +1,120 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "NFLX",
+  "name": "奈飞",
+  "type": "us",
+  "category": "科技",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 28.8,
+    "risk": 58.8,
+    "technical": 93.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 33.1,
+    "max_drawdown_60d_pct": -24.6,
+    "atr14_pct": 3.18,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 44.1,
+        "value": 33.1
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 63.9,
+        "value": -24.6
+      },
+      {
+        "name": "ATR百分比",
+        "score": 49.5,
+        "value": 3.18
+      },
+      {
+        "name": "量价异常",
+        "score": 89.1,
+        "value": 0.67
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -1.09,
+    "return_5d_pct": -1.46,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 30.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 73.786,
+    "ma10": 73.023,
+    "ma20": 71.91749999999999,
+    "ma60": 77.74966666666666,
+    "rsi14": 52.3,
+    "macd_dif": -0.4899792858546874,
+    "macd_dea": -1.1977532809530664,
+    "macd_hist": 1.415547990196758,
+    "atr14_pct": 3.1760309892384604,
+    "boll_position": 0.7456227595323136,
+    "return_5d_pct": 3.388648724027332,
+    "return_20d_pct": 1.0494752623688042,
+    "volume_ratio_5d": 0.67
+  },
+  "industry": {
+    "name": "科技",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 5.94
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": -1.09,
+      "median_return_pct": -0.79,
+      "best_return_pct": 7.0,
+      "worst_return_pct": -10.72
+    },
+    "horizon_5d": {
+      "up_probability_pct": 30.0,
+      "average_return_pct": -1.46,
+      "median_return_pct": -1.92,
+      "best_return_pct": 12.21,
+      "worst_return_pct": -10.45
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 24.6%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 24.6%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/NFLX.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

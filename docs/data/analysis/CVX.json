@@ -1,0 +1,126 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "CVX",
+  "name": "雪佛龙",
+  "type": "us",
+  "category": "能源",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 49.7,
+    "risk": 38.3,
+    "technical": 70.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 25.4,
+    "max_drawdown_60d_pct": -16.0,
+    "atr14_pct": 2.34,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 27.2,
+        "value": 25.4
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 42.1,
+        "value": -16.0
+      },
+      {
+        "name": "ATR百分比",
+        "score": 26.2,
+        "value": 2.34
+      },
+      {
+        "name": "量价异常",
+        "score": 35.6,
+        "value": 1.1
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.73,
+    "return_5d_pct": 0.51,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 63.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "rebound",
+    "ma5": 189.156,
+    "ma10": 190.436,
+    "ma20": 189.2065,
+    "ma60": 184.006,
+    "rsi14": 49.6,
+    "macd_dif": 2.3357819382740104,
+    "macd_dea": 2.997887917028713,
+    "macd_hist": -1.3242119575094051,
+    "atr14_pct": 2.3444056989768622,
+    "boll_position": 0.3483617176035411,
+    "return_5d_pct": -5.217700553777371,
+    "return_20d_pct": 5.759637188208622,
+    "volume_ratio_5d": 1.1
+  },
+  "industry": {
+    "name": "能源",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 10.65
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.73,
+      "median_return_pct": 0.74,
+      "best_return_pct": 5.65,
+      "worst_return_pct": -4.27
+    },
+    "horizon_5d": {
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.51,
+      "median_return_pct": 1.27,
+      "best_return_pct": 7.27,
+      "worst_return_pct": -10.16
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 16.0%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 16.0%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    }
+  ],
+  "kline_file": "../kline/CVX.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

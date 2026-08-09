@@ -1,0 +1,126 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "601601",
+  "name": "中国太保",
+  "type": "stock",
+  "category": "保险",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 54.4,
+    "risk": 44.7,
+    "technical": 80.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 36.97,
+    "max_drawdown_60d_pct": -17.68,
+    "atr14_pct": 3.2,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 52.5,
+        "value": 36.97
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 47.5,
+        "value": -17.68
+      },
+      {
+        "name": "ATR百分比",
+        "score": 50.5,
+        "value": 3.2
+      },
+      {
+        "name": "量价异常",
+        "score": 69.3,
+        "value": 0.79
+      },
+      {
+        "name": "行业波动",
+        "score": 0.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.84,
+    "return_5d_pct": 1.26,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 31.983999999999998,
+    "ma10": 32.033,
+    "ma20": 31.416499999999996,
+    "ma60": 30.62116666666667,
+    "rsi14": 51.8,
+    "macd_dif": 0.5202983548068545,
+    "macd_dea": 0.5527686590830363,
+    "macd_hist": -0.06494060855236361,
+    "atr14_pct": 3.2006309633942847,
+    "boll_position": 0.5106140005371094,
+    "return_5d_pct": -2.7503090234857863,
+    "return_20d_pct": 10.343618513323971,
+    "volume_ratio_5d": 0.79
+  },
+  "industry": {
+    "name": "保险",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.11,
+    "relative_strength_20d_pct": 15.23
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.84,
+      "median_return_pct": -0.2,
+      "best_return_pct": 15.87,
+      "worst_return_pct": -7.69
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.26,
+      "median_return_pct": 0.08,
+      "best_return_pct": 18.77,
+      "worst_return_pct": -7.61
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 17.7%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 17.7%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/601601.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

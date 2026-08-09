@@ -1,0 +1,126 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "00883",
+  "name": "中国海洋石油",
+  "type": "hk",
+  "category": "能源",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 44.8,
+    "risk": 51.5,
+    "technical": 70.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 33.11,
+    "max_drawdown_60d_pct": -26.91,
+    "atr14_pct": 3.03,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 44.6,
+        "value": 33.11
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 71.3,
+        "value": -26.91
+      },
+      {
+        "name": "ATR百分比",
+        "score": 44.1,
+        "value": 3.03
+      },
+      {
+        "name": "量价异常",
+        "score": 34.7,
+        "value": 0.91
+      },
+      {
+        "name": "行业波动",
+        "score": 53.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.02,
+    "return_5d_pct": 0.65,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 23.247999999999998,
+    "ma10": 23.392,
+    "ma20": 23.338,
+    "ma60": 24.069666666666663,
+    "rsi14": 49.9,
+    "macd_dif": 0.03754274823663195,
+    "macd_dea": 0.04220528952355571,
+    "macd_hist": -0.009325082573847523,
+    "atr14_pct": 3.032253915245051,
+    "boll_position": 0.46402409961303304,
+    "return_5d_pct": -2.350965575146935,
+    "return_20d_pct": 6.5994500458295136,
+    "volume_ratio_5d": 0.91
+  },
+  "industry": {
+    "name": "能源",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 11.49
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 66.7,
+      "average_return_pct": 1.02,
+      "median_return_pct": 1.4,
+      "best_return_pct": 11.37,
+      "worst_return_pct": -8.65
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.65,
+      "median_return_pct": 0.23,
+      "best_return_pct": 10.54,
+      "worst_return_pct": -10.57
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 26.9%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 26.9%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/00883.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

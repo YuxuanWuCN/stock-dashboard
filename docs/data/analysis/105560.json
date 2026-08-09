@@ -1,0 +1,120 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "105560",
+  "name": "KB金融",
+  "type": "kr",
+  "category": "银行",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 40.3,
+    "risk": 68.5,
+    "technical": 88.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 49.4,
+    "max_drawdown_60d_pct": -14.02,
+    "atr14_pct": 4.79,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 68.8,
+        "value": 49.4
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 35.6,
+        "value": -14.02
+      },
+      {
+        "name": "ATR百分比",
+        "score": 76.2,
+        "value": 4.79
+      },
+      {
+        "name": "量价异常",
+        "score": 94.6,
+        "value": 0.6
+      },
+      {
+        "name": "行业波动",
+        "score": 95.0,
+        "value": 44.32
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.51,
+    "return_5d_pct": 0.38,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 53.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 171260.0,
+    "ma10": 169010.0,
+    "ma20": 173455.0,
+    "ma60": 163640.0,
+    "rsi14": 57.0,
+    "macd_dif": 1178.887667085568,
+    "macd_dea": 1450.114527353266,
+    "macd_hist": -542.4537205353963,
+    "atr14_pct": 4.794746548582843,
+    "boll_position": 0.5899737876798443,
+    "return_5d_pct": 4.3323442136498524,
+    "return_20d_pct": 2.5670945157526326,
+    "volume_ratio_5d": 0.6
+  },
+  "industry": {
+    "name": "银行",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -7.06,
+    "return_60d_pct": -9.99,
+    "relative_strength_20d_pct": 9.63
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.51,
+      "median_return_pct": 0.2,
+      "best_return_pct": 13.27,
+      "worst_return_pct": -5.03
+    },
+    "horizon_5d": {
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.38,
+      "median_return_pct": 1.1,
+      "best_return_pct": 11.68,
+      "worst_return_pct": -7.79
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 49.4%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/105560.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

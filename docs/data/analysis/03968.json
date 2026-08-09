@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "03968",
+  "name": "招商银行",
+  "type": "hk",
+  "category": "银行",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 58.8,
+    "risk": 28.2,
+    "technical": 80.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 21.41,
+    "max_drawdown_60d_pct": -12.1,
+    "atr14_pct": 2.23,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 15.8,
+        "value": 21.41
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 27.2,
+        "value": -12.1
+      },
+      {
+        "name": "ATR百分比",
+        "score": 21.8,
+        "value": 2.23
+      },
+      {
+        "name": "量价异常",
+        "score": 42.6,
+        "value": 1.13
+      },
+      {
+        "name": "行业波动",
+        "score": 53.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.03,
+    "return_5d_pct": 0.82,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 60.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 49.339999999999996,
+    "ma10": 49.792,
+    "ma20": 48.571,
+    "ma60": 47.322333333333326,
+    "rsi14": 52.3,
+    "macd_dif": 0.737444628113515,
+    "macd_dea": 0.8062582359985573,
+    "macd_hist": -0.13762721577008463,
+    "atr14_pct": 2.231229040389845,
+    "boll_position": 0.5170736566702723,
+    "return_5d_pct": -4.361493123772098,
+    "return_20d_pct": 6.4741907261592235,
+    "volume_ratio_5d": 1.13
+  },
+  "industry": {
+    "name": "银行",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 11.36
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 66.7,
+      "average_return_pct": 1.03,
+      "median_return_pct": 2.02,
+      "best_return_pct": 6.11,
+      "worst_return_pct": -5.58
+    },
+    "horizon_5d": {
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.82,
+      "median_return_pct": 1.89,
+      "best_return_pct": 13.81,
+      "worst_return_pct": -8.95
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/03968.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

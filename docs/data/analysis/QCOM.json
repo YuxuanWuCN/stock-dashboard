@@ -1,0 +1,126 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "QCOM",
+  "name": "高通",
+  "type": "us",
+  "category": "科技",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 23.7,
+    "risk": 74.5,
+    "technical": 91.0,
+    "industry": 34.3
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 50.19,
+    "max_drawdown_60d_pct": -41.2,
+    "atr14_pct": 5.46,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 69.8,
+        "value": 50.19
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 88.6,
+        "value": -41.2
+      },
+      {
+        "name": "ATR百分比",
+        "score": 80.2,
+        "value": 5.46
+      },
+      {
+        "name": "量价异常",
+        "score": 46.0,
+        "value": 0.87
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -1.42,
+    "return_5d_pct": -1.63,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 43.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 160.004,
+    "ma10": 158.783,
+    "ma20": 166.3905,
+    "ma60": 195.658,
+    "rsi14": 47.6,
+    "macd_dif": -8.271145865137498,
+    "macd_dea": -9.514910709389804,
+    "macd_hist": 2.487529688504612,
+    "atr14_pct": 5.458512672487174,
+    "boll_position": 0.5380579888592925,
+    "return_5d_pct": 13.718582751846075,
+    "return_20d_pct": -11.260308733347424,
+    "volume_ratio_5d": 0.87
+  },
+  "industry": {
+    "name": "科技",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": -6.37
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -1.42,
+      "median_return_pct": -1.65,
+      "best_return_pct": 6.44,
+      "worst_return_pct": -12.17
+    },
+    "horizon_5d": {
+      "up_probability_pct": 43.3,
+      "average_return_pct": -1.63,
+      "median_return_pct": -0.95,
+      "best_return_pct": 7.48,
+      "worst_return_pct": -11.36
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 41.2%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 41.2%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 50.2%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/QCOM.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

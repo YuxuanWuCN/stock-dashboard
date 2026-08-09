@@ -1,0 +1,120 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "513500",
+  "name": "标普500ETF",
+  "type": "etf",
+  "category": "",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 52.3,
+    "risk": 14.1,
+    "technical": 100.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 20.46,
+    "max_drawdown_60d_pct": -5.6,
+    "atr14_pct": 1.46,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 11.4,
+        "value": 20.46
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 2.5,
+        "value": -5.6
+      },
+      {
+        "name": "ATR百分比",
+        "score": 2.5,
+        "value": 1.46
+      },
+      {
+        "name": "量价异常",
+        "score": 95.0,
+        "value": 1.4
+      },
+      {
+        "name": "行业波动",
+        "score": 0.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.56,
+    "return_5d_pct": -0.17,
+    "up_probability_3d_pct": 33.3,
+    "up_probability_5d_pct": 46.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 2.6338,
+    "ma10": 2.5671999999999997,
+    "ma20": 2.5477499999999997,
+    "ma60": 2.5310833333333336,
+    "rsi14": 71.2,
+    "macd_dif": 0.03346801869247695,
+    "macd_dea": 0.01248104957442346,
+    "macd_hist": 0.041973938236106983,
+    "atr14_pct": 1.4609413886217402,
+    "boll_position": 1.081563520665785,
+    "return_5d_pct": 7.413312076524514,
+    "return_20d_pct": 6.64819944598336,
+    "volume_ratio_5d": 1.4
+  },
+  "industry": {
+    "name": "深证成指",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.11,
+    "relative_strength_20d_pct": 11.54
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.56,
+      "median_return_pct": -0.39,
+      "best_return_pct": 2.93,
+      "worst_return_pct": -3.58
+    },
+    "horizon_5d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.17,
+      "median_return_pct": -0.16,
+      "best_return_pct": 5.14,
+      "worst_return_pct": -3.97
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=71.2，短期超买。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/513500.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

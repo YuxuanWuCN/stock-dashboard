@@ -1,0 +1,126 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "051910",
+  "name": "LG化学",
+  "type": "kr",
+  "category": "材料",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 23.7,
+    "risk": 79.3,
+    "technical": 93.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 64.56,
+    "max_drawdown_60d_pct": -40.76,
+    "atr14_pct": 6.47,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 80.7,
+        "value": 64.56
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 87.6,
+        "value": -40.76
+      },
+      {
+        "name": "ATR百分比",
+        "score": 83.2,
+        "value": 6.47
+      },
+      {
+        "name": "量价异常",
+        "score": 23.3,
+        "value": 0.94
+      },
+      {
+        "name": "行业波动",
+        "score": 95.0,
+        "value": 44.32
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.89,
+    "return_5d_pct": -3.24,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 33.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 259200.0,
+    "ma10": 253250.0,
+    "ma20": 256150.0,
+    "ma60": 303275.0,
+    "rsi14": 53.6,
+    "macd_dif": -8000.535296549962,
+    "macd_dea": -12852.987485932948,
+    "macd_hist": 9704.904378765972,
+    "atr14_pct": 6.471857295480881,
+    "boll_position": 1.0076676532879274,
+    "return_5d_pct": 6.976744186046502,
+    "return_20d_pct": 9.741550695825051,
+    "volume_ratio_5d": 0.94
+  },
+  "industry": {
+    "name": "材料",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -7.06,
+    "return_60d_pct": -9.99,
+    "relative_strength_20d_pct": 16.81
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.89,
+      "median_return_pct": -2.32,
+      "best_return_pct": 19.12,
+      "worst_return_pct": -11.6
+    },
+    "horizon_5d": {
+      "up_probability_pct": 33.3,
+      "average_return_pct": -3.24,
+      "median_return_pct": -3.97,
+      "best_return_pct": 14.02,
+      "worst_return_pct": -20.68
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 40.8%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 40.8%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 64.6%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/051910.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

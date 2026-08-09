@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "PFE",
+  "name": "辉瑞",
+  "type": "us",
+  "category": "医药",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 33.7,
+    "risk": 25.1,
+    "technical": 93.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 19.4,
+    "max_drawdown_60d_pct": -9.69,
+    "atr14_pct": 2.03,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 8.4,
+        "value": 19.4
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 13.4,
+        "value": -9.69
+      },
+      {
+        "name": "ATR百分比",
+        "score": 13.4,
+        "value": 2.03
+      },
+      {
+        "name": "量价异常",
+        "score": 57.4,
+        "value": 1.17
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -1.72,
+    "return_5d_pct": -2.15,
+    "up_probability_3d_pct": 13.3,
+    "up_probability_5d_pct": 26.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 25.842000000000002,
+    "ma10": 25.42,
+    "ma20": 25.1,
+    "ma60": 25.191333333333333,
+    "rsi14": 70.8,
+    "macd_dif": 0.3160784293563772,
+    "macd_dea": 0.10785142075141305,
+    "macd_hist": 0.4164540172099283,
+    "atr14_pct": 2.0320866984385466,
+    "boll_position": 1.2244889155262433,
+    "return_5d_pct": 6.997201119552177,
+    "return_20d_pct": 10.715763342987184,
+    "volume_ratio_5d": 1.17
+  },
+  "industry": {
+    "name": "医药",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 15.6
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 13.3,
+      "average_return_pct": -1.72,
+      "median_return_pct": -1.68,
+      "best_return_pct": 7.42,
+      "worst_return_pct": -5.73
+    },
+    "horizon_5d": {
+      "up_probability_pct": 26.7,
+      "average_return_pct": -2.15,
+      "median_return_pct": -2.33,
+      "best_return_pct": 3.1,
+      "worst_return_pct": -6.59
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=70.8，短期超买。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/PFE.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

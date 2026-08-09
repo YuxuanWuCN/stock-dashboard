@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "518880",
+  "name": "黄金ETF",
+  "type": "etf",
+  "category": "",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 69.5,
+    "risk": 20.4,
+    "technical": 85.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 18.5,
+    "max_drawdown_60d_pct": -13.43,
+    "atr14_pct": 1.47,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 5.0,
+        "value": 18.5
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 33.7,
+        "value": -13.43
+      },
+      {
+        "name": "ATR百分比",
+        "score": 3.0,
+        "value": 1.47
+      },
+      {
+        "name": "量价异常",
+        "score": 98.0,
+        "value": 1.53
+      },
+      {
+        "name": "行业波动",
+        "score": 0.5,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.26,
+    "return_5d_pct": 1.61,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 66.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 8.6304,
+    "ma10": 8.523900000000001,
+    "ma20": 8.46825,
+    "ma60": 8.780583333333334,
+    "rsi14": 64.8,
+    "macd_dif": 0.010476765541731936,
+    "macd_dea": -0.056774903657990296,
+    "macd_hist": 0.13450333839944445,
+    "atr14_pct": 1.4717897668183675,
+    "boll_position": 1.2061309485103313,
+    "return_5d_pct": 5.442902881536815,
+    "return_20d_pct": 4.109589041095885,
+    "volume_ratio_5d": 1.53
+  },
+  "industry": {
+    "name": "深证成指",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.11,
+    "relative_strength_20d_pct": 9.0
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.26,
+      "median_return_pct": -0.11,
+      "best_return_pct": 6.24,
+      "worst_return_pct": -4.69
+    },
+    "horizon_5d": {
+      "up_probability_pct": 66.7,
+      "average_return_pct": 1.61,
+      "median_return_pct": 1.35,
+      "best_return_pct": 15.11,
+      "worst_return_pct": -7.48
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.53倍。",
+      "contribution": 5.0
+    }
+  ],
+  "kline_file": "../kline/518880.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

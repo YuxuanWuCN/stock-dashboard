@@ -1,0 +1,114 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 22:44:59+08:00",
+  "trade_date": "2026-08-07",
+  "code": "KO",
+  "name": "可口可乐",
+  "type": "us",
+  "category": "消费",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 59.4,
+    "risk": 28.4,
+    "technical": 85.0,
+    "industry": 62.0
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 28.55,
+    "max_drawdown_60d_pct": -6.23,
+    "atr14_pct": 2.09,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 34.7,
+        "value": 28.55
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 4.0,
+        "value": -6.23
+      },
+      {
+        "name": "ATR百分比",
+        "score": 16.8,
+        "value": 2.09
+      },
+      {
+        "name": "量价异常",
+        "score": 28.7,
+        "value": 0.92
+      },
+      {
+        "name": "行业波动",
+        "score": 71.8,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.35,
+    "return_5d_pct": 0.81,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 60.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 86.83000000000001,
+    "ma10": 87.16499999999999,
+    "ma20": 84.881,
+    "ma60": 82.32633333333334,
+    "rsi14": 59.9,
+    "macd_dif": 1.4157716447407722,
+    "macd_dea": 1.3045886198275312,
+    "macd_hist": 0.22236604982648212,
+    "atr14_pct": 2.0895222510225597,
+    "boll_position": 0.7096346971541646,
+    "return_5d_pct": -0.616508733873733,
+    "return_20d_pct": 4.26398371062402,
+    "volume_ratio_5d": 0.92
+  },
+  "industry": {
+    "name": "消费",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": 9.15
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.35,
+      "median_return_pct": 0.44,
+      "best_return_pct": 6.69,
+      "worst_return_pct": -4.15
+    },
+    "horizon_5d": {
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.81,
+      "median_return_pct": 0.64,
+      "best_return_pct": 9.69,
+      "worst_return_pct": -3.74
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/KO.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

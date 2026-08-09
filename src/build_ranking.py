@@ -487,7 +487,7 @@ def analyze_single(
     # 周期判断只能基于真实行业板块；宽基指数仅可用于技术面的市场参照。
     cycle_close = industry_close if ref_type == "industry" else None
     fundamental_result = _analyze_fundamental_with_timeout(
-        code, name, category, cycle_close
+        code, name, category, cycle_close, typ
     )
     # ---- 2.8 收集 reasons ----
     tech_reasons = _collect_technical_reasons(latest, technical)
@@ -561,9 +561,10 @@ def _analyze_fundamental_with_timeout(
     name: str,
     category: str,
     industry_close: Optional[pd.Series],
+    typ: str = "stock",
 ) -> Optional[dict]:
     """Run fundamental analysis with a timeout so external APIs cannot stall ranking."""
-    if code.startswith(("5", "1")):
+    if typ != "stock" or code.startswith(("5", "1")):
         return None
 
     cached = _load_fundamental_cache(code)
