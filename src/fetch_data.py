@@ -129,7 +129,7 @@ def read_watchlist(path: str) -> list[dict]:
             if not name:
                 name = code
 
-            items.append({"code": code, "name": name, "type": typ})
+            items.append({"code": code, "name": name, "type": typ, "category": row.get("category", "").strip()})
 
     if not items:
         logger.error("watchlist.csv 中没有有效标的")
