@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>股票研究看板 2.5</title>
-    <link rel="stylesheet" href="assets/style.css?v=2.5">
+    <link rel="stylesheet" href="assets/style.css?v=2.6">
     <!-- 引入 ECharts 5.5.1 CDN -->
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
@@ -21,6 +21,31 @@
                 <span id="status-text">正在加载运行信息...</span>
             </div>
         </header>
+
+        <!-- 顶部页面导航：拆分后的功能入口 -->
+        <nav class="app-nav" id="app-nav" aria-label="页面切换">
+            <button type="button" class="app-nav-btn active" data-page="today">🏠 今日关注</button>
+            <button type="button" class="app-nav-btn" data-page="watchlist">⭐ 自选股</button>
+            <button type="button" class="app-nav-btn" data-page="ranking">📊 排行榜</button>
+            <button type="button" class="app-nav-btn" data-page="query">🔍 单股查询</button>
+            <button type="button" class="app-nav-btn" data-page="detail">📈 个股研究</button>
+        </nav>
+
+        <!-- 主框架：左侧功能导航 + 中间内容区 -->
+        <div class="app-shell">
+            <aside class="page-sidebar" id="page-sidebar" aria-label="功能导航">
+                <div class="page-sidebar-title">功能导航</div>
+                <button type="button" class="page-sidebar-btn active" data-page="today">🏠 今日关注</button>
+                <button type="button" class="page-sidebar-btn" data-page="watchlist">⭐ 自选股</button>
+                <button type="button" class="page-sidebar-btn" data-page="ranking">📊 排行榜</button>
+                <button type="button" class="page-sidebar-btn" data-page="query">🔍 单股查询</button>
+                <button type="button" class="page-sidebar-btn" data-page="detail">📈 个股研究</button>
+            </aside>
+            <main class="app-main">
+
+                <!-- 页面：今日关注（默认首页，只显示今日关注） -->
+                <section class="page" data-page="today" id="page-today">
+
 
         <!-- v2.5 市场温度条 -->
         <section id="market-temp-bar" class="market-temp-bar" aria-labelledby="market-temp-title" hidden>
@@ -42,11 +67,15 @@
                 <p class="buy-today-subtitle">策略选出、靠近支撑位的标的（研究参考，不构成买卖建议）</p>
             </div>
             <div id="buy-today-list" class="buy-today-list">
-                <div class="buy-today-empty">今日没有策略信号，可继续查看下方排行榜</div>
+                <div class="buy-today-empty">今日没有策略信号，可前往「排行榜」查看其他自选股</div>
             </div>
         </section>
 
-        <!-- 单股查询栏 -->
+        </section>
+
+                <!-- 页面：单股查询 -->
+                <section class="page" data-page="query" id="page-query" hidden>
+                <!-- 单股查询栏 -->
         <div class="query-bar" id="query-bar">
             <div class="query-bar-inner">
                 <label class="query-label" for="query-code-input">🔍 单股查询对比</label>
@@ -75,7 +104,11 @@
             </div>
         </div>
 
-        <!-- 2.1 风险收益排行榜 -->
+        </section>
+
+                <!-- 页面：排行榜 -->
+                <section class="page" data-page="ranking" id="page-ranking" hidden>
+                <!-- 2.1 风险收益排行榜 -->
         <section class="ranking-section" aria-labelledby="ranking-title">
             <div class="ranking-heading-row">
                 <div>
@@ -118,10 +151,15 @@
             <div id="ranking-mobile-list" class="ranking-mobile-list" hidden></div>
         </section>
 
-        <!-- 主布局 -->
-        <div class="dashboard-layout">
+        </section>
+
+                <!-- 页面：自选股 -->
+                <section class="page" data-page="watchlist" id="page-watchlist" hidden>
+                    <div class="stock-sidebar watchlist-panel">
+                <!-- 主布局 -->
+        
             <!-- 左侧/上方 自选股概览列表 -->
-            <aside class="stock-sidebar">
+            
                 <div class="sidebar-header">
                     <div class="sidebar-title-row">
                         <h2>自选股列表</h2>
@@ -132,10 +170,15 @@
                 <div id="stock-list" class="stock-list-container">
                     <div class="list-loading">正在加载自选股...</div>
                 </div>
-            </aside>
+                    </div>
+                </section>
+
+                <!-- 页面：个股研究（K线 + 分析 + AI 研报 + 查询对比结果） -->
+                <section class="page" data-page="detail" id="page-detail" hidden>
+                    <div class="chart-container-wrapper">
 
             <!-- 右侧/下方 K线图详情区域 -->
-            <main class="chart-container-wrapper">
+            
                 <!-- 选中股票的大字概要 -->
                 <div id="detail-header" class="detail-header" style="display: none;">
                     <div class="detail-title-row">
@@ -290,6 +333,8 @@
                     </div>
                     <div id="index-chart" class="chart-element index-chart-element"></div>
                 </div>
+                                </div>
+                </section>
             </main>
         </div>
     </div>
@@ -411,6 +456,6 @@
     </div>
 
     <!-- 引入前端交互脚本 -->
-    <script src="assets/app.js?v=2.1"></script>
+    <script src="assets/app.js?v=2.6"></script>
 </body>
 </html>

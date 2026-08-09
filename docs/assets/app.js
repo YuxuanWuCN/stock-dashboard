@@ -117,6 +117,51 @@ document.addEventListener('DOMContentLoaded', () => {
         reportDisclaimer: document.getElementById('report-disclaimer'),
     };
 
+    // ============================================================
+    // v2.6 页面导航：今日关注 / 自选股 / 排行榜 / 单股查询 / 个股研究
+    // ============================================================
+    const PAGE_IDS = ['today', 'watchlist', 'ranking', 'query', 'detail'];
+
+    function currentPageFromHash() {
+        const m = (window.location.hash || '').match(/^#\/([a-z]+)/);
+        return m && PAGE_IDS.indexOf(m[1]) !== -1 ? m[1] : 'today';
+    }
+
+    function navigateTo(page) {
+        if (PAGE_IDS.indexOf(page) === -1) page = 'today';
+        PAGE_IDS.forEach(function (id) {
+            const section = document.getElementById('page-' + id);
+            if (section) section.hidden = (id !== page);
+        });
+        document.querySelectorAll('[data-page]').forEach(function (btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-page') === page);
+        });
+        // 进入个股研究页时重绘图表（页面从隐藏变为可见）
+        if (page === 'detail') {
+            setTimeout(function () {
+                if (state.chart) state.chart.resize();
+                if (state.indexChart) state.indexChart.resize();
+            }, 60);
+        }
+        const hash = '#/' + page;
+        if (window.location.hash !== hash) {
+            try { window.location.hash = hash; } catch (e) { /* ignore */ }
+        }
+    }
+
+    document.querySelectorAll('[data-page]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            navigateTo(btn.getAttribute('data-page'));
+        });
+    });
+
+    window.addEventListener('hashchange', function () {
+        navigateTo(currentPageFromHash());
+    });
+
+    // 初始页面：默认今日关注（支持 #/watchlist 等直达链接）
+    navigateTo(currentPageFromHash());
+
     function readBrowserWatchlist() {
         try {
             var parsed = JSON.parse(localStorage.getItem(BROWSER_WATCHLIST_KEY) || '[]');
@@ -320,7 +365,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstSummaryItem = state.summary && state.summary.items && state.summary.items[0];
             const initialCode = firstRankingItem ? firstRankingItem.code : (firstSummaryItem ? firstSummaryItem.code : null);
             if (initialCode) {
+                state.suppressDetailNavigation = true;
                 await selectTrackedStock(initialCode);
+                state.suppressDetailNavigation = false;
             }
         } catch (error) {
             console.error('Initialization error:', error);
@@ -1239,6 +1286,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         await Promise.all([selectStock(code), loadAnalysisDetail(code)]);
 
+        // v2.6：用户点击进入个股研究页；初始化预载时由 init 标记跳过
+        if (!state.suppressDetailNavigation) navigateTo('detail');
+
         if (scrollToDetail && window.innerWidth < 900) {
             el.analysisDetail.scrollIntoView({behavior: 'smooth', block: 'start'});
         }
@@ -1923,6 +1973,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 hideOverlay();
 
                 showQueryHint('✅ 查询成功！个股 ' + data.stock.name + ' + ' + data.meta.index_name + ' 对比');
+                navigateTo('detail');
             })
             .catch(function (err) {
                 el.queryGoBtn.disabled = false;

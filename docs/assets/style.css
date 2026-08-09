@@ -2323,3 +2323,142 @@ body {
     color: #4b5563;
     font-size: 14px;
 }
+
+/* ============================================================
+   v2.6 页面拆分：顶部导航 + 左侧功能导航 + 中间内容区
+   ============================================================ */
+.page[hidden] {
+    display: none !important;
+}
+
+/* 顶部页面导航 */
+.app-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    background-color: var(--card-bg);
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+}
+
+.app-nav-btn {
+    flex: 1 1 auto;
+    min-width: 128px;
+    padding: 12px 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    background-color: #f3f4f6;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.app-nav-btn:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.app-nav-btn.active {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.35);
+}
+
+/* 主框架：左侧功能导航 + 中间内容 */
+.app-shell {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .app-shell {
+        grid-template-columns: 220px 1fr;
+    }
+    .page-sidebar {
+        position: sticky;
+        top: 16px;
+    }
+}
+
+.page-sidebar {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.page-sidebar-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    padding: 4px 10px 10px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 6px;
+}
+
+.page-sidebar-btn {
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    background-color: transparent;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all 0.15s ease;
+}
+
+.page-sidebar-btn:hover {
+    background-color: #eff6ff;
+    color: #3b82f6;
+}
+
+.page-sidebar-btn.active {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+@media (max-width: 899px) {
+    .page-sidebar {
+        display: none; /* 移动端用顶部导航即可 */
+    }
+}
+
+.app-main {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 自选股页面：卡片网格展示 */
+.watchlist-panel {
+    max-height: none;
+}
+
+.page-watchlist .stock-list-container {
+    overflow-y: visible;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+}
+
+@media (min-width: 900px) {
+    .page-watchlist .stock-list-container {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
