@@ -57,6 +57,8 @@ from src.fetch_data import (
     compute_derived,
     build_kline_json,
     _fetch_tencent_kline,
+    _fetch_us_kline,
+    _fetch_kr_kline,
 )
 
 from src.analysis.config import (
@@ -154,6 +156,10 @@ def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
         try:
             if typ == "stock":
                 df = _fetch_stock_5y(code, start_date_str, end_date_str, attempt)
+            elif typ == "us":
+                df = _fetch_us_5y(code, start_date_str, end_date_str, attempt)
+            elif typ == "kr":
+                df = _fetch_kr_5y(code, start_date_str, end_date_str, attempt)
             else:
                 df = _fetch_etf_5y(code, start_date_str, end_date_str, attempt)
 
@@ -188,6 +194,30 @@ def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
     logger.error("%s(%s) 5Y 数据全部尝试失败", item["name"], code)
     return None
 
+
+
+def _fetch_us_5y(code: str, start_date: str, end_date: str, attempt: int) -> Optional[pd.DataFrame]:
+    """美股 5 年历史数据（腾讯行情）。"""
+    df = _fetch_us_kline(code, start_date, end_date, count=1500)
+    if df is None or df.empty:
+        return None
+    col_map = {
+        "日期": "date", "开盘": "open", "收盘": "close",
+        "最高": "high", "最低": "low", "成交量": "volume",
+    }
+    return df.rename(columns=col_map)
+
+
+def _fetch_kr_5y(code: str, start_date: str, end_date: str, attempt: int) -> Optional[pd.DataFrame]:
+    """韩股 5 年历史数据（Naver）。"""
+    df = _fetch_kr_kline(code, start_date, end_date, count=1500)
+    if df is None or df.empty:
+        return None
+    col_map = {
+        "日期": "date", "开盘": "open", "收盘": "close",
+        "最高": "high", "最低": "low", "成交量": "volume",
+    }
+    return df.rename(columns=col_map)
 
 def _fetch_stock_5y(code: str, start_date: str, end_date: str, attempt: int) -> Optional[pd.DataFrame]:
     """抓取 A 股 5 年历史数据。"""

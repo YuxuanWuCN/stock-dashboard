@@ -193,7 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
         Array.prototype.slice.call(arguments).forEach(function (items) {
             if (!Array.isArray(items)) return;
             items.forEach(function (item) {
-                if (!item || !/^\d{6}$/.test(item.code || '')) return;
+                if (!item || !item.code) return;
+        if (!/^\d{6}$/.test(item.code) && !(item.type === 'us' && /^[A-Za-z]{1,6}$/.test(item.code))) return;
                 byCode[item.code] = Object.assign({}, byCode[item.code] || {}, item);
             });
         });
@@ -584,7 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // 类型标签 (股票/ETF)
-            const typeLabel = item.type === 'etf' ? '基金' : '股票';
+            const typeLabel = item.type === 'etf' ? '基金' : item.type === 'us' ? '美股' : item.type === 'kr' ? '韩股' : '股票';
             const typeClass = item.type === 'etf' ? 'etf' : 'stock';
 
             // 失败或节假日数据可能没有价格/涨跌幅，仍然渲染卡片。

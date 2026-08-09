@@ -11,6 +11,7 @@
 import csv
 import json
 import os
+import re
 import sys
 import time
 import traceback
@@ -91,15 +92,23 @@ def read_watchlist(path: str) -> list[dict]:
             if code.startswith("#"):
                 continue
 
-            # 代码校验
-            if not code.isdigit() or len(code) != 6:
+            # 代码校验：A股/韩股要求 6 位数字；美股允许 1-6 位字母代码
+            if typ == "us":
+                if not re.fullmatch(r"[A-Za-z]{1,6}", code):
+                    logger.warning("第 %d 行美股代码 '%s' 非法，跳过", line_no, code)
+                    continue
+            elif typ == "kr":
+                if not code.isdigit() or len(code) != 6:
+                    logger.warning("第 %d 行韩股代码 '%s' 非法，跳过", line_no, code)
+                    continue
+            elif not code.isdigit() or len(code) != 6:
                 logger.warning(
                     "第 %d 行代码 '%s' 不是 6 位数字，跳过", line_no, code
                 )
                 continue
 
             # 类型校验
-            if typ not in ("stock", "etf"):
+            if typ not in ("stock", "etf", "us", "kr"):
                 logger.warning(
                     "第 %d 行 type='%s' 非法，按 stock 处理", line_no, typ
                 )
@@ -142,8 +151,18 @@ def fetch_one(
                 df = _fetch_stock_zh_a_hist(code, start_date, end_date, attempt)
                 if df is None:
                     continue
+            elif typ == "us":
+                # ---- 美股（腾讯行情，.OQ/.N 兜底） ----
+                df = _fetch_us_kline(code, start_date, end_date, count=1500)
+                if df is None:
+                    continue
+            elif typ == "kr":
+                # ---- 韩股（Naver Finance 日线） ----
+                df = _fetch_kr_kline(code, start_date, end_date, count=1500)
+                if df is None:
+                    continue
             else:
-                # ---- ETF / 场内基金 ----
+                # ---- ETF / 场内基金 / 场外基金 ----
                 df = _fetch_etf_hist_em(code, start_date, end_date, attempt)
                 if df is None:
                     continue
@@ -381,6 +400,103 @@ def _fetch_tencent_kline(
         logger.warning("ETF %s Tencent 备用源失败: %s", code, traceback.format_exc())
         return None
 
+
+
+def _fetch_us_kline(
+    code: str, start_date: str, end_date: str, count: int = 1500
+) -> Optional[pd.DataFrame]:
+    """美股日线（腾讯行情）：NASDAQ 用 .OQ，失败再试 NYSE .N。
+
+    返回列名与 A 股一致（日期/开盘/收盘/最高/最低/成交量）。
+    """
+    try:
+        import requests
+        headers = {"User-Agent": "Mozilla/5.0"}
+        symbols = [f"us{code}.OQ", f"us{code}.N"]
+        for sym in symbols:
+            try:
+                url = f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={sym},day,,,{count},qfq"
+                resp = requests.get(url, headers=headers, timeout=15)
+                resp.raise_for_status()
+                payload = resp.json()
+                day = ((payload.get("data") or {}).get(sym) or {}).get("day") or []
+                if not day:
+                    continue
+                rows = []
+                for bar in day:
+                    if not isinstance(bar, list) or len(bar) < 6:
+                        continue
+                    try:
+                        rows.append({
+                            "日期": bar[0],
+                            "开盘": float(bar[1]),
+                            "收盘": float(bar[2]),
+                            "最高": float(bar[3]),
+                            "最低": float(bar[4]),
+                            "成交量": float(bar[5]),
+                        })
+                    except (TypeError, ValueError):
+                        continue
+                if rows:
+                    df = pd.DataFrame(rows)
+                    start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+                    end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+                    df = df[(df["日期"] >= start_fmt) & (df["日期"] <= end_fmt)]
+                    return df if not df.empty else None
+            except Exception as exc:
+                logger.warning("%s 美股源 %s 失败: %s", code, sym, exc)
+        return None
+    except Exception:
+        logger.warning("%s 美股行情抓取失败: %s", code, traceback.format_exc())
+        return None
+
+
+def _fetch_kr_kline(
+    code: str, start_date: str, end_date: str, count: int = 1500
+) -> Optional[pd.DataFrame]:
+    """韩股日线（Naver Finance，EUC-KR XML）。
+
+    item data 格式：日期|开盘|最高|最低|收盘|成交量。
+    """
+    try:
+        import requests
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://finance.naver.com/",
+        }
+        url = f"https://fchart.stock.naver.com/sise.nhn?symbol={code}&timeframe=day&count={count}&requestType=0"
+        resp = requests.get(url, headers=headers, timeout=15)
+        resp.raise_for_status()
+        resp.encoding = "euc-kr"
+        rows = []
+        for m in re.finditer(r'<item data="([^"]+)"\s*/>', resp.text):
+            fields = m.group(1).split("|")
+            if len(fields) < 6:
+                continue
+            try:
+                date_s = fields[0]
+                rows.append({
+                    "日期": date_s,
+                    "开盘": float(fields[1]),
+                    "收盘": float(fields[4]),
+                    "最高": float(fields[2]),
+                    "最低": float(fields[3]),
+                    "成交量": float(fields[5]),
+                })
+            except (TypeError, ValueError):
+                continue
+        if not rows:
+            return None
+        df = pd.DataFrame(rows)
+        # Naver 日期为 YYYYMMDD，转 YYYY-MM-DD 后按范围过滤
+        df["日期"] = df["日期"].str.replace(r"(\d{4})(\d{2})(\d{2})", r"\1-\2-\3", regex=True)
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        df = df[(df["日期"] >= start_fmt) & (df["日期"] <= end_fmt)]
+        return df if not df.empty else None
+    except Exception:
+        logger.warning("%s 韩股行情抓取失败: %s", code, traceback.format_exc())
+        return None
 
 def _clean_and_validate(
     df: pd.DataFrame, code: str, name: str
