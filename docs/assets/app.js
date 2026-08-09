@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isLocal = window.location.hostname === '127.0.0.1'
         || window.location.hostname === 'localhost';
+    const DATA_VERSION = '2.9';
+    function dataUrl(path) {
+        return path + (path.indexOf('?') === -1 ? '?v=' + DATA_VERSION : '&v=' + DATA_VERSION);
+    }
+
     const API_BASE = isLocal
         ? 'http://127.0.0.1:5000'
         : 'https://yuxuanwucn-stock-dashboard-api.onrender.com';
@@ -295,15 +300,15 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // 并行加载元数据、汇总、排行榜、自选股与 v2.5 策略数据
             const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes] = await Promise.all([
-                fetch('data/meta.json').then(r => r.json()).catch(err => {
+                fetch(dataUrl('data/meta.json')).then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
                     return null;
                 }),
-                fetch('data/summary.json').then(r => r.json()).catch(err => {
+                fetch(dataUrl('data/summary.json')).then(r => r.json()).catch(err => {
                     console.error('Failed to fetch summary.json:', err);
                     return null;
                 }),
-                fetch('data/analysis/ranking.json').then(r => {
+                fetch(dataUrl('data/analysis/ranking.json')).then(r => {
                     if (!r.ok) throw new Error(`HTTP ${r.status}`);
                     return r.json();
                 }).catch(err => {
@@ -317,21 +322,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.warn('Failed to fetch configured watchlist:', err);
                     return null;
                 }),
-                fetch('data/strategy/selection.json').then(r => {
+                fetch(dataUrl('data/strategy/selection.json')).then(r => {
                     if (!r.ok) throw new Error(`HTTP ${r.status}`);
                     return r.json();
                 }).catch(err => {
                     console.warn('v2.5 选股数据未加载（可跳过）:', err);
                     return null;
                 }),
-                fetch('data/strategy/hunting_ground.json').then(r => {
+                fetch(dataUrl('data/strategy/hunting_ground.json')).then(r => {
                     if (!r.ok) throw new Error(`HTTP ${r.status}`);
                     return r.json();
                 }).catch(err => {
                     console.warn('v2.5 狩猎场数据未加载（可跳过）:', err);
                     return null;
                 }),
-                fetch('data/strategy/market_temperature.json').then(r => {
+                fetch(dataUrl('data/strategy/market_temperature.json')).then(r => {
                     if (!r.ok) throw new Error(`HTTP ${r.status}`);
                     return r.json();
                 }).catch(err => {
@@ -659,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showLoadingOverlay();
 
         try {
-            const response = await fetch(`data/kline/${code}.json`);
+            const response = await fetch(dataUrl(`data/kline/${code}.json`));
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -1311,7 +1316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             var detail = state.analysisCache[code];
             if (!detail) {
-                var response = await fetch('data/analysis/' + encodeURIComponent(code) + '.json');
+                var response = await fetch(dataUrl('data/analysis/' + encodeURIComponent(code) + '.json'));
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 detail = await response.json();
                 if (String(detail.schema_version || '').split('.')[0] !== '2') {
@@ -1459,7 +1464,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             var reportPath = 'data/llm/reports/' + encodeURIComponent(code)
                 + '_' + encodeURIComponent(tradeDate) + '.json';
-            var resp = await fetch(reportPath);
+            var resp = await fetch(dataUrl(reportPath));
             if (!resp.ok) {
                 if (resp.status === 404) {
                     if (state.analysisSelectedCode === code) hideResearchReport();
