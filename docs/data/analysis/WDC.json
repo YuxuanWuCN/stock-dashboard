@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 14:18:34+08:00",
+  "trade_date": "2026-08-07",
+  "code": "WDC",
+  "name": "西部数据",
+  "type": "us",
+  "category": "存储",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 40.1,
+    "risk": 72.6,
+    "technical": 42.0,
+    "industry": 32.0
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 108.04,
+    "max_drawdown_60d_pct": -41.8,
+    "atr14_pct": 12.5,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 62.9,
+        "value": 108.04
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 57.1,
+        "value": -41.8
+      },
+      {
+        "name": "ATR百分比",
+        "score": 88.6,
+        "value": 12.5
+      },
+      {
+        "name": "量价异常",
+        "score": 88.6,
+        "value": 1.29
+      },
+      {
+        "name": "行业波动",
+        "score": 85.7,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 3.58,
+    "return_5d_pct": 4.43,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 73.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 496.154,
+    "ma10": 498.212,
+    "ma20": 511.4719999999999,
+    "ma60": 548.7541666666667,
+    "rsi14": 38.4,
+    "macd_dif": -21.17528517560322,
+    "macd_dea": -15.945960536222369,
+    "macd_hist": -10.458649278761705,
+    "atr14_pct": 12.496861530072941,
+    "boll_position": 0.016082813447713635,
+    "return_5d_pct": -20.288525071580654,
+    "return_20d_pct": -25.45357798795036,
+    "volume_ratio_5d": 1.29
+  },
+  "industry": {
+    "name": "存储",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": -20.56
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 66.7,
+      "average_return_pct": 3.58,
+      "median_return_pct": 3.54,
+      "best_return_pct": 33.35,
+      "worst_return_pct": -11.83
+    },
+    "horizon_5d": {
+      "up_probability_pct": 73.3,
+      "average_return_pct": 4.43,
+      "median_return_pct": 5.69,
+      "best_return_pct": 45.31,
+      "worst_return_pct": -18.52
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 41.8%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 41.8%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 108.0%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/WDC.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

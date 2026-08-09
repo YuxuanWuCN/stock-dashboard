@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 14:18:34+08:00",
+  "trade_date": "2026-08-07",
+  "code": "300475",
+  "name": "香农芯创",
+  "type": "stock",
+  "category": "存储",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 38.8,
+    "risk": 68.4,
+    "technical": 81.0,
+    "industry": 32.0
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 131.91,
+    "max_drawdown_60d_pct": -56.22,
+    "atr14_pct": 11.48,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 85.7,
+        "value": 131.91
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 82.9,
+        "value": -56.22
+      },
+      {
+        "name": "ATR百分比",
+        "score": 82.9,
+        "value": 11.48
+      },
+      {
+        "name": "量价异常",
+        "score": 54.3,
+        "value": 0.85
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.5,
+    "return_5d_pct": 2.64,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 46.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 147.772,
+    "ma10": 148.409,
+    "ma20": 167.73499999999999,
+    "ma60": 204.79566666666668,
+    "rsi14": 42.1,
+    "macd_dif": -20.89406415798652,
+    "macd_dea": -21.607617057704505,
+    "macd_hist": 1.4271057994359708,
+    "atr14_pct": 11.476721761676934,
+    "boll_position": 0.4189450491346919,
+    "return_5d_pct": 8.848343507785184,
+    "return_20d_pct": -41.42118863049096,
+    "volume_ratio_5d": 0.85
+  },
+  "industry": {
+    "name": "存储",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.11,
+    "relative_strength_20d_pct": -36.53
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.5,
+      "median_return_pct": 0.46,
+      "best_return_pct": 23.42,
+      "worst_return_pct": -15.08
+    },
+    "horizon_5d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": 2.64,
+      "median_return_pct": -0.64,
+      "best_return_pct": 39.92,
+      "worst_return_pct": -19.18
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 56.2%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 56.2%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 131.9%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/300475.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

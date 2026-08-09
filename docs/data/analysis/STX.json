@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-09 14:18:34+08:00",
+  "trade_date": "2026-08-07",
+  "code": "STX",
+  "name": "希捷科技",
+  "type": "us",
+  "category": "存储",
+  "stale": false,
+  "scores": {
+    "risk_adjusted": 40.6,
+    "risk": 57.1,
+    "technical": 73.0,
+    "industry": 35.3
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 89.93,
+    "max_drawdown_60d_pct": -31.86,
+    "atr14_pct": 9.97,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 54.3,
+        "value": 89.93
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 45.7,
+        "value": -31.86
+      },
+      {
+        "name": "ATR百分比",
+        "score": 65.7,
+        "value": 9.97
+      },
+      {
+        "name": "量价异常",
+        "score": 34.3,
+        "value": 0.91
+      },
+      {
+        "name": "行业波动",
+        "score": 85.7,
+        "value": 42.69
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.09,
+    "return_5d_pct": 1.08,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 835.9559999999999,
+    "ma10": 821.631,
+    "ma20": 834.208,
+    "ma60": 876.4976666666666,
+    "rsi14": 46.0,
+    "macd_dif": -13.22418547016673,
+    "macd_dea": -15.054458136687423,
+    "macd_hist": 3.6605453330413837,
+    "atr14_pct": 9.967751407093138,
+    "boll_position": 0.38507720049679905,
+    "return_5d_pct": -5.065819443308839,
+    "return_20d_pct": -10.719071995078766,
+    "volume_ratio_5d": 0.91
+  },
+  "industry": {
+    "name": "存储",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.57,
+    "relative_strength_20d_pct": -5.83
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.09,
+      "median_return_pct": 1.8,
+      "best_return_pct": 13.82,
+      "worst_return_pct": -15.8
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.08,
+      "median_return_pct": -0.21,
+      "best_return_pct": 19.27,
+      "worst_return_pct": -19.18
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 31.9%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 31.9%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 89.9%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/STX.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}
