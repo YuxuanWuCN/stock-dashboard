@@ -162,6 +162,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始页面：默认今日关注（支持 #/watchlist 等直达链接）
     navigateTo(currentPageFromHash());
 
+    // v2.6.1：给外部 API 调用加超时，避免 Render 冷启动/无响应导致页面卡住
+    function fetchWithTimeout(url, options, timeoutMs) {
+        var controller = new AbortController();
+        var timer = setTimeout(function () { controller.abort(); }, timeoutMs || 10000);
+        return fetch(url, Object.assign({}, options || {}, { signal: controller.signal }))
+            .finally(function () { clearTimeout(timer); });
+    }
+
     function readBrowserWatchlist() {
         try {
             var parsed = JSON.parse(localStorage.getItem(BROWSER_WATCHLIST_KEY) || '[]');
@@ -301,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.error('Failed to fetch ranking.json:', err);
                     return null;
                 }),
-                fetch(API_BASE + '/api/watchlist').then(r => {
+                fetchWithTimeout(API_BASE + '/api/watchlist', null, 8000).then(r => {
                     if (!r.ok) throw new Error(`HTTP ${r.status}`);
                     return r.json();
                 }).catch(err => {
@@ -1920,7 +1928,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         var url = API_BASE + '/api/query?code=' + encodeURIComponent(code) + '&start_date=' + encodeURIComponent(startDate);
 
-        fetch(url)
+        fetchWithTimeout(url, null, 20000)
             .then(function (resp) {
                 if (!resp.ok) {
                     return resp.json().then(function (data) {
@@ -2353,7 +2361,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addWlModal.confirmBtn.disabled = true;
         addWlModal.confirmBtn.textContent = '提交中...';
 
-        fetch(API_BASE + '/api/watchlist/add', {
+        fetchWithTimeout(API_BASE + '/api/watchlist/add', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
