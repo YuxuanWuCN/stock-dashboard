@@ -46,3 +46,10 @@ def test_css_has_filter_styles():
     assert ".watchlist-filter" in css
     assert ".watchlist-filter-btn.active" in css
     assert ".watchlist-section-title" in css
+def test_js_groups_by_industry():
+    """自选股按行业分组（category），ETF 归入基金，无分类归入未分类。"""
+    app = _read("docs/assets/app.js")
+    assert "const industry = item.category" in app
+    assert "'基金' : '未分类'" in app
+    # 按行业数量降序排列
+    assert "groups[b].length - groups[a].length" in app

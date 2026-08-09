@@ -647,16 +647,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         el.stockList.innerHTML = ''; // 清空加载状态
 
-        // 按分区分组（尊重顶部筛选）
+        // 按行业分组（尊重顶部市场筛选）
         const groups = {};
         state.summary.items.forEach(item => {
             const region = regionOf(item);
             if (state.watchlistRegion !== 'all' && region !== state.watchlistRegion) return;
-            if (!groups[region]) groups[region] = [];
-            groups[region].push(item);
+            const industry = item.category || (region === 'etf' ? '基金' : '未分类');
+            if (!groups[industry]) groups[industry] = [];
+            groups[industry].push(item);
         });
-        const orderedRegions = Object.keys(groups).sort((a, b) => regionOrder.indexOf(a) - regionOrder.indexOf(b));
-
+        const orderedRegions = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
         if (orderedRegions.length === 0) {
             el.stockList.innerHTML = '<div class="list-loading">该分区暂无股票</div>';
             return;
