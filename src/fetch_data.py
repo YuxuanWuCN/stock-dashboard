@@ -167,10 +167,6 @@ def fetch_one(
                 df = _fetch_us_kline(code, start_date, end_date, count=1500)
                 if df is None:
                     continue
-            elif typ == "hk":
-                if not re.fullmatch(r"\d{5}", code):
-                    logger.warning("第 %d 行港股代码 '%s' 非法，跳过", line_no, code)
-                    continue
             elif typ == "kr":
                 # ---- 韩股（Naver Finance 日线） ----
                 df = _fetch_kr_kline(code, start_date, end_date, count=1500)
@@ -467,7 +463,10 @@ def _fetch_us_kline(
                     start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
                     end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
                     df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
-                    return df if not df.empty else None
+                    if df is not None and not df.empty and len(df) >= MIN_VALID_ROWS:
+                        return df
+                    # 该 symbol 行数不足（无效前缀，如 .OQ 对纽交所股只返回最新1条），继续尝试下一个
+                    continue
             except Exception as exc:
                 logger.warning("%s 美股源 %s 失败: %s", code, sym, exc)
         return None
