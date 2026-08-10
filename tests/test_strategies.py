@@ -123,3 +123,43 @@ def test_parameter_override():
     strategy = MultiGoldenCrossStrategy(params={"lookback_days": 5})
     assert strategy.params["lookback_days"] == 5
     assert strategy.params["ma_short_period"] == 5  # 默认值保留
+
+def test_load_stock_data_from_selection_restores_type(tmp_path, monkeypatch):
+    """选股结果条目缺 type 时，从 watchlist.csv 反查类型并传给抓取函数。"""
+    from src.strategies import main as strategies_main
+
+    selection = {
+        "results": {
+            "MultiGoldenCrossStrategy": [
+                {"code": "CRM", "name": "Salesforce", "signals": []},
+                {"code": "600519", "name": "贵州茅台", "signals": []},
+                {"code": "999999", "name": "未知标的", "signals": []},
+            ]
+        }
+    }
+    sel_path = tmp_path / "selection.json"
+    sel_path.write_text(json.dumps(selection, ensure_ascii=False), encoding="utf-8")
+
+    fake_items = [
+        {"code": "CRM", "name": "Salesforce", "type": "us", "category": "科技"},
+        {"code": "600519", "name": "贵州茅台", "type": "stock", "category": "白酒"},
+    ]
+    monkeypatch.setattr("src.fetch_data.read_watchlist", lambda path: fake_items)
+
+    captured = {}
+
+    def fake_fetch(item):
+        captured[item["code"]] = dict(item)
+        return pd.DataFrame({"date": ["2026-01-01"], "close": [1.0]})
+
+    monkeypatch.setattr("src.build_ranking.fetch_5y_data", fake_fetch)
+
+    stock_data, names = strategies_main._load_stock_data_from_selection(str(sel_path))
+
+    # 关键断言：类型被正确反查并传给抓取函数
+    assert captured["CRM"]["type"] == "us"
+    assert captured["600519"]["type"] == "stock"
+    # 未知代码回退为 stock，不崩溃
+    assert captured["999999"]["type"] == "stock"
+    assert set(stock_data) == {"CRM", "600519", "999999"}
+    assert names["CRM"] == "Salesforce"

@@ -29,15 +29,34 @@ OUTPUT_DIR = os.path.join(DATA_DIR, "strategy")
 
 
 def _load_stock_data_from_selection(selection_path: str):
-    """从已保存的选股结果中恢复股票数据（每只重新抓取）。"""
+    """从已保存的选股结果中恢复股票数据（每只重新抓取）。
+
+    选股结果条目不含 type 字段，此处从 watchlist.csv / strategy_pool.csv
+    反查标的类型（stock/us/kr/hk/etf），供 fetch_5y_data 使用。
+    """
     from src.build_ranking import fetch_5y_data
+    from src.fetch_data import read_watchlist as _read_watchlist
+
+    type_map = {}
+    for csv_path in ("watchlist.csv", "strategy_pool.csv"):
+        if not os.path.exists(csv_path):
+            continue
+        try:
+            for item in _read_watchlist(csv_path):
+                type_map[item["code"]] = item.get("type", "stock")
+        except Exception:
+            continue
 
     with open(selection_path, "r", encoding="utf-8") as f:
         payload = json.load(f)
     items = []
     for strategy_name, entries in payload.get("results", {}).items():
         for entry in entries:
-            items.append({"code": entry["code"], "name": entry.get("name", "")})
+            items.append({
+                "code": entry["code"],
+                "name": entry.get("name", ""),
+                "type": type_map.get(entry["code"], entry.get("type", "stock")),
+            })
     stock_data = {}
     names = {}
     for item in items:
