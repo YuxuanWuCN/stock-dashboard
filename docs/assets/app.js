@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const isLocal = window.location.hostname === '127.0.0.1'
         || window.location.hostname === 'localhost';
-    const DATA_VERSION = '1';
+    const DATA_VERSION = '2';
     function dataUrl(path) {
         return path + (path.indexOf('?') === -1 ? '?v=' + DATA_VERSION : '&v=' + DATA_VERSION);
     }
