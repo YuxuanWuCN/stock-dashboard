@@ -311,6 +311,7 @@ stock-dashboard/
 │   └── strategies/             策略选股引擎（KHunter 合并）、明日关注
 ├── tools/                      自动化与工具
 │   ├── daily_local.ps1         每日本地自动任务（抓取→排行→策略→模拟盘→推送）
+│   ├── daily_morning.ps1      早上8:00美股补数据（抓取→排行→模拟盘修正→推送）
 │   ├── paper_portfolio.py      模拟盘对决记录（稳健 vs 激进）
 │   ├── aggressive_scan.py      全库激进扫描
 │   └── run_quality.ps1 / quality_gate.py   质量门禁
