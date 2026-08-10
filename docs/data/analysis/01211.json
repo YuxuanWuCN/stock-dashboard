@@ -1,75 +1,75 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-09 22:44:59+08:00",
-  "trade_date": "2026-08-07",
+  "generated_at": "2026-08-10 10:22:38+08:00",
+  "trade_date": "2026-08-10",
   "code": "01211",
   "name": "比亚迪股份",
   "type": "hk",
   "category": "汽车",
   "stale": false,
   "scores": {
-    "risk_adjusted": 40.1,
-    "risk": 55.2,
-    "technical": 85.0,
+    "risk_adjusted": 37.0,
+    "risk": 50.3,
+    "technical": 80.0,
     "industry": 62.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 33.01,
+    "annualized_volatility_20d_pct": 32.93,
     "max_drawdown_60d_pct": -26.18,
-    "atr14_pct": 3.58,
+    "atr14_pct": 3.41,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 43.6,
-        "value": 33.01
+        "score": 42.6,
+        "value": 32.93
       },
       {
         "name": "60日最大回撤",
-        "score": 68.8,
+        "score": 69.8,
         "value": -26.18
       },
       {
         "name": "ATR百分比",
-        "score": 59.4,
-        "value": 3.58
+        "score": 56.9,
+        "value": 3.41
       },
       {
         "name": "量价异常",
-        "score": 50.0,
-        "value": 0.85
+        "score": 76.2,
+        "value": 0.72
       },
       {
         "name": "行业波动",
-        "score": 53.5,
-        "value": 42.69
+        "score": 7.4,
+        "value": 40.98
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.63,
-    "return_5d_pct": 0.01,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 46.7,
+    "return_3d_pct": -0.31,
+    "return_5d_pct": -0.44,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 92.42999999999999,
-    "ma10": 92.305,
-    "ma20": 90.24249999999999,
-    "ma60": 87.66749999999999,
-    "rsi14": 51.9,
-    "macd_dif": 1.8252779690398455,
-    "macd_dea": 1.873623176935782,
-    "macd_hist": -0.0966904157918731,
-    "atr14_pct": 3.5845990085778094,
-    "boll_position": 0.4922097936135325,
-    "return_5d_pct": -4.248539564524689,
-    "return_20d_pct": 6.183745583038869,
-    "volume_ratio_5d": 0.85
+    "trend": "uptrend",
+    "ma5": 91.8,
+    "ma10": 92.625,
+    "ma20": 90.6325,
+    "ma60": 87.56083333333332,
+    "rsi14": 55.5,
+    "macd_dif": 1.7270863075862195,
+    "macd_dea": 1.8443158030658697,
+    "macd_hist": -0.23445899095930045,
+    "atr14_pct": 3.4145354675770836,
+    "boll_position": 0.6071861206883103,
+    "return_5d_pct": -3.3192834562697615,
+    "return_20d_pct": 9.291244788564622,
+    "volume_ratio_5d": 0.72
   },
   "industry": {
     "name": "汽车",
@@ -78,7 +78,7 @@
     "return_5d_pct": 5.39,
     "return_20d_pct": -4.89,
     "return_60d_pct": -9.57,
-    "relative_strength_20d_pct": 11.07
+    "relative_strength_20d_pct": 10.75
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,22 +86,28 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.63,
-      "median_return_pct": 0.22,
-      "best_return_pct": 8.32,
-      "worst_return_pct": -5.91
+      "up_probability_pct": 56.7,
+      "average_return_pct": -0.31,
+      "median_return_pct": 0.34,
+      "best_return_pct": 5.83,
+      "worst_return_pct": -6.2
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.01,
-      "median_return_pct": -0.92,
-      "best_return_pct": 18.05,
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.44,
+      "median_return_pct": 0.04,
+      "best_return_pct": 14.84,
       "worst_return_pct": -11.7
     }
   },
   "fundamental": null,
   "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",
@@ -113,12 +119,6 @@
       "title": "回撤风险",
       "detail": "近60日最大回撤 26.2%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
     }
   ],
   "kline_file": "../kline/01211.json",

@@ -40,7 +40,7 @@ import pandas as pd
 try:
     from .config import (
         LOOKBACK_DAYS, ADJUST, PERIOD, REQUEST_INTERVAL, REQUEST_TIMEOUT,
-        MAX_RETRIES, MIN_VALID_ROWS, MA_WINDOWS, WATCHLIST_PATH, DATA_DIR,
+        MAX_RETRIES, MIN_VALID_ROWS, MA_WINDOWS, WATCHLIST_PATH, DATA_DIR, STALE_DATA_DAYS,
         KLINE_DIR, SUMMARY_PATH, META_PATH,
     )
     from .utils import (
@@ -51,7 +51,7 @@ try:
 except ImportError:  # Support direct execution from src/.
     from config import (
         LOOKBACK_DAYS, ADJUST, PERIOD, REQUEST_INTERVAL, REQUEST_TIMEOUT,
-        MAX_RETRIES, MIN_VALID_ROWS, MA_WINDOWS, WATCHLIST_PATH, DATA_DIR,
+        MAX_RETRIES, MIN_VALID_ROWS, MA_WINDOWS, WATCHLIST_PATH, DATA_DIR, STALE_DATA_DAYS,
         KLINE_DIR, SUMMARY_PATH, META_PATH,
     )
     from utils import (

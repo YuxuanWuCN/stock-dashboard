@@ -904,7 +904,12 @@ def build_ranking(
         for r in succeeded
         if r.get("trade_date")
     ]
-    trade_date_str = max(trade_dates) if trade_dates else beijing_date_str()
+    # 用多数股票的交易日作为整体交易日（避免盘中个别标的混入当日未收盘 bar）
+    if trade_dates:
+        from collections import Counter
+        trade_date_str = Counter(trade_dates).most_common(1)[0][0]
+    else:
+        trade_date_str = beijing_date_str()
     generated_at = beijing_datetime_str() + "+08:00"
 
     # 统一填充 generated_at
