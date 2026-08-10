@@ -54,6 +54,42 @@ def _performance_path_for(portfolio_path: str) -> str:
     suffix = name[len("portfolio"):]
     return os.path.join(DATA_DIR, "paper", f"performance{suffix}.json")
 
+def _backfill_portfolio_from_kline(portfolio: dict, trade_date: str):
+    """用 kline 回填组合起点当日收益（按 items 权重加权，缺失股票跳过）。"""
+    changes = []
+    total_pct = 0.0
+    for item in portfolio.get("items", []):
+        code = item["code"]
+        pct = item.get("pct", 0)
+        d = _load_json(os.path.join(KLINE_DIR, f"{code}.json"))
+        if not d:
+            continue
+        dates = d.get("dates", [])
+        kline = d.get("kline", [])
+        if trade_date not in dates:
+            continue
+        i = dates.index(trade_date)
+        if i < 1:
+            continue
+        prev_close = kline[i - 1][1]
+        cur_close = kline[i][1]
+        if prev_close and cur_close and prev_close > 0:
+            changes.append(((cur_close - prev_close) / prev_close * 100.0, pct))
+            total_pct += pct
+    if not changes:
+        return None
+    weighted = (sum(c * p for c, p in changes) / total_pct) if total_pct else 0.0
+    return {
+        "recorded_at": beijing_datetime_str(),
+        "trade_date": trade_date,
+        "portfolio_return_pct": round(weighted, 2),
+        "equal_weight_return_pct": round(weighted, 2),
+        "valid_count": len(changes),
+        "skipped": [],
+        "source": "kline_backfill",
+    }
+
+
 def report(portfolio_path: str = None) -> int:
     portfolio = _load_json(portfolio_path or PORTFOLIO_PATH)
     summary = _load_json(SUMMARY_PATH)
@@ -124,6 +160,11 @@ def report(portfolio_path: str = None) -> int:
         perf = {"schema_version": "1.0", "portfolio_name": portfolio.get("name"), "records": []}
     # 同一天去重（覆盖当天记录）
     perf["records"] = [r for r in perf.get("records", []) if r.get("trade_date") != today]
+    # 首次记录且组合声明了基准日：用 kline 回填起点，使对比曲线起点一致
+    if not perf["records"] and portfolio.get("base_trade_date") and portfolio["base_trade_date"] != today:
+        back = _backfill_portfolio_from_kline(portfolio, portfolio["base_trade_date"])
+        if back:
+            perf["records"].append(back)
     perf["records"].append(entry)
     os.makedirs(os.path.dirname(performance_path), exist_ok=True)
     with open(performance_path, "w", encoding="utf-8") as f:

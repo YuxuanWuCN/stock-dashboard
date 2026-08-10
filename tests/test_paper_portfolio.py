@@ -203,3 +203,46 @@ def test_manifest_lists_all_portfolios(tmp_path, monkeypatch):
     for e in manifest["portfolios"]:
         assert e["file"].endswith(".json")
         assert e["name"]
+
+def test_report_backfills_base_date_from_kline(tmp_path, monkeypatch):
+    """首次生成绩效且组合有 base_trade_date 时，用 kline 回填起点当日收益。"""
+    portfolio = {
+        "name": "测试组合", "capital": 1000000, "cash_pct": 0,
+        "base_trade_date": "2026-08-07",
+        "items": [
+            {"code": "600519", "name": "贵州茅台", "pct": 50},
+            {"code": "000001", "name": "平安银行", "pct": 50},
+        ],
+    }
+    summary = {
+        "items": [
+            {"code": "600519", "change_pct": 1.0, "last_date": "2026-08-10", "status": "ok"},
+            {"code": "000001", "change_pct": -1.0, "last_date": "2026-08-10", "status": "ok"},
+        ]
+    }
+    data = _setup(tmp_path, portfolio=portfolio, summary=summary)
+    # kline：600519 8/6=10 → 8/7=10.5 (+5%)；000001 8/6=5 → 8/7=4.8 (-4%)
+    _write_json(data / "kline" / "600519.json", {
+        "dates": ["2026-08-06", "2026-08-07"],
+        "kline": [[0, 10, 0, 0], [0, 10.5, 0, 0]], "volume": [1, 1],
+    })
+    _write_json(data / "kline" / "000001.json", {
+        "dates": ["2026-08-06", "2026-08-07"],
+        "kline": [[0, 5, 0, 0], [0, 4.8, 0, 0]], "volume": [1, 1],
+    })
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "SUMMARY_PATH", str(data / "summary.json"))
+    monkeypatch.setattr(pp, "PORTFOLIO_PATH", str(data / "paper" / "portfolio.json"))
+    monkeypatch.setattr(pp, "PERFORMANCE_PATH", str(data / "paper" / "performance.json"))
+    monkeypatch.setattr(pp, "KLINE_DIR", str(data / "kline"))
+    assert pp.report() == 0
+    perf = json.loads((data / "paper" / "performance.json").read_text(encoding="utf-8"))
+    assert len(perf["records"]) == 2
+    first = perf["records"][0]
+    assert first["trade_date"] == "2026-08-07"
+    assert first["source"] == "kline_backfill"
+    # 加权：(50%×5% + 50%×-4%) = +0.5%
+    assert first["portfolio_return_pct"] == 0.5
+    last = perf["records"][1]
+    assert last["trade_date"] == "2026-08-10"
+    assert last["portfolio_return_pct"] == 0.0  # (50%×1% + 50%×-1%)
