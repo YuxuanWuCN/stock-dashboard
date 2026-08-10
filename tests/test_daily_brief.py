@@ -308,3 +308,24 @@ def test_frontend_shows_analysis_and_recommend_dates():
     assert "基于 " in app and "收盘分析" in app
     assert "next_trade_label" in app
     assert "重点关注" in app
+
+def test_candidates_exclude_stale():
+    """排行榜中标记 stale（数据过期）的股票不进入候选池。"""
+    ranking = {
+        "trade_date": "2026-08-07",
+        "items": [
+            {"rank": 1, "code": "000001", "name": "平安银行", "type": "stock",
+             "total_score": 67.6, "risk": {"label": "低风险"},
+             "technical": {"trend": "uptrend"},
+             "forecast": {"up_probability_3d_pct": 50.0}, "reasons": []},
+            {"rank": 2, "code": "00011", "name": "恒生银行", "type": "hk",
+             "total_score": 67.2, "risk": {"label": "低风险"},
+             "technical": {"trend": "uptrend"},
+             "forecast": {"up_probability_3d_pct": 63.3}, "reasons": [],
+             "stale": True},
+        ],
+    }
+    cands = build_candidates({"results": {}}, {"hunting_ground": {}}, ranking, None, top_k=5)
+    codes = [c["code"] for c in cands]
+    assert "000001" in codes
+    assert "00011" not in codes

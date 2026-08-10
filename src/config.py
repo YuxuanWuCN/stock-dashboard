@@ -38,6 +38,8 @@ MAX_RETRIES = 2
 
 # 单只标的有效行数低于此值视为抓取失败
 MIN_VALID_ROWS = 20
+# 数据过期判定：个股最后交易日距今超过 N 天视为数据过期（stale）
+STALE_DATA_DAYS = int(os.environ.get("STALE_DATA_DAYS", "10"))
 
 # ============================================================
 # 均线参数

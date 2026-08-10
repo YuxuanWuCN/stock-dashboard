@@ -42,6 +42,7 @@ from src.config import (
     MAX_RETRIES as KLINE_MAX_RETRIES,
     MIN_VALID_ROWS,
     MA_WINDOWS,
+    STALE_DATA_DAYS,
     WATCHLIST_PATH,
     DATA_DIR,
     KLINE_DIR,
@@ -805,7 +806,7 @@ def build_ranking(
 
     # 风险收益榜：按 risk_adjusted_score 降序（null 排最后）
     succeeded.sort(
-        key=lambda r: r["composite"]["risk_adjusted"] if r["composite"]["risk_adjusted"] is not None else -999,
+        key=lambda r: (not r.get("stale", False), r["composite"]["risk_adjusted"] if r["composite"]["risk_adjusted"] is not None else -999),
         reverse=True,
     )
 
@@ -1197,7 +1198,18 @@ def main() -> int:
                 continue
 
             # 全量分析
+            # v2.12 数据过期检测：最后交易日距今超过阈值 → 标记 stale，不参与推荐
+            data_is_stale = False
+            try:
+                _last_bar = df_5y["date"].iloc[-1]
+                _last_d = _last_bar.date() if hasattr(_last_bar, "date") else pd.to_datetime(str(_last_bar)).date()
+                data_is_stale = (beijing_today() - _last_d).days > STALE_DATA_DAYS
+            except Exception:
+                pass
+
             result = analyze_single(item, df_5y, industry_provider, all_latest_values)
+            if data_is_stale:
+                result["stale"] = True
             analysis_results[code] = result
             logger.info("%s(%s) ✓ 分析完成", item["name"], code)
 

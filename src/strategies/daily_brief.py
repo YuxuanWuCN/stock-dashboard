@@ -106,6 +106,8 @@ def build_candidates(
         if not code or code in seen:
             continue
         seen.add(code)
+        if item.get("stale"):
+            continue  # v2.12 数据过期不参与推荐
         forecast = (item.get("forecast") or {}) or {}
         candidates.append({
             "code": code,

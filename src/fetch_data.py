@@ -16,7 +16,7 @@ import sys
 import time
 import traceback
 import urllib.request
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Optional
 
 # ---- 在 import akshare 之前清除系统代理 ----
@@ -811,8 +811,8 @@ def build_summary_and_meta(
                 if pd.notna(last_row.get("change_amt"))
                 else None
             ),
-            "last_date": trade_date_str,
-            "status": "ok",
+            "last_date": str(last_row["date"])[:10],
+            "status": "stale" if (beijing_today() - pd.to_datetime(last_row["date"]).date()).days > STALE_DATA_DAYS else "ok",
         })
 
     summary = {"items": summary_items}
