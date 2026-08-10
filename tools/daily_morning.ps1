@@ -1,4 +1,4 @@
-﻿# daily_morning.ps1 —— 早上 8:00 美股补数据任务
+# daily_morning.ps1 —— 早上 8:00 美股补数据任务
 #
 # 背景：晚上 18:00 运行时美股尚未开盘，美股行情停留在上一个美股交易日（滞后一天）。
 # 本任务在美股收盘后（北京时间次日早上）重新抓取全市场数据，重新生成排行榜/AI研报
@@ -39,6 +39,9 @@ Write-Log ("build_ranking 退出码: " + $LASTEXITCODE)
 # 3) 模拟盘绩效记录（按数据实际交易日去重覆盖，修正前一交易日的美股部分）
 & $py tools\paper_portfolio.py report *>> $logFile
 Write-Log ("paper_portfolio 退出码: " + $LASTEXITCODE)
+# 3.x) 全池等权基准对照组（全部自选股买入持有，累计净值曲线）
+& $py tools\paper_portfolio.py benchmark *>> $logFile
+Write-Log ("paper_portfolio benchmark 退出码: " + $LASTEXITCODE)
 
 # 4) 提交并推送数据（仅当有变化）
 git add docs/data

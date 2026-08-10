@@ -105,3 +105,73 @@ def test_multi_portfolio_scan(tmp_path, monkeypatch):
     assert pp.report(str(data / "paper" / "portfolio_aggressive.json")) == 0
     perf = json.loads((data / "paper" / "performance_aggressive.json").read_text(encoding="utf-8"))
     assert perf["records"][-1]["valid_count"] == 1
+
+def test_benchmark_records_daily_return(tmp_path, monkeypatch):
+    """全池等权日收益=有效股票涨跌幅平均，首次记录累计=当日。"""
+    data = _setup(tmp_path)
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "SUMMARY_PATH", str(data / "summary.json"))
+    monkeypatch.setattr(pp, "BENCHMARK_PATH", str(data / "paper" / "benchmark.json"))
+    monkeypatch.setattr(pp, "KLINE_DIR", str(data / "kline"))
+    assert pp.benchmark() == 0
+    bm = json.loads((data / "paper" / "benchmark.json").read_text(encoding="utf-8"))
+    rec = bm["records"][-1]
+    assert rec["trade_date"] == "2026-08-07"
+    assert rec["daily_return_pct"] == 0.5          # (2.0 + (-1.0)) / 2
+    assert rec["cumulative_return_pct"] == 0.5
+    assert rec["valid_count"] == 2
+
+
+def test_benchmark_dedup_same_day(tmp_path, monkeypatch):
+    """同一天重复记录会覆盖而不是追加。"""
+    data = _setup(tmp_path)
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "SUMMARY_PATH", str(data / "summary.json"))
+    monkeypatch.setattr(pp, "BENCHMARK_PATH", str(data / "paper" / "benchmark.json"))
+    monkeypatch.setattr(pp, "KLINE_DIR", str(data / "kline"))
+    assert pp.benchmark() == 0
+    assert pp.benchmark() == 0
+    bm = json.loads((data / "paper" / "benchmark.json").read_text(encoding="utf-8"))
+    assert len(bm["records"]) == 1
+
+
+def test_benchmark_backfills_from_kline(tmp_path, monkeypatch):
+    """首次运行且模拟盘有起点时，用 kline 回填起点当日收益，累计从起点计算。"""
+    summary = {
+        "items": [
+            {"code": "600519", "name": "贵州茅台", "change_pct": 1.0, "last_date": "2026-08-10", "status": "ok"},
+            {"code": "000001", "name": "平安银行", "change_pct": -1.0, "last_date": "2026-08-10", "status": "ok"},
+        ]
+    }
+    data = _setup(tmp_path, summary=summary)
+    _write_json(data / "paper" / "performance.json", {
+        "schema_version": "1.0", "portfolio_name": "x",
+        "records": [{"trade_date": "2026-08-07"}],
+    })
+    # kline：600519 8/6=10 → 8/7=10.5 (+5%)；000001 8/6=5 → 8/7=4.8 (-4%)
+    _write_json(data / "kline" / "600519.json", {
+        "code": "600519", "name": "贵州茅台",
+        "dates": ["2026-08-06", "2026-08-07"],
+        "kline": [[0, 10, 0, 0], [0, 10.5, 0, 0]], "volume": [1, 1],
+    })
+    _write_json(data / "kline" / "000001.json", {
+        "code": "000001", "name": "平安银行",
+        "dates": ["2026-08-06", "2026-08-07"],
+        "kline": [[0, 5, 0, 0], [0, 4.8, 0, 0]], "volume": [1, 1],
+    })
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "SUMMARY_PATH", str(data / "summary.json"))
+    monkeypatch.setattr(pp, "PERFORMANCE_PATH", str(data / "paper" / "performance.json"))
+    monkeypatch.setattr(pp, "BENCHMARK_PATH", str(data / "paper" / "benchmark.json"))
+    monkeypatch.setattr(pp, "KLINE_DIR", str(data / "kline"))
+    assert pp.benchmark() == 0
+    bm = json.loads((data / "paper" / "benchmark.json").read_text(encoding="utf-8"))
+    assert len(bm["records"]) == 2
+    first = bm["records"][0]
+    assert first["trade_date"] == "2026-08-07"
+    assert first["source"] == "kline_backfill"
+    assert first["daily_return_pct"] == 0.5         # (5 + (-4)) / 2
+    last = bm["records"][1]
+    assert last["trade_date"] == "2026-08-10"
+    assert last["daily_return_pct"] == 0.0          # (1 + (-1)) / 2
+    assert abs(last["cumulative_return_pct"] - 0.5) < 0.01  # (1+0.5%)*(1+0%)-1

@@ -40,6 +40,9 @@ Write-Log ("daily_brief 退出码: " + $LASTEXITCODE)
 # 3.6) 模拟盘组合绩效记录（对比组合 vs 等权基准）
 & $py tools\paper_portfolio.py report *>> $logFile
 Write-Log ("paper_portfolio 退出码: " + $LASTEXITCODE)
+# 3.x) 全池等权基准对照组（全部自选股买入持有，累计净值曲线）
+& $py tools\paper_portfolio.py benchmark *>> $logFile
+Write-Log ("paper_portfolio benchmark 退出码: " + $LASTEXITCODE)
 # 4) 提交并推送数据（仅当有变化）
 git add docs/data
 if (-not (git diff --cached --quiet)) {

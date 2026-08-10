@@ -29,6 +29,7 @@
             <button type="button" class="app-nav-btn" data-page="ranking">📊 排行榜</button>
             <button type="button" class="app-nav-btn" data-page="query">🔍 单股查询</button>
             <button type="button" class="app-nav-btn" data-page="detail">📈 个股研究</button>
+            <button type="button" class="app-nav-btn" data-page="paper">💼 模拟盘</button>
         </nav>
 
         <!-- 主框架：左侧功能导航 + 中间内容区 -->
@@ -40,6 +41,7 @@
                 <button type="button" class="page-sidebar-btn" data-page="ranking">📊 排行榜</button>
                 <button type="button" class="page-sidebar-btn" data-page="query">🔍 单股查询</button>
                 <button type="button" class="page-sidebar-btn" data-page="detail">📈 个股研究</button>
+                <button type="button" class="page-sidebar-btn" data-page="paper">💼 模拟盘</button>
             </aside>
             <main class="app-main">
 
@@ -353,6 +355,38 @@
                     <div id="index-chart" class="chart-element index-chart-element"></div>
                 </div>
                                 </div>
+                </section>
+
+                <!-- 页面：模拟盘对比 -->
+                <section class="page" data-page="paper" id="page-paper" hidden>
+                    <div class="paper-page">
+                        <div class="paper-heading">
+                            <h2>💼 模拟盘对比</h2>
+                            <p id="paper-meta" class="paper-meta">正在读取数据...</p>
+                        </div>
+                        <div id="paper-cards" class="paper-cards"></div>
+                        <section class="paper-section" aria-labelledby="paper-curve-title">
+                            <h3 id="paper-curve-title">📈 累计净值曲线（起点 = 100）</h3>
+                            <div id="paper-curve" class="paper-curve"></div>
+                        </section>
+                        <section class="paper-section" aria-labelledby="paper-compare-title">
+                            <h3 id="paper-compare-title">📅 每日收益对比</h3>
+                            <div id="paper-compare-wrap" class="paper-table-wrap" hidden>
+                                <table class="paper-table">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>稳健组合</th>
+                                            <th>激进组合</th>
+                                            <th>全池等权基准</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="paper-compare-tbody"></tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <p class="paper-disclaimer">模拟盘与等权基准均为研究用途，不构成投资建议，市场有风险，入市需谨慎。</p>
+                    </div>
                 </section>
             </main>
         </div>

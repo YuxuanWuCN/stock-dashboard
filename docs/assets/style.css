@@ -2613,3 +2613,25 @@ body {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
 }
+
+/* ========== 模拟盘对比页 ========== */
+.paper-page { display: flex; flex-direction: column; gap: 18px; padding: 4px 2px; }
+.paper-heading h2 { margin: 0 0 4px; font-size: 20px; }
+.paper-meta { margin: 0; font-size: 12px; color: #6b7280; }
+.paper-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.paper-card { background: var(--card-bg, #fff); border: 1px solid var(--border-color, #e5e7eb); border-top: 3px solid #3b82f6; border-radius: 10px; padding: 12px 14px; }
+.paper-card-name { font-weight: 600; margin-bottom: 8px; }
+.paper-card-row { font-size: 13px; color: #4b5563; padding: 2px 0; display: flex; justify-content: space-between; }
+.paper-card-value { font-weight: 600; color: #111827; }
+.paper-section h3 { font-size: 15px; margin: 0 0 8px; }
+.paper-curve { background: var(--card-bg, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 10px; padding: 12px; }
+.paper-empty { color: #9ca3af; font-size: 13px; padding: 30px 0; text-align: center; }
+.paper-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: #374151; }
+.paper-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.paper-legend-item i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.paper-table-wrap { overflow-x: auto; }
+.paper-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.paper-table th, .paper-table td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--border-color, #e5e7eb); }
+.paper-table th:first-child, .paper-table td:first-child { text-align: left; }
+.paper-table th { background: var(--muted-bg, #f3f4f6); color: #374151; }
+.paper-disclaimer { font-size: 11px; color: #9ca3af; margin: 4px 0 0; }
