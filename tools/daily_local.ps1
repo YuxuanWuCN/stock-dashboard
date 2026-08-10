@@ -10,7 +10,7 @@ Set-Location $repo
 $env:PYTHONIOENCODING = "utf-8"
 $env:PYTHONUTF8 = "1"
 $env:STOCK_PROXY = "direct"  # 直连模式：避免 Clash 代理导致东财连接失败
-$env:LLM_DAILY_CALL_LIMIT = "400"  # 全量生成22只AI报告需要更多API调用额度
+$env:LLM_DAILY_CALL_LIMIT = "800"  # 202只自选股AI研报增量生成额度（防截断）
 $py = Join-Path $repo ".venv\Scripts\python.exe"
 $logFile = Join-Path $repo ".quality-state\daily_local.log"
 
