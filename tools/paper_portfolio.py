@@ -18,6 +18,7 @@ from src.utils import beijing_date_str, beijing_datetime_str
 PORTFOLIO_PATH = os.path.join(DATA_DIR, "paper", "portfolio.json")
 PERFORMANCE_PATH = os.path.join(DATA_DIR, "paper", "performance.json")
 SUMMARY_PATH = os.path.join(DATA_DIR, "summary.json")
+RANKING_PATH = os.path.join(DATA_DIR, "analysis", "ranking.json")
 
 
 def _load_json(path):
@@ -53,6 +54,17 @@ def _performance_path_for(portfolio_path: str) -> str:
 def report(portfolio_path: str = None) -> int:
     portfolio = _load_json(portfolio_path or PORTFOLIO_PATH)
     summary = _load_json(SUMMARY_PATH)
+    ranking = _load_json(RANKING_PATH)
+    pred_map = {}
+    if ranking:
+        for it in ranking.get("items", []):
+            fc = it.get("forecast") or {}
+            pred_map[it.get("code")] = {
+                "up3": fc.get("up_probability_3d_pct"),
+                "ret3": fc.get("return_3d_pct"),
+                "up5": fc.get("up_probability_5d_pct"),
+                "ret5": fc.get("return_5d_pct"),
+            }
     if not portfolio or not summary:
         print("缺少 portfolio.json 或 summary.json")
         return 1
@@ -82,7 +94,8 @@ def report(portfolio_path: str = None) -> int:
             skipped.append({"code": code, "name": item.get("name"), "reason": "no_change"})
             rows.append({"code": code, "name": item.get("name"), "change_pct": None, "note": "无涨跌数据"})
             continue
-        rows.append({"code": code, "name": item.get("name"), "change_pct": chg})
+        p = pred_map.get(code, {})
+        rows.append({"code": code, "name": item.get("name"), "change_pct": chg, "pred_up3": p.get("up3"), "pred_ret3": p.get("ret3"), "pred_up5": p.get("up5"), "pred_ret5": p.get("ret5")})
         total_weight += pct
         weighted_return += pct * chg
         valid_changes.append(chg)
