@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         dailyBrief: null,
         // v2.11 自选股分区筛选
         watchlistRegion: 'all',
+        // v2.12 自选股搜索
+        watchlistSearch: '',
         // 当前选中的股票切片数据，供 tooltip 使用
         activeData: {
             dates: [],
@@ -77,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
         paperCompareWrap: document.getElementById('paper-compare-wrap'),
         stockList: document.getElementById('stock-list'),
         watchlistFilter: document.getElementById('watchlist-filter'),
+        watchlistSearchInput: document.getElementById('watchlist-search-input'),
+        watchlistSearchClear: document.getElementById('watchlist-search-clear'),
         detailHeader: document.getElementById('detail-header'),
         detailName: document.getElementById('detail-name'),
         detailCode: document.getElementById('detail-code'),
@@ -420,6 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state.summary && state.summary.items && state.summary.items.length > 0) {
                 renderStockList();
                 initWatchlistFilter();
+                initWatchlistSearch();
 
             } else {
                 el.stockList.innerHTML = '<div class="list-loading text-down">暂无自选股数据</div>';
@@ -677,6 +682,25 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    // 自选股搜索（v2.12：名称/代码包含，与分区筛选组合生效）
+    function initWatchlistSearch() {
+        if (!el.watchlistSearchInput) return;
+        el.watchlistSearchInput.addEventListener('input', function (ev) {
+            if (ev.isComposing) return; // 中文输入法组合期间不触发
+            state.watchlistSearch = el.watchlistSearchInput.value;
+            if (el.watchlistSearchClear) el.watchlistSearchClear.hidden = !state.watchlistSearch;
+            renderStockList();
+        });
+        if (el.watchlistSearchClear) {
+            el.watchlistSearchClear.addEventListener('click', function () {
+                el.watchlistSearchInput.value = '';
+                state.watchlistSearch = '';
+                el.watchlistSearchClear.hidden = true;
+                renderStockList();
+            });
+        }
+    }
+
     // 渲染股票列表（v2.11 分区：A股/港股/美股/韩股/基金）
     function renderStockList() {
         const regionOrder = ['stock', 'hk', 'us', 'kr', 'etf'];
@@ -690,16 +714,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 按行业分组（尊重顶部市场筛选）
         const groups = {};
+        const searchQ = (state.watchlistSearch || '').trim().toLowerCase();
         state.summary.items.forEach(item => {
             const region = regionOf(item);
             if (state.watchlistRegion !== 'all' && region !== state.watchlistRegion) return;
+            if (searchQ && !((item.name || item.code).toLowerCase().includes(searchQ) || String(item.code || '').toLowerCase().includes(searchQ))) return;
             const industry = item.category || (region === 'etf' ? '基金' : '未分类');
             if (!groups[industry]) groups[industry] = [];
             groups[industry].push(item);
         });
         const orderedRegions = Object.keys(groups).sort((a, b) => groups[b].length - groups[a].length);
         if (orderedRegions.length === 0) {
-            el.stockList.innerHTML = '<div class="list-loading">该分区暂无股票</div>';
+            el.stockList.innerHTML = searchQ
+                ? '<div class="list-loading">没有找到匹配的股票</div>'
+                : '<div class="list-loading">该分区暂无股票</div>';
             return;
         }
 
