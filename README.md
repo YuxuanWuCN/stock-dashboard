@@ -287,39 +287,40 @@ A：按需求方要求，本期只做 K 线 + 均线 + 成交量，复杂指标�
 
 ```
 stock-dashboard/
-├── .github/workflows/
-│   ├── daily.yml                    K 线数据抓取：每交易日 18:30
-│   └── analysis.yml                 排行榜分析：每交易日 17:30
-├── src/
-│   ├── fetch_data.py                主脚本：抓取+计算+产出 K 线数据
-│   ├── build_ranking.py             排行榜主脚本：抓取 5 年数据+分析+评分
-│   ├── config.py                    配置区
-│   ├── utils.py                     工具函数
-│   ├── server.py                    Flask API 服务
-│   └── analysis/
-│       ├── config.py                分析系统参数与权重
-│       ├── indicators.py            技术指标（RSI/MACD/ATR/布林带等）
-│       ├── industry.py              行业板块数据与映射
-│       ├── similarity.py            历史相似走势 KNN 匹配
-│       ├── scoring.py               评分系统（风险/技术/行业/综合）
-│       └── schema.py                输出数据校验
-├── tests/
-│   ├── test_server.py               API 测试
-│   └── test_analysis.py             分析系统完整测试
-├── watchlist.csv                  自选股列表（可自行编辑）
-├── docs/                          GitHub Pages 发布目录
-│   ├── index.html                 看板主页面
-│   ├── assets/
-│   │   ├── app.js
-│   │   └── style.css
-│   └── data/                      程序自动生成，勿手动修改
-│       ├── summary.json
-│       ├── meta.json
-│       ├── kline/*.json
-│       └── analysis/              排行榜分析数据
-│           ├── ranking.json
-│           └── {code}.json
-└── requirements.txt
+├── README.md                   项目总说明（从零配置教程）
+├── AGENTS.md                   质量门禁规则
+├── QUALITY_WORKFLOW.md         质量工作流入口（完整规则见 WORKFLOW.md）
+├── WORKFLOW.md                 质量门禁完整规则
+├── 项目背书.md                   项目立项背书
+├── requirements.txt            Python 依赖
+├── render.yaml                 Render 云端部署配置（备用）
+├── start_local.bat / start_local.py   本地一键启动
+├── watchlist.csv               自选股/基金列表（可自行编辑）
+├── strategy_pool.csv           策略扩展股票池
+├── .env.example                密钥配置模板（真实密钥放 .env，勿提交）
+├── src/                        后端源码
+│   ├── fetch_data.py           抓取行情（A股/港股/美股/韩股/ETF/基金）
+│   ├── build_ranking.py        排行榜构建
+│   ├── server.py               Flask API 服务
+│   ├── config.py / utils.py / proxy.py / market_feedback.py
+│   ├── analysis/               技术指标、行业、评分（规则引擎）
+│   ├── llm/                    FinGPT 风格 LLM 分析管线（DeepSeek V4 Flash）
+│   └── strategies/             策略选股引擎（KHunter 合并）、明日关注
+├── tools/                      自动化与工具
+│   ├── daily_local.ps1         每日本地自动任务（抓取→排行→策略→模拟盘→推送）
+│   ├── paper_portfolio.py      模拟盘对决记录（稳健 vs 激进）
+│   ├── aggressive_scan.py      全库激进扫描
+│   └── run_quality.ps1 / quality_gate.py   质量门禁
+├── tests/                      pytest 测试
+├── config/strategy_params.json 策略参数
+├── docs/                       GitHub Pages 发布目录（data/ 勿手动修改）
+│   ├── index.html / assets/
+│   └── data/                   程序自动生成（kline/analysis/llm/strategy/paper/fundamental）
+├── 项目规划/                    项目规划文档（01-05）+ 人工需求idea/
+├── 测试记录/版本/                各版本测试记录
+├── reports/                    研究报告（assumptions.md、单股分析 data/）
+├── bug合集/                     质量门禁 bug 归档
+└── .github/workflows/          云端自动化（已停用，现由本地计划任务代替）
 ```
 
 ---
