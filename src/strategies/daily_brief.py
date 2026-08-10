@@ -198,6 +198,23 @@ def _parse_llm_json(raw: str, candidates: list) -> Optional[dict]:
     }
 
 
+
+_WEEKDAYS = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+
+
+def _next_trade_date(trade_date_str: str) -> tuple:
+    """从最近交易日推算下一个交易日（跳过周末）。返回 (日期, 中文星期)。"""
+    from datetime import date, timedelta
+
+    try:
+        d = date.fromisoformat(str(trade_date_str)[:10])
+    except ValueError:
+        return str(trade_date_str), ""
+    d += timedelta(days=1)
+    while d.weekday() >= 5:  # 5=周六 6=周日
+        d += timedelta(days=1)
+    return d.isoformat(), _WEEKDAYS[d.weekday()]
+
 def _template_brief(candidates: list, temperature: Optional[dict], trade_date: str) -> dict:
     """LLM 不可用时的规则模板（保证页面始终有内容且不报错）。"""
     position_hint = ""
@@ -343,6 +360,8 @@ def generate_daily_brief(
         "schema_version": "1.0",
         "generated_at": beijing_datetime_str(),
         "trade_date": trade_date,
+        "next_trade_date": _next_trade_date(trade_date)[0],
+        "next_trade_label": _next_trade_date(trade_date)[1],
         "mode": mode,
         "llm_metadata": llm_metadata,
         "top_k": len(candidates),

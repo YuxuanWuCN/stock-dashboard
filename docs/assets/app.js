@@ -452,9 +452,17 @@ document.addEventListener('DOMContentLoaded', () => {
             return; // 无数据保持 hidden
         }
         el.dailyBriefSection.hidden = false;
-        if (brief.title) el.dailyBriefTitle.textContent = brief.title;
+        // 标题：周一重点关注（基于上一交易日分析）
+        const briefWeekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+        const nextLabel = brief.next_trade_label || '';
+        el.dailyBriefTitle.textContent = '📋 ' + (nextLabel ? nextLabel + '重点关注' : '明日重点关注');
         const modeText = (brief.mode === 'deepseek_api') ? 'AI 生成' : '自动生成';
-        el.dailyBriefMeta.textContent = '数据截至 ' + (brief.trade_date || '--') + ' 收盘 · ' + modeText + '（研究参考，不构成买卖建议）';
+        let tradeWeek = '';
+        if (brief.trade_date) {
+            const d = new Date(String(brief.trade_date) + 'T00:00:00');
+            if (!isNaN(d.getTime())) tradeWeek = '（' + briefWeekdays[d.getDay()] + '）';
+        }
+        el.dailyBriefMeta.textContent = '基于 ' + (brief.trade_date || '--') + tradeWeek + ' 收盘分析 · 推荐 ' + (brief.next_trade_date || '--') + (nextLabel ? '（' + nextLabel + '）' : '') + ' 关注 · ' + modeText + '（研究参考，不构成买卖建议）';
         el.dailyBriefSummary.textContent = brief.summary;
         const focus = brief.focus || [];
         if (focus.length > 0) {

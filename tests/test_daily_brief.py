@@ -291,3 +291,20 @@ def test_frontend_css_has_brief_styles():
 def db_path(relative):
     from pathlib import Path
     return (Path(__file__).resolve().parents[1] / relative).read_text(encoding="utf-8")
+def test_next_trade_date_fields():
+    """payload 必须带下一个交易日（跳过周末）：8/7 周五 -> 8/10 周一。"""
+    import tempfile
+    from pathlib import Path
+    tmp = Path(tempfile.mkdtemp())
+    data = _setup_data_dir(tmp)
+    payload = generate_daily_brief(data_dir=str(data), use_llm=False, output_path=str(tmp / "b.json"))
+    assert payload["trade_date"] == "2026-08-07"
+    assert payload["next_trade_date"] == "2026-08-10"
+    assert payload["next_trade_label"] == "周一"
+
+
+def test_frontend_shows_analysis_and_recommend_dates():
+    app = db_path("docs/assets/app.js")
+    assert "基于 " in app and "收盘分析" in app
+    assert "next_trade_label" in app
+    assert "重点关注" in app
