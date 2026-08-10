@@ -175,3 +175,31 @@ def test_benchmark_backfills_from_kline(tmp_path, monkeypatch):
     assert last["trade_date"] == "2026-08-10"
     assert last["daily_return_pct"] == 0.0          # (1 + (-1)) / 2
     assert abs(last["cumulative_return_pct"] - 0.5) < 0.01  # (1+0.5%)*(1+0%)-1
+
+def test_manifest_lists_all_portfolios(tmp_path, monkeypatch):
+    """组合清单包含全部 portfolio 文件与基准，is_benchmark 标记正确。"""
+    data = _setup(tmp_path)
+    # 多创建两个组合文件（防守 + 科技）
+    _write_json(data / "paper" / "portfolio_defensive.json", {
+        "name": "防守红利组合", "color": "#0ea5e9", "risk_profile": "defensive",
+        "items": [{"code": "600519", "name": "贵州茅台", "pct": 10}],
+    })
+    _write_json(data / "paper" / "portfolio_tech.json", {
+        "name": "科技成长组合", "color": "#8b5cf6", "risk_profile": "aggressive",
+        "items": [{"code": "00700", "name": "腾讯控股", "pct": 10}],
+    })
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "BENCHMARK_PATH", str(data / "paper" / "benchmark.json"))
+    monkeypatch.setattr(pp, "MANIFEST_PATH", str(data / "paper" / "manifest.json"))
+    assert pp.manifest() == 0
+    manifest = json.loads((data / "paper" / "manifest.json").read_text(encoding="utf-8"))
+    keys = [e["key"] for e in manifest["portfolios"]]
+    assert "steady" in keys and "defensive" in keys and "tech" in keys
+    # 普通组合按 key 升序，基准线固定排在最后
+    assert keys[-1] == "benchmark"
+    assert keys[:-1] == sorted(keys[:-1])
+    bench = [e for e in manifest["portfolios"] if e["is_benchmark"]]
+    assert len(bench) == 1 and bench[0]["key"] == "benchmark"
+    for e in manifest["portfolios"]:
+        assert e["file"].endswith(".json")
+        assert e["name"]

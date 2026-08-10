@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function init() {
         try {
             // 并行加载元数据、汇总、排行榜、自选股与 v2.5 策略数据
-            const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes, briefRes, steadyRes, aggressiveRes, benchmarkRes] = await Promise.all([
+            const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes, briefRes, manifestRes] = await Promise.all([
                 fetch(dataUrl('data/meta.json')).then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
                     return null;
@@ -373,25 +373,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.warn('v2.10 明日重点关注未加载（可跳过）:', err);
                     return null;
                 }),
-                fetch(dataUrl('data/paper/performance.json')).then(r => {
+                fetch(dataUrl('data/paper/manifest.json')).then(r => {
                     if (!r.ok) throw new Error(`HTTP ${r.status}`);
                     return r.json();
                 }).catch(err => {
-                    console.warn('模拟盘数据未加载（可跳过）:', err);
-                    return null;
-                }),
-                fetch(dataUrl('data/paper/performance_aggressive.json')).then(r => {
-                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-                    return r.json();
-                }).catch(err => {
-                    console.warn('激进组合数据未加载（可跳过）:', err);
-                    return null;
-                }),
-                fetch(dataUrl('data/paper/benchmark.json')).then(r => {
-                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-                    return r.json();
-                }).catch(err => {
-                    console.warn('等权基准数据未加载（可跳过）:', err);
+                    console.warn('模拟盘清单未加载（可跳过）:', err);
                     return null;
                 })
             ]);
@@ -403,9 +389,8 @@ document.addEventListener('DOMContentLoaded', () => {
             state.huntingGround = huntingRes;
             state.marketTemperature = tempRes;
             state.dailyBrief = briefRes;
-            state.paperSteady = steadyRes;
-            state.paperAggressive = aggressiveRes;
-            state.paperBenchmark = benchmarkRes;
+            state.paperManifest = manifestRes;
+            state.paperSeries = [];
             state.watchlist = combineWatchlists(
                 watchlistRes && watchlistRes.items,
                 readBrowserWatchlist()
@@ -433,7 +418,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             initRankingModule();
 
-            // 渲染模拟盘对比（数据缺失时静默降级）
+            // 渲染模拟盘对比：按清单加载全部组合（数据缺失时静默降级）
+            await loadPaperSeries();
             renderPaper();
 
             const firstRankingItem = state.ranking && state.ranking.items && state.ranking.items[0];
@@ -2068,89 +2054,104 @@ document.addEventListener('DOMContentLoaded', () => {
         return out;
     }
 
+    async function loadPaperSeries() {
+        var manifest = state.paperManifest;
+        var list = (manifest && manifest.portfolios) || [];
+        var loaded = [];
+        for (var i = 0; i < list.length; i++) {
+            var p = list[i];
+            try {
+                var res = await fetch(dataUrl('data/' + p.file));
+                if (!res.ok) continue;
+                var j = await res.json();
+                loaded.push({
+                    key: p.key,
+                    name: p.name,
+                    color: p.color,
+                    description: p.description,
+                    isBenchmark: !!p.is_benchmark,
+                    points: buildPaperSeries(j.records || [])
+                });
+            } catch (e) {
+                console.warn('加载组合数据失败:', p.file, e);
+            }
+        }
+        state.paperSeries = loaded;
+    }
+
     function renderPaper() {
-        var steady = state.paperSteady, aggressive = state.paperAggressive, bench = state.paperBenchmark;
-        var hasAny = (steady && steady.records && steady.records.length)
-            || (aggressive && aggressive.records && aggressive.records.length)
-            || (bench && bench.records && bench.records.length);
-        if (!hasAny) {
+        var portfolios = state.paperSeries || [];
+        if (!portfolios.length) {
             el.paperMeta.textContent = '暂无模拟盘数据，每日收盘后自动记录。';
             return;
         }
-        var series = {
-            steady: buildPaperSeries(steady && steady.records),
-            aggressive: buildPaperSeries(aggressive && aggressive.records),
-            benchmark: buildPaperSeries(bench && bench.records)
-        };
-        var starts = [];
-        ['steady', 'aggressive', 'benchmark'].forEach(function (k) {
-            if (series[k].length) starts.push(series[k][0].date);
-        });
-        el.paperMeta.textContent = starts.length ? ('对照起点：' + starts.join(' / ') + '，每日收盘后自动更新。') : '';
+        var starts = portfolios.map(function (s) {
+            return s.points.length ? s.points[0].date : null;
+        }).filter(Boolean);
+        el.paperMeta.textContent = starts.length
+            ? ('对照起点：' + starts.join(' / ') + '，每日收盘后自动更新。')
+            : '';
 
-        var cards = [
-            { key: 'steady', name: '🛡️ 稳健组合', color: '#2f9e6e' },
-            { key: 'aggressive', name: '⚡ 激进组合', color: '#d97706' },
-            { key: 'benchmark', name: '📊 全池等权基准（全部自选股）', color: '#3b82f6' }
-        ];
-        el.paperCards.innerHTML = cards.map(function (card) {
-            var s = series[card.key];
-            var last = s.length ? s[s.length - 1] : null;
-            var first = s.length ? s[0] : null;
+        el.paperCards.innerHTML = portfolios.map(function (s) {
+            var last = s.points.length ? s.points[s.points.length - 1] : null;
+            var first = s.points.length ? s.points[0] : null;
             var total = (last && first) ? (last.nav / 100 - 1) * 100 : null;
-            return '<div class="paper-card" style="border-top-color:' + card.color + '">' +
-                '<div class="paper-card-name">' + card.name + '</div>' +
+            return '<div class="paper-card" style="border-top-color:' + s.color + '">' +
+                '<div class="paper-card-name">' + (s.isBenchmark ? '📊 ' : '') + s.name + '</div>' +
                 '<div class="paper-card-row">当日 <span class="paper-card-value">' + _paperPct(last ? last.daily : null) + '</span></div>' +
                 '<div class="paper-card-row">累计 <span class="paper-card-value">' + _paperPct(total) + '</span></div>' +
-                '<div class="paper-card-row">' + s.length + ' 个交易日' + (first ? '（自 ' + first.date + '）' : '') + '</div>' +
+                '<div class="paper-card-row">' + s.points.length + ' 个交易日' + (first ? '（自 ' + first.date + '）' : '') + '</div>' +
                 '</div>';
         }).join('');
 
-        renderPaperCurve(series);
+        renderPaperCurve(portfolios);
 
+        var thead = document.querySelector('#paper-compare-wrap thead tr');
+        if (thead) {
+            thead.innerHTML = '<th>日期</th>' + portfolios.map(function (s) {
+                return '<th>' + s.name + '</th>';
+            }).join('');
+        }
         var dates = {};
-        ['steady', 'aggressive', 'benchmark'].forEach(function (k) {
-            series[k].forEach(function (p) {
+        portfolios.forEach(function (s) {
+            s.points.forEach(function (p) {
                 dates[p.date] = dates[p.date] || {};
-                dates[p.date][k] = p.daily;
+                dates[p.date][s.key] = p.daily;
             });
         });
         var dateList = Object.keys(dates).sort();
         if (dateList.length) {
             el.paperCompareWrap.hidden = false;
             el.paperCompareTbody.innerHTML = dateList.slice().reverse().map(function (d) {
-                return '<tr><td>' + d + '</td>' +
-                    '<td>' + _paperPct(dates[d].steady) + '</td>' +
-                    '<td>' + _paperPct(dates[d].aggressive) + '</td>' +
-                    '<td>' + _paperPct(dates[d].benchmark) + '</td></tr>';
+                return '<tr><td>' + d + '</td>' + portfolios.map(function (s) {
+                    return '<td>' + _paperPct(dates[d][s.key]) + '</td>';
+                }).join('') + '</tr>';
             }).join('');
         }
     }
 
-    function renderPaperCurve(series) {
+    function renderPaperCurve(portfolios) {
         var W = 720, H = 260, padL = 46, padR = 12, padT = 16, padB = 28;
         var allDates = {};
-        ['steady', 'aggressive', 'benchmark'].forEach(function (k) {
-            series[k].forEach(function (p) { allDates[p.date] = 1; });
+        portfolios.forEach(function (s) {
+            s.points.forEach(function (p) { allDates[p.date] = 1; });
         });
         var dates = Object.keys(allDates).sort();
         if (dates.length < 2) {
             el.paperCurve.innerHTML = '<div class="paper-empty">数据不足，暂无法绘制曲线</div>';
             return;
         }
-        function align(k) {
-            var s = series[k];
+        function align(s) {
             var map = {};
-            s.forEach(function (p) { map[p.date] = p.nav; });
+            s.points.forEach(function (p) { map[p.date] = p.nav; });
             var last = 100;
             return dates.map(function (d) { last = map[d] || last; return last; });
         }
-        var lines = {
-            steady: align('steady'),
-            aggressive: align('aggressive'),
-            benchmark: align('benchmark')
-        };
-        var allVals = [100].concat(lines.steady, lines.aggressive, lines.benchmark);
+        var lines = portfolios.map(function (s) {
+            return { key: s.key, name: s.name, color: s.color, vals: align(s) };
+        });
+        var allVals = [100];
+        lines.forEach(function (l) { allVals = allVals.concat(l.vals); });
         var minV = Math.min.apply(null, allVals) - 2;
         var maxV = Math.max.apply(null, allVals) + 2;
         function x(i) { return padL + (dates.length > 1 ? i / (dates.length - 1) * (W - padL - padR) : 0); }
@@ -2160,8 +2161,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return (i ? 'L' : 'M') + x(i).toFixed(1) + ',' + y(v).toFixed(1);
             }).join(' ');
         }
-        var colors = { steady: '#2f9e6e', aggressive: '#d97706', benchmark: '#3b82f6' };
-        var names = { steady: '稳健组合', aggressive: '激进组合', benchmark: '全池等权基准' };
         var gridY = '';
         for (var g = 0; g <= 4; g++) {
             var gy = padT + g / 4 * (H - padT - padB);
@@ -2169,8 +2168,8 @@ document.addEventListener('DOMContentLoaded', () => {
             gridY += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy + '" stroke="#e5e7eb" stroke-width="1"/>' +
                 '<text x="' + (padL - 8) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="11" fill="#6b7280">' + gv.toFixed(0) + '</text>';
         }
-        var legend = ['steady', 'aggressive', 'benchmark'].map(function (k) {
-            return '<span class="paper-legend-item"><i style="background:' + colors[k] + '"></i>' + names[k] + '</span>';
+        var legend = lines.map(function (l) {
+            return '<span class="paper-legend-item"><i style="background:' + l.color + '"></i>' + l.name + '</span>';
         }).join('');
         var xEvery = Math.max(1, Math.floor(dates.length / 6));
         var xLabels = dates.map(function (d, i) {
@@ -2179,8 +2178,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join('');
         var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="累计净值曲线" style="width:100%;height:auto">' +
             gridY + xLabels +
-            ['steady', 'aggressive', 'benchmark'].map(function (k) {
-                return '<path d="' + path(lines[k]) + '" fill="none" stroke="' + colors[k] + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+            lines.map(function (l) {
+                return '<path d="' + path(l.vals) + '" fill="none" stroke="' + l.color + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
             }).join('') +
             '</svg><div class="paper-legend">' + legend + '</div>';
         el.paperCurve.innerHTML = svg;

@@ -42,6 +42,9 @@ Write-Log ("paper_portfolio 退出码: " + $LASTEXITCODE)
 # 3.x) 全池等权基准对照组（全部自选股买入持有，累计净值曲线）
 & $py tools\paper_portfolio.py benchmark *>> $logFile
 Write-Log ("paper_portfolio benchmark 退出码: " + $LASTEXITCODE)
+# 3.y) 生成模拟盘组合清单（前端动态展示全部组合）
+& $py tools\paper_portfolio.py manifest *>> $logFile
+Write-Log ("paper_portfolio manifest 退出码: " + $LASTEXITCODE)
 
 # 4) 提交并推送数据（仅当有变化）
 git add docs/data

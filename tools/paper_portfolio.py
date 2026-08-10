@@ -20,6 +20,7 @@ PERFORMANCE_PATH = os.path.join(DATA_DIR, "paper", "performance.json")
 SUMMARY_PATH = os.path.join(DATA_DIR, "summary.json")
 RANKING_PATH = os.path.join(DATA_DIR, "analysis", "ranking.json")
 BENCHMARK_PATH = os.path.join(DATA_DIR, "paper", "benchmark.json")
+MANIFEST_PATH = os.path.join(DATA_DIR, "paper", "manifest.json")
 KLINE_DIR = os.path.join(DATA_DIR, "kline")
 
 
@@ -229,13 +230,57 @@ def benchmark() -> int:
     return 0
 
 
+def manifest() -> int:
+    """生成模拟盘组合清单（供前端动态渲染全部组合对比）。"""
+    files = _portfolio_files()
+    entries = []
+    for pf in files:
+        pdata = _load_json(pf)
+        if not pdata:
+            continue
+        perf_path = _performance_path_for(pf)
+        suffix = os.path.splitext(os.path.basename(pf))[0][len("portfolio"):]
+        entries.append({
+            "key": (suffix or "steady").lstrip("_") or "steady",
+            "file": os.path.relpath(perf_path, DATA_DIR).replace(os.sep, "/"),
+            "name": pdata.get("name", "组合" + suffix),
+            "color": pdata.get("color", "#3b82f6"),
+            "description": pdata.get("description", ""),
+            "risk_profile": pdata.get("risk_profile", ""),
+            "is_benchmark": False,
+        })
+    # 全池等权基准作为独立对照线
+    entries.append({
+        "key": "benchmark",
+        "file": os.path.relpath(BENCHMARK_PATH, DATA_DIR).replace(os.sep, "/"),
+        "name": "全池等权基准",
+        "color": "#3b82f6",
+        "description": "全部自选股等权买入持有（对照组）",
+        "risk_profile": "benchmark",
+        "is_benchmark": True,
+    })
+    entries.sort(key=lambda e: (e["is_benchmark"], e["key"]))
+    out = {
+        "schema_version": "1.0",
+        "generated_at": beijing_datetime_str(),
+        "portfolios": entries,
+    }
+    os.makedirs(os.path.dirname(MANIFEST_PATH), exist_ok=True)
+    with open(MANIFEST_PATH, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print(f"已生成组合清单：{len(entries)} 条")
+    return 0
+
+
 def main() -> int:
     import argparse
     parser = argparse.ArgumentParser(description="模拟盘绩效跟踪")
-    parser.add_argument("cmd", choices=["report", "benchmark"])
+    parser.add_argument("cmd", choices=["report", "benchmark", "manifest"])
     args = parser.parse_args()
     if args.cmd == "benchmark":
         return benchmark()
+    if args.cmd == "manifest":
+        return manifest()
     # 扫描全部组合（稳健 + 激进），逐个记录
     files = _portfolio_files()
     if not files:
