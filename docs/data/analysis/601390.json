@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 10:22:38+08:00",
-  "trade_date": "2026-08-07",
+  "generated_at": "2026-08-10 20:06:03+08:00",
+  "trade_date": "2026-08-10",
   "code": "601390",
   "name": "中国中铁",
   "type": "stock",
   "category": "基建",
   "stale": false,
   "scores": {
-    "risk_adjusted": 60.6,
-    "risk": 27.0,
+    "risk_adjusted": 47.8,
+    "risk": 22.8,
     "technical": 90.0,
-    "industry": 62.0
+    "industry": 70.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 20.88,
-    "max_drawdown_60d_pct": -16.7,
-    "atr14_pct": 2.13,
+    "annualized_volatility_20d_pct": 20.6,
+    "max_drawdown_60d_pct": -15.5,
+    "atr14_pct": 2.07,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 14.9,
-        "value": 20.88
+        "score": 13.9,
+        "value": 20.6
       },
       {
         "name": "60日最大回撤",
-        "score": 45.5,
-        "value": -16.7
+        "score": 41.1,
+        "value": -15.5
       },
       {
         "name": "ATR百分比",
-        "score": 17.3,
-        "value": 2.13
+        "score": 16.3,
+        "value": 2.07
       },
       {
         "name": "量价异常",
-        "score": 32.7,
-        "value": 0.9
+        "score": 37.1,
+        "value": 0.89
       },
       {
         "name": "行业波动",
-        "score": 29.2,
-        "value": 42.69
+        "score": 8.9,
+        "value": 40.98
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.04,
-    "return_5d_pct": 1.01,
-    "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 46.7,
+    "return_3d_pct": -0.2,
+    "return_5d_pct": -0.23,
+    "up_probability_3d_pct": 33.3,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 4.522,
-    "ma10": 4.525,
-    "ma20": 4.453,
-    "ma60": 4.4635,
-    "rsi14": 52.2,
-    "macd_dif": 0.04062604205229814,
-    "macd_dea": 0.03488244295806495,
-    "macd_hist": 0.011487198188466372,
-    "atr14_pct": 2.125332831263899,
-    "boll_position": 0.5608849794088224,
-    "return_5d_pct": -2.819956616052055,
-    "return_20d_pct": 6.666666666666665,
-    "volume_ratio_5d": 0.9
+    "trend": "uptrend",
+    "ma5": 4.5,
+    "ma10": 4.5329999999999995,
+    "ma20": 4.4704999999999995,
+    "ma60": 4.457,
+    "rsi14": 55.2,
+    "macd_dif": 0.03962700864725832,
+    "macd_dea": 0.03583135609590363,
+    "macd_hist": 0.007591305102709389,
+    "atr14_pct": 2.0666780039950936,
+    "boll_position": 0.6366194495890639,
+    "return_5d_pct": -2.3758099352051865,
+    "return_20d_pct": 8.39328537170263,
+    "volume_ratio_5d": 0.89
   },
   "industry": {
     "name": "基建",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.11,
-    "relative_strength_20d_pct": 11.56
+    "return_5d_pct": 6.46,
+    "return_20d_pct": -1.42,
+    "return_60d_pct": -8.0,
+    "relative_strength_20d_pct": 9.81
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 1.04,
-      "median_return_pct": -0.07,
-      "best_return_pct": 16.4,
-      "worst_return_pct": -5.08
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.2,
+      "median_return_pct": -1.0,
+      "best_return_pct": 10.32,
+      "worst_return_pct": -6.33
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 1.01,
-      "median_return_pct": -0.27,
-      "best_return_pct": 19.58,
-      "worst_return_pct": -12.22
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.23,
+      "median_return_pct": -1.46,
+      "best_return_pct": 10.32,
+      "worst_return_pct": -6.52
     }
   },
   "fundamental": {
@@ -229,15 +229,21 @@
   },
   "reasons": [
     {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 16.7%，风险偏高。",
+      "detail": "近60日最大回撤 15.5%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 16.7%，风险扣分。",
+      "detail": "近60日最大回撤 15.5%，风险扣分。",
       "contribution": -7.0
     }
   ],

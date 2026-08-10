@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 10:22:38+08:00",
+  "generated_at": "2026-08-10 20:06:03+08:00",
   "trade_date": "2026-08-10",
   "code": "01398",
   "name": "工商银行",
@@ -8,22 +8,22 @@
   "category": "银行",
   "stale": false,
   "scores": {
-    "risk_adjusted": 49.9,
-    "risk": 21.0,
-    "technical": 70.0,
-    "industry": 62.0
+    "risk_adjusted": 42.2,
+    "risk": 26.5,
+    "technical": 80.0,
+    "industry": 70.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 22.91,
+    "annualized_volatility_20d_pct": 23.08,
     "max_drawdown_60d_pct": -11.08,
-    "atr14_pct": 2.36,
+    "atr14_pct": 2.39,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 19.8,
-        "value": 22.91
+        "score": 20.3,
+        "value": 23.08
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +32,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 26.7,
-        "value": 2.36
+        "score": 29.2,
+        "value": 2.39
       },
       {
         "name": "量价异常",
-        "score": 26.7,
-        "value": 0.92
+        "score": 8.4,
+        "value": 1.01
       },
       {
         "name": "行业波动",
-        "score": 7.4,
+        "score": 52.0,
         "value": 40.98
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.08,
-    "return_5d_pct": 0.19,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 53.3,
+    "return_3d_pct": -0.62,
+    "return_5d_pct": -0.55,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 46.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 7.195,
-    "ma10": 7.346000000000001,
-    "ma20": 7.1819999999999995,
-    "ma60": 6.921166666666666,
-    "rsi14": 52.4,
-    "macd_dif": 0.10724680304377632,
-    "macd_dea": 0.13413806250854876,
-    "macd_hist": -0.05378251892954489,
-    "atr14_pct": 2.3606600085906897,
-    "boll_position": 0.4870357439554807,
-    "return_5d_pct": -4.3362241494329545,
-    "return_20d_pct": 4.9780380673499325,
-    "volume_ratio_5d": 0.92
+    "trend": "uptrend",
+    "ma5": 7.203999999999999,
+    "ma10": 7.350500000000001,
+    "ma20": 7.1842500000000005,
+    "ma60": 6.921916666666666,
+    "rsi14": 54.1,
+    "macd_dif": 0.11083654663351972,
+    "macd_dea": 0.13485601122649746,
+    "macd_hist": -0.04803892918595548,
+    "atr14_pct": 2.385536596993698,
+    "boll_position": 0.5332078275087,
+    "return_5d_pct": -3.735823882588396,
+    "return_20d_pct": 5.636896046852113,
+    "volume_ratio_5d": 1.01
   },
   "industry": {
     "name": "银行",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.57,
-    "relative_strength_20d_pct": 6.44
+    "return_5d_pct": 6.46,
+    "return_20d_pct": -1.42,
+    "return_60d_pct": -11.02,
+    "relative_strength_20d_pct": 7.05
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,17 +86,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.08,
-      "median_return_pct": 0.11,
-      "best_return_pct": 7.23,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.62,
+      "median_return_pct": -0.81,
+      "best_return_pct": 3.5,
       "worst_return_pct": -7.36
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.19,
-      "median_return_pct": 0.39,
-      "best_return_pct": 6.02,
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.55,
+      "median_return_pct": -0.62,
+      "best_return_pct": 5.92,
       "worst_return_pct": -8.87
     }
   },
@@ -104,9 +104,9 @@
   "reasons": [
     {
       "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     }
   ],
   "kline_file": "../kline/01398.json",

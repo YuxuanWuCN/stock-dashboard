@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 10:22:38+08:00",
-  "trade_date": "2026-08-07",
+  "generated_at": "2026-08-10 20:06:03+08:00",
+  "trade_date": "2026-08-10",
   "code": "300122",
   "name": "智飞生物",
   "type": "stock",
   "category": "医药",
   "stale": false,
   "scores": {
-    "risk_adjusted": 27.5,
-    "risk": 54.1,
-    "technical": 85.0,
-    "industry": 62.0
+    "risk_adjusted": 31.0,
+    "risk": 49.4,
+    "technical": 100.0,
+    "industry": 70.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 43.57,
-    "max_drawdown_60d_pct": -24.4,
-    "atr14_pct": 3.79,
+    "annualized_volatility_20d_pct": 42.76,
+    "max_drawdown_60d_pct": -23.84,
+    "atr14_pct": 3.75,
     "factors": [
       {
         "name": "20日波动率",
         "score": 62.9,
-        "value": 43.57
+        "value": 42.76
       },
       {
         "name": "60日最大回撤",
         "score": 64.4,
-        "value": -24.4
+        "value": -23.84
       },
       {
         "name": "ATR百分比",
-        "score": 62.4,
-        "value": 3.79
+        "score": 62.9,
+        "value": 3.75
       },
       {
         "name": "量价异常",
-        "score": 22.8,
-        "value": 0.93
+        "score": 5.4,
+        "value": 1.0
       },
       {
         "name": "行业波动",
-        "score": 29.2,
-        "value": 42.69
+        "score": 8.9,
+        "value": 40.98
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -1.98,
-    "return_5d_pct": -1.85,
-    "up_probability_3d_pct": 33.3,
-    "up_probability_5d_pct": 26.7,
+    "return_3d_pct": -1.97,
+    "return_5d_pct": -2.03,
+    "up_probability_3d_pct": 30.0,
+    "up_probability_5d_pct": 23.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 13.174000000000001,
-    "ma10": 12.943999999999999,
-    "ma20": 12.7265,
-    "ma60": 12.763666666666667,
-    "rsi14": 60.1,
-    "macd_dif": 0.19828463326166812,
-    "macd_dea": 0.1125582742372227,
-    "macd_hist": 0.17145271804889084,
-    "atr14_pct": 3.785893402593649,
-    "boll_position": 0.9588337379921467,
-    "return_5d_pct": 3.3742331288343586,
-    "return_20d_pct": 10.76417419884963,
-    "volume_ratio_5d": 0.93
+    "trend": "uptrend",
+    "ma5": 13.198000000000002,
+    "ma10": 13.031,
+    "ma20": 12.799,
+    "ma60": 12.7355,
+    "rsi14": 58.1,
+    "macd_dif": 0.2164232862191806,
+    "macd_dea": 0.13333127663361427,
+    "macd_hist": 0.16618401917113268,
+    "atr14_pct": 3.7530227922445736,
+    "boll_position": 0.8573657209563222,
+    "return_5d_pct": 0.9070294784580435,
+    "return_20d_pct": 12.184873949579833,
+    "volume_ratio_5d": 1.0
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.11,
-    "relative_strength_20d_pct": 15.65
+    "return_5d_pct": 6.46,
+    "return_20d_pct": -1.42,
+    "return_60d_pct": -8.0,
+    "relative_strength_20d_pct": 13.6
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,17 +86,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -1.98,
-      "median_return_pct": -1.58,
-      "best_return_pct": 15.04,
+      "up_probability_pct": 30.0,
+      "average_return_pct": -1.97,
+      "median_return_pct": -1.77,
+      "best_return_pct": 18.74,
       "worst_return_pct": -14.67
     },
     "horizon_5d": {
-      "up_probability_pct": 26.7,
-      "average_return_pct": -1.85,
-      "median_return_pct": -2.42,
-      "best_return_pct": 19.76,
+      "up_probability_pct": 23.3,
+      "average_return_pct": -2.03,
+      "median_return_pct": -2.2,
+      "best_return_pct": 17.65,
       "worst_return_pct": -11.91
     }
   },
@@ -229,21 +229,27 @@
   },
   "reasons": [
     {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 24.4%，风险偏高。",
+      "detail": "近60日最大回撤 23.8%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 24.4%，风险扣分。",
+      "detail": "近60日最大回撤 23.8%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 43.6%，波动偏高。",
+      "detail": "20日年化波动率 42.8%，波动偏高。",
       "contribution": -5.0
     }
   ],

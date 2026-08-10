@@ -1,15 +1,15 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 10:22:38+08:00",
-  "trade_date": "2026-08-06",
+  "generated_at": "2026-08-10 20:06:03+08:00",
+  "trade_date": "2026-08-07",
   "code": "513030",
   "name": "德国ETF",
   "type": "etf",
   "category": "",
   "stale": false,
   "scores": {
-    "risk_adjusted": 56.1,
-    "risk": 20.3,
+    "risk_adjusted": 57.3,
+    "risk": 16.5,
     "technical": 100.0,
     "industry": 62.0
   },
@@ -18,7 +18,7 @@
     "label": "低风险",
     "annualized_volatility_20d_pct": 12.08,
     "max_drawdown_60d_pct": -5.98,
-    "atr14_pct": 0.7,
+    "atr14_pct": 0.69,
     "factors": [
       {
         "name": "20日波动率",
@@ -33,7 +33,7 @@
       {
         "name": "ATR百分比",
         "score": 0.5,
-        "value": 0.7
+        "value": 0.69
       },
       {
         "name": "量价异常",
@@ -42,8 +42,8 @@
       },
       {
         "name": "行业波动",
-        "score": 94.1,
-        "value": 42.82
+        "score": 69.3,
+        "value": 42.69
       }
     ]
   },
@@ -57,28 +57,28 @@
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 1.8539999999999999,
-    "ma10": 1.8240000000000003,
-    "ma20": 1.7970000000000002,
-    "ma60": 1.7901666666666667,
-    "rsi14": 69.0,
-    "macd_dif": 0.020577062141684754,
-    "macd_dea": 0.010102305343019286,
-    "macd_hist": 0.020949513597330938,
-    "atr14_pct": 0.701504796448782,
-    "boll_position": 0.9910955846678701,
-    "return_5d_pct": 2.7472527472527597,
-    "return_20d_pct": 5.0561797752809,
+    "ma5": 1.866,
+    "ma10": 1.8350000000000002,
+    "ma20": 1.802,
+    "ma60": 1.7916666666666667,
+    "rsi14": 70.7,
+    "macd_dif": 0.02331586737692981,
+    "macd_dea": 0.012745017749801392,
+    "macd_hist": 0.021141699254256838,
+    "atr14_pct": 0.6859263526470316,
+    "boll_position": 0.9749039985399277,
+    "return_5d_pct": 3.296703296703285,
+    "return_20d_pct": 5.617977528089879,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "深证成指",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 6.2,
-    "return_20d_pct": -8.37,
-    "return_60d_pct": -12.3,
-    "relative_strength_20d_pct": 13.42
+    "return_5d_pct": 5.39,
+    "return_20d_pct": -4.89,
+    "return_60d_pct": -9.11,
+    "relative_strength_20d_pct": 10.51
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -107,6 +107,12 @@
       "title": "中短期趋势向上",
       "detail": "收盘价位于20日和60日均线上方。",
       "contribution": 8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=70.7，短期超买。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/513030.json",

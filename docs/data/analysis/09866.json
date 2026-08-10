@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 10:22:38+08:00",
+  "generated_at": "2026-08-10 20:06:03+08:00",
   "trade_date": "2026-08-10",
   "code": "09866",
   "name": "蔚来-SW",
@@ -8,37 +8,37 @@
   "category": "汽车",
   "stale": false,
   "scores": {
-    "risk_adjusted": 34.7,
-    "risk": 53.9,
-    "technical": 90.0,
-    "industry": 57.1
+    "risk_adjusted": 40.6,
+    "risk": 57.0,
+    "technical": 80.0,
+    "industry": 63.8
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 54.56,
+    "annualized_volatility_20d_pct": 54.25,
     "max_drawdown_60d_pct": -27.5,
-    "atr14_pct": 4.07,
+    "atr14_pct": 4.09,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 72.3,
-        "value": 54.56
+        "score": 73.3,
+        "value": 54.25
       },
       {
         "name": "60日最大回撤",
-        "score": 71.8,
+        "score": 72.3,
         "value": -27.5
       },
       {
         "name": "ATR百分比",
         "score": 66.8,
-        "value": 4.07
+        "value": 4.09
       },
       {
         "name": "量价异常",
-        "score": 8.4,
-        "value": 0.98
+        "score": 34.7,
+        "value": 1.1
       },
       {
         "name": "行业波动",
@@ -48,37 +48,37 @@
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.2,
-    "return_5d_pct": -0.29,
-    "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 33.3,
+    "return_3d_pct": 1.0,
+    "return_5d_pct": 0.27,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 36.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 37.556,
-    "ma10": 37.782,
-    "ma20": 38.11999999999999,
-    "ma60": 40.638000000000005,
-    "rsi14": 48.8,
-    "macd_dif": -0.5957652977143155,
-    "macd_dea": -0.7130182219975754,
-    "macd_hist": 0.23450584856651968,
-    "atr14_pct": 4.073443892840473,
-    "boll_position": 0.5000000000000014,
-    "return_5d_pct": -0.8324661810613976,
-    "return_20d_pct": 1.9251336898395754,
-    "volume_ratio_5d": 0.98
+    "trend": "downtrend",
+    "ma5": 37.524,
+    "ma10": 37.766,
+    "ma20": 38.111999999999995,
+    "ma60": 40.63533333333333,
+    "rsi14": 48.1,
+    "macd_dif": -0.6085288304778445,
+    "macd_dea": -0.7155709285502811,
+    "macd_hist": 0.2140841961448734,
+    "atr14_pct": 4.0906133086164065,
+    "boll_position": 0.4680577066193524,
+    "return_5d_pct": -1.2486992715920797,
+    "return_20d_pct": 1.497326203208571,
+    "volume_ratio_5d": 1.1
   },
   "industry": {
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.57,
-    "relative_strength_20d_pct": 3.38
+    "return_5d_pct": 6.46,
+    "return_20d_pct": -1.42,
+    "return_60d_pct": -11.02,
+    "relative_strength_20d_pct": 2.92
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,15 +86,15 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.2,
-      "median_return_pct": -0.66,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.0,
+      "median_return_pct": 0.33,
       "best_return_pct": 18.07,
       "worst_return_pct": -12.97
     },
     "horizon_5d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.29,
+      "up_probability_pct": 36.7,
+      "average_return_pct": 0.27,
       "median_return_pct": -1.27,
       "best_return_pct": 22.95,
       "worst_return_pct": -17.08
@@ -102,6 +102,12 @@
   },
   "fundamental": null,
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",
@@ -117,7 +123,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 54.6%，波动偏高。",
+      "detail": "20日年化波动率 54.2%，波动偏高。",
       "contribution": -5.0
     }
   ],

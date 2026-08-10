@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 10:22:38+08:00",
-  "trade_date": "2026-08-07",
+  "generated_at": "2026-08-10 20:06:03+08:00",
+  "trade_date": "2026-08-10",
   "code": "603501",
   "name": "韦尔股份",
   "type": "stock",
   "category": "科技",
   "stale": false,
   "scores": {
-    "risk_adjusted": 25.1,
-    "risk": 60.0,
-    "technical": 66.0,
-    "industry": 32.0
+    "risk_adjusted": 32.0,
+    "risk": 57.6,
+    "technical": 58.0,
+    "industry": 40.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
     "annualized_volatility_20d_pct": 41.19,
     "max_drawdown_60d_pct": -21.74,
-    "atr14_pct": 5.2,
+    "atr14_pct": 5.02,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 59.9,
+        "score": 60.9,
         "value": 41.19
       },
       {
         "name": "60日最大回撤",
-        "score": 55.9,
+        "score": 57.9,
         "value": -21.74
       },
       {
         "name": "ATR百分比",
-        "score": 79.7,
-        "value": 5.2
+        "score": 78.2,
+        "value": 5.02
       },
       {
         "name": "量价异常",
-        "score": 77.7,
-        "value": 0.72
+        "score": 79.2,
+        "value": 0.74
       },
       {
         "name": "行业波动",
-        "score": 29.2,
-        "value": 42.69
+        "score": 8.9,
+        "value": 40.98
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.37,
-    "return_5d_pct": -0.69,
-    "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 40.0,
+    "return_3d_pct": 0.02,
+    "return_5d_pct": -0.17,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 89.28200000000001,
-    "ma10": 90.24100000000001,
-    "ma20": 96.763,
-    "ma60": 96.38466666666666,
-    "rsi14": 40.5,
-    "macd_dif": -2.602715589492675,
-    "macd_dea": -1.644505009146088,
-    "macd_hist": -1.916421160693174,
-    "atr14_pct": 5.198786761722409,
-    "boll_position": 0.2641721905646088,
-    "return_5d_pct": 1.1950394588500668,
-    "return_20d_pct": -13.03168297645576,
-    "volume_ratio_5d": 0.72
+    "trend": "downtrend",
+    "ma5": 89.46600000000001,
+    "ma10": 89.624,
+    "ma20": 96.0955,
+    "ma60": 96.18216666666667,
+    "rsi14": 39.5,
+    "macd_dif": -2.6323982961750403,
+    "macd_dea": -1.8420836665518785,
+    "macd_hist": -1.5806292592463236,
+    "atr14_pct": 5.0228855864920705,
+    "boll_position": 0.26749507690384955,
+    "return_5d_pct": 1.042847426887339,
+    "return_20d_pct": -13.025661040101467,
+    "volume_ratio_5d": 0.74
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.11,
-    "relative_strength_20d_pct": -8.14
+    "return_5d_pct": 6.46,
+    "return_20d_pct": -1.42,
+    "return_60d_pct": -8.0,
+    "relative_strength_20d_pct": -11.61
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.37,
-      "median_return_pct": -0.62,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.02,
+      "median_return_pct": -0.39,
       "best_return_pct": 14.69,
-      "worst_return_pct": -12.34
+      "worst_return_pct": -14.04
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.69,
-      "median_return_pct": -1.44,
-      "best_return_pct": 10.71,
-      "worst_return_pct": -10.46
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.17,
+      "median_return_pct": -0.34,
+      "best_return_pct": 9.85,
+      "worst_return_pct": -9.47
     }
   },
   "fundamental": {
@@ -228,6 +228,12 @@
     "cached_at": "2026-08-09 22:19:18"
   },
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",

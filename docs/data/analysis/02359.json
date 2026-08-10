@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 10:22:38+08:00",
+  "generated_at": "2026-08-10 20:06:03+08:00",
   "trade_date": "2026-08-10",
   "code": "02359",
   "name": "药明康德",
@@ -8,22 +8,22 @@
   "category": "医药",
   "stale": false,
   "scores": {
-    "risk_adjusted": 31.1,
-    "risk": 53.4,
-    "technical": 95.0,
-    "industry": 62.0
+    "risk_adjusted": 33.6,
+    "risk": 60.3,
+    "technical": 100.0,
+    "industry": 70.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 56.73,
+    "annualized_volatility_20d_pct": 55.35,
     "max_drawdown_60d_pct": -10.84,
-    "atr14_pct": 4.49,
+    "atr14_pct": 4.59,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 74.8,
-        "value": 56.73
+        "score": 74.3,
+        "value": 55.35
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +32,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 72.8,
-        "value": 4.49
+        "score": 74.3,
+        "value": 4.59
       },
       {
         "name": "量价异常",
-        "score": 98.5,
-        "value": 1.57
+        "score": 99.0,
+        "value": 1.71
       },
       {
         "name": "行业波动",
-        "score": 7.4,
+        "score": 52.0,
         "value": 40.98
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -2.99,
-    "return_5d_pct": -2.01,
-    "up_probability_3d_pct": 26.7,
-    "up_probability_5d_pct": 40.0,
+    "return_3d_pct": -3.33,
+    "return_5d_pct": -1.38,
+    "up_probability_3d_pct": 30.0,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 187.8,
-    "ma10": 173.54999999999998,
-    "ma20": 165.945,
-    "ma60": 144.86499999999998,
-    "rsi14": 80.6,
-    "macd_dif": 11.249863881574527,
-    "macd_dea": 7.764985069142601,
-    "macd_hist": 6.969757624863851,
-    "atr14_pct": 4.489820361370409,
-    "boll_position": 1.1728471011987485,
-    "return_5d_pct": 24.248004910988328,
-    "return_20d_pct": 33.50923482849606,
-    "volume_ratio_5d": 1.57
+    "ma5": 186.92000000000002,
+    "ma10": 173.10999999999999,
+    "ma20": 165.725,
+    "ma60": 144.79166666666666,
+    "rsi14": 79.2,
+    "macd_dif": 10.898866730577367,
+    "macd_dea": 7.69478563894317,
+    "macd_hist": 6.408162183268395,
+    "atr14_pct": 4.589594147178641,
+    "boll_position": 1.1218740579686886,
+    "return_5d_pct": 21.54696132596685,
+    "return_20d_pct": 30.606860158311356,
+    "volume_ratio_5d": 1.71
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.57,
-    "relative_strength_20d_pct": 34.97
+    "return_5d_pct": 6.46,
+    "return_20d_pct": -1.42,
+    "return_60d_pct": -11.02,
+    "relative_strength_20d_pct": 32.02
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 26.7,
-      "average_return_pct": -2.99,
+      "up_probability_pct": 30.0,
+      "average_return_pct": -3.33,
       "median_return_pct": -3.27,
-      "best_return_pct": 22.89,
-      "worst_return_pct": -15.91
+      "best_return_pct": 17.02,
+      "worst_return_pct": -18.48
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -2.01,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -1.38,
       "median_return_pct": -4.35,
-      "best_return_pct": 20.94,
-      "worst_return_pct": -17.68
+      "best_return_pct": 34.24,
+      "worst_return_pct": -26.67
     }
   },
   "fundamental": null,
@@ -111,19 +111,19 @@
     {
       "type": "positive",
       "title": "成交活跃",
-      "detail": "近5日量能为前期1.57倍。",
+      "detail": "近5日量能为前期1.71倍。",
       "contribution": 5.0
     },
     {
       "type": "warning",
       "title": "RSI偏高",
-      "detail": "RSI14=80.6，短期超买。",
+      "detail": "RSI14=79.2，短期超买。",
       "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 56.7%，波动偏高。",
+      "detail": "20日年化波动率 55.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

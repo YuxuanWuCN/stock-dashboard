@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 10:22:38+08:00",
+  "generated_at": "2026-08-10 20:06:03+08:00",
   "trade_date": "2026-08-10",
   "code": "03968",
   "name": "招商银行",
@@ -8,77 +8,77 @@
   "category": "银行",
   "stale": false,
   "scores": {
-    "risk_adjusted": 56.7,
-    "risk": 18.2,
-    "technical": 70.0,
-    "industry": 62.0
+    "risk_adjusted": 53.3,
+    "risk": 25.6,
+    "technical": 80.0,
+    "industry": 70.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 21.41,
+    "annualized_volatility_20d_pct": 21.42,
     "max_drawdown_60d_pct": -12.1,
-    "atr14_pct": 2.19,
+    "atr14_pct": 2.21,
     "factors": [
       {
         "name": "20日波动率",
         "score": 15.8,
-        "value": 21.41
+        "value": 21.42
       },
       {
         "name": "60日最大回撤",
-        "score": 28.2,
+        "score": 29.2,
         "value": -12.1
       },
       {
         "name": "ATR百分比",
-        "score": 19.8,
-        "value": 2.19
+        "score": 20.3,
+        "value": 2.21
       },
       {
         "name": "量价异常",
-        "score": 13.9,
-        "value": 0.97
+        "score": 16.8,
+        "value": 1.04
       },
       {
         "name": "行业波动",
-        "score": 7.4,
+        "score": 52.0,
         "value": 40.98
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.4,
-    "return_5d_pct": 0.5,
-    "up_probability_3d_pct": 60.0,
-    "up_probability_5d_pct": 63.3,
+    "return_3d_pct": -0.07,
+    "return_5d_pct": 0.16,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 60.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 48.9,
-    "ma10": 49.766,
-    "ma20": 48.707,
-    "ma60": 47.347,
-    "rsi14": 52.4,
-    "macd_dif": 0.6473982733860737,
-    "macd_dea": 0.7744862434760607,
-    "macd_hist": -0.2541759401799739,
-    "atr14_pct": 2.185407723555749,
-    "boll_position": 0.4988185302479729,
-    "return_5d_pct": -4.3222003929273,
-    "return_20d_pct": 5.915615484993486,
-    "volume_ratio_5d": 0.97
+    "trend": "uptrend",
+    "ma5": 48.96,
+    "ma10": 49.796,
+    "ma20": 48.721999999999994,
+    "ma60": 47.352,
+    "rsi14": 54.4,
+    "macd_dif": 0.6713298973177046,
+    "macd_dea": 0.7792725682623868,
+    "macd_hist": -0.21588534188936426,
+    "atr14_pct": 2.207013099009198,
+    "boll_position": 0.5468778196673181,
+    "return_5d_pct": -3.7328094302554016,
+    "return_20d_pct": 6.568073075250114,
+    "volume_ratio_5d": 1.04
   },
   "industry": {
     "name": "银行",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.57,
-    "relative_strength_20d_pct": 7.37
+    "return_5d_pct": 6.46,
+    "return_20d_pct": -1.42,
+    "return_60d_pct": -11.02,
+    "relative_strength_20d_pct": 7.99
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,16 +86,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.4,
-      "median_return_pct": 0.85,
-      "best_return_pct": 5.37,
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.07,
+      "median_return_pct": 0.26,
+      "best_return_pct": 5.26,
       "worst_return_pct": -7.59
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 0.5,
-      "median_return_pct": 1.52,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.16,
+      "median_return_pct": 1.23,
       "best_return_pct": 10.8,
       "worst_return_pct": -8.95
     }
@@ -104,9 +104,9 @@
   "reasons": [
     {
       "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     }
   ],
   "kline_file": "../kline/03968.json",
