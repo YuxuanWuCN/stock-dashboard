@@ -30,8 +30,28 @@ def _load_json(path):
         return None
 
 
-def report() -> int:
-    portfolio = _load_json(PORTFOLIO_PATH)
+
+
+def _portfolio_files():
+    """扫描 paper 目录下所有组合文件（portfolio*.json）。"""
+    paper_dir = os.path.join(DATA_DIR, "paper")
+    if not os.path.isdir(paper_dir):
+        return []
+    return sorted(
+        os.path.join(paper_dir, f)
+        for f in os.listdir(paper_dir)
+        if f.startswith("portfolio") and f.endswith(".json") and f != "performance.json"
+    )
+
+
+def _performance_path_for(portfolio_path: str) -> str:
+    """由组合文件推导绩效文件：portfolio.json -> performance.json；portfolio_aggressive.json -> performance_aggressive.json。"""
+    name = os.path.splitext(os.path.basename(portfolio_path))[0]
+    suffix = name[len("portfolio"):]
+    return os.path.join(DATA_DIR, "paper", f"performance{suffix}.json")
+
+def report(portfolio_path: str = None) -> int:
+    portfolio = _load_json(portfolio_path or PORTFOLIO_PATH)
     summary = _load_json(SUMMARY_PATH)
     if not portfolio or not summary:
         print("缺少 portfolio.json 或 summary.json")
@@ -82,14 +102,15 @@ def report() -> int:
         "items": rows,
     }
 
-    perf = _load_json(PERFORMANCE_PATH)
+    performance_path = _performance_path_for(portfolio_path or PORTFOLIO_PATH)
+    perf = _load_json(performance_path)
     if perf is None:
         perf = {"schema_version": "1.0", "portfolio_name": portfolio.get("name"), "records": []}
     # 同一天去重（覆盖当天记录）
     perf["records"] = [r for r in perf.get("records", []) if r.get("trade_date") != today]
     perf["records"].append(entry)
-    os.makedirs(os.path.dirname(PERFORMANCE_PATH), exist_ok=True)
-    with open(PERFORMANCE_PATH, "w", encoding="utf-8") as f:
+    os.makedirs(os.path.dirname(performance_path), exist_ok=True)
+    with open(performance_path, "w", encoding="utf-8") as f:
         json.dump(perf, f, ensure_ascii=False, indent=2)
 
     print(f"[{today}] 组合收益 {weighted_return_pct:.2f}% | 等权基准 {equal_weight_pct:.2f}% | 有效 {len(valid_changes)} 只")
@@ -104,7 +125,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="模拟盘绩效跟踪")
     parser.add_argument("cmd", choices=["report"])
     args = parser.parse_args()
-    return report()
+    # 扫描全部组合（稳健 + 激进），逐个记录
+    files = _portfolio_files()
+    if not files:
+        print("没有找到组合文件")
+        return 1
+    ok = 0
+    for f in files:
+        ok += report(f)
+    return 0 if ok == 0 else 1
 
 
 if __name__ == "__main__":

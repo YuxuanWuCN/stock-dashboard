@@ -87,3 +87,21 @@ def test_report_dedup_same_day(tmp_path, monkeypatch):
     pp.report()
     perf = json.loads((data / "paper" / "performance.json").read_text(encoding="utf-8"))
     assert len(perf["records"]) == 1
+def test_multi_portfolio_scan(tmp_path, monkeypatch):
+    """report 命令应扫描 portfolio*.json 并为每个组合写独立绩效文件。"""
+    data = _setup(tmp_path)
+    agg = {
+        "name": "激进组合", "capital": 1000000, "cash_pct": 0,
+        "items": [{"code": "000001", "name": "平安银行", "pct": 100}],
+    }
+    _write_json(data / "paper" / "portfolio_aggressive.json", agg)
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "SUMMARY_PATH", str(data / "summary.json"))
+    monkeypatch.setattr(pp, "PORTFOLIO_PATH", str(data / "paper" / "portfolio.json"))
+    monkeypatch.setattr(pp, "PERFORMANCE_PATH", str(data / "paper" / "performance.json"))
+    files = pp._portfolio_files()
+    assert len(files) == 2
+    assert pp._performance_path_for(str(data / "paper" / "portfolio_aggressive.json")).endswith("performance_aggressive.json")
+    assert pp.report(str(data / "paper" / "portfolio_aggressive.json")) == 0
+    perf = json.loads((data / "paper" / "performance_aggressive.json").read_text(encoding="utf-8"))
+    assert perf["records"][-1]["valid_count"] == 1
