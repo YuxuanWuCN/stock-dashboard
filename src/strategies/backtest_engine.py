@@ -184,11 +184,19 @@ class BacktestEngine:
             positions_value = 0.0
             for p in positions:
                 row = stock_rows.get(p["code"])
-                if row is not None and current_date in row.index:
+                if row is None:
+                    continue
+                if current_date in row.index:
                     px = float(row.loc[current_date, "close"])
-                    p["current_price"] = px
-                    p["highest_price"] = max(p["highest_price"], px)
-                    positions_value += px * p["quantity"]
+                else:
+                    # 跨市场休市：当日无行情时用最近收盘价结算，避免市值误计为 0
+                    prior = row.loc[:current_date]
+                    if prior.empty:
+                        continue
+                    px = float(prior["close"].iloc[-1])
+                p["current_price"] = px
+                p["highest_price"] = max(p["highest_price"], px)
+                positions_value += px * p["quantity"]
             equity = cash + positions_value
             capital_history.append(equity)
             equity_history.append(equity)

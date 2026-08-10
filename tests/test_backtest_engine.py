@@ -157,3 +157,52 @@ def test_real_kline_backtest():
     })
     assert "error" not in result
     assert result["performance"]["trades"] >= 0
+
+def _trend_df(n=100, seed=7, start="2024-05-01", base=10.0, flat=30, up=8):
+    """构造横盘后放量拉升的序列，确定触发多金叉信号。"""
+    rng = np.random.default_rng(seed)
+    dates = pd.bdate_range(start=start, periods=n)
+    close = np.full(n, base, dtype=float)
+    for i in range(flat, min(flat + up, n)):
+        close[i] = close[i - 1] * 1.05
+    for i in range(flat + up, n):
+        close[i] = close[i - 1] * 1.001
+    volume = np.where(np.arange(n) >= flat, 300000.0, 100000.0)
+    high = close * 1.01
+    low = close * 0.99
+    return pd.DataFrame({
+        "date": dates.strftime("%Y-%m-%d"),
+        "open": close, "high": high, "low": low, "close": close, "volume": volume,
+    })
+
+
+def test_backtest_holiday_cap_uses_last_close():
+    """跨市场休市：持仓股票当日无行情时按最近收盘价结算，市值不归零。"""
+    df_a = _synthetic_df(n=100, seed=3, start="2024-05-01", base=5.0)
+    df_b = _trend_df()  # 触发信号的市场
+    # 市场B 在 2024-07-05 休市（模拟美股 Juneteenth/假期），删除该日
+    df_b = df_b[df_b["date"] != "2024-07-05"].reset_index(drop=True)
+
+    engine = BacktestEngine(
+        stock_data={"000001": df_a, "600519": df_b},
+        stock_names={"000001": "市场A", "600519": "市场B"},
+        initial_capital=100000.0,
+    )
+    result = engine.run("MultiGoldenCrossStrategy", {
+        "start_date": "2024-06-01",
+        "end_date": "2024-08-31",
+        "take_profit_pct": 100.0,      # 防止止盈提前平仓，保证休市日仍有持仓
+        "stop_loss_pct": -100.0,
+        "trailing_stop_pct": 100.0,
+        "max_hold_days": 1000,
+    })
+    assert "error" not in result
+    hist = result["capital_history"]
+    dates = result["period"]["start"]  # placeholder
+    trading_dates = [d for d in engine.trading_dates if "2024-06-01" <= d <= "2024-08-31"]
+    assert "2024-07-05" in trading_dates
+    idx_holiday = trading_dates.index("2024-07-05")
+    prev_date = trading_dates[idx_holiday - 1]
+    # capital_history[0] 是初始资金，capital_history[k] 对应 trading_dates[k-1]
+    ratio = hist[idx_holiday + 1] / hist[idx_holiday]
+    assert 0.99 <= ratio <= 1.01, f"休市日净值变化 {ratio:.3f}，疑似持仓市值被误计为 0（前日 {prev_date}）"
