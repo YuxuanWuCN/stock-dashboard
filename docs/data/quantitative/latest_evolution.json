@@ -1,0 +1,158 @@
+{
+  "generated_at": "20260811_154139",
+  "analysis_period": "past_7_days",
+  "champion": {
+    "name": "global",
+    "stats": {
+      "cumulative_return": 1.1,
+      "avg_daily_return": 0.55,
+      "volatility": 0.15,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 3.667,
+      "score": 24.72,
+      "trading_days": 2
+    },
+    "analysis": {
+      "core_holdings": [],
+      "prediction_accuracy": 11.11111111111111,
+      "llm_analysis": {
+        "success_factors": [
+          "高盈亏比：预测准确率仅11.1%，但最近7天收益为正，说明单次盈利远大于多次亏损，策略依靠少数大行情获利。",
+          "严格风险控制：在低胜率下仍能保持正收益，表明每笔亏损有限，止损纪律严格，避免了连续小亏侵蚀本金。"
+        ],
+        "holdings_characteristics": {
+          "industry": "未知（数据中未提供持仓信息，可能集中于高弹性行业如科技、新能源等）",
+          "market_cap": "小盘或中盘（高波动特征通常对应小市值股票）",
+          "volatility": "高（收益数据0.4和0.7显示大幅波动，典型高波动标的）"
+        },
+        "sustainability": {
+          "score": 5.5,
+          "reasoning": "低准确率依赖高盈亏比，长期稳定性存疑；若市场环境转向震荡或趋势行情减少，策略可能失效。同时样本量过小，统计显著性不足。",
+          "risk_factors": [
+            "预测准确率极低，可能导致回撤峰值较大",
+            "盈利依赖极少数交易，结果随机性强",
+            "缺少持仓明细，难以判断收益来源的可靠性"
+          ]
+        },
+        "improvement_directions": [
+          {
+            "direction": "增加过滤条件以提高准确率",
+            "reason": "当前准确率仅11.1%，对盈亏比要求过高；通过加入趋势确认、量能验证等过滤器，减少无效交易，降低回撤风险。",
+            "expected_impact": "提升交易命中率，使资金曲线更平滑，增强策略稳定性"
+          },
+          {
+            "direction": "优化仓位管理，采用动态仓位策略",
+            "reason": "在高盈亏比下，通过仓位控制平衡风险，避免单次大亏损影响整体资金。",
+            "expected_impact": "提高风险调整后收益，减少极端回撤，提升长期存活概率"
+          }
+        ]
+      }
+    }
+  },
+  "all_strategies": {
+    "aggressive": {
+      "cumulative_return": 3.32,
+      "avg_daily_return": 1.66,
+      "volatility": 0.69,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 2.406,
+      "score": 22.67,
+      "trading_days": 2
+    },
+    "robust": {
+      "cumulative_return": 0.07,
+      "avg_daily_return": 0.035,
+      "volatility": 0.325,
+      "win_rate": 50.0,
+      "max_drawdown": 0.29,
+      "sharpe": 0.108,
+      "score": 7.78,
+      "trading_days": 2
+    },
+    "bluechip": {
+      "cumulative_return": 0.89,
+      "avg_daily_return": 0.445,
+      "volatility": 0.245,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 1.816,
+      "score": 19.99,
+      "trading_days": 2
+    },
+    "defensive": {
+      "cumulative_return": 0.8,
+      "avg_daily_return": 0.4,
+      "volatility": 0.13,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 3.077,
+      "score": 23.09,
+      "trading_days": 2
+    },
+    "global": {
+      "cumulative_return": 1.1,
+      "avg_daily_return": 0.55,
+      "volatility": 0.15,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 3.667,
+      "score": 24.72,
+      "trading_days": 2
+    },
+    "tech": {
+      "cumulative_return": 1.21,
+      "avg_daily_return": 0.605,
+      "volatility": 0.655,
+      "win_rate": 50.0,
+      "max_drawdown": 0.05,
+      "sharpe": 0.924,
+      "score": 10.41,
+      "trading_days": 2
+    }
+  },
+  "variants": [
+    {
+      "name": "global_v1",
+      "display_name": "稳健过滤版",
+      "description": "提升稳定性",
+      "changes": {
+        "predict_threshold": "0.65",
+        "volume_filter": "成交量>20日均量*1.2"
+      },
+      "llm_reasoning": "交易次数减少约30%，胜率提升至20%以上，资金曲线更平滑，回撤进一步降低"
+    },
+    {
+      "name": "global_v2",
+      "display_name": "动态风控版",
+      "description": "降低风险",
+      "changes": {
+        "risk_per_trade": "1%",
+        "position_sizing": "ATR动态仓位（仓位=风险金额/(ATR*合约乘数)）"
+      },
+      "llm_reasoning": "最大回撤控制在5%以内，风险调整后夏普比率进一步提升，长期存活能力增强"
+    },
+    {
+      "name": "global_v3",
+      "display_name": "趋势确认版",
+      "description": "提高收益",
+      "changes": {
+        "trend_filter": "收盘价>MA20 且 MA20>MA50",
+        "profit_take": "15%"
+      },
+      "llm_reasoning": "在保持高盈亏比的同时，增加盈利交易的平均收益，累计收益有望提升至3%以上"
+    }
+  ],
+  "next_week_strategies": [
+    "aggressive",
+    "robust",
+    "bluechip",
+    "defensive",
+    "global",
+    "tech",
+    "global_v1",
+    "global_v2",
+    "global_v3"
+  ]
+}
