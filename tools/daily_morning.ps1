@@ -46,14 +46,14 @@ Write-Log ("paper_portfolio benchmark 退出码: " + $LASTEXITCODE)
 & $py tools\paper_portfolio.py manifest *>> $logFile
 Write-Log ("paper_portfolio manifest 退出码: " + $LASTEXITCODE)
 
-# 4) 提交并推送数据（仅当有变化）
+# 4) 提交并推送数据（仅当有变化；GitHub 直连失败时自动走本机代理重试）
 git add docs/data
 if (-not (git diff --cached --quiet)) {
     $tradeDate = Get-Date -Format "yyyy-MM-dd"
     git commit -m ("chore(data): morning US catch-up for " + $tradeDate) *>> $logFile
     if ($LASTEXITCODE -eq 0) {
-        git push origin main *>> $logFile
-        Write-Log ("已推送 GitHub，退出码: " + $LASTEXITCODE)
+        & $py tools\git_push_with_fallback.py *>> $logFile
+        Write-Log ("GitHub 推送退出码: " + $LASTEXITCODE)
     } else {
         Write-Log "提交失败：请先运行质量门禁 small（源码有变化时）"
     }
