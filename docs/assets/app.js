@@ -2048,8 +2048,10 @@ document.addEventListener('DOMContentLoaded', () => {
         var out = [];
         var nav = 100;
         records.forEach(function (r) {
-            nav = nav * (1 + (r.daily_return_pct || 0) / 100);
-            out.push({ date: r.trade_date, nav: nav, daily: r.daily_return_pct });
+            // 兼容字段名：portfolio_return_pct（新）或 daily_return_pct（旧）
+            var dailyReturn = r.portfolio_return_pct != null ? r.portfolio_return_pct : (r.daily_return_pct || 0);
+            nav = nav * (1 + dailyReturn / 100);
+            out.push({ date: r.trade_date, nav: nav, daily: dailyReturn });
         });
         return out;
     }

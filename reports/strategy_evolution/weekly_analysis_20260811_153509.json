@@ -1,0 +1,161 @@
+{
+  "generated_at": "20260811_153509",
+  "analysis_period": "past_7_days",
+  "champion": {
+    "name": "global",
+    "stats": {
+      "cumulative_return": 1.1,
+      "avg_daily_return": 0.55,
+      "volatility": 0.15,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 3.667,
+      "score": 31.44,
+      "trading_days": 2
+    },
+    "analysis": {
+      "core_holdings": [],
+      "prediction_accuracy": 11.11111111111111,
+      "llm_analysis": {
+        "success_factors": [
+          "高盈亏比策略：预测准确率仅11.1%，但近期收益为正，表明单笔盈利显著大于每笔亏损，通过严格止损和利润最大化实现正期望。",
+          "全球化分散配置：策略名为global，推测通过投资全球不同市场与资产，降低单一市场预测错误的影响，获取风险溢价。"
+        ],
+        "holdings_characteristics": {
+          "industry": "全球多行业（无法从空持仓具体判断）",
+          "market_cap": "未知（核心持仓列表为空，无法判定）",
+          "volatility": "中等（推测通过分散化控制波动）"
+        },
+        "sustainability": {
+          "score": 3.2,
+          "reasoning": "预测准确率远低于随机水平，且仅有两次收益观测，统计显著性不足。正收益极可能来自短期市场波动或运气。若无更多验证数据，策略不具备可持续性。",
+          "risk_factors": [
+            "低准确率导致高交易频次和成本，可能侵蚀实际收益",
+            "收益分布偏斜，依靠极少数大额盈利，一旦缺失将转为负收益",
+            "核心持仓数据缺失，无法分析选股逻辑的稳定性"
+          ]
+        },
+        "improvement_directions": [
+          {
+            "direction": "提高预测模型准确率",
+            "reason": "当前11.1%的准确率低于随机猜测，表明信号无效或反向。需要从特征工程、模型选择和数据质量方面改进。",
+            "expected_impact": "假设准确率提升至30%，在盈亏比不变下期望收益可增长数倍，且降低对爆发的依赖。"
+          },
+          {
+            "direction": "补充并固定核心持仓规则",
+            "reason": "空核心持仓说明策略可能无明确选股标准，导致随机交易。应依据已验证因子构建可复现的持仓筛选机制。",
+            "expected_impact": "提高交易一致性，便于回测和实盘验证，减少主观干扰。"
+          }
+        ]
+      }
+    }
+  },
+  "all_strategies": {
+    "aggressive": {
+      "cumulative_return": 3.32,
+      "avg_daily_return": 1.66,
+      "volatility": 0.69,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 2.406,
+      "score": 28.55,
+      "trading_days": 2
+    },
+    "robust": {
+      "cumulative_return": 0.07,
+      "avg_daily_return": 0.035,
+      "volatility": 0.325,
+      "win_rate": 50.0,
+      "max_drawdown": 0.29,
+      "sharpe": 0.108,
+      "score": 10.32,
+      "trading_days": 2
+    },
+    "bluechip": {
+      "cumulative_return": 0.89,
+      "avg_daily_return": 0.445,
+      "volatility": 0.245,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 1.816,
+      "score": 25.8,
+      "trading_days": 2
+    },
+    "defensive": {
+      "cumulative_return": 0.8,
+      "avg_daily_return": 0.4,
+      "volatility": 0.13,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 3.077,
+      "score": 29.55,
+      "trading_days": 2
+    },
+    "global": {
+      "cumulative_return": 1.1,
+      "avg_daily_return": 0.55,
+      "volatility": 0.15,
+      "win_rate": 100.0,
+      "max_drawdown": 0,
+      "sharpe": 3.667,
+      "score": 31.44,
+      "trading_days": 2
+    },
+    "tech": {
+      "cumulative_return": 1.21,
+      "avg_daily_return": 0.605,
+      "volatility": 0.655,
+      "win_rate": 50.0,
+      "max_drawdown": 0.05,
+      "sharpe": 0.924,
+      "score": 13.25,
+      "trading_days": 2
+    }
+  },
+  "variants": [
+    {
+      "name": "global_v1",
+      "display_name": "全球动能增强策略",
+      "description": "提高收益",
+      "changes": {
+        "止盈倍数": "2.5倍",
+        "持仓集中度": "前5大机会配置50%仓位",
+        "止损比例": "1.5%"
+      },
+      "llm_reasoning": "在高盈亏比基础上进一步提高单笔盈利，收益预计提升20%-40%"
+    },
+    {
+      "name": "global_v2",
+      "display_name": "全球低波动稳健策略",
+      "description": "降低风险",
+      "changes": {
+        "目标组合波动率": "≤10%",
+        "资产相关性上限": "0.5",
+        "单日最大亏损限制": "2%"
+      },
+      "llm_reasoning": "最大回撤控制在2%以内，夏普比率保持3以上，风险调整后收益更稳定"
+    },
+    {
+      "name": "global_v3",
+      "display_name": "全球信号反转策略",
+      "description": "提升稳定性",
+      "changes": {
+        "信号方向": "反转信号",
+        "预测置信度阈值": "0.7",
+        "模型更新频率": "周度"
+      },
+      "llm_reasoning": "预测准确率提升至30%以上，减少交易频次和成本，收益稳定性显著增强"
+    }
+  ],
+  "next_week_strategies": [
+    "aggressive",
+    "robust",
+    "bluechip",
+    "defensive",
+    "global",
+    "tech",
+    "global_v1",
+    "global_v2",
+    "global_v3"
+  ]
+}

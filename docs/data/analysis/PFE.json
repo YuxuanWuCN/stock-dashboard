@@ -1,29 +1,29 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-07",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "PFE",
   "name": "辉瑞",
   "type": "us",
   "category": "医药",
   "stale": false,
   "scores": {
-    "risk_adjusted": 33.5,
-    "risk": 26.1,
-    "technical": 93.0,
+    "risk_adjusted": 37.1,
+    "risk": 18.9,
+    "technical": 100.0,
     "industry": 62.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 19.4,
+    "annualized_volatility_20d_pct": 19.1,
     "max_drawdown_60d_pct": -9.69,
-    "atr14_pct": 2.03,
+    "atr14_pct": 2.0,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 8.9,
-        "value": 19.4
+        "score": 9.4,
+        "value": 19.1
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +32,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 15.3,
-        "value": 2.03
+        "score": 16.8,
+        "value": 2.0
       },
       {
         "name": "量价异常",
-        "score": 55.9,
-        "value": 1.17
+        "score": 6.9,
+        "value": 0.97
       },
       {
         "name": "行业波动",
-        "score": 73.8,
-        "value": 42.69
+        "score": 55.4,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -1.72,
-    "return_5d_pct": -2.15,
-    "up_probability_3d_pct": 13.3,
-    "up_probability_5d_pct": 26.7,
+    "return_3d_pct": -1.39,
+    "return_5d_pct": -1.85,
+    "up_probability_3d_pct": 20.0,
+    "up_probability_5d_pct": 30.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 25.842000000000002,
-    "ma10": 25.42,
-    "ma20": 25.1,
-    "ma60": 25.191333333333333,
-    "rsi14": 70.8,
-    "macd_dif": 0.3160784293563772,
-    "macd_dea": 0.10785142075141305,
-    "macd_hist": 0.4164540172099283,
-    "atr14_pct": 2.0320866984385466,
-    "boll_position": 1.224488915526131,
-    "return_5d_pct": 6.997201119552177,
-    "return_20d_pct": 10.715763342987184,
-    "volume_ratio_5d": 1.17
+    "trend": "uptrend",
+    "ma5": 26.536,
+    "ma10": 25.819,
+    "ma20": 25.359,
+    "ma60": 25.228,
+    "rsi14": 69.4,
+    "macd_dif": 0.4744945396986715,
+    "macd_dea": 0.23049337387844893,
+    "macd_hist": 0.48800233164044515,
+    "atr14_pct": 2.0041542253267925,
+    "boll_position": 1.005665771198125,
+    "return_5d_pct": 5.706414797323878,
+    "return_20d_pct": 10.762886597938138,
+    "volume_ratio_5d": 0.97
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.57,
-    "relative_strength_20d_pct": 15.6
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -9.44,
+    "relative_strength_20d_pct": 15.22
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,27 +86,27 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 13.3,
-      "average_return_pct": -1.72,
-      "median_return_pct": -1.68,
-      "best_return_pct": 7.42,
-      "worst_return_pct": -5.73
+      "up_probability_pct": 20.0,
+      "average_return_pct": -1.39,
+      "median_return_pct": -1.23,
+      "best_return_pct": 2.93,
+      "worst_return_pct": -5.26
     },
     "horizon_5d": {
-      "up_probability_pct": 26.7,
-      "average_return_pct": -2.15,
-      "median_return_pct": -2.33,
-      "best_return_pct": 3.1,
-      "worst_return_pct": -6.59
+      "up_probability_pct": 30.0,
+      "average_return_pct": -1.85,
+      "median_return_pct": -2.34,
+      "best_return_pct": 3.66,
+      "worst_return_pct": -6.4
     }
   },
   "fundamental": null,
   "reasons": [
     {
-      "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=70.8，短期超买。",
-      "contribution": -5.0
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     }
   ],
   "kline_file": "../kline/PFE.json",

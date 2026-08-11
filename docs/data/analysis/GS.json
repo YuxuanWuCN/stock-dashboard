@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-07",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "GS",
   "name": "高盛",
   "type": "us",
   "category": "金融",
   "stale": false,
   "scores": {
-    "risk_adjusted": 51.6,
-    "risk": 57.7,
-    "technical": 71.0,
-    "industry": 57.2
+    "risk_adjusted": 50.9,
+    "risk": 52.8,
+    "technical": 63.0,
+    "industry": 37.2
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 50.01,
+    "annualized_volatility_20d_pct": 37.54,
     "max_drawdown_60d_pct": -14.87,
-    "atr14_pct": 3.41,
+    "atr14_pct": 3.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 69.8,
-        "value": 50.01
+        "score": 56.9,
+        "value": 37.54
       },
       {
         "name": "60日最大回撤",
-        "score": 40.1,
+        "score": 41.1,
         "value": -14.87
       },
       {
         "name": "ATR百分比",
-        "score": 56.4,
-        "value": 3.41
+        "score": 53.0,
+        "value": 3.14
       },
       {
         "name": "量价异常",
-        "score": 43.6,
-        "value": 0.87
+        "score": 65.8,
+        "value": 0.72
       },
       {
         "name": "行业波动",
-        "score": 73.8,
-        "value": 42.69
+        "score": 55.4,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.17,
-    "return_5d_pct": 1.3,
-    "up_probability_3d_pct": 53.3,
-    "up_probability_5d_pct": 66.7,
+    "return_3d_pct": 1.6,
+    "return_5d_pct": 1.85,
+    "up_probability_3d_pct": 80.0,
+    "up_probability_5d_pct": 70.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 1042.522,
-    "ma10": 1031.817,
-    "ma20": 1059.5785,
-    "ma60": 1040.4971666666665,
-    "rsi14": 48.6,
-    "macd_dif": -4.524060287484417,
-    "macd_dea": -2.129693264749886,
-    "macd_hist": -4.788734045469062,
-    "atr14_pct": 3.407683977781071,
-    "boll_position": 0.3734261762278024,
-    "return_5d_pct": 2.0846835169582967,
-    "return_20d_pct": -1.4755776265660936,
-    "volume_ratio_5d": 0.87
+    "ma5": 1040.05,
+    "ma10": 1030.4279999999999,
+    "ma20": 1053.667,
+    "ma60": 1042.8855,
+    "rsi14": 47.4,
+    "macd_dif": -5.170078048359301,
+    "macd_dea": -3.174201028766409,
+    "macd_hist": -3.9917540391857838,
+    "atr14_pct": 3.1431890690086637,
+    "boll_position": 0.35530551244126723,
+    "return_5d_pct": -1.8813272806700976,
+    "return_20d_pct": -9.371052631578936,
+    "volume_ratio_5d": 0.72
   },
   "industry": {
     "name": "金融",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.57,
-    "relative_strength_20d_pct": 3.41
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -9.44,
+    "relative_strength_20d_pct": -4.91
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,29 +86,22 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": -0.17,
-      "median_return_pct": 0.76,
-      "best_return_pct": 4.3,
-      "worst_return_pct": -17.33
+      "up_probability_pct": 80.0,
+      "average_return_pct": 1.6,
+      "median_return_pct": 2.07,
+      "best_return_pct": 13.82,
+      "worst_return_pct": -14.16
     },
     "horizon_5d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 1.3,
-      "median_return_pct": 1.39,
-      "best_return_pct": 9.3,
-      "worst_return_pct": -8.21
+      "up_probability_pct": 70.0,
+      "average_return_pct": 1.85,
+      "median_return_pct": 1.56,
+      "best_return_pct": 17.77,
+      "worst_return_pct": -15.72
     }
   },
   "fundamental": null,
-  "reasons": [
-    {
-      "type": "negative",
-      "title": "波动较大",
-      "detail": "20日年化波动率 50.0%，波动偏高。",
-      "contribution": -5.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/GS.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

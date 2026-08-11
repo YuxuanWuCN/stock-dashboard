@@ -1,29 +1,29 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-10",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "001258",
   "name": "立新能源",
   "type": "stock",
   "category": "电力",
   "stale": false,
   "scores": {
-    "risk_adjusted": 25.7,
-    "risk": 76.9,
+    "risk_adjusted": 21.2,
+    "risk": 82.5,
     "technical": 100.0,
-    "industry": 70.0
+    "industry": 62.0
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 109.53,
+    "annualized_volatility_20d_pct": 110.48,
     "max_drawdown_60d_pct": -41.21,
-    "atr14_pct": 7.14,
+    "atr14_pct": 7.29,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 94.1,
-        "value": 109.53
+        "score": 95.0,
+        "value": 110.48
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +32,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 86.6,
-        "value": 7.14
+        "score": 87.6,
+        "value": 7.29
       },
       {
         "name": "量价异常",
-        "score": 77.2,
-        "value": 1.25
+        "score": 64.9,
+        "value": 1.28
       },
       {
         "name": "行业波动",
-        "score": 8.9,
-        "value": 40.98
+        "score": 51.5,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -2.09,
-    "return_5d_pct": -3.18,
-    "up_probability_3d_pct": 23.3,
-    "up_probability_5d_pct": 30.0,
+    "return_3d_pct": -2.86,
+    "return_5d_pct": -3.0,
+    "up_probability_3d_pct": 16.7,
+    "up_probability_5d_pct": 13.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 13.352,
-    "ma10": 12.869,
-    "ma20": 11.373,
-    "ma60": 9.418166666666666,
-    "rsi14": 68.8,
-    "macd_dif": 1.4158938838017647,
-    "macd_dea": 1.2673577817002952,
-    "macd_hist": 0.297072204202939,
-    "atr14_pct": 7.136718710733709,
-    "boll_position": 0.8227129111276981,
-    "return_5d_pct": 13.74705420267086,
-    "return_20d_pct": 123.11248073959939,
-    "volume_ratio_5d": 1.25
+    "ma5": 13.858,
+    "ma10": 13.172,
+    "ma20": 11.842,
+    "ma60": 9.513166666666667,
+    "rsi14": 73.1,
+    "macd_dif": 1.5780707405586565,
+    "macd_dea": 1.3295003734719677,
+    "macd_hist": 0.49714073417337756,
+    "atr14_pct": 7.29269092506732,
+    "boll_position": 0.9378314941067621,
+    "return_5d_pct": 18.88059701492537,
+    "return_20d_pct": 143.206106870229,
+    "volume_ratio_5d": 1.28
   },
   "industry": {
     "name": "电力",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 6.46,
-    "return_20d_pct": -1.42,
-    "return_60d_pct": -8.0,
-    "relative_strength_20d_pct": 124.53
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -8.18,
+    "relative_strength_20d_pct": 147.66
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,17 +86,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 23.3,
-      "average_return_pct": -2.09,
-      "median_return_pct": -1.91,
-      "best_return_pct": 18.65,
+      "up_probability_pct": 16.7,
+      "average_return_pct": -2.86,
+      "median_return_pct": -2.44,
+      "best_return_pct": 33.13,
       "worst_return_pct": -19.38
     },
     "horizon_5d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -3.18,
-      "median_return_pct": -2.79,
-      "best_return_pct": 12.21,
+      "up_probability_pct": 13.3,
+      "average_return_pct": -3.0,
+      "median_return_pct": -3.67,
+      "best_return_pct": 57.56,
       "worst_return_pct": -28.26
     }
   },
@@ -241,9 +241,15 @@
       "contribution": -7.0
     },
     {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=73.1，短期超买。",
+      "contribution": -5.0
+    },
+    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 109.5%，波动偏高。",
+      "detail": "20日年化波动率 110.5%，波动偏高。",
       "contribution": -5.0
     }
   ],

@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-10",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "601111",
   "name": "中国国航",
   "type": "stock",
   "category": "航空",
   "stale": false,
   "scores": {
-    "risk_adjusted": 42.4,
-    "risk": 21.5,
-    "technical": 90.0,
-    "industry": 70.0
+    "risk_adjusted": 51.0,
+    "risk": 22.5,
+    "technical": 75.0,
+    "industry": 61.9
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 18.45,
+    "annualized_volatility_20d_pct": 20.1,
     "max_drawdown_60d_pct": -16.09,
-    "atr14_pct": 2.45,
+    "atr14_pct": 2.51,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 5.4,
-        "value": 18.45
+        "score": 11.9,
+        "value": 20.1
       },
       {
         "name": "60日最大回撤",
-        "score": 44.1,
+        "score": 45.0,
         "value": -16.09
       },
       {
         "name": "ATR百分比",
-        "score": 31.7,
-        "value": 2.45
+        "score": 35.6,
+        "value": 2.51
       },
       {
         "name": "量价异常",
-        "score": 11.4,
-        "value": 0.97
+        "score": 4.5,
+        "value": 0.98
       },
       {
         "name": "行业波动",
-        "score": 8.9,
-        "value": 40.98
+        "score": 0.5,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.4,
-    "return_5d_pct": -0.74,
-    "up_probability_3d_pct": 40.0,
-    "up_probability_5d_pct": 40.0,
+    "return_3d_pct": 0.75,
+    "return_5d_pct": 0.3,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 6.118,
-    "ma10": 6.1450000000000005,
-    "ma20": 6.0485,
-    "ma60": 6.271666666666666,
-    "rsi14": 48.6,
-    "macd_dif": -0.006243332537846591,
-    "macd_dea": -0.02398627260879459,
-    "macd_hist": 0.035485880141896,
-    "atr14_pct": 2.451654468323446,
-    "boll_position": 0.5872719675122382,
-    "return_5d_pct": -2.2471910112359605,
-    "return_20d_pct": 3.924914675767921,
-    "volume_ratio_5d": 0.97
+    "trend": "downtrend",
+    "ma5": 6.086,
+    "ma10": 6.131,
+    "ma20": 6.05,
+    "ma60": 6.261,
+    "rsi14": 42.6,
+    "macd_dif": -0.01842951520168956,
+    "macd_dea": -0.022874921127373583,
+    "macd_hist": 0.008890811851368044,
+    "atr14_pct": 2.510173880638261,
+    "boll_position": 0.2871087188104409,
+    "return_5d_pct": -2.6186579378068786,
+    "return_20d_pct": 0.5067567567567544,
+    "volume_ratio_5d": 0.98
   },
   "industry": {
     "name": "航空",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 6.46,
-    "return_20d_pct": -1.42,
-    "return_60d_pct": -8.0,
-    "relative_strength_20d_pct": 5.34
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -8.18,
+    "relative_strength_20d_pct": 4.97
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.4,
-      "median_return_pct": -0.4,
-      "best_return_pct": 7.45,
-      "worst_return_pct": -5.81
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.75,
+      "median_return_pct": -0.27,
+      "best_return_pct": 8.02,
+      "worst_return_pct": -4.42
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.74,
-      "median_return_pct": -0.67,
-      "best_return_pct": 5.5,
-      "worst_return_pct": -5.9
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.3,
+      "median_return_pct": 0.07,
+      "best_return_pct": 12.42,
+      "worst_return_pct": -9.14
     }
   },
   "fundamental": {
@@ -228,6 +228,12 @@
     "cached_at": "2026-08-09 22:35:52"
   },
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",

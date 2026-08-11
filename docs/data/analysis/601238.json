@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-10",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "601238",
   "name": "广汽集团",
   "type": "stock",
   "category": "汽车",
   "stale": false,
   "scores": {
-    "risk_adjusted": 48.0,
-    "risk": 42.4,
-    "technical": 90.0,
-    "industry": 70.0
+    "risk_adjusted": 52.0,
+    "risk": 42.0,
+    "technical": 80.0,
+    "industry": 62.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 31.48,
+    "annualized_volatility_20d_pct": 32.41,
     "max_drawdown_60d_pct": -24.54,
     "atr14_pct": 3.05,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 43.1,
-        "value": 31.48
+        "score": 44.1,
+        "value": 32.41
       },
       {
         "name": "60日最大回撤",
-        "score": 65.8,
+        "score": 66.3,
         "value": -24.54
       },
       {
         "name": "ATR百分比",
-        "score": 47.0,
+        "score": 49.5,
         "value": 3.05
       },
       {
         "name": "量价异常",
-        "score": 22.8,
-        "value": 0.93
+        "score": 22.3,
+        "value": 0.89
       },
       {
         "name": "行业波动",
-        "score": 8.9,
-        "value": 40.98
+        "score": 0.5,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.8,
-    "return_5d_pct": 0.31,
-    "up_probability_3d_pct": 40.0,
-    "up_probability_5d_pct": 36.7,
+    "return_3d_pct": 0.95,
+    "return_5d_pct": 0.76,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 53.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 5.318,
-    "ma10": 5.3759999999999994,
-    "ma20": 5.2445,
-    "ma60": 5.562,
-    "rsi14": 50.1,
-    "macd_dif": -0.007357968882408805,
-    "macd_dea": -0.032793369008004954,
-    "macd_hist": 0.0508708002511923,
-    "atr14_pct": 3.0534815972485623,
-    "boll_position": 0.628349445169516,
-    "return_5d_pct": -4.308797127468589,
-    "return_20d_pct": 8.997955010224956,
-    "volume_ratio_5d": 0.93
+    "trend": "downtrend",
+    "ma5": 5.284,
+    "ma10": 5.3790000000000004,
+    "ma20": 5.2589999999999995,
+    "ma60": 5.542,
+    "rsi14": 46.0,
+    "macd_dif": -0.013688801305590914,
+    "macd_dea": -0.028972455467522147,
+    "macd_hist": 0.030567308323862466,
+    "atr14_pct": 3.053479102340247,
+    "boll_position": 0.4520896053774683,
+    "return_5d_pct": -3.1481481481481444,
+    "return_20d_pct": 5.870445344129549,
+    "volume_ratio_5d": 0.89
   },
   "industry": {
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 6.46,
-    "return_20d_pct": -1.42,
-    "return_60d_pct": -8.0,
-    "relative_strength_20d_pct": 10.42
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -8.18,
+    "relative_strength_20d_pct": 10.33
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,16 +86,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.8,
-      "median_return_pct": -0.67,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.95,
+      "median_return_pct": -0.13,
       "best_return_pct": 26.45,
-      "worst_return_pct": -5.66
+      "worst_return_pct": -4.82
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": 0.31,
-      "median_return_pct": -1.16,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.76,
+      "median_return_pct": 0.12,
       "best_return_pct": 15.9,
       "worst_return_pct": -7.49
     }
@@ -228,6 +228,12 @@
     "cached_at": "2026-08-09 22:25:58"
   },
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",

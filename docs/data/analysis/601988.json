@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-10",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "601988",
   "name": "中国银行",
   "type": "stock",
   "category": "银行",
   "stale": false,
   "scores": {
-    "risk_adjusted": 39.9,
-    "risk": 26.0,
-    "technical": 58.0,
-    "industry": 55.0
+    "risk_adjusted": 41.4,
+    "risk": 26.3,
+    "technical": 78.0,
+    "industry": 60.9
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 26.42,
+    "annualized_volatility_20d_pct": 26.53,
     "max_drawdown_60d_pct": -11.53,
-    "atr14_pct": 2.52,
+    "atr14_pct": 2.38,
     "factors": [
       {
         "name": "20日波动率",
         "score": 30.7,
-        "value": 26.42
+        "value": 26.53
       },
       {
         "name": "60日最大回撤",
-        "score": 26.2,
+        "score": 27.7,
         "value": -11.53
       },
       {
         "name": "ATR百分比",
-        "score": 34.7,
-        "value": 2.52
+        "score": 31.2,
+        "value": 2.38
       },
       {
         "name": "量价异常",
-        "score": 19.3,
-        "value": 0.94
+        "score": 38.1,
+        "value": 0.84
       },
       {
         "name": "行业波动",
-        "score": 8.9,
-        "value": 40.98
+        "score": 0.5,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.47,
-    "return_5d_pct": -0.31,
-    "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 50.0,
+    "return_3d_pct": -0.38,
+    "return_5d_pct": -0.18,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 36.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 5.7860000000000005,
-    "ma10": 5.927,
-    "ma20": 5.933,
-    "ma60": 5.832833333333332,
-    "rsi14": 47.3,
-    "macd_dif": 0.0019844587923936174,
-    "macd_dea": 0.0345542700559712,
-    "macd_hist": -0.06513962252715516,
-    "atr14_pct": 2.5153435432037328,
-    "boll_position": 0.2601362791697597,
-    "return_5d_pct": -3.482587064676612,
-    "return_20d_pct": -1.6891891891891886,
-    "volume_ratio_5d": 0.94
+    "trend": "rebound",
+    "ma5": 5.798,
+    "ma10": 5.905,
+    "ma20": 5.9335,
+    "ma60": 5.836333333333333,
+    "rsi14": 50.2,
+    "macd_dif": 0.0018416509251313329,
+    "macd_dea": 0.028011746229803226,
+    "macd_hist": -0.052340190609343785,
+    "atr14_pct": 2.384729014562614,
+    "boll_position": 0.38619699891232795,
+    "return_5d_pct": 1.0309278350515427,
+    "return_20d_pct": 0.17035775127767216,
+    "volume_ratio_5d": 0.84
   },
   "industry": {
     "name": "银行",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 6.46,
-    "return_20d_pct": -1.42,
-    "return_60d_pct": -8.0,
-    "relative_strength_20d_pct": -0.27
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -8.18,
+    "relative_strength_20d_pct": 4.63
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,22 +86,29 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.47,
-      "median_return_pct": -0.3,
-      "best_return_pct": 2.98,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.38,
+      "median_return_pct": -0.29,
+      "best_return_pct": 2.31,
       "worst_return_pct": -4.75
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.31,
-      "median_return_pct": 0.15,
-      "best_return_pct": 3.36,
-      "worst_return_pct": -5.74
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.18,
+      "median_return_pct": -0.24,
+      "best_return_pct": 5.56,
+      "worst_return_pct": -6.1
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    }
+  ],
   "kline_file": "../kline/601988.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-10",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "000858",
   "name": "五粮液",
   "type": "stock",
   "category": "白酒",
   "stale": false,
   "scores": {
-    "risk_adjusted": 56.4,
-    "risk": 35.6,
-    "technical": 90.0,
-    "industry": 70.0
+    "risk_adjusted": 46.3,
+    "risk": 34.5,
+    "technical": 80.0,
+    "industry": 62.0
   },
   "risk": {
-    "level": "medium",
-    "label": "中等风险",
-    "annualized_volatility_20d_pct": 32.14,
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 32.83,
     "max_drawdown_60d_pct": -17.35,
-    "atr14_pct": 2.47,
+    "atr14_pct": 2.44,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 43.6,
-        "value": 32.14
+        "score": 44.6,
+        "value": 32.83
       },
       {
         "name": "60日最大回撤",
-        "score": 48.5,
+        "score": 49.0,
         "value": -17.35
       },
       {
         "name": "ATR百分比",
-        "score": 32.7,
-        "value": 2.47
+        "score": 33.7,
+        "value": 2.44
       },
       {
         "name": "量价异常",
-        "score": 24.8,
-        "value": 0.93
+        "score": 20.3,
+        "value": 0.91
       },
       {
         "name": "行业波动",
-        "score": 8.9,
-        "value": 40.98
+        "score": 0.5,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.15,
-    "return_5d_pct": 0.6,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 46.7,
+    "return_3d_pct": 0.4,
+    "return_5d_pct": 0.23,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 75.632,
-    "ma10": 76.275,
-    "ma20": 75.09150000000001,
-    "ma60": 75.60166666666666,
-    "rsi14": 54.0,
-    "macd_dif": 0.5226726557384183,
-    "macd_dea": 0.3948408991024862,
-    "macd_hist": 0.2556635132718641,
-    "atr14_pct": 2.4692535691824653,
-    "boll_position": 0.6512298805550433,
-    "return_5d_pct": -2.3955931334870617,
-    "return_20d_pct": 8.285957930642418,
-    "volume_ratio_5d": 0.93
+    "trend": "downtrend",
+    "ma5": 75.256,
+    "ma10": 76.295,
+    "ma20": 75.2955,
+    "ma60": 75.47366666666666,
+    "rsi14": 49.7,
+    "macd_dif": 0.43639564374950623,
+    "macd_dea": 0.40315184803189025,
+    "macd_hist": 0.06648759143523197,
+    "atr14_pct": 2.443544364445864,
+    "boll_position": 0.4521780521670408,
+    "return_5d_pct": -2.4453694068678367,
+    "return_20d_pct": 5.752961082910324,
+    "volume_ratio_5d": 0.91
   },
   "industry": {
     "name": "白酒",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 6.46,
-    "return_20d_pct": -1.42,
-    "return_60d_pct": -8.0,
-    "relative_strength_20d_pct": 9.7
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -8.18,
+    "relative_strength_20d_pct": 10.21
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.15,
-      "median_return_pct": -0.08,
-      "best_return_pct": 6.31,
-      "worst_return_pct": -4.98
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.4,
+      "median_return_pct": -0.15,
+      "best_return_pct": 7.27,
+      "worst_return_pct": -7.43
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.6,
-      "median_return_pct": -0.28,
-      "best_return_pct": 13.12,
-      "worst_return_pct": -4.3
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.23,
+      "median_return_pct": -0.67,
+      "best_return_pct": 11.35,
+      "worst_return_pct": -9.13
     }
   },
   "fundamental": {
@@ -222,6 +222,12 @@
     "cached_at": "2026-08-09 09:31:05"
   },
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",

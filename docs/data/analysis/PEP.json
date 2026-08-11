@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-07",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "PEP",
   "name": "百事",
   "type": "us",
   "category": "消费",
   "stale": false,
   "scores": {
-    "risk_adjusted": 46.6,
-    "risk": 29.8,
-    "technical": 90.0,
+    "risk_adjusted": 52.9,
+    "risk": 27.9,
+    "technical": 80.0,
     "industry": 62.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 21.68,
+    "annualized_volatility_20d_pct": 20.28,
     "max_drawdown_60d_pct": -10.37,
-    "atr14_pct": 2.26,
+    "atr14_pct": 2.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 17.3,
-        "value": 21.68
+        "score": 12.9,
+        "value": 20.28
       },
       {
         "name": "60日最大回撤",
-        "score": 19.8,
+        "score": 19.3,
         "value": -10.37
       },
       {
         "name": "ATR百分比",
-        "score": 23.3,
-        "value": 2.26
+        "score": 20.3,
+        "value": 2.14
       },
       {
         "name": "量价异常",
-        "score": 39.1,
-        "value": 0.88
+        "score": 68.8,
+        "value": 0.71
       },
       {
         "name": "行业波动",
-        "score": 73.8,
-        "value": 42.69
+        "score": 55.4,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.47,
-    "return_5d_pct": -0.18,
-    "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 46.7,
+    "return_3d_pct": 0.07,
+    "return_5d_pct": 0.39,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 56.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 138.994,
-    "ma10": 140.088,
-    "ma20": 138.2235,
-    "ma60": 141.94799999999998,
-    "rsi14": 48.5,
-    "macd_dif": -0.41237249870439996,
-    "macd_dea": -0.6690143546957621,
-    "macd_hist": 0.5132837119827243,
-    "atr14_pct": 2.258327129647932,
-    "boll_position": 0.5821507254272343,
-    "return_5d_pct": -0.38693035253654084,
-    "return_20d_pct": 1.193769107584819,
-    "volume_ratio_5d": 0.88
+    "trend": "downtrend",
+    "ma5": 138.28000000000003,
+    "ma10": 139.339,
+    "ma20": 138.2845,
+    "ma60": 141.56833333333333,
+    "rsi14": 44.6,
+    "macd_dif": -0.5703415071808422,
+    "macd_dea": -0.6207435479049132,
+    "macd_hist": 0.1008040814481419,
+    "atr14_pct": 2.1370432646325987,
+    "boll_position": 0.40913320871120423,
+    "return_5d_pct": -1.2005751258087671,
+    "return_20d_pct": 1.46179401993356,
+    "volume_ratio_5d": 0.71
   },
   "industry": {
     "name": "消费",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 5.39,
-    "return_20d_pct": -4.89,
-    "return_60d_pct": -9.57,
-    "relative_strength_20d_pct": 6.08
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -9.44,
+    "relative_strength_20d_pct": 5.92
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,22 +86,29 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.47,
-      "median_return_pct": -0.89,
-      "best_return_pct": 3.02,
-      "worst_return_pct": -3.98
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.07,
+      "median_return_pct": -0.13,
+      "best_return_pct": 3.59,
+      "worst_return_pct": -3.15
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.18,
-      "median_return_pct": -0.31,
-      "best_return_pct": 3.85,
-      "worst_return_pct": -3.93
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.39,
+      "median_return_pct": 0.3,
+      "best_return_pct": 6.58,
+      "worst_return_pct": -4.05
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    }
+  ],
   "kline_file": "../kline/PEP.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

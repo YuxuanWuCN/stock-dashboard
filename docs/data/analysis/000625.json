@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-10 20:06:03+08:00",
-  "trade_date": "2026-08-10",
+  "generated_at": "2026-08-11 22:21:30+08:00",
+  "trade_date": "2026-08-11",
   "code": "000625",
   "name": "长安汽车",
   "type": "stock",
   "category": "汽车",
   "stale": false,
   "scores": {
-    "risk_adjusted": 49.4,
-    "risk": 37.7,
-    "technical": 90.0,
-    "industry": 70.0
+    "risk_adjusted": 45.7,
+    "risk": 38.2,
+    "technical": 70.0,
+    "industry": 62.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 28.67,
+    "annualized_volatility_20d_pct": 29.07,
     "max_drawdown_60d_pct": -20.4,
-    "atr14_pct": 2.7,
+    "atr14_pct": 2.62,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 37.1,
-        "value": 28.67
+        "score": 37.6,
+        "value": 29.07
       },
       {
         "name": "60日最大回撤",
-        "score": 55.0,
+        "score": 55.9,
         "value": -20.4
       },
       {
         "name": "ATR百分比",
-        "score": 37.6,
-        "value": 2.7
+        "score": 36.1,
+        "value": 2.62
       },
       {
         "name": "量价异常",
-        "score": 39.6,
-        "value": 0.88
+        "score": 56.4,
+        "value": 0.75
       },
       {
         "name": "行业波动",
-        "score": 8.9,
-        "value": 40.98
+        "score": 0.5,
+        "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.16,
-    "return_5d_pct": 0.33,
-    "up_probability_3d_pct": 43.3,
+    "return_3d_pct": 0.19,
+    "return_5d_pct": 0.56,
+    "up_probability_3d_pct": 46.7,
     "up_probability_5d_pct": 33.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 7.465999999999999,
-    "ma10": 7.567,
-    "ma20": 7.3655,
-    "ma60": 7.465000000000001,
-    "rsi14": 50.7,
-    "macd_dif": 0.06129664523030787,
-    "macd_dea": 0.05153221787323671,
-    "macd_hist": 0.019528854714142313,
-    "atr14_pct": 2.7033886180778963,
-    "boll_position": 0.5515918082746041,
-    "return_5d_pct": -4.99359795134443,
-    "return_20d_pct": 9.43952802359882,
-    "volume_ratio_5d": 0.88
+    "trend": "downtrend",
+    "ma5": 7.412000000000001,
+    "ma10": 7.571,
+    "ma20": 7.391500000000001,
+    "ma60": 7.446333333333333,
+    "rsi14": 48.4,
+    "macd_dif": 0.048099589417314625,
+    "macd_dea": 0.050845692182052295,
+    "macd_hist": -0.005492205529475339,
+    "atr14_pct": 2.6216605063148095,
+    "boll_position": 0.45565702772351224,
+    "return_5d_pct": -3.543307086614178,
+    "return_20d_pct": 7.613469985358701,
+    "volume_ratio_5d": 0.75
   },
   "industry": {
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 6.46,
-    "return_20d_pct": -1.42,
-    "return_60d_pct": -8.0,
-    "relative_strength_20d_pct": 10.86
+    "return_5d_pct": 2.69,
+    "return_20d_pct": -4.46,
+    "return_60d_pct": -8.18,
+    "relative_strength_20d_pct": 12.07
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.16,
-      "median_return_pct": -0.75,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.19,
+      "median_return_pct": -0.6,
       "best_return_pct": 13.73,
-      "worst_return_pct": -5.91
+      "worst_return_pct": -7.58
     },
     "horizon_5d": {
       "up_probability_pct": 33.3,
-      "average_return_pct": 0.33,
-      "median_return_pct": -1.2,
+      "average_return_pct": 0.56,
+      "median_return_pct": -1.25,
       "best_return_pct": 31.07,
-      "worst_return_pct": -11.15
+      "worst_return_pct": -11.69
     }
   },
   "fundamental": {
@@ -228,6 +228,12 @@
     "cached_at": "2026-08-09 22:24:52"
   },
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",

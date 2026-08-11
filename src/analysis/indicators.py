@@ -332,8 +332,10 @@ def compute_all_indicators(
 # 13. 辅助：获取最近有效值
 # ============================================================
 
-def get_latest_value(series: pd.Series) -> Optional[float]:
-    """获取 series 中最后一个非 NaN 值。"""
+def get_latest_value(series: Optional[pd.Series]) -> Optional[float]:
+    """获取 series 中最后一个非 NaN 值；series 为 None 时返回 None。"""
+    if series is None:
+        return None
     valid = series.dropna()
     if valid.empty:
         return None

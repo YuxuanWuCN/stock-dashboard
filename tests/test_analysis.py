@@ -278,6 +278,9 @@ class TestIndicators(unittest.TestCase):
         s = pd.Series([np.nan, np.nan])
         self.assertIsNone(get_latest_value(s))
 
+    def test_get_latest_value_none(self):
+        self.assertIsNone(get_latest_value(None))
+
 
 # ============================================================
 # 测试滚动标准化（防泄漏核心）
