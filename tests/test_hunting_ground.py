@@ -220,3 +220,56 @@ def test_temperature_legu_fallback(monkeypatch):
     assert result["dimensions"]["up_count"] == 400
     assert result["dimensions"]["down_count"] == 100
     assert result["temperature"] >= 0
+
+
+# ------------------------------------------------------------
+# 均值回归预测因子
+# ------------------------------------------------------------
+
+def test_mean_reversion_no_history_no_damping():
+    """无历史时 damping=1.0（不降仓）。"""
+    d, info = MarketTemperature.mean_reversion_factor(88.0, [])
+    assert d == 1.0
+    assert info["note"] == "no_history"
+
+
+def test_mean_reversion_normal_no_damping():
+    """温度贴近近期均值时不降仓。"""
+    history = [70, 72, 68, 75, 71, 69, 74, 70, 73, 71]  # 均值约 71
+    d, info = MarketTemperature.mean_reversion_factor(72.0, history)
+    assert d == 1.0
+    assert info["note"] == "normal"
+
+
+def test_mean_reversion_overheat_damps():
+    """温度显著高于近期均值（>10 且当日≥65）时按偏离度降仓。"""
+    history = [60, 62, 58, 61, 59, 63, 60, 62, 61, 60]  # 均值约 60.6
+    d, info = MarketTemperature.mean_reversion_factor(88.0, history)
+    # 偏离 27.4 → damping = 1 - 17.4*0.008 = 0.86
+    assert d < 1.0
+    assert 0.8 <= d <= 0.9
+    assert info["note"] == "overheat"
+    assert info["mean20"] > 60 and info["mean20"] < 61
+
+
+def test_mean_reversion_extreme_overheat_floor():
+    """极端偏离时 damping 不低于 0.6 下限。"""
+    history = [50, 52, 51, 49, 53, 50, 52, 51, 50, 52]  # 均值约 51
+    d, info = MarketTemperature.mean_reversion_factor(100.0, history)
+    assert d >= 0.6
+    assert d < 0.9
+
+
+def test_mean_reversion_cold_notes_but_no_damp():
+    """温度低于均值时不降仓（低温已由 6 档仓位系数处理）。"""
+    history = [70, 72, 71, 73, 69, 74, 70, 71, 72, 70]  # 均值约 71
+    d, info = MarketTemperature.mean_reversion_factor(50.0, history)
+    assert d == 1.0
+    assert info["note"] == "cold_below_mean"
+
+
+def test_mean_reversion_low_mean_no_damp():
+    """近期均值≤30（长期冰封市场）时不触发过热降仓。"""
+    history = [20, 22, 25, 21, 24, 23, 20, 26, 22, 21]
+    d, info = MarketTemperature.mean_reversion_factor(80.0, history)
+    assert d == 1.0

@@ -20,6 +20,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from src.config import DATA_DIR
+from src.utils import beijing_date_str
 from src.strategies.hunting_ground import HuntingGround
 from src.strategies.market_temperature import MarketTemperature, MarketTemperatureError
 
@@ -113,11 +114,41 @@ def main() -> int:
     logger.info("计算市场温度...")
     try:
         temperature = MarketTemperature().calculate()
+
+        # 温度历史（按日追加，保留最近 20 个交易日）——用于均值回归预测因子
+        temp_history_path = os.path.join(out_dir, "market_temperature_history.json")
+        temp_history = []
+        if os.path.exists(temp_history_path):
+            try:
+                with open(temp_history_path, "r", encoding="utf-8") as f:
+                    hist_data = json.load(f)
+                temp_history = hist_data.get("history", []) if isinstance(hist_data, dict) else []
+            except Exception:
+                temp_history = []
+        # 当日去重后追加（同一天只保留最新）
+        today = beijing_date_str()
+        temp_history = [h for h in temp_history if h.get("date") != today]
+        temp_history.append({"date": today, "temperature": temperature["temperature"]})
+        temp_history = temp_history[-20:]  # 近 20 个交易日
+
+        # 均值回归预测因子：温度显著高于近期均值时降仓，避免狂热顶部追高
+        damping, reg_info = MarketTemperature.mean_reversion_factor(
+            temperature["temperature"], [h["temperature"] for h in temp_history[:-1]])
+        adjusted_ratio = round(temperature["position_ratio"] * damping, 3)
+
         with open(os.path.join(out_dir, "market_temperature.json"), "w", encoding="utf-8") as f:
-            json.dump({"generated_at": generated_at, **temperature}, f,
-                      ensure_ascii=False, indent=2)
-        logger.info("市场温度: %.1f (%s, 仓位系数 %.2f)",
-                    temperature["temperature"], temperature["status"], temperature["position_ratio"])
+            json.dump({
+                "generated_at": generated_at,
+                **temperature,
+                "position_ratio_adjusted": adjusted_ratio,
+                "mean_reversion": reg_info,
+            }, f, ensure_ascii=False, indent=2)
+        with open(temp_history_path, "w", encoding="utf-8") as f:
+            json.dump({"history": temp_history}, f, ensure_ascii=False, indent=2)
+
+        logger.info("市场温度: %.1f (%s, 仓位系数 %.2f → 调整后 %.2f, 均值回归 %s)",
+                    temperature["temperature"], temperature["status"],
+                    temperature["position_ratio"], adjusted_ratio, reg_info.get("note"))
     except MarketTemperatureError as exc:
         logger.warning("市场温度计算失败（不影响选股结果）: %s", exc)
 

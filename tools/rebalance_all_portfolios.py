@@ -84,6 +84,7 @@ TEMPERATURE_TIERS = [
 def load_market_temperature():
     """加载当日市场温度，返回 (temperature, position_ratio)。
 
+    优先使用均值回归调整后的仓位系数（position_ratio_adjusted），
     温度文件缺失或异常时返回 (None, 1.0)（兜底满仓，等同原行为），不阻塞调仓。
     """
     if not os.path.exists(MARKET_TEMP_FILE):
@@ -92,7 +93,7 @@ def load_market_temperature():
     try:
         with open(MARKET_TEMP_FILE, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        ratio = data.get('position_ratio')
+        ratio = data.get('position_ratio_adjusted', data.get('position_ratio'))
         if ratio is None:
             print("⚠️  市场温度缺少 position_ratio，按满仓处理")
             return data.get('temperature'), 1.0

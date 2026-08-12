@@ -70,21 +70,20 @@ class MarketTemperature:
         down_count = int((spot["涨跌幅"] < 0).sum())
         total = up_count + down_count
         up_down_ratio = up_count / total if total > 0 else 0.5
-        # 0.3~0.7 映射到 0~100
-        ratio_score = max(0.0, min(100.0, (up_down_ratio - 0.3) / 0.4 * 100.0))
+        # 0.3~1.0 映射到 0~100：涨跌比 7:3 时 57 分，1:0 才到 100（避免普涨天顶格）
+        ratio_score = max(0.0, min(100.0, (up_down_ratio - 0.3) / 0.7 * 100.0))
 
         # 跌停家数（权重 35%）：跌停越多温度越低
         limit_down_count = int((spot["涨跌幅"] <= -9.8).sum())
         limit_down_score = max(0.0, 100.0 - limit_down_count * 10.0)
 
-        # 成交额位置（权重 10%）：当日总成交额
+        # 成交额位置（权重 10%）：当日总成交额，2 万亿封顶（避免放量天顶格）
         amount = float(spot["成交额"].sum())
-        # 用 1 万亿元作为中性参考（A 股常态区间 0.6~1.5 万亿）
-        volume_score = max(0.0, min(100.0, amount / 1.0e12 * 100.0))
+        volume_score = max(0.0, min(100.0, amount / 2.0e12 * 100.0))
 
-        # 昨日涨停表现（权重 20%）：当日涨幅靠前股票的强度近似
+        # 昨日涨停表现（权重 20%）：当日涨幅靠前股票的强度近似，8% 封顶
         top_gainers = spot.nlargest(20, "涨跌幅")["涨跌幅"].mean()
-        limit_up_perf_score = max(0.0, min(100.0, 50.0 + float(top_gainers) * 5.0))
+        limit_up_perf_score = max(0.0, min(100.0, 50.0 + float(top_gainers) * 6.25))
 
         temperature = (
             self.WEIGHT_UP_DOWN_RATIO * ratio_score
@@ -134,17 +133,17 @@ class MarketTemperature:
         limit_up_count = int(_value("真实涨停"))
         total = up_count + down_count
         up_down_ratio = up_count / total if total > 0 else 0.5
-        ratio_score = max(0.0, min(100.0, (up_down_ratio - 0.3) / 0.4 * 100.0))
+        ratio_score = max(0.0, min(100.0, (up_down_ratio - 0.3) / 0.7 * 100.0))
         limit_down_score = max(0.0, 100.0 - limit_down_count * 10.0)
 
         amount_yuan = self._fetch_market_amount()
         if amount_yuan is None:
             volume_score = 50.0  # 无成交额时给中性分
         else:
-            volume_score = max(0.0, min(100.0, amount_yuan / 1.0e12 * 100.0))
+            volume_score = max(0.0, min(100.0, amount_yuan / 2.0e12 * 100.0))
 
-        # 用真实涨停家数近似“涨停表现”强度
-        limit_up_perf_score = max(0.0, min(100.0, 50.0 + limit_up_count * 0.6))
+        # 用真实涨停家数近似“涨停表现”强度，40 家封顶
+        limit_up_perf_score = max(0.0, min(100.0, 50.0 + limit_up_count * 1.25))
 
         temperature = (
             self.WEIGHT_UP_DOWN_RATIO * ratio_score
@@ -202,3 +201,36 @@ class MarketTemperature:
             if temperature >= threshold:
                 return status, ratio
         return MarketTemperature.STATUS_THRESHOLDS[-1][1], MarketTemperature.STATUS_THRESHOLDS[-1][2]
+
+    @staticmethod
+    def mean_reversion_factor(temperature: float, history: list) -> tuple:
+        """均值回归预测因子：温度相对近 20 日均值的偏离度。
+
+        理念：今天的狂热不预测明天的狂热。当日温度显著高于近期均值
+        （>10 度且当日≥65）时，按偏离度线性降仓（最多降 40%），
+        避免在情绪顶部满仓追高；趋势延续（偏离小）不降仓。
+
+        返回 (damping, info)；history 为空或均值≤30 时 damping=1.0（不降）。
+        """
+        if temperature is None or not history:
+            return 1.0, {"mean20": None, "overheat": 0.0, "percentile": None, "note": "no_history"}
+        vals = [float(h) for h in history if h is not None]
+        if not vals:
+            return 1.0, {"mean20": None, "overheat": 0.0, "percentile": None, "note": "no_history"}
+        mean20 = sum(vals) / len(vals)
+        overheat = temperature - mean20
+        percentile = sum(1 for v in vals if v <= temperature) / len(vals) * 100.0
+
+        damping = 1.0
+        note = "normal"
+        if mean20 > 30 and temperature >= 65 and overheat > 10:
+            damping = max(0.6, 1.0 - (overheat - 10.0) * 0.008)
+            note = "overheat" if percentile >= 90 else "hot_above_mean"
+        elif mean20 > 30 and temperature < mean20 - 10:
+            note = "cold_below_mean"
+        return round(damping, 3), {
+            "mean20": round(mean20, 1),
+            "overheat": round(overheat, 1),
+            "percentile": round(percentile, 1),
+            "note": note,
+        }
