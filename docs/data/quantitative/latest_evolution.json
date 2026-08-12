@@ -1,6 +1,5 @@
 {
-  "generated_at": "20260811_154139",
-  "analysis_period": "past_7_days",
+  "analysis_date": "20260811_154139",
   "champion": {
     "name": "global",
     "stats": {
@@ -48,7 +47,11 @@
           }
         ]
       }
-    }
+    },
+    "cumulative_return": 1.1,
+    "sharpe_ratio": 3.667,
+    "win_rate": 1.0,
+    "max_drawdown": 0
   },
   "all_strategies": {
     "aggressive": {
@@ -144,15 +147,6 @@
       "llm_reasoning": "在保持高盈亏比的同时，增加盈利交易的平均收益，累计收益有望提升至3%以上"
     }
   ],
-  "next_week_strategies": [
-    "aggressive",
-    "robust",
-    "bluechip",
-    "defensive",
-    "global",
-    "tech",
-    "global_v1",
-    "global_v2",
-    "global_v3"
-  ]
+  "llm_analysis": "**成功因素：**高盈亏比：预测准确率仅11.1%，但最近7天收益为正，说明单次盈利远大于多次亏损，策略依靠少数大行情获利。；严格风险控制：在低胜率下仍能保持正收益，表明每笔亏损有限，止损纪律严格，避免了连续小亏侵蚀本金。\n**可持续性（5.5/10）：**低准确率依赖高盈亏比，长期稳定性存疑；若市场环境转向震荡或趋势行情减少，策略可能失效。同时样本量过小，统计显著性不足。\n**改进方向：**增加过滤条件以提高准确率（当前准确率仅11.1%，对盈亏比要求过高；通过加入趋势确认、量能验证等过滤器，减少无效交易，降低回撤风险。）；优化仓位管理，采用动态仓位策略（在高盈亏比下，通过仓位控制平衡风险，避免单次大亏损影响整体资金。）",
+  "source_file": "weekly_analysis_20260811_154139.json"
 }
