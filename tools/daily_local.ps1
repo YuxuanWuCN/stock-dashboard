@@ -82,8 +82,10 @@ if ($latestSentiment) {
     Write-Log ("  复制: " + $latestSentiment.Name + " → latest_sentiment.json")
 }
 
-# 复制最新策略进化数据
-$latestEvolution = Get-ChildItem "reports\strategy_evolution\weekly_*.json" -ErrorAction SilentlyContinue |
+# 复制最新策略进化数据（先转换为前端格式，兼容 portfolio.js 的扁平字段）
+& $py tools\weekly_champion_analysis.py export *>> $logFile
+Write-Log ("weekly_champion export 退出码: " + $LASTEXITCODE)
+$latestEvolution = Get-ChildItem "reports\strategy_evolution\latest_evolution.json" -ErrorAction SilentlyContinue |
     Sort-Object LastWriteTime -Descending | Select-Object -First 1
 if ($latestEvolution) {
     Copy-Item $latestEvolution.FullName -Destination (Join-Path $dashboardDataDir "latest_evolution.json") -Force

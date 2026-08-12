@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-11 22:21:30+08:00",
+  "generated_at": "2026-08-12 18:16:46+08:00",
   "trade_date": "2026-08-11",
   "code": "GOOGL",
   "name": "谷歌-A",
@@ -8,68 +8,68 @@
   "category": "科技",
   "stale": false,
   "scores": {
-    "risk_adjusted": 50.9,
-    "risk": 61.3,
-    "technical": 83.0,
-    "industry": 53.9
+    "risk_adjusted": 45.0,
+    "risk": 62.6,
+    "technical": 73.0,
+    "industry": 47.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 49.91,
+    "annualized_volatility_20d_pct": 51.37,
     "max_drawdown_60d_pct": -19.97,
-    "atr14_pct": 3.41,
+    "atr14_pct": 3.61,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 70.8,
-        "value": 49.91
+        "score": 72.3,
+        "value": 51.37
       },
       {
         "name": "60日最大回撤",
-        "score": 55.0,
+        "score": 55.9,
         "value": -19.97
       },
       {
         "name": "ATR百分比",
-        "score": 57.9,
-        "value": 3.41
+        "score": 62.4,
+        "value": 3.61
       },
       {
         "name": "量价异常",
-        "score": 63.9,
-        "value": 0.72
+        "score": 35.1,
+        "value": 0.84
       },
       {
         "name": "行业波动",
-        "score": 55.4,
+        "score": 73.3,
         "value": 39.67
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.75,
-    "return_5d_pct": 1.57,
-    "up_probability_3d_pct": 70.0,
-    "up_probability_5d_pct": 66.7,
+    "return_3d_pct": 0.92,
+    "return_5d_pct": 1.14,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 56.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 356.754,
-    "ma10": 356.143,
-    "ma20": 348.6255,
-    "ma60": 360.88666666666666,
-    "rsi14": 49.4,
-    "macd_dif": 0.8969116782663491,
-    "macd_dea": -0.9429240658886286,
-    "macd_hist": 3.6796714883099555,
-    "atr14_pct": 3.408790658730712,
-    "boll_position": 0.5479736281920211,
-    "return_5d_pct": -6.852906130014558,
-    "return_20d_pct": -2.1529303774582065,
-    "volume_ratio_5d": 0.72
+    "trend": "downtrend",
+    "ma5": 355.15999999999997,
+    "ma10": 355.346,
+    "ma20": 348.227,
+    "ma60": 360.7538333333333,
+    "rsi14": 45.9,
+    "macd_dif": 0.26112820248295066,
+    "macd_dea": -1.0700807610453082,
+    "macd_hist": 2.662417927056518,
+    "atr14_pct": 3.6130940040521566,
+    "boll_position": 0.43252427121256415,
+    "return_5d_pct": -8.963325830795698,
+    "return_20d_pct": -4.369836722205223,
+    "volume_ratio_5d": 0.84
   },
   "industry": {
     "name": "科技",
@@ -78,7 +78,7 @@
     "return_5d_pct": 2.69,
     "return_20d_pct": -4.46,
     "return_60d_pct": -9.44,
-    "relative_strength_20d_pct": 2.31
+    "relative_strength_20d_pct": 0.09
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,22 +86,28 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 70.0,
-      "average_return_pct": 1.75,
-      "median_return_pct": 2.3,
-      "best_return_pct": 7.26,
-      "worst_return_pct": -5.27
+      "up_probability_pct": 66.7,
+      "average_return_pct": 0.92,
+      "median_return_pct": 0.77,
+      "best_return_pct": 7.86,
+      "worst_return_pct": -5.54
     },
     "horizon_5d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 1.57,
-      "median_return_pct": 1.51,
-      "best_return_pct": 12.6,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.14,
+      "median_return_pct": 0.65,
+      "best_return_pct": 14.38,
       "worst_return_pct": -10.37
     }
   },
   "fundamental": null,
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",
@@ -117,7 +123,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 49.9%，波动偏高。",
+      "detail": "20日年化波动率 51.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

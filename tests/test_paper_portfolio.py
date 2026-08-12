@@ -8,6 +8,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import tools.paper_portfolio as pp
+import tools.weekly_champion_analysis as weekly
 
 
 def _write_json(path, data):
@@ -176,7 +177,104 @@ def test_benchmark_backfills_from_kline(tmp_path, monkeypatch):
     assert last["daily_return_pct"] == 0.0          # (1 + (-1)) / 2
     assert abs(last["cumulative_return_pct"] - 0.5) < 0.01  # (1+0.5%)*(1+0%)-1
 
-def test_manifest_lists_all_portfolios(tmp_path, monkeypatch):
+def test_report_outputs_history_for_frontend(tmp_path, monkeypatch):
+    """前端兼容：performance 文件除 records 外，还要有 history（date/total_return）与 holdings。"""
+    data = _setup(tmp_path)
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "SUMMARY_PATH", str(data / "summary.json"))
+    monkeypatch.setattr(pp, "PORTFOLIO_PATH", str(data / "paper" / "portfolio.json"))
+    monkeypatch.setattr(pp, "PERFORMANCE_PATH", str(data / "paper" / "performance.json"))
+    assert pp.report() == 0
+    perf = json.loads((data / "paper" / "performance.json").read_text(encoding="utf-8"))
+    assert "history" in perf and "holdings" in perf
+    assert perf["history"][-1]["date"] == "2026-08-07"
+    # 唯一记录：total_return == 当日等权收益
+    assert perf["history"][-1]["total_return"] == 0.5
+    assert perf["history"][-1]["daily_return"] == 0.5
+    # holdings 只含有效持仓（change_pct 非 None 的股票）
+    codes = sorted(h["code"] for h in perf["holdings"])
+    assert codes == ["000001", "MA"]
+
+
+def test_report_history_compounds_over_multiple_days(tmp_path, monkeypatch):
+    """history 的 total_return 应按日复利累计，而非简单相加。"""
+    portfolio = {
+        "name": "测试组合", "capital": 1000000, "cash_pct": 0,
+        "items": [{"code": "000001", "name": "平安银行", "pct": 100}],
+    }
+    data = _setup(tmp_path, portfolio=portfolio)
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "SUMMARY_PATH", str(data / "summary.json"))
+    monkeypatch.setattr(pp, "PORTFOLIO_PATH", str(data / "paper" / "portfolio.json"))
+    monkeypatch.setattr(pp, "PERFORMANCE_PATH", str(data / "paper" / "performance.json"))
+
+    # 第一天：+10%
+    _write_json(data / "summary.json", {
+        "items": [{"code": "000001", "change_pct": 10.0, "last_date": "2026-08-07", "status": "ok"}],
+    })
+    pp.report()
+    # 第二天：+10%（累计应为 (1.1*1.1-1)=21%，而不是 20%）
+    _write_json(data / "summary.json", {
+        "items": [{"code": "000001", "change_pct": 10.0, "last_date": "2026-08-08", "status": "ok"}],
+    })
+    pp.report()
+    perf = json.loads((data / "paper" / "performance.json").read_text(encoding="utf-8"))
+    assert len(perf["history"]) == 2
+    assert perf["history"][0]["total_return"] == 10.0
+    assert perf["history"][1]["total_return"] == 21.0
+    # 时间升序
+    assert [h["date"] for h in perf["history"]] == ["2026-08-07", "2026-08-08"]
+
+
+def test_benchmark_outputs_history(tmp_path, monkeypatch):
+    """基准文件同样输出 history（total_return 来自 cumulative_return_pct）。"""
+    data = _setup(tmp_path)
+    monkeypatch.setattr(pp, "DATA_DIR", str(data))
+    monkeypatch.setattr(pp, "SUMMARY_PATH", str(data / "summary.json"))
+    monkeypatch.setattr(pp, "BENCHMARK_PATH", str(data / "paper" / "benchmark.json"))
+    monkeypatch.setattr(pp, "KLINE_DIR", str(data / "kline"))
+    assert pp.benchmark() == 0
+    bm = json.loads((data / "paper" / "benchmark.json").read_text(encoding="utf-8"))
+    assert "history" in bm
+    assert bm["history"][-1]["date"] == "2026-08-07"
+    assert bm["history"][-1]["total_return"] == 0.5
+
+
+def test_export_frontend_evolution(tmp_path, monkeypatch):
+    """前端格式导出：champion 扁平字段 + llm_analysis 字符串。"""
+    report_dir = tmp_path / "strategy_evolution"
+    report_dir.mkdir()
+    src = report_dir / "weekly_analysis_20260810_120000.json"
+    src.write_text(json.dumps({
+        "generated_at": "20260810_120000",
+        "champion": {
+            "name": "global",
+            "stats": {"cumulative_return": 1.1, "sharpe": 3.667, "win_rate": 100.0, "max_drawdown": 0.0, "score": 24.72},
+            "analysis": {
+                "llm_analysis": {
+                    "success_factors": ["高盈亏比", "严格止损"],
+                    "sustainability": {"score": 5.5, "reasoning": "样本量小"},
+                    "improvement_directions": [{"direction": "加过滤", "reason": "提高胜率"}],
+                }
+            },
+        },
+        "all_strategies": {"global": {"score": 24.72}},
+        "variants": [{"name": "global_v1"}],
+    }, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(weekly, "ANALYSIS_DIR", str(report_dir))
+    assert weekly.export_frontend_evolution() == 0
+    out = json.loads((report_dir / "latest_evolution.json").read_text(encoding="utf-8"))
+    ch = out["champion"]
+    assert ch["name"] == "global"
+    assert ch["cumulative_return"] == 1.1
+    assert ch["sharpe_ratio"] == 3.667
+    # 前端显示逻辑为 win_rate*100，故导出必须是小数
+    assert ch["win_rate"] == 1.0
+    assert ch["max_drawdown"] == 0.0
+    assert "高盈亏比" in out["llm_analysis"]
+    assert "严格止损" in out["llm_analysis"]
+    assert "样本量小" in out["llm_analysis"]
+    assert out["analysis_date"] == "20260810_120000"
     """组合清单包含全部 portfolio 文件与基准，is_benchmark 标记正确。"""
     data = _setup(tmp_path)
     # 多创建两个组合文件（防守 + 科技）

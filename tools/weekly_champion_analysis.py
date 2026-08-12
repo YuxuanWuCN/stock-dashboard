@@ -669,5 +669,74 @@ def main():
     return 0
 
 
+def export_frontend_evolution():
+    """将最新一份周冠军分析报告转换为前端 latest_evolution.json 格式并保存。
+
+    前端 portfolio.js 期望：
+      - champion 扁平字段（cumulative_return/sharpe_ratio/win_rate/max_drawdown）
+      - llm_analysis 为字符串（直接 innerHTML 展示）
+    原报告的 champion.stats / champion.analysis 嵌套结构保持兼容，仅增加扁平字段。
+    """
+    import glob
+    files = sorted(glob.glob(os.path.join(ANALYSIS_DIR, "weekly_analysis_*.json")))
+    if not files:
+        print("未找到周冠军分析报告，请先运行 python tools/weekly_champion_analysis.py")
+        return 1
+    latest = files[-1]
+    with open(latest, "r", encoding="utf-8") as f:
+        report = json.load(f)
+
+    champion = report.get("champion", {})
+    stats = champion.get("stats", {})
+    analysis = champion.get("analysis", {})
+    llm = analysis.get("llm_analysis") or {}
+
+    # 前端 portfolio.js 期望：win_rate 为小数（显示时 *100），
+    # 其余为百分数；缺字段时不输出该键（避免 null 触发前端 .toFixed() 崩溃）
+    flat = dict(champion)
+    if stats.get("cumulative_return") is not None:
+        flat["cumulative_return"] = round(stats["cumulative_return"], 2)
+    if stats.get("sharpe") is not None:
+        flat["sharpe_ratio"] = round(stats["sharpe"], 3)
+    if stats.get("win_rate") is not None:
+        flat["win_rate"] = round(stats["win_rate"] / 100.0, 4)
+    if stats.get("max_drawdown") is not None:
+        flat["max_drawdown"] = round(stats["max_drawdown"], 2)
+
+    text_parts = []
+    if llm.get("success_factors"):
+        text_parts.append("**成功因素：**" + "；".join(llm["success_factors"]))
+    sus = llm.get("sustainability") or {}
+    if sus.get("reasoning"):
+        text_parts.append(f"**可持续性（{sus.get('score', '?')}/10）：**" + sus["reasoning"])
+    if llm.get("improvement_directions"):
+        text_parts.append("**改进方向：**" + "；".join(
+            f"{d.get('direction', '')}（{d.get('reason', '')}）"
+            for d in llm["improvement_directions"]))
+    llm_text = "\n".join(text_parts) if text_parts else "（无 LLM 深度分析）"
+
+    out = {
+        "analysis_date": report.get("generated_at", ""),
+        "champion": flat,
+        "all_strategies": report.get("all_strategies", {}),
+        "variants": report.get("variants", []),
+        "llm_analysis": llm_text,
+        "source_file": os.path.basename(latest),
+    }
+    out_path = os.path.join(ANALYSIS_DIR, "latest_evolution.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print(f"✅ 前端格式已导出: {out_path} (冠军: {flat.get('name')})")
+    return 0
+
+
 if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description="周冠军策略分析与衍生系统")
+    parser.add_argument("cmd", nargs="?", default="analyze",
+                        choices=["analyze", "export"],
+                        help="analyze=完整分析；export=仅将最新报告转为前端格式")
+    args = parser.parse_args()
+    if args.cmd == "export":
+        sys.exit(export_frontend_evolution())
     sys.exit(main())

@@ -1,75 +1,75 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-11 22:21:30+08:00",
-  "trade_date": "2026-08-11",
+  "generated_at": "2026-08-12 18:16:46+08:00",
+  "trade_date": "2026-08-12",
   "code": "601066",
   "name": "中信建投",
   "type": "stock",
   "category": "券商",
   "stale": false,
   "scores": {
-    "risk_adjusted": 44.4,
-    "risk": 35.8,
+    "risk_adjusted": 35.5,
+    "risk": 33.2,
     "technical": 58.0,
-    "industry": 47.0
+    "industry": 38.8
   },
   "risk": {
-    "level": "medium",
-    "label": "中等风险",
-    "annualized_volatility_20d_pct": 26.76,
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 23.69,
     "max_drawdown_60d_pct": -15.9,
-    "atr14_pct": 3.26,
+    "atr14_pct": 3.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 31.7,
-        "value": 26.76
+        "score": 24.3,
+        "value": 23.69
       },
       {
         "name": "60日最大回撤",
-        "score": 43.6,
+        "score": 44.1,
         "value": -15.9
       },
       {
         "name": "ATR百分比",
-        "score": 56.4,
-        "value": 3.26
+        "score": 53.5,
+        "value": 3.14
       },
       {
         "name": "量价异常",
-        "score": 40.6,
-        "value": 0.83
+        "score": 40.1,
+        "value": 0.82
       },
       {
         "name": "行业波动",
-        "score": 0.5,
-        "value": 39.67
+        "score": 1.5,
+        "value": 39.57
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.33,
-    "return_5d_pct": 0.39,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 56.7,
+    "return_3d_pct": 0.25,
+    "return_5d_pct": -0.17,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 25.938,
-    "ma10": 25.858000000000004,
-    "ma20": 26.241500000000002,
-    "ma60": 26.118333333333336,
-    "rsi14": 44.0,
-    "macd_dif": -0.2910778218985861,
-    "macd_dea": -0.24815959865245021,
-    "macd_hist": -0.08583644649227179,
-    "atr14_pct": 3.26461018372698,
-    "boll_position": 0.26761891225533047,
-    "return_5d_pct": -0.5415860735009659,
-    "return_20d_pct": -4.636498516320476,
-    "volume_ratio_5d": 0.83
+    "trend": "downtrend",
+    "ma5": 25.872000000000003,
+    "ma10": 25.840999999999998,
+    "ma20": 26.1355,
+    "ma60": 26.175333333333338,
+    "rsi14": 43.9,
+    "macd_dif": -0.29518240435189824,
+    "macd_dea": -0.2575641597923398,
+    "macd_hist": -0.07523648911911685,
+    "atr14_pct": 3.138217514472119,
+    "boll_position": 0.26000012122714644,
+    "return_5d_pct": -1.2677679600461067,
+    "return_20d_pct": -7.620416966211363,
+    "volume_ratio_5d": 0.82
   },
   "industry": {
     "name": "券商",
@@ -78,7 +78,7 @@
     "return_5d_pct": 2.69,
     "return_20d_pct": -4.46,
     "return_60d_pct": -8.18,
-    "relative_strength_20d_pct": -0.18
+    "relative_strength_20d_pct": -4.1
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,22 +86,28 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.33,
-      "median_return_pct": 0.17,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.25,
+      "median_return_pct": 0.32,
       "best_return_pct": 6.41,
-      "worst_return_pct": -11.52
+      "worst_return_pct": -8.85
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.39,
-      "median_return_pct": 0.61,
-      "best_return_pct": 6.23,
-      "worst_return_pct": -9.87
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.17,
+      "median_return_pct": 0.15,
+      "best_return_pct": 4.58,
+      "worst_return_pct": -10.96
     }
   },
   "fundamental": null,
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",

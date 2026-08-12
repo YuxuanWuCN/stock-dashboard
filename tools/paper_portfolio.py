@@ -54,6 +54,49 @@ def _performance_path_for(portfolio_path: str) -> str:
     suffix = name[len("portfolio"):]
     return os.path.join(DATA_DIR, "paper", f"performance{suffix}.json")
 
+def _history_from_records(records: list) -> list:
+    """由 records 生成前端 history 数组（date/total_return/daily_return/sharpe_ratio 等）。
+
+    历史曲线的口径与周冠军分析一致：不含现金的股票等权累计收益
+    （equal_weight_return_pct），按 trade_date 升序；sharpe_ratio 为截至
+    当日的滚动值（日均收益/日收益总体标准差，单日数据时为 None）。
+    """
+    dates = [r["trade_date"] for r in records]
+    dates.sort()
+    total = 0.0  # 小数形式的累计收益（1.0 == 100%）
+    history = []
+    daily_series = []
+    for d in dates:
+        rec = next(r for r in records if r["trade_date"] == d)
+        daily = rec.get("equal_weight_return_pct")
+        if daily is None:
+            continue
+        total = (1.0 + total) * (1.0 + daily / 100.0) - 1.0
+        daily_series.append(daily)
+        avg = sum(daily_series) / len(daily_series)
+        std = (sum((x - avg) ** 2 for x in daily_series) / len(daily_series)) ** 0.5
+        sharpe = round(avg / std, 3) if std > 0 else None
+        history.append({
+            "date": d,
+            "total_return": round(total * 100.0, 2),
+            "daily_return": daily,
+            "sharpe_ratio": sharpe,
+        })
+    return history
+
+
+def _holdings_from_items(items: list) -> list:
+    """从最近一条记录 items 提取前端展示的持仓（name + code）。"""
+    if not items:
+        return []
+    out = []
+    for it in items:
+        if it.get("change_pct") is None:
+            continue
+        out.append({"code": it.get("code"), "name": it.get("name")})
+    return out
+
+
 def _backfill_portfolio_from_kline(portfolio: dict, trade_date: str):
     """用 kline 回填组合起点当日收益（按 items 权重加权，缺失股票跳过）。"""
     changes = []
@@ -166,6 +209,10 @@ def report(portfolio_path: str = None) -> int:
         if back:
             perf["records"].append(back)
     perf["records"].append(entry)
+    # 前端兼容字段：history（日期序列曲线）+ holdings（最新持仓）
+    perf["records"].sort(key=lambda r: r["trade_date"])
+    perf["history"] = _history_from_records(perf["records"])
+    perf["holdings"] = _holdings_from_items(rows)
     os.makedirs(os.path.dirname(performance_path), exist_ok=True)
     with open(performance_path, "w", encoding="utf-8") as f:
         json.dump(perf, f, ensure_ascii=False, indent=2)
@@ -264,6 +311,13 @@ def benchmark() -> int:
     })
     records.sort(key=lambda r: r["trade_date"])
     data["records"] = records
+    # 前端兼容字段：history（累计收益曲线，基准曲线起点与组合对齐）
+    data["history"] = [
+        {"date": r["trade_date"],
+         "total_return": r.get("cumulative_return_pct"),
+         "daily_return": r.get("daily_return_pct")}
+        for r in records if r.get("cumulative_return_pct") is not None
+    ]
     os.makedirs(os.path.dirname(BENCHMARK_PATH), exist_ok=True)
     with open(BENCHMARK_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
