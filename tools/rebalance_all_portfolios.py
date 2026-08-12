@@ -63,6 +63,109 @@ def load_aggressive_scan():
     return items
 
 
+# ============================================================================
+# 市场温度联动
+# ============================================================================
+
+MARKET_TEMP_FILE = os.path.join(DATA_DIR, "strategy", "market_temperature.json")
+PORTFOLIO_CONFIG_FILE = os.path.join("config", "strategy_params.json")
+
+# 温度档位（与 src/strategies/market_temperature.py 的 STATUS_THRESHOLDS 保持一致）
+TEMPERATURE_TIERS = [
+    (80, 1.0),    # 活跃
+    (65, 0.8),    # 正常
+    (50, 0.5),    # 偏冷
+    (30, 0.25),   # 寒冷
+    (15, 0.1),    # 冰封
+    (0, 0.0),     # 极端
+]
+
+
+def load_market_temperature():
+    """加载当日市场温度，返回 (temperature, position_ratio)。
+
+    温度文件缺失或异常时返回 (None, 1.0)（兜底满仓，等同原行为），不阻塞调仓。
+    """
+    if not os.path.exists(MARKET_TEMP_FILE):
+        print("⚠️  未找到 market_temperature.json，按满仓处理")
+        return None, 1.0
+    try:
+        with open(MARKET_TEMP_FILE, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        ratio = data.get('position_ratio')
+        if ratio is None:
+            print("⚠️  市场温度缺少 position_ratio，按满仓处理")
+            return data.get('temperature'), 1.0
+        return data.get('temperature'), float(ratio)
+    except Exception as exc:
+        print(f"⚠️  读取市场温度失败 ({exc})，按满仓处理")
+        return None, 1.0
+
+
+def position_ratio_for_temperature(temperature):
+    """按温度档位返回仓位系数（温度缺失或 None 时返回 1.0）。"""
+    if temperature is None:
+        return 1.0
+    for threshold, ratio in TEMPERATURE_TIERS:
+        if temperature >= threshold:
+            return ratio
+    return TEMPERATURE_TIERS[-1][1]
+
+
+def load_portfolio_config():
+    """读取 config/strategy_params.json 中的 portfolios 段；缺省时返回空 dict。"""
+    try:
+        with open(PORTFOLIO_CONFIG_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f).get('portfolios', {})
+    except Exception as exc:
+        print(f"⚠️  读取组合配置失败 ({exc})，使用默认值")
+        return {}
+
+
+def portfolio_settings(key, config, temperature, defaults=None):
+    """解析某组合的温度联动设置，返回 (enabled, size, base_ratio)。
+
+    - 配置缺失该组合：返回默认设置（enabled=False，保持原行为）
+    - 配置 enabled=False：返回 (False, defaults.size, defaults.base_ratio)
+    - 配置 enabled=True：持仓数 = max(min_size, round(max_size × 仓位系数))
+    """
+    defaults = defaults or {}
+    cfg = config.get(key) or {}
+    enabled = bool(cfg.get('enabled', False))
+    base_ratio = float(cfg.get('base_ratio', defaults.get('base_ratio', 1.0)))
+
+    if not enabled:
+        return False, defaults.get('size', 10), base_ratio
+
+    max_size = int(cfg.get('max_size', defaults.get('max_size', 20)))
+    min_size = int(cfg.get('min_size', defaults.get('min_size', 5)))
+    ratio = position_ratio_for_temperature(temperature)
+    size = max(min_size, round(max_size * ratio))
+    return True, size, base_ratio
+
+
+def allocate_regions(total, region_ratios):
+    """按区域比例把总持仓数分配到各市场，返回 {region: count}（取整修正到总和）。
+
+    region_ratios 如 {"stock": 0.3, "hk": 0.2, "us": 0.3, "kr": 0.2}。
+    """
+    if not region_ratios:
+        return {}
+    total_weight = sum(float(v) for v in region_ratios.values())
+    if total_weight <= 0:
+        return {}
+    raw = {k: total * float(v) / total_weight for k, v in region_ratios.items()}
+    # 先按整数部分分配，余数补给小数部分最大者
+    counts = {k: int(v) for k, v in raw.items()}
+    remainder = total - sum(counts.values())
+    for k in sorted(raw, key=lambda x: raw[x] - int(raw[x]), reverse=True):
+        if remainder <= 0:
+            break
+        counts[k] += 1
+        remainder -= 1
+    return counts
+
+
 def backup_portfolio(portfolio_file):
     """备份当前组合"""
     if not os.path.exists(portfolio_file):
@@ -91,27 +194,32 @@ def save_portfolio(portfolio, portfolio_file, dry_run=False):
 # 各组合的选股逻辑
 # ============================================================================
 
-def rebalance_aggressive(scan_results, dry_run=False):
-    """激进组合：激进分 Top 8，满仓"""
+def rebalance_aggressive(scan_results, dry_run=False, temperature=None, config=None):
+    """激进组合：激进分 Top N（温度联动），仓位随温度缩放"""
     print("\n" + "="*80)
     print("🔥 激进组合 - 全库扫描版")
     print("="*80)
 
+    enabled, size, base_ratio = portfolio_settings(
+        'aggressive', config or {}, temperature,
+        defaults={'size': 8, 'max_size': 20, 'min_size': 5, 'base_ratio': 1.0})
+
     # 按激进分排序
     sorted_stocks = sorted(scan_results, key=lambda x: x.get('aggressive_score', 0), reverse=True)
-    selected = sorted_stocks[:8]
+    selected = sorted_stocks[:size]
 
     if not selected:
         print("❌ 无可用股票")
         return
 
-    print(f"✅ 选出 {len(selected)} 只:")
+    print(f"✅ 选出 {len(selected)} 只 (温度联动={'开' if enabled else '关'}):")
     for i, s in enumerate(selected, 1):
         print(f"   {i}. {s['code']} {s['name']} | 激进分 {s['aggressive_score']:.1f}")
 
-    # 等权配置
-    pct = 100.0 / len(selected)
-    amount = 1000000 / len(selected)
+    # 等权配置（总仓位 = base_ratio × 温度系数）
+    position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
+    pct = position_pct / len(selected)
+    amount = int(1000000 * position_pct / 100.0) / len(selected)
 
     items = []
     for s in selected:
@@ -123,6 +231,7 @@ def rebalance_aggressive(scan_results, dry_run=False):
             "reason": f"激进分{s['aggressive_score']:.1f} | 5日↑{s['up5']:.0f}% | 20日{s['return_20d_pct']:+.1f}%"
         })
 
+    cash_pct = round(100.0 - position_pct, 1)
     portfolio = {
         "schema_version": "1.1",
         "name": "激进组合-全库扫描版",
@@ -132,11 +241,12 @@ def rebalance_aggressive(scan_results, dry_run=False):
         "base_trade_date": beijing_date_str(),
         "rebalanced": True,
         "rebalance_date": beijing_date_str(),
-        "cash_pct": 0,
+        "cash_pct": cash_pct,
         "items": items,
-        "cash": 0,
+        "cash": int(1000000 * (100.0 - position_pct) / 100.0),
         "color": "#d97706",
-        "description": "激进进攻：每日自动调仓，满仓8只高弹性标的"
+        "description": f"激进进攻：每日自动调仓，温度联动持仓 {len(selected)} 只",
+        "temperature_ratio": position_ratio_for_temperature(temperature) if enabled else None,
     }
 
     filepath = os.path.join(DATA_DIR, "paper", "portfolio_aggressive.json")
@@ -146,11 +256,15 @@ def rebalance_aggressive(scan_results, dry_run=False):
     print(f"✅ 已更新: portfolio_aggressive.json")
 
 
-def rebalance_robust(ranking, dry_run=False):
-    """稳健组合：低风险 + 高概率，80% 仓位"""
+def rebalance_robust(ranking, dry_run=False, temperature=None, config=None):
+    """稳健组合：低风险 + 高概率，仓位随温度缩放"""
     print("\n" + "="*80)
     print("🛡️  稳健组合 - 防守型")
     print("="*80)
+
+    enabled, size, base_ratio = portfolio_settings(
+        'robust', config or {}, temperature,
+        defaults={'size': 6, 'max_size': 15, 'min_size': 4, 'base_ratio': 0.8})
 
     # 选股标准：风险分 < 40，3日上涨概率 > 60%
     candidates = []
@@ -168,21 +282,22 @@ def rebalance_robust(ranking, dry_run=False):
                 'score': item.get('score', 0)
             })
 
-    # 按综合分排序，取 Top 6
+    # 按综合分排序，取 Top N
     candidates.sort(key=lambda x: x['score'], reverse=True)
-    selected = candidates[:6]
+    selected = candidates[:size]
 
     if not selected:
         print("❌ 无符合条件的股票（风险<40 且 3日概率>60%）")
         return
 
-    print(f"✅ 选出 {len(selected)} 只:")
+    print(f"✅ 选出 {len(selected)} 只 (温度联动={'开' if enabled else '关'}):")
     for i, s in enumerate(selected, 1):
         print(f"   {i}. {s['code']} {s['name']} | 风险{s['risk']:.1f} | 3日↑{s['up3']:.0f}%")
 
-    # 80% 仓位，等权分配
-    pct = 80.0 / len(selected)
-    amount = 800000 / len(selected)
+    # 仓位随温度缩放（基准 80% × 温度系数）
+    position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
+    pct = position_pct / len(selected)
+    amount = int(1000000 * position_pct / 100.0) / len(selected)
 
     items = []
     for s in selected:
@@ -194,6 +309,7 @@ def rebalance_robust(ranking, dry_run=False):
             "reason": f"综合分{s['score']:.1f} | 风险{s['risk']:.0f} | 3日↑{s['up3']:.0f}%"
         })
 
+    cash_pct = round(100.0 - position_pct, 1)
     portfolio = {
         "schema_version": "1.0",
         "name": "稳健组合-防守型",
@@ -203,11 +319,12 @@ def rebalance_robust(ranking, dry_run=False):
         "base_trade_date": beijing_date_str(),
         "rebalanced": True,
         "rebalance_date": beijing_date_str(),
-        "cash_pct": 20,
+        "cash_pct": cash_pct,
         "items": items,
-        "cash": 200000,
+        "cash": int(1000000 * (100.0 - position_pct) / 100.0),
         "color": "#2f9e6e",
-        "description": "稳健防守：80%仓位+20%现金，低风险高概率标的"
+        "description": f"稳健防守：温度联动仓位 {position_pct:.0f}%",
+        "temperature_ratio": position_ratio_for_temperature(temperature) if enabled else None,
     }
 
     filepath = os.path.join(DATA_DIR, "paper", "portfolio.json")
@@ -217,11 +334,15 @@ def rebalance_robust(ranking, dry_run=False):
     print(f"✅ 已更新: portfolio.json")
 
 
-def rebalance_bluechip(ranking, dry_run=False):
+def rebalance_bluechip(ranking, dry_run=False, temperature=None, config=None):
     """蓝筹组合：大盘蓝筹，低波动"""
     print("\n" + "="*80)
     print("💎 蓝筹组合")
     print("="*80)
+
+    enabled, size, base_ratio = portfolio_settings(
+        'bluechip', config or {}, temperature,
+        defaults={'size': 10, 'max_size': 20, 'min_size': 5, 'base_ratio': 1.0})
 
     # 蓝筹标准：市值大、波动低
     bluechip_codes = ['600519', '601318', '600036', '000858', '300750',
@@ -237,20 +358,21 @@ def rebalance_bluechip(ranking, dry_run=False):
                 'risk': item.get('risk_score', 0)
             })
 
-    # 按综合分排序，取 Top 10
+    # 按综合分排序，取 Top N
     candidates.sort(key=lambda x: x['score'], reverse=True)
-    selected = candidates[:10]
+    selected = candidates[:size]
 
     if not selected:
         print("❌ 无可用蓝筹股")
         return
 
-    print(f"✅ 选出 {len(selected)} 只:")
+    print(f"✅ 选出 {len(selected)} 只 (温度联动={'开' if enabled else '关'}):")
     for i, s in enumerate(selected, 1):
         print(f"   {i}. {s['code']} {s['name']} | 分数{s['score']:.1f}")
 
-    pct = 100.0 / len(selected)
-    amount = 1000000 / len(selected)
+    position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
+    pct = position_pct / len(selected)
+    amount = int(1000000 * position_pct / 100.0) / len(selected)
 
     items = []
     for s in selected:
@@ -262,6 +384,7 @@ def rebalance_bluechip(ranking, dry_run=False):
             "reason": f"蓝筹 | 分数{s['score']:.1f} | 风险{s['risk']:.0f}"
         })
 
+    cash_pct = round(100.0 - position_pct, 1)
     portfolio = {
         "schema_version": "1.0",
         "name": "蓝筹组合",
@@ -271,11 +394,12 @@ def rebalance_bluechip(ranking, dry_run=False):
         "base_trade_date": beijing_date_str(),
         "rebalanced": True,
         "rebalance_date": beijing_date_str(),
-        "cash_pct": 0,
+        "cash_pct": cash_pct,
         "items": items,
-        "cash": 0,
+        "cash": int(1000000 * (100.0 - position_pct) / 100.0),
         "color": "#3b82f6",
-        "description": "蓝筹稳健：大盘蓝筹，低波动"
+        "description": f"蓝筹稳健：温度联动持仓 {len(selected)} 只",
+        "temperature_ratio": position_ratio_for_temperature(temperature) if enabled else None,
     }
 
     filepath = os.path.join(DATA_DIR, "paper", "portfolio_bluechip.json")
@@ -285,11 +409,15 @@ def rebalance_bluechip(ranking, dry_run=False):
     print(f"✅ 已更新: portfolio_bluechip.json")
 
 
-def rebalance_defensive(ranking, dry_run=False):
+def rebalance_defensive(ranking, dry_run=False, temperature=None, config=None):
     """防御组合：银行 + 黄金 + 公用事业"""
     print("\n" + "="*80)
     print("🛡️  防御组合")
     print("="*80)
+
+    enabled, size, base_ratio = portfolio_settings(
+        'defensive', config or {}, temperature,
+        defaults={'size': 10, 'max_size': 20, 'min_size': 5, 'base_ratio': 1.0})
 
     # 防御性行业
     defensive_codes = ['601398', '601288', '600028', '601088', '600900',
@@ -305,18 +433,19 @@ def rebalance_defensive(ranking, dry_run=False):
             })
 
     candidates.sort(key=lambda x: x['score'], reverse=True)
-    selected = candidates[:10]
+    selected = candidates[:size]
 
     if not selected:
         print("❌ 无可用防御性股票")
         return
 
-    print(f"✅ 选出 {len(selected)} 只:")
+    print(f"✅ 选出 {len(selected)} 只 (温度联动={'开' if enabled else '关'}):")
     for i, s in enumerate(selected, 1):
         print(f"   {i}. {s['code']} {s['name']}")
 
-    pct = 100.0 / len(selected)
-    amount = 1000000 / len(selected)
+    position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
+    pct = position_pct / len(selected)
+    amount = int(1000000 * position_pct / 100.0) / len(selected)
 
     items = []
     for s in selected:
@@ -328,6 +457,7 @@ def rebalance_defensive(ranking, dry_run=False):
             "reason": f"防御 | 分数{s['score']:.1f}"
         })
 
+    cash_pct = round(100.0 - position_pct, 1)
     portfolio = {
         "schema_version": "1.0",
         "name": "防御组合",
@@ -337,11 +467,12 @@ def rebalance_defensive(ranking, dry_run=False):
         "base_trade_date": beijing_date_str(),
         "rebalanced": True,
         "rebalance_date": beijing_date_str(),
-        "cash_pct": 0,
+        "cash_pct": cash_pct,
         "items": items,
-        "cash": 0,
+        "cash": int(1000000 * (100.0 - position_pct) / 100.0),
         "color": "#10b981",
-        "description": "防御配置：银行+黄金+公用事业"
+        "description": f"防御配置：温度联动持仓 {len(selected)} 只",
+        "temperature_ratio": position_ratio_for_temperature(temperature) if enabled else None,
     }
 
     filepath = os.path.join(DATA_DIR, "paper", "portfolio_defensive.json")
@@ -351,11 +482,17 @@ def rebalance_defensive(ranking, dry_run=False):
     print(f"✅ 已更新: portfolio_defensive.json")
 
 
-def rebalance_global(ranking, dry_run=False):
+def rebalance_global(ranking, dry_run=False, temperature=None, config=None):
     """全球组合：全球分散配置"""
     print("\n" + "="*80)
     print("🌍 全球组合")
     print("="*80)
+
+    enabled, size, base_ratio = portfolio_settings(
+        'global', config or {}, temperature,
+        defaults={'size': 10, 'max_size': 20, 'min_size': 5, 'base_ratio': 1.0})
+    cfg = (config or {}).get('global', {})
+    region_ratios = cfg.get('regions') or {'stock': 0.3, 'hk': 0.2, 'us': 0.3, 'kr': 0.2}
 
     # 分市场选择
     cn_stocks = []
@@ -382,24 +519,30 @@ def rebalance_global(ranking, dry_run=False):
         elif stock_type == 'kr':
             kr_stocks.append(stock)
 
-    # 每个市场选 Top 2-3
+    # 每市场按分数排序
     cn_stocks.sort(key=lambda x: x['score'], reverse=True)
     hk_stocks.sort(key=lambda x: x['score'], reverse=True)
     us_stocks.sort(key=lambda x: x['score'], reverse=True)
     kr_stocks.sort(key=lambda x: x['score'], reverse=True)
 
-    selected = cn_stocks[:3] + hk_stocks[:2] + us_stocks[:3] + kr_stocks[:2]
+    # 按区域比例分配持仓数（温度联动时按缩放后的总持仓数分配）
+    region_pool = {'stock': cn_stocks, 'hk': hk_stocks, 'us': us_stocks, 'kr': kr_stocks}
+    counts = allocate_regions(size, region_ratios)
+    selected = []
+    for region, n in counts.items():
+        selected.extend(region_pool.get(region, [])[:n])
 
     if len(selected) < 5:
         print("❌ 全球股票数量不足")
         return
 
-    print(f"✅ 选出 {len(selected)} 只（A股{len(cn_stocks[:3])} + 港股{len(hk_stocks[:2])} + 美股{len(us_stocks[:3])} + 韩股{len(kr_stocks[:2])}）:")
+    print(f"✅ 选出 {len(selected)} 只 (温度联动={'开' if enabled else '关'})（A股{counts.get('stock',0)} + 港股{counts.get('hk',0)} + 美股{counts.get('us',0)} + 韩股{counts.get('kr',0)}）:")
     for i, s in enumerate(selected, 1):
         print(f"   {i}. {s['code']} {s['name']}")
 
-    pct = 100.0 / len(selected)
-    amount = 1000000 / len(selected)
+    position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
+    pct = position_pct / len(selected)
+    amount = int(1000000 * position_pct / 100.0) / len(selected)
 
     items = []
     for s in selected:
@@ -411,6 +554,7 @@ def rebalance_global(ranking, dry_run=False):
             "reason": f"全球配置 | 分数{s['score']:.1f}"
         })
 
+    cash_pct = round(100.0 - position_pct, 1)
     portfolio = {
         "schema_version": "1.0",
         "name": "全球组合",
@@ -420,11 +564,12 @@ def rebalance_global(ranking, dry_run=False):
         "base_trade_date": beijing_date_str(),
         "rebalanced": True,
         "rebalance_date": beijing_date_str(),
-        "cash_pct": 0,
+        "cash_pct": cash_pct,
         "items": items,
-        "cash": 0,
+        "cash": int(1000000 * (100.0 - position_pct) / 100.0),
         "color": "#8b5cf6",
-        "description": "全球分散：A股+港股+美股+韩股"
+        "description": f"全球分散：温度联动持仓 {len(selected)} 只",
+        "temperature_ratio": position_ratio_for_temperature(temperature) if enabled else None,
     }
 
     filepath = os.path.join(DATA_DIR, "paper", "portfolio_global.json")
@@ -434,11 +579,15 @@ def rebalance_global(ranking, dry_run=False):
     print(f"✅ 已更新: portfolio_global.json")
 
 
-def rebalance_tech(ranking, dry_run=False):
+def rebalance_tech(ranking, dry_run=False, temperature=None, config=None):
     """科技组合：科技股集中"""
     print("\n" + "="*80)
     print("💻 科技组合")
     print("="*80)
+
+    enabled, size, base_ratio = portfolio_settings(
+        'tech', config or {}, temperature,
+        defaults={'size': 10, 'max_size': 20, 'min_size': 5, 'base_ratio': 1.0})
 
     # 科技股代码
     tech_codes = ['AAPL', 'MSFT', 'GOOGL', 'NVDA', '00700',
@@ -454,18 +603,19 @@ def rebalance_tech(ranking, dry_run=False):
             })
 
     candidates.sort(key=lambda x: x['score'], reverse=True)
-    selected = candidates[:10]
+    selected = candidates[:size]
 
     if not selected:
         print("❌ 无可用科技股")
         return
 
-    print(f"✅ 选出 {len(selected)} 只:")
+    print(f"✅ 选出 {len(selected)} 只 (温度联动={'开' if enabled else '关'}):")
     for i, s in enumerate(selected, 1):
         print(f"   {i}. {s['code']} {s['name']}")
 
-    pct = 100.0 / len(selected)
-    amount = 1000000 / len(selected)
+    position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
+    pct = position_pct / len(selected)
+    amount = int(1000000 * position_pct / 100.0) / len(selected)
 
     items = []
     for s in selected:
@@ -477,6 +627,7 @@ def rebalance_tech(ranking, dry_run=False):
             "reason": f"科技 | 分数{s['score']:.1f}"
         })
 
+    cash_pct = round(100.0 - position_pct, 1)
     portfolio = {
         "schema_version": "1.0",
         "name": "科技组合",
@@ -486,11 +637,12 @@ def rebalance_tech(ranking, dry_run=False):
         "base_trade_date": beijing_date_str(),
         "rebalanced": True,
         "rebalance_date": beijing_date_str(),
-        "cash_pct": 0,
+        "cash_pct": cash_pct,
         "items": items,
-        "cash": 0,
+        "cash": int(1000000 * (100.0 - position_pct) / 100.0),
         "color": "#ec4899",
-        "description": "科技集中：全球科技龙头"
+        "description": f"科技集中：温度联动持仓 {len(selected)} 只",
+        "temperature_ratio": position_ratio_for_temperature(temperature) if enabled else None,
     }
 
     filepath = os.path.join(DATA_DIR, "paper", "portfolio_tech.json")
@@ -519,21 +671,25 @@ def main():
     print("\n📂 加载数据...")
     ranking = load_ranking()
     aggressive_scan = load_aggressive_scan()
+    temperature, position_ratio = load_market_temperature()
+    config = load_portfolio_config()
 
     print(f"   排行榜: {len(ranking)} 只")
     print(f"   激进扫描: {len(aggressive_scan)} 只")
+    if temperature is not None:
+        print(f"   市场温度: {temperature:.1f} | 仓位系数: {position_ratio:.2f}")
 
     if args.dry_run:
         print("\n🔍 预览模式（不实际修改文件）")
 
     # 调仓
     portfolios = {
-        'aggressive': lambda: rebalance_aggressive(aggressive_scan, args.dry_run),
-        'robust': lambda: rebalance_robust(ranking, args.dry_run),
-        'bluechip': lambda: rebalance_bluechip(ranking, args.dry_run),
-        'defensive': lambda: rebalance_defensive(ranking, args.dry_run),
-        'global': lambda: rebalance_global(ranking, args.dry_run),
-        'tech': lambda: rebalance_tech(ranking, args.dry_run),
+        'aggressive': lambda: rebalance_aggressive(aggressive_scan, args.dry_run, temperature, config),
+        'robust': lambda: rebalance_robust(ranking, args.dry_run, temperature, config),
+        'bluechip': lambda: rebalance_bluechip(ranking, args.dry_run, temperature, config),
+        'defensive': lambda: rebalance_defensive(ranking, args.dry_run, temperature, config),
+        'global': lambda: rebalance_global(ranking, args.dry_run, temperature, config),
+        'tech': lambda: rebalance_tech(ranking, args.dry_run, temperature, config),
     }
 
     if args.only:
