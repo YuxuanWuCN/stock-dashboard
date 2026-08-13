@@ -61,6 +61,14 @@ Write-Log ("paper_portfolio benchmark 退出码: " + $LASTEXITCODE)
 & $py tools\paper_portfolio.py manifest *>> $logFile
 Write-Log ("paper_portfolio manifest 退出码: " + $LASTEXITCODE)
 
+# 3.9a) 从 K线重建历史日快照（修复当日部分失败导致的有效池缺口，协议 v1 B 修复）
+& $py tools\reconstruct_summary.py --all *>> $logFile
+Write-Log ("reconstruct_summary 退出码: " + $LASTEXITCODE)
+
+# 3.9b) 随机对照组（组合 vs 随机抽样 100 次，协议 v1 第 4 条：每日积累统计样本）
+& $py tools\random_control.py *>> $logFile
+Write-Log ("random_control 退出码: " + $LASTEXITCODE)
+
 # 3.10) 同步量化数据到 Dashboard（供 portfolio.html 展示）
 Write-Log "同步量化数据到 Dashboard..."
 $dashboardDataDir = Join-Path $repo "..\\.upload-stock-dashboard\docs\data\quantitative"

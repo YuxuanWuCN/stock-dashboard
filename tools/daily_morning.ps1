@@ -46,6 +46,12 @@ Write-Log ("paper_portfolio benchmark 退出码: " + $LASTEXITCODE)
 & $py tools\paper_portfolio.py manifest *>> $logFile
 Write-Log ("paper_portfolio manifest 退出码: " + $LASTEXITCODE)
 
+# 3.z) 美股补数后刷新历史快照与随机对照（协议 v1：每日积累统计样本）
+& $py tools\reconstruct_summary.py --all *>> $logFile
+Write-Log ("reconstruct_summary 退出码: " + $LASTEXITCODE)
+& $py tools\random_control.py *>> $logFile
+Write-Log ("random_control 退出码: " + $LASTEXITCODE)
+
 # 4) 提交并推送数据（仅当有变化；GitHub 直连失败时自动走本机代理重试）
 git add docs/data
 if (-not (git diff --cached --quiet)) {
