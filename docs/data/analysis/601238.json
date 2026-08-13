@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-12 18:16:46+08:00",
-  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-13 19:39:25+08:00",
+  "trade_date": "2026-08-13",
   "code": "601238",
   "name": "广汽集团",
   "type": "stock",
   "category": "汽车",
   "stale": false,
   "scores": {
-    "risk_adjusted": 43.3,
-    "risk": 41.1,
-    "technical": 90.0,
-    "industry": 62.0
+    "risk_adjusted": 49.5,
+    "risk": 43.3,
+    "technical": 68.0,
+    "industry": 58.5
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 31.33,
+    "annualized_volatility_20d_pct": 32.64,
     "max_drawdown_60d_pct": -22.87,
-    "atr14_pct": 2.97,
+    "atr14_pct": 3.06,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 45.0,
-        "value": 31.33
+        "score": 48.5,
+        "value": 32.64
       },
       {
         "name": "60日最大回撤",
-        "score": 62.4,
+        "score": 63.9,
         "value": -22.87
       },
       {
         "name": "ATR百分比",
-        "score": 46.0,
-        "value": 2.97
+        "score": 52.0,
+        "value": 3.06
       },
       {
         "name": "量价异常",
-        "score": 26.2,
-        "value": 0.87
+        "score": 21.3,
+        "value": 0.9
       },
       {
         "name": "行业波动",
         "score": 1.5,
-        "value": 39.57
+        "value": 39.33
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.01,
-    "return_5d_pct": 0.09,
-    "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 36.7,
+    "return_3d_pct": 0.76,
+    "return_5d_pct": 0.77,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 5.274,
-    "ma10": 5.372,
-    "ma20": 5.27,
-    "ma60": 5.522333333333333,
-    "rsi14": 49.1,
-    "macd_dif": -0.012908811878676651,
-    "macd_dea": -0.025759726749753048,
-    "macd_hist": 0.025701829742152793,
-    "atr14_pct": 2.973127279893712,
-    "boll_position": 0.5514374740307952,
-    "return_5d_pct": -0.9345794392523366,
-    "return_20d_pct": 4.330708661417315,
-    "volume_ratio_5d": 0.87
+    "trend": "downtrend",
+    "ma5": 5.252,
+    "ma10": 5.336,
+    "ma20": 5.2695,
+    "ma60": 5.5024999999999995,
+    "rsi14": 43.4,
+    "macd_dif": -0.024116412049855818,
+    "macd_dea": -0.025431063809773603,
+    "macd_hist": 0.00262930351983557,
+    "atr14_pct": 3.0630855698290813,
+    "boll_position": 0.29565811655945695,
+    "return_5d_pct": -2.091254752851701,
+    "return_20d_pct": -0.19379844961240345,
+    "volume_ratio_5d": 0.9
   },
   "industry": {
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 2.69,
-    "return_20d_pct": -4.46,
-    "return_60d_pct": -8.18,
-    "relative_strength_20d_pct": 7.85
+    "return_5d_pct": 1.27,
+    "return_20d_pct": -1.37,
+    "return_60d_pct": -8.22,
+    "relative_strength_20d_pct": 1.18
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.01,
-      "median_return_pct": -0.92,
-      "best_return_pct": 8.03,
-      "worst_return_pct": -4.82
+      "up_probability_pct": 66.7,
+      "average_return_pct": 0.76,
+      "median_return_pct": 0.23,
+      "best_return_pct": 14.67,
+      "worst_return_pct": -6.71
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": 0.09,
-      "median_return_pct": -1.16,
-      "best_return_pct": 10.62,
-      "worst_return_pct": -7.49
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.77,
+      "median_return_pct": -0.05,
+      "best_return_pct": 19.05,
+      "worst_return_pct": -5.29
     }
   },
   "fundamental": {
@@ -228,6 +228,12 @@
     "cached_at": "2026-08-09 22:25:58"
   },
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",

@@ -1,29 +1,29 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-12 18:16:46+08:00",
-  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-13 19:39:25+08:00",
+  "trade_date": "2026-08-13",
   "code": "510500",
   "name": "中证500ETF",
   "type": "etf",
   "category": "",
   "stale": false,
   "scores": {
-    "risk_adjusted": 43.8,
-    "risk": 49.8,
-    "technical": 86.0,
-    "industry": 53.8
+    "risk_adjusted": 53.6,
+    "risk": 50.2,
+    "technical": 93.0,
+    "industry": 60.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 39.24,
+    "annualized_volatility_20d_pct": 38.44,
     "max_drawdown_60d_pct": -18.89,
-    "atr14_pct": 2.86,
+    "atr14_pct": 2.82,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 62.9,
-        "value": 39.24
+        "score": 61.9,
+        "value": 38.44
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +32,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 41.1,
-        "value": 2.86
+        "score": 43.1,
+        "value": 2.82
       },
       {
         "name": "量价异常",
-        "score": 94.6,
-        "value": 0.55
+        "score": 98.0,
+        "value": 0.48
       },
       {
         "name": "行业波动",
         "score": 1.5,
-        "value": 39.57
+        "value": 39.33
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.05,
-    "return_5d_pct": 0.13,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 60.0,
+    "return_3d_pct": 0.32,
+    "return_5d_pct": 0.71,
+    "up_probability_3d_pct": 60.0,
+    "up_probability_5d_pct": 66.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 7.979000000000001,
-    "ma10": 7.7567,
-    "ma20": 7.6998500000000005,
-    "ma60": 8.220583333333334,
-    "rsi14": 53.6,
-    "macd_dif": -0.06641524545710453,
-    "macd_dea": -0.15272242457335017,
-    "macd_hist": 0.17261435823249127,
-    "atr14_pct": 2.856307323448327,
-    "boll_position": 0.8934826966484852,
-    "return_5d_pct": 3.00703774792066,
-    "return_20d_pct": -1.2391117654275474,
-    "volume_ratio_5d": 0.55
+    "ma5": 8.009200000000002,
+    "ma10": 7.8214,
+    "ma20": 7.7012,
+    "ma60": 8.210316666666667,
+    "rsi14": 51.6,
+    "macd_dif": -0.050775002120532875,
+    "macd_dea": -0.13229464948449612,
+    "macd_hist": 0.1630392947279265,
+    "atr14_pct": 2.8218990458187205,
+    "boll_position": 0.8109641307787188,
+    "return_5d_pct": 1.8896833503575072,
+    "return_20d_pct": 0.3016591251885359,
+    "volume_ratio_5d": 0.48
   },
   "industry": {
     "name": "深证成指",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 2.69,
-    "return_20d_pct": -4.46,
-    "return_60d_pct": -8.18,
-    "relative_strength_20d_pct": 2.28
+    "return_5d_pct": 1.27,
+    "return_20d_pct": -1.37,
+    "return_60d_pct": -8.22,
+    "relative_strength_20d_pct": 1.68
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.05,
-      "median_return_pct": 0.0,
-      "best_return_pct": 5.08,
-      "worst_return_pct": -4.52
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.32,
+      "median_return_pct": 0.62,
+      "best_return_pct": 4.39,
+      "worst_return_pct": -4.0
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.13,
-      "median_return_pct": 0.62,
-      "best_return_pct": 5.1,
-      "worst_return_pct": -8.08
+      "up_probability_pct": 66.7,
+      "average_return_pct": 0.71,
+      "median_return_pct": 0.99,
+      "best_return_pct": 4.9,
+      "worst_return_pct": -4.84
     }
   },
   "fundamental": null,
@@ -113,6 +113,12 @@
       "title": "回撤风险",
       "detail": "近60日最大回撤 18.9%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "成交缩量",
+      "detail": "近5日量能仅为前期0.48倍。",
+      "contribution": -3.0
     }
   ],
   "kline_file": "../kline/510500.json",

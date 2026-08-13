@@ -1,29 +1,29 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-12 18:16:46+08:00",
-  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-13 19:39:25+08:00",
+  "trade_date": "2026-08-13",
   "code": "688525",
   "name": "佰维存储",
   "type": "stock",
   "category": "科技",
   "stale": false,
   "scores": {
-    "risk_adjusted": 48.1,
-    "risk": 74.7,
-    "technical": 91.0,
-    "industry": 32.0
+    "risk_adjusted": 46.8,
+    "risk": 75.2,
+    "technical": 81.0,
+    "industry": 40.0
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 103.89,
+    "annualized_volatility_20d_pct": 104.47,
     "max_drawdown_60d_pct": -59.21,
-    "atr14_pct": 10.1,
+    "atr14_pct": 10.35,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 92.6,
-        "value": 103.89
+        "score": 93.6,
+        "value": 104.47
       },
       {
         "name": "60日最大回撤",
@@ -33,52 +33,52 @@
       {
         "name": "ATR百分比",
         "score": 96.5,
-        "value": 10.1
+        "value": 10.35
       },
       {
         "name": "量价异常",
-        "score": 29.2,
-        "value": 0.87
+        "score": 31.2,
+        "value": 0.85
       },
       {
         "name": "行业波动",
         "score": 1.5,
-        "value": 39.57
+        "value": 39.33
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 3.34,
-    "return_5d_pct": 6.09,
-    "up_probability_3d_pct": 70.0,
-    "up_probability_5d_pct": 70.0,
+    "return_3d_pct": 4.56,
+    "return_5d_pct": 4.09,
+    "up_probability_3d_pct": 76.7,
+    "up_probability_5d_pct": 66.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 241.352,
-    "ma10": 230.99899999999997,
-    "ma20": 238.79850000000002,
-    "ma60": 324.3983333333333,
-    "rsi14": 42.9,
-    "macd_dif": -26.87047276984879,
-    "macd_dea": -33.38373944383281,
-    "macd_hist": 13.02653334796804,
-    "atr14_pct": 10.101550933114943,
-    "boll_position": 0.5716784403416804,
-    "return_5d_pct": 5.067147208993017,
-    "return_20d_pct": -19.553219448094605,
-    "volume_ratio_5d": 0.87
+    "trend": "downtrend",
+    "ma5": 241.766,
+    "ma10": 232.516,
+    "ma20": 235.53650000000002,
+    "ma60": 323.0418333333334,
+    "rsi14": 40.6,
+    "macd_dif": -25.376576480574954,
+    "macd_dea": -31.78230685118124,
+    "macd_hist": 12.81146074121257,
+    "atr14_pct": 10.347791067406078,
+    "boll_position": 0.4916947372781549,
+    "return_5d_pct": 0.8886408517214672,
+    "return_20d_pct": -21.728559533721903,
+    "volume_ratio_5d": 0.85
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 2.69,
-    "return_20d_pct": -4.46,
-    "return_60d_pct": -8.18,
-    "relative_strength_20d_pct": -16.04
+    "return_5d_pct": 1.27,
+    "return_20d_pct": -1.37,
+    "return_60d_pct": -8.22,
+    "relative_strength_20d_pct": -20.35
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 70.0,
-      "average_return_pct": 3.34,
-      "median_return_pct": 3.1,
-      "best_return_pct": 23.47,
-      "worst_return_pct": -9.56
+      "up_probability_pct": 76.7,
+      "average_return_pct": 4.56,
+      "median_return_pct": 3.55,
+      "best_return_pct": 22.01,
+      "worst_return_pct": -6.72
     },
     "horizon_5d": {
-      "up_probability_pct": 70.0,
-      "average_return_pct": 6.09,
-      "median_return_pct": 3.74,
-      "best_return_pct": 66.18,
-      "worst_return_pct": -13.25
+      "up_probability_pct": 66.7,
+      "average_return_pct": 4.09,
+      "median_return_pct": 3.59,
+      "best_return_pct": 34.98,
+      "worst_return_pct": -18.26
     }
   },
   "fundamental": {
@@ -224,6 +224,12 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 59.2%，风险偏高。",
       "contribution": -7.0
@@ -237,7 +243,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 103.9%，波动偏高。",
+      "detail": "20日年化波动率 104.5%，波动偏高。",
       "contribution": -5.0
     }
   ],
