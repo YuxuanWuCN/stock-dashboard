@@ -69,6 +69,10 @@ Write-Log ("reconstruct_summary 退出码: " + $LASTEXITCODE)
 & $py tools\random_control.py *>> $logFile
 Write-Log ("random_control 退出码: " + $LASTEXITCODE)
 
+# 3.9c) 市场级对照组（选股池 vs 宽基指数，协议 v1 第 4 条第三项）
+& $py tools\market_benchmark.py *>> $logFile
+Write-Log ("market_benchmark 退出码: " + $LASTEXITCODE)
+
 # 3.10) 同步量化数据到 Dashboard（供 portfolio.html 展示）
 Write-Log "同步量化数据到 Dashboard..."
 $dashboardDataDir = Join-Path $repo "..\\.upload-stock-dashboard\docs\data\quantitative"

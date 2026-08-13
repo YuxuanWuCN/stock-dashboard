@@ -51,6 +51,8 @@ Write-Log ("paper_portfolio manifest 退出码: " + $LASTEXITCODE)
 Write-Log ("reconstruct_summary 退出码: " + $LASTEXITCODE)
 & $py tools\random_control.py *>> $logFile
 Write-Log ("random_control 退出码: " + $LASTEXITCODE)
+& $py tools\market_benchmark.py *>> $logFile
+Write-Log ("market_benchmark 退出码: " + $LASTEXITCODE)
 
 # 4) 提交并推送数据（仅当有变化；GitHub 直连失败时自动走本机代理重试）
 git add docs/data
