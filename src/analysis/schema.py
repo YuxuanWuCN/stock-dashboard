@@ -21,6 +21,11 @@ VALID_CONFIDENCE = {"low", "medium", "high"}
 VALID_REASON_TYPES = {"positive", "warning", "negative"}
 VALID_TRENDS = {"strong_uptrend", "uptrend", "range", "rebound", "downtrend", "insufficient"}
 VALID_REF_TYPES = {"industry", "index"}
+VALID_GATE_VERDICTS = {"pass", "reject"}
+VALID_GATE_REJECT_REASONS = {
+    "statistical", "economical", "insufficient_data", "data_unavailable",
+}
+GATE_FACTOR_KEYS = ["MKT", "SMB", "HML", "MOM"]
 
 
 # ============================================================
@@ -98,6 +103,55 @@ def validate_ranking(data: dict) -> list[str]:
             if "code" not in err_item:
                 errors.append("error 项缺少 code")
 
+    # alpha_gate_summary（spec-kit 003）：存在时校验基本结构
+    summary = data.get("alpha_gate_summary")
+    if summary is not None:
+        if not isinstance(summary, dict):
+            errors.append("alpha_gate_summary 必须是对象")
+        else:
+            for key in ("passed_codes", "passed_count", "fallback_applied",
+                        "min_size", "aggressive_candidates", "thresholds"):
+                if key not in summary:
+                    errors.append(f"alpha_gate_summary 缺少字段: {key}")
+            if summary.get("passed_count") != len(summary.get("passed_codes", [])):
+                errors.append("alpha_gate_summary.passed_count 与 passed_codes 不一致")
+
+    return errors
+
+
+def _validate_alpha_gate(gate: dict, prefix: str) -> list[str]:
+    """校验 alpha_gate 字段组（契约 contracts/alpha-gate-output.md）。"""
+    errors = []
+    verdict = gate.get("verdict")
+    if verdict not in VALID_GATE_VERDICTS:
+        errors.append(f"{prefix}.verdict 非法: {verdict}")
+        return errors
+
+    reason = gate.get("reject_reason")
+    if verdict == "reject":
+        if reason not in VALID_GATE_REJECT_REASONS:
+            errors.append(f"{prefix}.reject_reason 非法: {reason}")
+        if reason == "insufficient_data" or reason == "data_unavailable":
+            for key in ("alpha", "alpha_p_value", "information_ratio", "betas"):
+                if gate.get(key) is not None:
+                    errors.append(f"{prefix}.{key} 在 {reason} 时应为 null")
+    else:
+        if reason is not None:
+            errors.append(f"{prefix}.reject_reason 在 pass 时应为 null")
+
+    alpha_p = gate.get("alpha_p_value")
+    if alpha_p is not None and (not isinstance(alpha_p, (int, float)) or alpha_p < 0 or alpha_p > 1):
+        errors.append(f"{prefix}.alpha_p_value 越界: {alpha_p}")
+
+    betas = gate.get("betas")
+    if betas is not None:
+        if not isinstance(betas, dict):
+            errors.append(f"{prefix}.betas 必须是对象")
+        else:
+            for key in GATE_FACTOR_KEYS:
+                val = betas.get(key)
+                if val is not None and not isinstance(val, (int, float)):
+                    errors.append(f"{prefix}.betas.{key} 非数值: {val}")
     return errors
 
 
@@ -128,6 +182,10 @@ def _validate_ranking_item(item: dict) -> list[str]:
     # reasons
     if "reasons" in item:
         errors.extend(_validate_reasons(item["reasons"]))
+
+    # alpha_gate（spec-kit 003）：存在时校验其契约结构
+    if item.get("alpha_gate") is not None:
+        errors.extend(_validate_alpha_gate(item["alpha_gate"], "item.alpha_gate"))
 
     return errors
 
@@ -194,6 +252,10 @@ def validate_stock_detail(data: dict) -> list[str]:
 
     # reasons
     errors.extend(_validate_reasons(data.get("reasons", [])))
+
+    # alpha_gate（spec-kit 003）：存在时校验其契约结构
+    if data.get("alpha_gate") is not None:
+        errors.extend(_validate_alpha_gate(data["alpha_gate"], "alpha_gate"))
 
     return errors
 

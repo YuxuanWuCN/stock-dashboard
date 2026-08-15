@@ -200,3 +200,29 @@ MAX_RETRIES = 2
 # ============================================================
 
 MAX_REASONS = 5
+
+# ============================================================
+# Fama-MacBeth 多因子引擎参数（spec-kit 003 / v3.0 Phase 1）
+# ============================================================
+
+# Alpha 门控硬约束（蓝图：p < 0.05 且 IR >= 0.3）
+ALPHA_P_THRESHOLD = 0.05
+IR_THRESHOLD = 0.3
+
+# 回归窗口：锚定最近 5 年（约 1250 个交易日），最小有效窗口默认 1 年
+FACTOR_WINDOW_YEARS = 5
+MIN_OBS_DAYS = 250
+
+# 无风险利率：CSV 无 rf 列时使用可配置年化固定近似值（2.5%/年）
+RF_ANNUAL_DEFAULT = 0.025
+TRADING_DAYS_PER_YEAR = 252
+
+# 因子数据质量阈值：空值缺口率上限（超出报错）
+GAP_RATE_MAX = 0.05
+
+# 阶段一回归稳健标准误：HAC（Newey-West）最大滞后阶数
+HAC_MAXLAGS = 5
+
+# 因子库路径（SQLite）与数据目录
+FACTOR_DB_PATH = None  # 默认在 factor_db.py 内解析为 docs/data/factors/factors.db
+FACTORS_DIR_NAME = "factors"

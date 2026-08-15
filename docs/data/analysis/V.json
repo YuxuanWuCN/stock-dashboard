@@ -1,84 +1,84 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-13 19:39:25+08:00",
-  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-14 18:16:44+08:00",
+  "trade_date": "2026-08-13",
   "code": "V",
   "name": "Visa",
   "type": "us",
   "category": "金融",
   "stale": false,
   "scores": {
-    "risk_adjusted": 54.1,
-    "risk": 24.6,
-    "technical": 70.0,
-    "industry": 66.0
+    "risk_adjusted": 38.4,
+    "risk": 20.1,
+    "technical": 80.0,
+    "industry": 59.4
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 18.96,
-    "max_drawdown_60d_pct": -6.08,
-    "atr14_pct": 2.07,
+    "annualized_volatility_20d_pct": 17.19,
+    "max_drawdown_60d_pct": -5.65,
+    "atr14_pct": 2.02,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 11.4,
-        "value": 18.96
+        "score": 5.0,
+        "value": 17.19
       },
       {
         "name": "60日最大回撤",
         "score": 3.5,
-        "value": -6.08
+        "value": -5.65
       },
       {
         "name": "ATR百分比",
         "score": 19.8,
-        "value": 2.07
+        "value": 2.02
       },
       {
         "name": "量价异常",
-        "score": 53.0,
-        "value": 0.78
+        "score": 27.2,
+        "value": 0.88
       },
       {
         "name": "行业波动",
-        "score": 73.8,
-        "value": 39.81
+        "score": 73.3,
+        "value": 39.33
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.78,
-    "return_5d_pct": 0.45,
-    "up_probability_3d_pct": 66.7,
-    "up_probability_5d_pct": 53.3,
+    "return_3d_pct": -0.96,
+    "return_5d_pct": -0.81,
+    "up_probability_3d_pct": 30.0,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 363.306,
-    "ma10": 365.273,
-    "ma20": 362.5715,
-    "ma60": 343.41866666666664,
-    "rsi14": 51.2,
-    "macd_dif": 4.363020688335325,
-    "macd_dea": 5.928164718663478,
-    "macd_hist": -3.130288060656305,
-    "atr14_pct": 2.0730521214531397,
-    "boll_position": 0.3526660241647197,
-    "return_5d_pct": -2.47462961957996,
-    "return_20d_pct": 1.2051585290308031,
-    "volume_ratio_5d": 0.78
+    "trend": "uptrend",
+    "ma5": 362.302,
+    "ma10": 365.191,
+    "ma20": 362.587,
+    "ma60": 343.9655,
+    "rsi14": 57.3,
+    "macd_dif": 4.224756697225473,
+    "macd_dea": 5.5874831143758765,
+    "macd_hist": -2.725452834300807,
+    "atr14_pct": 2.0249502795780034,
+    "boll_position": 0.6336498869284833,
+    "return_5d_pct": -1.3550354954517285,
+    "return_20d_pct": 0.08489894287122546,
+    "volume_ratio_5d": 0.88
   },
   "industry": {
     "name": "金融",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.91,
-    "return_20d_pct": -2.47,
-    "return_60d_pct": -7.37,
-    "relative_strength_20d_pct": 3.67
+    "return_5d_pct": 1.27,
+    "return_20d_pct": -1.37,
+    "return_60d_pct": -7.99,
+    "relative_strength_20d_pct": 1.46
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,27 +86,27 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 0.78,
-      "median_return_pct": 1.2,
-      "best_return_pct": 6.67,
-      "worst_return_pct": -5.89
+      "up_probability_pct": 30.0,
+      "average_return_pct": -0.96,
+      "median_return_pct": -0.72,
+      "best_return_pct": 3.02,
+      "worst_return_pct": -4.82
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.45,
-      "median_return_pct": 0.24,
-      "best_return_pct": 8.36,
-      "worst_return_pct": -6.14
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.81,
+      "median_return_pct": -0.51,
+      "best_return_pct": 4.46,
+      "worst_return_pct": -5.8
     }
   },
   "fundamental": null,
   "reasons": [
     {
       "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     }
   ],
   "kline_file": "../kline/V.json",

@@ -98,6 +98,7 @@ from src.analysis.scoring import (
     compute_industry_score,
     compute_composite_score,
 )
+from src.analysis.alpha_gate import gate_summary, run_alpha_gate
 from src.analysis.schema import validate_ranking, validate_stock_detail
 
 logger = setup_logging()
@@ -881,6 +882,7 @@ def build_ranking(
             },
             "fundamental": fundamental,
             "reasons": r["reasons"],
+            "alpha_gate": r.get("alpha_gate"),
         }
 
         items.append(item_entry)
@@ -917,6 +919,13 @@ def build_ranking(
         if r:
             r["generated_at"] = generated_at
 
+    alpha_gate_summary = gate_summary(items)
+    if alpha_gate_summary["fallback_applied"]:
+        logger.warning(
+            "Alpha 门控通过数(%d) < min_size(%d)，激进组合候选按原机会分回退补齐",
+            alpha_gate_summary["passed_count"], alpha_gate_summary["min_size"],
+        )
+
     ranking = {
         "schema_version": "2.0",
         "generated_at": generated_at,
@@ -929,6 +938,7 @@ def build_ranking(
         "failed": failed_count,
         "items": items,
         "errors": errors_list if errors_list else [],
+        "alpha_gate_summary": alpha_gate_summary,
         "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
     }
 
@@ -1024,6 +1034,7 @@ def build_stock_detail(r: dict, generated_at: str) -> dict:
         "type": r["type"],
         "category": r.get("category", ""),
         "stale": r.get("stale", False),
+        "alpha_gate": r.get("alpha_gate"),
         "scores": {
             "risk_adjusted": comp["risk_adjusted"],
             "risk": comp["risk"],
@@ -1186,6 +1197,7 @@ def main() -> int:
     # ---- 5.3 逐只抓取 5 年数据并分析 ----
     analysis_results: dict[str, Optional[dict]] = {}
     all_latest_values: list = []  # 存 latest dict 列表
+    klines: dict[str, Optional[pd.DataFrame]] = {}  # 门控回归所需的 5 年 K 线
 
     for i, item in enumerate(watchlist):
         code = item["code"]
@@ -1194,6 +1206,7 @@ def main() -> int:
         try:
             # 抓取 5 年数据
             df_5y = fetch_5y_data(item)
+            klines[code] = df_5y
 
             if df_5y is None:
                 logger.warning("%s(%s) 5Y 数据抓取失败，标记为 stale", item["name"], code)
@@ -1234,6 +1247,19 @@ def main() -> int:
         if has_existing_data(ANALYSIS_DIR):
             logger.warning("保留分析目录旧数据，不覆盖")
         return 1
+
+    # ---- 5.4.5 Fama-MacBeth Alpha 门控（spec-kit 003 / v3.0 Phase 1）----
+    # 非阻塞附加：门控异常被隔离，排行榜保持可用（与 LLM 报告同策略）；
+    # 但门控正常时其结果写入 ranking 与详情（FR-007）。
+    try:
+        gates = run_alpha_gate(klines)
+        for code, r in analysis_results.items():
+            if r is not None and not r.get("stale"):
+                r["alpha_gate"] = gates.get(code)
+        passed = sum(1 for g in gates.values() if g.get("verdict") == "pass")
+        logger.info("Alpha 门控完成：通过 %d / 参与 %d", passed, len(gates))
+    except Exception:
+        logger.warning("Alpha 门控异常已隔离，排行榜保持可用: %s", traceback.format_exc())
 
     # ---- 5.5 生成排名 ----
     logger.info("生成排行榜...")

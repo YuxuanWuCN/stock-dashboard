@@ -1,4 +1,42 @@
-// 🏠 家庭股票自动看板 - 前端交互逻辑 (docs/assets/app.js)
+// 🏠 股票研究看板 2.5 - 前端交互与 Toast/ResizeObserver 核心逻辑 (docs/assets/app.js)
+
+// 全局 Toast 提示组件 API
+window.showToast = function(message, type = 'info', duration = 3000) {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    const iconMap = {
+        success: '✓',
+        warning: '⚠',
+        error: '✕',
+        info: 'ℹ'
+    };
+    toast.innerHTML = `<span style="font-weight:bold;margin-right:6px;">${iconMap[type] || 'ℹ'}</span><span>${message}</span>`;
+    container.appendChild(toast);
+
+    setTimeout(() => {
+        toast.classList.add('toast-fadeOut');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+};
+
+// ECharts ResizeObserver 自适应尺寸绑定
+window.bindChartResize = function(chartInstance, containerElem) {
+    if (!chartInstance || !containerElem) return;
+    if (window.ResizeObserver) {
+        const ro = new ResizeObserver(() => {
+            chartInstance.resize();
+        });
+        ro.observe(containerElem);
+    } else {
+        window.addEventListener('resize', () => chartInstance.resize());
+    }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     // 全局状态管理

@@ -21,7 +21,8 @@
 ## 校验规则（FR-007）
 
 - verdict=reject 时 reject_reason 必填；verdict=pass 时 reject_reason=null
-- insufficient_data 时 alpha/alpha_p_value/information_ratio/betas 均为 null（FR-009）
+- reject_reason 枚举：statistical（统计不显著）/ economical（经济不显著）/ insufficient_data（数据不足）/ data_unavailable（因子数据不可用，如因子库缺失）
+- insufficient_data 与 data_unavailable 时 alpha/alpha_p_value/information_ratio/betas 均为 null（FR-009）
 - src/analysis/schema.py 校验器同步扩展；旧字段不变
 
 ## 消费方

@@ -1,31 +1,55 @@
-/* 🏠 家庭股票自动看板 - 样式表 (docs/assets/style.css) */
+/* 🏠 股票研究看板 2.5 - 现代极简风金融设计系统 (docs/assets/style.css) */
 
 :root {
-    --bg-color: #f4f6f9;
+    /* 现代极简金融调色盘 Design Tokens */
+    --bg-color: #f8fafc;
     --card-bg: #ffffff;
-    --text-primary: #1f2937;
-    --text-secondary: #4b5563;
-    --border-color: #e5e7eb;
+    --surface-hover: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --border-subtle: #f1f5f9;
     
-    /* A股红涨绿跌，平盘灰色 */
-    --color-up: #e63946;    /* 鲜艳的中国红 */
-    --color-down: #10b981;  /* 清晰的翡翠绿 */
-    --color-flat: #6b7280;  /* 稳重的灰色 */
+    /* 金融语义颜色：A股红涨绿跌，平盘灰色 */
+    --color-up: #ef4444;       /* 鲜艳高对比红 */
+    --color-up-bg: #fef2f2;
+    --color-down: #10b981;     /* 翡翠绿 */
+    --color-down-bg: #ecfdf5;
+    --color-flat: #64748b;     /* 稳重中性灰 */
+    --color-flat-bg: #f8fafc;
+
+    /* 品牌与高亮色 */
+    --accent-primary: #3b82f6; /* 现代科技蓝 */
+    --accent-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    --accent-glow: 0 4px 14px rgba(59, 130, 246, 0.25);
     
     /* 均线颜色 */
-    --color-ma5: #eab308;   /* 金黄 */
-    --color-ma10: #ec4899;  /* 粉红 */
-    --color-ma20: #3b82f6;  /* 蓝色 */
-    --color-ma60: #14b8a6;  /* 青绿 */
+    --color-ma5: #f59e0b;      /* 琥珀金 */
+    --color-ma10: #ec4899;     /* 胭脂粉 */
+    --color-ma20: #3b82f6;     /* 极光蓝 */
+    --color-ma60: #14b8a6;     /* 翡翠青 */
 
-    --risk-low: #15803d;
-    --risk-low-bg: #f0fdf4;
-    --risk-medium: #b45309;
+    /* 风险等级语义 */
+    --risk-low: #059669;
+    --risk-low-bg: #ecfdf5;
+    --risk-medium: #d97706;
     --risk-medium-bg: #fffbeb;
-    --risk-high: #b91c1c;
+    --risk-high: #dc2626;
     --risk-high-bg: #fef2f2;
 
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans CJK SC", sans-serif;
+    /* 模块尺寸与阴影 Design Tokens */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.12);
+    --shadow-hover: 0 16px 32px -4px rgba(15, 23, 42, 0.15);
+
+    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 * {
@@ -39,9 +63,99 @@ body {
     background-color: var(--bg-color);
     color: var(--text-primary);
     line-height: 1.5;
-    font-size: 16px; /* 中老年友好：增大基础字体 */
+    font-size: 15px;
     -webkit-font-smoothing: antialiased;
     padding-bottom: 40px;
+}
+
+/* 全局 Toast 提示容器 */
+#toast-container {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.toast {
+    pointer-events: auto;
+    min-width: 260px;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-lg);
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 4px solid var(--accent-primary);
+    animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.toast.toast-success { border-left-color: var(--color-down); }
+.toast.toast-warning { border-left-color: var(--risk-medium); }
+.toast.toast-error { border-left-color: var(--color-up); }
+.toast.toast-fadeOut { animation: toastOut 0.3s forwards; }
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(-16px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toastOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* 骨架屏占位动画 (Skeleton) */
+.skeleton-box {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: skeleton-pulse 1.5s infinite ease-in-out;
+    border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-pulse {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* 通用现代极简金融 Card 组件 */
+.dashboard-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .container {
@@ -50,16 +164,18 @@ body {
     padding: 16px;
 }
 
-/* 顶部状态栏 */
+/* 顶部状态栏 - 现代极简暗调深邃渐变 Header */
 .header {
-    background-color: var(--card-bg);
-    padding: 20px 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    margin-bottom: 16px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    padding: 24px 28px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
 }
 
 @media (min-width: 768px) {
@@ -81,29 +197,36 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     color: white;
     text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: var(--radius-md);
+    font-weight: 700;
     font-size: 0.95rem;
-    transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
 }
 
 .portfolio-link:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 8px 22px rgba(59, 130, 246, 0.45);
 }
 
 .header h1 {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #111827;
+    font-size: 1.95rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #ffffff 0%, #93c5fd 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .header .subtitle {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    margin-top: 4px;
+}
     font-size: 1rem;
     color: var(--text-secondary);
     margin-top: 4px;

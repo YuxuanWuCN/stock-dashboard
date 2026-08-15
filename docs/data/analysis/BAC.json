@@ -1,29 +1,29 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-13 19:39:25+08:00",
-  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-14 18:16:44+08:00",
+  "trade_date": "2026-08-13",
   "code": "BAC",
   "name": "美国银行",
   "type": "us",
   "category": "金融",
   "stale": false,
   "scores": {
-    "risk_adjusted": 46.3,
-    "risk": 17.7,
+    "risk_adjusted": 52.0,
+    "risk": 17.3,
     "technical": 100.0,
     "industry": 70.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 14.9,
+    "annualized_volatility_20d_pct": 15.59,
     "max_drawdown_60d_pct": -2.74,
-    "atr14_pct": 1.62,
+    "atr14_pct": 1.66,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 2.0,
-        "value": 14.9
+        "score": 2.5,
+        "value": 15.59
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +32,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 5.4,
-        "value": 1.62
+        "score": 7.4,
+        "value": 1.66
       },
       {
         "name": "量价异常",
-        "score": 48.5,
-        "value": 0.79
+        "score": 39.6,
+        "value": 0.82
       },
       {
         "name": "行业波动",
-        "score": 73.8,
-        "value": 39.81
+        "score": 73.3,
+        "value": 39.33
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.7,
-    "return_5d_pct": -0.67,
-    "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 43.3,
+    "return_3d_pct": -0.28,
+    "return_5d_pct": -0.22,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 53.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 63.76800000000001,
-    "ma10": 63.11500000000001,
-    "ma20": 62.31600000000001,
-    "ma60": 57.85366666666667,
-    "rsi14": 73.6,
-    "macd_dif": 1.4021273013066349,
-    "macd_dea": 1.3553453951745718,
-    "macd_hist": 0.09356381226412624,
-    "atr14_pct": 1.6175285679866547,
-    "boll_position": 1.066407801854747,
-    "return_5d_pct": 2.4664031620553306,
-    "return_20d_pct": 5.22812144828706,
-    "volume_ratio_5d": 0.79
+    "ma5": 63.986000000000004,
+    "ma10": 63.351,
+    "ma20": 62.446000000000005,
+    "ma60": 58.077000000000005,
+    "rsi14": 66.6,
+    "macd_dif": 1.378613461358917,
+    "macd_dea": 1.3599990084114408,
+    "macd_hist": 0.0372289058949522,
+    "atr14_pct": 1.6637500216055505,
+    "boll_position": 0.8579881329391601,
+    "return_5d_pct": 1.7301587301587373,
+    "return_20d_pct": 4.228329809725162,
+    "volume_ratio_5d": 0.82
   },
   "industry": {
     "name": "金融",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.91,
-    "return_20d_pct": -2.47,
-    "return_60d_pct": -7.37,
-    "relative_strength_20d_pct": 7.7
+    "return_5d_pct": 1.27,
+    "return_20d_pct": -1.37,
+    "return_60d_pct": -7.99,
+    "relative_strength_20d_pct": 5.6
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +86,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.7,
-      "median_return_pct": -0.87,
-      "best_return_pct": 5.55,
-      "worst_return_pct": -5.15
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.28,
+      "median_return_pct": -0.26,
+      "best_return_pct": 7.79,
+      "worst_return_pct": -8.93
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.67,
-      "median_return_pct": -0.55,
-      "best_return_pct": 6.81,
-      "worst_return_pct": -8.08
+      "up_probability_pct": 53.3,
+      "average_return_pct": -0.22,
+      "median_return_pct": 0.66,
+      "best_return_pct": 11.05,
+      "worst_return_pct": -13.5
     }
   },
   "fundamental": null,
@@ -107,12 +107,6 @@
       "title": "中短期趋势向上",
       "detail": "收盘价位于20日和60日均线上方。",
       "contribution": 8.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=73.6，短期超买。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/BAC.json",

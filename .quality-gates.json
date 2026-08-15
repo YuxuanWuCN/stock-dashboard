@@ -26,12 +26,22 @@
         "name": "v2.5 策略模块单元测试",
         "argv": ["{python}", "-m", "pytest", "-q", "tests/test_strategies.py", "tests/test_backtest_engine.py", "tests/test_hunting_ground.py"],
         "timeout": 300
+      },
+      {
+        "name": "Fama-MacBeth 多因子引擎单元测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_fama_macbeth.py"],
+        "timeout": 300
       }
     ],
     "medium": [
       {
         "name": "股票离线综合流程测试",
         "argv": ["{python}", "-m", "pytest", "-q", "tests/test_integration_pipeline.py"],
+        "timeout": 300
+      },
+      {
+        "name": "Fama-MacBeth Alpha 门控集成测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_fama_macbeth_integration.py"],
         "timeout": 300
       }
     ],

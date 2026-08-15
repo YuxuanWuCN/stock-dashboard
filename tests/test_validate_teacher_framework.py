@@ -36,7 +36,8 @@ def test_load_kline_shape():
     # 列序 [开,收,低,高] 校验：low <= min(open,close) 且 high >= max(open,close)
     assert (df["low"] <= df[["open", "close"]].min(axis=1) + 1e-9).all()
     assert (df["high"] >= df[["open", "close"]].max(axis=1) - 1e-9).all()
-    assert df["date"].dt.strftime("%Y-%m-%d").iloc[-1] == vtf.LAST_DATE
+    # 数据文件会随每日抓取刷新，断言"覆盖截止日"而非"恰好等于"（避免日期漂移）
+    assert vtf.LAST_DATE in df["date"].dt.strftime("%Y-%m-%d").tolist()
 
 
 def test_load_market_temperature():
@@ -117,8 +118,10 @@ def test_limit_up_clustering():
 
 def test_pullback_stats():
     df = vtf.load_kline(KLINE)
-    events = vtf.list_limit_up_events(df)
-    stats = vtf.pullback_stats(df, events)
+    # 冻结到数据截止日（工具不变量：严禁未来数据泄漏），避免每日刷新导致断言漂移
+    cutoff = df[df["date"].dt.strftime("%Y-%m-%d") <= vtf.LAST_DATE]
+    events = vtf.list_limit_up_events(cutoff)
+    stats = vtf.pullback_stats(cutoff, events)
     assert stats["n_events"] == 6
     assert stats["n_pullback"] >= 5
     assert stats["rate_pct"] >= 80

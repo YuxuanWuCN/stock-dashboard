@@ -19,9 +19,9 @@
 
 **Purpose**: 依赖与参数基础设施
 
-- [ ] T001 安装依赖：.venv\Scripts\pip install statsmodels（自动带 scipy/patsy），并把 statsmodels 写入 requirements.txt（research.md R1）
-- [ ] T002 [P] 在 src/analysis/config.py 扩展回归与门控参数：ALPHA_P_THRESHOLD=0.05、IR_THRESHOLD=0.3、FACTOR_WINDOW_YEARS=5、MIN_OBS_DAYS=250、RF_ANNUAL_DEFAULT=0.025、GAP_RATE_MAX=0.05、HAC_MAXLAGS=5、FACTOR_DB_PATH（默认 docs/data/factors/factors.db）
-- [ ] T003 [P] 创建 docs/data/factors/ 目录与 5 年日频合成因子夹具 docs/data/factors/fixture_factors.csv（表头 date,MKT,SMB,HML,MOM,rf；约 1250 行；含 5% 以内可控缺口）
+- [X] T001 安装依赖：.venv\Scripts\pip install statsmodels（自动带 scipy/patsy），并把 statsmodels 写入 requirements.txt（research.md R1）
+- [X] T002 [P] 在 src/analysis/config.py 扩展回归与门控参数：ALPHA_P_THRESHOLD=0.05、IR_THRESHOLD=0.3、FACTOR_WINDOW_YEARS=5、MIN_OBS_DAYS=250、RF_ANNUAL_DEFAULT=0.025、GAP_RATE_MAX=0.05、HAC_MAXLAGS=5、FACTOR_DB_PATH（默认 docs/data/factors/factors.db）
+- [X] T003 [P] 创建 docs/data/factors/ 目录与 5 年日频合成因子夹具 docs/data/factors/fixture_factors.csv（表头 date,MKT,SMB,HML,MOM,rf；约 1250 行；含 5% 以内可控缺口）
 
 ---
 
@@ -31,7 +31,7 @@
 
 **⚠️ CRITICAL**: 用户故事开始前必须完成本阶段
 
-- [ ] T004 在 tests/test_fama_macbeth.py 中实现合成数据生成器（synthetic_factors / synthetic_stock_returns：给定 beta 生成 4 因子载荷的收益序列，支持注入已知 alpha 与残差波动率），供 US1–US4 全部测试复用
+- [X] T004 在 tests/test_fama_macbeth.py 中实现合成数据生成器（synthetic_factors / synthetic_stock_returns：给定 beta 生成 4 因子载荷的收益序列，支持注入已知 alpha 与残差波动率），供 US1–US4 全部测试复用
 
 **Checkpoint**: 基础就绪——可开始用户故事实现
 
@@ -45,16 +45,16 @@
 
 ### Tests for User Story 1（先写，先看到失败）
 
-- [ ] T005 [P] [US1] 在 tests/test_fama_macbeth.py 写 CSV 契约校验测试：缺失列报错、重复日期报错、缺口率>5% 报错、乱序排序+告警、区间不足报错（FR-001，契约 contracts/factors-csv.md）
-- [ ] T006 [P] [US1] 在 tests/test_fama_macbeth.py 写 SQLite 入库与查询测试：UPSERT 幂等重导入、事务回滚不留半写、区间查询正确、无重复日期（FR-002/FR-003）
-- [ ] T007 [P] [US1] 在 tests/test_fama_macbeth.py 写对齐与质量报告测试：因子∩K线交集策略、剔除日期记录、质量报告字段完整（FR-003/FR-012）
+- [X] T005 [P] [US1] 在 tests/test_fama_macbeth.py 写 CSV 契约校验测试：缺失列报错、重复日期报错、缺口率>5% 报错、乱序排序+告警、区间不足报错（FR-001，契约 contracts/factors-csv.md）
+- [X] T006 [P] [US1] 在 tests/test_fama_macbeth.py 写 SQLite 入库与查询测试：UPSERT 幂等重导入、事务回滚不留半写、区间查询正确、无重复日期（FR-002/FR-003）
+- [X] T007 [P] [US1] 在 tests/test_fama_macbeth.py 写对齐与质量报告测试：因子∩K线交集策略、剔除日期记录、质量报告字段完整（FR-003/FR-012）
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] 在 src/analysis/factor_db.py 实现 CSV 契约校验器 validate_factors_csv（表头/列序、重复日期、缺口率、乱序、覆盖区间，按 contracts/factors-csv.md 校验规则逐条实现）
-- [ ] T009 [US1] 在 src/analysis/factor_db.py 实现 SQLite 入库与查询（factors/source_meta 表结构按 data-model.md；import_to_db 幂等 UPSERT + 事务；query_range 按日期区间）
-- [ ] T010 [US1] 在 src/analysis/factor_db.py 实现对齐与质量报告（align_with_kline 交集策略 + 剔除记录；write_quality_report 输出 docs/data/factors/quality_report.json）
-- [ ] T011 [US1] 在 src/analysis/factor_db.py 提供 CLI 入口：python -m src.analysis.factor_db import --csv <path>（quickstart.md 用法一致）
+- [X] T008 [US1] 在 src/analysis/factor_db.py 实现 CSV 契约校验器 validate_factors_csv（表头/列序、重复日期、缺口率、乱序、覆盖区间，按 contracts/factors-csv.md 校验规则逐条实现）
+- [X] T009 [US1] 在 src/analysis/factor_db.py 实现 SQLite 入库与查询（factors/source_meta 表结构按 data-model.md；import_to_db 幂等 UPSERT + 事务；query_range 按日期区间）
+- [X] T010 [US1] 在 src/analysis/factor_db.py 实现对齐与质量报告（align_with_kline 交集策略 + 剔除记录；write_quality_report 输出 docs/data/factors/quality_report.json）
+- [X] T011 [US1] 在 src/analysis/factor_db.py 提供 CLI 入口：python -m src.analysis.factor_db import --csv <path>（quickstart.md 用法一致）
 
 **Checkpoint**: US1 独立可用——离线夹具即可入库、质检、审计
 
@@ -68,15 +68,15 @@
 
 ### Tests for User Story 2（先写，先看到失败）
 
-- [ ] T012 [P] [US2] 在 tests/test_fama_macbeth.py 写还原测试：注入 alpha=0.5%/日、IR≈0.5 的合成序列，断言估计 alpha 误差 ±20% 内、p<0.05、IR>=0.3（US2 验收 1）
-- [ ] T013 [P] [US2] 在 tests/test_fama_macbeth.py 写纯因子暴露与数据不足测试：alpha=0 纯 MKT 暴露 → p>=0.05 或 IR<0.3；样本 <250 日 → 输出 null + 原因（US2 验收 2/4，FR-009）
-- [ ] T014 [P] [US2] 在 tests/test_fama_macbeth.py 写泄漏注入测试：用未来因子值污染回归输入 → 断言必须触发失败（FR-008、SC-004）
+- [X] T012 [P] [US2] 在 tests/test_fama_macbeth.py 写还原测试：注入 alpha=0.5%/日、IR≈0.5 的合成序列，断言估计 alpha 误差 ±20% 内、p<0.05、IR>=0.3（US2 验收 1）
+- [X] T013 [P] [US2] 在 tests/test_fama_macbeth.py 写纯因子暴露与数据不足测试：alpha=0 纯 MKT 暴露 → p>=0.05 或 IR<0.3；样本 <250 日 → 输出 null + 原因（US2 验收 2/4，FR-009）
+- [X] T014 [P] [US2] 在 tests/test_fama_macbeth.py 写泄漏注入测试：用未来因子值污染回归输入 → 断言必须触发失败（FR-008、SC-004）
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] 在 src/analysis/fama_macbeth.py 实现阶段一时间序列回归（statsmodels OLS，cov_type=HAC、maxlags 取 config；输出 alpha/alpha_p_value/information_ratio/betas/vif/n_obs/converged；数据不足输出 null+reason，结构按 data-model.md RegressionResult）
-- [ ] T016 [US2] 在 src/analysis/fama_macbeth.py 实现阶段二横截面 FM（每日截面收益对阶段一 beta 回归 → lambda_t 时间均值与 std/sqrt(T) 标准误，信息性输出入报告）
-- [ ] T017 [US2] 在 src/analysis/fama_macbeth.py 实现全池批量入口 run_all（202 只循环，实测 <15 分钟预算 SC-005）与 CLI 调试入口 python -m src.analysis.fama_macbeth --code 600519
+- [X] T015 [US2] 在 src/analysis/fama_macbeth.py 实现阶段一时间序列回归（statsmodels OLS，cov_type=HAC、maxlags 取 config；输出 alpha/alpha_p_value/information_ratio/betas/vif/n_obs/converged；数据不足输出 null+reason，结构按 data-model.md RegressionResult）
+- [X] T016 [US2] 在 src/analysis/fama_macbeth.py 实现阶段二横截面 FM（每日截面收益对阶段一 beta 回归 → lambda_t 时间均值与 std/sqrt(T) 标准误，信息性输出入报告）
+- [X] T017 [US2] 在 src/analysis/fama_macbeth.py 实现全池批量入口 run_all（202 只循环，实测 <15 分钟预算 SC-005）与 CLI 调试入口 python -m src.analysis.fama_macbeth --code 600519
 
 **Checkpoint**: US1+US2 可用——任何标的可离线输出回归结果与显著性判定
 
@@ -90,15 +90,15 @@
 
 ### Tests for User Story 3（先写，先看到失败）
 
-- [ ] T018 [P] [US3] 在 tests/test_fama_macbeth_integration.py 写集成测试：mock 行情跑 build_ranking 流水线，断言激进候选只含 alpha_gate=pass、ranking.json 与 {code}.json 字段完整（US3 验收 1，契约 contracts/alpha-gate-output.md）
-- [ ] T019 [P] [US3] 在 tests/test_fama_macbeth_integration.py 写降级测试：全池 reject → 按原机会分回退补齐 + 告警标注、不产生空组合不崩溃（US3 验收 2，FR-011）
+- [X] T018 [P] [US3] 在 tests/test_fama_macbeth_integration.py 写集成测试：mock 行情跑 build_ranking 流水线，断言激进候选只含 alpha_gate=pass、ranking.json 与 {code}.json 字段完整（US3 验收 1，契约 contracts/alpha-gate-output.md）
+- [X] T019 [P] [US3] 在 tests/test_fama_macbeth_integration.py 写降级测试：全池 reject → 按原机会分回退补齐 + 告警标注、不产生空组合不崩溃（US3 验收 2，FR-011）
 
 ### Implementation for User Story 3
 
-- [ ] T020 [US3] 在 src/analysis/alpha_gate.py 实现门控判定 evaluate_gate（verdict=pass/reject + reject_reason 枚举 statistical/economical/insufficient_data，阈值取 config）
-- [ ] T021 [US3] 在 src/build_ranking.py 插入门控调用点（机会分计算之后、激进组合候选构建之前），每标的输出 alpha_gate 字段组并写入 ranking.json/{code}.json
-- [ ] T022 [US3] 在 src/analysis/schema.py 扩展 alpha_gate 字段校验（reject 必填 reject_reason；insufficient_data 时 alpha/p/IR/betas 全 null；旧字段保持兼容）
-- [ ] T023 [US3] 在 src/build_ranking.py 实现降级策略（通过数 < 激进组合 min_size=5 时按原机会分回退补齐并记录告警标注）
+- [X] T020 [US3] 在 src/analysis/alpha_gate.py 实现门控判定 evaluate_gate（verdict=pass/reject + reject_reason 枚举 statistical/economical/insufficient_data，阈值取 config）
+- [X] T021 [US3] 在 src/build_ranking.py 插入门控调用点（机会分计算之后、激进组合候选构建之前），每标的输出 alpha_gate 字段组并写入 ranking.json/{code}.json
+- [X] T022 [US3] 在 src/analysis/schema.py 扩展 alpha_gate 字段校验（reject 必填 reject_reason；insufficient_data 时 alpha/p/IR/betas 全 null；旧字段保持兼容）
+- [X] T023 [US3] 在 src/build_ranking.py 实现降级策略（通过数 < 激进组合 min_size=5 时按原机会分回退补齐并记录告警标注）
 
 **Checkpoint**: 排行榜具备风险调整后的 Alpha 门控，US1–US3 全部独立可用
 
@@ -110,10 +110,10 @@
 
 **Independent Test**: small → medium → heavy 门禁全绿；手算复核与模块输出一致（spec US4）
 
-- [ ] T024 [P] [US4] 在 .quality-gates.json 把 tests/test_fama_macbeth.py 注册进 small 批次、tests/test_fama_macbeth_integration.py 注册进 medium 批次（保持现有批次其余条目不动）
-- [ ] T025 [P] [US4] 覆盖率核对：新模块 src/analysis/factor_db.py、fama_macbeth.py、alpha_gate.py 行覆盖 100%（SC-004），不足则补测试
-- [ ] T026 [P] [US4] 独立手算复核 3 只小样本（alpha/p/IR 用可手算数据核对）并归档记录到 reports/ 下（SC-006）
-- [ ] T027 [US4] 按 AGENTS.md 走完整门禁：tools/run_quality.ps1 begin-unit（写明验收标准）→ small → medium → heavy 全绿（含泄漏注入测试必须能触发失败的验证）
+- [X] T024 [P] [US4] 在 .quality-gates.json 把 tests/test_fama_macbeth.py 注册进 small 批次、tests/test_fama_macbeth_integration.py 注册进 medium 批次（保持现有批次其余条目不动）
+- [X] T025 [P] [US4] 覆盖率核对：新模块 src/analysis/factor_db.py、fama_macbeth.py、alpha_gate.py 行覆盖 100%（SC-004），不足则补测试
+- [X] T026 [P] [US4] 独立手算复核 3 只小样本（alpha/p/IR 用可手算数据核对）并归档记录到 reports/ 下（SC-006）
+- [X] T027 [US4] 按 AGENTS.md 走完整门禁：tools/run_quality.ps1 begin-unit（写明验收标准）→ small → medium → heavy 全绿（含泄漏注入测试必须能触发失败的验证）
 
 **Checkpoint**: 全部故事完成且通过项目质量门禁，可发布提交
 
@@ -123,9 +123,9 @@
 
 **Purpose**: 收尾与跨故事改进
 
-- [ ] T028 [P] 验证 quickstart.md 全流程可复现（空库 → 导入夹具 → build_ranking → 检查 alpha_gate 输出与质量报告）
-- [ ] T029 [P] （可选，spec 标注非必需）在 docs/index.html 展示 alpha_gate 字段（verdict/alpha/IR）
-- [ ] T030 代码清理与最终审阅：对照 plan.md 源码结构核对文件清单，补齐 docstring/日志，移除调试残留
+- [X] T028 [P] 验证 quickstart.md 全流程可复现（离线部分已验证：空库→CLI 导入 1250 行→CLI 回归 600519 诚实输出 insufficient_data→质量报告；build_ranking 全量联网运行留待每日流水线验证，门控输出路径已由 53 项离线测试覆盖）
+- [X] T029 [P] （可选）docs/index.html 前端展示：本 feature 跳过（spec 标注非必需，前端展示留待 Phase 4 校准后统一设计）
+- [X] T030 代码清理与最终审阅：新模块 docstring 齐全、无调试残留；临时脚本已清理；plan.md 源码结构与实际一致（factor_db/fama_macbeth/alpha_gate + 两个测试文件 + .quality-gates.json + requirements.txt）
 
 ---
 
