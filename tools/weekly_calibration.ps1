@@ -1,4 +1,4 @@
-# weekly_calibration.ps1 —— 周日晚上统一校准分析
+﻿# weekly_calibration.ps1 —— 周日晚上统一校准分析
 #
 # 功能：
 # 1. 检查是否满足校准条件（≥3 个交易日）
