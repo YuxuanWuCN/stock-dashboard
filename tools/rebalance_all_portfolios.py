@@ -257,6 +257,31 @@ def rebalance_aggressive(scan_results, dry_run=False, temperature=None, config=N
     print(f"✅ 已更新: portfolio_aggressive.json")
 
 
+def robust_candidates(ranking):
+    """稳健组合候选：风险分 < 40 且 3日上涨概率 > 60%，按综合分降序。
+
+    spec-kit 004b 修复：读取嵌套字段 risk.score 与 total_score，
+    不再误读不存在的顶层 risk_score / score（旧 bug 导致永远选不出标的）。
+    """
+    candidates = []
+    for item in ranking:
+        risk = (item.get('risk') or {}).get('score', 100)
+        fc = item.get('forecast', {})
+        up3 = fc.get('up_probability_3d_pct', 0)
+
+        if risk < 40 and up3 > 60:
+            candidates.append({
+                'code': item['code'],
+                'name': item['name'],
+                'risk': risk,
+                'up3': up3,
+                'score': item.get('total_score', 0),
+            })
+
+    candidates.sort(key=lambda x: x['score'], reverse=True)
+    return candidates
+
+
 def rebalance_robust(ranking, dry_run=False, temperature=None, config=None):
     """稳健组合：低风险 + 高概率，仓位随温度缩放"""
     print("\n" + "="*80)
@@ -267,24 +292,7 @@ def rebalance_robust(ranking, dry_run=False, temperature=None, config=None):
         'robust', config or {}, temperature,
         defaults={'size': 6, 'max_size': 15, 'min_size': 4, 'base_ratio': 0.8})
 
-    # 选股标准：风险分 < 40，3日上涨概率 > 60%
-    candidates = []
-    for item in ranking:
-        risk = item.get('risk_score', 100)
-        fc = item.get('forecast', {})
-        up3 = fc.get('up_probability_3d_pct', 0)
-
-        if risk < 40 and up3 > 60:
-            candidates.append({
-                'code': item['code'],
-                'name': item['name'],
-                'risk': risk,
-                'up3': up3,
-                'score': item.get('score', 0)
-            })
-
-    # 按综合分排序，取 Top N
-    candidates.sort(key=lambda x: x['score'], reverse=True)
+    candidates = robust_candidates(ranking)
     selected = candidates[:size]
 
     if not selected:
@@ -355,8 +363,8 @@ def rebalance_bluechip(ranking, dry_run=False, temperature=None, config=None):
             candidates.append({
                 'code': item['code'],
                 'name': item['name'],
-                'score': item.get('score', 0),
-                'risk': item.get('risk_score', 0)
+                'score': item.get('total_score', 0),
+                'risk': (item.get('risk') or {}).get('score', 0)
             })
 
     # 按综合分排序，取 Top N
@@ -430,7 +438,7 @@ def rebalance_defensive(ranking, dry_run=False, temperature=None, config=None):
             candidates.append({
                 'code': item['code'],
                 'name': item['name'],
-                'score': item.get('score', 0)
+                'score': item.get('total_score', 0)
             })
 
     candidates.sort(key=lambda x: x['score'], reverse=True)
@@ -503,7 +511,7 @@ def rebalance_global(ranking, dry_run=False, temperature=None, config=None):
 
     for item in ranking:
         stock_type = item.get('type', 'stock')
-        score = item.get('score', 0)
+        score = item.get('total_score', 0)
 
         stock = {
             'code': item['code'],
@@ -600,7 +608,7 @@ def rebalance_tech(ranking, dry_run=False, temperature=None, config=None):
             candidates.append({
                 'code': item['code'],
                 'name': item['name'],
-                'score': item.get('score', 0)
+                'score': item.get('total_score', 0)
             })
 
     candidates.sort(key=lambda x: x['score'], reverse=True)
