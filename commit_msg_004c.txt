@@ -1,7 +1,0 @@
-fix(tools): 校准系统幽灵建议与静默失败修复 + 动量权重落地
-
-- calibration.py：建议生成改用 directional_accuracy 新口径（spec-kit 004），并从 rebalance_all_portfolios.py 真实读取概率门槛（up3 > N）；模式不存在或样本不足不再产生幽灵建议
-- apply_calibration.py：概率阈值/动量权重替换失败如实报"未生效"（返回 False、文件不变）；portfolio_strategy 动量权重实际落地；scoring_weights 低优先级如实计为未应用
-- aggressive_scan.py：动量权重 0.75 → 0.85（依据：激进组合跑赢稳健组合 3.19%）
-- 新增 tests/test_calibration_suggestions.py（11 项）；test_aggressive_scan 期望值同步更新
-- 校准报告重新生成（calibration_report_20260815_173745.json，含新口径）；质量门禁 small/medium/heavy 全绿（v2.8.1 证据）
