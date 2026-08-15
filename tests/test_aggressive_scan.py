@@ -40,9 +40,10 @@ def test_scan_sorts_and_skips_stale(tmp_path, monkeypatch):
     assert len(rows) == 2
     codes = [r["code"] for r in rows]
     assert "CC" not in codes
-    # AA 激进分更高：70*0.4 + 80*0.3 + 30*0.75 = 28+24+22.5 = 74.5
+    # AA 激进分更高：70*0.4 + 80*0.3 + 30*0.85 = 28+24+25.5 = 77.5
+    # （动量权重 0.75 → 0.85，2026-08-15 校准调参落地）
     assert rows[0]["code"] == "AA"
-    assert abs(rows[0]["aggressive_score"] - 74.5) < 0.01
+    assert abs(rows[0]["aggressive_score"] - 77.5) < 0.01
     # 扫描结果已保存
     out = json.loads((data / "paper" / "aggressive_scan.json").read_text(encoding="utf-8"))
     assert out["generated"] == 2

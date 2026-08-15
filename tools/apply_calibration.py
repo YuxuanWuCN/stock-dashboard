@@ -15,6 +15,7 @@
 """
 
 import json
+import re
 import sys
 import shutil
 import argparse
@@ -95,54 +96,36 @@ class CalibrationApplier:
                 print("   ⏭️  跳过此调整")
                 return False
 
-        # 备份文件
-        for file_str in suggestion['affected_files']:
-            file_path = PROJECT_ROOT / file_str
-            self.backup_file(file_path)
+        # 目标文件：稳健组合选股代码（真实门槛 up3 > N 所在地）
+        file_str = suggestion['affected_files'][0]
+        file_path = PROJECT_ROOT / file_str
+        if not file_path.exists():
+            print(f"   ❌ 目标文件不存在: {file_path}")
+            return False
 
-        # 修改 daily_brief.py
+        self.backup_file(file_path)
+
+        old_threshold = str(suggestion['current_value'])
+        new_threshold = str(suggestion['suggested_value'])
+
         try:
-            if DAILY_BRIEF_FILE.exists():
-                with open(DAILY_BRIEF_FILE, 'r', encoding='utf-8') as f:
-                    content = f.read()
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
 
-                # 查找并替换概率阈值
-                # 假设代码中有类似 pred_up5 >= 50 的判断
-                old_threshold = suggestion['current_value']
-                new_threshold = suggestion['suggested_value']
+            new_content = re.sub(
+                rf"(up3\s*>\s*){old_threshold}\b",
+                rf"\g<1>{new_threshold}",
+                content,
+            )
 
-                content = content.replace(
-                    f"pred_up5 >= {old_threshold}",
-                    f"pred_up5 >= {new_threshold}"
-                )
-                content = content.replace(
-                    f"pred_up3 >= {old_threshold}",
-                    f"pred_up3 >= {new_threshold}"
-                )
+            if new_content == content:
+                print(f"   ⚠️ 未找到目标门槛模式 up3 > {old_threshold}（代码已变化），此建议未生效")
+                return False
 
-                with open(DAILY_BRIEF_FILE, 'w', encoding='utf-8') as f:
-                    f.write(content)
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
 
-                print(f"   ✅ 已更新 {DAILY_BRIEF_FILE.name}")
-
-            # 修改 aggressive_scan.py
-            if AGGRESSIVE_SCAN_FILE.exists():
-                with open(AGGRESSIVE_SCAN_FILE, 'r', encoding='utf-8') as f:
-                    content = f.read()
-
-                old_threshold = suggestion['current_value']
-                new_threshold = suggestion['suggested_value']
-
-                content = content.replace(
-                    f"pred_up5 >= {old_threshold}",
-                    f"pred_up5 >= {new_threshold}"
-                )
-
-                with open(AGGRESSIVE_SCAN_FILE, 'w', encoding='utf-8') as f:
-                    f.write(content)
-
-                print(f"   ✅ 已更新 {AGGRESSIVE_SCAN_FILE.name}")
-
+            print(f"   ✅ 已更新 {file_path.name}: up3 > {old_threshold} → up3 > {new_threshold}")
             return True
 
         except Exception as e:
@@ -150,7 +133,11 @@ class CalibrationApplier:
             return False
 
     def apply_portfolio_strategy(self, suggestion: Dict[str, Any]) -> bool:
-        """应用组合策略调整"""
+        """应用组合策略调整。
+
+        spec-kit 004 修复：动量权重调整（momentum_old/momentum_new 字段存在时）
+        实际落地替换；替换失败如实报未生效。其余（如止损纪律）仍需人工实现。
+        """
         print(f"\n📝 应用组合策略调整...")
         print(f"   原因: {suggestion['reason']}")
         print(f"   实施: {suggestion['implementation']}")
@@ -161,11 +148,36 @@ class CalibrationApplier:
                 print("   ⏭️  跳过此调整")
                 return False
 
+        momentum_old = suggestion.get('momentum_old')
+        momentum_new = suggestion.get('momentum_new')
+        if momentum_old is not None and momentum_new is not None:
+            file_path = PROJECT_ROOT / suggestion['affected_files'][0]
+            if not file_path.exists():
+                print(f"   ❌ 目标文件不存在: {file_path}")
+                return False
+            self.backup_file(file_path)
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                new_content = content.replace(
+                    f"momentum) * {momentum_old}",
+                    f"momentum) * {momentum_new}",
+                )
+                if new_content == content:
+                    print(f"   ⚠️ 未找到动量权重模式 momentum) * {momentum_old}（代码已变化），此建议未生效")
+                    return False
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(new_content)
+                print(f"   ✅ 已更新 {file_path.name}: 动量权重 {momentum_old} → {momentum_new}")
+                return True
+            except Exception as e:
+                print(f"   ❌ 应用失败: {e}")
+                return False
+
         print("   ⚠️  组合策略调整需要手动实现:")
         print(f"      {suggestion['implementation']}")
         print(f"      涉及文件: {', '.join(suggestion['affected_files'])}")
-
-        return True
+        return False
 
     def apply_scoring_weights(self, suggestion: Dict[str, Any]) -> bool:
         """应用评分权重调整"""
@@ -175,8 +187,9 @@ class CalibrationApplier:
 
         if suggestion['priority'] == 'low':
             print("   ℹ️  优先级为低，建议等待更多数据后再调整")
+            return False
 
-        return True
+        return False  # 非低优先级评分权重调整暂不支持自动应用
 
     def apply_suggestions(self):
         """应用所有调参建议"""

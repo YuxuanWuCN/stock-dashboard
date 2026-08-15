@@ -12,17 +12,22 @@ FinGPT 后训练校准分析脚本
 """
 
 import json
+import re
 import sys
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 
 # 项目根目录
 PROJECT_ROOT = Path(__file__).parent.parent
+sys.path.insert(0, str(PROJECT_ROOT))
 DATA_DIR = PROJECT_ROOT / "docs" / "data"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 CALIBRATION_DIR = REPORTS_DIR / "calibration"
+
+# 稳健组合选股代码（真实概率门槛所在地，spec-kit 004 修复的幽灵建议目标）
+REBALANCE_ALL_FILE = PROJECT_ROOT / "tools" / "rebalance_all_portfolios.py"
 
 # 数据文件路径
 MARKET_FEEDBACK_FILE = DATA_DIR / "llm" / "market_feedback.json"
@@ -33,6 +38,29 @@ AGGRESSIVE_SCAN_FILE = DATA_DIR / "paper" / "aggressive_scan.json"
 # 配置文件路径
 CONFIG_DIR = PROJECT_ROOT / "config"
 STRATEGY_PARAMS_FILE = CONFIG_DIR / "strategy_params.json"
+
+
+def _read_probability_threshold() -> Optional[int]:
+    """从稳健组合选股代码读取真实概率门槛（up3 > N）。
+
+    模式不存在（代码已变化）→ 返回 None，调用方不得生成幽灵建议。
+    """
+    try:
+        text = REBALANCE_ALL_FILE.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    m = re.search(r"up3\s*>\s*(\d+)", text)
+    return int(m.group(1)) if m else None
+
+
+def _fresh_feedback_summary() -> Dict[str, Any]:
+    """从市场反馈样本实时计算摘要（新口径，含 directional_accuracy）。
+
+    替代读取 JSON 中可能过期的 summary 字段（spec-kit 004）。
+    """
+    from src.market_feedback import MarketFeedbackTracker
+    tracker = MarketFeedbackTracker(path=str(MARKET_FEEDBACK_FILE))
+    return tracker.compute_summary()
 
 
 class CalibrationAnalyzer:
@@ -240,25 +268,31 @@ class CalibrationAnalyzer:
         }
 
     def generate_calibration_suggestions(self, analysis: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """生成调参建议"""
+        """生成调参建议（spec-kit 004 修复：新口径 + 真实代码门槛）。"""
         suggestions = []
 
-        # 从市场反馈获取当前 alignment_rate
-        current_alignment = self.market_feedback.get('summary', {}).get('alignment_rate', 0)
+        # 新口径：从样本实时计算摘要（directional_accuracy 只统计决定性样本）
+        summary = _fresh_feedback_summary()
+        directional = summary.get("directional_accuracy")
+        decisive_n = summary.get("decisive_sample_count", 0)
 
-        # 建议1：概率阈值调整
-        if current_alignment < 0.5:
+        # 建议1：概率阈值调整——只针对真实存在的门槛（rebalance_all_portfolios.py 的 up3 > N）
+        current_threshold = _read_probability_threshold()
+        if directional is not None and directional < 0.5 and current_threshold is not None:
+            suggested_value = min(80, current_threshold + 5)
             suggestions.append({
                 'type': 'probability_threshold',
                 'priority': 'high',
-                'current_value': 50,
-                'suggested_value': 60,
-                'reason': f'当前对齐率 {current_alignment:.1%} < 50%，存在乐观偏差，建议提高概率阈值',
-                'affected_files': [
-                    'src/strategies/daily_brief.py',
-                    'tools/aggressive_scan.py'
-                ],
-                'implementation': '将候选股票的 pred_up5 阈值从 50% 提高到 60%'
+                'current_value': current_threshold,
+                'suggested_value': suggested_value,
+                'reason': (
+                    f"决定性样本方向准确率 {directional:.1%}（n={decisive_n}）< 50%，"
+                    "建议提高稳健组合概率门槛（新口径，spec-kit 004）"
+                ),
+                'affected_files': ['tools/rebalance_all_portfolios.py'],
+                'implementation': (
+                    f"将稳健组合候选门槛 up3 > {current_threshold} 提高到 > {suggested_value}"
+                ),
             })
 
         # 建议2：组合策略调整
@@ -269,7 +303,9 @@ class CalibrationAnalyzer:
                 'priority': 'medium',
                 'reason': f"激进组合跑赢稳健组合 {portfolio_perf['aggressive']['cumulative_return'] - portfolio_perf['robust']['cumulative_return']:.2f}%，可提高动量权重",
                 'affected_files': ['tools/aggressive_scan.py'],
-                'implementation': '在 aggressive_scan.py 中增加动量因子权重 10-20%'
+                'implementation': '在 aggressive_scan.py 中动量权重 0.75 → 0.85',
+                'momentum_old': 0.75,
+                'momentum_new': 0.85,
             })
         elif portfolio_perf['aggressive']['max_drawdown'] < -10:
             suggestions.append({
@@ -324,7 +360,7 @@ class CalibrationAnalyzer:
             'generated_at': datetime.now().isoformat(),
             'trading_days': trading_days,
             'trigger_condition': 'met',
-            'market_feedback_summary': self.market_feedback.get('summary', {}),
+            'market_feedback_summary': _fresh_feedback_summary(),
             'portfolio_performance': portfolio_performance,
             'stock_accuracy': stock_accuracy,
             'calibration_suggestions': suggestions,
@@ -360,7 +396,9 @@ class CalibrationAnalyzer:
 
         # 市场反馈
         mf = report['market_feedback_summary']
-        print(f"\n🎯 市场反馈对齐率: {mf.get('alignment_rate', 0):.1%}")
+        print(f"\n🎯 市场反馈对齐率(旧口径): {mf.get('alignment_rate', 0):.1%}")
+        _da = mf.get('directional_accuracy')
+        print(f"   - 方向准确率(新口径): {_da:.1%} (决定性样本 {mf.get('decisive_sample_count', 0)})" if _da is not None else "   - 方向准确率(新口径): 决定性样本不足")
         print(f"   - 总样本数: {mf.get('total', 0)}")
         print(f"   - 正向惊喜: {mf.get('positive_surprise', 0)}")
         print(f"   - 负向惊喜: {mf.get('negative_surprise', 0)}")

@@ -38,7 +38,7 @@ def scan(top: int = 20) -> list:
         up5 = fc.get("up_probability_5d_pct") or 0
         ret20 = tech.get("return_20d_pct") or 0
         momentum = max(-20, min(40, ret20))
-        score = up5 * 0.4 + up3 * 0.3 + max(0, momentum) * 0.75
+        score = up5 * 0.4 + up3 * 0.3 + max(0, momentum) * 0.85
         rows.append({
             "code": code,
             "name": it.get("name"),
