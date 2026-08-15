@@ -64,6 +64,26 @@ def compute_rlsp_reward_continuous(
     return round(sentiment_score * actual_return, 4)
 
 
+def realized_return(close_series, t_index: int, horizon: int) -> Optional[float]:
+    """真实已实现收益（spec-kit 004 / Phase 0 口径，research.md R2）。
+
+    ret_N = (close[t+N] − close[t]) / close[t] × 100
+    t 为 event_date 在 K 线中的位置，N 为交易日数。
+    窗口不足 / 基准价为 0 或缺失 → None（不伪造）。
+    """
+    n = len(close_series)
+    if t_index < 0 or t_index >= n:
+        return None
+    j = t_index + horizon
+    if j < 0 or j >= n:
+        return None
+    base = close_series[t_index]
+    target = close_series[j]
+    if base is None or target is None or base == 0:
+        return None
+    return (target - base) / base * 100.0
+
+
 # ============================================================
 # 排序验证（FinGPT 的评估指标）
 # ============================================================
@@ -233,11 +253,17 @@ class MarketFeedbackTracker:
         benchmark_ret_5d: Optional[float] = None,
         sentiment_score: Optional[float] = None,
         sentiment_confidence: float = 1.0,
+        forecast_ret_5d: Optional[float] = None,
     ) -> dict:
         """
         记录一次事件及其后续收益，联动 RLSP 奖励和软标签。
 
         sentiment_score: -1.0 (负面) ~ +1.0 (正面), None 表示无情感数据。
+
+        spec-kit 004 契约：ret_3d / ret_5d 必须是**真实已实现收益**
+        （event_date 之后 3/5 个交易日收盘口径，见 realized_return）；
+        KNN 预测值只能通过 forecast_ret_5d 独立保存，不得冒充实际收益。
+        真实收益不可算时传 None（样本标注 realized_available=False，不伪造）。
         """
         excess_3d = _excess_return(ret_3d, benchmark_ret_3d)
         excess_5d = _excess_return(ret_5d, benchmark_ret_5d)
@@ -268,6 +294,10 @@ class MarketFeedbackTracker:
             "sentiment_score": sentiment_score,
             "ret_3d_pct": ret_3d,
             "ret_5d_pct": ret_5d,
+            "realized_ret_3d_pct": ret_3d,
+            "realized_ret_5d_pct": ret_5d,
+            "forecast_ret_5d_pct": forecast_ret_5d,
+            "realized_available": (ret_3d is not None or ret_5d is not None),
             "benchmark_ret_3d_pct": benchmark_ret_3d,
             "benchmark_ret_5d_pct": benchmark_ret_5d,
             "excess_3d_pct": excess_3d,
@@ -282,7 +312,14 @@ class MarketFeedbackTracker:
         return sample
 
     def compute_summary(self) -> dict:
-        """统计当前样本的标签分布、RLSP 奖励与区分度。"""
+        """统计当前样本的标签分布、RLSP 奖励与区分度。
+
+        spec-kit 004 新增（度量口径修复）：
+          directional_accuracy：决定性样本方向准确率
+            决定性样本 = |sentiment_score| >= 0.1 且有真实收益
+            （realized_ret_5d 优先，缺失回退 realized_ret_3d）；
+          旧 alignment_rate 保留原定义（分母含全部样本，向后兼容）。
+        """
         total = len(self.samples)
         if total == 0:
             return {
@@ -294,6 +331,9 @@ class MarketFeedbackTracker:
                 "avg_excess_5d_pct": None,
                 "avg_rlsp_reward_5d": None,
                 "alignment_rate": None,
+                "directional_accuracy": None,
+                "decisive_sample_count": 0,
+                "no_score_sample_count": 0,
             }
         pos = sum(1 for s in self.samples if s["label"] == "positive_surprise")
         neg = sum(1 for s in self.samples if s["label"] == "negative_surprise")
@@ -305,6 +345,24 @@ class MarketFeedbackTracker:
         r5 = [s["rlsp_reward_5d"] for s in self.samples if s["rlsp_reward_5d"] is not None]
         aligned = sum(1 for s in self.samples if s.get("soft_label", {}).get("aligned"))
 
+        # 决定性样本方向准确率（spec-kit 004）
+        no_score = sum(1 for s in self.samples if s.get("sentiment_score") is None)
+        decisive = 0
+        decisive_aligned = 0
+        for s in self.samples:
+            score = s.get("sentiment_score")
+            if score is None or abs(score) < 0.1:
+                continue
+            realized = s.get("realized_ret_5d_pct")
+            if realized is None:
+                realized = s.get("realized_ret_3d_pct")
+            if realized is None:
+                continue
+            decisive += 1
+            if (score > 0 and realized > 0) or (score < 0 and realized < 0):
+                decisive_aligned += 1
+        directional_accuracy = decisive_aligned / decisive if decisive else None
+
         return {
             "total": total,
             "positive_surprise": pos,
@@ -314,6 +372,11 @@ class MarketFeedbackTracker:
             "avg_excess_5d_pct": round(sum(e5) / len(e5), 3) if e5 else None,
             "avg_rlsp_reward_5d": round(sum(r5) / len(r5), 4) if r5 else None,
             "alignment_rate": round(aligned / max(total, 1), 3),
+            "directional_accuracy": (
+                round(directional_accuracy, 3) if directional_accuracy is not None else None
+            ),
+            "decisive_sample_count": decisive,
+            "no_score_sample_count": no_score,
         }
 
     def compute_ranking_discrimination(

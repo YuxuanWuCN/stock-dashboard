@@ -34,7 +34,7 @@ from .news_fetcher import NewsFetcher
 from .report_generator import ReportGenerator
 from .rag_engine import RAGEngine
 from .embeddings import Embedder
-from src.market_feedback import MarketFeedbackTracker
+from src.market_feedback import MarketFeedbackTracker, realized_return
 from src.llm.config import FEEDBACK_PATH
 from src.utils import setup_logging, beijing_date_str
 
@@ -94,41 +94,71 @@ def _scores_from_detail(detail: dict) -> dict:
     }
 
 
+def _load_kline_for_code(code: str) -> Optional[tuple]:
+    """读 K 线缓存（docs/data/kline/{code}.json），返回 (dates, closes)。"""
+    path = os.path.join(DATA_DIR, "kline", f"{code}.json")
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+    except Exception:
+        return None
+    dates = data.get("dates", [])
+    rows = data.get("kline", [])
+    if not dates or len(dates) != len(rows):
+        return None
+    return ([str(d) for d in dates], [r[1] for r in rows])  # 列序 [开, 收, 低, 高]
+
+
 def _record_market_feedback(
     tracker: MarketFeedbackTracker,
     detail: dict,
     sentiment_scores: list[Optional[float]],
 ) -> None:
     """
-    把新闻情感与后续收益关联，记录 RLSP 市场反馈样本。
+    把新闻情感与真实已实现收益关联，记录 RLSP 市场反馈样本（spec-kit 004）。
 
-    用相似走势预测的 5 日收益作为"后续收益"的近似（已有数据，无需额外抓取）。
+    契约：ret_3d/ret_5d 只放真实收益（event_date 之后 3/5 个交易日收盘口径，
+    由 K 线计算）；KNN 预测值独立保存到 forecast_ret_5d；收益不可算 → None 标注。
     """
     code = detail.get("code", "")
     name = detail.get("name", "")
     trade_date = detail.get("trade_date", "")
     forecast = detail.get("forecast", {}) or {}
-    ret_5d = forecast.get("return_5d_pct")
-
-    if ret_5d is None:
-        logger.info("%s(%s) 无 5 日预测，跳过市场反馈记录", name, code)
-        return
+    forecast_5d = forecast.get("return_5d_pct")
 
     # 用新闻情感平均分（LLM 或规则）
     valid = [s for s in sentiment_scores if s is not None]
     avg_sentiment = sum(valid) / len(valid) if valid else None
+    if avg_sentiment is None:
+        logger.info("%s(%s) 无情感分，跳过市场反馈记录", name, code)
+        return
+
+    # 从 K 线计算真实已实现收益（无前视：只用 event_date 之后的交易日）
+    r3 = r5 = None
+    loaded = _load_kline_for_code(code)
+    if loaded is not None:
+        dates, closes = loaded
+        try:
+            t = dates.index(str(trade_date))
+            r3 = realized_return(closes, t, 3)
+            r5 = realized_return(closes, t, 5)
+        except ValueError:
+            pass  # event_date 不在 K 线中 → 不可算，如实标注
 
     tracker.record_event(
         code=code,
         name=name,
         event_date=trade_date,
         event_type="daily_analysis",
-        ret_3d=None,
-        ret_5d=ret_5d,
+        ret_3d=r3,
+        ret_5d=r5,
         benchmark_ret_3d=None,
         benchmark_ret_5d=None,
         sentiment_score=avg_sentiment,
         sentiment_confidence=1.0,
+        forecast_ret_5d=forecast_5d,
     )
 
 

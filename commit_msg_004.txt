@@ -1,0 +1,8 @@
+feat(analysis): 情绪信号数据与度量口径修复（spec-kit 004 / Phase 0）
+
+- 诊断工具 tools/diagnose_sentiment_alignment.py：三段式离线诊断（根因审计/分母构成/真实方向统计 + Wilson CI 三选一结论）
+- 数据口径修复：record_event 只记录真实已实现收益（realized_return，K 线收盘价口径）；KNN 预测值独立保存 forecast_ret_5d_pct；不可算 None 标注不伪造
+- 回填工具 tools/backfill_market_feedback.py：历史 144 样本幂等回填（快照+对比，144/144 可算）
+- 度量修复：compute_summary 新增 directional_accuracy/decisive_sample_count/no_score_sample_count，旧 alignment_rate 保留
+- 诊断结论（真实收益重算）：决定性样本方向准确率 31.0%，Wilson CI [0.206, 0.438]（单日横截面 2026-08-07，时间维度待多日积累；映射修复暂缓）
+- 新测试 19 项 + 泄漏注入；新代码 100% 覆盖；质量门禁 small/medium/heavy 全绿（v2.8.0 证据）
