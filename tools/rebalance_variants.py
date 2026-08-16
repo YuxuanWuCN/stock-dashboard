@@ -39,11 +39,19 @@ def load_ranking():
 
 def load_aggressive_scan():
     if not os.path.exists(AGGRESSIVE_SCAN_FILE):
-        return []
+        try:
+            from tools.aggressive_scan import scan
+            return scan()
+        except Exception:
+            return []
     try:
         with open(AGGRESSIVE_SCAN_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
-            return data.get("all") or data.get("items", [])
+            items = data.get("all") or data.get("items", [])
+            if not items:
+                from tools.aggressive_scan import scan
+                return scan()
+            return items
     except Exception:
         return []
 

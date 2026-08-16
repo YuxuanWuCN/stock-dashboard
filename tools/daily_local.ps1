@@ -51,6 +51,10 @@ Write-Log ("market_sentiment 退出码: " + $LASTEXITCODE)
 & $py tools\paper_portfolio.py report *>> $logFile
 Write-Log ("paper_portfolio 退出码: " + $LASTEXITCODE)
 
+# 3.6b) 全库激进潜力扫描（每日刷新全库激进评分，为激进组合与衍生实验供数）
+& $py tools\aggressive_scan.py *>> $logFile
+Write-Log ("aggressive_scan 退出码: " + $LASTEXITCODE)
+
 # 3.7) 所有基础组合自动调仓（在绩效记录之后，为明日选股）
 & $py tools\rebalance_all_portfolios.py *>> $logFile
 Write-Log ("rebalance_all_portfolios 退出码: " + $LASTEXITCODE)

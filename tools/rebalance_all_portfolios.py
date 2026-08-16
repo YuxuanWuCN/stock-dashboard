@@ -50,16 +50,27 @@ def load_ranking():
 
 
 def load_aggressive_scan():
-    """加载激进扫描结果"""
+    """加载激进扫描结果，文件缺失或为空时自动实时扫描。"""
     if not os.path.exists(AGGRESSIVE_SCAN_FILE):
-        print(f"❌ 激进扫描文件不存在: {AGGRESSIVE_SCAN_FILE}")
-        return []
+        try:
+            from tools.aggressive_scan import scan
+            print("🔄 激进扫描文件不存在，正在执行全库扫描...")
+            return scan()
+        except Exception as e:
+            print(f"❌ 自动激进扫描失败: {e}")
+            return []
 
     with open(AGGRESSIVE_SCAN_FILE, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    # 兼容 'items' 或 'all' 字段
     items = data.get('items') or data.get('all', [])
+    if not items:
+        try:
+            from tools.aggressive_scan import scan
+            print("🔄 激进扫描结果为空，正在重新扫描...")
+            return scan()
+        except Exception as e:
+            print(f"❌ 重新激进扫描失败: {e}")
     return items
 
 
