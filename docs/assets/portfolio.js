@@ -104,43 +104,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const s = state.sentiment;
+        const sa = (s && s.sentiment_analysis) || {};
 
         // 日期
         if (s.date) {
             document.getElementById('sentiment-date').textContent = s.date;
         }
 
-        // 情绪
-        if (s.sentiment) {
-            document.getElementById('sentiment-mood').textContent = s.sentiment;
+        // 情绪（嵌套在 sentiment_analysis 中）
+        if (sa.sentiment) {
+            document.getElementById('sentiment-mood').textContent = sa.sentiment;
         }
 
-        // 分数
-        if (typeof s.sentiment_score === 'number') {
-            const score = s.sentiment_score;
+        // 分数（0-10）
+        if (typeof sa.sentiment_score === 'number') {
+            const score = sa.sentiment_score;
             document.getElementById('sentiment-score-fill').style.width = `${score * 10}%`;
             document.getElementById('sentiment-score-text').textContent = `${score}/10`;
         }
 
         // 资金流向
-        if (s.capital_flow) {
-            document.getElementById('capital-flow').textContent = s.capital_flow;
+        if (sa.capital_flow) {
+            document.getElementById('capital-flow').textContent = sa.capital_flow;
         }
 
         // 热点板块
-        if (s.hot_sectors && Array.isArray(s.hot_sectors)) {
-            document.getElementById('hot-sectors').textContent = s.hot_sectors.join('、');
+        if (sa.hot_sectors && Array.isArray(sa.hot_sectors)) {
+            document.getElementById('hot-sectors').textContent = sa.hot_sectors.join('、');
         }
 
-        // 推荐组合
-        if (s.recommendation) {
-            const rec = s.recommendation;
-            const portfolioName = portfolioConfig[rec.portfolio]?.name || rec.portfolio;
+        // 推荐组合（trading_advice）
+        if (sa.trading_advice) {
+            const ta = sa.trading_advice;
+            const portfolioName = portfolioConfig[ta.recommended_portfolio]?.name || ta.recommended_portfolio;
             document.getElementById('recommend-portfolio').textContent = portfolioName;
-            document.getElementById('recommend-reason').textContent = rec.reason || '';
+            document.getElementById('recommend-reason').textContent = ta.reasoning || '';
 
-            if (rec.position) {
-                document.getElementById('recommend-position').textContent = `建议仓位: ${rec.position}`;
+            if (ta.position_suggestion) {
+                document.getElementById('recommend-position').textContent = `建议仓位: ${ta.position_suggestion}`;
             }
         }
     }
@@ -316,9 +317,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let html = '';
 
-        // 冠军信息
+        // 冠军信息（嵌套 champion.stats）
         if (evo.champion) {
             const champion = evo.champion;
+            const st = champion.stats || {};
             const championName = portfolioConfig[champion.name]?.name || champion.name;
 
             html += `
@@ -326,28 +328,28 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="evolution-champion-title">🏆 本周冠军策略</div>
                     <div class="evolution-champion-name">${championName}</div>
                     <div class="evolution-champion-stats">
-                        ${champion.cumulative_return !== undefined ? `
+                        ${st.cumulative_return !== undefined ? `
                             <div class="evolution-stat">
                                 <div class="evolution-stat-label">累计收益</div>
-                                <div class="evolution-stat-value">${champion.cumulative_return.toFixed(2)}%</div>
+                                <div class="evolution-stat-value">${st.cumulative_return.toFixed(2)}%</div>
                             </div>
                         ` : ''}
-                        ${champion.sharpe_ratio !== undefined ? `
+                        ${st.sharpe !== undefined ? `
                             <div class="evolution-stat">
                                 <div class="evolution-stat-label">夏普比率</div>
-                                <div class="evolution-stat-value">${champion.sharpe_ratio.toFixed(2)}</div>
+                                <div class="evolution-stat-value">${st.sharpe.toFixed(2)}</div>
                             </div>
                         ` : ''}
-                        ${champion.win_rate !== undefined ? `
+                        ${st.win_rate !== undefined ? `
                             <div class="evolution-stat">
                                 <div class="evolution-stat-label">胜率</div>
-                                <div class="evolution-stat-value">${(champion.win_rate * 100).toFixed(1)}%</div>
+                                <div class="evolution-stat-value">${st.win_rate.toFixed(1)}%</div>
                             </div>
                         ` : ''}
-                        ${champion.max_drawdown !== undefined ? `
+                        ${st.max_drawdown !== undefined ? `
                             <div class="evolution-stat">
                                 <div class="evolution-stat-label">最大回撤</div>
-                                <div class="evolution-stat-value">${champion.max_drawdown.toFixed(2)}%</div>
+                                <div class="evolution-stat-value">${st.max_drawdown.toFixed(2)}%</div>
                             </div>
                         ` : ''}
                     </div>
@@ -355,12 +357,16 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
-        // LLM深度分析
-        if (evo.llm_analysis) {
+        // AI 深度分析（嵌套 champion.analysis.llm_analysis 对象）
+        const llm = evo.champion && evo.champion.analysis && evo.champion.analysis.llm_analysis;
+        if (llm) {
+            const factors = (llm.success_factors || []).map(f => `<li>${f}</li>`).join('');
+            const sust = llm.sustainability || {};
             html += `
                 <div class="evolution-analysis">
                     <h3>🤖 AI深度分析</h3>
-                    <p>${evo.llm_analysis.replace(/\n/g, '<br>')}</p>
+                    ${factors ? `<ul>${factors}</ul>` : ''}
+                    ${sust.reasoning ? `<p>可持续性（评分 ${sust.score ?? '--'}）：${sust.reasoning}</p>` : ''}
                 </div>
             `;
         }

@@ -75,7 +75,7 @@ Write-Log ("market_benchmark 退出码: " + $LASTEXITCODE)
 
 # 3.10) 同步量化数据到 Dashboard（供 portfolio.html 展示）
 Write-Log "同步量化数据到 Dashboard..."
-$dashboardDataDir = Join-Path $repo "..\\.upload-stock-dashboard\docs\data\quantitative"
+$dashboardDataDir = Join-Path $repo "docs\data\quantitative"
 if (-not (Test-Path $dashboardDataDir)) {
     New-Item -ItemType Directory -Path $dashboardDataDir -Force | Out-Null
 }
@@ -84,6 +84,13 @@ if (-not (Test-Path $dashboardDataDir)) {
 Get-ChildItem "docs\data\paper\performance_*.json" -ErrorAction SilentlyContinue | ForEach-Object {
     Copy-Item $_.FullName -Destination $dashboardDataDir -Force
     Write-Log ("  复制: " + $_.Name)
+}
+
+# 稳健组合绩效：paper/performance.json（无后缀）→ performance_robust.json（对齐前端命名）
+$robustPerf = Join-Path $repo "docs\data\paper\performance.json"
+if (Test-Path $robustPerf) {
+    Copy-Item $robustPerf -Destination (Join-Path $dashboardDataDir "performance_robust.json") -Force
+    Write-Log "  复制: performance.json → performance_robust.json"
 }
 
 # 复制最新市场情绪数据
