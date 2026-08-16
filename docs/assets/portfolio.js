@@ -35,10 +35,41 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('update-time').textContent = '数据加载中...';
     }
 
-    // 加载6组合表现数据
+    // 加载组合表现数据（优先从 manifest.json 动态加载基础组合与衍生变体）
     async function loadPortfolios() {
-        const portfolioIds = ['aggressive', 'robust', 'defensive', 'tech', 'bluechip', 'global'];
+        try {
+            const manifestRes = await fetch('data/quantitative/manifest.json');
+            if (manifestRes.ok) {
+                const manifest = await manifestRes.json();
+                if (manifest.portfolios && Array.isArray(manifest.portfolios)) {
+                    for (const p of manifest.portfolios) {
+                        if (p.is_benchmark) continue;
+                        const key = p.key;
+                        if (!portfolioConfig[key]) {
+                            portfolioConfig[key] = {
+                                name: p.name,
+                                color: p.color || (p.is_variant ? '#f59e0b' : '#3b82f6'),
+                                is_variant: !!p.is_variant,
+                                parent_strategy: p.parent_strategy || ''
+                            };
+                        }
+                        try {
+                            const res = await fetch(`data/quantitative/performance_${key}.json`);
+                            if (res.ok) {
+                                state.portfolios[key] = await res.json();
+                            }
+                        } catch (e) {
+                            console.warn(`加载 ${key} 失败:`, e);
+                        }
+                    }
+                    return;
+                }
+            }
+        } catch (err) {
+            console.info('未找到 manifest.json，回退到默认静态组合列表');
+        }
 
+        const portfolioIds = ['aggressive', 'robust', 'defensive', 'tech', 'bluechip', 'global'];
         for (const id of portfolioIds) {
             try {
                 const response = await fetch(`data/quantitative/performance_${id}.json`);
@@ -171,8 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const returnClass = dailyReturn >= 0 ? 'up' : 'down';
             const returnSign = dailyReturn >= 0 ? '+' : '';
 
+            const variantBadge = config.is_variant ? '<span style="font-size:11px;background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;margin-left:6px;">🔬 衍生实验</span>' : '';
             card.innerHTML = `
-                <div class="portfolio-name">${config.name}</div>
+                <div class="portfolio-name">${config.name}${variantBadge}</div>
                 <div class="portfolio-return ${returnClass}">
                     ${returnSign}${dailyReturn.toFixed(2)}%
                 </div>

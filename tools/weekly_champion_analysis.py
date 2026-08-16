@@ -78,7 +78,7 @@ def call_llm_for_analysis(client, prompt, temperature=0.3):
 
 
 def load_all_performances():
-    """加载所有组合的绩效数据"""
+    """加载所有组合的绩效数据（包括基础组合与衍生变体）"""
     portfolios = {
         'aggressive': 'performance_aggressive.json',
         'robust': 'performance.json',
@@ -94,6 +94,18 @@ def load_all_performances():
         if os.path.exists(path):
             with open(path, 'r', encoding='utf-8') as f:
                 data[name] = json.load(f)
+
+    # 扫描 strategy_variants 或 paper 目录下的衍生组合绩效
+    if os.path.isdir(PERFORMANCE_DIR):
+        for f in os.listdir(PERFORMANCE_DIR):
+            if f.startswith("performance_") and f.endswith(".json") and f not in portfolios.values():
+                var_key = f[len("performance_"):-len(".json")]
+                if var_key not in data:
+                    try:
+                        with open(os.path.join(PERFORMANCE_DIR, f), 'r', encoding='utf-8') as fp:
+                            data[var_key] = json.load(fp)
+                    except Exception:
+                        pass
 
     return data
 

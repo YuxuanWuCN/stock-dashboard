@@ -51,9 +51,13 @@ Write-Log ("market_sentiment 退出码: " + $LASTEXITCODE)
 & $py tools\paper_portfolio.py report *>> $logFile
 Write-Log ("paper_portfolio 退出码: " + $LASTEXITCODE)
 
-# 3.7) 所有组合自动调仓（在绩效记录之后，为明日选股）
+# 3.7) 所有基础组合自动调仓（在绩效记录之后，为明日选股）
 & $py tools\rebalance_all_portfolios.py *>> $logFile
 Write-Log ("rebalance_all_portfolios 退出码: " + $LASTEXITCODE)
+
+# 3.7b) 策略进化衍生变体组合自动调仓（基于冠军策略生成的衍生实验）
+& $py tools\rebalance_variants.py *>> $logFile
+Write-Log ("rebalance_variants 退出码: " + $LASTEXITCODE)
 # 3.8) 全池等权基准对照组（全部自选股买入持有，累计净值曲线）
 & $py tools\paper_portfolio.py benchmark *>> $logFile
 Write-Log ("paper_portfolio benchmark 退出码: " + $LASTEXITCODE)
@@ -91,6 +95,18 @@ $robustPerf = Join-Path $repo "docs\data\paper\performance.json"
 if (Test-Path $robustPerf) {
     Copy-Item $robustPerf -Destination (Join-Path $dashboardDataDir "performance_robust.json") -Force
     Write-Log "  复制: performance.json → performance_robust.json"
+}
+
+# 复制基准与组合清单
+$manifestFile = Join-Path $repo "docs\data\paper\manifest.json"
+if (Test-Path $manifestFile) {
+    Copy-Item $manifestFile -Destination (Join-Path $dashboardDataDir "manifest.json") -Force
+    Write-Log "  复制: manifest.json"
+}
+$benchmarkFile = Join-Path $repo "docs\data\paper\benchmark.json"
+if (Test-Path $benchmarkFile) {
+    Copy-Item $benchmarkFile -Destination (Join-Path $dashboardDataDir "benchmark.json") -Force
+    Write-Log "  复制: benchmark.json"
 }
 
 # 复制最新市场情绪数据

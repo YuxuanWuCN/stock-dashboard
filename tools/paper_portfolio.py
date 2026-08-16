@@ -37,15 +37,24 @@ def _load_json(path):
 
 
 def _portfolio_files():
-    """扫描 paper 目录下所有组合文件（portfolio*.json）。"""
+    """扫描 paper 目录及 strategy_variants 目录下所有组合文件（portfolio*.json）。"""
     paper_dir = os.path.join(DATA_DIR, "paper")
     if not os.path.isdir(paper_dir):
         return []
-    return sorted(
+    base_files = [
         os.path.join(paper_dir, f)
         for f in os.listdir(paper_dir)
         if f.startswith("portfolio") and f.endswith(".json") and f != "performance.json"
-    )
+    ]
+    variants_dir = os.path.join(paper_dir, "strategy_variants")
+    variant_files = []
+    if os.path.isdir(variants_dir):
+        variant_files = [
+            os.path.join(variants_dir, f)
+            for f in os.listdir(variants_dir)
+            if f.startswith("portfolio") and f.endswith(".json")
+        ]
+    return sorted(base_files) + sorted(variant_files)
 
 
 def _performance_path_for(portfolio_path: str) -> str:
@@ -335,14 +344,17 @@ def manifest() -> int:
             continue
         perf_path = _performance_path_for(pf)
         suffix = os.path.splitext(os.path.basename(pf))[0][len("portfolio"):]
+        is_variant = "strategy_variants" in pf
         entries.append({
             "key": (suffix or "steady").lstrip("_") or "steady",
             "file": os.path.relpath(perf_path, DATA_DIR).replace(os.sep, "/"),
             "name": pdata.get("name", "组合" + suffix),
-            "color": pdata.get("color", "#3b82f6"),
+            "color": pdata.get("color", "#f59e0b" if is_variant else "#3b82f6"),
             "description": pdata.get("description", ""),
             "risk_profile": pdata.get("risk_profile", ""),
             "is_benchmark": False,
+            "is_variant": is_variant,
+            "parent_strategy": pdata.get("parent_strategy", ""),
         })
     # 全池等权基准作为独立对照线
     entries.append({
