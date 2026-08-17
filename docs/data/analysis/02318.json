@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "02318",
   "name": "中国平安",
   "type": "hk",
   "category": "保险",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 6.035898188701731e-05,
+    "alpha_p_value": 0.936617597805583,
+    "information_ratio": 0.0023217298743739064,
+    "betas": {
+      "MKT": -0.023071728396086726,
+      "SMB": 0.2219062125639918,
+      "HML": 0.24437469533992845,
+      "MOM": 0.0006760600578205273
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 49.8,
-    "risk": 27.2,
+    "risk_adjusted": 33.4,
+    "risk": 29.6,
     "technical": 42.0,
-    "industry": 46.5
+    "industry": 43.8
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.76,
-    "max_drawdown_60d_pct": -17.33,
-    "atr14_pct": 2.06,
+    "annualized_volatility_20d_pct": 14.03,
+    "max_drawdown_60d_pct": -16.93,
+    "atr14_pct": 2.02,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 3.0,
-        "value": 15.76
+        "score": 2.5,
+        "value": 14.03
       },
       {
         "name": "60日最大回撤",
-        "score": 51.0,
-        "value": -17.33
+        "score": 49.5,
+        "value": -16.93
       },
       {
         "name": "ATR百分比",
-        "score": 20.8,
-        "value": 2.06
+        "score": 21.3,
+        "value": 2.02
       },
       {
         "name": "量价异常",
-        "score": 15.8,
-        "value": 1.08
+        "score": 44.6,
+        "value": 1.19
       },
       {
         "name": "行业波动",
         "score": 52.0,
-        "value": 34.1
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.3,
-    "return_5d_pct": 1.12,
-    "up_probability_3d_pct": 66.7,
-    "up_probability_5d_pct": 50.0,
+    "return_3d_pct": 0.7,
+    "return_5d_pct": -0.14,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 55.660000000000004,
-    "ma10": 56.705000000000005,
-    "ma20": 56.925,
-    "ma60": 56.13166666666667,
-    "rsi14": 37.5,
-    "macd_dif": 0.035037253058639806,
-    "macd_dea": 0.3978071783796563,
-    "macd_hist": -0.725539850642033,
-    "atr14_pct": 2.0611170572675594,
-    "boll_position": -0.026535823407149335,
-    "return_5d_pct": -4.461942257217844,
-    "return_20d_pct": 0.0,
-    "volume_ratio_5d": 1.08
+    "ma5": 55.27,
+    "ma10": 56.339999999999996,
+    "ma20": 56.88000000000001,
+    "ma60": 56.02583333333333,
+    "rsi14": 39.4,
+    "macd_dif": -0.08596589963153178,
+    "macd_dea": 0.3010525627774187,
+    "macd_hist": -0.774036924817901,
+    "atr14_pct": 2.0242190918254876,
+    "boll_position": 0.05530372033680048,
+    "return_5d_pct": -3.436123348017628,
+    "return_20d_pct": -1.6157989228007263,
+    "volume_ratio_5d": 1.19
   },
   "industry": {
     "name": "保险",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": -4.25
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": -7.08
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 1.3,
-      "median_return_pct": 1.25,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.7,
+      "median_return_pct": 0.78,
       "best_return_pct": 10.04,
-      "worst_return_pct": -7.14
+      "worst_return_pct": -7.7
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.12,
-      "median_return_pct": 0.1,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.14,
+      "median_return_pct": -0.51,
       "best_return_pct": 15.27,
-      "worst_return_pct": -9.73
+      "worst_return_pct": -9.75
     }
   },
   "fundamental": null,
@@ -105,13 +119,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 17.3%，风险偏高。",
+      "detail": "近60日最大回撤 16.9%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 17.3%，风险扣分。",
+      "detail": "近60日最大回撤 16.9%，风险扣分。",
       "contribution": -7.0
     }
   ],

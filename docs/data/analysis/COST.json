@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "COST",
   "name": "开市客",
   "type": "us",
   "category": "消费",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0006806500691099947,
+    "alpha_p_value": 0.10812330611942704,
+    "information_ratio": 0.046972822688167465,
+    "betas": {
+      "MKT": -0.009342170859772566,
+      "SMB": 0.04950003442451323,
+      "HML": 0.031136635019609452,
+      "MOM": -0.007143448348844445
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 40.1,
-    "risk": 31.5,
+    "risk_adjusted": 38.6,
+    "risk": 31.3,
     "technical": 93.0,
-    "industry": 64.3
+    "industry": 52.9
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 14.62,
-    "max_drawdown_60d_pct": -16.57,
-    "atr14_pct": 1.91,
+    "annualized_volatility_20d_pct": 14.48,
+    "max_drawdown_60d_pct": -14.99,
+    "atr14_pct": 1.83,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 1.5,
-        "value": 14.62
+        "score": 3.5,
+        "value": 14.48
       },
       {
         "name": "60日最大回撤",
-        "score": 49.0,
-        "value": -16.57
+        "score": 44.1,
+        "value": -14.99
       },
       {
         "name": "ATR百分比",
-        "score": 15.8,
-        "value": 1.91
+        "score": 14.9,
+        "value": 1.83
       },
       {
         "name": "量价异常",
-        "score": 46.5,
-        "value": 0.79
+        "score": 52.5,
+        "value": 0.78
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.62,
-    "return_5d_pct": -0.64,
+    "return_3d_pct": -0.69,
+    "return_5d_pct": -0.81,
     "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 40.0,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 951.2639999999999,
-    "ma10": 950.128,
-    "ma20": 947.0965,
-    "ma60": 960.587,
-    "rsi14": 55.9,
-    "macd_dif": 1.1324744508639242,
-    "macd_dea": -0.4686702977405172,
-    "macd_hist": 3.202289497208883,
-    "atr14_pct": 1.9061558207172782,
-    "boll_position": 0.800784716823181,
-    "return_5d_pct": 1.3380392983195488,
-    "return_20d_pct": 1.721712829298716,
-    "volume_ratio_5d": 0.79
+    "ma5": 953.9200000000001,
+    "ma10": 951.049,
+    "ma20": 948.108,
+    "ma60": 958.3666666666667,
+    "rsi14": 55.5,
+    "macd_dif": 1.9122466252645154,
+    "macd_dea": 0.007513086860489293,
+    "macd_hist": 3.809467076808052,
+    "atr14_pct": 1.8279402834579337,
+    "boll_position": 0.7590434487841838,
+    "return_5d_pct": 1.4011099153847795,
+    "return_20d_pct": 2.15013763856855,
+    "volume_ratio_5d": 0.78
   },
   "industry": {
     "name": "消费",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 3.1
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": -2.57
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -87,34 +101,21 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 36.7,
-      "average_return_pct": -0.62,
-      "median_return_pct": -0.79,
+      "average_return_pct": -0.69,
+      "median_return_pct": -0.81,
       "best_return_pct": 6.85,
-      "worst_return_pct": -5.33
+      "worst_return_pct": -6.51
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.64,
-      "median_return_pct": -0.61,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.81,
+      "median_return_pct": -0.34,
       "best_return_pct": 7.75,
-      "worst_return_pct": -5.73
+      "worst_return_pct": -9.04
     }
   },
   "fundamental": null,
-  "reasons": [
-    {
-      "type": "negative",
-      "title": "近期回撤较大",
-      "detail": "近60日最大回撤 16.6%，风险偏高。",
-      "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "回撤风险",
-      "detail": "近60日最大回撤 16.6%，风险扣分。",
-      "contribution": -7.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/COST.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

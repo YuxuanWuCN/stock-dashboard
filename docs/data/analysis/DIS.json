@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "DIS",
   "name": "迪士尼",
   "type": "us",
   "category": "消费",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.0004087111457385277,
+    "alpha_p_value": 0.4660096354926655,
+    "information_ratio": -0.021883288318214466,
+    "betas": {
+      "MKT": -0.0448201204084695,
+      "SMB": -0.09596609771965123,
+      "HML": 0.057080597976524386,
+      "MOM": 0.029813123409201916
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 48.7,
-    "risk": 41.6,
+    "risk_adjusted": 50.9,
+    "risk": 44.7,
     "technical": 85.0,
-    "industry": 70.0
+    "industry": 72.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 28.78,
+    "annualized_volatility_20d_pct": 28.05,
     "max_drawdown_60d_pct": -10.89,
-    "atr14_pct": 2.13,
+    "atr14_pct": 2.09,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 41.1,
-        "value": 28.78
+        "score": 47.5,
+        "value": 28.05
       },
       {
         "name": "60日最大回撤",
-        "score": 24.3,
+        "score": 24.8,
         "value": -10.89
       },
       {
         "name": "ATR百分比",
-        "score": 23.8,
-        "value": 2.13
+        "score": 23.3,
+        "value": 2.09
       },
       {
         "name": "量价异常",
-        "score": 74.3,
-        "value": 0.69
+        "score": 85.6,
+        "value": 0.65
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.34,
-    "return_5d_pct": 0.33,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 43.3,
+    "return_3d_pct": 0.53,
+    "return_5d_pct": 0.76,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 103.928,
-    "ma10": 101.85900000000001,
-    "ma20": 99.12700000000001,
-    "ma60": 99.70433333333334,
-    "rsi14": 63.7,
-    "macd_dif": 1.6325148801070526,
-    "macd_dea": 0.8182412577104526,
-    "macd_hist": 1.6285472447932,
-    "atr14_pct": 2.1256768913255666,
-    "boll_position": 0.8868228384158546,
-    "return_5d_pct": 0.11463507833395781,
-    "return_20d_pct": 5.10480393140107,
-    "volume_ratio_5d": 0.69
+    "ma5": 104.31599999999999,
+    "ma10": 102.925,
+    "ma20": 99.586,
+    "ma60": 99.78033333333333,
+    "rsi14": 67.5,
+    "macd_dif": 1.9187646302840733,
+    "macd_dea": 1.0383459322251767,
+    "macd_hist": 1.7608373961177932,
+    "atr14_pct": 2.090395211405811,
+    "boll_position": 0.952476109712546,
+    "return_5d_pct": 1.8492040796873388,
+    "return_20d_pct": 9.398996621275725,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "消费",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 6.48
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": 4.68
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.34,
-      "median_return_pct": -0.09,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.53,
+      "median_return_pct": -0.32,
       "best_return_pct": 14.12,
-      "worst_return_pct": -10.35
+      "worst_return_pct": -6.37
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.33,
-      "median_return_pct": -0.44,
+      "up_probability_pct": 40.0,
+      "average_return_pct": 0.76,
+      "median_return_pct": -0.59,
       "best_return_pct": 19.95,
-      "worst_return_pct": -9.82
+      "worst_return_pct": -6.01
     }
   },
   "fundamental": null,

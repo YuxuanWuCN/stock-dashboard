@@ -1,103 +1,112 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
+  "generated_at": "2026-08-17 21:38:03+08:00",
   "trade_date": "2026-08-14",
   "code": "513180",
   "name": "恒生科技ETF",
   "type": "etf",
   "category": "",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 31.3,
-    "risk": 34.4,
+    "risk_adjusted": 41.1,
+    "risk": 45.9,
     "technical": 65.0,
-    "industry": 49.9
+    "industry": 51.9
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
-    "annualized_volatility_20d_pct": 24.91,
-    "max_drawdown_60d_pct": -16.87,
-    "atr14_pct": 2.28,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 31.46,
+    "max_drawdown_60d_pct": -18.18,
+    "atr14_pct": 1.54,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 29.2,
-        "value": 24.91
+        "score": 54.5,
+        "value": 31.46
       },
       {
         "name": "60日最大回撤",
-        "score": 50.0,
-        "value": -16.87
+        "score": 51.5,
+        "value": -18.18
       },
       {
         "name": "ATR百分比",
-        "score": 32.7,
-        "value": 2.28
+        "score": 6.4,
+        "value": 1.54
       },
       {
         "name": "量价异常",
-        "score": 63.9,
-        "value": 0.72
+        "score": 50.0,
+        "value": null
       },
       {
         "name": "行业波动",
-        "score": 1.5,
+        "score": 69.3,
         "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.15,
-    "return_5d_pct": -0.81,
-    "up_probability_3d_pct": 53.3,
-    "up_probability_5d_pct": 40.0,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "range",
-    "ma5": 0.6064,
-    "ma10": 0.6111000000000001,
-    "ma20": 0.60605,
-    "ma60": 0.5993333333333333,
-    "rsi14": 46.1,
-    "macd_dif": 0.002901508196054503,
-    "macd_dea": 0.00453517439446514,
-    "macd_hist": -0.0032673323968212733,
-    "atr14_pct": 2.28274769605859,
-    "boll_position": 0.24242282271166019,
-    "return_5d_pct": -2.773246329526924,
-    "return_20d_pct": 1.7064846416382284,
-    "volume_ratio_5d": 0.72
+    "ma5": 0.6119999999999999,
+    "ma10": 0.616,
+    "ma20": 0.61,
+    "ma60": 0.6024999999999999,
+    "rsi14": 46.9,
+    "macd_dif": 0.0035535863350899533,
+    "macd_dea": 0.005139375414580462,
+    "macd_hist": -0.003171578158981017,
+    "atr14_pct": 1.5389090067446816,
+    "boll_position": 0.27178226770598457,
+    "return_5d_pct": -3.2258064516129115,
+    "return_20d_pct": 1.6949152542372836,
+    "volume_ratio_5d": null
   },
   "industry": {
     "name": "深证成指",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -2.54
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -3.03
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.15,
-      "median_return_pct": 0.44,
-      "best_return_pct": 6.13,
-      "worst_return_pct": -6.53
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.81,
-      "median_return_pct": -0.89,
-      "best_return_pct": 5.67,
-      "worst_return_pct": -8.67
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": null,
@@ -105,13 +114,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 16.9%，风险偏高。",
+      "detail": "近60日最大回撤 18.2%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 16.9%，风险扣分。",
+      "detail": "近60日最大回撤 18.2%，风险扣分。",
       "contribution": -7.0
     }
   ],

@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "601066",
   "name": "中信建投",
   "type": "stock",
   "category": "券商",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.00014643400788500187,
+    "alpha_p_value": 0.799600297509691,
+    "information_ratio": -0.0075565247310853826,
+    "betas": {
+      "MKT": -0.010109336210481473,
+      "SMB": -0.02369353703691411,
+      "HML": 0.07599541429904409,
+      "MOM": -0.09341038183400409
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 47.0,
-    "risk": 30.7,
-    "technical": 58.0,
-    "industry": 40.0
+    "risk_adjusted": 37.6,
+    "risk": 32.1,
+    "technical": 63.0,
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 21.78,
+    "annualized_volatility_20d_pct": 21.94,
     "max_drawdown_60d_pct": -15.9,
-    "atr14_pct": 3.11,
+    "atr14_pct": 2.98,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 22.8,
-        "value": 21.78
+        "score": 28.2,
+        "value": 21.94
       },
       {
         "name": "60日最大回撤",
-        "score": 44.6,
+        "score": 46.0,
         "value": -15.9
       },
       {
         "name": "ATR百分比",
-        "score": 53.5,
-        "value": 3.11
+        "score": 53.0,
+        "value": 2.98
       },
       {
         "name": "量价异常",
-        "score": 18.3,
-        "value": 0.92
+        "score": 13.4,
+        "value": 0.95
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.48,
-    "return_5d_pct": 0.58,
-    "up_probability_3d_pct": 53.3,
+    "return_3d_pct": 0.05,
+    "return_5d_pct": -0.25,
+    "up_probability_3d_pct": 46.7,
     "up_probability_5d_pct": 53.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 25.776,
-    "ma10": 25.831,
-    "ma20": 26.040499999999998,
-    "ma60": 26.283833333333334,
-    "rsi14": 42.9,
-    "macd_dif": -0.287690248532563,
-    "macd_dea": -0.2661384530492891,
-    "macd_hist": -0.0431035909665477,
-    "atr14_pct": 3.1130080327391116,
-    "boll_position": 0.20444862560643262,
-    "return_5d_pct": -1.920122887864828,
-    "return_20d_pct": -3.622641509433966,
-    "volume_ratio_5d": 0.92
+    "ma5": 25.738,
+    "ma10": 25.851999999999997,
+    "ma20": 25.996,
+    "ma60": 26.346666666666668,
+    "rsi14": 45.6,
+    "macd_dif": -0.27718509149125836,
+    "macd_dea": -0.26834778073768295,
+    "macd_hist": -0.017674621507150823,
+    "atr14_pct": 2.9757218444205322,
+    "boll_position": 0.3595048893735873,
+    "return_5d_pct": -0.7318952234206533,
+    "return_20d_pct": -3.338334583645919,
+    "volume_ratio_5d": 0.95
   },
   "industry": {
     "name": "券商",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -7.87
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -8.81
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.48,
-      "median_return_pct": 0.27,
-      "best_return_pct": 7.33,
-      "worst_return_pct": -7.11
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.05,
+      "median_return_pct": -0.25,
+      "best_return_pct": 6.41,
+      "worst_return_pct": -8.85
     },
     "horizon_5d": {
       "up_probability_pct": 53.3,
-      "average_return_pct": 0.58,
-      "median_return_pct": 0.69,
-      "best_return_pct": 7.79,
-      "worst_return_pct": -6.76
+      "average_return_pct": -0.25,
+      "median_return_pct": 0.29,
+      "best_return_pct": 7.02,
+      "worst_return_pct": -10.96
     }
   },
   "fundamental": null,

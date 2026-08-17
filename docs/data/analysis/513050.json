@@ -1,29 +1,38 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "513050",
   "name": "中概互联网ETF",
   "type": "etf",
   "category": "",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 40.5,
-    "risk": 49.0,
-    "technical": 63.0,
-    "industry": 55.0
+    "risk_adjusted": 38.5,
+    "risk": 50.0,
+    "technical": 58.0,
+    "industry": 48.6
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 35.04,
+    "annualized_volatility_20d_pct": 33.36,
     "max_drawdown_60d_pct": -20.83,
-    "atr14_pct": 1.7,
+    "atr14_pct": 1.74,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 57.9,
-        "value": 35.04
+        "score": 58.9,
+        "value": 33.36
       },
       {
         "name": "60日最大回撤",
@@ -32,8 +41,8 @@
       },
       {
         "name": "ATR百分比",
-        "score": 8.4,
-        "value": 1.7
+        "score": 11.9,
+        "value": 1.74
       },
       {
         "name": "量价异常",
@@ -43,7 +52,7 @@
       {
         "name": "行业波动",
         "score": 69.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
@@ -57,28 +66,28 @@
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 1.158,
-    "ma10": 1.169,
+    "ma5": 1.144,
+    "ma10": 1.164,
     "ma20": 1.1400000000000001,
-    "ma60": 1.1003333333333332,
-    "rsi14": 47.6,
-    "macd_dif": 0.01861514093488492,
-    "macd_dea": 0.022191666874214207,
-    "macd_hist": -0.00715305187865857,
-    "atr14_pct": 1.6995306270526054,
-    "boll_position": 0.36731377689149436,
-    "return_5d_pct": -4.273504273504258,
-    "return_20d_pct": -1.754385964912264,
+    "ma60": 1.0995,
+    "rsi14": 44.1,
+    "macd_dif": 0.013142856935090652,
+    "macd_dea": 0.020381904871258634,
+    "macd_hist": -0.014478095872335964,
+    "atr14_pct": 1.7366990973062015,
+    "boll_position": 0.2346275537828707,
+    "return_5d_pct": -5.982905982905972,
+    "return_20d_pct": 0.0,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "深证成指",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -0.38
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -4.72
   },
   "similarity": {
     "method": "standardized_knn_v1",

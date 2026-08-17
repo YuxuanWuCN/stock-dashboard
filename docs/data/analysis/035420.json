@@ -1,17 +1,31 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
+  "generated_at": "2026-08-17 21:38:03+08:00",
   "trade_date": "2026-08-14",
   "code": "035420",
   "name": "NAVER",
   "type": "kr",
   "category": "互联网",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.00046235119905275047,
+    "alpha_p_value": 0.49144447466426544,
+    "information_ratio": -0.019666535648139697,
+    "betas": {
+      "MKT": 0.07833220947857011,
+      "SMB": 0.051297980412379186,
+      "HML": 0.03587388268227083,
+      "MOM": -0.12938492468607868
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 26.0,
-    "risk": 85.2,
+    "risk_adjusted": 26.6,
+    "risk": 85.5,
     "technical": 93.0,
-    "industry": 62.0
+    "industry": 65.0
   },
   "risk": {
     "level": "high",
@@ -22,12 +36,12 @@
     "factors": [
       {
         "name": "20日波动率",
-        "score": 89.6,
+        "score": 89.1,
         "value": 81.95
       },
       {
         "name": "60日最大回撤",
-        "score": 82.2,
+        "score": 82.7,
         "value": -34.69
       },
       {
@@ -37,13 +51,13 @@
       },
       {
         "name": "量价异常",
-        "score": 69.3,
+        "score": 71.8,
         "value": 0.7
       },
       {
         "name": "行业波动",
         "score": 95.0,
-        "value": 40.47
+        "value": 40.51
       }
     ]
   },
@@ -66,7 +80,7 @@
     "macd_dea": 2786.124781910784,
     "macd_hist": 3699.600271232275,
     "atr14_pct": 5.524118023577131,
-    "boll_position": 0.8214703542393678,
+    "boll_position": 0.8214703542393417,
     "return_5d_pct": 8.571428571428562,
     "return_20d_pct": 19.999999999999996,
     "volume_ratio_5d": 0.7
@@ -75,10 +89,10 @@
     "name": "互联网",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -3.32,
-    "return_60d_pct": -8.17,
-    "relative_strength_20d_pct": 21.37
+    "return_5d_pct": 0.3,
+    "return_20d_pct": -0.93,
+    "return_60d_pct": -7.57,
+    "relative_strength_20d_pct": 20.93
   },
   "similarity": {
     "method": "standardized_knn_v1",

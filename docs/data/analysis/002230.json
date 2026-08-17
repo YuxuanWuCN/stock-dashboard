@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "002230",
   "name": "科大讯飞",
   "type": "stock",
   "category": "科技",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 9.321225259433224e-05,
+    "alpha_p_value": 0.8981314634471197,
+    "information_ratio": 0.0035694017639184635,
+    "betas": {
+      "MKT": -0.0010681646803639914,
+      "SMB": -0.06865392687945464,
+      "HML": 0.29297764230828166,
+      "MOM": -0.035821014235878065
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 34.6,
-    "risk": 47.2,
+    "risk_adjusted": 36.3,
+    "risk": 50.1,
     "technical": 90.0,
-    "industry": 49.7
+    "industry": 51.8
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 31.37,
+    "annualized_volatility_20d_pct": 31.34,
     "max_drawdown_60d_pct": -22.44,
-    "atr14_pct": 3.38,
+    "atr14_pct": 3.24,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 47.0,
-        "value": 31.37
+        "score": 54.0,
+        "value": 31.34
       },
       {
         "name": "60日最大回撤",
-        "score": 61.9,
+        "score": 63.4,
         "value": -22.44
       },
       {
         "name": "ATR百分比",
-        "score": 58.9,
-        "value": 3.38
+        "score": 57.4,
+        "value": 3.24
       },
       {
         "name": "量价异常",
-        "score": 56.4,
-        "value": 0.76
+        "score": 64.4,
+        "value": 0.74
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.31,
-    "return_5d_pct": -0.35,
-    "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 36.7,
+    "return_3d_pct": -0.38,
+    "return_5d_pct": -0.26,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 42.540000000000006,
-    "ma10": 43.038000000000004,
-    "ma20": 41.7475,
-    "ma60": 42.798500000000004,
-    "rsi14": 47.7,
-    "macd_dif": 0.2280889677963316,
-    "macd_dea": 0.16719533785365726,
-    "macd_hist": 0.12178725988534866,
-    "atr14_pct": 3.3766263488793697,
-    "boll_position": 0.5052633735793676,
-    "return_5d_pct": -4.020215943027794,
-    "return_20d_pct": 1.6050583657587714,
-    "volume_ratio_5d": 0.76
+    "ma5": 42.230000000000004,
+    "ma10": 42.95100000000001,
+    "ma20": 41.79600000000001,
+    "ma60": 42.71016666666666,
+    "rsi14": 48.7,
+    "macd_dif": 0.17740044147977585,
+    "macd_dea": 0.16923635857888097,
+    "macd_hist": 0.01632816580178975,
+    "atr14_pct": 3.2409919530116857,
+    "boll_position": 0.5234726063830016,
+    "return_5d_pct": -3.5640377098183573,
+    "return_20d_pct": 2.367586038564795,
+    "volume_ratio_5d": 0.74
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -2.65
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -3.1
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,16 +100,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.31,
-      "median_return_pct": -0.79,
+      "up_probability_pct": 53.3,
+      "average_return_pct": -0.38,
+      "median_return_pct": 0.6,
       "best_return_pct": 16.57,
       "worst_return_pct": -11.86
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.35,
-      "median_return_pct": -1.28,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.26,
+      "median_return_pct": -0.49,
       "best_return_pct": 14.66,
       "worst_return_pct": -11.98
     }

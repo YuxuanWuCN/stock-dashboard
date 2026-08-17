@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "000333",
   "name": "美的集团",
   "type": "stock",
   "category": "家电",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.00024612065246678173,
+    "alpha_p_value": 0.6157536385531824,
+    "information_ratio": 0.014565011997447757,
+    "betas": {
+      "MKT": 0.04447309213617272,
+      "SMB": 0.014450432315142847,
+      "HML": 0.030027445254499602,
+      "MOM": -0.08955409784606838
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 57.1,
-    "risk": 25.3,
-    "technical": 65.0,
-    "industry": 47.3
+    "risk_adjusted": 47.3,
+    "risk": 26.4,
+    "technical": 50.0,
+    "industry": 43.1
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 21.34,
+    "annualized_volatility_20d_pct": 20.23,
     "max_drawdown_60d_pct": -10.38,
-    "atr14_pct": 2.26,
+    "atr14_pct": 2.19,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 21.8,
-        "value": 21.34
+        "score": 22.8,
+        "value": 20.23
       },
       {
         "name": "60日最大回撤",
-        "score": 21.8,
+        "score": 22.3,
         "value": -10.38
       },
       {
         "name": "ATR百分比",
-        "score": 31.7,
-        "value": 2.26
+        "score": 29.7,
+        "value": 2.19
       },
       {
         "name": "量价异常",
-        "score": 67.8,
-        "value": 0.71
+        "score": 79.2,
+        "value": 0.67
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.91,
-    "return_5d_pct": 1.04,
-    "up_probability_3d_pct": 63.3,
-    "up_probability_5d_pct": 63.3,
+    "return_3d_pct": 1.01,
+    "return_5d_pct": 0.51,
+    "up_probability_3d_pct": 73.3,
+    "up_probability_5d_pct": 56.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 84.49600000000001,
-    "ma10": 84.781,
-    "ma20": 85.1755,
-    "ma60": 80.20383333333334,
-    "rsi14": 47.7,
-    "macd_dif": 0.9040404447047194,
-    "macd_dea": 1.4591685251313482,
-    "macd_hist": -1.1102561608532575,
-    "atr14_pct": 2.26025278421892,
-    "boll_position": 0.10509437170721213,
-    "return_5d_pct": -0.5628742514970031,
-    "return_20d_pct": 0.3868939668722149,
-    "volume_ratio_5d": 0.71
+    "ma5": 83.958,
+    "ma10": 84.452,
+    "ma20": 85.091,
+    "ma60": 80.306,
+    "rsi14": 46.1,
+    "macd_dif": 0.678737453162384,
+    "macd_dea": 1.3030823107375553,
+    "macd_hist": -1.2486897151503427,
+    "atr14_pct": 2.186430432806526,
+    "boll_position": 0.07485488907579523,
+    "return_5d_pct": -3.1535756154747907,
+    "return_20d_pct": -2.004744958481608,
+    "volume_ratio_5d": 0.67
   },
   "industry": {
     "name": "家电",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -3.86
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -7.47
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 0.91,
-      "median_return_pct": 0.54,
-      "best_return_pct": 5.7,
-      "worst_return_pct": -4.21
+      "up_probability_pct": 73.3,
+      "average_return_pct": 1.01,
+      "median_return_pct": 1.46,
+      "best_return_pct": 4.63,
+      "worst_return_pct": -5.77
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 1.04,
-      "median_return_pct": 0.87,
-      "best_return_pct": 7.87,
-      "worst_return_pct": -6.8
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.51,
+      "median_return_pct": 0.74,
+      "best_return_pct": 4.39,
+      "worst_return_pct": -8.3
     }
   },
   "fundamental": {

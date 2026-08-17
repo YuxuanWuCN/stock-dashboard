@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "000538",
   "name": "云南白药",
   "type": "stock",
   "category": "医药",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -9.848357552963705e-05,
+    "alpha_p_value": 0.799760383088682,
+    "information_ratio": -0.007231894378811866,
+    "betas": {
+      "MKT": 0.033626664466983064,
+      "SMB": -0.015952754626937994,
+      "HML": -0.025959036897572632,
+      "MOM": 0.02045588213308576
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 55.1,
-    "risk": 10.1,
+    "risk_adjusted": 60.3,
+    "risk": 11.5,
     "technical": 50.0,
-    "industry": 41.1
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.15,
+    "annualized_volatility_20d_pct": 14.36,
     "max_drawdown_60d_pct": -7.11,
-    "atr14_pct": 1.84,
+    "atr14_pct": 1.79,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 2.0,
-        "value": 15.15
+        "score": 3.0,
+        "value": 14.36
       },
       {
         "name": "60日最大回撤",
-        "score": 6.4,
+        "score": 6.9,
         "value": -7.11
       },
       {
         "name": "ATR百分比",
         "score": 13.9,
-        "value": 1.84
+        "value": 1.79
       },
       {
         "name": "量价异常",
-        "score": 49.0,
-        "value": 0.79
+        "score": 59.9,
+        "value": 0.75
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
     "return_3d_pct": 0.61,
-    "return_5d_pct": 0.69,
-    "up_probability_3d_pct": 73.3,
-    "up_probability_5d_pct": 63.3,
+    "return_5d_pct": 1.21,
+    "up_probability_3d_pct": 63.3,
+    "up_probability_5d_pct": 66.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 50.612,
-    "ma10": 50.94,
-    "ma20": 51.35699999999999,
-    "ma60": 49.91783333333333,
-    "rsi14": 43.2,
-    "macd_dif": 0.06431555325199412,
-    "macd_dea": 0.3174568154500088,
-    "macd_hist": -0.5062825243960294,
-    "atr14_pct": 1.8369073371585238,
-    "boll_position": 0.05177962628736057,
-    "return_5d_pct": -1.4381402679275013,
-    "return_20d_pct": -2.7032283158304193,
-    "volume_ratio_5d": 0.79
+    "trend": "range",
+    "ma5": 50.333999999999996,
+    "ma10": 50.690999999999995,
+    "ma20": 51.245000000000005,
+    "ma60": 49.917833333333334,
+    "rsi14": 41.5,
+    "macd_dif": -0.02611959116269702,
+    "macd_dea": 0.24874153412746766,
+    "macd_hist": -0.5497222505803294,
+    "atr14_pct": 1.786727141443678,
+    "boll_position": 0.04600673956418162,
+    "return_5d_pct": -2.7153740965032203,
+    "return_20d_pct": -4.3043812451960095,
+    "volume_ratio_5d": 0.75
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -6.95
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -9.77
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,17 +100,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 73.3,
+      "up_probability_pct": 63.3,
       "average_return_pct": 0.61,
-      "median_return_pct": 0.43,
-      "best_return_pct": 10.45,
+      "median_return_pct": 0.31,
+      "best_return_pct": 8.16,
       "worst_return_pct": -3.65
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 0.69,
-      "median_return_pct": 0.61,
-      "best_return_pct": 10.45,
+      "up_probability_pct": 66.7,
+      "average_return_pct": 1.21,
+      "median_return_pct": 0.86,
+      "best_return_pct": 21.48,
       "worst_return_pct": -4.13
     }
   },
@@ -221,14 +235,7 @@
     },
     "cached_at": "2026-08-09 22:27:57"
   },
-  "reasons": [
-    {
-      "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/000538.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

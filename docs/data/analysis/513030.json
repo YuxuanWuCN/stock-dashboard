@@ -1,33 +1,42 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-13",
   "code": "513030",
   "name": "德国ETF",
   "type": "etf",
   "category": "",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 57.5,
-    "risk": 20.4,
-    "technical": 100.0,
+    "risk_adjusted": 55.9,
+    "risk": 20.7,
+    "technical": 92.0,
     "industry": 70.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 11.74,
+    "annualized_volatility_20d_pct": 12.06,
     "max_drawdown_60d_pct": -5.98,
     "atr14_pct": 0.55,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 0.5,
-        "value": 11.74
+        "score": 1.0,
+        "value": 12.06
       },
       {
         "name": "60日最大回撤",
-        "score": 4.0,
+        "score": 4.5,
         "value": -5.98
       },
       {
@@ -43,7 +52,7 @@
       {
         "name": "行业波动",
         "score": 94.6,
-        "value": 39.81
+        "value": 39.33
       }
     ]
   },
@@ -57,28 +66,28 @@
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 1.8780000000000001,
-    "ma10": 1.8610000000000002,
-    "ma20": 1.8175000000000001,
-    "ma60": 1.7978333333333334,
-    "rsi14": 70.7,
-    "macd_dif": 0.027010258637986118,
-    "macd_dea": 0.019373671702635258,
-    "macd_hist": 0.01527317387070172,
-    "atr14_pct": 0.5491910353883324,
-    "boll_position": 0.8287652774198738,
-    "return_5d_pct": 1.0752688172043001,
-    "return_20d_pct": 6.214689265536721,
+    "ma5": 1.8779999999999997,
+    "ma10": 1.866,
+    "ma20": 1.8224999999999998,
+    "ma60": 1.7991666666666668,
+    "rsi14": 65.8,
+    "macd_dif": 0.026397102458152633,
+    "macd_dea": 0.02077835790406969,
+    "macd_hist": 0.011237489108165882,
+    "atr14_pct": 0.5508872751517582,
+    "boll_position": 0.7498616108391079,
+    "return_5d_pct": 0.0,
+    "return_20d_pct": 5.649717514124308,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "深证成指",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.91,
-    "return_20d_pct": -2.47,
-    "return_60d_pct": -7.42,
-    "relative_strength_20d_pct": 8.68
+    "return_5d_pct": 1.27,
+    "return_20d_pct": -1.37,
+    "return_60d_pct": -8.22,
+    "relative_strength_20d_pct": 7.02
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -107,12 +116,6 @@
       "title": "中短期趋势向上",
       "detail": "收盘价位于20日和60日均线上方。",
       "contribution": 8.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=70.7，短期超买。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/513030.json",

@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "002352",
   "name": "顺丰控股",
   "type": "stock",
   "category": "物流",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.0003508883378416306,
+    "alpha_p_value": 0.4933045615682202,
+    "information_ratio": -0.01922124486567389,
+    "betas": {
+      "MKT": 0.02820235866100665,
+      "SMB": -0.008642681195614677,
+      "HML": 0.20818217958882682,
+      "MOM": -0.0010963513322645565
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 38.2,
-    "risk": 22.7,
-    "technical": 50.0,
-    "industry": 44.4
+    "risk_adjusted": 44.1,
+    "risk": 21.4,
+    "technical": 42.0,
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 19.57,
+    "annualized_volatility_20d_pct": 16.84,
     "max_drawdown_60d_pct": -14.22,
-    "atr14_pct": 1.94,
+    "atr14_pct": 1.9,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 16.8,
-        "value": 19.57
+        "score": 9.4,
+        "value": 16.84
       },
       {
         "name": "60日最大回撤",
-        "score": 39.6,
+        "score": 40.6,
         "value": -14.22
       },
       {
         "name": "ATR百分比",
-        "score": 16.3,
-        "value": 1.94
+        "score": 15.8,
+        "value": 1.9
       },
       {
         "name": "量价异常",
-        "score": 42.6,
-        "value": 0.81
+        "score": 51.5,
+        "value": 0.79
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.49,
-    "return_5d_pct": 0.03,
-    "up_probability_3d_pct": 53.3,
-    "up_probability_5d_pct": 40.0,
+    "return_3d_pct": 1.15,
+    "return_5d_pct": 0.3,
+    "up_probability_3d_pct": 63.3,
+    "up_probability_5d_pct": 53.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 33.263999999999996,
-    "ma10": 33.684999999999995,
-    "ma20": 33.973,
-    "ma60": 33.509166666666665,
-    "rsi14": 40.5,
-    "macd_dif": -0.051553853325771115,
-    "macd_dea": 0.15205008833381667,
-    "macd_hist": -0.40720788331917557,
-    "atr14_pct": 1.9442832098312046,
-    "boll_position": 0.03559687676948851,
-    "return_5d_pct": -1.6816816816816682,
-    "return_20d_pct": -1.0278113663845123,
-    "volume_ratio_5d": 0.81
+    "ma5": 33.008,
+    "ma10": 33.432,
+    "ma20": 33.9,
+    "ma60": 33.465333333333334,
+    "rsi14": 38.6,
+    "macd_dif": -0.1297792118473211,
+    "macd_dea": 0.09568422829758913,
+    "macd_hist": -0.4509268802898205,
+    "atr14_pct": 1.9032811012307975,
+    "boll_position": 0.030861847097228255,
+    "return_5d_pct": -3.786982248520687,
+    "return_20d_pct": -4.296645085344297,
+    "volume_ratio_5d": 0.79
   },
   "industry": {
     "name": "物流",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -5.28
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -9.76
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.49,
-      "median_return_pct": 0.38,
-      "best_return_pct": 12.16,
-      "worst_return_pct": -6.73
+      "up_probability_pct": 63.3,
+      "average_return_pct": 1.15,
+      "median_return_pct": 0.63,
+      "best_return_pct": 7.57,
+      "worst_return_pct": -4.81
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.03,
-      "median_return_pct": -0.67,
-      "best_return_pct": 12.09,
-      "worst_return_pct": -7.35
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.3,
+      "median_return_pct": 1.05,
+      "best_return_pct": 7.72,
+      "worst_return_pct": -5.53
     }
   },
   "fundamental": {

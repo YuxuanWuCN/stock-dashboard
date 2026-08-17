@@ -1,17 +1,31 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
+  "generated_at": "2026-08-17 21:38:03+08:00",
   "trade_date": "2026-08-14",
   "code": "000270",
   "name": "起亚",
   "type": "kr",
   "category": "汽车",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0007432146073673676,
+    "alpha_p_value": 0.21978693629331103,
+    "information_ratio": 0.03289849568164578,
+    "betas": {
+      "MKT": 0.06427390710531279,
+      "SMB": 0.0029369692636139005,
+      "HML": 0.01584104170193424,
+      "MOM": 0.12998940569079162
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 22.7,
-    "risk": 79.4,
+    "risk_adjusted": 25.7,
+    "risk": 79.8,
     "technical": 86.0,
-    "industry": 39.1
+    "industry": 41.2
   },
   "risk": {
     "level": "high",
@@ -22,7 +36,7 @@
     "factors": [
       {
         "name": "20日波动率",
-        "score": 86.1,
+        "score": 85.6,
         "value": 69.44
       },
       {
@@ -32,26 +46,26 @@
       },
       {
         "name": "ATR百分比",
-        "score": 78.7,
+        "score": 79.7,
         "value": 4.8
       },
       {
         "name": "量价异常",
-        "score": 45.5,
+        "score": 48.5,
         "value": 0.8
       },
       {
         "name": "行业波动",
         "score": 95.0,
-        "value": 40.47
+        "value": 40.51
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -1.23,
-    "return_5d_pct": -1.68,
+    "return_3d_pct": -1.14,
+    "return_5d_pct": -0.88,
     "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 46.7,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
@@ -75,10 +89,10 @@
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -3.32,
-    "return_60d_pct": -8.17,
-    "relative_strength_20d_pct": -3.97
+    "return_5d_pct": 0.3,
+    "return_20d_pct": -0.93,
+    "return_60d_pct": -7.57,
+    "relative_strength_20d_pct": -4.42
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -87,16 +101,16 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 36.7,
-      "average_return_pct": -1.23,
-      "median_return_pct": -0.62,
-      "best_return_pct": 9.12,
+      "average_return_pct": -1.14,
+      "median_return_pct": -0.97,
+      "best_return_pct": 10.31,
       "worst_return_pct": -8.99
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -1.68,
-      "median_return_pct": -0.61,
-      "best_return_pct": 4.88,
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.88,
+      "median_return_pct": 0.09,
+      "best_return_pct": 13.78,
       "worst_return_pct": -19.27
     }
   },

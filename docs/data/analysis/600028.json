@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "600028",
   "name": "中国石化",
   "type": "stock",
   "category": "能源",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.00037368282475588513,
+    "alpha_p_value": 0.36179134951030667,
+    "information_ratio": 0.024567836164124945,
+    "betas": {
+      "MKT": -0.03442975815554913,
+      "SMB": 0.10040701181801508,
+      "HML": 0.1395951712787131,
+      "MOM": -0.10633628348703796
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 55.4,
-    "risk": 24.7,
+    "risk_adjusted": 58.8,
+    "risk": 22.0,
     "technical": 58.0,
-    "industry": 45.3
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 26.06,
+    "annualized_volatility_20d_pct": 21.12,
     "max_drawdown_60d_pct": -8.61,
-    "atr14_pct": 2.17,
+    "atr14_pct": 2.08,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 32.7,
-        "value": 26.06
+        "score": 25.2,
+        "value": 21.12
       },
       {
         "name": "60日最大回撤",
-        "score": 12.4,
+        "score": 11.9,
         "value": -8.61
       },
       {
         "name": "ATR百分比",
-        "score": 26.2,
-        "value": 2.17
+        "score": 22.8,
+        "value": 2.08
       },
       {
         "name": "量价异常",
-        "score": 63.4,
+        "score": 67.3,
         "value": 0.72
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.51,
-    "return_5d_pct": 0.98,
+    "return_3d_pct": 0.37,
+    "return_5d_pct": 1.15,
     "up_probability_3d_pct": 60.0,
-    "up_probability_5d_pct": 63.3,
+    "up_probability_5d_pct": 70.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 5.054,
-    "ma10": 5.081,
-    "ma20": 5.138,
-    "ma60": 4.8853333333333335,
-    "rsi14": 46.7,
-    "macd_dif": 0.02412935540878003,
-    "macd_dea": 0.05576620794156,
-    "macd_hist": -0.06327370506555995,
-    "atr14_pct": 2.1709100698859367,
-    "boll_position": 0.10724385778493792,
-    "return_5d_pct": -1.9607843137254832,
-    "return_20d_pct": -0.5964214711729698,
+    "ma5": 5.032,
+    "ma10": 5.054,
+    "ma20": 5.1265,
+    "ma60": 4.888,
+    "rsi14": 47.4,
+    "macd_dif": 0.017145098588305707,
+    "macd_dea": 0.04804198607090915,
+    "macd_hist": -0.06179377496520688,
+    "atr14_pct": 2.0831074214796965,
+    "boll_position": 0.1719598079883664,
+    "return_5d_pct": -2.148437500000011,
+    "return_20d_pct": -4.389312977099246,
     "volume_ratio_5d": 0.72
   },
   "industry": {
     "name": "能源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -4.85
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -9.86
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -87,15 +101,15 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 60.0,
-      "average_return_pct": 0.51,
-      "median_return_pct": 0.46,
-      "best_return_pct": 14.58,
-      "worst_return_pct": -5.0
+      "average_return_pct": 0.37,
+      "median_return_pct": 0.45,
+      "best_return_pct": 6.71,
+      "worst_return_pct": -4.16
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 0.98,
-      "median_return_pct": 0.81,
+      "up_probability_pct": 70.0,
+      "average_return_pct": 1.15,
+      "median_return_pct": 0.98,
       "best_return_pct": 7.59,
       "worst_return_pct": -4.23
     }

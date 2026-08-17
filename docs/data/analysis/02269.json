@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "02269",
   "name": "药明生物",
   "type": "hk",
   "category": "医药",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.00021660760261399547,
+    "alpha_p_value": 0.8595663220991536,
+    "information_ratio": -0.0051513962491069815,
+    "betas": {
+      "MKT": 0.09352080482436044,
+      "SMB": -0.047986501952401256,
+      "HML": -0.13502631513350657,
+      "MOM": -0.20118462262405248
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 33.1,
-    "risk": 61.6,
-    "technical": 92.0,
-    "industry": 70.0
+    "risk_adjusted": 40.2,
+    "risk": 56.2,
+    "technical": 100.0,
+    "industry": 73.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 45.58,
+    "annualized_volatility_20d_pct": 44.96,
     "max_drawdown_60d_pct": -15.48,
-    "atr14_pct": 4.51,
+    "atr14_pct": 4.53,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 68.8,
-        "value": 45.58
+        "score": 69.8,
+        "value": 44.96
       },
       {
         "name": "60日最大回撤",
-        "score": 44.1,
+        "score": 45.5,
         "value": -15.48
       },
       {
         "name": "ATR百分比",
         "score": 77.2,
-        "value": 4.51
+        "value": 4.53
       },
       {
         "name": "量价异常",
-        "score": 67.3,
-        "value": 1.29
+        "score": 6.9,
+        "value": 0.98
       },
       {
         "name": "行业波动",
         "score": 52.0,
-        "value": 34.1
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.35,
-    "return_5d_pct": -0.76,
-    "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 40.0,
+    "return_3d_pct": -0.55,
+    "return_5d_pct": -0.36,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 45.732,
-    "ma10": 43.577999999999996,
-    "ma20": 41.16,
-    "ma60": 36.272000000000006,
-    "rsi14": 71.1,
-    "macd_dif": 2.462234201832416,
-    "macd_dea": 2.043746749292823,
-    "macd_hist": 0.8369749050791864,
-    "atr14_pct": 4.506330722909082,
-    "boll_position": 0.8194851274225127,
-    "return_5d_pct": -1.5699956389010006,
-    "return_20d_pct": 22.065981611682005,
-    "volume_ratio_5d": 1.29
+    "ma5": 45.739999999999995,
+    "ma10": 44.314,
+    "ma20": 41.55499999999999,
+    "ma60": 36.489,
+    "rsi14": 73.6,
+    "macd_dif": 2.501600916081543,
+    "macd_dea": 2.135317582650567,
+    "macd_hist": 0.7325666668619517,
+    "atr14_pct": 4.525261504731227,
+    "boll_position": 0.8574539256899156,
+    "return_5d_pct": 0.08673026886383273,
+    "return_20d_pct": 20.648196549921582,
+    "volume_ratio_5d": 0.98
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 17.82
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": 15.18
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.35,
-      "median_return_pct": 0.0,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.55,
+      "median_return_pct": -1.75,
       "best_return_pct": 16.07,
-      "worst_return_pct": -12.31
+      "worst_return_pct": -12.75
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.76,
-      "median_return_pct": -2.62,
-      "best_return_pct": 37.8,
-      "worst_return_pct": -34.12
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.36,
+      "median_return_pct": 0.0,
+      "best_return_pct": 16.55,
+      "worst_return_pct": -13.15
     }
   },
   "fundamental": null,
@@ -123,13 +137,13 @@
     {
       "type": "warning",
       "title": "RSI偏高",
-      "detail": "RSI14=71.1，短期超买。",
+      "detail": "RSI14=73.6，短期超买。",
       "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 45.6%，波动偏高。",
+      "detail": "20日年化波动率 45.0%，波动偏高。",
       "contribution": -5.0
     }
   ],

@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "601601",
   "name": "中国太保",
   "type": "stock",
   "category": "保险",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.00027426184083294774,
+    "alpha_p_value": 0.6479604495915187,
+    "information_ratio": 0.013072601070188754,
+    "betas": {
+      "MKT": -0.02508391220559842,
+      "SMB": 0.1674810517224575,
+      "HML": 0.3311963866590666,
+      "MOM": 0.06434244084001922
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 49.9,
-    "risk": 43.6,
-    "technical": 57.0,
-    "industry": 47.6
+    "risk_adjusted": 53.5,
+    "risk": 40.2,
+    "technical": 58.0,
+    "industry": 43.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 35.11,
+    "annualized_volatility_20d_pct": 26.83,
     "max_drawdown_60d_pct": -14.6,
-    "atr14_pct": 2.84,
+    "atr14_pct": 2.75,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 58.4,
-        "value": 35.11
+        "score": 42.6,
+        "value": 26.83
       },
       {
         "name": "60日最大回撤",
-        "score": 42.1,
+        "score": 43.1,
         "value": -14.6
       },
       {
         "name": "ATR百分比",
         "score": 44.1,
-        "value": 2.84
+        "value": 2.75
       },
       {
         "name": "量价异常",
-        "score": 64.9,
-        "value": 0.72
+        "score": 76.7,
+        "value": 0.69
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.02,
-    "return_5d_pct": 0.85,
-    "up_probability_3d_pct": 63.3,
-    "up_probability_5d_pct": 70.0,
+    "return_3d_pct": 0.62,
+    "return_5d_pct": 1.41,
+    "up_probability_3d_pct": 66.7,
+    "up_probability_5d_pct": 66.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 30.458,
-    "ma10": 31.221000000000004,
-    "ma20": 31.669500000000006,
-    "ma60": 30.4545,
-    "rsi14": 41.1,
-    "macd_dif": 0.0015948173312274605,
-    "macd_dea": 0.28842594946160344,
-    "macd_hist": -0.573662264260752,
-    "atr14_pct": 2.83979707753773,
-    "boll_position": -0.02028106792632286,
-    "return_5d_pct": -4.925325707022554,
-    "return_20d_pct": 0.5714285714285783,
-    "volume_ratio_5d": 0.72
+    "ma5": 30.3,
+    "ma10": 30.938,
+    "ma20": 31.595500000000005,
+    "ma60": 30.42983333333333,
+    "rsi14": 43.3,
+    "macd_dif": -0.06513833587015938,
+    "macd_dea": 0.21771309239525088,
+    "macd_hist": -0.5657028565308205,
+    "atr14_pct": 2.7471392354396476,
+    "boll_position": 0.10009441251132296,
+    "return_5d_pct": -2.5533290239172723,
+    "return_20d_pct": -4.679102118242174,
+    "volume_ratio_5d": 0.69
   },
   "industry": {
     "name": "保险",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -3.68
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -10.15
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,16 +100,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 1.02,
-      "median_return_pct": 1.1,
+      "up_probability_pct": 66.7,
+      "average_return_pct": 0.62,
+      "median_return_pct": 1.27,
       "best_return_pct": 8.31,
-      "worst_return_pct": -6.32
+      "worst_return_pct": -7.87
     },
     "horizon_5d": {
-      "up_probability_pct": 70.0,
-      "average_return_pct": 0.85,
-      "median_return_pct": 1.35,
+      "up_probability_pct": 66.7,
+      "average_return_pct": 1.41,
+      "median_return_pct": 1.85,
       "best_return_pct": 9.26,
       "worst_return_pct": -9.34
     }

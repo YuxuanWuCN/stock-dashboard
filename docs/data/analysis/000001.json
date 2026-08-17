@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "000001",
   "name": "平安银行",
   "type": "stock",
   "category": "银行",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.0003622666857265492,
+    "alpha_p_value": 0.43604766187340793,
+    "information_ratio": -0.022809546910426193,
+    "betas": {
+      "MKT": 0.009219711310763696,
+      "SMB": 0.11682925620490536,
+      "HML": -0.010674314532399818,
+      "MOM": -0.09054031607374081
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 39.5,
-    "risk": 19.2,
+    "risk_adjusted": 40.5,
+    "risk": 19.3,
     "technical": 70.0,
-    "industry": 52.6
+    "industry": 49.3
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 17.84,
+    "annualized_volatility_20d_pct": 16.73,
     "max_drawdown_60d_pct": -10.59,
-    "atr14_pct": 1.72,
+    "atr14_pct": 1.69,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 7.9,
-        "value": 17.84
+        "score": 8.9,
+        "value": 16.73
       },
       {
         "name": "60日最大回撤",
-        "score": 22.8,
+        "score": 23.3,
         "value": -10.59
       },
       {
         "name": "ATR百分比",
-        "score": 9.4,
-        "value": 1.72
+        "score": 9.9,
+        "value": 1.69
       },
       {
         "name": "量价异常",
-        "score": 90.6,
-        "value": 0.62
+        "score": 86.6,
+        "value": 0.64
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.53,
-    "return_5d_pct": -0.14,
-    "up_probability_3d_pct": 33.3,
+    "return_3d_pct": -0.21,
+    "return_5d_pct": -0.11,
+    "up_probability_3d_pct": 40.0,
     "up_probability_5d_pct": 33.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 11.232,
-    "ma10": 11.293,
-    "ma20": 11.237,
-    "ma60": 10.798,
-    "rsi14": 50.2,
-    "macd_dif": 0.12020163771535408,
-    "macd_dea": 0.16307645728920817,
-    "macd_hist": -0.08574963914770817,
-    "atr14_pct": 1.7177105521287457,
-    "boll_position": 0.3466398304883663,
-    "return_5d_pct": -0.7149240393208189,
-    "return_20d_pct": 3.0612244897959107,
-    "volume_ratio_5d": 0.62
+    "ma5": 11.193999999999999,
+    "ma10": 11.241,
+    "ma20": 11.242999999999999,
+    "ma60": 10.810666666666666,
+    "rsi14": 49.8,
+    "macd_dif": 0.10060588184535924,
+    "macd_dea": 0.1505823422004384,
+    "macd_hist": -0.09995292071015832,
+    "atr14_pct": 1.6929789899868386,
+    "boll_position": 0.32227122806405845,
+    "return_5d_pct": -1.6829052258635957,
+    "return_20d_pct": 1.0928961748633892,
+    "volume_ratio_5d": 0.64
   },
   "industry": {
     "name": "银行",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -1.19
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -4.37
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,17 +100,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.53,
-      "median_return_pct": -0.55,
-      "best_return_pct": 5.05,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.21,
+      "median_return_pct": -0.46,
+      "best_return_pct": 9.93,
       "worst_return_pct": -4.73
     },
     "horizon_5d": {
       "up_probability_pct": 33.3,
-      "average_return_pct": -0.14,
-      "median_return_pct": -0.48,
-      "best_return_pct": 7.83,
+      "average_return_pct": -0.11,
+      "median_return_pct": -0.25,
+      "best_return_pct": 12.27,
       "worst_return_pct": -5.52
     }
   },

@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "01801",
   "name": "信达生物",
   "type": "hk",
   "category": "医药",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0008913728697050177,
+    "alpha_p_value": 0.4106815686369951,
+    "information_ratio": 0.02280203767758266,
+    "betas": {
+      "MKT": 0.11110209779287465,
+      "SMB": 0.4343982922547258,
+      "HML": -0.12532323504477885,
+      "MOM": -0.19286788838731536
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 54.9,
-    "risk": 44.9,
-    "technical": 100.0,
-    "industry": 58.6
+    "risk_adjusted": 51.7,
+    "risk": 47.4,
+    "technical": 92.0,
+    "industry": 53.2
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 30.65,
+    "annualized_volatility_20d_pct": 28.01,
     "max_drawdown_60d_pct": -12.48,
-    "atr14_pct": 4.19,
+    "atr14_pct": 4.17,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 46.0,
-        "value": 30.65
+        "score": 47.0,
+        "value": 28.01
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +46,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 70.8,
-        "value": 4.19
+        "score": 71.3,
+        "value": 4.17
       },
       {
         "name": "量价异常",
-        "score": 8.4,
-        "value": 1.02
+        "score": 29.7,
+        "value": 0.87
       },
       {
         "name": "行业波动",
         "score": 52.0,
-        "value": 34.1
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.15,
-    "return_5d_pct": 0.92,
-    "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 53.3,
+    "return_3d_pct": -0.82,
+    "return_5d_pct": 0.77,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 56.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 95.47,
-    "ma10": 92.615,
-    "ma20": 91.39000000000001,
-    "ma60": 84.42333333333333,
-    "rsi14": 57.9,
-    "macd_dif": 2.286590898626855,
-    "macd_dea": 2.0464712271263874,
-    "macd_hist": 0.4802393430009353,
-    "atr14_pct": 4.187956030458033,
-    "boll_position": 0.6902027346566898,
-    "return_5d_pct": -1.1070110701106972,
-    "return_20d_pct": 5.4525014052838605,
-    "volume_ratio_5d": 1.02
+    "ma5": 95.08,
+    "ma10": 93.55,
+    "ma20": 91.5325,
+    "ma60": 84.68916666666668,
+    "rsi14": 60.8,
+    "macd_dif": 2.309620448272142,
+    "macd_dea": 2.0991010713555385,
+    "macd_hist": 0.42103875383320677,
+    "atr14_pct": 4.166449609364391,
+    "boll_position": 0.7912670491918572,
+    "return_5d_pct": -2.0041109969167525,
+    "return_20d_pct": 3.081081081081072,
+    "volume_ratio_5d": 0.87
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 1.2
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": -2.39
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.15,
-      "median_return_pct": -1.04,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.82,
+      "median_return_pct": -2.3,
       "best_return_pct": 17.16,
-      "worst_return_pct": -9.17
+      "worst_return_pct": -12.44
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.92,
-      "median_return_pct": 0.9,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.77,
+      "median_return_pct": 1.12,
       "best_return_pct": 23.61,
-      "worst_return_pct": -12.01
+      "worst_return_pct": -13.71
     }
   },
   "fundamental": null,

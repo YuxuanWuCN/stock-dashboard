@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "XOM",
   "name": "埃克森美孚",
   "type": "us",
   "category": "能源",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0008798863599035513,
+    "alpha_p_value": 0.0649724017764628,
+    "information_ratio": 0.052165590144501534,
+    "betas": {
+      "MKT": 0.02182883729388742,
+      "SMB": 0.08255730027665817,
+      "HML": 0.06186096102764164,
+      "MOM": -0.07412103649655347
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 43.0,
-    "risk": 39.2,
+    "risk_adjusted": 40.2,
+    "risk": 37.4,
     "technical": 100.0,
-    "industry": 70.0
+    "industry": 69.8
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 24.53,
-    "max_drawdown_60d_pct": -16.3,
-    "atr14_pct": 2.35,
+    "annualized_volatility_20d_pct": 24.52,
+    "max_drawdown_60d_pct": -12.94,
+    "atr14_pct": 2.28,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 27.7,
-        "value": 24.53
+        "score": 33.7,
+        "value": 24.52
       },
       {
         "name": "60日最大回撤",
-        "score": 47.0,
-        "value": -16.3
+        "score": 34.7,
+        "value": -12.94
       },
       {
         "name": "ATR百分比",
-        "score": 34.2,
-        "value": 2.35
+        "score": 33.2,
+        "value": 2.28
       },
       {
         "name": "量价异常",
-        "score": 13.4,
-        "value": 1.05
+        "score": 9.4,
+        "value": 0.97
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.64,
-    "return_5d_pct": -0.38,
-    "up_probability_3d_pct": 40.0,
-    "up_probability_5d_pct": 46.7,
+    "return_3d_pct": -1.21,
+    "return_5d_pct": -0.82,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 158.198,
-    "ma10": 156.19199999999998,
-    "ma20": 154.958,
-    "ma60": 148.14633333333333,
-    "rsi14": 62.1,
-    "macd_dif": 3.271119516646877,
-    "macd_dea": 3.047785783534879,
-    "macd_hist": 0.446667466223996,
-    "atr14_pct": 2.34625650039972,
-    "boll_position": 0.7693427923140836,
-    "return_5d_pct": 2.434771376905198,
-    "return_20d_pct": 8.674203494347399,
-    "volume_ratio_5d": 1.05
+    "ma5": 159.61,
+    "ma10": 156.65800000000002,
+    "ma20": 155.595,
+    "ma60": 148.1055,
+    "rsi14": 64.3,
+    "macd_dif": 3.3341928473753626,
+    "macd_dea": 3.105067196302976,
+    "macd_hist": 0.45825130214477294,
+    "atr14_pct": 2.2766202667391773,
+    "boll_position": 0.8650188591240535,
+    "return_5d_pct": 4.613173026659689,
+    "return_20d_pct": 8.64549402823016,
+    "volume_ratio_5d": 0.97
   },
   "industry": {
     "name": "能源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 10.05
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": 3.92
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,16 +100,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.64,
-      "median_return_pct": -0.48,
-      "best_return_pct": 4.61,
+      "up_probability_pct": 36.7,
+      "average_return_pct": -1.21,
+      "median_return_pct": -0.81,
+      "best_return_pct": 3.84,
       "worst_return_pct": -8.8
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.38,
-      "median_return_pct": -0.09,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.82,
+      "median_return_pct": -0.59,
       "best_return_pct": 5.25,
       "worst_return_pct": -8.85
     }
@@ -107,18 +121,6 @@
       "title": "中短期趋势向上",
       "detail": "收盘价位于20日和60日均线上方。",
       "contribution": 8.0
-    },
-    {
-      "type": "negative",
-      "title": "近期回撤较大",
-      "detail": "近60日最大回撤 16.3%，风险偏高。",
-      "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "回撤风险",
-      "detail": "近60日最大回撤 16.3%，风险扣分。",
-      "contribution": -7.0
     }
   ],
   "kline_file": "../kline/XOM.json",

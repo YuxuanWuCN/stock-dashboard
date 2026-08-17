@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "002459",
   "name": "晶澳科技",
   "type": "stock",
   "category": "新能源",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.00023097093415561047,
+    "alpha_p_value": 0.8061996901436649,
+    "information_ratio": -0.007227432590700249,
+    "betas": {
+      "MKT": 0.12186477672848535,
+      "SMB": 0.005129965280175184,
+      "HML": -0.6022497607437983,
+      "MOM": 0.08852163187139211
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 33.3,
-    "risk": 52.6,
+    "risk_adjusted": 32.9,
+    "risk": 52.4,
     "technical": 90.0,
-    "industry": 68.1
+    "industry": 68.8
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 39.8,
-    "max_drawdown_60d_pct": -29.2,
-    "atr14_pct": 3.9,
+    "annualized_volatility_20d_pct": 39.96,
+    "max_drawdown_60d_pct": -27.8,
+    "atr14_pct": 3.72,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 64.4,
-        "value": 39.8
+        "score": 65.8,
+        "value": 39.96
       },
       {
         "name": "60日最大回撤",
-        "score": 75.7,
-        "value": -29.2
+        "score": 74.3,
+        "value": -27.8
       },
       {
         "name": "ATR百分比",
-        "score": 64.9,
-        "value": 3.9
+        "score": 62.9,
+        "value": 3.72
       },
       {
         "name": "量价异常",
-        "score": 11.4,
-        "value": 0.96
+        "score": 13.9,
+        "value": 0.95
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.28,
-    "return_5d_pct": -0.82,
-    "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 36.7,
+    "return_3d_pct": 0.26,
+    "return_5d_pct": -1.04,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 7.7219999999999995,
-    "ma10": 7.744,
-    "ma20": 7.5105,
-    "ma60": 8.075333333333333,
-    "rsi14": 47.1,
-    "macd_dif": -0.02455773356520563,
-    "macd_dea": -0.08007514775938795,
-    "macd_hist": 0.11103482838836465,
-    "atr14_pct": 3.8987098924538612,
-    "boll_position": 0.5448373243985223,
-    "return_5d_pct": -2.0725388601036343,
-    "return_20d_pct": 8.620689655172399,
-    "volume_ratio_5d": 0.96
+    "ma5": 7.702,
+    "ma10": 7.725,
+    "ma20": 7.5424999999999995,
+    "ma60": 8.039833333333334,
+    "rsi14": 50.3,
+    "macd_dif": -0.018730982918399697,
+    "macd_dea": -0.06780631479119031,
+    "macd_hist": 0.09815066374558123,
+    "atr14_pct": 3.7213841208753755,
+    "boll_position": 0.6523478743192644,
+    "return_5d_pct": -1.2820512820512775,
+    "return_20d_pct": 9.065155807365443,
+    "volume_ratio_5d": 0.95
   },
   "industry": {
     "name": "新能源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": 4.37
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": 3.6
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.28,
-      "median_return_pct": -0.41,
-      "best_return_pct": 14.46,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.26,
+      "median_return_pct": 0.57,
+      "best_return_pct": 13.76,
       "worst_return_pct": -10.83
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.82,
-      "median_return_pct": -1.36,
-      "best_return_pct": 24.44,
-      "worst_return_pct": -17.69
+      "up_probability_pct": 40.0,
+      "average_return_pct": -1.04,
+      "median_return_pct": -1.75,
+      "best_return_pct": 7.59,
+      "worst_return_pct": -11.96
     }
   },
   "fundamental": {
@@ -225,13 +239,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 29.2%，风险偏高。",
+      "detail": "近60日最大回撤 27.8%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 29.2%，风险扣分。",
+      "detail": "近60日最大回撤 27.8%，风险扣分。",
       "contribution": -7.0
     }
   ],
