@@ -51,6 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
         rankingMode: 'balanced',
         rankingSortKey: 'risk_adjusted_score',
         rankingSortDirection: 'desc',
+        rankingPillFilterType: 'all',
+        rankingPillFilterVal: '',
         analysisSelectedCode: null,
         analysisCache: {},
         watchlist: [],
@@ -1301,6 +1303,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
+        document.querySelectorAll('.ranking-pills-bar .ranking-pill').forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                document.querySelectorAll('.ranking-pills-bar .ranking-pill').forEach(function (p) {
+                    p.classList.toggle('active', p === pill);
+                });
+                state.rankingPillFilterType = pill.dataset.filterType || 'all';
+                state.rankingPillFilterVal = pill.dataset.filterVal || '';
+                renderRanking();
+            });
+        });
+
         el.rankingSearch.addEventListener('input', renderRanking);
         el.rankingIndustryFilter.addEventListener('change', renderRanking);
     }
@@ -1351,7 +1364,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 || String(item.code).toLowerCase().includes(search)
                 || String(item.name).toLowerCase().includes(search);
             var matchesCategory = !category || displayCategory(item) === category;
-            return matchesSearch && matchesCategory;
+            
+            // 分组专榜过滤（市场类型 或 赌注类型）
+            var matchesPill = true;
+            if (state.rankingPillFilterType === 'market') {
+                matchesPill = item.type === state.rankingPillFilterVal;
+            } else if (state.rankingPillFilterType === 'bet') {
+                var bt = state.betTypes && state.betTypes[item.code];
+                matchesPill = bt && bt.bet_type === state.rankingPillFilterVal;
+            }
+
+            return matchesSearch && matchesCategory && matchesPill;
         });
 
         var direction = state.rankingSortDirection === 'asc' ? 1 : -1;

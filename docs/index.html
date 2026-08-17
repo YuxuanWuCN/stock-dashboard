@@ -142,9 +142,22 @@
             </div>
 
             <div class="ranking-tabs" role="tablist" aria-label="排行榜类型">
-                <button class="ranking-tab active" type="button" role="tab" aria-selected="true" data-mode="balanced">风险收益榜</button>
-                <button class="ranking-tab" type="button" role="tab" aria-selected="false" data-mode="return">收益预估榜</button>
-                <button class="ranking-tab" type="button" role="tab" aria-selected="false" data-mode="risk">低风险榜</button>
+                <button class="ranking-tab active" type="button" role="tab" aria-selected="true" data-mode="balanced">🔥 综合优选榜</button>
+                <button class="ranking-tab" type="button" role="tab" aria-selected="false" data-mode="return">📈 收益预估榜</button>
+                <button class="ranking-tab" type="button" role="tab" aria-selected="false" data-mode="risk">🛡️ 低风险防守榜</button>
+            </div>
+
+            <!-- 分组专榜胶囊选择器（市场分类 + 赌注类型） -->
+            <div class="ranking-pills-bar" id="ranking-pills-bar" role="group" aria-label="分类榜单">
+                <button class="ranking-pill active" type="button" data-filter-type="all">全部 (202)</button>
+                <span class="pill-divider"></span>
+                <button class="ranking-pill pill-trend" type="button" data-filter-type="bet" data-filter-val="trend">🟢 趋势大牛榜</button>
+                <button class="ranking-pill pill-volatile" type="button" data-filter-type="bet" data-filter-val="volatile">🔴 妖股博弈榜</button>
+                <span class="pill-divider"></span>
+                <button class="ranking-pill" type="button" data-filter-type="market" data-filter-val="stock">🇨🇳 A股专榜</button>
+                <button class="ranking-pill" type="button" data-filter-type="market" data-filter-val="us">🇺🇸 美股专榜</button>
+                <button class="ranking-pill" type="button" data-filter-type="market" data-filter-val="hk">🇭🇰 港股专榜</button>
+                <button class="ranking-pill" type="button" data-filter-type="market" data-filter-val="etf">📊 ETF基金榜</button>
             </div>
 
             <div id="ranking-state" class="ranking-state">分析数据加载中...</div>

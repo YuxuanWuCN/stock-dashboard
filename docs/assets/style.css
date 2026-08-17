@@ -2792,6 +2792,130 @@ body {
 .watchlist-search-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: none; background: transparent; color: #9ca3af; cursor: pointer; font-size: 13px; padding: 4px; line-height: 1; }
 .watchlist-search-clear:hover { color: #374151; }
 
+/* ============================================================ */
+/* 排行榜分类胶囊与专业 UI 视觉重塑 (v2.6 终极版)                  */
+/* ============================================================ */
+.ranking-pills-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 16px;
+    padding: 6px 10px;
+    background: var(--muted-bg, #f8fafc);
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 30px;
+}
+.pill-divider {
+    width: 1px;
+    height: 16px;
+    background: var(--border-color, #cbd5e1);
+    margin: 0 4px;
+}
+.ranking-pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid transparent;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted, #64748b);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.ranking-pill:hover {
+    color: var(--text-color, #0f172a);
+    background: rgba(0, 0, 0, 0.04);
+}
+.ranking-pill.active {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+}
+.ranking-pill.pill-trend.active {
+    background: #059669 !important;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35);
+}
+.ranking-pill.pill-volatile.active {
+    background: #dc2626 !important;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.35);
+}
+
+/* 优化排行榜大 Tab */
+.ranking-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.ranking-tab {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 10px;
+    border: 1px solid var(--border-color, #e2e8f0);
+    background: var(--card-bg, #ffffff);
+    color: var(--text-muted, #64748b);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.ranking-tab.active {
+    background: var(--primary-color, #1e3a8a);
+    color: #ffffff;
+    border-color: var(--primary-color, #1e3a8a);
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+}
+
+/* 前三名发光序号徽章 */
+.ranking-table td.ranking-number.top-three {
+    font-size: 15px;
+    font-weight: 900;
+    color: #b45309;
+}
+.ranking-table tr:nth-child(1) td.ranking-number { color: #d97706; text-shadow: 0 0 8px rgba(217, 119, 6, 0.3); }
+.ranking-table tr:nth-child(2) td.ranking-number { color: #64748b; }
+.ranking-table tr:nth-child(3) td.ranking-number { color: #b45309; }
+
+/* 赌注类型精致 Badge */
+.bet-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px 6px;
+    margin-left: 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+    line-height: 1.3;
+}
+.bet-trend {
+    color: #065f46;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+}
+.bet-volatile {
+    color: #991b1b;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    animation: pulse-badge 2s infinite;
+}
+.bet-range {
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+}
+
+@keyframes pulse-badge {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.75; }
+}
+
+
 /* ========== 赌注类型标签（v2.6 师门框架融合） ========== */
 .bet-badge {
     display: inline-flex;
