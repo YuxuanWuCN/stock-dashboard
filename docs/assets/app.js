@@ -1848,6 +1848,12 @@ document.addEventListener('DOMContentLoaded', () => {
             el.analysisSummary.textContent = '历史相似样本不足，当前仅展示风险和技术状态。';
         }
 
+        // 赌注类型与策略建议（师门框架融合 v2.6）
+        var betInfo = state.betTypes && detail.code ? state.betTypes[detail.code] : null;
+        if (betInfo) {
+            el.analysisSummary.textContent += ' ｜ ' + betInfo.advice;
+        }
+
         el.analysisRiskBadge.className = 'risk-badge ' + riskClass(risk.level);
         el.analysisRiskBadge.textContent = (risk.label || '未知风险') + ' ' + formatScore(scores.risk);
         el.analysisCompositeScore.textContent = formatScore(scores.risk_adjusted);
