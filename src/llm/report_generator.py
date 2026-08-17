@@ -24,6 +24,7 @@ from .citation import audit_citations, build_citation, build_uncertain
 from .llm_client import LLMClient, LLMCompletionClient, LLMUnavailableError
 from .llm_sentiment import LLMSentimentAnalyzer, LLMSentimentResult
 from .rag_engine import RAGEngine, RetrievedChunk
+from .leading_indicator_tracker import LeadingIndicatorTracker
 
 logger = logging.getLogger("stock-dashboard.llm.report")
 
@@ -234,6 +235,11 @@ def _build_template_report(
         "disclaimer": "本研究基于公开历史数据，不构成投资建议。",
         "citation_audit": audit_citations(citations),
         "llm_metadata": llm_metadata,
+        "leading_signals_tracker": {
+            "source_type": "high_frequency_industry_proxy",
+            "process_node": "待LLM/人工校准",
+            "description": "基于海关进出口及大宗商品高频先行数据构建，弥补季度财报时滞",
+        },
     }
 
 
@@ -271,6 +277,7 @@ class ReportGenerator:
     ) -> None:
         self.llm = llm_client or LLMClient()
         self.sentiment_analyzer = LLMSentimentAnalyzer(llm_client=self.llm)
+        self.leading_tracker = LeadingIndicatorTracker(client=self.llm)
         self.rag = rag
         self.report_dir = REPORT_DIR
         self.last_sentiment_results: list[LLMSentimentResult] = []

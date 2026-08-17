@@ -428,7 +428,9 @@ def test_run_all_kline_derived_returns_path():
     factors = synthetic_factors()
     results = fama_macbeth.run_all(factors, {"T000": synthetic_kline()})
     assert results["T000"]["status"] == "ok"
-    assert results["T000"]["n_obs"] == len(factors)
+    # pct_change 首行收益为 NaN，regress_one 现会正确丢弃（NaN 防护）
+    # 因此有效观测 = 因子行数 - 1
+    assert results["T000"]["n_obs"] == len(factors) - 1
 
 
 def test_run_all_no_overlap_insufficient():

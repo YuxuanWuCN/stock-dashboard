@@ -70,6 +70,9 @@ from src.fetch_data import (
     _fetch_hk_kline,
 )
 
+from src.analysis.bet_type_classifier import classify_bet_type, get_strategy_recommendation
+from src.analysis.leading_indicators import LeadingIndicatorEngine
+
 from src.analysis.config import (
     LOOKBACK_DAYS_5Y,
     STANDARDIZATION_WINDOW,
@@ -526,6 +529,20 @@ def analyze_single(
         "reasons": reasons,
         # kline_file 指向已有 K 线数据
         "kline_file": f"../kline/{code}.json",
+        # 赌注类型与策略建议（P0-2 重塑）
+        "bet_type": classify_bet_type(
+            df["close"].dropna().tolist(),
+            df["high"].dropna().tolist() if "high" in df else None,
+            df["low"].dropna().tolist() if "low" in df else None,
+        )[0],
+        "bet_type_metrics": classify_bet_type(
+            df["close"].dropna().tolist(),
+            df["high"].dropna().tolist() if "high" in df else None,
+            df["low"].dropna().tolist() if "low" in df else None,
+        )[1],
+        "strategy_recommendation": get_strategy_recommendation(
+            classify_bet_type(df["close"].dropna().tolist())[0]
+        ),
     }
 
     return result

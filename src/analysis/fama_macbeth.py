@@ -65,6 +65,9 @@ def regress_one(factors_df: pd.DataFrame, returns: Sequence,
     if analysis_date is not None:
         f = f[f["date"] <= analysis_date].reset_index(drop=True)
 
+    # 丢弃缺失收益/因子/无风险利率的行（如 pct_change 首行 NaN），避免 NaN 污染 OLS
+    f = f.dropna(subset=["_r"] + FACTOR_COLS + ["rf"]).reset_index(drop=True)
+
     n = len(f)
     window_start = str(f["date"].iloc[0]) if n else None
     window_end = str(f["date"].iloc[-1]) if n else None

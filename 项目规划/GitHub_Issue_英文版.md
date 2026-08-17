@@ -1,0 +1,60 @@
+# Observed inconsistencies between ADRs and v2.1 README/SKILL.md + backtest evidence for two architecture improvements
+
+**Repository**: serenity-chokepoint-investing-enhanced
+**Author**: Yuxuan Wu (u11yw25@abdn.ac.uk, South China Normal University Aberdeen Institute, Information Management, Year 2)
+
+Hi! My teacher asked me to study this framework carefully, and I spent two days reading all 6 ADRs, the README and SKILL.md line by line. I also ran two "sealed-box" backtests (Lixin New Energy 001258 and Micron MU) using the four-factor Fama-MacBeth + IR gating idea. I'd like to share what I found, hoping it helps.
+
+---
+
+## Part A — Documentation inconsistencies (probably v2.0 → v2.1 leftovers)
+
+### A1. IR rejection threshold: 0.5 vs 0.3
+
+- `docs/adr/0001-two-stage-multiplicative-model.md` (Hard Constraints table, and "IR < 0.5" in the Layer-2 section) says: **IR < 0.5 → Reject**
+- `README.md` and `SKILL.md` (v2.1) say: **IR < 0.3 → Reject**, with 0.3–0.5 classified as "weak alpha, small position only"
+
+**Suggestion**: Add a "v2.1 update" note in ADR-0001 pointing to the current 0.3 threshold, so future readers don't get conflicting signals.
+
+### A2. Position-sizing adjustment: multiplicative vs additive
+
+- `docs/adr/0006-catalyst-driven-position-sizing.md` uses a **multiplicative** formula: `Final = Base × (1+adj₁) × (1+adj₂) × ...`
+- `README.md` / `SKILL.md` (v2.1) use **additive percentage-point** adjustments with a hard floor `max(Base×25%, 0.5%)`
+
+**Suggestion**: Same — add a v2.1 note in ADR-0006 documenting the additive scheme and the hard floor.
+
+---
+
+## Part B — Two architecture improvements supported by backtest evidence
+
+### B1. Bet-type classification should be data-driven, not LLM-guessed
+
+ADR-0006 asks the agent to classify Super Beta / Catalyst Alpha / Event-Driven, but the criteria are qualitative (LLM judgment). I ran the same rule-based signal ensemble on two stocks:
+
+| Stock | Character | Buy & Hold | Signal strategy (daily timing) |
+|---|---|---|---|
+| 立新能源 001258 | high-volatility "monster" stock | +85.3% | **+163.0%** (timing wins) |
+| Micron MU | strong-trend winner | **+423.3%** | +161.0% (timing loses badly) |
+
+The *same* strategy is inverted between the two. This is quantitative evidence that the optimal holding period/position logic depends on the stock's statistical character (volatility, momentum half-life, autocorrelation). **Suggestion**: add a lightweight statistical classifier (e.g. 20d volatility + momentum half-life + ATR) that maps the stock to a bet type, instead of relying on LLM judgment alone.
+
+### B2. Missing trend-environment filter (worst blind spot)
+
+On Micron MU, the ensemble's 1-day direction accuracy by regime:
+
+| Regime (20d trend) | Accuracy |
+|---|---|
+| Up | 53.7% |
+| **Down** | **45.2%** (below random!) |
+| Flat | 56.8% |
+
+The system systematically predicts "up" during downtrends. **Suggestion**: add a trend gate — when the stock's 20/60d trend is negative, suppress or downweight long signals. This is the single highest-impact fix I measured.
+
+---
+
+All backtest artifacts (reports + JSON + scripts) are available on request. Happy to turn any of these into a PR — especially the A1/A2 doc fixes, which are trivial and safe.
+
+Thanks for reading!
+
+
+---
