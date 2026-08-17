@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "MSFT",
   "name": "微软",
   "type": "us",
   "category": "科技",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0003428899079649815,
+    "alpha_p_value": 0.4608820892617911,
+    "information_ratio": 0.020262009816882552,
+    "betas": {
+      "MKT": 0.00709724256010413,
+      "SMB": -0.044662952833082886,
+      "HML": 0.03736303231943706,
+      "MOM": 0.004495963577733688
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 43.2,
-    "risk": 68.1,
+    "risk_adjusted": 46.8,
+    "risk": 69.2,
     "technical": 92.0,
-    "industry": 70.0
+    "industry": 73.0
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 60.49,
+    "annualized_volatility_20d_pct": 59.77,
     "max_drawdown_60d_pct": -23.38,
-    "atr14_pct": 2.9,
+    "atr14_pct": 2.79,
     "factors": [
       {
         "name": "20日波动率",
         "score": 80.7,
-        "value": 60.49
+        "value": 59.77
       },
       {
         "name": "60日最大回撤",
-        "score": 65.8,
+        "score": 66.8,
         "value": -23.38
       },
       {
         "name": "ATR百分比",
-        "score": 46.5,
-        "value": 2.9
+        "score": 44.6,
+        "value": 2.79
       },
       {
         "name": "量价异常",
-        "score": 71.3,
-        "value": 0.7
+        "score": 84.2,
+        "value": 0.65
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.07,
-    "return_5d_pct": 0.31,
-    "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 56.7,
+    "return_3d_pct": 0.13,
+    "return_5d_pct": 0.68,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 60.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 499.834,
-    "ma10": 493.16700000000003,
-    "ma20": 445.162,
-    "ma60": 414.2436666666666,
-    "rsi14": 71.8,
-    "macd_dif": 29.352238650322988,
-    "macd_dea": 24.17940773741453,
-    "macd_hist": 10.345661825816919,
-    "atr14_pct": 2.897341805554778,
-    "boll_position": 0.7561777680412981,
-    "return_5d_pct": -0.5961669267394942,
-    "return_20d_pct": 23.879331837447015,
-    "volume_ratio_5d": 0.7
+    "ma5": 498.916,
+    "ma10": 496.23499999999996,
+    "ma20": 450.241,
+    "ma60": 415.5433333333333,
+    "rsi14": 70.9,
+    "macd_dif": 28.58188760082561,
+    "macd_dea": 25.059903710096744,
+    "macd_hist": 7.043967781457731,
+    "atr14_pct": 2.786234147366162,
+    "boll_position": 0.7250804048310745,
+    "return_5d_pct": -0.9180183603672121,
+    "return_20d_pct": 25.79350972525518,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 25.25
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": 21.07
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,16 +100,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.07,
-      "median_return_pct": -0.87,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.13,
+      "median_return_pct": -0.35,
       "best_return_pct": 18.14,
       "worst_return_pct": -7.1
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.31,
-      "median_return_pct": 0.6,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.68,
+      "median_return_pct": 1.0,
       "best_return_pct": 25.29,
       "worst_return_pct": -8.97
     }
@@ -123,13 +137,13 @@
     {
       "type": "warning",
       "title": "RSI偏高",
-      "detail": "RSI14=71.8，短期超买。",
+      "detail": "RSI14=70.9，短期超买。",
       "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 60.5%，波动偏高。",
+      "detail": "20日年化波动率 59.8%，波动偏高。",
       "contribution": -5.0
     }
   ],

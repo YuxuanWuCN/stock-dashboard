@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "UNH",
   "name": "联合健康",
   "type": "us",
   "category": "医药",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.00010787640420283553,
+    "alpha_p_value": 0.8633928790049491,
+    "information_ratio": 0.0052951368294509565,
+    "betas": {
+      "MKT": -0.03265583903104313,
+      "SMB": 0.20191424843829472,
+      "HML": -0.03972545969975607,
+      "MOM": -0.07520903257382482
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 32.7,
-    "risk": 36.6,
-    "technical": 50.0,
-    "industry": 46.3
+    "risk_adjusted": 37.5,
+    "risk": 38.0,
+    "technical": 58.0,
+    "industry": 43.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 24.69,
+    "annualized_volatility_20d_pct": 24.7,
     "max_drawdown_60d_pct": -8.55,
-    "atr14_pct": 2.75,
+    "atr14_pct": 2.66,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 28.7,
-        "value": 24.69
+        "score": 35.1,
+        "value": 24.7
       },
       {
         "name": "60日最大回撤",
-        "score": 11.9,
+        "score": 11.4,
         "value": -8.55
       },
       {
         "name": "ATR百分比",
         "score": 43.6,
-        "value": 2.75
+        "value": 2.66
       },
       {
         "name": "量价异常",
-        "score": 53.0,
-        "value": 0.76
+        "score": 49.0,
+        "value": 0.8
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.31,
-    "return_5d_pct": -0.21,
-    "up_probability_3d_pct": 60.0,
-    "up_probability_5d_pct": 43.3,
+    "return_3d_pct": 0.01,
+    "return_5d_pct": 0.09,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 404.532,
-    "ma10": 407.669,
-    "ma20": 416.238,
-    "ma60": 409.32866666666666,
-    "rsi14": 40.3,
-    "macd_dif": -3.7550709140302274,
-    "macd_dea": -1.230010982742262,
-    "macd_hist": -5.050119862575931,
-    "atr14_pct": 2.7516945237132258,
-    "boll_position": 0.0731748342476819,
-    "return_5d_pct": -1.2154367898606355,
-    "return_20d_pct": -5.7442486655014395,
-    "volume_ratio_5d": 0.76
+    "ma5": 403.462,
+    "ma10": 406.40200000000004,
+    "ma20": 415.02,
+    "ma60": 409.53683333333333,
+    "rsi14": 42.4,
+    "macd_dif": -4.0631723584958195,
+    "macd_dea": -1.7966432578929736,
+    "macd_hist": -4.533058201205692,
+    "atr14_pct": 2.655867981022968,
+    "boll_position": 0.1764055891054422,
+    "return_5d_pct": -1.314237987619138,
+    "return_20d_pct": -5.717102020699838,
+    "volume_ratio_5d": 0.8
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": -4.37
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": -10.44
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.31,
-      "median_return_pct": 0.37,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.01,
+      "median_return_pct": 0.03,
       "best_return_pct": 6.91,
-      "worst_return_pct": -6.29
+      "worst_return_pct": -11.54
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.21,
+      "up_probability_pct": 40.0,
+      "average_return_pct": 0.09,
       "median_return_pct": -0.14,
-      "best_return_pct": 10.96,
-      "worst_return_pct": -11.84
+      "best_return_pct": 17.55,
+      "worst_return_pct": -14.58
     }
   },
   "fundamental": null,

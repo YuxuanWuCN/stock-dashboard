@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "002594",
   "name": "比亚迪",
   "type": "stock",
   "category": "汽车",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.00021180380304424622,
+    "alpha_p_value": 0.7398255591941219,
+    "information_ratio": 0.009490703044337894,
+    "betas": {
+      "MKT": 0.1308198748728323,
+      "SMB": -0.1241442677229629,
+      "HML": -0.07040901893805335,
+      "MOM": -0.09204359438115688
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 36.9,
-    "risk": 37.3,
+    "risk_adjusted": 40.4,
+    "risk": 40.8,
     "technical": 58.0,
-    "industry": 40.0
+    "industry": 43.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 21.74,
+    "annualized_volatility_20d_pct": 22.1,
     "max_drawdown_60d_pct": -19.18,
-    "atr14_pct": 2.66,
+    "atr14_pct": 2.59,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 22.3,
-        "value": 21.74
+        "score": 29.2,
+        "value": 22.1
       },
       {
         "name": "60日最大回撤",
-        "score": 55.4,
+        "score": 55.9,
         "value": -19.18
       },
       {
         "name": "ATR百分比",
-        "score": 41.1,
-        "value": 2.66
+        "score": 41.6,
+        "value": 2.59
       },
       {
         "name": "量价异常",
-        "score": 83.2,
-        "value": 0.64
+        "score": 95.5,
+        "value": 0.58
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.29,
-    "return_5d_pct": 0.08,
-    "up_probability_3d_pct": 50.0,
+    "return_3d_pct": -0.27,
+    "return_5d_pct": 0.34,
+    "up_probability_3d_pct": 36.7,
     "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 90.058,
-    "ma10": 90.62,
-    "ma20": 91.999,
-    "ma60": 90.10050000000001,
-    "rsi14": 43.8,
-    "macd_dif": -0.09663270615683928,
-    "macd_dea": 0.4399927828427149,
-    "macd_hist": -1.0732509779991084,
-    "atr14_pct": 2.662629933641271,
-    "boll_position": 0.12076600101789604,
-    "return_5d_pct": -1.2661039537983143,
-    "return_20d_pct": -4.5317869415807515,
-    "volume_ratio_5d": 0.64
+    "ma5": 89.804,
+    "ma10": 90.16300000000001,
+    "ma20": 91.8145,
+    "ma60": 90.04183333333332,
+    "rsi14": 47.2,
+    "macd_dif": -0.156005688054492,
+    "macd_dea": 0.3207930886632736,
+    "macd_hist": -0.9535975534355312,
+    "atr14_pct": 2.5909159945874007,
+    "boll_position": 0.2651487928993378,
+    "return_5d_pct": -1.3933077345035794,
+    "return_20d_pct": -3.9435716575825563,
+    "volume_ratio_5d": 0.58
   },
   "industry": {
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -8.78
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -9.41
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.29,
-      "median_return_pct": 0.07,
-      "best_return_pct": 8.78,
-      "worst_return_pct": -8.57
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.27,
+      "median_return_pct": -0.52,
+      "best_return_pct": 8.48,
+      "worst_return_pct": -6.9
     },
     "horizon_5d": {
       "up_probability_pct": 43.3,
-      "average_return_pct": 0.08,
-      "median_return_pct": -0.6,
-      "best_return_pct": 13.13,
-      "worst_return_pct": -14.29
+      "average_return_pct": 0.34,
+      "median_return_pct": -0.37,
+      "best_return_pct": 12.83,
+      "worst_return_pct": -7.26
     }
   },
   "fundamental": {

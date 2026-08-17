@@ -1,55 +1,69 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "600905",
   "name": "三峡能源",
   "type": "stock",
   "category": "电力",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.000188252895511032,
+    "alpha_p_value": 0.6572953168538354,
+    "information_ratio": -0.012518531232997617,
+    "betas": {
+      "MKT": 0.0055283826908021725,
+      "SMB": -0.07246228583515957,
+      "HML": -0.16724264977325617,
+      "MOM": -0.06241505669075572
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 42.9,
-    "risk": 24.5,
+    "risk_adjusted": 46.2,
+    "risk": 22.2,
     "technical": 42.0,
-    "industry": 44.9
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 18.4,
+    "annualized_volatility_20d_pct": 13.24,
     "max_drawdown_60d_pct": -15.94,
-    "atr14_pct": 1.65,
+    "atr14_pct": 1.57,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 10.4,
-        "value": 18.4
+        "score": 1.5,
+        "value": 13.24
       },
       {
         "name": "60日最大回撤",
-        "score": 45.0,
+        "score": 46.5,
         "value": -15.94
       },
       {
         "name": "ATR百分比",
         "score": 6.9,
-        "value": 1.65
+        "value": 1.57
       },
       {
         "name": "量价异常",
-        "score": 85.6,
-        "value": 0.63
+        "score": 86.1,
+        "value": 0.64
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.35,
-    "return_5d_pct": 0.21,
+    "return_3d_pct": 0.25,
+    "return_5d_pct": 0.42,
     "up_probability_3d_pct": 60.0,
     "up_probability_5d_pct": 56.7,
     "confidence": "medium",
@@ -57,28 +71,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 3.7659999999999996,
-    "ma10": 3.804,
-    "ma20": 3.8455,
-    "ma60": 3.908166666666667,
-    "rsi14": 37.6,
-    "macd_dif": -0.024515362651942763,
-    "macd_dea": -0.014160016605085018,
-    "macd_hist": -0.02071069209371549,
-    "atr14_pct": 1.648790867700609,
-    "boll_position": 0.04541648988439109,
-    "return_5d_pct": -1.0610079575596787,
-    "return_20d_pct": -0.7978723404255317,
-    "volume_ratio_5d": 0.63
+    "ma5": 3.754,
+    "ma10": 3.781999999999999,
+    "ma20": 3.8369999999999997,
+    "ma60": 3.902333333333333,
+    "rsi14": 36.6,
+    "macd_dif": -0.028766416604630418,
+    "macd_dea": -0.0170812966049941,
+    "macd_hist": -0.023370239999272638,
+    "atr14_pct": 1.573538194600663,
+    "boll_position": 0.07110330400675087,
+    "return_5d_pct": -1.5873015873015817,
+    "return_20d_pct": -4.370179948586117,
+    "volume_ratio_5d": 0.64
   },
   "industry": {
     "name": "电力",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -5.05
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -9.84
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -87,17 +101,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 60.0,
-      "average_return_pct": 0.35,
-      "median_return_pct": 0.37,
+      "average_return_pct": 0.25,
+      "median_return_pct": 0.53,
       "best_return_pct": 7.18,
       "worst_return_pct": -4.99
     },
     "horizon_5d": {
       "up_probability_pct": 56.7,
-      "average_return_pct": 0.21,
-      "median_return_pct": 0.24,
+      "average_return_pct": 0.42,
+      "median_return_pct": 0.49,
       "best_return_pct": 5.2,
-      "worst_return_pct": -7.2
+      "worst_return_pct": -4.28
     }
   },
   "fundamental": {

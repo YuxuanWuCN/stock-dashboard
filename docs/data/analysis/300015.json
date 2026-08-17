@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "300015",
   "name": "爱尔眼科",
   "type": "stock",
   "category": "医药",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.0008425238445878383,
+    "alpha_p_value": 0.27690223200710096,
+    "information_ratio": -0.03256259421493882,
+    "betas": {
+      "MKT": -0.025357582892965313,
+      "SMB": -0.21854078969605714,
+      "HML": 0.12935159886257858,
+      "MOM": -0.08270283621279381
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 34.5,
-    "risk": 32.3,
-    "technical": 65.0,
-    "industry": 47.2
+    "risk_adjusted": 25.5,
+    "risk": 35.8,
+    "technical": 58.0,
+    "industry": 43.0
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
-    "annualized_volatility_20d_pct": 28.51,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 26.55,
     "max_drawdown_60d_pct": -14.39,
-    "atr14_pct": 2.95,
+    "atr14_pct": 2.88,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 39.6,
-        "value": 28.51
+        "score": 41.6,
+        "value": 26.55
       },
       {
         "name": "60日最大回撤",
-        "score": 40.1,
+        "score": 41.1,
         "value": -14.39
       },
       {
         "name": "ATR百分比",
-        "score": 48.5,
-        "value": 2.95
+        "score": 48.0,
+        "value": 2.88
       },
       {
         "name": "量价异常",
-        "score": 5.0,
-        "value": 1.01
+        "score": 33.2,
+        "value": 0.85
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.13,
-    "return_5d_pct": -0.22,
-    "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 36.7,
+    "return_3d_pct": 0.1,
+    "return_5d_pct": -1.06,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 33.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 8.862,
-    "ma10": 8.874,
-    "ma20": 8.8415,
-    "ma60": 8.602333333333332,
-    "rsi14": 48.3,
-    "macd_dif": 0.05953322839904196,
-    "macd_dea": 0.08310643387849605,
-    "macd_hist": -0.047146410958908175,
-    "atr14_pct": 2.9454952188864048,
-    "boll_position": 0.2982511776939801,
-    "return_5d_pct": -1.2471655328798126,
-    "return_20d_pct": 0.3456221198156806,
-    "volume_ratio_5d": 1.01
+    "ma5": 8.784,
+    "ma10": 8.836000000000002,
+    "ma20": 8.828999999999999,
+    "ma60": 8.595666666666666,
+    "rsi14": 47.5,
+    "macd_dif": 0.043119768433287575,
+    "macd_dea": 0.07510910078945435,
+    "macd_hist": -0.06397866471233354,
+    "atr14_pct": 2.8762213926473637,
+    "boll_position": 0.2745898965325732,
+    "return_5d_pct": -4.299889746416763,
+    "return_20d_pct": -2.799552071668532,
+    "volume_ratio_5d": 0.85
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -3.9
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -8.27
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.13,
-      "median_return_pct": -0.15,
-      "best_return_pct": 6.76,
-      "worst_return_pct": -3.79
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.1,
+      "median_return_pct": -0.19,
+      "best_return_pct": 5.99,
+      "worst_return_pct": -6.42
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.22,
-      "median_return_pct": -1.32,
-      "best_return_pct": 9.07,
-      "worst_return_pct": -9.47
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.06,
+      "median_return_pct": -0.69,
+      "best_return_pct": 7.52,
+      "worst_return_pct": -9.56
     }
   },
   "fundamental": {

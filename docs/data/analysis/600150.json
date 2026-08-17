@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "600150",
   "name": "中国船舶",
   "type": "stock",
   "category": "制造",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0008645823529353991,
+    "alpha_p_value": 0.22825963025477258,
+    "information_ratio": 0.03499119513646018,
+    "betas": {
+      "MKT": 0.06143677950677339,
+      "SMB": 0.05863770593968326,
+      "HML": 0.13330004423669076,
+      "MOM": 0.02228618889813795
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
     "risk_adjusted": 40.8,
-    "risk": 41.4,
-    "technical": 65.0,
-    "industry": 55.0
+    "risk": 42.5,
+    "technical": 70.0,
+    "industry": 50.9
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 25.95,
+    "annualized_volatility_20d_pct": 23.58,
     "max_drawdown_60d_pct": -16.42,
-    "atr14_pct": 3.01,
+    "atr14_pct": 2.93,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 31.2,
-        "value": 25.95
+        "score": 31.7,
+        "value": 23.58
       },
       {
         "name": "60日最大回撤",
@@ -32,23 +46,23 @@
       },
       {
         "name": "ATR百分比",
-        "score": 51.5,
-        "value": 3.01
+        "score": 51.0,
+        "value": 2.93
       },
       {
         "name": "量价异常",
-        "score": 25.7,
-        "value": 0.88
+        "score": 36.1,
+        "value": 0.84
       },
       {
         "name": "行业波动",
         "score": 48.0,
-        "value": 34.1
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.11,
+    "return_3d_pct": -0.02,
     "return_5d_pct": 0.02,
     "up_probability_3d_pct": 53.3,
     "up_probability_5d_pct": 53.3,
@@ -57,28 +71,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 33.977999999999994,
-    "ma10": 34.44199999999999,
-    "ma20": 34.0895,
-    "ma60": 34.976166666666664,
-    "rsi14": 42.7,
-    "macd_dif": -0.16101092352861457,
-    "macd_dea": -0.11107934447458126,
-    "macd_hist": -0.09986315810806662,
-    "atr14_pct": 3.0080221928845283,
-    "boll_position": 0.2848669489612084,
-    "return_5d_pct": -4.1032998565279755,
-    "return_20d_pct": 4.535502033156091,
-    "volume_ratio_5d": 0.88
+    "ma5": 33.742000000000004,
+    "ma10": 34.297,
+    "ma20": 34.1215,
+    "ma60": 34.90416666666667,
+    "rsi14": 44.7,
+    "macd_dif": -0.19071667702135642,
+    "macd_dea": -0.1270068109839363,
+    "macd_hist": -0.12741973207484025,
+    "atr14_pct": 2.9290284905977755,
+    "boll_position": 0.34186934721020973,
+    "return_5d_pct": -3.3878840080390438,
+    "return_20d_pct": 1.9388064222962687,
+    "volume_ratio_5d": 0.84
   },
   "industry": {
     "name": "制造",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": 0.29
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -3.53
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -87,16 +101,16 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 53.3,
-      "average_return_pct": -0.11,
-      "median_return_pct": 0.19,
+      "average_return_pct": -0.02,
+      "median_return_pct": 0.35,
       "best_return_pct": 10.08,
-      "worst_return_pct": -10.39
+      "worst_return_pct": -10.82
     },
     "horizon_5d": {
       "up_probability_pct": 53.3,
       "average_return_pct": 0.02,
-      "median_return_pct": 0.24,
-      "best_return_pct": 12.16,
+      "median_return_pct": 0.36,
+      "best_return_pct": 8.14,
       "worst_return_pct": -13.01
     }
   },

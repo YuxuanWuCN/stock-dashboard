@@ -1,17 +1,31 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
+  "generated_at": "2026-08-17 21:38:03+08:00",
   "trade_date": "2026-08-14",
   "code": "005380",
   "name": "现代汽车",
   "type": "kr",
   "category": "汽车",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0011503824239019957,
+    "alpha_p_value": 0.0917335661880814,
+    "information_ratio": 0.04723347121998827,
+    "betas": {
+      "MKT": 0.006846290245187207,
+      "SMB": -0.0024744035828536542,
+      "HML": 0.12667157084953234,
+      "MOM": 0.049784027043988176
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 29.1,
-    "risk": 86.4,
+    "risk_adjusted": 29.8,
+    "risk": 87.0,
     "technical": 93.0,
-    "industry": 62.0
+    "industry": 65.0
   },
   "risk": {
     "level": "high",
@@ -32,18 +46,18 @@
       },
       {
         "name": "ATR百分比",
-        "score": 84.7,
+        "score": 86.1,
         "value": 6.03
       },
       {
         "name": "量价异常",
-        "score": 52.5,
+        "score": 55.9,
         "value": 0.77
       },
       {
         "name": "行业波动",
         "score": 95.0,
-        "value": 40.47
+        "value": 40.51
       }
     ]
   },
@@ -66,7 +80,7 @@
     "macd_dea": -25549.51482575555,
     "macd_hist": 23727.620700352927,
     "atr14_pct": 6.029608096979102,
-    "boll_position": 1.0773539397838552,
+    "boll_position": 1.0773539397838565,
     "return_5d_pct": 14.5385587863464,
     "return_20d_pct": 6.58823529411765,
     "volume_ratio_5d": 0.77
@@ -75,10 +89,10 @@
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -3.32,
-    "return_60d_pct": -8.17,
-    "relative_strength_20d_pct": 7.96
+    "return_5d_pct": 0.3,
+    "return_20d_pct": -0.93,
+    "return_60d_pct": -7.57,
+    "relative_strength_20d_pct": 7.52
   },
   "similarity": {
     "method": "standardized_knn_v1",

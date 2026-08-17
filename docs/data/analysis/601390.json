@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "601390",
   "name": "中国中铁",
   "type": "stock",
   "category": "基建",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 5.0672574901148814e-05,
+    "alpha_p_value": 0.929026086524622,
+    "information_ratio": 0.00253939559094889,
+    "betas": {
+      "MKT": -0.03287341472128637,
+      "SMB": 0.08378971370846969,
+      "HML": 0.14692785813397968,
+      "MOM": 0.01496155228194307
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 56.4,
-    "risk": 23.6,
-    "technical": 57.0,
-    "industry": 47.0
+    "risk_adjusted": 59.4,
+    "risk": 23.8,
+    "technical": 58.0,
+    "industry": 43.5
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 19.11,
+    "annualized_volatility_20d_pct": 17.23,
     "max_drawdown_60d_pct": -13.53,
-    "atr14_pct": 1.95,
+    "atr14_pct": 1.93,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 14.4,
-        "value": 19.11
+        "score": 10.4,
+        "value": 17.23
       },
       {
         "name": "60日最大回撤",
-        "score": 38.1,
+        "score": 39.1,
         "value": -13.53
       },
       {
         "name": "ATR百分比",
-        "score": 17.3,
-        "value": 1.95
+        "score": 19.3,
+        "value": 1.93
       },
       {
         "name": "量价异常",
-        "score": 60.4,
-        "value": 0.73
+        "score": 69.3,
+        "value": 0.71
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.38,
-    "return_5d_pct": 0.88,
-    "up_probability_3d_pct": 66.7,
+    "return_3d_pct": 1.39,
+    "return_5d_pct": 1.39,
+    "up_probability_3d_pct": 73.3,
     "up_probability_5d_pct": 70.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 4.438,
-    "ma10": 4.4799999999999995,
-    "ma20": 4.4875,
-    "ma60": 4.433999999999999,
-    "rsi14": 42.4,
-    "macd_dif": 0.008114140509992929,
-    "macd_dea": 0.02640023927808505,
-    "macd_hist": -0.036572197536184244,
-    "atr14_pct": 1.9545998903714963,
-    "boll_position": 0.02996489694966185,
-    "return_5d_pct": -2.67857142857143,
-    "return_20d_pct": 0.22988505747127963,
-    "volume_ratio_5d": 0.73
+    "ma5": 4.4079999999999995,
+    "ma10": 4.454,
+    "ma20": 4.4835,
+    "ma60": 4.429500000000001,
+    "rsi14": 43.4,
+    "macd_dif": 0.0007197116089949773,
+    "macd_dea": 0.021264133744267038,
+    "macd_hist": -0.04108884427054412,
+    "atr14_pct": 1.925248803305924,
+    "boll_position": 0.10661355500608403,
+    "return_5d_pct": -3.3185840707964487,
+    "return_20d_pct": -1.7977528089887618,
+    "volume_ratio_5d": 0.71
   },
   "industry": {
     "name": "基建",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -4.02
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -7.26
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 1.38,
-      "median_return_pct": 0.93,
+      "up_probability_pct": 73.3,
+      "average_return_pct": 1.39,
+      "median_return_pct": 1.0,
       "best_return_pct": 15.08,
-      "worst_return_pct": -6.9
+      "worst_return_pct": -10.56
     },
     "horizon_5d": {
       "up_probability_pct": 70.0,
-      "average_return_pct": 0.88,
-      "median_return_pct": 1.47,
+      "average_return_pct": 1.39,
+      "median_return_pct": 1.51,
       "best_return_pct": 16.47,
-      "worst_return_pct": -10.53
+      "worst_return_pct": -10.13
     }
   },
   "fundamental": {

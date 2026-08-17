@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "LLY",
   "name": "礼来",
   "type": "us",
   "category": "医药",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "economical",
+    "alpha": 0.001248783691038736,
+    "alpha_p_value": 0.03706843685780781,
+    "information_ratio": 0.0606982291554204,
+    "betas": {
+      "MKT": -0.03688956852872295,
+      "SMB": -0.045898278823289444,
+      "HML": 0.12642450943885308,
+      "MOM": -0.10259622443682859
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 52.0,
-    "risk": 46.4,
-    "technical": 93.0,
-    "industry": 69.3
+    "risk_adjusted": 43.6,
+    "risk": 49.3,
+    "technical": 95.0,
+    "industry": 48.7
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 35.03,
+    "annualized_volatility_20d_pct": 36.05,
     "max_drawdown_60d_pct": -9.7,
-    "atr14_pct": 3.37,
+    "atr14_pct": 3.43,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 57.4,
-        "value": 35.03
+        "score": 61.9,
+        "value": 36.05
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +46,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 57.9,
-        "value": 3.37
+        "score": 60.4,
+        "value": 3.43
       },
       {
         "name": "量价异常",
-        "score": 24.8,
-        "value": 0.88
+        "score": 35.6,
+        "value": 0.85
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.22,
-    "return_5d_pct": 0.48,
-    "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 56.7,
+    "return_3d_pct": 0.17,
+    "return_5d_pct": 0.26,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 1212.3899999999999,
-    "ma10": 1180.9630000000002,
-    "ma20": 1181.9569999999999,
-    "ma60": 1150.805833333333,
-    "rsi14": 55.7,
-    "macd_dif": 12.722548058717166,
-    "macd_dea": 9.008837552108485,
-    "macd_hist": 7.427421013217362,
-    "atr14_pct": 3.3651629935834757,
-    "boll_position": 0.712095887632036,
-    "return_5d_pct": 1.4312800979914941,
-    "return_20d_pct": 3.406690216136221,
-    "volume_ratio_5d": 0.88
+    "trend": "rebound",
+    "ma5": 1211.28,
+    "ma10": 1184.095,
+    "ma20": 1182.0095,
+    "ma60": 1153.4516666666668,
+    "rsi14": 50.1,
+    "macd_dif": 10.715808068097658,
+    "macd_dea": 9.35023165530632,
+    "macd_hist": 2.731152825582676,
+    "atr14_pct": 3.4299384811110047,
+    "boll_position": 0.48549277268656515,
+    "return_5d_pct": -0.4680739809902912,
+    "return_20d_pct": 0.08905021584078021,
+    "volume_ratio_5d": 0.85
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 4.78
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": -4.63
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,27 +100,27 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.22,
-      "median_return_pct": -0.64,
-      "best_return_pct": 14.81,
-      "worst_return_pct": -5.44
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.17,
+      "median_return_pct": 0.53,
+      "best_return_pct": 16.13,
+      "worst_return_pct": -14.89
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.48,
-      "median_return_pct": 0.48,
-      "best_return_pct": 18.48,
-      "worst_return_pct": -8.18
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.26,
+      "median_return_pct": -0.19,
+      "best_return_pct": 16.07,
+      "worst_return_pct": -11.51
     }
   },
   "fundamental": null,
   "reasons": [
     {
       "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
     }
   ],
   "kline_file": "../kline/LLY.json",

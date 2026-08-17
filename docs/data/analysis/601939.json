@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "601939",
   "name": "建设银行",
   "type": "stock",
   "category": "银行",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "economical",
+    "alpha": 0.0006338090480513237,
+    "alpha_p_value": 0.04209973591904691,
+    "information_ratio": 0.05782340081543185,
+    "betas": {
+      "MKT": -0.007707916660850878,
+      "SMB": 0.16372480580735593,
+      "HML": 0.05406703356105896,
+      "MOM": -0.030007475641782896
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 58.1,
-    "risk": 31.2,
-    "technical": 78.0,
-    "industry": 48.1
+    "risk_adjusted": 50.3,
+    "risk": 33.3,
+    "technical": 71.0,
+    "industry": 44.4
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 28.62,
+    "annualized_volatility_20d_pct": 26.96,
     "max_drawdown_60d_pct": -11.26,
-    "atr14_pct": 2.64,
+    "atr14_pct": 2.53,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 40.6,
-        "value": 28.62
+        "score": 43.6,
+        "value": 26.96
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +46,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 40.6,
-        "value": 2.64
+        "score": 40.1,
+        "value": 2.53
       },
       {
         "name": "量价异常",
-        "score": 37.6,
-        "value": 0.82
+        "score": 51.0,
+        "value": 0.79
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.5,
-    "return_5d_pct": 0.84,
-    "up_probability_3d_pct": 56.7,
-    "up_probability_5d_pct": 73.3,
+    "return_3d_pct": 0.58,
+    "return_5d_pct": 0.47,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 63.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 10.228000000000002,
-    "ma10": 10.183000000000002,
-    "ma20": 10.3315,
-    "ma60": 10.023666666666667,
-    "rsi14": 51.5,
-    "macd_dif": 0.05370170190009915,
-    "macd_dea": 0.0882503956182653,
-    "macd_hist": -0.06909738743633229,
-    "atr14_pct": 2.6406381201147315,
-    "boll_position": 0.4106559480078621,
-    "return_5d_pct": 1.688182720953324,
-    "return_20d_pct": 0.7874015748031482,
-    "volume_ratio_5d": 0.82
+    "ma5": 10.262,
+    "ma10": 10.168000000000001,
+    "ma20": 10.3245,
+    "ma60": 10.030333333333335,
+    "rsi14": 53.1,
+    "macd_dif": 0.05386024737357431,
+    "macd_dea": 0.08137236596932709,
+    "macd_hist": -0.055024237191505565,
+    "atr14_pct": 2.534824872050438,
+    "boll_position": 0.4759692565334444,
+    "return_5d_pct": 1.6781836130306038,
+    "return_20d_pct": -1.3409961685823646,
+    "volume_ratio_5d": 0.79
   },
   "industry": {
     "name": "银行",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -3.46
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -6.81
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,16 +100,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.5,
-      "median_return_pct": 0.72,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.58,
+      "median_return_pct": 0.77,
       "best_return_pct": 5.42,
       "worst_return_pct": -3.2
     },
     "horizon_5d": {
-      "up_probability_pct": 73.3,
-      "average_return_pct": 0.84,
-      "median_return_pct": 0.88,
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.47,
+      "median_return_pct": 0.46,
       "best_return_pct": 6.13,
       "worst_return_pct": -5.45
     }

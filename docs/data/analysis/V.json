@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "V",
   "name": "Visa",
   "type": "us",
   "category": "金融",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0002334203453325877,
+    "alpha_p_value": 0.5639068345276365,
+    "information_ratio": 0.016126335133387924,
+    "betas": {
+      "MKT": 0.005900118256383021,
+      "SMB": -0.05136080494179229,
+      "HML": 0.1423305284651242,
+      "MOM": 0.033182715331959815
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 38.4,
-    "risk": 20.1,
-    "technical": 80.0,
-    "industry": 59.4
+    "risk_adjusted": 45.2,
+    "risk": 19.1,
+    "technical": 88.0,
+    "industry": 51.7
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 17.19,
+    "annualized_volatility_20d_pct": 15.94,
     "max_drawdown_60d_pct": -5.65,
-    "atr14_pct": 2.02,
+    "atr14_pct": 1.97,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 5.0,
-        "value": 17.19
+        "score": 6.9,
+        "value": 15.94
       },
       {
         "name": "60日最大回撤",
@@ -33,52 +47,52 @@
       {
         "name": "ATR百分比",
         "score": 19.8,
-        "value": 2.02
+        "value": 1.97
       },
       {
         "name": "量价异常",
-        "score": 27.2,
-        "value": 0.88
+        "score": 11.9,
+        "value": 0.96
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.96,
-    "return_5d_pct": -0.81,
-    "up_probability_3d_pct": 30.0,
-    "up_probability_5d_pct": 40.0,
+    "return_3d_pct": -0.48,
+    "return_5d_pct": -0.33,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 362.302,
-    "ma10": 365.191,
-    "ma20": 362.587,
-    "ma60": 343.9655,
-    "rsi14": 57.3,
-    "macd_dif": 4.224756697225473,
-    "macd_dea": 5.5874831143758765,
-    "macd_hist": -2.725452834300807,
-    "atr14_pct": 2.0249502795780034,
-    "boll_position": 0.6336498869284833,
-    "return_5d_pct": -1.3550354954517285,
-    "return_20d_pct": 0.08489894287122546,
-    "volume_ratio_5d": 0.88
+    "ma5": 362.63199999999995,
+    "ma10": 364.993,
+    "ma20": 362.8665,
+    "ma60": 344.53616666666665,
+    "rsi14": 55.7,
+    "macd_dif": 3.964581129293549,
+    "macd_dea": 5.262902717359411,
+    "macd_hist": -2.5966431761317246,
+    "atr14_pct": 1.9662688130348875,
+    "boll_position": 0.5607334367029251,
+    "return_5d_pct": 0.45517241379309237,
+    "return_20d_pct": 1.5590138331102121,
+    "volume_ratio_5d": 0.96
   },
   "industry": {
     "name": "金融",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 1.46
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": -3.16
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,17 +100,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -0.96,
-      "median_return_pct": -0.72,
-      "best_return_pct": 3.02,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.48,
+      "median_return_pct": -0.24,
+      "best_return_pct": 6.06,
       "worst_return_pct": -4.82
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.81,
-      "median_return_pct": -0.51,
-      "best_return_pct": 4.46,
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.33,
+      "median_return_pct": -0.07,
+      "best_return_pct": 5.93,
       "worst_return_pct": -5.8
     }
   },

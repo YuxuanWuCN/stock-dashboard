@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "JPM",
   "name": "摩根大通",
   "type": "us",
   "category": "金融",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0005840442327516178,
+    "alpha_p_value": 0.20223135229975797,
+    "information_ratio": 0.03767682198317936,
+    "betas": {
+      "MKT": 0.007692697977916189,
+      "SMB": 0.015883078807601075,
+      "HML": -0.050437722739021,
+      "MOM": 0.040182130490816
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 54.0,
-    "risk": 23.5,
+    "risk_adjusted": 53.9,
+    "risk": 23.8,
     "technical": 100.0,
-    "industry": 70.0
+    "industry": 63.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 18.15,
+    "annualized_volatility_20d_pct": 17.91,
     "max_drawdown_60d_pct": -3.53,
-    "atr14_pct": 1.78,
+    "atr14_pct": 1.75,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 9.4,
-        "value": 18.15
+        "score": 12.4,
+        "value": 17.91
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +46,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 11.9,
-        "value": 1.78
+        "score": 12.4,
+        "value": 1.75
       },
       {
         "name": "量价异常",
-        "score": 70.3,
-        "value": 0.7
+        "score": 63.4,
+        "value": 0.74
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.14,
-    "return_5d_pct": -0.03,
+    "return_3d_pct": 0.36,
+    "return_5d_pct": 0.09,
     "up_probability_3d_pct": 63.3,
-    "up_probability_5d_pct": 56.7,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 361.528,
-    "ma10": 358.51300000000003,
-    "ma20": 353.536,
-    "ma60": 331.88916666666665,
-    "rsi14": 65.6,
-    "macd_dif": 7.159330175682555,
-    "macd_dea": 6.991728682605683,
-    "macd_hist": 0.3352029861537442,
-    "atr14_pct": 1.7844814702127627,
-    "boll_position": 0.8382676364647285,
-    "return_5d_pct": 1.9113106932360457,
-    "return_20d_pct": 5.816698236922635,
-    "volume_ratio_5d": 0.7
+    "ma5": 362.592,
+    "ma10": 359.618,
+    "ma20": 354.623,
+    "ma60": 333.0081666666666,
+    "rsi14": 65.2,
+    "macd_dif": 7.027083263013537,
+    "macd_dea": 6.998799598687254,
+    "macd_hist": 0.05656732865256586,
+    "atr14_pct": 1.7458541085477328,
+    "boll_position": 0.8046082282022865,
+    "return_5d_pct": 1.488028641754302,
+    "return_20d_pct": 6.3734975080621314,
+    "volume_ratio_5d": 0.74
   },
   "industry": {
     "name": "金融",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 7.19
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": 1.65
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -87,17 +101,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 63.3,
-      "average_return_pct": 0.14,
-      "median_return_pct": 0.2,
+      "average_return_pct": 0.36,
+      "median_return_pct": 0.79,
       "best_return_pct": 4.96,
       "worst_return_pct": -5.03
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": -0.03,
-      "median_return_pct": 0.25,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.09,
+      "median_return_pct": -0.04,
       "best_return_pct": 5.72,
-      "worst_return_pct": -3.41
+      "worst_return_pct": -7.09
     }
   },
   "fundamental": null,

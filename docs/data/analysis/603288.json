@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "603288",
   "name": "海天味业",
   "type": "stock",
   "category": "消费",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.0006168131701492482,
+    "alpha_p_value": 0.2946792438253393,
+    "information_ratio": -0.03300129149264761,
+    "betas": {
+      "MKT": -0.02063535978923621,
+      "SMB": 0.008192763201911604,
+      "HML": -0.014011368796758815,
+      "MOM": -0.07040352442388347
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 43.7,
-    "risk": 25.5,
+    "risk_adjusted": 42.7,
+    "risk": 26.7,
     "technical": 58.0,
-    "industry": 45.5
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 23.82,
-    "max_drawdown_60d_pct": -7.6,
-    "atr14_pct": 2.52,
+    "annualized_volatility_20d_pct": 21.77,
+    "max_drawdown_60d_pct": -8.38,
+    "atr14_pct": 2.49,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 26.2,
-        "value": 23.82
+        "score": 27.7,
+        "value": 21.77
       },
       {
         "name": "60日最大回撤",
-        "score": 9.4,
-        "value": -7.6
+        "score": 10.4,
+        "value": -8.38
       },
       {
         "name": "ATR百分比",
-        "score": 36.6,
-        "value": 2.52
+        "score": 37.1,
+        "value": 2.49
       },
       {
         "name": "量价异常",
-        "score": 77.7,
-        "value": 0.67
+        "score": 82.2,
+        "value": 0.65
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.02,
-    "return_5d_pct": 0.16,
-    "up_probability_3d_pct": 60.0,
-    "up_probability_5d_pct": 53.3,
+    "return_3d_pct": 0.61,
+    "return_5d_pct": 0.26,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 36.242000000000004,
-    "ma10": 36.65,
-    "ma20": 36.837,
-    "ma60": 35.04483333333334,
-    "rsi14": 46.3,
-    "macd_dif": 0.24003302255165693,
-    "macd_dea": 0.48658323402263304,
-    "macd_hist": -0.4931004229419522,
-    "atr14_pct": 2.520718475947296,
-    "boll_position": 0.18071514541048783,
-    "return_5d_pct": -1.6474464579901205,
-    "return_20d_pct": -0.5000000000000004,
-    "volume_ratio_5d": 0.67
+    "ma5": 35.970000000000006,
+    "ma10": 36.39,
+    "ma20": 36.758,
+    "ma60": 35.06016666666666,
+    "rsi14": 43.3,
+    "macd_dif": 0.13654297609327415,
+    "macd_dea": 0.4165751824367613,
+    "macd_hist": -0.5600644126869743,
+    "atr14_pct": 2.4921306878874274,
+    "boll_position": 0.10767314790387948,
+    "return_5d_pct": -3.697661772702554,
+    "return_20d_pct": -4.270270270270271,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "消费",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -4.75
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -9.74
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 1.02,
-      "median_return_pct": 0.77,
-      "best_return_pct": 8.06,
-      "worst_return_pct": -5.22
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.61,
+      "median_return_pct": 0.26,
+      "best_return_pct": 7.95,
+      "worst_return_pct": -5.1
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.16,
-      "median_return_pct": 0.13,
-      "best_return_pct": 6.23,
-      "worst_return_pct": -5.73
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.26,
+      "median_return_pct": -0.55,
+      "best_return_pct": 8.86,
+      "worst_return_pct": -7.08
     }
   },
   "fundamental": {

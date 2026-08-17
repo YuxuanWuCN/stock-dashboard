@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "600519",
   "name": "贵州茅台",
   "type": "stock",
   "category": "白酒",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -5.791609298319757e-05,
+    "alpha_p_value": 0.9058870012338566,
+    "information_ratio": -0.0035871545090298833,
+    "betas": {
+      "MKT": -0.021072344266313856,
+      "SMB": 0.0604950301094743,
+      "HML": -0.014669020085453241,
+      "MOM": 0.005450852156983034
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 46.4,
-    "risk": 27.5,
-    "technical": 100.0,
-    "industry": 63.5
+    "risk_adjusted": 36.6,
+    "risk": 25.5,
+    "technical": 73.0,
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 30.19,
+    "annualized_volatility_20d_pct": 25.69,
     "max_drawdown_60d_pct": -9.78,
-    "atr14_pct": 2.08,
+    "atr14_pct": 2.34,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 45.5,
-        "value": 30.19
+        "score": 37.6,
+        "value": 25.69
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +46,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 21.8,
-        "value": 2.08
+        "score": 34.2,
+        "value": 2.34
       },
       {
         "name": "量价异常",
-        "score": 48.0,
-        "value": 0.79
+        "score": 27.7,
+        "value": 0.88
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.06,
-    "return_5d_pct": -0.18,
-    "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 43.3,
+    "return_3d_pct": -0.25,
+    "return_5d_pct": -0.57,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 46.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 1347.128,
-    "ma10": 1334.72,
-    "ma20": 1325.999,
-    "ma60": 1259.2065,
-    "rsi14": 59.2,
-    "macd_dif": 24.14269651403174,
-    "macd_dea": 24.569803013447245,
-    "macd_hist": -0.8542129988310094,
-    "atr14_pct": 2.076502904858562,
-    "boll_position": 0.6751103031349591,
-    "return_5d_pct": 2.5030170635951254,
-    "return_20d_pct": 7.102154828411811,
-    "volume_ratio_5d": 0.79
+    "trend": "rebound",
+    "ma5": 1335.9740000000002,
+    "ma10": 1328.1309999999999,
+    "ma20": 1324.2785,
+    "ma60": 1259.7518333333333,
+    "rsi14": 47.2,
+    "macd_dif": 19.23528652238656,
+    "macd_dea": 23.50289971523511,
+    "macd_hist": -8.5352263856971,
+    "atr14_pct": 2.3416445288188346,
+    "boll_position": 0.1740660153687364,
+    "return_5d_pct": -4.134602553267197,
+    "return_20d_pct": -2.592090395480229,
+    "volume_ratio_5d": 0.88
   },
   "industry": {
     "name": "白酒",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": 2.85
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -8.06
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.06,
-      "median_return_pct": -0.51,
-      "best_return_pct": 5.61,
-      "worst_return_pct": -3.48
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.25,
+      "median_return_pct": -0.03,
+      "best_return_pct": 3.1,
+      "worst_return_pct": -5.78
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.18,
-      "median_return_pct": -0.9,
-      "best_return_pct": 7.19,
-      "worst_return_pct": -6.07
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.57,
+      "median_return_pct": -0.75,
+      "best_return_pct": 3.76,
+      "worst_return_pct": -7.86
     }
   },
   "fundamental": {
@@ -224,9 +238,9 @@
   "reasons": [
     {
       "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
     }
   ],
   "kline_file": "../kline/600519.json",

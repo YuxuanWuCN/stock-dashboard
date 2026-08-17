@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "600900",
   "name": "长江电力",
   "type": "stock",
   "category": "电力",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0003698239945371708,
+    "alpha_p_value": 0.19582330165940143,
+    "information_ratio": 0.03415250393947648,
+    "betas": {
+      "MKT": -0.050476061028039886,
+      "SMB": 0.06664720915085519,
+      "HML": -0.014945051249399188,
+      "MOM": -0.051761742292537626
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 45.4,
-    "risk": 21.7,
-    "technical": 73.0,
-    "industry": 47.3
+    "risk_adjusted": 53.6,
+    "risk": 21.9,
+    "technical": 58.0,
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 24.01,
+    "annualized_volatility_20d_pct": 20.32,
     "max_drawdown_60d_pct": -7.28,
-    "atr14_pct": 1.99,
+    "atr14_pct": 1.92,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 26.7,
-        "value": 24.01
+        "score": 23.8,
+        "value": 20.32
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +46,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 18.3,
-        "value": 1.99
+        "score": 18.8,
+        "value": 1.92
       },
       {
         "name": "量价异常",
-        "score": 79.7,
-        "value": 0.65
+        "score": 90.6,
+        "value": 0.63
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 0.5,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.08,
-    "return_5d_pct": 0.09,
-    "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 46.7,
+    "return_3d_pct": 0.38,
+    "return_5d_pct": 0.76,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 63.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 28.144,
-    "ma10": 28.133000000000003,
-    "ma20": 28.544999999999998,
-    "ma60": 27.288333333333338,
-    "rsi14": 50.7,
-    "macd_dif": 0.15065599985280542,
-    "macd_dea": 0.2825217519095967,
-    "macd_hist": -0.2637315041135826,
-    "atr14_pct": 1.9939628266369087,
-    "boll_position": 0.2881759176193142,
-    "return_5d_pct": 1.2612612612612706,
-    "return_20d_pct": 0.3929974991068397,
-    "volume_ratio_5d": 0.65
+    "ma5": 28.125999999999998,
+    "ma10": 28.024,
+    "ma20": 28.494,
+    "ma60": 27.324,
+    "rsi14": 48.9,
+    "macd_dif": 0.11915517996344249,
+    "macd_dea": 0.2498484375203659,
+    "macd_hist": -0.2613865151138468,
+    "atr14_pct": 1.92211991766417,
+    "boll_position": 0.24810603353371802,
+    "return_5d_pct": -0.3208556149732589,
+    "return_20d_pct": -3.5196687370600444,
+    "volume_ratio_5d": 0.63
   },
   "industry": {
     "name": "电力",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -3.86
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -8.99
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,17 +100,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.08,
-      "median_return_pct": -0.08,
-      "best_return_pct": 2.89,
-      "worst_return_pct": -3.32
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.38,
+      "median_return_pct": 0.16,
+      "best_return_pct": 3.43,
+      "worst_return_pct": -1.72
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.09,
-      "median_return_pct": -0.15,
-      "best_return_pct": 3.65,
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.76,
+      "median_return_pct": 0.6,
+      "best_return_pct": 4.48,
       "worst_return_pct": -2.57
     }
   },

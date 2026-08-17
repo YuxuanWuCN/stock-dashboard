@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "AMZN",
   "name": "亚马逊",
   "type": "us",
   "category": "科技",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.00018249025611343764,
+    "alpha_p_value": 0.8556914179629912,
+    "information_ratio": -0.005135704094304663,
+    "betas": {
+      "MKT": 0.053357917332365196,
+      "SMB": 0.017958503807789645,
+      "HML": -0.0363196044844735,
+      "MOM": -0.0781607047652317
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 41.2,
-    "risk": 67.9,
+    "risk_adjusted": 48.5,
+    "risk": 68.1,
     "technical": 90.0,
-    "industry": 70.0
+    "industry": 62.5
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 63.51,
+    "annualized_volatility_20d_pct": 63.47,
     "max_drawdown_60d_pct": -17.28,
-    "atr14_pct": 3.22,
+    "atr14_pct": 3.11,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 84.2,
-        "value": 63.51
+        "score": 83.7,
+        "value": 63.47
       },
       {
         "name": "60日最大回撤",
@@ -32,53 +46,53 @@
       },
       {
         "name": "ATR百分比",
-        "score": 56.4,
-        "value": 3.22
+        "score": 55.9,
+        "value": 3.11
       },
       {
         "name": "量价异常",
-        "score": 77.2,
-        "value": 0.67
+        "score": 81.7,
+        "value": 0.65
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.21,
-    "return_5d_pct": -0.0,
-    "up_probability_3d_pct": 56.7,
-    "up_probability_5d_pct": 66.7,
+    "return_3d_pct": 1.24,
+    "return_5d_pct": 1.14,
+    "up_probability_3d_pct": 70.0,
+    "up_probability_5d_pct": 60.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 271.45,
-    "ma10": 273.518,
-    "ma20": 255.74849999999998,
-    "ma60": 250.90650000000002,
-    "rsi14": 55.4,
-    "macd_dif": 7.371655274451882,
-    "macd_dea": 6.119135681325293,
-    "macd_hist": 2.5050391862531782,
-    "atr14_pct": 3.222212638006594,
-    "boll_position": 0.6233578254468184,
-    "return_5d_pct": -2.6188202453537035,
-    "return_20d_pct": 6.09868342070512,
-    "volume_ratio_5d": 0.67
+    "ma5": 269.08399999999995,
+    "ma10": 272.625,
+    "ma20": 256.5195,
+    "ma60": 250.96166666666667,
+    "rsi14": 53.5,
+    "macd_dif": 6.609419469468946,
+    "macd_dea": 6.217192438954024,
+    "macd_hist": 0.7844540610298445,
+    "atr14_pct": 3.1124984572872503,
+    "boll_position": 0.5808163322608549,
+    "return_5d_pct": -4.309967939376291,
+    "return_20d_pct": 6.237107147190879,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 7.47
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": 1.51
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.21,
-      "median_return_pct": 0.44,
+      "up_probability_pct": 70.0,
+      "average_return_pct": 1.24,
+      "median_return_pct": 1.95,
       "best_return_pct": 6.61,
-      "worst_return_pct": -11.43
+      "worst_return_pct": -6.33
     },
     "horizon_5d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": -0.0,
-      "median_return_pct": 0.8,
-      "best_return_pct": 11.96,
-      "worst_return_pct": -20.35
+      "up_probability_pct": 60.0,
+      "average_return_pct": 1.14,
+      "median_return_pct": 0.35,
+      "best_return_pct": 14.25,
+      "worst_return_pct": -8.6
     }
   },
   "fundamental": null,

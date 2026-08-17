@@ -1,29 +1,43 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "IBM",
   "name": "IBM",
   "type": "us",
   "category": "科技",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0005856831561903077,
+    "alpha_p_value": 0.23142348847216343,
+    "information_ratio": 0.034989175045594144,
+    "betas": {
+      "MKT": 0.012368205196696798,
+      "SMB": 0.10636019780663615,
+      "HML": 0.09528441677560784,
+      "MOM": 0.12237582546567366
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 42.5,
+    "risk_adjusted": 47.1,
     "risk": 69.6,
-    "technical": 93.0,
-    "industry": 70.0
+    "technical": 90.0,
+    "industry": 73.0
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 32.16,
+    "annualized_volatility_20d_pct": 30.4,
     "max_drawdown_60d_pct": -37.5,
-    "atr14_pct": 3.91,
+    "atr14_pct": 3.84,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 50.5,
-        "value": 32.16
+        "score": 52.0,
+        "value": 30.4
       },
       {
         "name": "60日最大回撤",
@@ -33,52 +47,52 @@
       {
         "name": "ATR百分比",
         "score": 65.8,
-        "value": 3.91
+        "value": 3.84
       },
       {
         "name": "量价异常",
-        "score": 87.6,
-        "value": 0.62
+        "score": 83.2,
+        "value": 0.65
       },
       {
         "name": "行业波动",
         "score": 73.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.16,
-    "return_5d_pct": 0.26,
+    "return_3d_pct": 0.4,
+    "return_5d_pct": 0.78,
     "up_probability_3d_pct": 56.7,
-    "up_probability_5d_pct": 56.7,
+    "up_probability_5d_pct": 60.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 237.026,
-    "ma10": 233.959,
-    "ma20": 224.719,
-    "ma60": 256.00266666666664,
-    "rsi14": 49.8,
-    "macd_dif": -3.388926430336994,
-    "macd_dea": -6.611614266379908,
-    "macd_hist": 6.445375672085827,
-    "atr14_pct": 3.9109748746474446,
-    "boll_position": 0.780737360008343,
-    "return_5d_pct": 1.5893415584971926,
-    "return_20d_pct": 8.258388495777202,
-    "volume_ratio_5d": 0.62
+    "ma5": 236.43400000000003,
+    "ma10": 235.026,
+    "ma20": 225.80150000000003,
+    "ma60": 256.20250000000004,
+    "rsi14": 47.7,
+    "macd_dif": -3.0831866858771377,
+    "macd_dea": -5.9059287502793545,
+    "macd_hist": 5.6454841288044335,
+    "atr14_pct": 3.8405451528619703,
+    "boll_position": 0.695613146748884,
+    "return_5d_pct": -1.2474713418745842,
+    "return_20d_pct": 10.180091221140742,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": 9.63
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": 5.46
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -87,17 +101,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 56.7,
-      "average_return_pct": 0.16,
-      "median_return_pct": 0.61,
-      "best_return_pct": 4.74,
-      "worst_return_pct": -6.35
+      "average_return_pct": 0.4,
+      "median_return_pct": 0.36,
+      "best_return_pct": 4.83,
+      "worst_return_pct": -5.84
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.26,
-      "median_return_pct": 0.69,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.78,
+      "median_return_pct": 1.09,
       "best_return_pct": 7.05,
-      "worst_return_pct": -6.5
+      "worst_return_pct": -4.5
     }
   },
   "fundamental": null,

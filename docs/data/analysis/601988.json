@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "601988",
   "name": "中国银行",
   "type": "stock",
   "category": "银行",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "economical",
+    "alpha": 0.0007448053954975254,
+    "alpha_p_value": 0.018740561466428007,
+    "information_ratio": 0.06634254424180613,
+    "betas": {
+      "MKT": -0.005533624196298427,
+      "SMB": 0.12393042032827851,
+      "HML": 0.0365816886698332,
+      "MOM": -0.09812978851501208
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 42.7,
-    "risk": 28.0,
+    "risk_adjusted": 43.7,
+    "risk": 29.9,
     "technical": 71.0,
-    "industry": 43.8
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 25.75,
+    "annualized_volatility_20d_pct": 24.67,
     "max_drawdown_60d_pct": -11.53,
-    "atr14_pct": 2.26,
+    "atr14_pct": 2.16,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 30.2,
-        "value": 25.75
+        "score": 34.7,
+        "value": 24.67
       },
       {
         "name": "60日最大回撤",
-        "score": 28.2,
+        "score": 28.7,
         "value": -11.53
       },
       {
         "name": "ATR百分比",
-        "score": 31.2,
-        "value": 2.26
+        "score": 27.7,
+        "value": 2.16
       },
       {
         "name": "量价异常",
-        "score": 54.0,
-        "value": 0.76
+        "score": 65.8,
+        "value": 0.73
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.02,
-    "return_5d_pct": 0.03,
-    "up_probability_3d_pct": 43.3,
+    "return_3d_pct": -0.04,
+    "return_5d_pct": 0.09,
+    "up_probability_3d_pct": 40.0,
     "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 5.872000000000001,
-    "ma10": 5.8500000000000005,
-    "ma20": 5.9345,
-    "ma60": 5.847666666666666,
-    "rsi14": 50.0,
-    "macd_dif": 0.0034494631420241006,
-    "macd_dea": 0.015394444881622471,
-    "macd_hist": -0.02388996347919674,
-    "atr14_pct": 2.2587183361449785,
-    "boll_position": 0.3824502482462621,
-    "return_5d_pct": 1.906412478336228,
-    "return_20d_pct": -1.342281879194629,
-    "volume_ratio_5d": 0.76
+    "ma5": 5.888,
+    "ma10": 5.837,
+    "ma20": 5.9255,
+    "ma60": 5.850333333333333,
+    "rsi14": 51.0,
+    "macd_dif": 0.004503964734038135,
+    "macd_dea": 0.013216348852105604,
+    "macd_hist": -0.017424768236134938,
+    "atr14_pct": 2.1629107701564423,
+    "boll_position": 0.4426460665324479,
+    "return_5d_pct": 1.3745704467353903,
+    "return_20d_pct": -2.960526315789469,
+    "volume_ratio_5d": 0.73
   },
   "industry": {
     "name": "银行",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -5.59
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -8.43
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,16 +100,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.02,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.04,
       "median_return_pct": 0.0,
       "best_return_pct": 2.85,
       "worst_return_pct": -2.98
     },
     "horizon_5d": {
       "up_probability_pct": 50.0,
-      "average_return_pct": 0.03,
-      "median_return_pct": 0.14,
+      "average_return_pct": 0.09,
+      "median_return_pct": 0.09,
       "best_return_pct": 5.56,
       "worst_return_pct": -4.78
     }

@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "600886",
   "name": "国投电力",
   "type": "stock",
   "category": "电力",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.00044864422413616215,
+    "alpha_p_value": 0.3199516442469026,
+    "information_ratio": 0.02742521939097558,
+    "betas": {
+      "MKT": 0.01629765947329142,
+      "SMB": -0.1015685154802368,
+      "HML": 0.1243521617796278,
+      "MOM": -0.01250944549017242
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 57.4,
-    "risk": 27.2,
+    "risk_adjusted": 57.5,
+    "risk": 27.0,
     "technical": 50.0,
-    "industry": 40.0
+    "industry": 43.0
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 20.15,
+    "annualized_volatility_20d_pct": 19.63,
     "max_drawdown_60d_pct": -10.42,
     "atr14_pct": 2.25,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 19.8,
-        "value": 20.15
+        "score": 18.8,
+        "value": 19.63
       },
       {
         "name": "60日最大回撤",
-        "score": 22.3,
+        "score": 22.8,
         "value": -10.42
       },
       {
         "name": "ATR百分比",
-        "score": 30.7,
+        "score": 32.2,
         "value": 2.25
       },
       {
         "name": "量价异常",
-        "score": 93.1,
-        "value": 0.6
+        "score": 91.1,
+        "value": 0.62
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.29,
-    "return_5d_pct": 1.89,
-    "up_probability_3d_pct": 70.0,
+    "return_3d_pct": 0.8,
+    "return_5d_pct": 1.47,
+    "up_probability_3d_pct": 60.0,
     "up_probability_5d_pct": 66.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 14.053999999999998,
-    "ma10": 14.237,
-    "ma20": 14.407,
-    "ma60": 13.633000000000001,
-    "rsi14": 41.9,
-    "macd_dif": 0.0766448221003948,
-    "macd_dea": 0.2060626745528269,
-    "macd_hist": -0.2588357049048642,
-    "atr14_pct": 2.2508509093892632,
-    "boll_position": -0.04659210984625291,
-    "return_5d_pct": -3.162333099086445,
-    "return_20d_pct": -3.3660589060308554,
-    "volume_ratio_5d": 0.6
+    "ma5": 13.972,
+    "ma10": 14.151999999999997,
+    "ma20": 14.377500000000001,
+    "ma60": 13.649,
+    "rsi14": 43.9,
+    "macd_dif": 0.04460806623899494,
+    "macd_dea": 0.17377175289006053,
+    "macd_hist": -0.2583273733021312,
+    "atr14_pct": 2.2548604017947014,
+    "boll_position": 0.07620062691478098,
+    "return_5d_pct": -2.8751753155680237,
+    "return_20d_pct": -4.085872576177286,
+    "volume_ratio_5d": 0.62
   },
   "industry": {
     "name": "电力",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -7.62
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -9.55
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 70.0,
-      "average_return_pct": 1.29,
-      "median_return_pct": 1.13,
-      "best_return_pct": 6.17,
-      "worst_return_pct": -1.82
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.8,
+      "median_return_pct": 0.48,
+      "best_return_pct": 5.33,
+      "worst_return_pct": -2.85
     },
     "horizon_5d": {
       "up_probability_pct": 66.7,
-      "average_return_pct": 1.89,
-      "median_return_pct": 1.8,
+      "average_return_pct": 1.47,
+      "median_return_pct": 1.41,
       "best_return_pct": 8.31,
-      "worst_return_pct": -4.05
+      "worst_return_pct": -4.96
     }
   },
   "fundamental": {

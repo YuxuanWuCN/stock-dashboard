@@ -1,17 +1,31 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
+  "generated_at": "2026-08-17 21:38:03+08:00",
   "trade_date": "2026-08-14",
   "code": "035720",
   "name": "Kakao",
   "type": "kr",
   "category": "互联网",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.0009524872234981519,
+    "alpha_p_value": 0.2178530756785968,
+    "information_ratio": -0.03567615029545698,
+    "betas": {
+      "MKT": -0.00639147413996187,
+      "SMB": 0.06984891801032807,
+      "HML": 0.354791388824501,
+      "MOM": -0.028869211670866167
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
     "risk_adjusted": 30.6,
-    "risk": 64.7,
+    "risk": 65.3,
     "technical": 85.0,
-    "industry": 62.0
+    "industry": 65.0
   },
   "risk": {
     "level": "medium",
@@ -22,12 +36,12 @@
     "factors": [
       {
         "name": "20日波动率",
-        "score": 62.4,
+        "score": 62.9,
         "value": 37.03
       },
       {
         "name": "60日最大回撤",
-        "score": 61.4,
+        "score": 62.9,
         "value": -22.37
       },
       {
@@ -37,13 +51,13 @@
       },
       {
         "name": "量价异常",
-        "score": 6.9,
+        "score": 7.9,
         "value": 0.98
       },
       {
         "name": "行业波动",
         "score": 95.0,
-        "value": 40.47
+        "value": 40.51
       }
     ]
   },
@@ -66,7 +80,7 @@
     "macd_dea": 568.1285764096697,
     "macd_hist": 789.8152880165844,
     "atr14_pct": 4.644791769655343,
-    "boll_position": 0.8309589898966039,
+    "boll_position": 0.8309589898956762,
     "return_5d_pct": 0.25062656641603454,
     "return_20d_pct": 11.420612813370479,
     "volume_ratio_5d": 0.98
@@ -75,10 +89,10 @@
     "name": "互联网",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -3.32,
-    "return_60d_pct": -8.17,
-    "relative_strength_20d_pct": 12.8
+    "return_5d_pct": 0.3,
+    "return_20d_pct": -0.93,
+    "return_60d_pct": -7.57,
+    "relative_strength_20d_pct": 12.35
   },
   "similarity": {
     "method": "standardized_knn_v1",

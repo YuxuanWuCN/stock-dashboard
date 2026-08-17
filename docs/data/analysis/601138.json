@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "601138",
   "name": "工业富联",
   "type": "stock",
   "category": "科技",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "economical",
+    "alpha": 0.0019833157155505366,
+    "alpha_p_value": 0.03958338450302956,
+    "information_ratio": 0.061752002624604826,
+    "betas": {
+      "MKT": -0.00044609670377564203,
+      "SMB": -0.23522754664141038,
+      "HML": 0.22216658988363605,
+      "MOM": 0.11153263094510518
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 45.4,
-    "risk": 65.0,
+    "risk_adjusted": 43.4,
+    "risk": 65.3,
     "technical": 85.0,
-    "industry": 70.0
+    "industry": 73.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 70.12,
+    "annualized_volatility_20d_pct": 69.77,
     "max_drawdown_60d_pct": -33.62,
-    "atr14_pct": 5.37,
+    "atr14_pct": 5.08,
     "factors": [
       {
         "name": "20日波动率",
         "score": 86.6,
-        "value": 70.12
+        "value": 69.77
       },
       {
         "name": "60日最大回撤",
-        "score": 80.7,
+        "score": 81.2,
         "value": -33.62
       },
       {
         "name": "ATR百分比",
-        "score": 82.2,
-        "value": 5.37
+        "score": 81.7,
+        "value": 5.08
       },
       {
         "name": "量价异常",
-        "score": 21.8,
+        "score": 25.7,
         "value": 0.9
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.38,
-    "return_5d_pct": 0.67,
+    "return_3d_pct": -0.25,
+    "return_5d_pct": 0.33,
     "up_probability_3d_pct": 40.0,
-    "up_probability_5d_pct": 50.0,
+    "up_probability_5d_pct": 53.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 66.44200000000001,
-    "ma10": 65.04100000000001,
-    "ma20": 61.64200000000001,
-    "ma60": 67.106,
-    "rsi14": 54.5,
-    "macd_dif": 0.6509846638327303,
-    "macd_dea": -0.3384627790048258,
-    "macd_hist": 1.9788948856751123,
-    "atr14_pct": 5.3720966348380985,
-    "boll_position": 0.7394820938934737,
-    "return_5d_pct": -2.918744499853343,
-    "return_20d_pct": 16.2655893202178,
+    "ma5": 66.252,
+    "ma10": 66.274,
+    "ma20": 62.26099999999999,
+    "ma60": 67.13666666666667,
+    "rsi14": 57.8,
+    "macd_dif": 0.9047815191764812,
+    "macd_dea": -0.08981391936856437,
+    "macd_hist": 1.989190877090091,
+    "atr14_pct": 5.081057757772176,
+    "boll_position": 0.8135459983717783,
+    "return_5d_pct": -1.3732292570106996,
+    "return_20d_pct": 22.166517457475376,
     "volume_ratio_5d": 0.9
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": 12.02
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": 16.7
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -87,17 +101,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 40.0,
-      "average_return_pct": -0.38,
-      "median_return_pct": -1.1,
-      "best_return_pct": 18.42,
-      "worst_return_pct": -10.74
+      "average_return_pct": -0.25,
+      "median_return_pct": -1.44,
+      "best_return_pct": 21.73,
+      "worst_return_pct": -10.86
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.67,
-      "median_return_pct": 0.53,
-      "best_return_pct": 26.42,
-      "worst_return_pct": -12.36
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.33,
+      "median_return_pct": 1.02,
+      "best_return_pct": 20.99,
+      "worst_return_pct": -13.47
     }
   },
   "fundamental": {
@@ -243,7 +257,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 70.1%，波动偏高。",
+      "detail": "20日年化波动率 69.8%，波动偏高。",
       "contribution": -5.0
     }
   ],

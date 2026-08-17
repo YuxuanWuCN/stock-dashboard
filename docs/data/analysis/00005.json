@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "00005",
   "name": "汇丰控股",
   "type": "hk",
   "category": "银行",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "economical",
+    "alpha": 0.0010999655620135063,
+    "alpha_p_value": 0.022545539936667185,
+    "information_ratio": 0.07016809660452125,
+    "betas": {
+      "MKT": 0.007855253779552002,
+      "SMB": -0.014640099541811856,
+      "HML": -0.11788825142114759,
+      "MOM": 0.01930508035848369
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 54.2,
-    "risk": 25.4,
-    "technical": 70.0,
-    "industry": 51.5
+    "risk_adjusted": 45.5,
+    "risk": 27.6,
+    "technical": 88.0,
+    "industry": 54.3
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 18.98,
+    "annualized_volatility_20d_pct": 19.68,
     "max_drawdown_60d_pct": -8.08,
-    "atr14_pct": 1.69,
+    "atr14_pct": 1.68,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 12.9,
-        "value": 18.98
+        "score": 19.3,
+        "value": 19.68
       },
       {
         "name": "60日最大回撤",
-        "score": 10.4,
+        "score": 9.9,
         "value": -8.08
       },
       {
         "name": "ATR百分比",
-        "score": 7.9,
-        "value": 1.69
+        "score": 8.9,
+        "value": 1.68
       },
       {
         "name": "量价异常",
-        "score": 95.5,
+        "score": 97.5,
         "value": 0.56
       },
       {
         "name": "行业波动",
         "score": 52.0,
-        "value": 34.1
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.94,
-    "return_5d_pct": 0.54,
-    "up_probability_3d_pct": 76.7,
-    "up_probability_5d_pct": 63.3,
+    "return_3d_pct": 0.45,
+    "return_5d_pct": -0.34,
+    "up_probability_3d_pct": 60.0,
+    "up_probability_5d_pct": 60.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 161.88,
-    "ma10": 162.75,
-    "ma20": 162.29000000000002,
-    "ma60": 152.45499999999998,
-    "rsi14": 52.9,
-    "macd_dif": 2.1410753484029783,
-    "macd_dea": 2.978330783566278,
-    "macd_hist": -1.674510870326599,
-    "atr14_pct": 1.6927366124530083,
-    "boll_position": 0.37412163830442263,
-    "return_5d_pct": -0.2481389578163684,
-    "return_20d_pct": 2.48565965583174,
+    "trend": "uptrend",
+    "ma5": 162.08,
+    "ma10": 162.28,
+    "ma20": 162.575,
+    "ma60": 152.86833333333334,
+    "rsi14": 58.6,
+    "macd_dif": 2.100323922878488,
+    "macd_dea": 2.8027294114287202,
+    "macd_hist": -1.4048109771004649,
+    "atr14_pct": 1.681300399594482,
+    "boll_position": 0.5831163980269698,
+    "return_5d_pct": 0.6153846153846176,
+    "return_20d_pct": 3.6121673003802313,
     "volume_ratio_5d": 0.56
   },
   "industry": {
     "name": "银行",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -7.99,
-    "relative_strength_20d_pct": -1.76
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -7.81,
+    "relative_strength_20d_pct": -1.85
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,27 +100,27 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 76.7,
-      "average_return_pct": 0.94,
-      "median_return_pct": 2.01,
-      "best_return_pct": 6.25,
-      "worst_return_pct": -17.3
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.45,
+      "median_return_pct": 1.13,
+      "best_return_pct": 3.63,
+      "worst_return_pct": -5.48
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 0.54,
-      "median_return_pct": 2.09,
-      "best_return_pct": 9.68,
-      "worst_return_pct": -19.21
+      "up_probability_pct": 60.0,
+      "average_return_pct": -0.34,
+      "median_return_pct": 0.69,
+      "best_return_pct": 7.25,
+      "worst_return_pct": -17.94
     }
   },
   "fundamental": null,
   "reasons": [
     {
       "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     }
   ],
   "kline_file": "../kline/00005.json",

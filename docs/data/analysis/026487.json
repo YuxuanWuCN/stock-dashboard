@@ -1,29 +1,38 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-14",
   "code": "026487",
   "name": "大成竞先成长混合C",
   "type": "etf",
   "category": "",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 36.7,
-    "risk": 69.5,
-    "technical": 91.0,
-    "industry": 40.0
+    "risk_adjusted": 36.3,
+    "risk": 68.5,
+    "technical": 83.0,
+    "industry": 43.0
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 57.27,
+    "annualized_volatility_20d_pct": 53.83,
     "max_drawdown_60d_pct": -37.5,
-    "atr14_pct": 2.7,
+    "atr14_pct": 2.55,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 78.7,
-        "value": 57.27
+        "score": 76.2,
+        "value": 53.83
       },
       {
         "name": "60日最大回撤",
@@ -32,8 +41,8 @@
       },
       {
         "name": "ATR百分比",
-        "score": 42.1,
-        "value": 2.7
+        "score": 40.6,
+        "value": 2.55
       },
       {
         "name": "量价异常",
@@ -43,7 +52,7 @@
       {
         "name": "行业波动",
         "score": 72.3,
-        "value": 39.33
+        "value": 34.1
       }
     ]
   },
@@ -57,28 +66,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 1.048,
-    "ma10": 1.024,
-    "ma20": 1.0365,
-    "ma60": 1.1911666666666667,
-    "rsi14": 43.6,
-    "macd_dif": -0.042817606583001266,
-    "macd_dea": -0.05508495553796612,
-    "macd_hist": 0.02453469790992971,
-    "atr14_pct": 2.701437077193649,
-    "boll_position": 0.5200593653166576,
-    "return_5d_pct": 0.9708737864077666,
-    "return_20d_pct": -11.111111111111105,
+    "ma5": 1.046,
+    "ma10": 1.032,
+    "ma20": 1.034,
+    "ma60": 1.191,
+    "rsi14": 45.1,
+    "macd_dif": -0.03894045296543314,
+    "macd_dea": -0.051856055023459524,
+    "macd_hist": 0.025831204116052775,
+    "atr14_pct": 2.5526142369835467,
+    "boll_position": 0.5969003166223025,
+    "return_5d_pct": -0.9433962264150941,
+    "return_20d_pct": -4.545454545454552,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "深证成指",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -9.74
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -9.27
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -117,7 +126,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 57.3%，波动偏高。",
+      "detail": "20日年化波动率 53.8%，波动偏高。",
       "contribution": -5.0
     }
   ],

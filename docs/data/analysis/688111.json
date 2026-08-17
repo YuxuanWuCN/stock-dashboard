@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "688111",
   "name": "金山办公",
   "type": "stock",
   "category": "科技",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.00021034933395629895,
+    "alpha_p_value": 0.8360432986156212,
+    "information_ratio": 0.006081474168519754,
+    "betas": {
+      "MKT": -0.024458382597033868,
+      "SMB": -0.10766991517163263,
+      "HML": -0.06547031593891976,
+      "MOM": -0.2719210518004467
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 43.2,
-    "risk": 61.8,
-    "technical": 80.0,
-    "industry": 70.0
+    "risk_adjusted": 37.0,
+    "risk": 60.1,
+    "technical": 70.0,
+    "industry": 58.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 55.0,
+    "annualized_volatility_20d_pct": 45.3,
     "max_drawdown_60d_pct": -23.72,
-    "atr14_pct": 5.15,
+    "atr14_pct": 5.05,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 76.2,
-        "value": 55.0
+        "score": 70.3,
+        "value": 45.3
       },
       {
         "name": "60日最大回撤",
-        "score": 66.3,
+        "score": 67.3,
         "value": -23.72
       },
       {
         "name": "ATR百分比",
         "score": 81.2,
-        "value": 5.15
+        "value": 5.05
       },
       {
         "name": "量价异常",
-        "score": 58.9,
-        "value": 0.74
+        "score": 58.4,
+        "value": 0.76
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.88,
-    "return_5d_pct": 0.5,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 43.3,
+    "return_3d_pct": -0.4,
+    "return_5d_pct": 0.04,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 259.08599999999996,
-    "ma10": 265.579,
-    "ma20": 255.112,
-    "ma60": 234.79766666666666,
-    "rsi14": 54.2,
-    "macd_dif": 7.882233880212567,
-    "macd_dea": 9.349921161770823,
-    "macd_hist": -2.935374563116511,
-    "atr14_pct": 5.149278966049454,
-    "boll_position": 0.5240292208940185,
-    "return_5d_pct": -3.463203463203457,
-    "return_20d_pct": 14.7427293064877,
-    "volume_ratio_5d": 0.74
+    "trend": "rebound",
+    "ma5": 257.654,
+    "ma10": 263.722,
+    "ma20": 255.6705,
+    "ma60": 235.04333333333335,
+    "rsi14": 53.4,
+    "macd_dif": 7.031252136217404,
+    "macd_dea": 8.88618735666014,
+    "macd_hist": -3.709870440885471,
+    "atr14_pct": 5.051766051005541,
+    "boll_position": 0.49579276161368785,
+    "return_5d_pct": -2.7265803503427333,
+    "return_20d_pct": 4.572808777172788,
+    "volume_ratio_5d": 0.76
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": 10.49
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -0.89
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.88,
-      "median_return_pct": 0.25,
-      "best_return_pct": 12.34,
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.4,
+      "median_return_pct": -1.11,
+      "best_return_pct": 12.59,
       "worst_return_pct": -7.6
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.5,
-      "median_return_pct": -0.36,
-      "best_return_pct": 16.52,
-      "worst_return_pct": -11.08
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.04,
+      "median_return_pct": -0.11,
+      "best_return_pct": 18.03,
+      "worst_return_pct": -12.39
     }
   },
   "fundamental": {
@@ -223,12 +237,6 @@
   },
   "reasons": [
     {
-      "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
-    },
-    {
       "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 23.7%，风险偏高。",
@@ -241,9 +249,15 @@
       "contribution": -7.0
     },
     {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    },
+    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 55.0%，波动偏高。",
+      "detail": "20日年化波动率 45.3%，波动偏高。",
       "contribution": -5.0
     }
   ],

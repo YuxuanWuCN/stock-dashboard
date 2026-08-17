@@ -1,84 +1,98 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-14 18:16:44+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-17 21:38:03+08:00",
+  "trade_date": "2026-08-17",
   "code": "601857",
   "name": "中国石油",
   "type": "stock",
   "category": "能源",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0010184356990371546,
+    "alpha_p_value": 0.07474430495152648,
+    "information_ratio": 0.05104302375301219,
+    "betas": {
+      "MKT": -0.020618219098879825,
+      "SMB": 0.049522502750990106,
+      "HML": 0.12333468786781436,
+      "MOM": -0.1258015837047441
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 36.3,
-    "risk": 50.8,
-    "technical": 65.0,
-    "industry": 55.0
+    "risk_adjusted": 35.2,
+    "risk": 44.2,
+    "technical": 58.0,
+    "industry": 43.0
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 38.46,
-    "max_drawdown_60d_pct": -19.41,
-    "atr14_pct": 2.99,
+    "annualized_volatility_20d_pct": 29.35,
+    "max_drawdown_60d_pct": -18.57,
+    "atr14_pct": 2.86,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 62.9,
-        "value": 38.46
+        "score": 49.5,
+        "value": 29.35
       },
       {
         "name": "60日最大回撤",
-        "score": 56.9,
-        "value": -19.41
+        "score": 54.0,
+        "value": -18.57
       },
       {
         "name": "ATR百分比",
-        "score": 51.0,
-        "value": 2.99
+        "score": 46.5,
+        "value": 2.86
       },
       {
         "name": "量价异常",
-        "score": 72.8,
-        "value": 0.7
+        "score": 63.9,
+        "value": 0.74
       },
       {
         "name": "行业波动",
-        "score": 1.5,
-        "value": 34.1
+        "score": 1.0,
+        "value": 33.93
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.14,
-    "return_5d_pct": -0.03,
-    "up_probability_3d_pct": 60.0,
+    "return_3d_pct": 0.64,
+    "return_5d_pct": -0.08,
+    "up_probability_3d_pct": 53.3,
     "up_probability_5d_pct": 46.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 10.758,
-    "ma10": 10.778,
-    "ma20": 10.8765,
-    "ma60": 10.132333333333333,
-    "rsi14": 52.0,
-    "macd_dif": 0.1674363924055342,
-    "macd_dea": 0.2402565859156357,
-    "macd_hist": -0.145640387020203,
-    "atr14_pct": 2.9913291518928338,
-    "boll_position": 0.21115457898763643,
-    "return_5d_pct": -1.021355617455888,
-    "return_20d_pct": 3.5957240038872795,
-    "volume_ratio_5d": 0.7
+    "ma5": 10.722,
+    "ma10": 10.739999999999998,
+    "ma20": 10.8595,
+    "ma60": 10.130666666666666,
+    "rsi14": 52.2,
+    "macd_dif": 0.148870706676691,
+    "macd_dea": 0.22197941006784677,
+    "macd_hist": -0.14621740678231154,
+    "atr14_pct": 2.8620859142409216,
+    "boll_position": 0.2505360699275889,
+    "return_5d_pct": -1.6589861751152069,
+    "return_20d_pct": -3.0881017257039067,
+    "volume_ratio_5d": 0.74
   },
   "industry": {
     "name": "能源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 1.27,
-    "return_20d_pct": -1.37,
-    "return_60d_pct": -8.22,
-    "relative_strength_20d_pct": -0.65
+    "return_5d_pct": 0.3,
+    "return_20d_pct": 4.72,
+    "return_60d_pct": -5.86,
+    "relative_strength_20d_pct": -8.56
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -86,18 +100,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.14,
-      "median_return_pct": 0.96,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.64,
+      "median_return_pct": 0.8,
       "best_return_pct": 7.82,
-      "worst_return_pct": -6.78
+      "worst_return_pct": -5.19
     },
     "horizon_5d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": -0.03,
-      "median_return_pct": -0.42,
+      "average_return_pct": -0.08,
+      "median_return_pct": -0.38,
       "best_return_pct": 10.96,
-      "worst_return_pct": -10.18
+      "worst_return_pct": -8.25
     }
   },
   "fundamental": {
@@ -231,13 +245,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 19.4%，风险偏高。",
+      "detail": "近60日最大回撤 18.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 19.4%，风险扣分。",
+      "detail": "近60日最大回撤 18.6%，风险扣分。",
       "contribution": -7.0
     },
     {
