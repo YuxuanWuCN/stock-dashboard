@@ -57,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
         lastQueryStock: null,
         // v2.5 策略数据
         selection: null,
-        betTypes: null,
         huntingGround: null,
         marketTemperature: null,
         // v2.10 明日重点关注
@@ -361,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function init() {
         try {
             // 并行加载元数据、汇总、排行榜、自选股与 v2.5 策略数据
-            const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes, briefRes, manifestRes, betTypesRes] = await Promise.all([
+            const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes, briefRes, manifestRes] = await Promise.all([
                 fetch(dataUrl('data/meta.json')).then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
                     return null;
@@ -418,13 +417,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).catch(err => {
                     console.warn('模拟盘清单未加载（可跳过）:', err);
                     return null;
-                }),
-                fetch(dataUrl('data/analysis/bet_types.json')).then(r => {
-                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-                    return r.json();
-                }).catch(err => {
-                    console.warn('赌注类型数据未加载（可跳过）:', err);
-                    return null;
                 })
             ]);
 
@@ -436,7 +428,6 @@ document.addEventListener('DOMContentLoaded', () => {
             state.marketTemperature = tempRes;
             state.dailyBrief = briefRes;
             state.paperManifest = manifestRes;
-            state.betTypes = betTypesRes && betTypesRes.bet_types ? betTypesRes.bet_types : {};
             state.paperSeries = [];
             state.watchlist = combineWatchlists(
                 watchlistRes && watchlistRes.items,
@@ -1398,12 +1389,6 @@ document.addEventListener('DOMContentLoaded', () => {
         highlightRankingSelection();
     }
 
-    function betTypeBadgeHtml(code) {
-        var bt = state.betTypes && state.betTypes[code];
-        if (!bt) return '';
-        return '<span class="bet-badge bet-' + (bt.color || 'range') + '">' + escapeHtml(bt.short || bt.label || '') + '</span>';
-    }
-
     function renderRankingTableRow(item, rank) {
         var tr = document.createElement('tr');
         tr.tabIndex = 0;
@@ -1415,7 +1400,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tr.innerHTML = '<td class="ranking-number ' + (rank <= 3 ? 'top-three' : '') + '">' + rank + '</td>'
             + '<td><span class="ranking-stock-name">' + escapeHtml(item.name) + '</span>'
-            + '<span class="ranking-stock-meta"><span>' + escapeHtml(item.code) + '</span><span>' + escapeHtml(displayCategory(item)) + '</span>' + betTypeBadgeHtml(item.code) + '</span></td>'
+            + '<span class="ranking-stock-meta"><span>' + escapeHtml(item.code) + '</span><span>' + escapeHtml(displayCategory(item)) + '</span></span></td>'
             + '<td><span class="score-value">' + formatScore(item.risk_adjusted_score) + '</span></td>'
             + '<td>' + formatForecastHtml(item.forecast && item.forecast.return_3d_pct) + '</td>'
             + '<td>' + formatForecastHtml(item.forecast && item.forecast.return_5d_pct) + '</td>'
@@ -1439,7 +1424,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.dataset.analysisCode = item.code;
         var risk = item.risk || {};
         button.innerHTML = '<div class="ranking-mobile-top">'
-            + '<div class="ranking-mobile-name">' + rank + '. ' + escapeHtml(item.name) + ' ' + betTypeBadgeHtml(item.code)
+            + '<div class="ranking-mobile-name">' + rank + '. ' + escapeHtml(item.name)
             + '<small>' + escapeHtml(item.code) + ' · ' + escapeHtml(displayCategory(item)) + '</small></div>'
             + '<span class="risk-badge ' + riskClass(risk.level) + '">' + escapeHtml(risk.label || '未知风险') + '</span>'
             + '</div>'
@@ -1861,6 +1846,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 + '；当前技术状态为' + trendLabel(detail.technical && detail.technical.trend) + '。';
         } else {
             el.analysisSummary.textContent = '历史相似样本不足，当前仅展示风险和技术状态。';
+        }
+
+        // 赌注类型与策略建议（师门框架融合 v2.6）
+        var betInfo = state.betTypes && detail.code ? state.betTypes[detail.code] : null;
+        if (betInfo) {
+            el.analysisSummary.textContent += ' ｜ ' + betInfo.advice;
         }
 
         el.analysisRiskBadge.className = 'risk-badge ' + riskClass(risk.level);
