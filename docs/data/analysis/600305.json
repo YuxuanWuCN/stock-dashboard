@@ -1,0 +1,262 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-21 10:35:19+08:00",
+  "trade_date": "2026-08-20",
+  "code": "600305",
+  "name": "恒顺醋业",
+  "type": "stock",
+  "category": "食醋调味品",
+  "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.0005667896758848844,
+    "alpha_p_value": 0.20779506663332492,
+    "information_ratio": -0.03498028537850988,
+    "betas": {
+      "MKT": -0.007790366356284106,
+      "SMB": -0.010642531049159886,
+      "HML": 0.01517256955075835,
+      "MOM": 0.13382266700754755
+    },
+    "window_end": "2026-05-28"
+  },
+  "scores": {
+    "risk_adjusted": 47.7,
+    "risk": 22.1,
+    "technical": 58.0,
+    "industry": 50.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 10:32:29"
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 21.14,
+    "max_drawdown_60d_pct": -11.99,
+    "atr14_pct": 2.24,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 21.0,
+        "value": 21.14
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 28.0,
+        "value": -11.99
+      },
+      {
+        "name": "ATR百分比",
+        "score": 27.0,
+        "value": 2.24
+      },
+      {
+        "name": "量价异常",
+        "score": 14.5,
+        "value": 0.94
+      },
+      {
+        "name": "行业波动",
+        "score": 13.0,
+        "value": 35.41
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.18,
+    "return_5d_pct": 0.31,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 46.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 6.789999999999999,
+    "ma10": 6.840999999999999,
+    "ma20": 6.877999999999998,
+    "ma60": 6.750666666666666,
+    "rsi14": 44.2,
+    "macd_dif": 0.007004978692487285,
+    "macd_dea": 0.035109558436585704,
+    "macd_hist": -0.05620915948819684,
+    "atr14_pct": 2.238872207961002,
+    "boll_position": 0.21196260154019694,
+    "return_5d_pct": -2.60869565217392,
+    "return_20d_pct": -0.4444444444444473,
+    "volume_ratio_5d": 0.94
+  },
+  "industry": {
+    "name": "食醋调味品",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": 0.62
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.18,
+      "median_return_pct": -0.07,
+      "best_return_pct": 6.85,
+      "worst_return_pct": -4.43
+    },
+    "horizon_5d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.31,
+      "median_return_pct": -0.13,
+      "best_return_pct": 11.53,
+      "worst_return_pct": -6.77
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-06-30",
+    "score": 41.9,
+    "dimensions": {
+      "asset_quality": 50.0,
+      "liability_safety": 63.0,
+      "profit_quality": 38.0,
+      "cash_health": 8.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 4048211570.72,
+      "total_assets_yoy": -2.133659577,
+      "inventory": 270876084.61,
+      "prepayment": 9828648.72,
+      "receivable": 21973287.02,
+      "inventory_prepay_ratio": 0.06934043056452086,
+      "receivable_revenue": 0.035894388326383184,
+      "goodwill_equity": null,
+      "debt_ratio": 0.17216960838734965,
+      "short_debt_ratio": 0.0020731968084281484,
+      "roe": 0.03618084291230639,
+      "gross_margin": 10.573975771884777,
+      "deduct_ratio": 0.9757601090726151,
+      "netprofit_yoy": 9.7056568146,
+      "ocf_np_ratio": -0.0694169865898068,
+      "financing_debt": -0.20121155525350226,
+      "retained_profit_equity": 0.3386734485053793
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +-2.1%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 6.9%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "positive",
+          "title": "回款效率良好",
+          "detail": "应收账款/营收 3.6%，回款健康。",
+          "contribution": 3.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 17.2%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 0.2%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 3.6%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +9.7%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 97.6%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 33.9%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "negative",
+          "title": "经营现金流为负",
+          "detail": "经营现金流/净利润 -0.07，账面利润缺乏现金支撑，警惕应收与存货占款。",
+          "contribution": -45.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -20.1%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "净利润同比 +9.7%",
+      "negative_view": "经营现金流/净利润 -0.07，利润兑现存疑",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    }
+  },
+  "reasons": [],
+  "kline_file": "../kline/600305.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

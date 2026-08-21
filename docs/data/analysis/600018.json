@@ -1,0 +1,269 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-21 10:35:19+08:00",
+  "trade_date": "2026-08-20",
+  "code": "600018",
+  "name": "上港集团",
+  "type": "stock",
+  "category": "集装箱港口",
+  "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 8.107681975257643e-05,
+    "alpha_p_value": 0.8488038495349821,
+    "information_ratio": 0.005472360925263651,
+    "betas": {
+      "MKT": -0.006299733216045459,
+      "SMB": 0.06356297873720428,
+      "HML": 0.11314405748420217,
+      "MOM": -0.05613445862234297
+    },
+    "window_end": "2026-05-28"
+  },
+  "scores": {
+    "risk_adjusted": 36.8,
+    "risk": 8.7,
+    "technical": 80.0,
+    "industry": 54.4,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 10:23:54"
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 12.47,
+    "max_drawdown_60d_pct": -8.2,
+    "atr14_pct": 1.61,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 0.5,
+        "value": 12.47
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 5.0,
+        "value": -8.2
+      },
+      {
+        "name": "ATR百分比",
+        "score": 4.0,
+        "value": 1.61
+      },
+      {
+        "name": "量价异常",
+        "score": 45.5,
+        "value": 0.82
+      },
+      {
+        "name": "行业波动",
+        "score": 13.0,
+        "value": 35.41
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.6,
+    "return_5d_pct": -1.21,
+    "up_probability_3d_pct": 26.7,
+    "up_probability_5d_pct": 23.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 5.128,
+    "ma10": 5.133000000000001,
+    "ma20": 5.1674999999999995,
+    "ma60": 4.975499999999999,
+    "rsi14": 60.5,
+    "macd_dif": 0.03214576019868698,
+    "macd_dea": 0.044314346945614175,
+    "macd_hist": -0.02433717349385439,
+    "atr14_pct": 1.6149950018955306,
+    "boll_position": 0.6365835600659692,
+    "return_5d_pct": 1.9607843137255054,
+    "return_20d_pct": 0.38610038610038533,
+    "volume_ratio_5d": 0.82
+  },
+  "industry": {
+    "name": "集装箱港口",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": 1.45
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 26.7,
+      "average_return_pct": -0.6,
+      "median_return_pct": -0.84,
+      "best_return_pct": 2.58,
+      "worst_return_pct": -4.92
+    },
+    "horizon_5d": {
+      "up_probability_pct": 23.3,
+      "average_return_pct": -1.21,
+      "median_return_pct": -0.83,
+      "best_return_pct": 2.6,
+      "worst_return_pct": -5.53
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 44.3,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 63.0,
+      "profit_quality": 38.0,
+      "cash_health": 47.1
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 228542753593.06,
+      "total_assets_yoy": 5.7036503966,
+      "inventory": 6681968916.54,
+      "prepayment": 235380596.77,
+      "receivable": 4669044266.44,
+      "inventory_prepay_ratio": 0.030267201232846503,
+      "receivable_revenue": 0.9161809376443993,
+      "goodwill_equity": 0.002495286901527894,
+      "debt_ratio": 0.29085285718574855,
+      "short_debt_ratio": 0.1370173396887445,
+      "roe": 0.027588432051570896,
+      "gross_margin": 28.680837311469638,
+      "deduct_ratio": 0.979376064823159,
+      "netprofit_yoy": 5.2929864438,
+      "ocf_np_ratio": 0.8325135068988632,
+      "financing_debt": 0.026617421254720174,
+      "retained_profit_equity": 0.6743591891817989
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +5.7%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 3.0%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 91.6%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 29.1%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 13.7%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 2.8%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +5.3%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 97.9%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 67.4%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "warning",
+          "title": "现金流偏弱",
+          "detail": "经营现金流/净利润 0.83，利润兑现能力一般。",
+          "contribution": -5.9
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 2.7%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "净利润同比 +5.3%",
+      "negative_view": "经营现金流/净利润 0.83，利润兑现存疑；应收账款/营收 91.6%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    }
+  },
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/600018.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}
