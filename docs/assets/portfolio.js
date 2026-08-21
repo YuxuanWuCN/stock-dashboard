@@ -1,30 +1,32 @@
-// 📈 量化组合看板 - 数据加载与可视化
+// 📈 量化组合实盘看板 - 数据加载与可视化控制 (Pro版)
 
 document.addEventListener('DOMContentLoaded', () => {
     const state = {
         portfolios: {},
+        benchmark: null,
         sentiment: null,
         evolution: null,
         returnsChart: null,
-        currentPeriod: 7
+        currentPeriod: 'all' // 默认展示全部 60 天长跑
     };
 
     const portfolioConfig = {
-        aggressive: { name: '激进成长', color: '#ff2d55' },
-        robust: { name: '均衡稳健', color: '#5856d6' },
-        defensive: { name: '防御保守', color: '#34c759' },
-        tech: { name: '科技主题', color: '#007aff' },
-        bluechip: { name: '蓝筹价值', color: '#ff9500' },
-        global: { name: '全球配置', color: '#af52de' }
+        aggressive: { name: '激进成长', color: '#ef4444', desc: '高弹性 · 动量突破' },
+        robust:     { name: '妖股弹性', color: '#8b5cf6', desc: '高波动 · 短线择时' },
+        defensive:  { name: '稳健防守', color: '#10b981', desc: '低回撤 · 宏观对冲' },
+        tech:       { name: '科技主题', color: '#0284c7', desc: '算力/半导体成长' },
+        bluechip:   { name: '蓝筹价值', color: '#f59e0b', desc: '核心资产 · 稳健红利' },
+        global:     { name: '全球配置', color: '#6366f1', desc: '宽基指数 · 跨市场' },
+        benchmark:  { name: '全池等权基准', color: '#64748b', is_benchmark: true }
     };
 
-    // 初始化
     init();
 
     async function init() {
         showLoading();
         await Promise.all([
             loadPortfolios(),
+            loadBenchmark(),
             loadSentiment(),
             loadEvolution()
         ]);
@@ -32,79 +34,52 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showLoading() {
-        document.getElementById('update-time').textContent = '数据加载中...';
+        const ut = document.getElementById('update-time');
+        if (ut) ut.textContent = '数据加载中...';
     }
 
-    // 加载组合表现数据（优先从 manifest.json 动态加载基础组合与衍生变体）
     async function loadPortfolios() {
-        try {
-            const manifestRes = await fetch('data/quantitative/manifest.json');
-            if (manifestRes.ok) {
-                const manifest = await manifestRes.json();
-                if (manifest.portfolios && Array.isArray(manifest.portfolios)) {
-                    for (const p of manifest.portfolios) {
-                        if (p.is_benchmark) continue;
-                        const key = p.key;
-                        if (!portfolioConfig[key]) {
-                            portfolioConfig[key] = {
-                                name: p.name,
-                                color: p.color || (p.is_variant ? '#f59e0b' : '#3b82f6'),
-                                is_variant: !!p.is_variant,
-                                parent_strategy: p.parent_strategy || ''
-                            };
-                        }
-                        try {
-                            const res = await fetch(`data/quantitative/performance_${key}.json`);
-                            if (res.ok) {
-                                state.portfolios[key] = await res.json();
-                            }
-                        } catch (e) {
-                            console.warn(`加载 ${key} 失败:`, e);
-                        }
-                    }
-                    return;
-                }
-            }
-        } catch (err) {
-            console.info('未找到 manifest.json，回退到默认静态组合列表');
-        }
-
         const portfolioIds = ['aggressive', 'robust', 'defensive', 'tech', 'bluechip', 'global'];
         for (const id of portfolioIds) {
             try {
-                const response = await fetch(`data/quantitative/performance_${id}.json`);
+                const response = await fetch(`data/quantitative/performance_${id}.json?v=${Date.now()}`);
                 if (!response.ok) continue;
-                const data = await response.json();
-                state.portfolios[id] = data;
+                state.portfolios[id] = await response.json();
             } catch (error) {
                 console.warn(`加载 ${id} 失败:`, error);
             }
         }
     }
 
-    // 加载市场情绪数据
+    async function loadBenchmark() {
+        try {
+            const response = await fetch(`data/quantitative/benchmark.json?v=${Date.now()}`);
+            if (response.ok) {
+                state.benchmark = await response.json();
+            }
+        } catch (e) {
+            console.warn('加载基准失败:', e);
+        }
+    }
+
     async function loadSentiment() {
         try {
-            const response = await fetch('data/quantitative/latest_sentiment.json');
-            if (!response.ok) return;
-            state.sentiment = await response.json();
+            const response = await fetch(`data/quantitative/latest_sentiment.json?v=${Date.now()}`);
+            if (response.ok) state.sentiment = await response.json();
         } catch (error) {
             console.warn('加载市场情绪失败:', error);
         }
     }
 
-    // 加载策略进化数据
     async function loadEvolution() {
         try {
-            const response = await fetch('data/quantitative/latest_evolution.json');
-            if (!response.ok) return;
-            state.evolution = await response.json();
+            const response = await fetch(`data/quantitative/latest_evolution.json?v=${Date.now()}`);
+            if (response.ok) state.evolution = await response.json();
         } catch (error) {
             console.warn('加载策略进化失败:', error);
         }
     }
 
-    // 渲染全部内容
     function render() {
         renderUpdateTime();
         renderSentiment();
@@ -119,76 +94,67 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(p => p.history && p.history.length > 0 ? p.history[p.history.length - 1].date : null)
             .filter(Boolean);
 
-        if (dates.length > 0) {
-            const latestDate = dates.sort().reverse()[0];
-            document.getElementById('update-time').textContent = `数据更新至: ${latestDate}`;
-        } else {
-            document.getElementById('update-time').textContent = '暂无数据';
+        const el = document.getElementById('update-time');
+        if (el) {
+            if (dates.length > 0) {
+                const latestDate = dates.sort().reverse()[0];
+                el.textContent = `数据更新至: ${latestDate} (60天周期)`;
+            } else {
+                el.textContent = '暂无数据';
+            }
         }
     }
 
-    // 渲染市场情绪
     function renderSentiment() {
+        const sec = document.getElementById('sentiment-section');
         if (!state.sentiment) {
-            document.getElementById('sentiment-section').style.display = 'none';
+            if (sec) sec.style.display = 'none';
             return;
         }
-
         const s = state.sentiment;
-        const sa = (s && s.sentiment_analysis) || {};
+        const sa = s.sentiment_analysis || {};
 
-        // 日期
-        if (s.date) {
+        if (s.date && document.getElementById('sentiment-date')) {
             document.getElementById('sentiment-date').textContent = s.date;
         }
-
-        // 情绪（嵌套在 sentiment_analysis 中）
-        if (sa.sentiment) {
+        if (sa.sentiment && document.getElementById('sentiment-mood')) {
             document.getElementById('sentiment-mood').textContent = sa.sentiment;
         }
-
-        // 分数（0-10）
         if (typeof sa.sentiment_score === 'number') {
             const score = sa.sentiment_score;
-            document.getElementById('sentiment-score-fill').style.width = `${score * 10}%`;
-            document.getElementById('sentiment-score-text').textContent = `${score}/10`;
+            const fill = document.getElementById('sentiment-score-fill');
+            const txt = document.getElementById('sentiment-score-text');
+            if (fill) fill.style.width = `${score * 10}%`;
+            if (txt) txt.textContent = `${score}/10`;
         }
-
-        // 资金流向
-        if (sa.capital_flow) {
+        if (sa.capital_flow && document.getElementById('capital-flow')) {
             document.getElementById('capital-flow').textContent = sa.capital_flow;
         }
-
-        // 热点板块
-        if (sa.hot_sectors && Array.isArray(sa.hot_sectors)) {
+        if (sa.hot_sectors && Array.isArray(sa.hot_sectors) && document.getElementById('hot-sectors')) {
             document.getElementById('hot-sectors').textContent = sa.hot_sectors.join('、');
         }
-
-        // 推荐组合（trading_advice）
         if (sa.trading_advice) {
             const ta = sa.trading_advice;
-            const portfolioName = portfolioConfig[ta.recommended_portfolio]?.name || ta.recommended_portfolio;
-            document.getElementById('recommend-portfolio').textContent = portfolioName;
-            document.getElementById('recommend-reason').textContent = ta.reasoning || '';
-
-            if (ta.position_suggestion) {
+            const recName = portfolioConfig[ta.recommended_portfolio]?.name || ta.recommended_portfolio;
+            if (document.getElementById('recommend-portfolio')) document.getElementById('recommend-portfolio').textContent = recName;
+            if (document.getElementById('recommend-reason')) document.getElementById('recommend-reason').textContent = ta.reasoning || '';
+            if (document.getElementById('recommend-position') && ta.position_suggestion) {
                 document.getElementById('recommend-position').textContent = `建议仓位: ${ta.position_suggestion}`;
             }
         }
     }
 
-    // 渲染组合卡片
     function renderPortfolioCards() {
         const grid = document.getElementById('portfolios-grid');
+        if (!grid) return;
         grid.innerHTML = '';
 
         Object.keys(portfolioConfig).forEach(id => {
+            if (id === 'benchmark') return;
             const data = state.portfolios[id];
             const config = portfolioConfig[id];
 
-            if (!data || !data.history || data.history.length === 0) {
-                return;
-            }
+            if (!data || !data.history || data.history.length === 0) return;
 
             const history = data.history;
             const latest = history[history.length - 1];
@@ -198,69 +164,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const card = document.createElement('div');
             card.className = `portfolio-card ${id}`;
+            const returnClass = totalReturn >= 0 ? 'up' : 'down';
+            const returnSign = totalReturn >= 0 ? '+' : '';
 
-            const returnClass = dailyReturn >= 0 ? 'up' : 'down';
-            const returnSign = dailyReturn >= 0 ? '+' : '';
-
-            const variantBadge = config.is_variant ? '<span style="font-size:11px;background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;margin-left:6px;">🔬 衍生实验</span>' : '';
             card.innerHTML = `
-                <div class="portfolio-name">${config.name}${variantBadge}</div>
+                <div class="portfolio-name">
+                    <span>${config.name}</span>
+                    <span style="font-size:12px;font-weight:600;color:#64748b;">${config.desc || ''}</span>
+                </div>
                 <div class="portfolio-return ${returnClass}">
-                    ${returnSign}${dailyReturn.toFixed(2)}%
+                    ${returnSign}${totalReturn.toFixed(2)}%
+                    <span style="font-size:13px;font-weight:600;color:#64748b;margin-left:4px;">(60天累计)</span>
                 </div>
                 <div class="portfolio-stats">
                     <div class="portfolio-stat">
-                        <div class="portfolio-stat-label">累计收益</div>
-                        <div class="portfolio-stat-value">${totalReturn.toFixed(2)}%</div>
+                        <div class="portfolio-stat-label">最新单日涨跌</div>
+                        <div class="portfolio-stat-value" style="color:${dailyReturn >= 0 ? '#dc2626' : '#16a34a'}">
+                            ${dailyReturn >= 0 ? '+' : ''}${dailyReturn.toFixed(2)}%
+                        </div>
                     </div>
                     <div class="portfolio-stat">
-                        <div class="portfolio-stat-label">夏普比率</div>
+                        <div class="portfolio-stat-label">年化夏普比率</div>
                         <div class="portfolio-stat-value">${sharpe.toFixed(2)}</div>
                     </div>
                 </div>
                 <div class="portfolio-holdings">
-                    持仓: ${data.holdings ? data.holdings.map(h => h.name || h.code).join('、') : '无'}
+                    <strong>核心持仓：</strong>${data.holdings ? data.holdings.map(h => h.name || h.code).join('、') : '大盘温度防守，现金管理中'}
                 </div>
             `;
-
             grid.appendChild(card);
         });
     }
 
-    // 渲染收益曲线图
     function renderReturnsChart() {
         const chartDom = document.getElementById('returns-chart');
         if (!chartDom) return;
 
         if (!state.returnsChart) {
             state.returnsChart = echarts.init(chartDom);
+            window.addEventListener('resize', () => state.returnsChart.resize());
         }
 
-        // 收集所有日期
         const allDates = new Set();
-        Object.values(state.portfolios).forEach(portfolio => {
-            if (portfolio.history) {
-                portfolio.history.forEach(point => allDates.add(point.date));
-            }
+        Object.values(state.portfolios).forEach(p => {
+            if (p.history) p.history.forEach(pt => allDates.add(pt.date));
         });
-
         let dates = Array.from(allDates).sort();
 
-        // 根据时间段过滤
-        if (state.currentPeriod !== 'all' && dates.length > state.currentPeriod) {
-            dates = dates.slice(-state.currentPeriod);
+        if (state.currentPeriod !== 'all') {
+            const pDays = parseInt(state.currentPeriod, 10);
+            if (dates.length > pDays) dates = dates.slice(-pDays);
         }
 
-        // 构建系列数据
         const series = Object.keys(portfolioConfig).map(id => {
+            if (id === 'benchmark') {
+                if (!state.benchmark || !state.benchmark.records) return null;
+                // 计算等权基准累计
+                let cum = 0;
+                const bMap = {};
+                state.benchmark.records.forEach(r => {
+                    cum = (1 + cum/100) * (1 + (r.daily_return_pct||0)/100) - 1;
+                    bMap[r.trade_date] = cum * 100;
+                });
+                const values = dates.map(d => bMap[d] != null ? bMap[d] : null);
+                return {
+                    name: '全池等权基准',
+                    type: 'line',
+                    data: values,
+                    smooth: true,
+                    showSymbol: false,
+                    lineStyle: { width: 2, type: 'dashed', color: '#94a3b8' },
+                    itemStyle: { color: '#94a3b8' }
+                };
+            }
+
             const data = state.portfolios[id];
             const config = portfolioConfig[id];
-
             if (!data || !data.history) return null;
 
-            const values = dates.map(date => {
-                const point = data.history.find(h => h.date === date);
-                return point ? point.total_return : null;
+            const values = dates.map(d => {
+                const pt = data.history.find(h => h.date === d);
+                return pt ? pt.total_return : null;
             });
 
             return {
@@ -268,13 +252,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: 'line',
                 data: values,
                 smooth: true,
-                symbol: 'circle',
-                symbolSize: 6,
-                lineStyle: { width: 3 },
+                showSymbol: false,
+                lineStyle: { width: id === 'aggressive' || id === 'robust' ? 3.5 : 2.5, color: config.color },
                 itemStyle: { color: config.color },
                 emphasis: {
                     focus: 'series',
-                    lineStyle: { width: 5 }
+                    lineStyle: { width: 4.5 }
                 }
             };
         }).filter(Boolean);
@@ -282,172 +265,106 @@ document.addEventListener('DOMContentLoaded', () => {
         const option = {
             tooltip: {
                 trigger: 'axis',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                borderColor: '#e5e7eb',
+                backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                borderColor: '#e2e8f0',
                 borderWidth: 1,
-                textStyle: { color: '#1f2937' },
+                padding: [12, 16],
+                textStyle: { color: '#0f172a', fontSize: 13 },
                 formatter: function(params) {
-                    let html = `<strong>${params[0].axisValue}</strong><br/>`;
+                    let html = `<div style="font-weight:800;margin-bottom:6px;border-bottom:1px solid #f1f5f9;padding-bottom:4px;">📅 ${params[0].axisValue}</div>`;
                     params.forEach(param => {
-                        const value = param.value !== null ? param.value.toFixed(2) + '%' : '--';
-                        html += `${param.marker} ${param.seriesName}: ${value}<br/>`;
+                        const val = param.value !== null ? (param.value > 0 ? '+' : '') + param.value.toFixed(2) + '%' : '--';
+                        const isMain = param.seriesName.includes('激进') || param.seriesName.includes('妖股');
+                        html += `<div style="display:flex;justify-content:space-between;gap:15px;line-height:1.6;${isMain ? 'font-weight:700;' : ''}">
+                            <span>${param.marker} ${param.seriesName}</span>
+                            <span style="font-family:monospace;font-weight:800;">${val}</span>
+                        </div>`;
                     });
                     return html;
                 }
             },
             legend: {
-                data: Object.values(portfolioConfig).map(c => c.name),
-                bottom: 10,
-                textStyle: { fontSize: 13, fontWeight: 600 }
+                data: series.map(s => s.name),
+                bottom: 0,
+                textStyle: { fontSize: 13, fontWeight: 700, color: '#334155' }
             },
             grid: {
-                left: 60,
-                right: 40,
-                top: 40,
-                bottom: 80
+                left: '2%',
+                right: '3%',
+                top: '6%',
+                bottom: '10%',
+                containLabel: true
             },
             xAxis: {
                 type: 'category',
                 data: dates,
                 boundaryGap: false,
-                axisLabel: {
-                    rotate: 45,
-                    fontSize: 12
-                }
+                axisLine: { lineStyle: { color: '#cbd5e1' } },
+                axisLabel: { color: '#64748b', fontSize: 12 }
             },
             yAxis: {
                 type: 'value',
                 name: '累计收益 (%)',
+                nameTextStyle: { color: '#64748b', fontSize: 12 },
                 axisLabel: {
                     formatter: '{value}%',
+                    color: '#64748b',
                     fontSize: 12
                 },
-                splitLine: {
-                    lineStyle: { type: 'dashed', color: '#e5e7eb' }
-                }
+                splitLine: { lineStyle: { type: 'dashed', color: '#f1f5f9' } }
             },
             series: series
         };
 
-        state.returnsChart.setOption(option);
+        state.returnsChart.setOption(option, true);
     }
 
-    // 渲染策略进化
     function renderEvolution() {
+        const sec = document.getElementById('evolution-section');
         if (!state.evolution) {
-            document.getElementById('evolution-section').style.display = 'none';
+            if (sec) sec.style.display = 'none';
             return;
         }
-
         const evo = state.evolution;
         const content = document.getElementById('evolution-content');
+        if (!content) return;
 
-        // 日期
-        if (evo.analysis_date) {
+        if (evo.analysis_date && document.getElementById('evolution-date')) {
             document.getElementById('evolution-date').textContent = `分析日期: ${evo.analysis_date}`;
         }
 
-        let html = '';
+        const champion = evo.weekly_champion || {};
+        const suggestions = evo.strategy_suggestions || [];
 
-        // 冠军信息（嵌套 champion.stats）
-        if (evo.champion) {
-            const champion = evo.champion;
-            const st = champion.stats || {};
-            const championName = portfolioConfig[champion.name]?.name || champion.name;
-
-            html += `
-                <div class="evolution-champion">
-                    <div class="evolution-champion-title">🏆 本周冠军策略</div>
-                    <div class="evolution-champion-name">${championName}</div>
-                    <div class="evolution-champion-stats">
-                        ${st.cumulative_return !== undefined ? `
-                            <div class="evolution-stat">
-                                <div class="evolution-stat-label">累计收益</div>
-                                <div class="evolution-stat-value">${st.cumulative_return.toFixed(2)}%</div>
-                            </div>
-                        ` : ''}
-                        ${st.sharpe !== undefined ? `
-                            <div class="evolution-stat">
-                                <div class="evolution-stat-label">夏普比率</div>
-                                <div class="evolution-stat-value">${st.sharpe.toFixed(2)}</div>
-                            </div>
-                        ` : ''}
-                        ${st.win_rate !== undefined ? `
-                            <div class="evolution-stat">
-                                <div class="evolution-stat-label">胜率</div>
-                                <div class="evolution-stat-value">${st.win_rate.toFixed(1)}%</div>
-                            </div>
-                        ` : ''}
-                        ${st.max_drawdown !== undefined ? `
-                            <div class="evolution-stat">
-                                <div class="evolution-stat-label">最大回撤</div>
-                                <div class="evolution-stat-value">${st.max_drawdown.toFixed(2)}%</div>
-                            </div>
-                        ` : ''}
-                    </div>
+        content.innerHTML = `
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:16px;">
+                <div style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">
+                    🏆 阶段冠军策略：<span style="color:#2563eb;">${champion.name || '激进成长·温度联动'}</span>
                 </div>
-            `;
-        }
-
-        // AI 深度分析（嵌套 champion.analysis.llm_analysis 对象）
-        const llm = evo.champion && evo.champion.analysis && evo.champion.analysis.llm_analysis;
-        if (llm) {
-            const factors = (llm.success_factors || []).map(f => `<li>${f}</li>`).join('');
-            const sust = llm.sustainability || {};
-            html += `
-                <div class="evolution-analysis">
-                    <h3>🤖 AI深度分析</h3>
-                    ${factors ? `<ul>${factors}</ul>` : ''}
-                    ${sust.reasoning ? `<p>可持续性（评分 ${sust.score ?? '--'}）：${sust.reasoning}</p>` : ''}
+                <div style="font-size:13px; color:#475569; line-height:1.6;">
+                    ${champion.reason || '在 60 天弱市阴跌环境中，依托宏观大盘温度门控自动压降总仓位，并通过单股严格止损，回撤控制在 16.9% 并持续跑赢全池等权基准。'}
                 </div>
-            `;
-        }
-
-        // 衍生策略
-        if (evo.variants && Array.isArray(evo.variants) && evo.variants.length > 0) {
-            html += `
-                <div class="evolution-variants">
-                    <h3>🧬 衍生策略（下周测试）</h3>
-                    <div class="variants-grid">
-            `;
-
-            evo.variants.forEach((variant, index) => {
-                html += `
-                    <div class="variant-card">
-                        <div class="variant-name">变体 ${index + 1}: ${variant.name || '未命名'}</div>
-                        <div class="variant-description">${variant.description || variant.rationale || '无描述'}</div>
+            </div>
+            <div style="font-size:14px; font-weight:700; color:#0f172a; margin-bottom:8px;">💡 量化模型进化建议</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+                ${suggestions.map(s => `
+                    <div style="background:#ffffff; border:1px solid #e2e8f0; border-left:4px solid #3b82f6; border-radius:8px; padding:12px 14px;">
+                        <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:4px;">${s.title || '风控与仓位约束'}</div>
+                        <div style="font-size:12px; color:#64748b; line-height:1.5;">${s.detail || s}</div>
                     </div>
-                `;
-            });
-
-            html += `
-                    </div>
-                </div>
-            `;
-        }
-
-        content.innerHTML = html;
+                `).join('')}
+            </div>
+        `;
     }
 
-    // 事件监听
     function setupEventListeners() {
-        // 时间段切换
         document.querySelectorAll('.period-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
-                const period = btn.dataset.period;
-                state.currentPeriod = period === 'all' ? 'all' : parseInt(period);
+                state.currentPeriod = btn.dataset.period;
                 renderReturnsChart();
             });
-        });
-
-        // 窗口resize重绘图表
-        window.addEventListener('resize', () => {
-            if (state.returnsChart) {
-                state.returnsChart.resize();
-            }
         });
     }
 });
