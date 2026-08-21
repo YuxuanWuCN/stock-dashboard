@@ -1,0 +1,171 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-21 10:35:19+08:00",
+  "trade_date": "2026-08-20",
+  "code": "002475",
+  "name": "立讯精密",
+  "type": "stock",
+  "category": "消费电子/汽车电子",
+  "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0008258104213547546,
+    "alpha_p_value": 0.29810558303471324,
+    "information_ratio": 0.029858445003865326,
+    "betas": {
+      "MKT": 0.060190227219341454,
+      "SMB": -0.23772259283676903,
+      "HML": -0.03575172424314624,
+      "MOM": -0.08859393004053598
+    },
+    "window_end": "2026-05-28"
+  },
+  "scores": {
+    "risk_adjusted": 41.0,
+    "risk": 62.6,
+    "technical": 60.0,
+    "industry": 35.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "semiconductor",
+    "industry_name": "半导体/存储芯片",
+    "description": "存储芯片现货价格、进出口均价、原厂报价通知",
+    "proxy_type": "customs_and_spot_price",
+    "keywords": [
+      "存储芯片",
+      "DRAM",
+      "NAND",
+      "InP衬底",
+      "晶圆代工",
+      "先进制程"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 09:55:44"
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 54.86,
+    "max_drawdown_60d_pct": -28.76,
+    "atr14_pct": 5.87,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 74.5,
+        "value": 54.86
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 72.5,
+        "value": -28.76
+      },
+      {
+        "name": "ATR百分比",
+        "score": 78.5,
+        "value": 5.87
+      },
+      {
+        "name": "量价异常",
+        "score": 44.5,
+        "value": 0.83
+      },
+      {
+        "name": "行业波动",
+        "score": 13.0,
+        "value": 35.41
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.56,
+    "return_5d_pct": 1.35,
+    "up_probability_3d_pct": 63.3,
+    "up_probability_5d_pct": 56.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 56.0,
+    "ma10": 56.182,
+    "ma20": 57.227,
+    "ma60": 63.09633333333333,
+    "rsi14": 39.4,
+    "macd_dif": -1.7588958918359126,
+    "macd_dea": -1.7863852980250856,
+    "macd_hist": 0.05497881237834612,
+    "atr14_pct": 5.867627553556908,
+    "boll_position": 0.1281141368407698,
+    "return_5d_pct": -4.851944345344272,
+    "return_20d_pct": -12.828893610066993,
+    "volume_ratio_5d": 0.83
+  },
+  "industry": {
+    "name": "消费电子/汽车电子",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": -11.76
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 63.3,
+      "average_return_pct": 1.56,
+      "median_return_pct": 1.79,
+      "best_return_pct": 14.57,
+      "worst_return_pct": -9.08
+    },
+    "horizon_5d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.35,
+      "median_return_pct": 2.83,
+      "best_return_pct": 19.37,
+      "worst_return_pct": -12.12
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 28.8%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 28.8%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 54.9%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/002475.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

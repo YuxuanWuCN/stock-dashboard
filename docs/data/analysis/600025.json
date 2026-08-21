@@ -1,0 +1,269 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-21 10:35:19+08:00",
+  "trade_date": "2026-08-20",
+  "code": "600025",
+  "name": "华能水电",
+  "type": "stock",
+  "category": "清洁水电",
+  "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0006341274285673193,
+    "alpha_p_value": 0.14425752352066448,
+    "information_ratio": 0.039552136845705445,
+    "betas": {
+      "MKT": -0.01303125294097873,
+      "SMB": -0.0432942137983286,
+      "HML": -0.12816451354986336,
+      "MOM": -0.008526518783374902
+    },
+    "window_end": "2026-05-28"
+  },
+  "scores": {
+    "risk_adjusted": 40.9,
+    "risk": 16.2,
+    "technical": 58.0,
+    "industry": 41.9,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 10:12:23"
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 15.62,
+    "max_drawdown_60d_pct": -12.66,
+    "atr14_pct": 2.0,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 5.5,
+        "value": 15.62
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 31.0,
+        "value": -12.66
+      },
+      {
+        "name": "ATR百分比",
+        "score": 18.5,
+        "value": 2.0
+      },
+      {
+        "name": "量价异常",
+        "score": 11.0,
+        "value": 0.95
+      },
+      {
+        "name": "行业波动",
+        "score": 13.0,
+        "value": 35.41
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.21,
+    "return_5d_pct": -0.13,
+    "up_probability_3d_pct": 33.3,
+    "up_probability_5d_pct": 43.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "rebound",
+    "ma5": 9.646,
+    "ma10": 9.681999999999999,
+    "ma20": 9.827000000000002,
+    "ma60": 9.597166666666665,
+    "rsi14": 46.2,
+    "macd_dif": -0.01796661675842337,
+    "macd_dea": 0.020549320235589023,
+    "macd_hist": -0.07703187398802479,
+    "atr14_pct": 1.9998869511597794,
+    "boll_position": 0.2538664132624911,
+    "return_5d_pct": -0.6179196704428458,
+    "return_20d_pct": -5.1130776794493515,
+    "volume_ratio_5d": 0.95
+  },
+  "industry": {
+    "name": "清洁水电",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": -4.05
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.21,
+      "median_return_pct": -0.37,
+      "best_return_pct": 3.76,
+      "worst_return_pct": -3.69
+    },
+    "horizon_5d": {
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.13,
+      "median_return_pct": -0.21,
+      "best_return_pct": 3.33,
+      "worst_return_pct": -5.08
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 42.4,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 41.3,
+      "profit_quality": 38.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 228969774567.65,
+      "total_assets_yoy": 5.8422703063,
+      "inventory": 43320503.88,
+      "prepayment": 174758072.69,
+      "receivable": 2986585776.23,
+      "inventory_prepay_ratio": 0.0009524339052251975,
+      "receivable_revenue": 1.0365010223756705,
+      "goodwill_equity": null,
+      "debt_ratio": 0.6003914519559591,
+      "short_debt_ratio": 0.17348159295165178,
+      "roe": 0.018120013966769773,
+      "gross_margin": 34.14205984009895,
+      "deduct_ratio": 0.9984212840658564,
+      "netprofit_yoy": 1.7963469039,
+      "ocf_np_ratio": 2.4319383057761055,
+      "financing_debt": 0.009855112470130085,
+      "retained_profit_equity": 0.32109589903687796
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +5.8%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 0.1%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 103.7%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "warning",
+          "title": "杠杆中等",
+          "detail": "资产负债率 60.0%，处于中间区间。",
+          "contribution": -11.7
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 17.3%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 1.8%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +1.8%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 99.8%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 32.1%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 2.43，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 1.0%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "净利润同比 +1.8%；经营现金流/净利润 2.43，利润含金量高",
+      "negative_view": "资产负债率 60.0%，杠杆偏高；应收账款/营收 103.7%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    }
+  },
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    }
+  ],
+  "kline_file": "../kline/600025.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

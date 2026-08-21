@@ -1,0 +1,165 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-21 10:35:19+08:00",
+  "trade_date": "2026-08-20",
+  "code": "002384",
+  "name": "东山精密",
+  "type": "stock",
+  "category": "PCB/电子",
+  "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "economical",
+    "alpha": 0.002775996883010183,
+    "alpha_p_value": 0.008302752633501664,
+    "information_ratio": 0.07956354834377143,
+    "betas": {
+      "MKT": 0.06528467238846358,
+      "SMB": -0.18137056683082206,
+      "HML": -0.4937490285378408,
+      "MOM": -0.06075972915733537
+    },
+    "window_end": "2026-05-28"
+  },
+  "scores": {
+    "risk_adjusted": 42.0,
+    "risk": 79.3,
+    "technical": 83.0,
+    "industry": 43.4,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "semiconductor",
+    "industry_name": "半导体/存储芯片",
+    "description": "存储芯片现货价格、进出口均价、原厂报价通知",
+    "proxy_type": "customs_and_spot_price",
+    "keywords": [
+      "存储芯片",
+      "DRAM",
+      "NAND",
+      "InP衬底",
+      "晶圆代工",
+      "先进制程"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 09:58:49"
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 91.02,
+    "max_drawdown_60d_pct": -41.33,
+    "atr14_pct": 8.61,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 95.5,
+        "value": 91.02
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 88.0,
+        "value": -41.33
+      },
+      {
+        "name": "ATR百分比",
+        "score": 94.0,
+        "value": 8.61
+      },
+      {
+        "name": "量价异常",
+        "score": 79.0,
+        "value": 0.71
+      },
+      {
+        "name": "行业波动",
+        "score": 13.0,
+        "value": 35.41
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 2.66,
+    "return_5d_pct": 2.64,
+    "up_probability_3d_pct": 63.3,
+    "up_probability_5d_pct": 56.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 206.288,
+    "ma10": 200.882,
+    "ma20": 192.10399999999998,
+    "ma60": 222.22766666666666,
+    "rsi14": 47.1,
+    "macd_dif": -4.04051879021759,
+    "macd_dea": -7.248435883697825,
+    "macd_hist": 6.4158341869604705,
+    "atr14_pct": 8.609544506922465,
+    "boll_position": 0.5920960995075555,
+    "return_5d_pct": -2.196823511948953,
+    "return_20d_pct": -4.345511734817331,
+    "volume_ratio_5d": 0.71
+  },
+  "industry": {
+    "name": "PCB/电子",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": -3.28
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 63.3,
+      "average_return_pct": 2.66,
+      "median_return_pct": 2.95,
+      "best_return_pct": 12.74,
+      "worst_return_pct": -8.87
+    },
+    "horizon_5d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 2.64,
+      "median_return_pct": 1.19,
+      "best_return_pct": 21.03,
+      "worst_return_pct": -14.14
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 41.3%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 41.3%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 91.0%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/002384.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

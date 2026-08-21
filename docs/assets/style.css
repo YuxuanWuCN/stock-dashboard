@@ -3113,3 +3113,188 @@ h2, h3, .card-title, .section-title {
     padding: 3px 8px;
     border-radius: 4px;
 }
+
+
+/* ============================================================
+   🏆 排行榜表格专属深度优化（大字号 + 极高对比度 + 舒适排版）
+   ============================================================ */
+.ranking-table-wrap {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06) !important;
+    overflow-x: auto;
+    margin-top: 12px;
+}
+
+.ranking-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 15px !important;
+    table-layout: auto !important;
+}
+
+.ranking-table th {
+    background: #f1f5f9 !important;
+    color: #0f172a !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    padding: 14px 16px !important;
+    border-bottom: 2px solid #cbd5e1 !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+}
+
+.ranking-table th button {
+    background: transparent !important;
+    border: none !important;
+    color: #0f172a !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    font-family: inherit !important;
+}
+
+.ranking-table th button:hover {
+    color: #2563eb !important;
+}
+
+.ranking-table td {
+    padding: 15px 16px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    vertical-align: middle !important;
+    font-size: 15px !important;
+    color: #1e293b !important;
+}
+
+.ranking-table tbody tr:hover {
+    background-color: #f8fafc !important;
+}
+
+.ranking-table tbody tr.active {
+    background-color: #eff6ff !important;
+}
+
+/* 排名序号 */
+.ranking-number {
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    color: #64748b !important;
+    font-variant-numeric: tabular-nums !important;
+}
+
+.ranking-number.top-three {
+    color: #d97706 !important;
+    font-size: 18px !important;
+}
+
+/* 股票名称与代码 */
+.ranking-stock-name {
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    letter-spacing: -0.2px !important;
+}
+
+.ranking-stock-meta {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 4px !important;
+}
+
+.ranking-stock-meta span:first-child {
+    font-family: var(--font-mono) !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #475569 !important;
+    background: #f1f5f9 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+}
+
+.ranking-stock-meta span:last-child {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #64748b !important;
+}
+
+/* 评分数字 */
+.score-value {
+    font-size: 18px !important;
+    font-weight: 900 !important;
+    color: #2563eb !important;
+    font-family: var(--font-mono) !important;
+}
+
+/* 预测收益百分比 */
+.forecast-value {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    font-family: var(--font-mono) !important;
+}
+
+.forecast-empty {
+    font-size: 13px !important;
+    color: #94a3b8 !important;
+}
+
+/* 风险等级徽章 */
+.risk-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 5px 12px !important;
+    border-radius: 6px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.2px !important;
+}
+
+.risk-low {
+    background: #dcfce7 !important;
+    color: #15803d !important;
+    border: 1px solid #86efac !important;
+}
+
+.risk-medium {
+    background: #fef3c7 !important;
+    color: #b45309 !important;
+    border: 1px solid #fde68a !important;
+}
+
+.risk-high {
+    background: #fee2e2 !important;
+    color: #b91c1c !important;
+    border: 1px solid #fca5a5 !important;
+}
+
+/* 理由文本 */
+.ranking-reason {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #334155 !important;
+    font-weight: 500 !important;
+}
+
+.leading-badge {
+    display: inline-block !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    margin-right: 4px !important;
+}
+
+.leading-badge.leading-up {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+    border: 1px solid #fca5a5 !important;
+}
+
+.leading-badge.leading-down {
+    background: #dcfce7 !important;
+    color: #16a34a !important;
+    border: 1px solid #86efac !important;
+}

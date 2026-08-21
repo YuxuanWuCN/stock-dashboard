@@ -1,0 +1,269 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-21 10:35:19+08:00",
+  "trade_date": "2026-08-20",
+  "code": "603195",
+  "name": "公牛集团",
+  "type": "stock",
+  "category": "插座转换器",
+  "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.00020828954233364654,
+    "alpha_p_value": 0.6521972732391961,
+    "information_ratio": -0.012542475929504813,
+    "betas": {
+      "MKT": 0.014637158350197878,
+      "SMB": 0.012364567060580377,
+      "HML": 0.01887487793386729,
+      "MOM": 0.0052743581539906725
+    },
+    "window_end": "2026-05-28"
+  },
+  "scores": {
+    "risk_adjusted": 42.6,
+    "risk": 22.1,
+    "technical": 70.0,
+    "industry": 63.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 10:31:52"
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 25.01,
+    "max_drawdown_60d_pct": -9.47,
+    "atr14_pct": 2.49,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 33.5,
+        "value": 25.01
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 11.0,
+        "value": -9.47
+      },
+      {
+        "name": "ATR百分比",
+        "score": 33.5,
+        "value": 2.49
+      },
+      {
+        "name": "量价异常",
+        "score": 6.5,
+        "value": 0.97
+      },
+      {
+        "name": "行业波动",
+        "score": 13.0,
+        "value": 35.41
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.58,
+    "return_5d_pct": -0.32,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 40.0,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "rebound",
+    "ma5": 39.662,
+    "ma10": 40.238,
+    "ma20": 40.5625,
+    "ma60": 39.46216666666667,
+    "rsi14": 50.7,
+    "macd_dif": 0.11929262951807829,
+    "macd_dea": 0.3528540478903317,
+    "macd_hist": -0.46712283674450683,
+    "atr14_pct": 2.4886618709642967,
+    "boll_position": 0.38621799275111035,
+    "return_5d_pct": -0.8413758970551743,
+    "return_20d_pct": 3.2731958762886704,
+    "volume_ratio_5d": 0.97
+  },
+  "industry": {
+    "name": "插座转换器",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": 4.34
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.58,
+      "median_return_pct": -1.16,
+      "best_return_pct": 8.1,
+      "worst_return_pct": -5.32
+    },
+    "horizon_5d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.32,
+      "median_return_pct": -0.77,
+      "best_return_pct": 9.16,
+      "worst_return_pct": -4.74
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 58.6,
+    "dimensions": {
+      "asset_quality": 68.0,
+      "liability_safety": 63.0,
+      "profit_quality": 38.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 24376116627.48,
+      "total_assets_yoy": 11.345298962,
+      "inventory": 1637053372.17,
+      "prepayment": 50514714.55,
+      "receivable": 375037015.17,
+      "inventory_prepay_ratio": 0.06923039106309284,
+      "receivable_revenue": 0.18476956462035166,
+      "goodwill_equity": null,
+      "debt_ratio": 0.26860352533835413,
+      "short_debt_ratio": 0.12386178948700938,
+      "roe": 0.05939759346977222,
+      "gross_margin": 29.06489911732712,
+      "deduct_ratio": 0.9294688697091374,
+      "netprofit_yoy": 8.6812618138,
+      "ocf_np_ratio": 1.6056674006452847,
+      "financing_debt": 0.037962236956474105,
+      "retained_profit_equity": 0.7078787513377778
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "positive",
+          "title": "资产稳步扩张",
+          "detail": "总资产同比 +11.3%，处于健康扩张区间。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 6.9%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "positive",
+          "title": "回款效率良好",
+          "detail": "应收账款/营收 18.5%，回款健康。",
+          "contribution": 3.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 26.9%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 12.4%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 5.9%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +8.7%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 92.9%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 70.8%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 1.61，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 3.8%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "总资产同比 +11.3%，规模扩张有力；净利润同比 +8.7%；经营现金流/净利润 1.61，利润含金量高",
+      "negative_view": "暂未发现显著风险",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    }
+  },
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    }
+  ],
+  "kline_file": "../kline/603195.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}
