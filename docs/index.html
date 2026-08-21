@@ -385,23 +385,26 @@
                 <section class="page" data-page="paper" id="page-paper" hidden>
                     <div class="paper-page">
                         <div class="paper-heading">
-                            <h2>💼 模拟盘对比</h2>
+                            <h2>💼 模拟盘对比（60天宏观温度与风控联动版）</h2>
                             <p id="paper-meta" class="paper-meta">正在读取数据...</p>
                         </div>
                         <div id="paper-cards" class="paper-cards"></div>
                         <section class="paper-section" aria-labelledby="paper-curve-title">
-                            <h3 id="paper-curve-title">📈 累计净值曲线（起点 = 100）</h3>
-                            <div id="paper-curve" class="paper-curve"></div>
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                                <h3 id="paper-curve-title">📈 60天长跑累计净值曲线（起点 = 100）</h3>
+                                <span style="font-size:14px;color:#059669;font-weight:700;background:#d1fae5;padding:4px 10px;border-radius:6px;">🛡️ 已启用大盘温度仓位门控 & 单股-8%严格止损</span>
+                            </div>
+                            <div id="paper-curve" class="paper-curve" style="height:360px;"></div>
                         </section>
                         <section class="paper-section" aria-labelledby="paper-compare-title">
-                            <h3 id="paper-compare-title">📅 每日收益对比</h3>
+                            <h3 id="paper-compare-title">📅 每日收益与净值明细</h3>
                             <div id="paper-compare-wrap" class="paper-table-wrap" hidden>
                                 <table class="paper-table">
                                     <thead>
                                         <tr>
                                             <th>日期</th>
-                                            <th>稳健组合</th>
-                                            <th>激进组合</th>
+                                            <th>妖股·温度联动</th>
+                                            <th>激进·温度联动</th>
                                             <th>全池等权基准</th>
                                         </tr>
                                     </thead>
@@ -410,6 +413,51 @@
                             </div>
                         </section>
                         <p class="paper-disclaimer">模拟盘与等权基准均为研究用途，不构成投资建议，市场有风险，入市需谨慎。</p>
+                    </div>
+                </section>
+
+                <!-- 页面：🔥 股票性质分辨器 · 妖股鉴定器 -->
+                <section class="page" data-page="monster" id="page-monster" hidden>
+                    <div class="monster-detector-page">
+                        <div class="monster-heading" style="margin-bottom:20px;">
+                            <h2 style="font-size:26px;color:#111827;display:flex;align-items:center;gap:10px;">
+                                <span>🔥 股票性质分辨器 · 妖股鉴定器</span>
+                            </h2>
+                            <p style="font-size:15px;color:#4b5563;margin-top:4px;">基于 SFM 因子流形（波动率、ATR日均振幅比、动量衰减半衰期）的大数据属性判定与操盘策略匹配</p>
+                        </div>
+
+                        <!-- 统计概览卡片 -->
+                        <div class="monster-stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+                            <div class="stat-card" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;">
+                                <div style="font-size:13px;color:#64748b;">📊 全池A股标的</div>
+                                <div id="monster-stat-total" style="font-size:28px;font-weight:800;color:#0f172a;margin-top:4px;">--</div>
+                            </div>
+                            <div class="stat-card" style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px;">
+                                <div style="font-size:13px;color:#b91c1c;">🔥 妖股题材型 (高波动)</div>
+                                <div id="monster-stat-volatile" style="font-size:28px;font-weight:800;color:#dc2626;margin-top:4px;">--</div>
+                            </div>
+                            <div class="stat-card" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:16px;">
+                                <div style="font-size:13px;color:#1d4ed8;">🎯 趋势主升型 (长动量)</div>
+                                <div id="monster-stat-trend" style="font-size:28px;font-weight:800;color:#2563eb;margin-top:4px;">--</div>
+                            </div>
+                            <div class="stat-card" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:16px;">
+                                <div style="font-size:13px;color:#15803d;">🧱 震荡蓄势型 (低波动)</div>
+                                <div id="monster-stat-range" style="font-size:28px;font-weight:800;color:#16a34a;margin-top:4px;">--</div>
+                            </div>
+                        </div>
+
+                        <!-- 筛选器切换 Tab -->
+                        <div class="monster-filters-row" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+                            <button type="button" class="ranking-tab active" data-monster-type="all">全部标的</button>
+                            <button type="button" class="ranking-tab" data-monster-type="volatile">🔥 妖股题材榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="trend">🎯 趋势主升榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="range_bound">🧱 震荡蓄势榜</button>
+                        </div>
+
+                        <!-- 股票卡片网格 -->
+                        <div id="monster-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;">
+                            <div style="color:#64748b;padding:30px;text-align:center;">正在分析股票性质...</div>
+                        </div>
                     </div>
                 </section>
             </main>

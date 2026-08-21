@@ -3204,4 +3204,140 @@ document.addEventListener('DOMContentLoaded', () => {
             closeEditor();
         }
     });
+
+    // ============================================================
+    // 🔥 股票性质分辨器 · 妖股鉴定器 全局渲染控制器
+    // ============================================================
+    var monsterState = {
+        filter: 'all'
+    };
+
+    function renderMonsterDetector() {
+        var grid = document.getElementById('monster-cards-grid');
+        var rank = state.ranking;
+        if (!grid || !rank || !Array.isArray(rank.items)) return;
+
+        var items = rank.items.filter(function (it) {
+            return it && it.bet_type;
+        });
+
+        // 统计
+        var total = items.length;
+        var volatile = items.filter(function (it) { return it.bet_type === 'volatile'; }).length;
+        var trend = items.filter(function (it) { return it.bet_type === 'trend'; }).length;
+        var range = items.filter(function (it) { return it.bet_type === 'range_bound'; }).length;
+
+        var elTotal = document.getElementById('monster-stat-total');
+        var elVolatile = document.getElementById('monster-stat-volatile');
+        var elTrend = document.getElementById('monster-stat-trend');
+        var elRange = document.getElementById('monster-stat-range');
+
+        if (elTotal) elTotal.textContent = total;
+        if (elVolatile) elVolatile.textContent = volatile;
+        if (elTrend) elTrend.textContent = trend;
+        if (elRange) elRange.textContent = range;
+
+        // 过滤
+        var filtered = items;
+        if (monsterState.filter !== 'all') {
+            filtered = items.filter(function (it) { return it.bet_type === monsterState.filter; });
+        }
+
+        // 排序：妖股指数降序或风险调整分降序
+        filtered.sort(function (a, b) {
+            var scoreA = (a.bet_type_metrics && a.bet_type_metrics.monster_score) || a.risk_adjusted_score || 0;
+            var scoreB = (b.bet_type_metrics && b.bet_type_metrics.monster_score) || b.risk_adjusted_score || 0;
+            return scoreB - scoreA;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #64748b;">该分类暂无股票</div>';
+            return;
+        }
+
+        grid.innerHTML = filtered.map(function (it) {
+            var metrics = it.bet_type_metrics || {};
+            var strat = it.strategy_recommendation || {};
+            var isVol = it.bet_type === 'volatile';
+            var isTrend = it.bet_type === 'trend';
+
+            var badgeText = isVol ? '🔥 妖股题材型' : (isTrend ? '🎯 趋势主升型' : '🧱 震荡蓄势型');
+            var badgeBg = isVol ? '#fee2e2' : (isTrend ? '#dbeafe' : '#dcfce7');
+            var badgeColor = isVol ? '#dc2626' : (isTrend ? '#2563eb' : '#16a34a');
+            var borderColor = isVol ? '#fca5a5' : (isTrend ? '#bfdbfe' : '#bbf7d0');
+
+            var monsterScore = metrics.monster_score || 0;
+            var vol = (metrics.volatility_annual || 0) * 100;
+            var atr = (metrics.atr_ratio || 0) * 100;
+            var hl = metrics.momentum_half_life ? (metrics.momentum_half_life + '天') : '快速反转/长动量';
+
+            var monsterScoreHtml = isVol ? (
+                '<div style="background:linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color:white; border-radius:8px; padding:12px; text-align:center; margin-bottom:14px;">' +
+                    '<div style="font-size:12px;opacity:0.9;">妖股指数 (Monster Score)</div>' +
+                    '<div style="font-size:32px;font-weight:900;line-height:1.2;">' + monsterScore.toFixed(1) + '</div>' +
+                '</div>'
+            ) : '';
+
+            return (
+                '<div class="top3-card" style="background:white; border:1px solid ' + borderColor + '; border-radius:12px; padding:18px; box-shadow:0 2px 6px rgba(0,0,0,0.05); cursor:pointer;" data-code="' + escapeHtml(it.code) + '">' +
+                    '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">' +
+                        '<div>' +
+                            '<span style="font-size:19px; font-weight:800; color:#0f172a;">' + escapeHtml(it.name) + '</span> ' +
+                            '<span style="font-size:13px; color:#64748b;">' + escapeHtml(it.code) + ' · ' + escapeHtml(it.category || '综合') + '</span>' +
+                        '</div>' +
+                        '<span style="font-size:12px; font-weight:700; padding:4px 10px; border-radius:6px; background:' + badgeBg + '; color:' + badgeColor + ';">' + badgeText + '</span>' +
+                    '</div>' +
+                    monsterScoreHtml +
+                    '<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">' +
+                        '<div style="background:#f8fafc; padding:8px 10px; border-radius:6px;">' +
+                            '<div style="font-size:11px; color:#64748b;">20日年化波动</div>' +
+                            '<div style="font-size:15px; font-weight:700; color:#0f172a;">' + vol.toFixed(1) + '%</div>' +
+                        '</div>' +
+                        '<div style="background:#f8fafc; padding:8px 10px; border-radius:6px;">' +
+                            '<div style="font-size:11px; color:#64748b;">日均ATR振幅比</div>' +
+                            '<div style="font-size:15px; font-weight:700; color:#0f172a;">' + atr.toFixed(2) + '%</div>' +
+                        '</div>' +
+                        '<div style="background:#f8fafc; padding:8px 10px; border-radius:6px;">' +
+                            '<div style="font-size:11px; color:#64748b;">动量半衰期</div>' +
+                            '<div style="font-size:15px; font-weight:700; color:#0f172a;">' + hl + '</div>' +
+                        '</div>' +
+                        '<div style="background:#f8fafc; padding:8px 10px; border-radius:6px;">' +
+                            '<div style="font-size:11px; color:#64748b;">综合风险收益</div>' +
+                            '<div style="font-size:15px; font-weight:700; color:#0f172a;">' + (it.risk_adjusted_score || 0).toFixed(1) + '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div style="background:#fef3c7; border-left:4px solid #f59e0b; padding:10px 12px; border-radius:4px; font-size:13px; color:#92400e;">' +
+                        '<strong>💡 策略建议：</strong>' + escapeHtml(strat.description || '短线择时，及时止盈止损') +
+                    '</div>' +
+                '</div>'
+            );
+        }).join('');
+
+        // 点击卡片联动查看详情
+        grid.querySelectorAll('.top3-card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                var code = card.dataset.code;
+                if (code) selectTrackedStock(code, true);
+            });
+        });
+    }
+
+    // 绑定妖股鉴定器 Tab 筛选事件
+    document.querySelectorAll('.monster-filters-row button[data-monster-type]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            document.querySelectorAll('.monster-filters-row button[data-monster-type]').forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            monsterState.filter = btn.dataset.monsterType;
+            renderMonsterDetector();
+        });
+    });
+
+    // 页面切换联动渲染
+    document.querySelectorAll('.app-nav-btn, .page-sidebar-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            if (btn.dataset.page === 'monster') {
+                renderMonsterDetector();
+            }
+        });
+    });
 });
