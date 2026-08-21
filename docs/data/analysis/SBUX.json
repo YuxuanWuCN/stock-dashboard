@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-17 21:38:03+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-21 00:05:58+08:00",
+  "trade_date": "2026-08-20",
   "code": "SBUX",
   "name": "星巴克",
   "type": "us",
@@ -10,89 +10,111 @@
   "alpha_gate": {
     "verdict": "reject",
     "reject_reason": "statistical",
-    "alpha": -7.40606753728968e-07,
-    "alpha_p_value": 0.9989435075311471,
-    "information_ratio": -3.66027445459256e-05,
+    "alpha": 1.2222469285020795e-06,
+    "alpha_p_value": 0.9982585953224089,
+    "information_ratio": 6.0340503462058666e-05,
     "betas": {
-      "MKT": 0.0255324195950178,
-      "SMB": -0.0012404507091888033,
-      "HML": -0.006766443382811866,
-      "MOM": 0.11075174457565708
+      "MKT": 0.02429835885809994,
+      "SMB": -0.002541109809598745,
+      "HML": -0.006060758485224492,
+      "MOM": 0.11079795861383676
     },
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 34.0,
-    "risk": 37.8,
-    "technical": 100.0,
-    "industry": 52.7
+    "risk_adjusted": 51.8,
+    "risk": 35.4,
+    "technical": 65.0,
+    "industry": 53.4,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 00:03:37"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 16.31,
-    "max_drawdown_60d_pct": -11.61,
-    "atr14_pct": 2.52,
+    "annualized_volatility_20d_pct": 18.4,
+    "max_drawdown_60d_pct": -7.8,
+    "atr14_pct": 2.67,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 8.4,
-        "value": 16.31
+        "score": 13.4,
+        "value": 18.4
       },
       {
         "name": "60日最大回撤",
-        "score": 29.2,
-        "value": -11.61
+        "score": 8.9,
+        "value": -7.8
       },
       {
         "name": "ATR百分比",
-        "score": 38.1,
-        "value": 2.52
+        "score": 41.6,
+        "value": 2.67
       },
       {
         "name": "量价异常",
-        "score": 94.1,
-        "value": 0.59
+        "score": 91.1,
+        "value": 0.64
       },
       {
         "name": "行业波动",
-        "score": 73.3,
-        "value": 34.1
+        "score": 78.2,
+        "value": 35.41
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.88,
-    "return_5d_pct": -1.77,
-    "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 43.3,
+    "return_3d_pct": 0.57,
+    "return_5d_pct": 1.03,
+    "up_probability_3d_pct": 63.3,
+    "up_probability_5d_pct": 60.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 107.208,
-    "ma10": 106.112,
-    "ma20": 105.1405,
-    "ma60": 102.971,
-    "rsi14": 58.5,
-    "macd_dif": 1.011842293889103,
-    "macd_dea": 0.71132594172782,
-    "macd_hist": 0.6010327043225658,
-    "atr14_pct": 2.5158307167148206,
-    "boll_position": 0.8910773065848996,
-    "return_5d_pct": 1.998484561469982,
-    "return_20d_pct": 2.085505735140769,
-    "volume_ratio_5d": 0.59
+    "trend": "rebound",
+    "ma5": 105.976,
+    "ma10": 106.381,
+    "ma20": 105.42750000000001,
+    "ma60": 103.08816666666667,
+    "rsi14": 43.1,
+    "macd_dif": 0.45527450803706415,
+    "macd_dea": 0.7311943228682446,
+    "macd_hist": -0.5518396296623609,
+    "atr14_pct": 2.670298502150322,
+    "boll_position": 0.1841539476118992,
+    "return_5d_pct": -4.854905573468448,
+    "return_20d_pct": 0.06782288537932057,
+    "volume_ratio_5d": 0.64
   },
   "industry": {
     "name": "消费",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.3,
-    "return_20d_pct": 4.72,
-    "return_60d_pct": -7.81,
-    "relative_strength_20d_pct": -2.64
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.99,
+    "relative_strength_20d_pct": 1.13
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -100,27 +122,27 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.88,
-      "median_return_pct": -0.49,
-      "best_return_pct": 5.81,
-      "worst_return_pct": -15.17
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.57,
+      "median_return_pct": 0.95,
+      "best_return_pct": 3.98,
+      "worst_return_pct": -4.65
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -1.77,
-      "median_return_pct": -0.86,
-      "best_return_pct": 5.13,
-      "worst_return_pct": -17.47
+      "up_probability_pct": 60.0,
+      "average_return_pct": 1.03,
+      "median_return_pct": 0.66,
+      "best_return_pct": 11.55,
+      "worst_return_pct": -6.18
     }
   },
   "fundamental": null,
   "reasons": [
     {
       "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
     }
   ],
   "kline_file": "../kline/SBUX.json",

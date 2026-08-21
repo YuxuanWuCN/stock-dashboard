@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
         indexChart: null,
         queryActive: false,
         ranking: null,
+        rankingEngine: 'v3',
+        rankingV2: null,
+        rankingV3: null,
         rankingMode: 'balanced',
         rankingSortKey: 'risk_adjusted_score',
         rankingSortDirection: 'desc',
@@ -101,6 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
         marketTempRatio: document.getElementById('market-temp-ratio'),
         buyTodaySection: document.getElementById('buy-today-section'),
         buyTodayList: document.getElementById('buy-today-list'),
+        // v3.0 首页全榜单 Top 3 精选矩阵
+        top3MatrixSection: document.getElementById('top3-matrix-section'),
+        top3MatrixGrid: document.getElementById('top3-matrix-grid'),
         // v2.10 明日重点关注
         dailyBriefSection: document.getElementById('daily-brief-section'),
         dailyBriefTitle: document.getElementById('daily-brief-title'),
@@ -359,14 +365,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化应用
     async function init() {
         try {
-            // 并行加载元数据、汇总、排行榜、自选股与 v2.5 策略数据
-            const [metaRes, summaryRes, rankingRes, watchlistRes, selectionRes, huntingRes, tempRes, briefRes, manifestRes] = await Promise.all([
+            // 并行加载元数据、汇总、排行榜(v3 & v2)、自选股与 v2.5 策略数据
+            const [metaRes, summaryRes, rankingV3Res, rankingV2Res, watchlistRes, selectionRes, huntingRes, tempRes, briefRes, manifestRes] = await Promise.all([
                 fetch(dataUrl('data/meta.json')).then(r => r.json()).catch(err => {
                     console.error('Failed to fetch meta.json:', err);
                     return null;
                 }),
                 fetch(dataUrl('data/summary.json')).then(r => r.json()).catch(err => {
                     console.error('Failed to fetch summary.json:', err);
+                    return null;
+                }),
+                fetch(dataUrl('data/analysis/ranking_v3.json')).then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+                    return r.json();
+                }).catch(err => {
+                    console.warn('Failed to fetch ranking_v3.json:', err);
                     return null;
                 }),
                 fetch(dataUrl('data/analysis/ranking.json')).then(r => {
@@ -422,7 +435,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             state.meta = metaRes;
             state.summary = summaryRes;
-            state.ranking = rankingRes;
+            state.rankingV3 = rankingV3Res;
+            state.rankingV2 = rankingV2Res;
+            state.ranking = (state.rankingEngine === 'v3' && state.rankingV3) ? state.rankingV3 : (state.rankingV2 || state.rankingV3);
             state.selection = selectionRes;
             state.huntingGround = huntingRes;
             state.marketTemperature = tempRes;
@@ -442,6 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderMarketTemperature();
             renderDailyBrief();
             renderBuyToday();
+            renderTop3Matrix();
 
             // 渲染自选股列表
             if (state.summary && state.summary.items && state.summary.items.length > 0) {
@@ -653,6 +669,116 @@ document.addEventListener('DOMContentLoaded', () => {
         el.buyTodayList.querySelectorAll('.buy-today-card').forEach(card => {
             card.addEventListener('click', () => {
                 const code = card.dataset.code;
+                if (code) selectTrackedStock(code);
+            });
+        });
+    }
+
+    // v3.0 首页全榜单 Top 3 精选矩阵（突破单一低风险偏好）
+    function numOf(obj, path) {
+        var v = obj;
+        for (var i = 0; i < path.length; i++) {
+            if (v == null) return 0;
+            v = v[path[i]];
+        }
+        var n = Number(v);
+        return isNaN(n) ? 0 : n;
+    }
+
+    function leadingReason(item) {
+        var ld = item.leading || {};
+        var inf = ld.inflection || 'none';
+        var mom = ld.momentum || 'flat';
+        var src = ld.source_name || (ld.data_source === 'synthetic_fallback' ? '合成降级' : '');
+        var infMap = {
+            positive_reversal: '前沿向上反转',
+            accelerating: '前沿加速',
+            decelerating: '前沿减速',
+            negative_reversal: '前沿向下反转'
+        };
+        if (infMap[inf]) return infMap[inf] + (src ? ' · ' + src : '');
+        if (mom === 'rising') return '动能上行' + (src ? ' · ' + src : '');
+        if (mom === 'falling') return '动能下行' + (src ? ' · ' + src : '');
+        return (src || '中性') + ' · 中短期趋势向上';
+    }
+
+    function gainReason(item) {
+        var fc = item.forecast || {};
+        var up = numOf(item, ['forecast', 'up_probability_5d_pct']);
+        var conf = fc.confidence === 'high' ? '高置信' : (fc.confidence === 'medium' ? '中置信' : '低置信');
+        return '5日上涨概率 ' + up.toFixed(0) + '% · ' + conf + ' · 样本 ' + (fc.sample_size || 0);
+    }
+
+    function betReason(item) {
+        var rec = item.strategy_recommendation || {};
+        if (rec.description) return rec.description;
+        if (item.bet_type === 'trend') return '趋势主升 · 长动量半衰期';
+        if (item.bet_type === 'volatile') return '高波动题材 · 短线择时';
+        return '震荡筑底 · 等待突破';
+    }
+
+    function lowRiskReason(item) {
+        var label = (item.risk || {}).label || '低风险';
+        return label + ' · ' + (item.category || '综合') + ' · 低回撤防御';
+    }
+
+    function renderTop3Matrix() {
+        var rank = state.ranking;
+        if (!rank || !Array.isArray(rank.items) || rank.items.length === 0) {
+            return;
+        }
+        var items = rank.items;
+
+        function sortBy(list, path, dir) {
+            return list.slice().sort(function (a, b) {
+                var av = numOf(a, path);
+                var bv = numOf(b, path);
+                if (av === bv) return 0;
+                return dir === 'asc' ? av - bv : bv - av;
+            });
+        }
+
+        var leading = sortBy(items, ['leading', 'score'], 'desc').slice(0, 3);
+        var gain = sortBy(items, ['forecast', 'return_5d_pct'], 'desc').slice(0, 3);
+        var trend = sortBy(items.filter(function (i) { return i.bet_type === 'trend'; }), ['risk_adjusted_score'], 'desc').slice(0, 3);
+        var volatile = sortBy(items.filter(function (i) { return i.bet_type === 'volatile'; }), ['risk_adjusted_score'], 'desc').slice(0, 3);
+        var rangeBound = sortBy(items.filter(function (i) { return i.bet_type === 'range_bound'; }), ['risk_adjusted_score'], 'desc').slice(0, 3);
+        var lowRisk = sortBy(items, ['risk', 'score'], 'asc').slice(0, 3);
+
+        var cards = [
+            { icon: '⚡', title: '前沿供需驱动', desc: '现货/期货/订单动能最强', list: leading, metric: function (i) { return '领先 ' + numOf(i, ['leading', 'score']).toFixed(0); }, reason: leadingReason },
+            { icon: '🚀', title: '高弹性预期收益', desc: 'KNN 5日期望收益最高', list: gain, metric: function (i) { return '5日 ' + numOf(i, ['forecast', 'return_5d_pct']).toFixed(1) + '%'; }, reason: gainReason },
+            { icon: '🎯', title: '趋势主升浪', desc: '长动量半衰期 · 稳健主升', list: trend, metric: function (i) { return '综合 ' + numOf(i, ['risk_adjusted_score']).toFixed(0); }, reason: betReason },
+            { icon: '🔥', title: '妖股题材弹性', desc: '高波动 · 短线择时博弈', list: volatile, metric: function (i) { return '综合 ' + numOf(i, ['risk_adjusted_score']).toFixed(0); }, reason: betReason },
+            { icon: '🧱', title: '震荡筑底', desc: '低位蓄势 · 等待突破', list: rangeBound, metric: function (i) { return '综合 ' + numOf(i, ['risk_adjusted_score']).toFixed(0); }, reason: betReason },
+            { icon: '🛡️', title: '低风险稳健', desc: '极低回撤 · 防御配置', list: lowRisk, metric: function (i) { return '风险 ' + numOf(i, ['risk', 'score']).toFixed(0); }, reason: lowRiskReason }
+        ];
+
+        el.top3MatrixSection.hidden = false;
+        el.top3MatrixGrid.innerHTML = cards.map(function (card) {
+            var rows = card.list.map(function (item, idx) {
+                var rankNo = idx + 1;
+                return '<div class="top3-item top3-rank-' + rankNo + '" data-code="' + escapeHtml(item.code || '') + '">' +
+                    '<span class="top3-rank">#' + rankNo + '</span>' +
+                    '<div class="top3-item-body">' +
+                        '<div class="top3-item-name">' + escapeHtml(item.name || item.code || '') + ' <span class="top3-item-code">' + escapeHtml(item.code || '') + '</span></div>' +
+                        '<div class="top3-item-reason">' + escapeHtml(card.reason(item)) + '</div>' +
+                    '</div>' +
+                    '<span class="top3-item-metric">' + escapeHtml(card.metric(item)) + '</span>' +
+                '</div>';
+            }).join('');
+            return '<div class="top3-card">' +
+                '<div class="top3-card-head">' +
+                    '<span class="top3-card-icon">' + card.icon + '</span>' +
+                    '<div class="top3-card-title">' + escapeHtml(card.title) + '<span class="top3-card-desc">' + escapeHtml(card.desc) + '</span></div>' +
+                '</div>' +
+                '<div class="top3-list">' + rows + '</div>' +
+            '</div>';
+        }).join('');
+
+        el.top3MatrixGrid.querySelectorAll('.top3-item').forEach(function (row) {
+            row.addEventListener('click', function () {
+                var code = row.dataset.code;
                 if (code) selectTrackedStock(code);
             });
         });
@@ -1232,7 +1358,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         var schemaMajor = String(state.ranking.schema_version || '').split('.')[0];
-        if (schemaMajor !== '2') {
+        if (schemaMajor !== '2' && schemaMajor !== '3') {
             showRankingState('分析数据版本不兼容，请重新生成当前版本数据。', true);
             el.rankingMeta.textContent = '数据版本不兼容';
             return;
@@ -1245,9 +1371,12 @@ document.addEventListener('DOMContentLoaded', () => {
         var statusText = state.ranking.status === 'partial'
             ? '部分标的使用旧数据'
             : '全部分析完成';
-        el.rankingMeta.textContent = '交易日 ' + (state.ranking.trade_date || '--')
-            + ' · ' + items.length + ' 只自选股 · ' + statusText
-            + ' · 生成于 ' + generated.substring(0, 16);
+        var engineTag = (state.rankingEngine === 'v3')
+            ? '⚡ 3.0 前沿驱动 (Leading-45%)'
+            : '📜 2.0 传统财报 (Legacy-50%)';
+        el.rankingMeta.textContent = '[' + engineTag + '] · 交易日 ' + (state.ranking.trade_date || '--')
+            + ' · ' + items.length + ' 只标的 · ' + statusText
+            + ' · ' + generated.substring(0, 16);
 
         renderRanking();
     }
@@ -1255,6 +1384,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function bindRankingControls() {
         if (el.rankingSearch.dataset.bound === 'true') return;
         el.rankingSearch.dataset.bound = 'true';
+
+        // 3.0 前沿驱动 vs 2.0 传统财报 双轨切换器
+        document.querySelectorAll('.ranking-engine-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                state.rankingEngine = btn.dataset.engine;
+                document.querySelectorAll('.ranking-engine-btn').forEach(function (b) {
+                    b.classList.toggle('active', b === btn);
+                });
+                state.ranking = (state.rankingEngine === 'v3' && state.rankingV3) ? state.rankingV3 : state.rankingV2;
+                initRankingModule();
+                renderTop3Matrix();
+            });
+        });
 
         document.querySelectorAll('.ranking-tab').forEach(function (tab) {
             tab.addEventListener('click', function () {
@@ -1389,6 +1531,19 @@ document.addEventListener('DOMContentLoaded', () => {
         highlightRankingSelection();
     }
 
+    function leadingBadgeHtml(leading) {
+        if (!leading) return '';
+        var text = '';
+        var cls = 'leading-badge';
+        if (leading.inflection === 'positive_reversal') { text = '领先拐点↑'; cls += ' leading-up'; }
+        else if (leading.inflection === 'negative_reversal') { text = '领先拐点↓'; cls += ' leading-down'; }
+        else if (leading.momentum === 'accelerating') { text = '领先加速'; cls += ' leading-up'; }
+        else if (leading.momentum === 'decelerating') { text = '领先减速'; cls += ' leading-down'; }
+        else if (leading.data_source === 'synthetic_fallback') { text = '领先·合成'; }
+        else { return ''; }
+        return '<span class="' + cls + '" title="领先指标信号（前沿供需拐点）">' + text + '</span> ';
+    }
+
     function renderRankingTableRow(item, rank) {
         var tr = document.createElement('tr');
         tr.tabIndex = 0;
@@ -1397,6 +1552,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var firstReason = item.reasons && item.reasons[0];
         var reasonText = firstReason ? firstReason.title + '：' + firstReason.detail : '暂无明确加减分项';
         var risk = item.risk || {};
+        var leadingBadge = leadingBadgeHtml(item.leading);
 
         tr.innerHTML = '<td class="ranking-number ' + (rank <= 3 ? 'top-three' : '') + '">' + rank + '</td>'
             + '<td><span class="ranking-stock-name">' + escapeHtml(item.name) + '</span>'
@@ -1405,7 +1561,7 @@ document.addEventListener('DOMContentLoaded', () => {
             + '<td>' + formatForecastHtml(item.forecast && item.forecast.return_3d_pct) + '</td>'
             + '<td>' + formatForecastHtml(item.forecast && item.forecast.return_5d_pct) + '</td>'
             + '<td><span class="risk-badge ' + riskClass(risk.level) + '">' + escapeHtml(risk.label || '未知风险') + ' ' + formatScore(risk.score) + '</span></td>'
-            + '<td><span class="ranking-reason">' + escapeHtml(reasonText) + '</span></td>';
+            + '<td><span class="ranking-reason">' + leadingBadge + escapeHtml(reasonText) + '</span></td>';
 
         tr.addEventListener('click', function () { selectTrackedStock(item.code, true); });
         tr.addEventListener('keydown', function (event) {
@@ -1852,6 +2008,20 @@ document.addEventListener('DOMContentLoaded', () => {
         var betInfo = state.betTypes && detail.code ? state.betTypes[detail.code] : null;
         if (betInfo) {
             el.analysisSummary.textContent += ' ｜ ' + betInfo.advice;
+        }
+
+        // 领先指标信号（005 融合：前沿供需拐点，真实数据才参与评分）
+        var leadingDetail = detail.leading || {};
+        if (leadingDetail.data_source === 'akshare') {
+            var mm = leadingDetail.momentum_metrics || {};
+            var ledTxt = mm.inflection_flag === 'positive_reversal' ? '触底反转（供需拐点向上）'
+                : mm.inflection_flag === 'negative_reversal' ? '见顶回落（供需拐点向下）'
+                : mm.momentum === 'accelerating' ? '动能加速'
+                : mm.momentum === 'decelerating' ? '动能减速' : '中性';
+            el.analysisSummary.textContent += ' ｜ 领先指标：' + ledTxt
+                + '（' + (leadingDetail.source_name || '真实数据') + '）';
+        } else if (leadingDetail.data_source) {
+            el.analysisSummary.textContent += ' ｜ 领先指标：暂无真实数据（合成降级，不参与评分）';
         }
 
         el.analysisRiskBadge.className = 'risk-badge ' + riskClass(risk.level);

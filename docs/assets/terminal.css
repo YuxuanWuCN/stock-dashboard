@@ -1,0 +1,486 @@
+/* ============================================================
+   terminal.css —— CLI/终端主题覆盖层（v2.7）
+   在 style.css 之后加载。只覆盖配色/字体/形态，不动功能与布局。
+   ============================================================ */
+
+/* ---------- 终端配色变量（覆盖 :root） ---------- */
+:root {
+    --bg-color: #0d1117;
+    --card-bg: #161b22;
+    --surface-hover: #21262d;
+    --text-primary: #f0f6fc;      /* 极高对比度亮白 */
+    --text-secondary: #c9d1d9;    /* 清晰银灰 */
+    --text-muted: #8b949e;        /* 次级辅助灰 */
+    --border-color: #30363d;
+    --border-subtle: #21262d;
+    --color-up: #ff7b72;          /* 明亮珊瑚红 */
+    --color-up-bg: rgba(255, 123, 114, 0.15);
+    --color-down: #3fb950;        /* 清晰翠绿 */
+    --color-down-bg: rgba(63, 185, 80, 0.15);
+    --color-flat: #c9d1d9;
+    --color-flat-bg: rgba(201, 209, 217, 0.10);
+    --accent-primary: #58a6ff;
+    --accent-gradient: linear-gradient(135deg, #58a6ff 0%, #388bfd 100%);
+    --accent-glow: 0 0 12px rgba(88, 166, 255, 0.35);
+    --risk-low: #3fb950;
+    --risk-low-bg: rgba(63, 185, 80, 0.15);
+    --risk-medium: #d29922;
+    --risk-medium-bg: rgba(210, 153, 34, 0.15);
+    --risk-high: #ff7b72;
+    --risk-high-bg: rgba(255, 123, 114, 0.15);
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+    --radius-full: 9999px;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- 全局：清晰深色 + 现代化无衬线字体 ---------- */
+body {
+    background: #0d1117;
+    background-image:
+        radial-gradient(ellipse at top, rgba(88, 166, 255, 0.05), transparent 60%),
+        radial-gradient(ellipse at bottom, rgba(63, 185, 80, 0.04), transparent 60%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 16px;              /* 整体字号放大 */
+    font-weight: 500;             /* 字体加粗，增强阅读质感 */
+    line-height: 1.6;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 1500px; }
+
+/* 滚动条：细条终端风 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0b0f14; }
+::-webkit-scrollbar-thumb { background: #1e2a37; }
+::-webkit-scrollbar-thumb:hover { background: #2a3b4d; }
+
+/* ---------- 终端窗口栏（index.html 新增的装饰条） ---------- */
+.terminal-window-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #0e141c;
+    border: 1px solid #1e2a37;
+    border-bottom: none;
+    font-size: 12px;
+    color: #5c6f83;
+    user-select: none;
+}
+.terminal-window-bar .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.terminal-window-bar .dot.r { background: #ff5c5c; }
+.terminal-window-bar .dot.y { background: #e6b450; }
+.terminal-window-bar .dot.g { background: #2ee07a; }
+.terminal-window-bar .tpath { margin-left: 10px; color: #8fa1b3; }
+.terminal-window-bar .tpath b { color: #43d675; font-weight: normal; }
+
+/* ---------- 页头：命令行提示符风格 ---------- */
+.header {
+    background: #0e141c;
+    border: 1px solid #1e2a37;
+    border-top: 2px solid #43d675;
+}
+.header h1 {
+    font-family: inherit;
+    font-size: 20px;
+    font-weight: 600;
+    color: #43d675;
+    letter-spacing: 0.5px;
+}
+.header h1::before { content: "$ "; color: #3ec6e0; }
+.header h1::after {
+    content: "▊";
+    color: #43d675;
+    animation: cli-blink 1.1s steps(2) infinite;
+    margin-left: 2px;
+}
+@keyframes cli-blink { 50% { opacity: 0; } }
+.header .subtitle {
+    font-family: inherit;
+    color: #5c6f83;
+    font-size: 13px;
+}
+.header .subtitle::before { content: "# "; color: #3ec6e0; }
+.portfolio-link {
+    font-family: inherit;
+    background: transparent;
+    border: 1px solid #1e2a37;
+    color: #3ec6e0;
+    border-radius: 0;
+}
+.portfolio-link:hover { border-color: #43d675; color: #43d675; box-shadow: none; }
+
+/* ---------- 导航：终端命令按钮 ---------- */
+.app-nav { border-bottom: 1px solid #1e2a37; background: #0e141c; }
+.app-nav-btn {
+    font-family: inherit;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0;
+    color: #8fa1b3;
+    padding: 8px 14px;
+    transition: none;
+}
+.app-nav-btn::before { content: "  "; color: #5c6f83; }
+.app-nav-btn:hover { background: #10161e; color: #c9d4e0; box-shadow: none; }
+.app-nav-btn.active {
+    background: transparent;
+    color: #43d675;
+    border-color: #43d675;
+    box-shadow: none;
+}
+.app-nav-btn.active::before { content: "> "; color: #3ec6e0; }
+
+.page-sidebar { background: #0e141c; border: 1px solid #1e2a37; border-radius: 0; }
+.page-sidebar-title { color: #5c6f83; font-size: 12px; letter-spacing: 1px; }
+.page-sidebar-btn {
+    font-family: inherit;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 0;
+    color: #8fa1b3;
+    text-align: left;
+}
+.page-sidebar-btn::before { content: "  "; color: #5c6f83; }
+.page-sidebar-btn:hover { background: #10161e; color: #c9d4e0; }
+.page-sidebar-btn.active { color: #43d675; border-color: #43d675; background: transparent; }
+.page-sidebar-btn.active::before { content: "> "; color: #3ec6e0; }
+
+/* ---------- 状态栏：命令行状态 ---------- */
+.status-bar {
+    font-family: inherit;
+    background: #0e141c;
+    border: 1px solid #1e2a37;
+    border-radius: 0;
+    font-size: 12px;
+    color: #8fa1b3;
+}
+.status-bar.ok { border-color: #2ee07a; color: #2ee07a; }
+.status-bar.partial { border-color: #e6b450; color: #e6b450; }
+.status-bar.failed { border-color: #ff5c5c; color: #ff5c5c; }
+.status-bar .status-indicator { border-radius: 0; }
+.status-bar.ok .status-indicator { background: #2ee07a; box-shadow: 0 0 6px #2ee07a; }
+
+/* ---------- 通用卡片/面板：高对比度清爽面板 ---------- */
+.card, .ranking-section, .daily-brief-section, .buy-today-section,
+.market-temp-bar, .query-bar, .watchlist-section,
+.list-card, .analysis-card, .fundamental-card, .similarity-card, .top3-matrix-section {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    padding: 18px;
+}
+h2, h3 { 
+    color: #58a6ff; 
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+h2::before { content: "● "; color: #3fb950; font-size: 0.8em; }
+
+/* ---------- 排行榜：高清晰度表格 ---------- */
+.ranking-table-wrap { 
+    background: #161b22; 
+    border: 1px solid #30363d; 
+    border-radius: 8px; 
+    overflow: hidden;
+}
+.ranking-table { 
+    font-size: 15px;
+    line-height: 1.6;
+}
+.ranking-table th {
+    background: #21262d;
+    color: #f0f6fc;
+    font-size: 14px;
+    font-weight: 700;
+    border-bottom: 2px solid #30363d;
+    padding: 12px 14px;
+}
+.ranking-table th button { color: #f0f6fc; font-weight: 700; font-size: 14px; }
+.ranking-table td { 
+    border-bottom: 1px solid #21262d; 
+    color: #f0f6fc; 
+    padding: 14px;
+    font-weight: 500;
+}
+.ranking-table tbody tr:hover, .ranking-table tbody tr.active {
+    background: rgba(88, 166, 255, 0.12);
+}
+.ranking-table tbody tr.top-three-row td { background: rgba(63, 185, 80, 0.08); }
+.ranking-number { color: #8b949e; font-weight: 700; font-size: 15px; }
+.ranking-number.top-three { color: #3fb950; font-weight: 800; font-size: 16px; }
+.score-value { font-weight: 800; color: #58a6ff; font-size: 16px; }
+.ranking-stock-name { color: #f0f6fc; font-weight: 700; font-size: 16px; }
+.ranking-stock-meta span { color: #8b949e; font-size: 13px; font-weight: 400; }
+.ranking-reason { color: #c9d1d9; font-size: 14px; }
+
+/* 排名胶囊条 */
+.ranking-pills { background: #0e141c; border: 1px solid #1e2a37; border-radius: 0; }
+.ranking-pill { background: transparent; border: 1px solid #1e2a37; color: #8fa1b3; border-radius: 0; font-family: inherit; }
+.ranking-pill:hover { border-color: #3ec6e0; color: #3ec6e0; }
+.ranking-pill.active { background: transparent; border-color: #43d675; color: #43d675; }
+
+/* ---------- 徽章：方括号标签风格 ---------- */
+.risk-badge, .bet-badge, .leading-badge, .buy-today-zone {
+    border-radius: 0 !important;
+    font-family: inherit;
+}
+.risk-badge { background: transparent !important; border: 1px solid #1e2a37; color: #8fa1b3 !important; }
+.risk-badge.low { border-color: #2ee07a; color: #2ee07a !important; }
+.risk-badge.medium { border-color: #e6b450; color: #e6b450 !important; }
+.risk-badge.high { border-color: #ff5c5c; color: #ff5c5c !important; }
+.leading-badge.leading-up { background: transparent; border-color: #2ee07a; color: #2ee07a; }
+.leading-badge.leading-down { background: transparent; border-color: #ff5c5c; color: #ff5c5c; }
+
+/* ---------- 市场温度：终端进度条 ---------- */
+.market-temp-bar { border-left: 3px solid #43d675; }
+.market-temp-value { color: #43d675; font-family: inherit; }
+.market-temp-scale { background: #0e141c; border: 1px solid #1e2a37; border-radius: 0; }
+.market-temp-scale-fill { background: linear-gradient(90deg, #43d675, #3ec6e0); border-radius: 0; }
+.market-temp-ratio { color: #8fa1b3; }
+
+/* ---------- 今日关注卡片 ---------- */
+.buy-today-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 16px;
+}
+.buy-today-card:hover { border-color: #58a6ff; box-shadow: 0 4px 16px rgba(88, 166, 255, 0.2); }
+.buy-today-card-name { color: #f0f6fc; font-weight: 700; font-size: 16px; }
+.buy-today-zone-hot { border-color: #3fb950; color: #3fb950; background: rgba(63, 185, 80, 0.1); font-weight: 600; }
+.buy-today-zone-warn { border-color: #ff7b72; color: #ff7b72; background: rgba(255, 123, 114, 0.1); font-weight: 600; }
+.daily-brief-summary { color: #f0f6fc; font-size: 15px; line-height: 1.7; font-weight: 500; }
+.daily-brief-meta { color: #8b949e; font-size: 13px; }
+
+/* ---------- 详情页：终端面板 ---------- */
+.analysis-summary { background: #161b22; border: 1px solid #30363d; border-radius: 8px; color: #f0f6fc; font-size: 15px; padding: 16px; }
+.analysis-summary::before { content: "$ cat detail.json\n"; display: block; color: #8b949e; margin-bottom: 6px; }
+.market-metrics-grid .metric-value { color: #3fb950; font-size: 18px; font-weight: 700; }
+.market-metrics-grid .metric-label { color: #8b949e; font-size: 13px; }
+
+/* 查询栏 */
+.query-bar { background: #0e141c; border: 1px solid #1e2a37; }
+.query-input, .query-go-btn {
+    font-family: inherit;
+    background: #0b0f14;
+    border: 1px solid #1e2a37;
+    color: #c9d4e0;
+    border-radius: 0;
+}
+.query-go-btn { color: #43d675; }
+.query-go-btn:hover { border-color: #43d675; box-shadow: none; }
+
+/* 搜索框 */
+.watchlist-search-input, .ranking-search-input {
+    font-family: inherit;
+    background: #0b0f14;
+    border: 1px solid #1e2a37;
+    color: #c9d4e0;
+    border-radius: 0;
+}
+input, select, textarea { color-scheme: dark; }
+
+/* ---------- ECharts：透明终端底 ---------- */
+.echarts-container { background: transparent !important; }
+.chart-card { background: #10161e !important; border: 1px solid #1e2a37 !important; border-radius: 0 !important; }
+
+/* ---------- 模态框：终端窗口 ---------- */
+.modal-panel {
+    background: #0e141c;
+    border: 1px solid #2a3b4d;
+    border-radius: 0;
+    box-shadow: 0 0 30px rgba(67, 214, 117, 0.15);
+}
+.modal-title { color: #43d675; font-family: inherit; }
+.modal-close { color: #8fa1b3; }
+
+/* ---------- 模拟盘/量化组合链接入口 ---------- */
+.portfolio-link::before { content: "$ open "; color: #5c6f83; }
+
+/* 表格通用 */
+table { font-family: inherit; }
+th { color: #3ec6e0; }
+td { color: #c9d4e0; }
+/* ---------- 3.0 前沿驱动 vs 2.0 传统基本面 切换器 ---------- */
+.ranking-engine-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    padding: 6px 12px;
+    background: #0e141c;
+    border: 1px solid #1e2a37;
+    border-left: 3px solid #3ec6e0;
+}
+.ranking-engine-label {
+    font-size: 12px;
+    color: #5c6f83;
+    font-family: inherit;
+}
+.ranking-engine-btn {
+    font-family: inherit;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #1e2a37;
+    color: #8fa1b3;
+    padding: 4px 10px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: all 0.15s ease;
+}
+.ranking-engine-btn:hover {
+    border-color: #3ec6e0;
+    color: #c9d4e0;
+}
+.ranking-engine-btn.active {
+    background: rgba(62, 198, 224, 0.12);
+    border-color: #3ec6e0;
+    color: #3ec6e0;
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(62, 198, 224, 0.25);
+}
+/* ---------- 首页全榜单 Top 3 精选矩阵 ---------- */
+.top3-matrix-section {
+    margin-bottom: 20px;
+}
+.top3-matrix-heading {
+    padding: 4px 2px 12px;
+}
+.top3-matrix-heading h2 {
+    color: #c9d4e0;
+    font-family: inherit;
+    font-size: 18px;
+    margin: 0 0 4px;
+}
+.top3-matrix-heading h2::before {
+    content: "$ cat top3.txt\A";
+    white-space: pre;
+    display: block;
+    color: #5c6f83;
+    font-size: 11px;
+    margin-bottom: 6px;
+}
+.top3-matrix-subtitle {
+    color: #5c6f83;
+    font-size: 12px;
+    margin: 0;
+    font-family: inherit;
+}
+.top3-matrix-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+}
+.top3-card {
+    background: #10161e;
+    border: 1px solid #1e2a37;
+    border-radius: 0;
+    padding: 10px;
+}
+.top3-card:hover {
+    border-color: #3ec6e0;
+}
+.top3-card-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #1e2a37;
+}
+.top3-card-icon {
+    font-size: 16px;
+}
+.top3-card-title {
+    color: #c9d4e0;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+}
+.top3-card-desc {
+    color: #5c6f83;
+    font-size: 11px;
+    font-weight: normal;
+    margin-top: 2px;
+}
+.top3-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.top3-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    background: #0e141c;
+    border: 1px solid #1a2531;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.top3-item:hover {
+    border-color: #43d675;
+    background: rgba(67, 214, 117, 0.06);
+}
+.top3-rank {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 12px;
+    border: 1px solid #2a3644;
+    color: #8fa1b3;
+    background: transparent;
+}
+.top3-item.top3-rank-1 .top3-rank { border-color: #e6b450; color: #e6b450; }
+.top3-item.top3-rank-2 .top3-rank { border-color: #9aa7b5; color: #9aa7b5; }
+.top3-item.top3-rank-3 .top3-rank { border-color: #c98a5e; color: #c98a5e; }
+.top3-item-body {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.top3-item-name {
+    color: #c9d4e0;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.top3-item-code {
+    color: #5c6f83;
+    font-weight: normal;
+    font-size: 11px;
+    margin-left: 4px;
+}
+.top3-item-reason {
+    color: #8fa1b3;
+    font-size: 11px;
+    font-family: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+}
+.top3-item-metric {
+    flex: 0 0 auto;
+    color: #3ec6e0;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: inherit;
+}

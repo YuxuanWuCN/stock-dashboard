@@ -3,18 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>股票研究看板 2.5</title>
-    <link rel="stylesheet" href="assets/style.css?v=20260817_v26_final">
+    <title>stock-dashboard 2.7 — CLI</title>
+    <link rel="stylesheet" href="assets/style.css?v=20260821_v30_contrast">
+    <link rel="stylesheet" href="assets/terminal.css?v=20260821_v30_contrast">
     <!-- 引入 ECharts 5.5.1 CDN -->
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
 <body>
     <div class="container">
+        <!-- 终端窗口栏（CLI 装饰） -->
+        <div class="terminal-window-bar" aria-hidden="true">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="tpath"><b>stock-dashboard</b> ~/2.0版 — bash</span>
+        </div>
         <!-- 顶部状态栏 -->
         <header class="header">
             <div class="header-main">
-                <h1>股票研究看板 2.5</h1>
-                <p class="subtitle">每日收盘分析自选股的短线风险与历史统计收益</p>
+                <h1>stock-dashboard --watch</h1>
+                <p class="subtitle">每日收盘分析：短线风险 × 历史统计收益 × 前沿领先信号</p>
             </div>
             <div class="header-actions">
                 <a href="portfolio.html" class="portfolio-link">📈 量化组合</a>
@@ -63,6 +69,15 @@
                 <div class="market-temp-scale-fill" id="market-temp-fill"></div>
             </div>
             <span id="market-temp-ratio" class="market-temp-ratio">仓位参考 --</span>
+        </section>
+
+        <!-- v3.0 全榜单 Top 3 精选矩阵（首页置顶，突破单一低风险偏好） -->
+        <section id="top3-matrix-section" class="top3-matrix-section" aria-labelledby="top3-matrix-title" hidden>
+            <div class="top3-matrix-heading">
+                <h2 id="top3-matrix-title">⚡ 全榜单 Top 3 精选矩阵</h2>
+                <p class="top3-matrix-subtitle">前沿供需驱动 / 高弹性预期 / 大趋势主升 / 妖股题材 / 震荡筑底 / 低风险防御 —— 每类各取前三，不再只看低风险</p>
+            </div>
+            <div id="top3-matrix-grid" class="top3-matrix-grid"></div>
         </section>
 
         <!-- v2.10 明日重点关注（AI 每日总结，置顶） -->
@@ -139,6 +154,13 @@
                         <option value="">全部行业</option>
                     </select>
                 </div>
+            </div>
+
+            <!-- 3.0 前沿驱动 vs 2.0 传统财报 双轨切换器 -->
+            <div class="ranking-engine-bar" id="ranking-engine-bar" aria-label="评分引擎版本">
+                <span class="ranking-engine-label">$ engine:</span>
+                <button class="ranking-engine-btn active" type="button" data-engine="v3">⚡ v3.0 前沿驱动 (Leading-45%)</button>
+                <button class="ranking-engine-btn" type="button" data-engine="v2">📜 v2.0 传统财报 (Legacy-50%)</button>
             </div>
 
             <div class="ranking-tabs" role="tablist" aria-label="排行榜类型">
@@ -516,6 +538,6 @@
     </div>
 
     <!-- 引入前端交互脚本 -->
-    <script src="assets/app.js?v=20260817_v26_final"></script>
+    <script src="assets/app.js?v=20260818_v29_top3"></script>
 </body>
 </html>

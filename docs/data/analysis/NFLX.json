@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-17 21:38:03+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-21 00:05:58+08:00",
+  "trade_date": "2026-08-20",
   "code": "NFLX",
   "name": "奈飞",
   "type": "us",
@@ -10,89 +10,111 @@
   "alpha_gate": {
     "verdict": "reject",
     "reject_reason": "statistical",
-    "alpha": -0.00014813709789459101,
-    "alpha_p_value": 0.8998282887723955,
-    "information_ratio": -0.003900439209673515,
+    "alpha": -0.00018822263204183298,
+    "alpha_p_value": 0.8729490929787341,
+    "information_ratio": -0.004952149768572662,
     "betas": {
-      "MKT": -0.0017436139410409064,
-      "SMB": -0.06684793990171582,
-      "HML": 0.3557957363497613,
-      "MOM": 0.06340124858260444
+      "MKT": 0.003969498232143936,
+      "SMB": -0.06460909405795551,
+      "HML": 0.3419347551769801,
+      "MOM": 0.06476459383876956
     },
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 32.0,
-    "risk": 59.5,
+    "risk_adjusted": 32.9,
+    "risk": 60.2,
     "technical": 85.0,
-    "industry": 73.0
+    "industry": 65.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 00:02:48"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 29.0,
-    "max_drawdown_60d_pct": -24.3,
-    "atr14_pct": 2.98,
+    "annualized_volatility_20d_pct": 31.57,
+    "max_drawdown_60d_pct": -22.61,
+    "atr14_pct": 3.03,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 48.5,
-        "value": 29.0
+        "score": 52.5,
+        "value": 31.57
       },
       {
         "name": "60日最大回撤",
-        "score": 68.3,
-        "value": -24.3
+        "score": 65.3,
+        "value": -22.61
       },
       {
         "name": "ATR百分比",
-        "score": 53.5,
-        "value": 2.98
+        "score": 54.5,
+        "value": 3.03
       },
       {
         "name": "量价异常",
-        "score": 61.9,
-        "value": 0.75
+        "score": 55.4,
+        "value": 0.81
       },
       {
         "name": "行业波动",
-        "score": 73.3,
-        "value": 34.1
+        "score": 78.2,
+        "value": 35.41
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -1.09,
-    "return_5d_pct": -1.09,
-    "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 46.7,
+    "return_3d_pct": -0.33,
+    "return_5d_pct": -0.95,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 76.338,
-    "ma10": 75.062,
-    "ma20": 72.785,
-    "ma60": 76.76950000000001,
-    "rsi14": 61.7,
-    "macd_dif": 0.6140430111001507,
-    "macd_dea": -0.23917326304292397,
-    "macd_hist": 1.7064325482861493,
-    "atr14_pct": 2.984097046408941,
-    "boll_position": 0.9545659759380857,
-    "return_5d_pct": 5.422174264904234,
-    "return_20d_pct": 13.357505438723694,
-    "volume_ratio_5d": 0.75
+    "ma5": 78.468,
+    "ma10": 77.001,
+    "ma20": 74.80949999999999,
+    "ma60": 76.11133333333333,
+    "rsi14": 63.7,
+    "macd_dif": 1.3474332073664215,
+    "macd_dea": 0.5207721078074007,
+    "macd_hist": 1.6533221991180416,
+    "atr14_pct": 3.0310696091195783,
+    "boll_position": 0.9725670277117975,
+    "return_5d_pct": 2.4667689161554263,
+    "return_20d_pct": 16.373929452750758,
+    "volume_ratio_5d": 0.81
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.3,
-    "return_20d_pct": 4.72,
-    "return_60d_pct": -7.81,
-    "relative_strength_20d_pct": 8.63
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.99,
+    "relative_strength_20d_pct": 17.44
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -100,18 +122,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -1.09,
-      "median_return_pct": -0.62,
-      "best_return_pct": 6.44,
-      "worst_return_pct": -10.72
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.33,
+      "median_return_pct": -0.24,
+      "best_return_pct": 12.81,
+      "worst_return_pct": -11.96
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -1.09,
-      "median_return_pct": -1.21,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.95,
+      "median_return_pct": -0.4,
       "best_return_pct": 8.77,
-      "worst_return_pct": -12.89
+      "worst_return_pct": -13.43
     }
   },
   "fundamental": null,
@@ -119,13 +141,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 24.3%，风险偏高。",
+      "detail": "近60日最大回撤 22.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 24.3%，风险扣分。",
+      "detail": "近60日最大回撤 22.6%，风险扣分。",
       "contribution": -7.0
     }
   ],

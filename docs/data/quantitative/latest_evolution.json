@@ -1,152 +1,188 @@
 {
-  "analysis_date": "20260811_154139",
+  "analysis_date": "20260815_165817",
   "champion": {
-    "name": "global",
+    "name": "aggressive",
     "stats": {
-      "cumulative_return": 1.1,
-      "avg_daily_return": 0.55,
-      "volatility": 0.15,
-      "win_rate": 100.0,
-      "max_drawdown": 0,
-      "sharpe": 3.667,
-      "score": 24.72,
-      "trading_days": 2
+      "cumulative_return": 2.47,
+      "avg_daily_return": 0.412,
+      "volatility": 0.998,
+      "win_rate": 50.0,
+      "max_drawdown": 0.85,
+      "sharpe": 0.412,
+      "score": 7.22,
+      "trading_days": 6
     },
     "analysis": {
-      "core_holdings": [],
-      "prediction_accuracy": 11.11111111111111,
+      "core_holdings": [
+        {
+          "code": "WDC",
+          "name": "西部数据",
+          "appearances": 3,
+          "avg_return": 3.64
+        },
+        {
+          "code": "001258",
+          "name": "立新能源",
+          "appearances": 6,
+          "avg_return": 2.31
+        },
+        {
+          "code": "WMT",
+          "name": "沃尔玛",
+          "appearances": 3,
+          "avg_return": 0.9
+        },
+        {
+          "code": "600809",
+          "name": "山西汾酒",
+          "appearances": 6,
+          "avg_return": 0.57
+        },
+        {
+          "code": "03690",
+          "name": "美团-W",
+          "appearances": 5,
+          "avg_return": 0.03
+        }
+      ],
+      "prediction_accuracy": 44.5945945945946,
       "llm_analysis": {
         "success_factors": [
-          "高盈亏比：预测准确率仅11.1%，但最近7天收益为正，说明单次盈利远大于多次亏损，策略依靠少数大行情获利。",
-          "严格风险控制：在低胜率下仍能保持正收益，表明每笔亏损有限，止损纪律严格，避免了连续小亏侵蚀本金。"
+          "跨市场分散配置（美股、A股、港股）降低了单一市场波动风险",
+          "高收益个股集中出现（如WDC）带动整体收益，同时高频持仓（立新能源、山西汾酒）提供稳定回报",
+          "策略对成长型与消费型股票混合持有，在震荡市中兼顾进攻与防御"
         ],
         "holdings_characteristics": {
-          "industry": "未知（数据中未提供持仓信息，可能集中于高弹性行业如科技、新能源等）",
-          "market_cap": "小盘或中盘（高波动特征通常对应小市值股票）",
-          "volatility": "高（收益数据0.4和0.7显示大幅波动，典型高波动标的）"
+          "industry": "混合行业，以消费（白酒、零售）、科技（存储）和新能源为主",
+          "market_cap": "以中大盘股为主（沃尔玛、美团、西部数据等），小盘为辅（立新能源）",
+          "volatility": "中高波动率，既有高波动的科技新能源股，也有低波动的消费零售股"
         },
         "sustainability": {
-          "score": 5.5,
-          "reasoning": "低准确率依赖高盈亏比，长期稳定性存疑；若市场环境转向震荡或趋势行情减少，策略可能失效。同时样本量过小，统计显著性不足。",
+          "score": 6.0,
+          "reasoning": "预测准确率仅44.6%，但近期收益为正，主要依赖少数高收益个股（如WDC）的贡献，这种集中依赖存在不确定性；若高收益个股行情消退，策略可能面临回撤。跨市场分散和稳定持仓提供一定缓冲，但整体可持续性一般。",
           "risk_factors": [
-            "预测准确率极低，可能导致回撤峰值较大",
-            "盈利依赖极少数交易，结果随机性强",
-            "缺少持仓明细，难以判断收益来源的可靠性"
+            "高收益个股（如WDC）的行情不可持续，平均收益回归后策略优势减弱",
+            "预测准确率低于50%，长期可能因随机性导致收益不稳定",
+            "跨市场投资面临汇率、政策、流动性等额外风险"
           ]
         },
         "improvement_directions": [
           {
-            "direction": "增加过滤条件以提高准确率",
-            "reason": "当前准确率仅11.1%，对盈亏比要求过高；通过加入趋势确认、量能验证等过滤器，减少无效交易，降低回撤风险。",
-            "expected_impact": "提升交易命中率，使资金曲线更平滑，增强策略稳定性"
+            "direction": "优化选股模型，提升预测准确率",
+            "reason": "当前准确率44.6%偏低，改善预测质量可从源头提高策略胜率",
+            "expected_impact": "若准确率提升至55%以上，策略收益和稳定性将显著增强"
           },
           {
-            "direction": "优化仓位管理，采用动态仓位策略",
-            "reason": "在高盈亏比下，通过仓位控制平衡风险，避免单次大亏损影响整体资金。",
-            "expected_impact": "提高风险调整后收益，减少极端回撤，提升长期存活概率"
+            "direction": "动态调整持仓权重，减少低收益股票占比",
+            "reason": "美团平均收益仅0.03%，低于其他持仓，降低其权重可提升整体组合收益",
+            "expected_impact": "组合平均收益有望提升，同时减少无效占用资金"
+          },
+          {
+            "direction": "设置止损和止盈机制，控制尾部风险",
+            "reason": "近期存在负收益天数，回撤控制可平滑净值曲线",
+            "expected_impact": "降低最大回撤，提升风险调整后收益（如夏普比率）"
           }
         ]
       }
     },
-    "cumulative_return": 1.1,
-    "sharpe_ratio": 3.667,
-    "win_rate": 1.0,
-    "max_drawdown": 0
+    "cumulative_return": 2.47,
+    "sharpe_ratio": 0.412,
+    "win_rate": 0.5,
+    "max_drawdown": 0.85
   },
   "all_strategies": {
     "aggressive": {
-      "cumulative_return": 3.32,
-      "avg_daily_return": 1.66,
-      "volatility": 0.69,
-      "win_rate": 100.0,
-      "max_drawdown": 0,
-      "sharpe": 2.406,
-      "score": 22.67,
-      "trading_days": 2
+      "cumulative_return": 2.47,
+      "avg_daily_return": 0.412,
+      "volatility": 0.998,
+      "win_rate": 50.0,
+      "max_drawdown": 0.85,
+      "sharpe": 0.412,
+      "score": 7.22,
+      "trading_days": 6
     },
     "robust": {
-      "cumulative_return": 0.07,
-      "avg_daily_return": 0.035,
-      "volatility": 0.325,
-      "win_rate": 50.0,
-      "max_drawdown": 0.29,
-      "sharpe": 0.108,
-      "score": 7.78,
-      "trading_days": 2
+      "cumulative_return": -0.72,
+      "avg_daily_return": -0.12,
+      "volatility": 0.257,
+      "win_rate": 33.3,
+      "max_drawdown": 0.79,
+      "sharpe": -0.466,
+      "score": 1.89,
+      "trading_days": 6
     },
     "bluechip": {
-      "cumulative_return": 0.89,
-      "avg_daily_return": 0.445,
-      "volatility": 0.245,
-      "win_rate": 100.0,
-      "max_drawdown": 0,
-      "sharpe": 1.816,
-      "score": 19.99,
-      "trading_days": 2
+      "cumulative_return": -2.03,
+      "avg_daily_return": -0.338,
+      "volatility": 0.705,
+      "win_rate": 33.3,
+      "max_drawdown": 2.92,
+      "sharpe": -0.48,
+      "score": 0.86,
+      "trading_days": 6
     },
     "defensive": {
-      "cumulative_return": 0.8,
-      "avg_daily_return": 0.4,
-      "volatility": 0.13,
-      "win_rate": 100.0,
-      "max_drawdown": 0,
-      "sharpe": 3.077,
-      "score": 23.09,
-      "trading_days": 2
+      "cumulative_return": 0.27,
+      "avg_daily_return": 0.045,
+      "volatility": 0.422,
+      "win_rate": 66.7,
+      "max_drawdown": 0.8,
+      "sharpe": 0.107,
+      "score": 6.96,
+      "trading_days": 6
     },
     "global": {
-      "cumulative_return": 1.1,
-      "avg_daily_return": 0.55,
-      "volatility": 0.15,
-      "win_rate": 100.0,
-      "max_drawdown": 0,
-      "sharpe": 3.667,
-      "score": 24.72,
-      "trading_days": 2
+      "cumulative_return": 0.31,
+      "avg_daily_return": 0.052,
+      "volatility": 0.383,
+      "win_rate": 33.3,
+      "max_drawdown": 0.79,
+      "sharpe": 0.135,
+      "score": 3.71,
+      "trading_days": 6
     },
     "tech": {
-      "cumulative_return": 1.21,
-      "avg_daily_return": 0.605,
-      "volatility": 0.655,
+      "cumulative_return": 0.99,
+      "avg_daily_return": 0.165,
+      "volatility": 0.726,
       "win_rate": 50.0,
-      "max_drawdown": 0.05,
-      "sharpe": 0.924,
-      "score": 10.41,
-      "trading_days": 2
+      "max_drawdown": 1.15,
+      "sharpe": 0.227,
+      "score": 5.93,
+      "trading_days": 6
     }
   },
   "variants": [
     {
-      "name": "global_v1",
-      "display_name": "稳健过滤版",
-      "description": "提升稳定性",
+      "name": "aggressive_v1",
+      "display_name": "置信度过滤增强策略",
+      "description": "提高收益和稳定性",
       "changes": {
-        "predict_threshold": "0.65",
-        "volume_filter": "成交量>20日均量*1.2"
+        "预测置信度阈值": "0.6"
       },
-      "llm_reasoning": "交易次数减少约30%，胜率提升至20%以上，资金曲线更平滑，回撤进一步降低"
+      "llm_reasoning": "若准确率提升至55%以上，组合收益和夏普比率显著增强，回撤可能略微降低，整体稳定性提升。"
     },
     {
-      "name": "global_v2",
-      "display_name": "动态风控版",
-      "description": "降低风险",
-      "changes": {
-        "risk_per_trade": "1%",
-        "position_sizing": "ATR动态仓位（仓位=风险金额/(ATR*合约乘数)）"
-      },
-      "llm_reasoning": "最大回撤控制在5%以内，风险调整后夏普比率进一步提升，长期存活能力增强"
-    },
-    {
-      "name": "global_v3",
-      "display_name": "趋势确认版",
+      "name": "aggressive_v2",
+      "display_name": "高收益加权聚焦策略",
       "description": "提高收益",
       "changes": {
-        "trend_filter": "收盘价>MA20 且 MA20>MA50",
-        "profit_take": "15%"
+        "权重分配方式": "按预测收益排名加权（Top10%权重翻倍）",
+        "最低预期收益阈值": "0.1%"
       },
-      "llm_reasoning": "在保持高盈亏比的同时，增加盈利交易的平均收益，累计收益有望提升至3%以上"
+      "llm_reasoning": "组合平均预期收益有望提升20-30%，收益集中度上升，但需监控个股集中风险。"
+    },
+    {
+      "name": "aggressive_v3",
+      "display_name": "止损止盈风控策略",
+      "description": "降低风险",
+      "changes": {
+        "止损线": "-5%",
+        "止盈线": "+15%"
+      },
+      "llm_reasoning": "最大回撤预计降低至0.5%以下，夏普比率提升至0.5以上，可能放弃部分潜在收益但风险更可控。"
     }
   ],
-  "llm_analysis": "**成功因素：**高盈亏比：预测准确率仅11.1%，但最近7天收益为正，说明单次盈利远大于多次亏损，策略依靠少数大行情获利。；严格风险控制：在低胜率下仍能保持正收益，表明每笔亏损有限，止损纪律严格，避免了连续小亏侵蚀本金。\n**可持续性（5.5/10）：**低准确率依赖高盈亏比，长期稳定性存疑；若市场环境转向震荡或趋势行情减少，策略可能失效。同时样本量过小，统计显著性不足。\n**改进方向：**增加过滤条件以提高准确率（当前准确率仅11.1%，对盈亏比要求过高；通过加入趋势确认、量能验证等过滤器，减少无效交易，降低回撤风险。）；优化仓位管理，采用动态仓位策略（在高盈亏比下，通过仓位控制平衡风险，避免单次大亏损影响整体资金。）",
-  "source_file": "weekly_analysis_20260811_154139.json"
+  "llm_analysis": "**成功因素：**跨市场分散配置（美股、A股、港股）降低了单一市场波动风险；高收益个股集中出现（如WDC）带动整体收益，同时高频持仓（立新能源、山西汾酒）提供稳定回报；策略对成长型与消费型股票混合持有，在震荡市中兼顾进攻与防御\n**可持续性（6.0/10）：**预测准确率仅44.6%，但近期收益为正，主要依赖少数高收益个股（如WDC）的贡献，这种集中依赖存在不确定性；若高收益个股行情消退，策略可能面临回撤。跨市场分散和稳定持仓提供一定缓冲，但整体可持续性一般。\n**改进方向：**优化选股模型，提升预测准确率（当前准确率44.6%偏低，改善预测质量可从源头提高策略胜率）；动态调整持仓权重，减少低收益股票占比（美团平均收益仅0.03%，低于其他持仓，降低其权重可提升整体组合收益）；设置止损和止盈机制，控制尾部风险（近期存在负收益天数，回撤控制可平滑净值曲线）",
+  "source_file": "weekly_analysis_20260815_165817.json"
 }

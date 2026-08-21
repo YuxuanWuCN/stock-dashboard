@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-17 21:38:03+08:00",
-  "trade_date": "2026-08-17",
+  "generated_at": "2026-08-21 09:20:59+08:00",
+  "trade_date": "2026-08-20",
   "code": "600809",
   "name": "山西汾酒",
   "type": "stock",
@@ -10,89 +10,111 @@
   "alpha_gate": {
     "verdict": "reject",
     "reject_reason": "statistical",
-    "alpha": -0.000534253214349478,
-    "alpha_p_value": 0.4306776854248635,
-    "information_ratio": -0.024071274954635465,
+    "alpha": -0.00044585486814369813,
+    "alpha_p_value": 0.5097472694592273,
+    "information_ratio": -0.02021367200660494,
     "betas": {
-      "MKT": -0.011753607438437026,
-      "SMB": 0.1552413777787597,
-      "HML": 0.02869054085207632,
-      "MOM": -0.012072231034233237
+      "MKT": -0.022199153335261478,
+      "SMB": 0.14740521621838246,
+      "HML": 0.0523861700247136,
+      "MOM": -0.01814721309612775
     },
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 51.6,
-    "risk": 49.0,
-    "technical": 85.0,
-    "industry": 51.2
+    "risk_adjusted": 42.6,
+    "risk": 58.6,
+    "technical": 65.0,
+    "industry": 56.9,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 09:17:25"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 39.93,
-    "max_drawdown_60d_pct": -18.31,
-    "atr14_pct": 3.74,
+    "annualized_volatility_20d_pct": 38.18,
+    "max_drawdown_60d_pct": -18.1,
+    "atr14_pct": 3.47,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 65.3,
-        "value": 39.93
+        "score": 69.6,
+        "value": 38.18
       },
       {
         "name": "60日最大回撤",
-        "score": 52.0,
-        "value": -18.31
+        "score": 57.1,
+        "value": -18.1
       },
       {
         "name": "ATR百分比",
-        "score": 63.9,
-        "value": 3.74
+        "score": 68.8,
+        "value": 3.47
       },
       {
         "name": "量价异常",
-        "score": 34.7,
-        "value": 0.85
+        "score": 94.6,
+        "value": 0.65
       },
       {
         "name": "行业波动",
-        "score": 1.0,
-        "value": 33.93
+        "score": 1.8,
+        "value": 35.41
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.7,
-    "return_5d_pct": 1.02,
-    "up_probability_3d_pct": 56.7,
-    "up_probability_5d_pct": 56.7,
+    "return_3d_pct": -0.02,
+    "return_5d_pct": 0.61,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 122.41,
-    "ma10": 121.78299999999999,
-    "ma20": 121.1765,
-    "ma60": 114.19666666666667,
-    "rsi14": 50.0,
-    "macd_dif": 2.4975165856096595,
-    "macd_dea": 2.87188917406225,
-    "macd_hist": -0.7487451769051807,
-    "atr14_pct": 3.7443094664627385,
-    "boll_position": 0.3495238405187705,
-    "return_5d_pct": -3.3793663688058473,
-    "return_20d_pct": 2.0768966700995595,
-    "volume_ratio_5d": 0.85
+    "ma5": 120.15599999999999,
+    "ma10": 121.36899999999999,
+    "ma20": 121.529,
+    "ma60": 114.07883333333332,
+    "rsi14": 49.2,
+    "macd_dif": 1.550564033621697,
+    "macd_dea": 2.369361695019353,
+    "macd_hist": -1.6375953227953115,
+    "atr14_pct": 3.4681758280945885,
+    "boll_position": 0.2755939089702784,
+    "return_5d_pct": -6.3611220861319655,
+    "return_20d_pct": 1.2387868432294002,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "白酒",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.3,
-    "return_20d_pct": 4.72,
-    "return_60d_pct": -5.86,
-    "relative_strength_20d_pct": -3.39
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": 2.3
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -100,17 +122,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.7,
-      "median_return_pct": 0.85,
-      "best_return_pct": 6.81,
-      "worst_return_pct": -5.26
+      "up_probability_pct": 53.3,
+      "average_return_pct": -0.02,
+      "median_return_pct": 0.55,
+      "best_return_pct": 5.95,
+      "worst_return_pct": -5.84
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.02,
-      "median_return_pct": 0.79,
-      "best_return_pct": 9.99,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.61,
+      "median_return_pct": 0.25,
+      "best_return_pct": 9.1,
       "worst_return_pct": -6.7
     }
   },
@@ -239,13 +261,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 18.3%，风险偏高。",
+      "detail": "近60日最大回撤 18.1%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 18.3%，风险扣分。",
+      "detail": "近60日最大回撤 18.1%，风险扣分。",
       "contribution": -7.0
     },
     {
