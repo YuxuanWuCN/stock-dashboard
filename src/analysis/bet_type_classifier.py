@@ -172,12 +172,34 @@ def classify_bet_type(
     # 妖股型（如题材炒作）：半衰期极短（< 3 天，冲高快速回落）且 日内波动极大（ATR > 10%）
     # 震荡型：其余
     
-    is_persistent_trend = (half_life is None) or (half_life is not None and half_life >= 4.0)
-    is_flash_speculation = (half_life is not None and half_life <= 2.5) and (atr_ratio > 0.08)
+    # 计算妖股指数（Monster Score: 0~100）
+    # 基于 20日年化波动率、ATR日均振幅比、短线反转速度
+    vol_part = min(50.0, max(0.0, (vol - 0.4) / 0.8 * 50.0))  # 波动率贡献 (0-50分)
+    atr_part = min(35.0, max(0.0, (atr_ratio - 0.04) / 0.08 * 35.0))  # ATR日内振幅贡献 (0-35分)
+    hl_part = 15.0 if (half_life is not None and half_life <= 3.0) else (7.5 if (half_life is not None and half_life <= 5.0) else 0.0)
+    monster_score = round(min(100.0, max(0.0, vol_part + atr_part + hl_part)), 1)
+    
+    metrics["monster_score"] = monster_score
+    
+    # 标的性质分类（支持：volatile 妖股题材型, trend 趋势主升型, range_bound 震荡蓄势型）
+    # 妖股题材型判定条件：
+    # 1. 动量半衰期 <= 3.0 且 ATR >= 6.5% 或 波动率 >= 80%
+    # 2. 或者 Monster Score >= 55.0
+    is_flash_speculation = (
+        monster_score >= 55.0
+        or ((half_life is not None and half_life <= 3.0) and (atr_ratio >= 0.065 or vol >= 0.80))
+        or (atr_ratio >= 0.09 and vol >= 0.85)
+    )
+    
+    is_persistent_trend = (
+        not is_flash_speculation
+        and ((half_life is None) or (half_life is not None and half_life >= 3.5))
+        and vol >= 0.30
+    )
     
     if is_flash_speculation:
         return "volatile", metrics
-    elif is_persistent_trend and vol > 0.3:
+    elif is_persistent_trend:
         return "trend", metrics
     else:
         return "range_bound", metrics

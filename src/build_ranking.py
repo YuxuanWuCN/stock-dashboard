@@ -925,6 +925,9 @@ def build_ranking(
             "fundamental": fundamental,
             "reasons": r["reasons"],
             "alpha_gate": r.get("alpha_gate"),
+            "bet_type": r.get("bet_type"),
+            "bet_type_metrics": r.get("bet_type_metrics"),
+            "strategy_recommendation": r.get("strategy_recommendation"),
         }
 
         items.append(item_entry)

@@ -18,31 +18,40 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 from src.config import DATA_DIR
 from src.utils import beijing_datetime_str, beijing_date_str
 
 
 def load_deepseek_client():
-    """加载 DeepSeek API 客户端"""
+    """加载 DeepSeek API 客户端（统一支持外置 api-key.txt 与环境变量）"""
     try:
         from openai import OpenAI
+        from src.llm.config import DEEPSEEK_API_KEY_FILE
 
-        api_key_file = Path("api-key.txt")
-        if not api_key_file.exists():
-            print("⚠️  未找到 api-key.txt，跳过市场情绪分析")
+        api_key = os.environ.get("DEEPSEEK_API_KEY", "").strip()
+        if not api_key and Path(DEEPSEEK_API_KEY_FILE).exists():
+            api_key = Path(DEEPSEEK_API_KEY_FILE).read_text(encoding="utf-8").strip()
+
+        if not api_key:
+            print("⚠️  未找到有效 API key，将自动降级为规则引擎生成情绪报告")
             return None
-
-        with open(api_key_file, 'r') as f:
-            api_key = f.read().strip()
 
         client = OpenAI(
             api_key=api_key,
-            base_url="https://api.deepseek.com/v1"
+            base_url=os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"),
+            timeout=20.0
         )
 
         return client
     except Exception as e:
-        print(f"⚠️  无法加载 DeepSeek 客户端: {e}")
+        print(f"⚠️  无法加载 DeepSeek 客户端（{e}），降级为规则引擎")
         return None
 
 
@@ -254,6 +263,71 @@ def analyze_market_sentiment(client, market_data, news):
         return None
 
 
+
+
+def _generate_rule_based_sentiment(market_data: dict, news: list) -> dict:
+    """当 LLM 不可用时，按既定规则确定性生成市场情绪分析（防日历停摆）。"""
+    total = market_data.get("total", 202) or 202
+    up_count = market_data.get("up_count", 0)
+    down_count = market_data.get("down_count", 0)
+    up_ratio = up_count / total * 100.0
+    avg_change = market_data.get("avg_change", 0.0)
+    limit_up = market_data.get("limit_up", 0)
+    limit_down = market_data.get("limit_down", 0)
+
+    if up_ratio >= 60.0 or avg_change >= 0.5:
+        sentiment = "乐观"
+        score = 7.5
+        capital_flow = "追涨"
+        portfolio = "aggressive" if limit_up >= 5 else "robust"
+        pos = "80%~满仓"
+        direction = "上涨"
+    elif up_ratio < 45.0 or avg_change <= -0.5:
+        sentiment = "悲观"
+        score = 3.5
+        capital_flow = "观望"
+        portfolio = "defensive" if limit_down >= 5 else "bluechip"
+        pos = "60%"
+        direction = "震荡偏弱"
+    else:
+        sentiment = "中性"
+        score = 5.5
+        capital_flow = "平衡"
+        portfolio = "robust"
+        pos = "70%"
+        direction = "窄幅震荡"
+
+    return {
+        "sentiment": sentiment,
+        "sentiment_score": score,
+        "hot_sectors": ["贵金属/资源", "新能源", "核心蓝筹"],
+        "capital_flow": capital_flow,
+        "key_observations": [
+            f"观察点1: 上涨 {up_count} 只 ({up_ratio:.1f}%)，下跌 {down_count} 只，涨停 {limit_up} 只，跌停 {limit_down} 只",
+            f"观察点2: 强势股 {len(market_data.get('strong_stocks', []))} 只，弱势股 {len(market_data.get('weak_stocks', []))} 只",
+            "观察点3: [规则降级模式] 基础市场情绪由盘面涨跌比与动能规则确定性导出"
+        ],
+        "tomorrow_expectation": {
+            "direction": direction,
+            "confidence": 65,
+            "reasoning": f"今日上涨占比 {up_ratio:.1f}%，平均涨跌 {avg_change:+.2f}%，市场整体处于{sentiment}状态。"
+        },
+        "trading_advice": {
+            "recommended_portfolio": portfolio,
+            "alternative_portfolio": "global",
+            "reasoning": f"根据规则引擎判断：市场处于{sentiment}状态（上涨占比{up_ratio:.1f}%），推荐配置 {portfolio} 组合以平衡收益与波动。",
+            "position_suggestion": pos,
+            "caution_points": [
+                "风险点1: 留意宏观与外盘波动对核心资产的传导",
+                "风险点2: 控制单一板块追高暴露，严格遵守止损纪律"
+            ],
+            "opportunities": [
+                "机会1: 重点关注前沿供需拐点向上的资源与新能源标的",
+                "机会2: 兼顾大盘低估值蓝筹的底线避险价值"
+            ]
+        }
+    }
+
 def save_sentiment_report(market_data, news, sentiment_analysis):
     """保存市场情绪报告"""
     report_dir = Path("reports") / "market_sentiment"
@@ -285,12 +359,10 @@ def main():
     # 1. 连接 API
     print("\n📡 连接 DeepSeek API...")
     client = load_deepseek_client()
-
-    if client is None:
-        print("⚠️  跳过市场情绪分析（无 API key）")
-        return 1
-
-    print("✅ API 已连接")
+    if client is not None:
+        print("✅ API 已连接")
+    else:
+        print("ℹ️  将启用规则引擎离线生成")
 
     # 2. 收集市场数据
     print("\n📈 收集市场数据...")
@@ -311,12 +383,14 @@ def main():
     news = collect_news()
     print(f"✅ 收集了 {len(news)} 条新闻/事件")
 
-    # 4. LLM 分析
-    sentiment_analysis = analyze_market_sentiment(client, market_data, news)
-
+    # 4. 情绪分析（优先 LLM，失败/无 Key 自动降级为规则引擎）
+    sentiment_analysis = None
+    if client is not None:
+        sentiment_analysis = analyze_market_sentiment(client, market_data, news)
+    
     if sentiment_analysis is None:
-        print("❌ 情绪分析失败")
-        return 1
+        print("⚙️  使用规则引擎生成确定性市场情绪报告...")
+        sentiment_analysis = _generate_rule_based_sentiment(market_data, news)
 
     # 5. 保存报告
     report_file = save_sentiment_report(market_data, news, sentiment_analysis)

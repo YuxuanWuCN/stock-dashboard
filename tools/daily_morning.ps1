@@ -8,6 +8,11 @@
 # 用法：powershell -NoProfile -ExecutionPolicy Bypass -File tools\daily_morning.ps1
 #
 # 流程：抓取行情 → 排行榜+基本面+LLM研报 → 模拟盘记录 → 提交推送 GitHub
+#
+# 修复记录（2026-08-19）：改用 Start-Process 分离重定向 stdout/stderr，
+# 避免 PowerShell 5.1 的 *>> 在大量 stderr 输出时把每行包装成 NativeCommandError
+# 错误记录，导致 build_ranking 等后续命令启动失败/秒退、$LASTEXITCODE 读到残留值 0
+# 的问题；同时每次调用后显式校验退出码并在失败时报警。
 
 $ErrorActionPreference = "Continue"
 $repo = Split-Path -Parent $PSScriptRoot
@@ -19,6 +24,8 @@ $env:STOCK_PROXY = "direct"  # 直连模式：避免 Clash 代理导致连接失
 $env:LLM_DAILY_CALL_LIMIT = "800"
 $py = Join-Path $repo ".venv\Scripts\python.exe"
 $logFile = Join-Path $repo ".quality-state\daily_morning.log"
+$runDir = Join-Path $repo ".quality-state\morning_runs"
+if (-not (Test-Path $runDir)) { New-Item -ItemType Directory -Path $runDir -Force | Out-Null }
 
 function Write-Log($msg) {
     $line = "[{0}] {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $msg
@@ -26,33 +33,52 @@ function Write-Log($msg) {
     Add-Content -Path $logFile -Value $line -Encoding UTF8
 }
 
+# 运行一个 Python 步骤：分离 stdout/stderr 重定向，返回真实退出码
+function Invoke-Step {
+    param(
+        [Parameter(Mandatory = $true)][string]$Name,
+        [Parameter(Mandatory = $true)][string[]]$StepArgs
+    )
+    $stamp = Get-Date -Format "yyyyMMdd_HHmmss"
+    $outFile = Join-Path $runDir ($Name + "_" + $stamp + ".out.log")
+    $errFile = Join-Path $runDir ($Name + "_" + $stamp + ".err.log")
+    $proc = Start-Process -FilePath $py -ArgumentList $StepArgs -NoNewWindow -PassThru -RedirectStandardOutput $outFile -RedirectStandardError $errFile
+    $proc.WaitForExit()
+    $code = $proc.ExitCode
+    if (Test-Path $errFile) {
+        $errLines = Get-Content $errFile -Tail 30 -Encoding UTF8 -ErrorAction SilentlyContinue
+        foreach ($l in $errLines) { Add-Content -Path $logFile -Value $l -Encoding UTF8 }
+    }
+    if (Test-Path $outFile) {
+        $outLines = Get-Content $outFile -Tail 10 -Encoding UTF8 -ErrorAction SilentlyContinue
+        foreach ($l in $outLines) { Add-Content -Path $logFile -Value $l -Encoding UTF8 }
+    }
+    Write-Log ("{0} 退出码: {1}" -f $Name, $code)
+    if ($code -ne 0) {
+        Write-Log ("⚠️  {0} 失败（退出码 {1}），请检查 {2}" -f $Name, $code, $errFile)
+    }
+    return $code
+}
+
 Write-Log "=== 早上美股补数据开始 ==="
 
 # 1) 抓取行情（美股补上昨日收盘；A股/港股无新数据时保持原样）
-& $py -m src.fetch_data *>> $logFile
-Write-Log ("fetch_data 退出码: " + $LASTEXITCODE)
+Invoke-Step -Name "fetch_data" -StepArgs @("-m", "src.fetch_data")
 
 # 2) 排行榜 + 基本面 + LLM 研报（已有报告自动跳过，节省 API 费用）
-& $py -m src.build_ranking *>> $logFile
-Write-Log ("build_ranking 退出码: " + $LASTEXITCODE)
+Invoke-Step -Name "build_ranking" -StepArgs @("-m", "src.build_ranking")
 
 # 3) 模拟盘绩效记录（按数据实际交易日去重覆盖，修正前一交易日的美股部分）
-& $py tools\paper_portfolio.py report *>> $logFile
-Write-Log ("paper_portfolio 退出码: " + $LASTEXITCODE)
+Invoke-Step -Name "paper_portfolio_report" -StepArgs @("tools\paper_portfolio.py", "report")
 # 3.x) 全池等权基准对照组（全部自选股买入持有，累计净值曲线）
-& $py tools\paper_portfolio.py benchmark *>> $logFile
-Write-Log ("paper_portfolio benchmark 退出码: " + $LASTEXITCODE)
+Invoke-Step -Name "paper_portfolio_benchmark" -StepArgs @("tools\paper_portfolio.py", "benchmark")
 # 3.y) 生成模拟盘组合清单（前端动态展示全部组合）
-& $py tools\paper_portfolio.py manifest *>> $logFile
-Write-Log ("paper_portfolio manifest 退出码: " + $LASTEXITCODE)
+Invoke-Step -Name "paper_portfolio_manifest" -StepArgs @("tools\paper_portfolio.py", "manifest")
 
 # 3.z) 美股补数后刷新历史快照与随机对照（协议 v1：每日积累统计样本）
-& $py tools\reconstruct_summary.py --all *>> $logFile
-Write-Log ("reconstruct_summary 退出码: " + $LASTEXITCODE)
-& $py tools\random_control.py *>> $logFile
-Write-Log ("random_control 退出码: " + $LASTEXITCODE)
-& $py tools\market_benchmark.py *>> $logFile
-Write-Log ("market_benchmark 退出码: " + $LASTEXITCODE)
+Invoke-Step -Name "reconstruct_summary" -StepArgs @("tools\reconstruct_summary.py", "--all")
+Invoke-Step -Name "random_control" -StepArgs @("tools\random_control.py")
+Invoke-Step -Name "market_benchmark" -StepArgs @("tools\market_benchmark.py")
 
 # 4) 提交并推送数据（仅当有变化；GitHub 直连失败时自动走本机代理重试）
 git add docs/data
@@ -60,8 +86,7 @@ if (-not (git diff --cached --quiet)) {
     $tradeDate = Get-Date -Format "yyyy-MM-dd"
     git commit -m ("chore(data): morning US catch-up for " + $tradeDate) *>> $logFile
     if ($LASTEXITCODE -eq 0) {
-        & $py tools\git_push_with_fallback.py *>> $logFile
-        Write-Log ("GitHub 推送退出码: " + $LASTEXITCODE)
+        Invoke-Step -Name "git_push" -StepArgs @("tools\git_push_with_fallback.py")
     } else {
         Write-Log "提交失败：请先运行质量门禁 small（源码有变化时）"
     }

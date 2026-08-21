@@ -1,8 +1,65 @@
 {
-  "generated_at": "2026-08-21T09:21:00",
+  "generated_at": "2026-08-21T10:35:20",
   "hunting_ground": {
-    "LimitUpPullbackStrategy": [],
-    "MorningStarStrategy": [],
+    "LimitUpPullbackStrategy": [
+      {
+        "code": "688235",
+        "name": "百济神州",
+        "signals": [
+          {
+            "date": "2026-08-20",
+            "close": 298.88,
+            "key_date": "2026-08-07",
+            "key_date_type": "涨停日",
+            "drawdown": 3.93,
+            "reasons": [
+              "近期涨停",
+              "回调企稳",
+              "站上5日均线"
+            ]
+          }
+        ],
+        "support_method": "ma20",
+        "support": 279.88,
+        "buy_judge": {
+          "in_buy_zone": false,
+          "distance_pct": 6.79,
+          "support_price": 279.88,
+          "current_price": 298.88,
+          "action": "above_support"
+        }
+      }
+    ],
+    "MorningStarStrategy": [
+      {
+        "code": "515050",
+        "name": "5GETF",
+        "signals": [
+          {
+            "date": "2026-08-21",
+            "close": 1.04,
+            "key_date": "2026-08-19",
+            "key_date_type": "启明星第一日",
+            "drawdown": -16.67,
+            "reasons": [
+              "超跌背景",
+              "大阴线",
+              "十字星",
+              "阳线确认"
+            ]
+          }
+        ],
+        "support_method": "ma20",
+        "support": 1.01,
+        "buy_judge": {
+          "in_buy_zone": true,
+          "distance_pct": 2.89,
+          "support_price": 1.01,
+          "current_price": 1.04,
+          "action": "buy_zone"
+        }
+      }
+    ],
     "MultiGoldenCrossStrategy": [
       {
         "code": "300122",
@@ -33,6 +90,68 @@
           "support_price": 12.98,
           "current_price": 14.48,
           "action": "above_support"
+        }
+      },
+      {
+        "code": "688278",
+        "name": "厦钨新能",
+        "signals": [
+          {
+            "date": "2026-08-20",
+            "close": 64.99,
+            "key_date": "2026-08-10",
+            "key_date_type": "多金叉共振日",
+            "max_time_diff": 3,
+            "ma_short": 61.79,
+            "ma_long": 59.19,
+            "volume_ratio": 1.43,
+            "reasons": [
+              "均线金叉",
+              "KDJ金叉",
+              "MACD金叉",
+              "多指标共振"
+            ]
+          }
+        ],
+        "support_method": "ma20",
+        "support": 59.19,
+        "buy_judge": {
+          "in_buy_zone": false,
+          "distance_pct": 9.8,
+          "support_price": 59.19,
+          "current_price": 64.99,
+          "action": "above_support"
+        }
+      },
+      {
+        "code": "002714",
+        "name": "牧原股份",
+        "signals": [
+          {
+            "date": "2026-08-20",
+            "close": 39.82,
+            "key_date": "2026-08-10",
+            "key_date_type": "多金叉共振日",
+            "max_time_diff": 2,
+            "ma_short": 39.43,
+            "ma_long": 39.26,
+            "volume_ratio": 1.02,
+            "reasons": [
+              "均线金叉",
+              "KDJ金叉",
+              "MACD金叉",
+              "多指标共振"
+            ]
+          }
+        ],
+        "support_method": "ma20",
+        "support": 39.26,
+        "buy_judge": {
+          "in_buy_zone": true,
+          "distance_pct": 1.44,
+          "support_price": 39.26,
+          "current_price": 39.82,
+          "action": "buy_zone"
         }
       }
     ]
