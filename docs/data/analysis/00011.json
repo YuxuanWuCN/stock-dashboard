@@ -8,10 +8,11 @@
   "category": "银行",
   "stale": false,
   "scores": {
-    "risk_adjusted": 67.2,
+    "risk_adjusted": 64.7,
     "risk": 10.0,
     "technical": 87.0,
-    "industry": 49.8
+    "industry": 49.8,
+    "leading": 50.0
   },
   "risk": {
     "level": "low",
@@ -122,5 +123,26 @@
     }
   ],
   "kline_file": "../kline/00011.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-18 00:12:50"
+  }
 }

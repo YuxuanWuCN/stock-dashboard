@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-17 21:38:03+08:00",
-  "trade_date": "2026-08-17",
+  "generated_at": "2026-08-21 09:20:59+08:00",
+  "trade_date": "2026-08-20",
   "code": "002415",
   "name": "海康威视",
   "type": "stock",
@@ -10,89 +10,111 @@
   "alpha_gate": {
     "verdict": "reject",
     "reject_reason": "statistical",
-    "alpha": -0.00037129944092633896,
-    "alpha_p_value": 0.5100731705079402,
-    "information_ratio": -0.019784755856896017,
+    "alpha": -0.0003718850193584403,
+    "alpha_p_value": 0.5107270695725061,
+    "information_ratio": -0.019817360025030296,
     "betas": {
-      "MKT": 0.05821480441718763,
-      "SMB": -0.024984260611585683,
-      "HML": 0.19842059478123678,
-      "MOM": -0.047426036541180036
+      "MKT": 0.0558110383263707,
+      "SMB": -0.03083923253999713,
+      "HML": 0.1936545106198227,
+      "MOM": -0.04661800614664839
     },
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 52.5,
-    "risk": 40.4,
-    "technical": 65.0,
-    "industry": 51.8
+    "risk_adjusted": 36.8,
+    "risk": 49.8,
+    "technical": 58.0,
+    "industry": 45.7,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 09:14:46"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 34.79,
-    "max_drawdown_60d_pct": -9.71,
-    "atr14_pct": 3.52,
+    "annualized_volatility_20d_pct": 34.18,
+    "max_drawdown_60d_pct": -10.89,
+    "atr14_pct": 3.28,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 60.4,
-        "value": 34.79
+        "score": 67.0,
+        "value": 34.18
       },
       {
         "name": "60日最大回撤",
-        "score": 16.8,
-        "value": -9.71
+        "score": 26.8,
+        "value": -10.89
       },
       {
         "name": "ATR百分比",
-        "score": 60.9,
-        "value": 3.52
+        "score": 66.1,
+        "value": 3.28
       },
       {
         "name": "量价异常",
-        "score": 57.9,
-        "value": 0.76
+        "score": 95.5,
+        "value": 0.64
       },
       {
         "name": "行业波动",
-        "score": 1.0,
-        "value": 33.93
+        "score": 1.8,
+        "value": 35.41
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.37,
-    "return_5d_pct": 1.27,
-    "up_probability_3d_pct": 53.3,
-    "up_probability_5d_pct": 53.3,
+    "return_3d_pct": -0.11,
+    "return_5d_pct": 0.16,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 35.694,
-    "ma10": 36.767,
-    "ma20": 36.488,
-    "ma60": 33.81016666666667,
-    "rsi14": 45.7,
-    "macd_dif": 0.3783280839820833,
-    "macd_dea": 0.7661061169825536,
-    "macd_hist": -0.7755560660009406,
-    "atr14_pct": 3.5201413148284804,
-    "boll_position": 0.18959944330644854,
-    "return_5d_pct": -6.2767094017093905,
-    "return_20d_pct": 2.362893815635947,
-    "volume_ratio_5d": 0.76
+    "ma5": 34.292,
+    "ma10": 35.177,
+    "ma20": 35.804,
+    "ma60": 33.41766666666667,
+    "rsi14": 43.4,
+    "macd_dif": 0.020092683712682913,
+    "macd_dea": 0.4432814988112781,
+    "macd_hist": -0.8463776301971904,
+    "atr14_pct": 3.279987380279665,
+    "boll_position": 0.1488242268982421,
+    "return_5d_pct": -2.9344729344729426,
+    "return_20d_pct": -3.2377165577960776,
+    "volume_ratio_5d": 0.64
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.3,
-    "return_20d_pct": 4.72,
-    "return_60d_pct": -5.86,
-    "relative_strength_20d_pct": -3.1
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": -2.17
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -100,17 +122,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.37,
-      "median_return_pct": 0.39,
-      "best_return_pct": 10.81,
-      "worst_return_pct": -10.02
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.11,
+      "median_return_pct": -0.08,
+      "best_return_pct": 10.1,
+      "worst_return_pct": -10.04
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 1.27,
-      "median_return_pct": 0.37,
-      "best_return_pct": 11.37,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.16,
+      "median_return_pct": -0.3,
+      "best_return_pct": 10.87,
       "worst_return_pct": -8.95
     }
   },

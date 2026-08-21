@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-17 21:38:03+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-21 00:05:58+08:00",
+  "trade_date": "2026-08-20",
   "code": "TSLA",
   "name": "特斯拉",
   "type": "us",
@@ -10,89 +10,111 @@
   "alpha_gate": {
     "verdict": "reject",
     "reject_reason": "statistical",
-    "alpha": 0.0007288288700030259,
-    "alpha_p_value": 0.5435916288095146,
-    "information_ratio": 0.017243002408008204,
+    "alpha": 0.0007071820864976792,
+    "alpha_p_value": 0.5565387535683912,
+    "information_ratio": 0.016717918662055905,
     "betas": {
-      "MKT": -0.019135680974256424,
-      "SMB": 0.18908244008986488,
-      "HML": -0.29123371516991176,
-      "MOM": -0.23795162764816763
+      "MKT": -0.02148529306185593,
+      "SMB": 0.18268448806173723,
+      "HML": -0.2996828291222559,
+      "MOM": -0.2370771422500545
     },
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 43.3,
-    "risk": 74.4,
-    "technical": 91.0,
-    "industry": 43.0
+    "risk_adjusted": 49.0,
+    "risk": 64.8,
+    "technical": 93.0,
+    "industry": 65.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 00:02:19"
   },
   "risk": {
-    "level": "high",
-    "label": "高风险",
-    "annualized_volatility_20d_pct": 61.44,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 33.92,
     "max_drawdown_60d_pct": -32.52,
-    "atr14_pct": 4.06,
+    "atr14_pct": 3.84,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 81.7,
-        "value": 61.44
+        "score": 57.4,
+        "value": 33.92
       },
       {
         "name": "60日最大回撤",
-        "score": 79.7,
+        "score": 79.2,
         "value": -32.52
       },
       {
         "name": "ATR百分比",
-        "score": 69.8,
-        "value": 4.06
+        "score": 64.9,
+        "value": 3.84
       },
       {
         "name": "量价异常",
-        "score": 50.0,
-        "value": 0.79
+        "score": 30.7,
+        "value": 0.89
       },
       {
         "name": "行业波动",
-        "score": 73.3,
-        "value": 34.1
+        "score": 78.2,
+        "value": 35.41
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.26,
-    "return_5d_pct": 1.39,
-    "up_probability_3d_pct": 40.0,
-    "up_probability_5d_pct": 50.0,
+    "return_3d_pct": 0.04,
+    "return_5d_pct": 1.49,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 53.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 334.686,
-    "ma10": 329.252,
-    "ma20": 329.1395,
-    "ma60": 380.50916666666666,
-    "rsi14": 48.8,
-    "macd_dif": -11.370248972151785,
-    "macd_dea": -16.32625024384448,
-    "macd_hist": 9.912002543385391,
-    "atr14_pct": 4.056142684290825,
-    "boll_position": 0.6503131867726627,
-    "return_5d_pct": 4.166413050094353,
-    "return_20d_pct": -10.127612645730489,
-    "volume_ratio_5d": 0.79
+    "ma5": 343.138,
+    "ma10": 337.543,
+    "ma20": 325.70050000000003,
+    "ma60": 375.1543333333333,
+    "rsi14": 50.9,
+    "macd_dif": -5.661965760451324,
+    "macd_dea": -11.098394847619337,
+    "macd_hist": 10.872858174336027,
+    "atr14_pct": 3.8371004064938257,
+    "boll_position": 0.8602298838211598,
+    "return_5d_pct": 1.814919402282622,
+    "return_20d_pct": 8.270512058556733,
+    "volume_ratio_5d": 0.89
   },
   "industry": {
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.3,
-    "return_20d_pct": 4.72,
-    "return_60d_pct": -7.81,
-    "relative_strength_20d_pct": -14.85
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.99,
+    "relative_strength_20d_pct": 9.34
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -100,18 +122,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.26,
-      "median_return_pct": -1.78,
-      "best_return_pct": 17.29,
-      "worst_return_pct": -17.5
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.04,
+      "median_return_pct": -0.47,
+      "best_return_pct": 16.57,
+      "worst_return_pct": -15.78
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.39,
-      "median_return_pct": 0.69,
-      "best_return_pct": 26.03,
-      "worst_return_pct": -11.68
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.49,
+      "median_return_pct": 0.58,
+      "best_return_pct": 33.34,
+      "worst_return_pct": -16.33
     }
   },
   "fundamental": null,
@@ -127,12 +149,6 @@
       "title": "回撤风险",
       "detail": "近60日最大回撤 32.5%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "波动较大",
-      "detail": "20日年化波动率 61.4%，波动偏高。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/TSLA.json",

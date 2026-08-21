@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-17 21:38:03+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-21 00:05:58+08:00",
+  "trade_date": "2026-08-20",
   "code": "LLY",
   "name": "礼来",
   "type": "us",
@@ -10,89 +10,111 @@
   "alpha_gate": {
     "verdict": "reject",
     "reject_reason": "economical",
-    "alpha": 0.001248783691038736,
-    "alpha_p_value": 0.03706843685780781,
-    "information_ratio": 0.0606982291554204,
+    "alpha": 0.0012571813640669075,
+    "alpha_p_value": 0.03617247628937042,
+    "information_ratio": 0.06104157915275759,
     "betas": {
-      "MKT": -0.03688956852872295,
-      "SMB": -0.045898278823289444,
-      "HML": 0.12642450943885308,
-      "MOM": -0.10259622443682859
+      "MKT": -0.03635264514426363,
+      "SMB": -0.043783839114432815,
+      "HML": 0.12984834807448156,
+      "MOM": -0.10282988277565142
     },
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 43.6,
-    "risk": 49.3,
-    "technical": 95.0,
-    "industry": 48.7
+    "risk_adjusted": 47.9,
+    "risk": 49.4,
+    "technical": 100.0,
+    "industry": 65.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 00:03:13"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 36.05,
+    "annualized_volatility_20d_pct": 38.17,
     "max_drawdown_60d_pct": -9.7,
-    "atr14_pct": 3.43,
+    "atr14_pct": 3.23,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 61.9,
-        "value": 36.05
+        "score": 61.4,
+        "value": 38.17
       },
       {
         "name": "60日最大回撤",
-        "score": 16.3,
+        "score": 16.8,
         "value": -9.7
       },
       {
         "name": "ATR百分比",
-        "score": 60.4,
-        "value": 3.43
+        "score": 58.4,
+        "value": 3.23
       },
       {
         "name": "量价异常",
-        "score": 35.6,
-        "value": 0.85
+        "score": 33.7,
+        "value": 0.87
       },
       {
         "name": "行业波动",
-        "score": 73.3,
-        "value": 34.1
+        "score": 78.2,
+        "value": 35.41
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.17,
-    "return_5d_pct": 0.26,
-    "up_probability_3d_pct": 56.7,
-    "up_probability_5d_pct": 43.3,
+    "return_3d_pct": -0.55,
+    "return_5d_pct": 0.3,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 53.3,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 1211.28,
-    "ma10": 1184.095,
-    "ma20": 1182.0095,
-    "ma60": 1153.4516666666668,
-    "rsi14": 50.1,
-    "macd_dif": 10.715808068097658,
-    "macd_dea": 9.35023165530632,
-    "macd_hist": 2.731152825582676,
-    "atr14_pct": 3.4299384811110047,
-    "boll_position": 0.48549277268656515,
-    "return_5d_pct": -0.4680739809902912,
-    "return_20d_pct": 0.08905021584078021,
-    "volume_ratio_5d": 0.85
+    "trend": "uptrend",
+    "ma5": 1227.682,
+    "ma10": 1220.036,
+    "ma20": 1196.3625,
+    "ma60": 1166.2514999999999,
+    "rsi14": 62.6,
+    "macd_dif": 20.85299791499915,
+    "macd_dea": 13.180942713925251,
+    "macd_hist": 15.344110402147798,
+    "atr14_pct": 3.230341995154394,
+    "boll_position": 0.9425285236752815,
+    "return_5d_pct": 4.96443341604631,
+    "return_20d_pct": 7.011729784883691,
+    "volume_ratio_5d": 0.87
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.3,
-    "return_20d_pct": 4.72,
-    "return_60d_pct": -7.81,
-    "relative_strength_20d_pct": -4.63
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.99,
+    "relative_strength_20d_pct": 8.08
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -100,27 +122,27 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.17,
-      "median_return_pct": 0.53,
-      "best_return_pct": 16.13,
-      "worst_return_pct": -14.89
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.55,
+      "median_return_pct": -0.49,
+      "best_return_pct": 6.75,
+      "worst_return_pct": -6.65
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.26,
-      "median_return_pct": -0.19,
-      "best_return_pct": 16.07,
-      "worst_return_pct": -11.51
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.3,
+      "median_return_pct": 0.3,
+      "best_return_pct": 11.39,
+      "worst_return_pct": -9.27
     }
   },
   "fundamental": null,
   "reasons": [
     {
       "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     }
   ],
   "kline_file": "../kline/LLY.json",

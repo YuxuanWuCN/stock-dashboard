@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-17 21:38:03+08:00",
-  "trade_date": "2026-08-17",
+  "generated_at": "2026-08-21 09:20:59+08:00",
+  "trade_date": "2026-08-20",
   "code": "300475",
   "name": "香农芯创",
   "type": "stock",
@@ -10,89 +10,114 @@
   "alpha_gate": {
     "verdict": "reject",
     "reject_reason": "economical",
-    "alpha": 0.002795812422167815,
-    "alpha_p_value": 0.029298580297177513,
-    "information_ratio": 0.06690285817349234,
+    "alpha": 0.00277727616585854,
+    "alpha_p_value": 0.030860807302152484,
+    "information_ratio": 0.06638296853635321,
     "betas": {
-      "MKT": 0.1963062178946765,
-      "SMB": 0.1844558391449837,
-      "HML": 0.27004226446249124,
-      "MOM": 0.19464658939618606
+      "MKT": 0.19635912658120802,
+      "SMB": 0.18107282403903424,
+      "HML": 0.2618577082575887,
+      "MOM": 0.19492644603501957
     },
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 47.2,
-    "risk": 72.6,
-    "technical": 93.0,
-    "industry": 73.0
+    "risk_adjusted": 32.3,
+    "risk": 71.8,
+    "technical": 83.0,
+    "industry": 44.9,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "semiconductor",
+    "industry_name": "半导体/存储芯片",
+    "description": "存储芯片现货价格、进出口均价、原厂报价通知",
+    "proxy_type": "customs_and_spot_price",
+    "keywords": [
+      "存储芯片",
+      "DRAM",
+      "NAND",
+      "InP衬底",
+      "晶圆代工",
+      "先进制程"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-21 09:15:27"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 91.57,
+    "annualized_volatility_20d_pct": 81.86,
     "max_drawdown_60d_pct": -56.22,
-    "atr14_pct": 8.78,
+    "atr14_pct": 9.17,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 94.1,
-        "value": 91.57
+        "score": 92.0,
+        "value": 81.86
       },
       {
         "name": "60日最大回撤",
-        "score": 97.0,
+        "score": 95.5,
         "value": -56.22
       },
       {
         "name": "ATR百分比",
         "score": 95.5,
-        "value": 8.78
+        "value": 9.17
       },
       {
         "name": "量价异常",
-        "score": 8.9,
-        "value": 0.97
+        "score": 9.8,
+        "value": 0.95
       },
       {
         "name": "行业波动",
-        "score": 1.0,
-        "value": 33.93
+        "score": 1.8,
+        "value": 35.41
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.13,
-    "return_5d_pct": 1.32,
+    "return_3d_pct": 0.6,
+    "return_5d_pct": -0.03,
     "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 46.7,
+    "up_probability_5d_pct": 36.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "range",
-    "ma5": 162.45,
-    "ma10": 157.372,
-    "ma20": 156.0585,
-    "ma60": 202.193,
-    "rsi14": 49.5,
-    "macd_dif": -11.55774903655805,
-    "macd_dea": -16.4572662487476,
-    "macd_hist": 9.799034424379101,
-    "atr14_pct": 8.777287679264687,
-    "boll_position": 0.8703978447796458,
-    "return_5d_pct": 9.799540347293178,
-    "return_20d_pct": 11.91436751691828,
-    "volume_ratio_5d": 0.97
+    "ma5": 163.63000000000002,
+    "ma10": 161.27100000000002,
+    "ma20": 154.98499999999999,
+    "ma60": 200.41199999999998,
+    "rsi14": 43.7,
+    "macd_dif": -9.248485935232026,
+    "macd_dea": -13.053566025428458,
+    "macd_hist": 7.610160180392864,
+    "atr14_pct": 9.172353808548923,
+    "boll_position": 0.5540827359831046,
+    "return_5d_pct": -0.17785682525567337,
+    "return_20d_pct": -3.6007851797325463,
+    "volume_ratio_5d": 0.95
   },
   "industry": {
     "name": "存储",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.3,
-    "return_20d_pct": 4.72,
-    "return_60d_pct": -5.86,
-    "relative_strength_20d_pct": 6.45
+    "return_5d_pct": -2.22,
+    "return_20d_pct": -1.07,
+    "return_60d_pct": -11.21,
+    "relative_strength_20d_pct": -2.53
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -101,17 +126,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 43.3,
-      "average_return_pct": 1.13,
-      "median_return_pct": -1.14,
-      "best_return_pct": 40.8,
-      "worst_return_pct": -9.62
+      "average_return_pct": 0.6,
+      "median_return_pct": -1.24,
+      "best_return_pct": 27.14,
+      "worst_return_pct": -15.3
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 1.32,
-      "median_return_pct": -0.93,
-      "best_return_pct": 41.68,
-      "worst_return_pct": -12.86
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.03,
+      "median_return_pct": -0.99,
+      "best_return_pct": 20.78,
+      "worst_return_pct": -20.12
     }
   },
   "fundamental": {
@@ -269,7 +294,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 91.6%，波动偏高。",
+      "detail": "20日年化波动率 81.9%，波动偏高。",
       "contribution": -5.0
     }
   ],
