@@ -3,6 +3,7 @@
 # 所有可调参数集中在此。规则引擎与 LLM 分离：
 # LLM 只做文本理解与表达，不生成财务数字，不覆盖程序计算结果。
 
+import logging
 import os
 from pathlib import Path
 
@@ -13,9 +14,34 @@ ROOT_DIR = str(ROOT_PATH)
 # 用户指定的唯一 DeepSeek 推理模型。FinGPT 风格管线会再次校验该值，
 # 防止环境变量或兼容网关悄悄切换到其他模型。
 DEEPSEEK_V4_FLASH_MODEL = "deepseek-v4-flash"
-DEEPSEEK_API_KEY_FILE = os.environ.get(
-    "DEEPSEEK_API_KEY_FILE",
-    str(ROOT_PATH / "api-key.txt"),
+
+
+def resolve_api_key_file_path(
+    env_value: str | None,
+    external_path: Path,
+    legacy_path: Path,
+) -> str:
+    """按优先级解析密钥文件路径（可独立测试的纯函数）。
+
+    优先级：环境变量 DEEPSEEK_API_KEY_FILE > 外置（2.0版 之外）> 旧路径回退。
+    返回值始终是某个路径字符串；文件不存在时返回外置路径，由 llm_client 安全降级。
+    """
+    if env_value:
+        return env_value
+    if external_path.exists():
+        return str(external_path)
+    if legacy_path.exists():
+        logging.getLogger(__name__).warning(
+            "api-key.txt 仍在 2.0版 内（旧路径），建议外置到 %s", external_path
+        )
+        return str(legacy_path)
+    return str(external_path)
+
+
+DEEPSEEK_API_KEY_FILE = resolve_api_key_file_path(
+    os.environ.get("DEEPSEEK_API_KEY_FILE"),
+    ROOT_PATH.parent / "api-key.txt",
+    ROOT_PATH / "api-key.txt",
 )
 
 # ============================================================

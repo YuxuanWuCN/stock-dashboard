@@ -49,6 +49,98 @@ INDUSTRY_LEADING_MAP = {
     },
 }
 
+# 真实数据源映射（akshare 免费接口；原厂报价/海关出口无稳定免费源，
+# 用行业板块指数 / 商品期货现货作"领先代理"，语义见 fetch_real_leading_signal）
+REAL_SOURCE_MAP = {
+    "semiconductor": {
+        "source": "akshare_board_industry",
+        "ak_symbol": "半导体",
+        "name": "半导体行业指数（领先代理）",
+        "description": "东财行业板块指数日线，替代原厂报价/海关出口的免费可行代理",
+    },
+    "optical_communication": {
+        "source": "akshare_board_industry",
+        "ak_symbol": "通信设备",
+        "name": "通信设备行业指数（领先代理）",
+        "description": "东财行业板块指数日线，替代云厂商资本开支指引的免费可行代理",
+    },
+    "new_energy": {
+        "source": "akshare_futures_main",
+        "ak_symbol": "LC0",
+        "name": "碳酸锂期货主力（领先代理）",
+        "description": "碳酸锂期货主力价格，替代多晶硅/组件出口的免费可行代理",
+    },
+    "gold_resources": {
+        "source": "akshare_spot_sge",
+        "ak_symbol": "Au99.99",
+        "name": "上金所黄金现货（领先代理）",
+        "description": "上海黄金交易所 Au99.99 现货价",
+    },
+}
+
+# 类别级内存缓存：同一类别只抓一次 akshare，避免 202 只标的重发请求
+_category_series_cache: Dict[str, Optional[List[float]]] = {}
+
+
+def _first_available(series_like, candidates: List[str]):
+    """从 DataFrame/dict 中按候选列名取第一列可用的数值序列（>=5 个非空值）。"""
+    for c in candidates:
+        if isinstance(series_like, pd.DataFrame) and c in series_like.columns:
+            s = pd.to_numeric(series_like[c], errors="coerce").dropna()
+            if len(s) >= 5:
+                return s
+        elif isinstance(series_like, dict) and c in series_like:
+            s = pd.to_numeric(pd.Series(series_like[c]), errors="coerce").dropna()
+            if len(s) >= 5:
+                return s
+    return None
+
+
+def _fetch_akshare_series(category: str) -> Optional[List[float]]:
+    """从 akshare 拉取真实领先序列（惰性导入、异常隔离、候选列名解析）。
+
+    返回按时间排序的数值列表；任何失败（未安装/无网络/接口变更）返回 None。
+    """
+    cfg = REAL_SOURCE_MAP.get(category)
+    if not cfg:
+        return None
+    try:
+        import akshare as ak
+    except Exception as exc:  # akshare 未安装或导入失败
+        logger.warning("akshare 不可用（%s），领先指标降级合成", exc)
+        return None
+
+    symbol = cfg["ak_symbol"]
+    try:
+        source = cfg["source"]
+        if source == "akshare_board_industry":
+            raw = ak.stock_board_industry_hist_em(
+                symbol=symbol, start_date="20200101", end_date="20991231",
+                period="日k", adjust="",
+            )
+            s = _first_available(raw, ["收盘", "close", "最新价"])
+        elif source == "akshare_futures_main":
+            raw = ak.futures_main_sina(symbol=symbol)
+            s = _first_available(raw, ["收盘价", "close", "最新价", "结算价"])
+        elif source == "akshare_spot_sge":
+            raw = ak.spot_hist_sge(symbol=symbol)
+            s = _first_available(raw, ["price", "收盘价", "close", "最新价"])
+        else:
+            return None
+        if s is None:
+            return None
+        return s.astype(float).tolist()
+    except Exception as exc:
+        logger.warning("akshare 抓取 %s(%s) 失败（%s），降级合成", category, symbol, exc)
+        return None
+
+
+def _fetch_akshare_series_cached(category: str) -> Optional[List[float]]:
+    """带内存缓存的真实序列抓取（同一类别只抓一次）。"""
+    if category not in _category_series_cache:
+        _category_series_cache[category] = _fetch_akshare_series(category)
+    return _category_series_cache[category]
+
 
 def calculate_momentum_and_inflection(
     series: pd.Series, window: int = 20
@@ -180,6 +272,43 @@ class LeadingIndicatorEngine:
             "description": meta["description"],
             "proxy_type": meta["proxy_type"],
             "keywords": meta["keywords"],
+            "data_source": "synthetic_fallback",
+            "source_name": "合成降级",
             "momentum_metrics": calc,
             "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         }
+
+    def fetch_real_leading_signal(
+        self, category: str, historical_trend: Optional[List[float]] = None
+    ) -> Dict[str, Any]:
+        """抓取真实领先信号：优先 akshare，失败降级合成。
+
+        返回含 data_source（"akshare" | "synthetic_fallback"）的信号快照。
+        合成降级的数据绝不参与评分（由 scoring 层判为中性），避免用假数据打分。
+        """
+        real_series = _fetch_akshare_series_cached(category)
+        if real_series:
+            calc = calculate_momentum_and_inflection(pd.Series(real_series))
+            meta = INDUSTRY_LEADING_MAP.get(category, {
+                "name": "通用行业",
+                "description": "宏观景气度与综合工业品价格",
+                "keywords": ["PMI", "工业增加值", "大宗商品"],
+                "proxy_type": "macro_general",
+            })
+            real_meta = REAL_SOURCE_MAP.get(category, {})
+            return {
+                "category": category,
+                "industry_name": meta["name"],
+                "description": real_meta.get("description", meta.get("description", "")),
+                "proxy_type": meta["proxy_type"],
+                "keywords": meta["keywords"],
+                "data_source": "akshare",
+                "source_name": real_meta.get("name", ""),
+                "series": real_series,
+                "momentum_metrics": calc,
+                "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+
+        fallback = self.generate_synthetic_leading_signal(category, historical_trend)
+        fallback["data_source"] = "synthetic_fallback"
+        return fallback

@@ -210,30 +210,38 @@ def fetch_one(
 def _fetch_stock_zh_a_hist(
     code: str, start_date: str, end_date: str, attempt: int
 ) -> Optional[pd.DataFrame]:
-    """抓取 A 股日线：主源东财，备用源新浪。"""
-    # 将 YYYYMMDD 转为 YYYY-MM-DD（备用源需要）
+    """抓取 A 股日线：主源新浪，备用源腾讯与东财。"""
+    # 先尝试腾讯高速行情源（与 ETF 一致，秒级响应且不受代理干扰）
+    df = _fetch_tencent_kline(code, start_date, end_date, count=500)
+    if df is not None and not df.empty and len(df) >= MIN_VALID_ROWS:
+        return df
+
     start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
     end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
 
     if attempt == 0:
-        # 主源：新浪 stock_zh_a_daily（直连稳定，支持 qfq，日期格式 YYYY-MM-DD）
         logger.info("主源 stock_zh_a_daily 尝试 %s", code)
-        df = ak.stock_zh_a_daily(
-            symbol=f"sh{code}" if code.startswith("6") else f"sz{code}",
-            start_date=start_fmt,
-            end_date=end_fmt,
-            adjust=ADJUST,
-        )
+        try:
+            df = ak.stock_zh_a_daily(
+                symbol=f"sh{code}" if (code.startswith("6") or code.startswith("688")) else f"sz{code}",
+                start_date=start_fmt,
+                end_date=end_fmt,
+                adjust=ADJUST,
+            )
+        except Exception:
+            df = None
     else:
-        # 备用源：东财（使用 YYYYMMDD）
         logger.info("切换备用源东财尝试 %s", code)
-        df = ak.stock_zh_a_hist(
-            symbol=code,
-            period=PERIOD,
-            start_date=start_date,
-            end_date=end_date,
-            adjust=ADJUST,
-        )
+        try:
+            df = ak.stock_zh_a_hist(
+                symbol=code,
+                period=PERIOD,
+                start_date=start_date,
+                end_date=end_date,
+                adjust=ADJUST,
+            )
+        except Exception:
+            df = None
 
     if df is None or df.empty:
         logger.warning("%s 返回空数据", code)
@@ -404,11 +412,24 @@ def _fetch_tencent_kline(
             payload = response.read().decode("utf-8")
 
         data = json.loads(payload)
-        rows = data.get("data", {}).get(symbol, {}).get("qfqday") or []
+        rows = data.get("data", {}).get(symbol, {}).get("qfqday") or data.get("data", {}).get(symbol, {}).get("day") or []
         if not rows:
             return None
 
-        df = pd.DataFrame(rows, columns=["date", "open", "close", "high", "low", "volume"])
+        clean_rows = []
+        for r in rows:
+            if isinstance(r, list) and len(r) >= 6:
+                clean_rows.append({
+                    "date": str(r[0]),
+                    "open": float(r[1]),
+                    "close": float(r[2]),
+                    "high": float(r[3]),
+                    "low": float(r[4]),
+                    "volume": float(r[5]),
+                })
+        if not clean_rows:
+            return None
+        df = pd.DataFrame(clean_rows)
         start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
         end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
         df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
@@ -890,31 +911,56 @@ def main() -> int:
     end_date = today.strftime("%Y%m%d")
     logger.info("抓取范围：%s ~ %s（%d 自然日）", start_date, end_date, LOOKBACK_DAYS)
 
-    # ---- 6.3 逐只抓取 ----
+    # ---- 6.3 并发抓取 ----
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    max_workers_str = os.environ.get("FETCH_WORKERS", "10").strip()
+    try:
+        max_workers = max(1, int(max_workers_str))
+    except ValueError:
+        max_workers = 10
+
     results: dict[str, Optional[pd.DataFrame]] = {}
-    for i, item in enumerate(watchlist):
+
+    def _fetch_worker(idx_item: tuple[int, dict]) -> tuple[str, Optional[pd.DataFrame]]:
+        idx, item = idx_item
         code = item["code"]
-        logger.info(
-            "[%d/%d] 开始抓取 %s(%s) ...", i + 1, len(watchlist), item["name"], code
-        )
+        name = item["name"]
+        logger.info("[%d/%d] 开始抓取 %s(%s) ...", idx + 1, len(watchlist), name, code)
+        try:
+            df = fetch_one(item, start_date, end_date)
+            if df is not None:
+                df = compute_derived(df)
+                logger.info("%s(%s) ✓ 抓取成功，%d 行数据", name, code, len(df))
+            else:
+                logger.warning("%s(%s) ✗ 抓取失败", name, code)
+            return code, df
+        except Exception:
+            logger.warning("%s(%s) 抓取异常: %s", name, code, traceback.format_exc())
+            return code, None
 
-        df = fetch_one(item, start_date, end_date)
-
-        if df is not None:
-            # 计算衍生指标
-            df = compute_derived(df)
-            logger.info(
-                "%s(%s) ✓ 抓取成功，%d 行数据",
-                item["name"], code, len(df),
-            )
-        else:
-            logger.warning("%s(%s) ✗ 抓取失败", item["name"], code)
-
-        results[code] = df
-
-        # 限流（最后一只不用 sleep）
-        if i < len(watchlist) - 1:
-            time.sleep(REQUEST_INTERVAL)
+    if max_workers == 1:
+        # 单线程调试模式
+        for i, item in enumerate(watchlist):
+            code, df = _fetch_worker((i, item))
+            results[code] = df
+            if i < len(watchlist) - 1:
+                time.sleep(REQUEST_INTERVAL)
+    else:
+        logger.info("启动 ThreadPoolExecutor 并发抓取 (workers=%d)...", max_workers)
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_code = {
+                executor.submit(_fetch_worker, (i, item)): item["code"]
+                for i, item in enumerate(watchlist)
+            }
+            for future in as_completed(future_to_code):
+                code = future_to_code[future]
+                try:
+                    c, df = future.result()
+                    results[c] = df
+                except Exception as exc:
+                    logger.warning("标的 %s 并发执行异常: %s", code, exc)
+                    results[code] = None
 
     # ---- 6.4 全部失败保护 ----
     success_count = sum(1 for v in results.values() if v is not None)

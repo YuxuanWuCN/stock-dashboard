@@ -16,6 +16,7 @@ from .config import (
     SCORE_MAX,
     TECHNICAL_SCORE_CONFIG as TECH,
     INDUSTRY_SCORE_CONFIG as IND,
+    LEADING_SCORE_CONFIG as LEAD,
     MAX_REASONS,
 )
 
@@ -432,6 +433,51 @@ def compute_industry_score(
 
 
 # ============================================================
+# 4.5 领先指标分（005 融合：前沿供需拐点）
+# ============================================================
+
+def compute_leading_score(leading_signal: Optional[dict] = None) -> dict:
+    """计算领先指标分 (0-100)，50 为中性。
+
+    合成降级 / 缺失 / 未知来源的信号判为中性（50），不参与加减分，
+    避免用假数据打分（FR-005 / 不伪造原则）。
+    """
+    if not leading_signal:
+        return {"score": LEAD["neutral"], "inflection_flag": "none",
+                "momentum": "flat", "data_source": "none", "reason": None}
+
+    mm = leading_signal.get("momentum_metrics", {}) or {}
+    inflection = mm.get("inflection_flag", "none")
+    momentum = mm.get("momentum", "flat")
+    data_source = leading_signal.get("data_source", "unknown")
+
+    # 合成降级/未知来源 → 中性，不给分
+    if data_source in ("synthetic_fallback", "none", "unknown", None, ""):
+        return {"score": LEAD["neutral"], "inflection_flag": inflection,
+                "momentum": momentum, "data_source": data_source, "reason": None}
+
+    if inflection == "positive_reversal":
+        return {"score": LEAD["positive_reversal"], "inflection_flag": inflection,
+                "momentum": momentum, "data_source": data_source,
+                "reason": "领先指标触底反转，供需拐点向上"}
+    if inflection == "negative_reversal":
+        return {"score": LEAD["negative_reversal"], "inflection_flag": inflection,
+                "momentum": momentum, "data_source": data_source,
+                "reason": "领先指标见顶回落，供需拐点向下"}
+    if momentum == "accelerating":
+        return {"score": LEAD["accelerating"], "inflection_flag": inflection,
+                "momentum": momentum, "data_source": data_source,
+                "reason": "领先指标动能加速"}
+    if momentum == "decelerating":
+        return {"score": LEAD["decelerating"], "inflection_flag": inflection,
+                "momentum": momentum, "data_source": data_source,
+                "reason": "领先指标动能减速"}
+
+    return {"score": LEAD["neutral"], "inflection_flag": inflection,
+            "momentum": momentum, "data_source": data_source, "reason": None}
+
+
+# ============================================================
 # 5. 综合评分
 # ============================================================
 
@@ -442,6 +488,7 @@ def compute_composite_score(
     similarity_result: dict,
     all_forecast_returns_5d: list,      # 所有标的的 forecast.return_5d_pct
     all_up_probabilities_5d: list,       # 所有标的的 forecast.up_probability_5d_pct
+    leading_signal: Optional[dict] = None,  # 领先指标信号（005 融合，可选向后兼容）
 ) -> dict:
     """
     计算机会分 + 风险调整后综合评分。
@@ -452,6 +499,7 @@ def compute_composite_score(
         "risk": float,
         "technical": float,
         "industry": float,
+        "leading": float,
         "opportunity": float,
     }
     """
@@ -480,12 +528,17 @@ def compute_composite_score(
     # 上涨比例（转为百分制）
     up_component = up_prob_5d if up_prob_5d is not None else 50.0
 
+    # 领先指标分（005 融合：前沿供需拐点；合成降级/缺失为中性 50）
+    leading_result = compute_leading_score(leading_signal)
+    leading_score = leading_result["score"]
+
     # 机会分
     opportunity = (
         OPPORTUNITY_WEIGHTS["forecast_percentile"] * fc_component
         + OPPORTUNITY_WEIGHTS["up_probability_5d"] * up_component
         + OPPORTUNITY_WEIGHTS["technical_score"] * tech_score
         + OPPORTUNITY_WEIGHTS["industry_score"] * ind_score
+        + OPPORTUNITY_WEIGHTS["leading_score"] * leading_score
     )
 
     # 风险调整
@@ -500,5 +553,7 @@ def compute_composite_score(
         "risk": risk_score,
         "technical": tech_score,
         "industry": ind_score,
+        "leading": round(leading_score, 1),
+        "leading_reason": leading_result.get("reason"),
         "opportunity": round(opportunity, 1),
     }

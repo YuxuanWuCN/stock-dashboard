@@ -485,6 +485,12 @@ def analyze_single(
     # ---- 2.7 行业分 ----
     industry_scoring = compute_industry_score(latest, industry_info, all_latest_values)
 
+    # ---- 2.7b 领先指标信号（005 融合：前沿供需拐点，失败降级合成）----
+    _leading_engine = LeadingIndicatorEngine()
+    leading_signal = _leading_engine.fetch_real_leading_signal(
+        _leading_engine.match_industry_category(category)
+    )
+
     # 将最新值加入全局列表（用于跨标的百分位排名）
     all_latest_values.append(latest)
 
@@ -524,6 +530,7 @@ def analyze_single(
         "technical": technical,
         "industry_info": industry_info,
         "industry_scoring": industry_scoring,
+        "leading": leading_signal,
         "similarity": similarity,
         "fundamental": fundamental_result,
         "reasons": reasons,
@@ -782,6 +789,7 @@ def build_ranking(
             r["similarity"],
             all_forecast_5d,
             all_up_prob_5d,
+            leading_signal=r.get("leading"),
         )
 
         r["risk_result"] = risk_result
@@ -805,6 +813,16 @@ def build_ranking(
                     "detail": f"20日年化波动率 {f['value']:.1f}%，波动偏高。",
                     "contribution": -5.0,
                 })
+
+        # 领先指标理由（005 融合：让前沿信号进排行榜原因，浏览器可见）
+        if composite.get("leading_reason"):
+            _lc = composite.get("leading", 50.0)
+            all_reasons.append({
+                "type": "positive" if _lc >= 65 else ("negative" if _lc <= 35 else "neutral"),
+                "title": "领先指标",
+                "detail": composite["leading_reason"],
+                "contribution": round((_lc - 50.0) * 2, 1),
+            })
 
         all_reasons = r["reasons"] + risk_reasons
         all_reasons.sort(key=lambda x: abs(x.get("contribution", 0)), reverse=True)
@@ -896,6 +914,13 @@ def build_ranking(
                 "return_5d_pct": ind_score.get("return_5d_pct"),
                 "return_20d_pct": ind_score.get("return_20d_pct"),
                 "relative_strength_20d_pct": ind_score.get("relative_strength_20d_pct"),
+            },
+            "leading": {
+                "score": comp.get("leading", 50.0),
+                "inflection": (r.get("leading") or {}).get("momentum_metrics", {}).get("inflection_flag", "none"),
+                "momentum": (r.get("leading") or {}).get("momentum_metrics", {}).get("momentum", "flat"),
+                "data_source": (r.get("leading") or {}).get("data_source", "none"),
+                "source_name": (r.get("leading") or {}).get("source_name", ""),
             },
             "fundamental": fundamental,
             "reasons": r["reasons"],
@@ -1057,7 +1082,9 @@ def build_stock_detail(r: dict, generated_at: str) -> dict:
             "risk": comp["risk"],
             "technical": comp["technical"],
             "industry": comp["industry"],
+            "leading": comp.get("leading", 50.0),
         },
+        "leading": r.get("leading"),
         "risk": {
             "level": risk["level"],
             "label": risk["label"],
@@ -1216,24 +1243,29 @@ def main() -> int:
     all_latest_values: list = []  # 存 latest dict 列表
     klines: dict[str, Optional[pd.DataFrame]] = {}  # 门控回归所需的 5 年 K 线
 
-    for i, item in enumerate(watchlist):
+    # ---- 5.3 并发抓取 5 年数据并全量分析 ----
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    # py_mini_racer (akshare/新浪内部 JS 引擎) 在多线程并发初始化 V8 时会触发 C++ Check failed
+    # 因此默认 ranking_workers=1 保证稳健执行；同时支持环境配置
+    ranking_workers_str = os.environ.get("RANKING_WORKERS", "1").strip()
+    try:
+        ranking_workers = max(1, int(ranking_workers_str))
+    except ValueError:
+        ranking_workers = 1
+
+    def _analyze_worker(idx_item: tuple[int, dict]) -> tuple[str, Optional[pd.DataFrame], Optional[dict]]:
+        idx, item = idx_item
         code = item["code"]
-        logger.info("[%d/%d] %s(%s) 分析中...", i + 1, len(watchlist), item["name"], code)
-
+        name = item["name"]
+        logger.info("[%d/%d] %s(%s) 分析中...", idx + 1, len(watchlist), name, code)
         try:
-            # 抓取 5 年数据
             df_5y = fetch_5y_data(item)
-            klines[code] = df_5y
-
             if df_5y is None:
-                logger.warning("%s(%s) 5Y 数据抓取失败，标记为 stale", item["name"], code)
-                # 尝试加载上次成功结果
-                stale_result = _load_stale_result(code, item)
-                analysis_results[code] = stale_result
-                continue
+                logger.warning("%s(%s) 5Y 数据抓取失败，标记为 stale", name, code)
+                stale_res = _load_stale_result(code, item)
+                return code, None, stale_res
 
-            # 全量分析
-            # v2.12 数据过期检测：最后交易日距今超过阈值 → 标记 stale，不参与推荐
             data_is_stale = False
             try:
                 _last_bar = df_5y["date"].iloc[-1]
@@ -1242,20 +1274,40 @@ def main() -> int:
             except Exception:
                 pass
 
-            result = analyze_single(item, df_5y, industry_provider, all_latest_values)
+            res = analyze_single(item, df_5y, industry_provider, all_latest_values)
             if data_is_stale:
-                result["stale"] = True
-            analysis_results[code] = result
-            logger.info("%s(%s) ✓ 分析完成", item["name"], code)
-
+                res["stale"] = True
+            logger.info("%s(%s) ✓ 分析完成", name, code)
+            return code, df_5y, res
         except Exception:
-            logger.error("%s(%s) 分析异常: %s", item["name"], code, traceback.format_exc())
-            stale_result = _load_stale_result(code, item)
-            analysis_results[code] = stale_result
+            logger.error("%s(%s) 分析异常: %s", name, code, traceback.format_exc())
+            stale_res = _load_stale_result(code, item)
+            return code, None, stale_res
 
-        # 限流
-        if i < len(watchlist) - 1:
-            time.sleep(REQUEST_INTERVAL)
+    if ranking_workers == 1:
+        for i, item in enumerate(watchlist):
+            code, df_5y, res = _analyze_worker((i, item))
+            klines[code] = df_5y
+            analysis_results[code] = res
+            if i < len(watchlist) - 1:
+                time.sleep(REQUEST_INTERVAL)
+    else:
+        logger.info("启动 ThreadPoolExecutor 并发分析 (workers=%d)...", ranking_workers)
+        with ThreadPoolExecutor(max_workers=ranking_workers) as executor:
+            future_to_code = {
+                executor.submit(_analyze_worker, (i, item)): item["code"]
+                for i, item in enumerate(watchlist)
+            }
+            for future in as_completed(future_to_code):
+                code = future_to_code[future]
+                try:
+                    c, df_5y, res = future.result()
+                    klines[c] = df_5y
+                    analysis_results[c] = res
+                except Exception as exc:
+                    logger.error("标的 %s 并发分析异常: %s", code, exc)
+                    klines[code] = None
+                    analysis_results[code] = _load_stale_result(code, {"code": code, "name": code, "type": "stock"})
 
     # ---- 5.4 全部失败保护 ----
     success_count = sum(1 for v in analysis_results.values() if v is not None and not v.get("stale"))

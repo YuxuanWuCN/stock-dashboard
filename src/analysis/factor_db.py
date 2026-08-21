@@ -265,17 +265,49 @@ def write_quality_report(report: dict, path: str) -> str:
     return str(p)
 
 
+def write_factor_quality_report(
+    db_path: Optional[str] = None, out_path: Optional[str] = None
+) -> str:
+    """从因子库生成质量报告（含半衰期/拥挤度，005 融合 US3），写入 JSON。
+
+    默认 db: docs/data/factors/factors.db；默认 out: docs/data/factors/quality_report.json。
+    返回输出路径。
+    """
+    db = str(db_path or default_db_path())
+    con = sqlite3.connect(db)
+    try:
+        df = pd.read_sql_query(
+            "SELECT date, mkt AS MKT, smb AS SMB, hml AS HML, mom AS MOM, rf "
+            "FROM factors ORDER BY date",
+            con,
+        )
+    finally:
+        con.close()
+
+    from .factor_quality import compute_factor_quality_report  # 惰性导入避免耦合
+
+    report = compute_factor_quality_report(df)
+    out = out_path or str(Path(db).parent / "quality_report.json")
+    return write_quality_report(report, out)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="因子数据层（spec-kit 003 / Fama-MacBeth Phase 1）")
     sub = parser.add_subparsers(dest="cmd", required=True)
     imp = sub.add_parser("import", help="导入因子 CSV 到 SQLite 因子库（幂等）")
     imp.add_argument("--csv", required=True, help="因子 CSV 路径（契约见 contracts/factors-csv.md）")
     imp.add_argument("--db", default=None, help="SQLite 因子库路径（默认 docs/data/factors/factors.db）")
+    qual = sub.add_parser("quality", help="生成因子质量报告（含半衰期/拥挤度）")
+    qual.add_argument("--db", default=None, help="SQLite 因子库路径")
+    qual.add_argument("--out", default=None, help="质量报告输出路径（默认 docs/data/factors/quality_report.json）")
     args = parser.parse_args()
 
     if args.cmd == "import":
         stats = import_to_db(args.csv, db_path=args.db)
         print(json.dumps(stats, ensure_ascii=False, indent=2))
+    elif args.cmd == "quality":
+        out = write_factor_quality_report(db_path=args.db, out_path=args.out)
+        print(json.dumps({"report_path": out}, ensure_ascii=False, indent=2))
     return 0
 
 
