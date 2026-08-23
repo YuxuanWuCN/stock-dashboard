@@ -27,6 +27,10 @@ function Write-Log($msg) {
 
 Write-Log "=== 每日本地数据更新开始 ==="
 
+# 0) 动态热点龙头自动沉淀（模式 B：每日吸纳涨幅榜强势龙头，池上限 400 只自动滑窗淘汰）
+& $py tools\auto_update_watchlist_top_gainers.py *>> $logFile
+Write-Log ("auto_update_watchlist 退出码: " + $LASTEXITCODE)
+
 # 1) 抓取行情（K线 + summary + 场外基金净值）
 & $py -m src.fetch_data *>> $logFile
 Write-Log ("fetch_data 退出码: " + $LASTEXITCODE)
