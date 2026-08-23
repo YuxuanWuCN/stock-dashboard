@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-21 10:35:19+08:00",
+  "generated_at": "2026-08-22 00:18:22+08:00",
   "trade_date": "2026-08-21",
   "code": "518880",
   "name": "黄金ETF",
@@ -17,8 +17,8 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 57.3,
-    "risk": 18.0,
+    "risk_adjusted": 57.9,
+    "risk": 16.2,
     "technical": 100.0,
     "industry": 65.0,
     "leading": 50.0
@@ -42,39 +42,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-21 09:48:51"
+    "updated_at": "2026-08-22 00:12:14"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 18.59,
-    "max_drawdown_60d_pct": -12.11,
-    "atr14_pct": 1.47,
+    "annualized_volatility_20d_pct": 17.24,
+    "max_drawdown_60d_pct": -12.01,
+    "atr14_pct": 0.97,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 12.5,
-        "value": 18.59
+        "score": 12.0,
+        "value": 17.24
       },
       {
         "name": "60日最大回撤",
-        "score": 28.5,
-        "value": -12.11
+        "score": 28.0,
+        "value": -12.01
       },
       {
         "name": "ATR百分比",
-        "score": 3.0,
-        "value": 1.47
+        "score": 2.5,
+        "value": 0.97
       },
       {
         "name": "量价异常",
-        "score": 59.0,
-        "value": 0.78
+        "score": 50.0,
+        "value": null
       },
       {
         "name": "行业波动",
-        "score": 4.0,
-        "value": 34.26
+        "score": 1.0,
+        "value": 34.37
       }
     ]
   },
@@ -88,28 +88,28 @@
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 9.134,
-    "ma10": 9.078,
-    "ma20": 8.8005,
-    "ma60": 8.722000000000001,
-    "rsi14": 69.8,
-    "macd_dif": 0.1661110447972085,
-    "macd_dea": 0.11343516334524781,
-    "macd_hist": 0.1053517629039214,
-    "atr14_pct": 1.4746008283788425,
-    "boll_position": 0.9135333946362834,
-    "return_5d_pct": 4.134078212290504,
-    "return_20d_pct": 11.217183770883054,
-    "volume_ratio_5d": 0.78
+    "ma5": 9.144,
+    "ma10": 9.080000000000002,
+    "ma20": 8.8015,
+    "ma60": 8.724166666666665,
+    "rsi14": 71.8,
+    "macd_dif": 0.1691938333059131,
+    "macd_dea": 0.11315441872914495,
+    "macd_hist": 0.11207882915353629,
+    "atr14_pct": 0.9745070534021834,
+    "boll_position": 0.9446278388574023,
+    "return_5d_pct": 4.5810055865921795,
+    "return_20d_pct": 11.29607609988108,
+    "volume_ratio_5d": null
   },
   "industry": {
     "name": "深证成指",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.22,
-    "return_20d_pct": -1.07,
-    "return_60d_pct": -11.21,
-    "relative_strength_20d_pct": 9.78
+    "return_5d_pct": -1.81,
+    "return_20d_pct": 2.32,
+    "return_60d_pct": -11.14,
+    "relative_strength_20d_pct": 8.98
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -138,6 +138,12 @@
       "title": "中短期趋势向上",
       "detail": "收盘价位于20日和60日均线上方。",
       "contribution": 8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=71.8，短期超买。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/518880.json",

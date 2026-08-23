@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-21 10:35:19+08:00",
+  "generated_at": "2026-08-22 00:18:22+08:00",
   "trade_date": "2026-08-21",
   "code": "513520",
   "name": "日经ETF",
@@ -17,10 +17,10 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 43.8,
-    "risk": 48.1,
-    "technical": 80.0,
-    "industry": 58.2,
+    "risk_adjusted": 48.7,
+    "risk": 35.4,
+    "technical": 90.0,
+    "industry": 56.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,39 +42,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-21 09:48:15"
+    "updated_at": "2026-08-22 00:11:30"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 33.73,
-    "max_drawdown_60d_pct": -20.31,
-    "atr14_pct": 2.66,
+    "annualized_volatility_20d_pct": 33.88,
+    "max_drawdown_60d_pct": -16.39,
+    "atr14_pct": 1.53,
     "factors": [
       {
         "name": "20日波动率",
         "score": 58.5,
-        "value": 33.73
+        "value": 33.88
       },
       {
         "name": "60日最大回撤",
-        "score": 56.5,
-        "value": -20.31
+        "score": 43.5,
+        "value": -16.39
       },
       {
         "name": "ATR百分比",
-        "score": 37.5,
-        "value": 2.66
+        "score": 9.0,
+        "value": 1.53
       },
       {
         "name": "量价异常",
-        "score": 83.0,
-        "value": 0.68
+        "score": 50.0,
+        "value": null
       },
       {
         "name": "行业波动",
-        "score": 4.0,
-        "value": 34.26
+        "score": 1.0,
+        "value": 34.37
       }
     ]
   },
@@ -87,29 +87,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 2.306,
-    "ma10": 2.321,
-    "ma20": 2.2575000000000003,
-    "ma60": 2.326,
-    "rsi14": 46.6,
-    "macd_dif": 0.007896460992109944,
-    "macd_dea": 0.006242228426942272,
-    "macd_hist": 0.0033084651303353432,
-    "atr14_pct": 2.657475572267369,
-    "boll_position": 0.4791134153501791,
-    "return_5d_pct": -5.063291139240511,
-    "return_20d_pct": 4.166666666666652,
-    "volume_ratio_5d": 0.68
+    "trend": "range",
+    "ma5": 2.21,
+    "ma10": 2.227,
+    "ma20": 2.1695,
+    "ma60": 2.208666666666667,
+    "rsi14": 48.6,
+    "macd_dif": 0.010696177286896535,
+    "macd_dea": 0.010170043238141729,
+    "macd_hist": 0.0010522680975096135,
+    "atr14_pct": 1.5276806600787864,
+    "boll_position": 0.5308189673090118,
+    "return_5d_pct": -3.964757709251099,
+    "return_20d_pct": 4.306220095693791,
+    "volume_ratio_5d": null
   },
   "industry": {
     "name": "深证成指",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.22,
-    "return_20d_pct": -1.07,
-    "return_60d_pct": -11.21,
-    "relative_strength_20d_pct": 2.73
+    "return_5d_pct": -1.81,
+    "return_20d_pct": 2.32,
+    "return_60d_pct": -11.14,
+    "relative_strength_20d_pct": 1.99
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -135,20 +135,14 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 20.3%，风险偏高。",
+      "detail": "近60日最大回撤 16.4%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 20.3%，风险扣分。",
+      "detail": "近60日最大回撤 16.4%，风险扣分。",
       "contribution": -7.0
     }
   ],

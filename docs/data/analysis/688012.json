@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-21 10:35:19+08:00",
-  "trade_date": "2026-08-20",
+  "generated_at": "2026-08-22 00:18:22+08:00",
+  "trade_date": "2026-08-21",
   "code": "688012",
   "name": "中微公司",
   "type": "stock",
@@ -22,10 +22,10 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 37.9,
-    "risk": 73.2,
-    "technical": 88.0,
-    "industry": 47.0,
+    "risk_adjusted": 25.5,
+    "risk": 72.0,
+    "technical": 73.0,
+    "industry": 35.0,
     "leading": 50.0
   },
   "leading": {
@@ -47,74 +47,74 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-21 09:44:26"
+    "updated_at": "2026-08-22 00:09:03"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 83.12,
+    "annualized_volatility_20d_pct": 82.13,
     "max_drawdown_60d_pct": -34.3,
-    "atr14_pct": 7.53,
+    "atr14_pct": 7.25,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 91.0,
-        "value": 83.12
+        "score": 92.0,
+        "value": 82.13
       },
       {
         "name": "60日最大回撤",
-        "score": 78.5,
+        "score": 79.5,
         "value": -34.3
       },
       {
         "name": "ATR百分比",
         "score": 88.5,
-        "value": 7.53
+        "value": 7.25
       },
       {
         "name": "量价异常",
         "score": 67.0,
-        "value": 0.76
+        "value": 0.77
       },
       {
         "name": "行业波动",
-        "score": 12.5,
-        "value": 35.41
+        "score": 0.5,
+        "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.33,
-    "return_5d_pct": 0.44,
-    "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 43.3,
+    "return_3d_pct": 0.3,
+    "return_5d_pct": -0.54,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 379.7,
-    "ma10": 377.06100000000004,
-    "ma20": 366.978,
-    "ma60": 364.9875,
-    "rsi14": 48.3,
-    "macd_dif": 0.8618926003768479,
-    "macd_dea": -0.7554531258706275,
-    "macd_hist": 3.2346914524949506,
-    "atr14_pct": 7.5292752438734585,
-    "boll_position": 0.48413424025810115,
-    "return_5d_pct": -1.3282220182495585,
-    "return_20d_pct": -2.5852878464818763,
-    "volume_ratio_5d": 0.76
+    "trend": "downtrend",
+    "ma5": 377.22999999999996,
+    "ma10": 376.546,
+    "ma20": 365.678,
+    "ma60": 365.9646666666667,
+    "rsi14": 47.6,
+    "macd_dif": -0.0762124316728432,
+    "macd_dea": -0.6196049870310707,
+    "macd_hist": 1.086785110716455,
+    "atr14_pct": 7.251300752958569,
+    "boll_position": 0.46510975900583246,
+    "return_5d_pct": -3.2946511938108602,
+    "return_20d_pct": -6.692406692406694,
+    "volume_ratio_5d": 0.77
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.22,
-    "return_20d_pct": -1.07,
-    "return_60d_pct": -11.21,
-    "relative_strength_20d_pct": -1.52
+    "return_5d_pct": -1.81,
+    "return_20d_pct": 2.32,
+    "return_60d_pct": -11.14,
+    "relative_strength_20d_pct": -9.01
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -122,17 +122,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.33,
-      "median_return_pct": -0.86,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.3,
+      "median_return_pct": -0.63,
       "best_return_pct": 10.11,
       "worst_return_pct": -7.74
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.44,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.54,
       "median_return_pct": -0.87,
-      "best_return_pct": 15.66,
+      "best_return_pct": 13.86,
       "worst_return_pct": -16.33
     }
   },
@@ -260,6 +260,12 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 34.3%，风险偏高。",
       "contribution": -7.0
@@ -271,15 +277,9 @@
       "contribution": -7.0
     },
     {
-      "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
-    },
-    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 83.1%，波动偏高。",
+      "detail": "20日年化波动率 82.1%，波动偏高。",
       "contribution": -5.0
     }
   ],

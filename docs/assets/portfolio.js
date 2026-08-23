@@ -205,62 +205,88 @@ document.addEventListener('DOMContentLoaded', () => {
             window.addEventListener('resize', () => state.returnsChart.resize());
         }
 
+        // 收集所有组合与基准的有效日期（并集，升序）
         const allDates = new Set();
         Object.values(state.portfolios).forEach(p => {
             if (p.history) p.history.forEach(pt => allDates.add(pt.date));
         });
+        if (state.benchmark && state.benchmark.records) {
+            state.benchmark.records.forEach(r => allDates.add(r.trade_date));
+        }
         let dates = Array.from(allDates).sort();
 
+        // 周期窗口：取最近 N 个交易日
         if (state.currentPeriod !== 'all') {
             const pDays = parseInt(state.currentPeriod, 10);
             if (dates.length > pDays) dates = dates.slice(-pDays);
         }
+        const dateSet = new Set(dates);
+        const toTs = d => new Date(d + 'T00:00:00+08:00').getTime();
 
-        const series = Object.keys(portfolioConfig).map(id => {
-            if (id === 'benchmark') {
-                if (!state.benchmark || !state.benchmark.records) return null;
-                // 计算等权基准累计
-                let cum = 0;
-                const bMap = {};
-                state.benchmark.records.forEach(r => {
-                    cum = (1 + cum/100) * (1 + (r.daily_return_pct||0)/100) - 1;
-                    bMap[r.trade_date] = cum * 100;
-                });
-                const values = dates.map(d => bMap[d] != null ? bMap[d] : null);
-                return {
+        const series = [];
+
+        // 全池等权基准线
+        if (state.benchmark && state.benchmark.records) {
+            let cum = 0;
+            const bPoints = [];
+            state.benchmark.records.forEach(r => {
+                cum = (1 + cum / 100) * (1 + (r.daily_return_pct || 0) / 100) - 1;
+                if (dateSet.has(r.trade_date)) {
+                    bPoints.push([toTs(r.trade_date), +(cum * 100).toFixed(2)]);
+                }
+            });
+            if (bPoints.length > 0) {
+                series.push({
                     name: '全池等权基准',
                     type: 'line',
-                    data: values,
+                    data: bPoints,
                     smooth: true,
                     showSymbol: false,
+                    connectNulls: true,
                     lineStyle: { width: 2, type: 'dashed', color: '#94a3b8' },
-                    itemStyle: { color: '#94a3b8' }
-                };
+                    itemStyle: { color: '#94a3b8' },
+                    z: 2
+                });
             }
+        }
 
+        // 六大组合曲线（各系列独立从自己的第一个有效数据点起笔）
+        Object.keys(portfolioConfig).forEach(id => {
+            if (id === 'benchmark') return;
             const data = state.portfolios[id];
             const config = portfolioConfig[id];
-            if (!data || !data.history) return null;
+            if (!data || !data.history) return;
 
-            const values = dates.map(d => {
-                const pt = data.history.find(h => h.date === d);
-                return pt ? pt.total_return : null;
-            });
+            const points = data.history
+                .filter(h => dateSet.has(h.date) && h.total_return != null)
+                .map(h => [toTs(h.date), +h.total_return]);
 
-            return {
+            if (points.length === 0) return;
+
+            const isKey = id === 'aggressive' || id === 'robust';
+            series.push({
                 name: config.name,
                 type: 'line',
-                data: values,
+                data: points,
                 smooth: true,
                 showSymbol: false,
-                lineStyle: { width: id === 'aggressive' || id === 'robust' ? 3.5 : 2.5, color: config.color },
+                connectNulls: true,
+                lineStyle: { width: isKey ? 3.5 : 2.5, color: config.color },
                 itemStyle: { color: config.color },
                 emphasis: {
                     focus: 'series',
                     lineStyle: { width: 4.5 }
-                }
-            };
-        }).filter(Boolean);
+                },
+                z: isKey ? 10 : 5
+            });
+        });
+
+        function fmtDate(ts) {
+            const d = new Date(ts);
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${d.getFullYear()}-${mm}-${dd}`;
+        }
 
         const option = {
             tooltip: {
@@ -271,13 +297,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 padding: [12, 16],
                 textStyle: { color: '#0f172a', fontSize: 13 },
                 formatter: function(params) {
-                    let html = `<div style="font-weight:800;margin-bottom:6px;border-bottom:1px solid #f1f5f9;padding-bottom:4px;">📅 ${params[0].axisValue}</div>`;
+                    if (!params || !params.length) return '';
+                    const first = params[0];
+                    const tsVal = Array.isArray(first.value) ? first.value[0] : first.axisValue;
+                    const dateStr = fmtDate(tsVal);
+                    let html = `<div style="font-weight:800;margin-bottom:6px;border-bottom:1px solid #f1f5f9;padding-bottom:4px;">📅 ${dateStr}</div>`;
                     params.forEach(param => {
-                        const val = param.value !== null ? (param.value > 0 ? '+' : '') + param.value.toFixed(2) + '%' : '--';
+                        const v = Array.isArray(param.value) ? param.value[1] : param.value;
+                        const valStr = (v !== null && v !== undefined)
+                            ? ((v > 0 ? '+' : '') + Number(v).toFixed(2) + '%')
+                            : '--';
                         const isMain = param.seriesName.includes('激进') || param.seriesName.includes('妖股');
                         html += `<div style="display:flex;justify-content:space-between;gap:15px;line-height:1.6;${isMain ? 'font-weight:700;' : ''}">
                             <span>${param.marker} ${param.seriesName}</span>
-                            <span style="font-family:monospace;font-weight:800;">${val}</span>
+                            <span style="font-family:monospace;font-weight:800;">${valStr}</span>
                         </div>`;
                     });
                     return html;
@@ -296,11 +329,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 containLabel: true
             },
             xAxis: {
-                type: 'category',
-                data: dates,
+                type: 'time',
                 boundaryGap: false,
                 axisLine: { lineStyle: { color: '#cbd5e1' } },
-                axisLabel: { color: '#64748b', fontSize: 12 }
+                axisLabel: {
+                    color: '#64748b',
+                    fontSize: 12,
+                    formatter: function(value) {
+                        const d = new Date(value);
+                        return `${d.getMonth() + 1}-${d.getDate()}`;
+                    }
+                }
             },
             yAxis: {
                 type: 'value',

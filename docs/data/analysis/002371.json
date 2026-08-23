@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-21 10:35:19+08:00",
-  "trade_date": "2026-08-20",
+  "generated_at": "2026-08-22 00:18:22+08:00",
+  "trade_date": "2026-08-21",
   "code": "002371",
   "name": "北方华创",
   "type": "stock",
@@ -22,10 +22,10 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 40.5,
-    "risk": 70.1,
+    "risk_adjusted": 33.4,
+    "risk": 67.7,
     "technical": 63.0,
-    "industry": 44.7,
+    "industry": 35.0,
     "leading": 50.0
   },
   "leading": {
@@ -47,74 +47,74 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-21 09:44:22"
+    "updated_at": "2026-08-22 00:09:00"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 66.06,
+    "annualized_volatility_20d_pct": 65.5,
     "max_drawdown_60d_pct": -31.38,
-    "atr14_pct": 6.45,
+    "atr14_pct": 6.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 85.0,
-        "value": 66.06
+        "score": 84.0,
+        "value": 65.5
       },
       {
         "name": "60日最大回撤",
-        "score": 75.5,
+        "score": 76.0,
         "value": -31.38
       },
       {
         "name": "ATR百分比",
-        "score": 83.5,
-        "value": 6.45
+        "score": 82.5,
+        "value": 6.14
       },
       {
         "name": "量价异常",
-        "score": 70.5,
-        "value": 0.75
+        "score": 68.5,
+        "value": 0.77
       },
       {
         "name": "行业波动",
-        "score": 13.0,
-        "value": 35.41
+        "score": 1.0,
+        "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.01,
-    "return_5d_pct": 1.53,
+    "return_3d_pct": 0.61,
+    "return_5d_pct": 0.5,
     "up_probability_3d_pct": 56.7,
-    "up_probability_5d_pct": 53.3,
+    "up_probability_5d_pct": 46.7,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
-    "trend": "range",
-    "ma5": 741.426,
-    "ma10": 746.382,
-    "ma20": 728.614,
-    "ma60": 727.9915,
-    "rsi14": 46.2,
-    "macd_dif": 0.6083144201501227,
-    "macd_dea": 0.7886750181783923,
-    "macd_hist": -0.3607211960565391,
-    "atr14_pct": 6.448069597231056,
-    "boll_position": 0.38739183590384707,
-    "return_5d_pct": -3.526942864879512,
-    "return_20d_pct": -3.709459459459463,
-    "volume_ratio_5d": 0.75
+    "trend": "downtrend",
+    "ma5": 736.58,
+    "ma10": 742.626,
+    "ma20": 726.4855,
+    "ma60": 728.9253333333334,
+    "rsi14": 46.6,
+    "macd_dif": -1.2125300349798636,
+    "macd_dea": 0.3884340075467412,
+    "macd_hist": -3.2019280850532095,
+    "atr14_pct": 6.138503611229617,
+    "boll_position": 0.414312306944444,
+    "return_5d_pct": -3.2802642623128375,
+    "return_20d_pct": -5.623513870541618,
+    "volume_ratio_5d": 0.77
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.22,
-    "return_20d_pct": -1.07,
-    "return_60d_pct": -11.21,
-    "relative_strength_20d_pct": -2.64
+    "return_5d_pct": -1.81,
+    "return_20d_pct": 2.32,
+    "return_60d_pct": -11.14,
+    "relative_strength_20d_pct": -7.94
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -123,15 +123,15 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 56.7,
-      "average_return_pct": 1.01,
-      "median_return_pct": 0.82,
+      "average_return_pct": 0.61,
+      "median_return_pct": 0.62,
       "best_return_pct": 8.4,
       "worst_return_pct": -4.89
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 1.53,
-      "median_return_pct": 0.64,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.5,
+      "median_return_pct": -0.37,
       "best_return_pct": 9.46,
       "worst_return_pct": -7.76
     }
@@ -260,6 +260,12 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 31.4%，风险偏高。",
       "contribution": -7.0
@@ -273,7 +279,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 66.1%，波动偏高。",
+      "detail": "20日年化波动率 65.5%，波动偏高。",
       "contribution": -5.0
     }
   ],

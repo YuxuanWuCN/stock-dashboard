@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-21 10:35:19+08:00",
-  "trade_date": "2026-08-20",
+  "generated_at": "2026-08-22 00:18:22+08:00",
+  "trade_date": "2026-08-21",
   "code": "002747",
   "name": "埃斯顿",
   "type": "stock",
@@ -22,8 +22,8 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 46.8,
-    "risk": 71.2,
+    "risk_adjusted": 44.4,
+    "risk": 70.6,
     "technical": 80.0,
     "industry": 65.0,
     "leading": 50.0
@@ -47,74 +47,74 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-21 10:17:39"
+    "updated_at": "2026-08-22 00:15:48"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 88.75,
+    "annualized_volatility_20d_pct": 87.47,
     "max_drawdown_60d_pct": -42.96,
-    "atr14_pct": 8.35,
+    "atr14_pct": 7.93,
     "factors": [
       {
         "name": "20日波动率",
         "score": 94.5,
-        "value": 88.75
+        "value": 87.47
       },
       {
         "name": "60日最大回撤",
-        "score": 89.0,
+        "score": 89.5,
         "value": -42.96
       },
       {
         "name": "ATR百分比",
         "score": 91.5,
-        "value": 8.35
+        "value": 7.93
       },
       {
         "name": "量价异常",
-        "score": 3.5,
-        "value": 0.99
+        "score": 14.0,
+        "value": 1.0
       },
       {
         "name": "行业波动",
-        "score": 13.0,
-        "value": 35.41
+        "score": 1.0,
+        "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.51,
-    "return_5d_pct": 2.4,
+    "return_3d_pct": 0.72,
+    "return_5d_pct": 1.39,
     "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 56.7,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
     "sample_size": 30
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 36.0,
-    "ma10": 35.525999999999996,
-    "ma20": 33.4035,
-    "ma60": 35.226333333333336,
-    "rsi14": 45.5,
-    "macd_dif": 0.17393687716721473,
-    "macd_dea": -0.12009666829156287,
-    "macd_hist": 0.5880670909175552,
-    "atr14_pct": 8.352297356819774,
-    "boll_position": 0.44420413329622044,
-    "return_5d_pct": -5.480242284395731,
-    "return_20d_pct": 4.6630469498562865,
-    "volume_ratio_5d": 0.99
+    "ma5": 35.764,
+    "ma10": 35.37,
+    "ma20": 33.58,
+    "ma60": 35.313833333333335,
+    "rsi14": 47.3,
+    "macd_dif": 0.041904036486030805,
+    "macd_dea": -0.08769652733604413,
+    "macd_hist": 0.2592011276441499,
+    "atr14_pct": 7.93259755091449,
+    "boll_position": 0.4990847769759912,
+    "return_5d_pct": -3.395683453237408,
+    "return_20d_pct": 11.750998668442092,
+    "volume_ratio_5d": 1.0
   },
   "industry": {
     "name": "工业机器人整机",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.22,
-    "return_20d_pct": -1.07,
-    "return_60d_pct": -11.21,
-    "relative_strength_20d_pct": 5.73
+    "return_5d_pct": -1.81,
+    "return_20d_pct": 2.32,
+    "return_60d_pct": -11.14,
+    "relative_strength_20d_pct": 9.43
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -123,17 +123,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 43.3,
-      "average_return_pct": 0.51,
+      "average_return_pct": 0.72,
       "median_return_pct": -0.43,
       "best_return_pct": 13.33,
       "worst_return_pct": -10.16
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 2.4,
-      "median_return_pct": 1.01,
-      "best_return_pct": 18.46,
-      "worst_return_pct": -5.84
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.39,
+      "median_return_pct": -0.36,
+      "best_return_pct": 18.16,
+      "worst_return_pct": -6.87
     }
   },
   "fundamental": {
@@ -266,7 +266,8 @@
       "industry_return_60d_pct": null,
       "cycle_observation_days": 0,
       "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    }
+    },
+    "cached_at": "2026-08-21 10:17:50"
   },
   "reasons": [
     {
@@ -290,7 +291,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 88.8%，波动偏高。",
+      "detail": "20日年化波动率 87.5%，波动偏高。",
       "contribution": -5.0
     }
   ],
