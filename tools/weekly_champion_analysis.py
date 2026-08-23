@@ -169,12 +169,17 @@ def analyze_weekly_performance(performances, days=7):
 
 
 def select_champion(results):
-    """选出冠军策略"""
+    """选出冠军策略（排除 global 参考基准）"""
     if not results:
         return None
 
+    # 排除 global（仅作参考基准，不参与冠军评选）
+    eligible = {k: v for k, v in results.items() if k != 'global'}
+    if not eligible:
+        eligible = results
+
     # 按综合得分排序
-    sorted_results = sorted(results.items(), key=lambda x: x[1]['score'], reverse=True)
+    sorted_results = sorted(eligible.items(), key=lambda x: x[1]['score'], reverse=True)
     champion_name, champion_stats = sorted_results[0]
 
     return champion_name, champion_stats, sorted_results
