@@ -1,57 +1,57 @@
 {
-  "analysis_date": "20260823_120347",
+  "analysis_date": "20260823_144556",
   "champion": {
-    "name": "global",
+    "name": "defensive",
     "stats": {
-      "cumulative_return": 0.04,
-      "avg_daily_return": 0.006,
-      "volatility": 0.147,
+      "cumulative_return": -0.5,
+      "avg_daily_return": -0.071,
+      "volatility": 0.318,
       "win_rate": 57.1,
-      "max_drawdown": 0.42,
-      "sharpe": 0.039,
-      "score": 5.77,
+      "max_drawdown": 0.8,
+      "sharpe": -0.224,
+      "score": 4.89,
       "trading_days": 7
     },
     "analysis": {
       "core_holdings": [
         {
-          "code": "005380",
-          "name": "现代汽车",
+          "code": "518880",
+          "name": "黄金ETF",
+          "appearances": 7,
+          "avg_return": 0.5
+        },
+        {
+          "code": "601288",
+          "name": "农业银行",
           "appearances": 4,
-          "avg_return": 1.91
-        },
-        {
-          "code": "601899",
-          "name": "紫金矿业",
-          "appearances": 4,
-          "avg_return": 1.09
-        },
-        {
-          "code": "PEP",
-          "name": "百事",
-          "appearances": 3,
-          "avg_return": 0.69
-        },
-        {
-          "code": "105560",
-          "name": "KB金融",
-          "appearances": 6,
           "avg_return": 0.35
         },
         {
-          "code": "00011",
-          "name": "恒生银行",
+          "code": "00005",
+          "name": "汇丰控股",
+          "appearances": 4,
+          "avg_return": 0.28
+        },
+        {
+          "code": "600900",
+          "name": "长江电力",
           "appearances": 3,
-          "avg_return": 0
+          "avg_return": 0.11
+        },
+        {
+          "code": "601398",
+          "name": "工商银行",
+          "appearances": 7,
+          "avg_return": 0.08
         }
       ],
-      "prediction_accuracy": 30.357142857142854,
+      "prediction_accuracy": 44.44444444444444,
       "llm_analysis": null
     },
-    "cumulative_return": 0.04,
-    "sharpe_ratio": 0.039,
+    "cumulative_return": -0.5,
+    "sharpe_ratio": -0.224,
     "win_rate": 0.571,
-    "max_drawdown": 0.42
+    "max_drawdown": 0.8
   },
   "all_strategies": {
     "aggressive": {
@@ -177,45 +177,30 @@
   },
   "variants": [
     {
-      "name": "global_us_heavy",
-      "display_name": "全球-美股偏重",
-      "description": "A股2 + 港股1 + 美股5 + 韩股2",
+      "name": "defensive_top5",
+      "display_name": "Defensive 精选版",
+      "description": "集中持仓：只持有池内Top 5",
       "changes": {
-        "allocation": {
-          "cn": 2,
-          "hk": 1,
-          "us": 5,
-          "kr": 2
-        }
+        "top_n": 5
       }
     },
     {
-      "name": "global_cn_heavy",
-      "display_name": "全球-A股偏重",
-      "description": "A股5 + 港股2 + 美股2 + 韩股1",
+      "name": "defensive_weighted",
+      "display_name": "Defensive 加权版",
+      "description": "按分数加权：高分股票权重更大",
       "changes": {
-        "allocation": {
-          "cn": 5,
-          "hk": 2,
-          "us": 2,
-          "kr": 1
-        }
+        "weighting": "score_weighted"
       }
     },
     {
-      "name": "global_balanced",
-      "display_name": "全球-极致平衡",
-      "description": "A股3 + 港股3 + 美股3 + 韩股3",
+      "name": "defensive_momentum",
+      "display_name": "Defensive 动量版",
+      "description": "池内选择：优先20日涨幅高的",
       "changes": {
-        "allocation": {
-          "cn": 3,
-          "hk": 3,
-          "us": 3,
-          "kr": 3
-        }
+        "selection_criterion": "momentum"
       }
     }
   ],
   "llm_analysis": "（无 LLM 深度分析）",
-  "source_file": "weekly_analysis_20260823_120347.json"
+  "source_file": "weekly_analysis_20260823_144556.json"
 }
