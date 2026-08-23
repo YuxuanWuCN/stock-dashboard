@@ -1,0 +1,300 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-23 19:02:09+08:00",
+  "trade_date": "2026-08-21",
+  "code": "688137",
+  "name": "近岸蛋白",
+  "type": "stock",
+  "category": "热点龙头",
+  "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": -0.00021403959471516775,
+    "alpha_p_value": 0.8237262763365927,
+    "information_ratio": -0.0074551570802129236,
+    "betas": {
+      "MKT": 0.07528700850122577,
+      "SMB": 0.27667228503281016,
+      "HML": 0.09106462541107002,
+      "MOM": -0.262328783359529
+    },
+    "window_end": "2026-05-28"
+  },
+  "scores": {
+    "risk_adjusted": 27.0,
+    "risk": 79.4,
+    "technical": 100.0,
+    "industry": 65.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-23 19:01:38"
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 158.07,
+    "max_drawdown_60d_pct": -20.98,
+    "atr14_pct": 7.87,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 99.2,
+        "value": 158.07
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 39.7,
+        "value": -20.98
+      },
+      {
+        "name": "ATR百分比",
+        "score": 82.4,
+        "value": 7.87
+      },
+      {
+        "name": "量价异常",
+        "score": 95.4,
+        "value": 1.61
+      },
+      {
+        "name": "行业波动",
+        "score": 91.6,
+        "value": 34.37
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -2.53,
+    "return_5d_pct": -2.8,
+    "up_probability_3d_pct": 20.0,
+    "up_probability_5d_pct": 26.7,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 66.628,
+    "ma10": 63.145,
+    "ma20": 50.297,
+    "ma60": 41.77250000000001,
+    "rsi14": 75.4,
+    "macd_dif": 8.567030189787097,
+    "macd_dea": 5.9652014689980986,
+    "macd_hist": 5.203657441577997,
+    "atr14_pct": 7.871766647598016,
+    "boll_position": 1.0345557246970638,
+    "return_5d_pct": 16.398390342052306,
+    "return_20d_pct": 138.13584239929432,
+    "volume_ratio_5d": 1.61
+  },
+  "industry": {
+    "name": "热点龙头",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -1.81,
+    "return_20d_pct": 2.32,
+    "return_60d_pct": -11.14,
+    "relative_strength_20d_pct": 135.82
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 20.0,
+      "average_return_pct": -2.53,
+      "median_return_pct": -3.63,
+      "best_return_pct": 23.15,
+      "worst_return_pct": -14.72
+    },
+    "horizon_5d": {
+      "up_probability_pct": 26.7,
+      "average_return_pct": -2.8,
+      "median_return_pct": -3.54,
+      "best_return_pct": 39.4,
+      "worst_return_pct": -20.75
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 42.6,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 63.0,
+      "profit_quality": 17.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 2145885280.68,
+      "total_assets_yoy": -3.0856705966,
+      "inventory": 70510884.25,
+      "prepayment": 3650653.0,
+      "receivable": 64414373.72,
+      "inventory_prepay_ratio": 0.0345598797464603,
+      "receivable_revenue": 3.4587918329374467,
+      "goodwill_equity": null,
+      "debt_ratio": 0.05818054870129741,
+      "short_debt_ratio": 0.07327794355943193,
+      "roe": -0.005246994679508652,
+      "gross_margin": -16.651778583869337,
+      "deduct_ratio": 0.999878424623665,
+      "netprofit_yoy": 10.1964306113,
+      "ocf_np_ratio": 1.3276777476903325,
+      "financing_debt": -0.06552338699815864,
+      "retained_profit_equity": -0.014038528123412155
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +-3.1%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 3.5%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 345.9%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 5.8%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 7.3%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 -0.5%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +10.2%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 100.0%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "negative",
+          "title": "毛利率偏低",
+          "detail": "毛利率 -16.7%，产品竞争力或成本控制存疑。",
+          "contribution": -8.0
+        },
+        {
+          "type": "negative",
+          "title": "累计未弥补亏损",
+          "detail": "未分配利润/归母权益 -1.4%，历史亏损削弱资本缓冲。",
+          "contribution": -8.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 1.33，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -6.6%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "净利润同比 +10.2%；经营现金流/净利润 1.33，利润含金量高",
+      "negative_view": "应收账款/营收 345.9%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-23 16:16:41"
+  },
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 21.0%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 21.0%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.61倍。",
+      "contribution": 5.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=75.4，短期超买。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/688137.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

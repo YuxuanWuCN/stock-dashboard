@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-22 00:22:42",
+  "generated_at": "2026-08-23 19:04:53",
   "portfolios": [
     {
       "key": "aggressive",
@@ -51,7 +51,7 @@
       "file": "paper/performance_bluechip.json",
       "name": "蓝筹组合",
       "color": "#3b82f6",
-      "description": "蓝筹稳健：温度联动持仓 5 只",
+      "description": "蓝筹稳健：温度联动持仓 1 只",
       "risk_profile": "conservative",
       "is_benchmark": false,
       "is_variant": false,
@@ -62,17 +62,28 @@
       "file": "paper/performance_defensive.json",
       "name": "防御组合",
       "color": "#10b981",
-      "description": "防御配置：温度联动持仓 5 只",
+      "description": "防御配置：温度联动持仓 2 只",
       "risk_profile": "defensive",
       "is_benchmark": false,
       "is_variant": false,
       "parent_strategy": ""
     },
     {
+      "key": "defensive_momentum",
+      "file": "paper/performance_defensive_momentum.json",
+      "name": "Defensive 动量版",
+      "color": "#f59e0b",
+      "description": "池内选择：优先20日涨幅高的",
+      "risk_profile": "",
+      "is_benchmark": false,
+      "is_variant": true,
+      "parent_strategy": "defensive"
+    },
+    {
       "key": "defensive_top5",
       "file": "paper/performance_defensive_top5.json",
       "name": "Defensive 精选版",
-      "color": "#10b981",
+      "color": "#f59e0b",
       "description": "集中持仓：只持有池内Top 5",
       "risk_profile": "",
       "is_benchmark": false,
@@ -83,19 +94,8 @@
       "key": "defensive_weighted",
       "file": "paper/performance_defensive_weighted.json",
       "name": "Defensive 加权版",
-      "color": "#10b981",
+      "color": "#f59e0b",
       "description": "按分数加权：高分股票权重更大",
-      "risk_profile": "",
-      "is_benchmark": false,
-      "is_variant": true,
-      "parent_strategy": "defensive"
-    },
-    {
-      "key": "defensive_momentum",
-      "file": "paper/performance_defensive_momentum.json",
-      "name": "Defensive 动量版",
-      "color": "#10b981",
-      "description": "池内选择：优先20日涨幅高的",
       "risk_profile": "",
       "is_benchmark": false,
       "is_variant": true,
@@ -104,13 +104,46 @@
     {
       "key": "global",
       "file": "paper/performance_global.json",
-      "name": "全球组合（参考基准）",
+      "name": "全球组合",
       "color": "#8b5cf6",
-      "description": "全球分散配置：仅作参考基准，不参与调仓",
+      "description": "全球分散：温度联动持仓 10 只",
       "risk_profile": "moderate",
-      "is_benchmark": true,
+      "is_benchmark": false,
       "is_variant": false,
       "parent_strategy": ""
+    },
+    {
+      "key": "global_v1",
+      "file": "paper/performance_global_v1.json",
+      "name": "稳健过滤版",
+      "color": "#f59e0b",
+      "description": "提升稳定性",
+      "risk_profile": "",
+      "is_benchmark": false,
+      "is_variant": true,
+      "parent_strategy": "global"
+    },
+    {
+      "key": "global_v2",
+      "file": "paper/performance_global_v2.json",
+      "name": "动态风控版",
+      "color": "#f59e0b",
+      "description": "降低风险",
+      "risk_profile": "",
+      "is_benchmark": false,
+      "is_variant": true,
+      "parent_strategy": "global"
+    },
+    {
+      "key": "global_v3",
+      "file": "paper/performance_global_v3.json",
+      "name": "趋势确认版",
+      "color": "#f59e0b",
+      "description": "提高收益",
+      "risk_profile": "",
+      "is_benchmark": false,
+      "is_variant": true,
+      "parent_strategy": "global"
     },
     {
       "key": "steady",

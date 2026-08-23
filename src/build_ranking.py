@@ -814,6 +814,9 @@ def build_ranking(
                     "contribution": -5.0,
                 })
 
+        # 合并 risk reasons 与原有 reasons（修复：先初始化 all_reasons 再使用）
+        all_reasons = list(r.get("reasons", []) or []) + risk_reasons
+
         # 领先指标理由（005 融合：让前沿信号进排行榜原因，浏览器可见）
         if composite.get("leading_reason"):
             _lc = composite.get("leading", 50.0)
@@ -824,7 +827,6 @@ def build_ranking(
                 "contribution": round((_lc - 50.0) * 2, 1),
             })
 
-        all_reasons = r["reasons"] + risk_reasons
         all_reasons.sort(key=lambda x: abs(x.get("contribution", 0)), reverse=True)
         r["reasons"] = all_reasons[:5]
 

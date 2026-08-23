@@ -1,26 +1,31 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-22 00:18:22+08:00",
+  "generated_at": "2026-08-23 19:02:09+08:00",
   "trade_date": "2026-08-21",
   "code": "159920",
   "name": "恒生ETF",
   "type": "etf",
-  "category": "",
+  "category": "通用",
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
+    "reject_reason": "statistical",
+    "alpha": 0.0006542449505028748,
+    "alpha_p_value": 0.23819677312719423,
+    "information_ratio": 0.04826853617310921,
+    "betas": {
+      "MKT": 0.021598486529632088,
+      "SMB": -0.10525968570622006,
+      "HML": 0.07529478237992782,
+      "MOM": 0.11109762738570932
+    },
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 51.7,
-    "risk": 15.5,
-    "technical": 75.0,
-    "industry": 55.2,
+    "risk_adjusted": 41.6,
+    "risk": 13.5,
+    "technical": 83.0,
+    "industry": 54.5,
     "leading": 50.0
   },
   "leading": {
@@ -42,93 +47,93 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-22 00:11:37"
+    "updated_at": "2026-08-23 18:58:45"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.99,
-    "max_drawdown_60d_pct": -12.34,
-    "atr14_pct": 0.82,
+    "annualized_volatility_20d_pct": 15.56,
+    "max_drawdown_60d_pct": -11.78,
+    "atr14_pct": 1.36,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 8.0,
-        "value": 15.99
+        "score": 3.8,
+        "value": 15.56
       },
       {
         "name": "60日最大回撤",
-        "score": 30.0,
-        "value": -12.34
+        "score": 13.7,
+        "value": -11.78
       },
       {
         "name": "ATR百分比",
-        "score": 2.0,
-        "value": 0.82
+        "score": 0.0,
+        "value": 1.36
       },
       {
         "name": "量价异常",
-        "score": 50.0,
-        "value": null
+        "score": 88.5,
+        "value": 0.59
       },
       {
         "name": "行业波动",
-        "score": 1.0,
+        "score": 0.8,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": null,
-    "return_5d_pct": null,
-    "up_probability_3d_pct": null,
-    "up_probability_5d_pct": null,
-    "confidence": "low",
-    "sample_size": 0
+    "return_3d_pct": -0.99,
+    "return_5d_pct": -0.92,
+    "up_probability_3d_pct": 23.3,
+    "up_probability_5d_pct": 40.0,
+    "confidence": "medium",
+    "sample_size": 30
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 1.518,
-    "ma10": 1.516,
-    "ma20": 1.52,
-    "ma60": 1.4688333333333332,
-    "rsi14": 60.9,
-    "macd_dif": 0.011822891348950648,
-    "macd_dea": 0.013784076663328046,
-    "macd_hist": -0.003922370628754796,
-    "atr14_pct": 0.8195663264232652,
-    "boll_position": 0.8296902366976012,
-    "return_5d_pct": 3.3557046979865834,
-    "return_20d_pct": 4.054054054054057,
-    "volume_ratio_5d": null
+    "ma5": 1.5078,
+    "ma10": 1.5032,
+    "ma20": 1.50965,
+    "ma60": 1.4588666666666668,
+    "rsi14": 59.1,
+    "macd_dif": 0.010851422052233772,
+    "macd_dea": 0.012696388831351211,
+    "macd_hist": -0.003689933558234878,
+    "atr14_pct": 1.3619599158216789,
+    "boll_position": 0.7271536621331017,
+    "return_5d_pct": 3.0425963488843744,
+    "return_20d_pct": 3.8147138964577776,
+    "volume_ratio_5d": 0.59
   },
   "industry": {
-    "name": "深证成指",
+    "name": "通用",
     "reference_type": "index",
     "benchmark_code": "399001",
     "return_5d_pct": -1.81,
     "return_20d_pct": 2.32,
     "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": 1.73
+    "relative_strength_20d_pct": 1.5
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 0,
+    "sample_size": 30,
     "minimum_sample_size": 15,
-    "confidence": "low",
+    "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": null,
-      "average_return_pct": null,
-      "median_return_pct": null,
-      "best_return_pct": null,
-      "worst_return_pct": null
+      "up_probability_pct": 23.3,
+      "average_return_pct": -0.99,
+      "median_return_pct": -1.04,
+      "best_return_pct": 5.05,
+      "worst_return_pct": -4.16
     },
     "horizon_5d": {
-      "up_probability_pct": null,
-      "average_return_pct": null,
-      "median_return_pct": null,
-      "best_return_pct": null,
-      "worst_return_pct": null
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.92,
+      "median_return_pct": -0.94,
+      "best_return_pct": 6.62,
+      "worst_return_pct": -12.07
     }
   },
   "fundamental": null,
