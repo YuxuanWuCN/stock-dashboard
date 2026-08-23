@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "688137",
   "name": "近岸蛋白",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -0.00021403959471516775,
-    "alpha_p_value": 0.8237262763365927,
-    "information_ratio": -0.0074551570802129236,
-    "betas": {
-      "MKT": 0.07528700850122577,
-      "SMB": 0.27667228503281016,
-      "HML": 0.09106462541107002,
-      "MOM": -0.262328783359529
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 27.0,
-    "risk": 79.4,
+    "risk_adjusted": 42.3,
+    "risk": 65.7,
     "technical": 100.0,
     "industry": 65.0,
     "leading": 50.0
@@ -47,11 +42,11 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 19:01:38"
+    "updated_at": "2026-08-23 21:58:40"
   },
   "risk": {
-    "level": "high",
-    "label": "高风险",
+    "level": "medium",
+    "label": "中等风险",
     "annualized_volatility_20d_pct": 158.07,
     "max_drawdown_60d_pct": -20.98,
     "atr14_pct": 7.87,
@@ -78,30 +73,30 @@
       },
       {
         "name": "行业波动",
-        "score": 91.6,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -2.53,
-    "return_5d_pct": -2.8,
-    "up_probability_3d_pct": 20.0,
-    "up_probability_5d_pct": 26.7,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "uptrend",
     "ma5": 66.628,
     "ma10": 63.145,
-    "ma20": 50.297,
-    "ma60": 41.77250000000001,
+    "ma20": 50.297000000000004,
+    "ma60": 41.7725,
     "rsi14": 75.4,
-    "macd_dif": 8.567030189787097,
-    "macd_dea": 5.9652014689980986,
-    "macd_hist": 5.203657441577997,
-    "atr14_pct": 7.871766647598016,
+    "macd_dif": 8.567030183834035,
+    "macd_dea": 5.9652014602435965,
+    "macd_hist": 5.203657447180877,
+    "atr14_pct": 7.871766642262293,
     "boll_position": 1.0345557246970638,
     "return_5d_pct": 16.398390342052306,
     "return_20d_pct": 138.13584239929432,
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 20.0,
-      "average_return_pct": -2.53,
-      "median_return_pct": -3.63,
-      "best_return_pct": 23.15,
-      "worst_return_pct": -14.72
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 26.7,
-      "average_return_pct": -2.8,
-      "median_return_pct": -3.54,
-      "best_return_pct": 39.4,
-      "worst_return_pct": -20.75
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {

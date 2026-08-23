@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "601211",
   "name": "国泰君安",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -9.221404487816832e-05,
-    "alpha_p_value": 0.8294406323725699,
-    "information_ratio": -0.006151982974029371,
-    "betas": {
-      "MKT": -0.029509434656909563,
-      "SMB": 0.029779858165930664,
-      "HML": 0.11080263707677317,
-      "MOM": 0.05922332018832471
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 32.7,
-    "risk": 25.9,
+    "risk_adjusted": 42.9,
+    "risk": 11.2,
     "technical": 42.0,
     "industry": 35.0,
     "leading": 50.0
@@ -47,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:57:18"
+    "updated_at": "2026-08-23 21:58:09"
   },
   "risk": {
     "level": "low",
@@ -58,7 +53,7 @@
     "factors": [
       {
         "name": "20日波动率",
-        "score": 5.3,
+        "score": 6.1,
         "value": 18.51
       },
       {
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 99.2,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.13,
-    "return_5d_pct": -0.19,
-    "up_probability_3d_pct": 56.7,
-    "up_probability_5d_pct": 43.3,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "range",
     "ma5": 17.704,
     "ma10": 17.894,
     "ma20": 18.161,
-    "ma60": 17.8885,
+    "ma60": 17.881666666666664,
     "rsi14": 36.8,
-    "macd_dif": -0.18959846401982006,
-    "macd_dea": -0.08638248625490492,
-    "macd_hist": -0.20643195552983026,
-    "atr14_pct": 2.3567947160014473,
-    "boll_position": 0.08002399924126288,
+    "macd_dif": -0.1886478083662091,
+    "macd_dea": -0.08501177000109902,
+    "macd_hist": -0.20727207673022013,
+    "atr14_pct": 2.3600148002818484,
+    "boll_position": 0.08002399924140731,
     "return_5d_pct": -3.1754874651810594,
     "return_20d_pct": -9.573361082206034,
     "volume_ratio_5d": 1.13
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": -0.13,
-      "median_return_pct": 0.56,
-      "best_return_pct": 7.28,
-      "worst_return_pct": -10.29
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.19,
-      "median_return_pct": -0.47,
-      "best_return_pct": 7.94,
-      "worst_return_pct": -5.87
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": null,

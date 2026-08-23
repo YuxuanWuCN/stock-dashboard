@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "159915",
   "name": "创业板ETF",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": 0.0015918232642393457,
-    "alpha_p_value": 0.10438519832306044,
-    "information_ratio": 0.0694305087115111,
-    "betas": {
-      "MKT": 0.0364109241555056,
-      "SMB": 0.0069260244727890816,
-      "HML": -0.06788179363429901,
-      "MOM": 0.05899483801039872
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 49.3,
-    "risk": 39.9,
+    "risk_adjusted": 46.5,
+    "risk": 39.5,
     "technical": 90.0,
     "industry": 50.0,
     "leading": 50.0
@@ -47,29 +42,29 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:58:25"
+    "updated_at": "2026-08-23 21:58:17"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 47.34,
-    "max_drawdown_60d_pct": -25.6,
-    "atr14_pct": 3.83,
+    "annualized_volatility_20d_pct": 47.07,
+    "max_drawdown_60d_pct": -25.51,
+    "atr14_pct": 3.82,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 45.0,
-        "value": 47.34
+        "score": 44.3,
+        "value": 47.07
       },
       {
         "name": "60日最大回撤",
         "score": 49.6,
-        "value": -25.6
+        "value": -25.51
       },
       {
         "name": "ATR百分比",
         "score": 34.4,
-        "value": 3.83
+        "value": 3.82
       },
       {
         "name": "量价异常",
@@ -78,33 +73,33 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.98,
-    "return_5d_pct": 0.47,
-    "up_probability_3d_pct": 66.7,
-    "up_probability_5d_pct": 60.0,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "range",
-    "ma5": 3.6098,
-    "ma10": 3.6043,
-    "ma20": 3.52875,
-    "ma60": 3.8237,
+    "ma5": 3.6100000000000003,
+    "ma10": 3.604,
+    "ma20": 3.5285,
+    "ma60": 3.8235,
     "rsi14": 47.1,
-    "macd_dif": -0.03422478536572271,
-    "macd_dea": -0.05200045551544322,
-    "macd_hist": 0.035551340299441014,
-    "atr14_pct": 3.8251716675056215,
-    "boll_position": 0.5623919060711804,
-    "return_5d_pct": -2.3319615912208547,
-    "return_20d_pct": 1.4823261117445918,
+    "macd_dif": -0.03426282585051732,
+    "macd_dea": -0.05198709260113833,
+    "macd_hist": 0.035448533501242024,
+    "atr14_pct": 3.8209689333948376,
+    "boll_position": 0.5628238376495502,
+    "return_5d_pct": -2.465753424657535,
+    "return_20d_pct": 1.4245014245014342,
     "volume_ratio_5d": 0.75
   },
   "industry": {
@@ -114,26 +109,26 @@
     "return_5d_pct": -1.81,
     "return_20d_pct": 2.32,
     "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": -0.84
+    "relative_strength_20d_pct": -0.89
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 0.98,
-      "median_return_pct": 0.95,
-      "best_return_pct": 6.93,
-      "worst_return_pct": -7.11
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.47,
-      "median_return_pct": 0.91,
-      "best_return_pct": 9.16,
-      "worst_return_pct": -15.03
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": null,
@@ -141,19 +136,19 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 25.6%，风险偏高。",
+      "detail": "近60日最大回撤 25.5%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 25.6%，风险扣分。",
+      "detail": "近60日最大回撤 25.5%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 47.3%，波动偏高。",
+      "detail": "20日年化波动率 47.1%，波动偏高。",
       "contribution": -5.0
     }
   ],

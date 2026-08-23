@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "002007",
   "name": "华兰生物",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -0.00071942428873067,
-    "alpha_p_value": 0.2182777511421159,
-    "information_ratio": -0.03839897895807648,
-    "betas": {
-      "MKT": 0.08683989675758322,
-      "SMB": -0.04629443200390502,
-      "HML": 0.003596656448000247,
-      "MOM": 0.037126279861332157
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 39.3,
-    "risk": 18.8,
+    "risk_adjusted": 48.9,
+    "risk": 19.0,
     "technical": 70.0,
     "industry": 50.0,
     "leading": 50.0
@@ -47,28 +42,28 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 19:01:08"
+    "updated_at": "2026-08-23 21:58:37"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
     "annualized_volatility_20d_pct": 25.41,
-    "max_drawdown_60d_pct": -10.16,
+    "max_drawdown_60d_pct": -10.29,
     "atr14_pct": 2.8,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 13.7,
+        "score": 14.5,
         "value": 25.41
       },
       {
         "name": "60日最大回撤",
         "score": 8.4,
-        "value": -10.16
+        "value": -10.29
       },
       {
         "name": "ATR百分比",
-        "score": 19.1,
+        "score": 19.8,
         "value": 2.8
       },
       {
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.7,
-    "return_5d_pct": -0.77,
-    "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 46.7,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "rebound",
     "ma5": 13.209999999999999,
     "ma10": 13.275,
-    "ma20": 13.293000000000001,
-    "ma60": 13.038833333333333,
+    "ma20": 13.292999999999997,
+    "ma60": 13.039333333333333,
     "rsi14": 48.9,
-    "macd_dif": 0.035770551727825506,
-    "macd_dea": 0.05907158297330429,
-    "macd_hist": -0.046602062490957566,
-    "atr14_pct": 2.8012320502826342,
-    "boll_position": 0.3401621201086874,
+    "macd_dif": 0.03547306907534775,
+    "macd_dea": 0.05863532025543031,
+    "macd_hist": -0.04632450236016511,
+    "atr14_pct": 2.803159672608469,
+    "boll_position": 0.3401621201095023,
     "return_5d_pct": -0.7535795026375247,
     "return_20d_pct": 3.294117647058825,
     "volume_ratio_5d": 1.38
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.7,
-      "median_return_pct": -0.71,
-      "best_return_pct": 4.81,
-      "worst_return_pct": -7.95
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.77,
-      "median_return_pct": -0.67,
-      "best_return_pct": 4.95,
-      "worst_return_pct": -8.17
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {

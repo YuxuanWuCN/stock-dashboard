@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "600570",
   "name": "恒生电子",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -0.00016981049481805448,
-    "alpha_p_value": 0.8377055525169573,
-    "information_ratio": -0.006327735571367461,
-    "betas": {
-      "MKT": 0.014676112046107142,
-      "SMB": 0.09805153517263739,
-      "HML": -0.04988690162761596,
-      "MOM": -0.14594793218263638
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 35.4,
-    "risk": 26.4,
+    "risk_adjusted": 46.1,
+    "risk": 26.2,
     "technical": 65.0,
     "industry": 50.0,
     "leading": 50.0
@@ -47,13 +42,13 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:57:29"
+    "updated_at": "2026-08-23 21:58:12"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
     "annualized_volatility_20d_pct": 25.52,
-    "max_drawdown_60d_pct": -17.89,
+    "max_drawdown_60d_pct": -17.96,
     "atr14_pct": 3.3,
     "factors": [
       {
@@ -64,7 +59,7 @@
       {
         "name": "60日最大回撤",
         "score": 29.8,
-        "value": -17.89
+        "value": -17.96
       },
       {
         "name": "ATR百分比",
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.37,
-    "return_5d_pct": -0.92,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 43.3,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "range",
     "ma5": 21.47,
     "ma10": 22.055,
     "ma20": 22.274,
-    "ma60": 22.000666666666667,
+    "ma60": 22.002333333333336,
     "rsi14": 41.8,
-    "macd_dif": -0.11281964648080489,
-    "macd_dea": 0.07533874076536687,
-    "macd_hist": -0.3763167744923435,
-    "atr14_pct": 3.2989555518288,
-    "boll_position": 0.187198639591406,
+    "macd_dif": -0.11326983037166372,
+    "macd_dea": 0.07468224218723465,
+    "macd_hist": -0.37590414511779674,
+    "atr14_pct": 3.299570504342998,
+    "boll_position": 0.18719863959117522,
     "return_5d_pct": -3.6618444846293063,
     "return_20d_pct": 2.550529355149167,
     "volume_ratio_5d": 0.62
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.37,
-      "median_return_pct": 0.05,
-      "best_return_pct": 8.07,
-      "worst_return_pct": -13.83
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.92,
-      "median_return_pct": -1.27,
-      "best_return_pct": 15.86,
-      "worst_return_pct": -14.25
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {
@@ -267,13 +262,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 17.9%，风险偏高。",
+      "detail": "近60日最大回撤 18.0%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 17.9%，风险扣分。",
+      "detail": "近60日最大回撤 18.0%，风险扣分。",
       "contribution": -7.0
     }
   ],

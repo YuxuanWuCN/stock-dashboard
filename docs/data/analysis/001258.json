@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "001258",
   "name": "立新能源",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": 0.001211692907521135,
-    "alpha_p_value": 0.31376353701883586,
-    "information_ratio": 0.04152510677827524,
-    "betas": {
-      "MKT": -0.09699490320717748,
-      "SMB": 0.21167896519945248,
-      "HML": -0.0296943780860726,
-      "MOM": -0.04376254616430503
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 33.9,
-    "risk": 87.5,
+    "risk_adjusted": 30.7,
+    "risk": 73.7,
     "technical": 58.0,
     "industry": 35.0,
     "leading": 50.0
@@ -47,13 +42,13 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:57:02"
+    "updated_at": "2026-08-23 21:58:00"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
     "annualized_volatility_20d_pct": 114.6,
-    "max_drawdown_60d_pct": -41.21,
+    "max_drawdown_60d_pct": -41.32,
     "atr14_pct": 10.11,
     "factors": [
       {
@@ -64,7 +59,7 @@
       {
         "name": "60日最大回撤",
         "score": 76.3,
-        "value": -41.21
+        "value": -41.32
       },
       {
         "name": "ATR百分比",
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 91.6,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.8,
-    "return_5d_pct": 1.64,
-    "up_probability_3d_pct": 70.0,
-    "up_probability_5d_pct": 60.0,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 12.858,
+    "ma5": 12.857999999999999,
     "ma10": 13.918000000000001,
     "ma20": 13.386000000000001,
-    "ma60": 9.971,
+    "ma60": 9.973,
     "rsi14": 49.4,
-    "macd_dif": 0.766250389444183,
-    "macd_dea": 1.1816756837567082,
-    "macd_hist": -0.8308505886250503,
-    "atr14_pct": 10.109554771238265,
-    "boll_position": 0.25780137634332373,
+    "macd_dif": 0.7660271936110572,
+    "macd_dea": 1.1813520403619382,
+    "macd_hist": -0.830649693501762,
+    "atr14_pct": 10.110589374041146,
+    "boll_position": 0.25780137634331557,
     "return_5d_pct": -11.2,
     "return_20d_pct": -6.293169608595539,
     "volume_ratio_5d": 0.78
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 70.0,
-      "average_return_pct": 1.8,
-      "median_return_pct": 2.52,
-      "best_return_pct": 23.09,
-      "worst_return_pct": -19.92
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 1.64,
-      "median_return_pct": 1.73,
-      "best_return_pct": 19.38,
-      "worst_return_pct": -21.33
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {
@@ -261,13 +256,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 41.2%，风险偏高。",
+      "detail": "近60日最大回撤 41.3%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 41.2%，风险扣分。",
+      "detail": "近60日最大回撤 41.3%，风险扣分。",
       "contribution": -7.0
     },
     {

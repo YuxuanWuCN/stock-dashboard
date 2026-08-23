@@ -153,13 +153,21 @@ def _load_cached_kline(code: str) -> Optional[pd.DataFrame]:
 
 def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
     """
-    抓取单只标的 5 年日线数据（用于分析/相似匹配）。
-    返回清洗后升序排列的 DataFrame。
-
-    注意：这个方法使用更大的 LOOKBACK_DAYS_5Y，
-    与 fetch_data.py 中的 fetch_one（400 自然日）不同。
+    获取单只标的 5 年历史数据用于打分与相似匹配。
+    ⚡ 极速优化：优先毫秒级加载本地已抓取的 K 线缓存（已有 5 年数据），
+    仅在本地无缓存或数据不足时才回退至网络请求，彻底消除重复网络 I/O。
     """
     code = item["code"]
+    name = item.get("name", code)
+    
+    # 1. 优先读取本地已抓取的 K 线缓存
+    cached_df = _load_cached_kline(code)
+    if cached_df is not None and len(cached_df) >= MIN_VALID_ROWS:
+        cleaned = _clean_dataframe(cached_df, code, name)
+        if cleaned is not None and not cleaned.empty:
+            return cleaned.sort_values("date").reset_index(drop=True)
+
+    # 2. 本地无有效数据时回退到在线拉取
     typ = item["type"]
     today = beijing_today()
     start_date_str = calc_start_date(today, LOOKBACK_DAYS_5Y)
@@ -181,8 +189,7 @@ def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
             if df is None or df.empty:
                 continue
 
-            # 清洗
-            df = _clean_dataframe(df, code, item["name"])
+            df = _clean_dataframe(df, code, name)
             if df is None:
                 continue
 
@@ -192,21 +199,13 @@ def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
         except Exception:
             logger.warning(
                 "%s(%s) 5Y 抓取异常 (attempt %d): %s",
-                item["name"], code, attempt + 1, traceback.format_exc(),
+                name, code, attempt + 1, traceback.format_exc(),
             )
 
         if attempt < MAX_RETRIES:
-            time.sleep(REQUEST_INTERVAL)
+            time.sleep(0.5)
 
-    # 兜底：在线源全部失败时读取本地已抓取的 K 线缓存（场外基金/网络波动场景）
-    cached_df = _load_cached_kline(code)
-    if cached_df is not None and not cached_df.empty:
-        cleaned = _clean_dataframe(cached_df, code, item.get("name", code))
-        if cleaned is not None:
-            logger.info("%s(%s) 使用本地 K 线缓存（%d 行）", item.get("name", code), code, len(cleaned))
-            return cleaned.sort_values("date").reset_index(drop=True)
-
-    logger.error("%s(%s) 5Y 数据全部尝试失败", item["name"], code)
+    logger.error("%s(%s) 5Y 数据全部尝试失败", name, code)
     return None
 
 
@@ -1294,8 +1293,7 @@ def main() -> int:
             code, df_5y, res = _analyze_worker((i, item))
             klines[code] = df_5y
             analysis_results[code] = res
-            if i < len(watchlist) - 1:
-                time.sleep(REQUEST_INTERVAL)
+            # 本地毫秒级计算，无需 sleep 浪费时间
     else:
         logger.info("启动 ThreadPoolExecutor 并发分析 (workers=%d)...", ranking_workers)
         with ThreadPoolExecutor(max_workers=ranking_workers) as executor:

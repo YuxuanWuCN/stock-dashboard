@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "601066",
   "name": "中信建投",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -0.00011363939876520802,
-    "alpha_p_value": 0.8440848174856693,
-    "information_ratio": -0.005872353566561207,
-    "betas": {
-      "MKT": -0.018353056335162432,
-      "SMB": -0.027966313285650784,
-      "HML": 0.09120742360120501,
-      "MOM": -0.08976656528139648
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 48.2,
-    "risk": 17.8,
+    "risk_adjusted": 41.7,
+    "risk": 17.9,
     "technical": 42.0,
     "industry": 36.8,
     "leading": 50.0
@@ -47,29 +42,29 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:57:14"
+    "updated_at": "2026-08-23 21:58:06"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 19.87,
-    "max_drawdown_60d_pct": -17.51,
-    "atr14_pct": 2.91,
+    "annualized_volatility_20d_pct": 19.83,
+    "max_drawdown_60d_pct": -17.59,
+    "atr14_pct": 2.92,
     "factors": [
       {
         "name": "20日波动率",
         "score": 9.2,
-        "value": 19.87
+        "value": 19.83
       },
       {
         "name": "60日最大回撤",
         "score": 29.0,
-        "value": -17.51
+        "value": -17.59
       },
       {
         "name": "ATR百分比",
-        "score": 24.4,
-        "value": 2.91
+        "score": 25.2,
+        "value": 2.92
       },
       {
         "name": "量价异常",
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.72,
-    "return_5d_pct": 0.88,
-    "up_probability_3d_pct": 66.7,
-    "up_probability_5d_pct": 56.7,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "downtrend",
     "ma5": 25.076,
-    "ma10": 25.336,
-    "ma20": 25.518,
-    "ma60": 26.287166666666668,
+    "ma10": 25.339000000000002,
+    "ma20": 25.522,
+    "ma60": 26.295333333333335,
     "rsi14": 38.3,
-    "macd_dif": -0.3819403612731307,
-    "macd_dea": -0.3140426618911115,
-    "macd_hist": -0.13579539876403834,
-    "atr14_pct": 2.9134409610769225,
-    "boll_position": -0.008482537055412272,
+    "macd_dif": -0.3843937036200451,
+    "macd_dea": -0.31604158425856005,
+    "macd_hist": -0.1367042387229701,
+    "atr14_pct": 2.9225317732269125,
+    "boll_position": -0.009634617053574109,
     "return_5d_pct": -2.287066246056779,
     "return_20d_pct": -4.287369640787942,
     "volume_ratio_5d": 0.9
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 0.72,
-      "median_return_pct": 0.47,
-      "best_return_pct": 7.33,
-      "worst_return_pct": -7.09
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.88,
-      "median_return_pct": 0.76,
-      "best_return_pct": 8.73,
-      "worst_return_pct": -6.73
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": null,
@@ -147,13 +142,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 17.5%，风险偏高。",
+      "detail": "近60日最大回撤 17.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 17.5%，风险扣分。",
+      "detail": "近60日最大回撤 17.6%，风险扣分。",
       "contribution": -7.0
     }
   ],

@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "300033",
   "name": "同花顺",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": 0.001469616002607057,
-    "alpha_p_value": 0.1847577780655617,
-    "information_ratio": 0.04093868522596392,
-    "betas": {
-      "MKT": 0.04954482668917794,
-      "SMB": 0.08728028899391903,
-      "HML": 0.21618605129334048,
-      "MOM": -0.12997040393554804
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 39.4,
-    "risk": 30.7,
+    "risk_adjusted": 45.6,
+    "risk": 30.1,
     "technical": 65.0,
     "industry": 53.5,
     "leading": 50.0
@@ -47,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:59:38"
+    "updated_at": "2026-08-23 21:58:29"
   },
   "risk": {
     "level": "low",
@@ -58,12 +53,12 @@
     "factors": [
       {
         "name": "20日波动率",
-        "score": 37.4,
+        "score": 36.6,
         "value": 34.88
       },
       {
         "name": "60日最大回撤",
-        "score": 27.5,
+        "score": 26.7,
         "value": -17.38
       },
       {
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.11,
-    "return_5d_pct": -0.16,
-    "up_probability_3d_pct": 36.7,
-    "up_probability_5d_pct": 43.3,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "range",
     "ma5": 226.65,
     "ma10": 230.392,
     "ma20": 230.35099999999997,
-    "ma60": 227.9065,
+    "ma60": 227.90650000000002,
     "rsi14": 43.8,
-    "macd_dif": -0.9025584483825355,
-    "macd_dea": 0.6494906673865476,
-    "macd_hist": -3.104098231538166,
-    "atr14_pct": 4.062310459724254,
-    "boll_position": 0.23239249658113462,
+    "macd_dif": -0.9026005664212562,
+    "macd_dea": 0.6494287161819989,
+    "macd_hist": -3.1040585652065102,
+    "atr14_pct": 4.062378160113172,
+    "boll_position": 0.2323924965809915,
     "return_5d_pct": -3.530791279423262,
     "return_20d_pct": 3.4847426042394547,
     "volume_ratio_5d": 0.84
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.11,
-      "median_return_pct": -1.34,
-      "best_return_pct": 17.9,
-      "worst_return_pct": -12.05
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.16,
-      "median_return_pct": -0.88,
-      "best_return_pct": 28.03,
-      "worst_return_pct": -13.37
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {

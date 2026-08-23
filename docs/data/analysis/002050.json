@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "002050",
   "name": "三花智控",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": 0.0010722458777188174,
-    "alpha_p_value": 0.2475236621956104,
-    "information_ratio": 0.03510933843697369,
-    "betas": {
-      "MKT": 0.13179221517413275,
-      "SMB": -0.08493750468636577,
-      "HML": -0.21814292072559327,
-      "MOM": -0.13548746105988332
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 58.2,
-    "risk": 34.8,
+    "risk_adjusted": 46.7,
+    "risk": 34.7,
     "technical": 75.0,
     "industry": 57.3,
     "leading": 50.0
@@ -47,13 +42,13 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 19:00:38"
+    "updated_at": "2026-08-23 21:58:35"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
     "annualized_volatility_20d_pct": 41.74,
-    "max_drawdown_60d_pct": -27.97,
+    "max_drawdown_60d_pct": -28.04,
     "atr14_pct": 4.19,
     "factors": [
       {
@@ -64,7 +59,7 @@
       {
         "name": "60日最大回撤",
         "score": 51.9,
-        "value": -27.97
+        "value": -28.04
       },
       {
         "name": "ATR百分比",
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.44,
-    "return_5d_pct": 2.34,
-    "up_probability_3d_pct": 60.0,
-    "up_probability_5d_pct": 63.3,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "downtrend",
     "ma5": 37.652,
     "ma10": 38.249,
     "ma20": 37.8695,
-    "ma60": 41.460166666666666,
+    "ma60": 41.469833333333334,
     "rsi14": 41.7,
-    "macd_dif": -0.8093321651734371,
-    "macd_dea": -0.8157900619559703,
-    "macd_hist": 0.012915793565066336,
-    "atr14_pct": 4.1876444741975565,
-    "boll_position": 0.2936628773592637,
+    "macd_dif": -0.8112230926130195,
+    "macd_dea": -0.8183883266627752,
+    "macd_hist": 0.014330468099511329,
+    "atr14_pct": 4.1932286036105815,
+    "boll_position": 0.2936628773591834,
     "return_5d_pct": -4.1514360313315795,
     "return_20d_pct": 4.736091298145517,
     "volume_ratio_5d": 0.96
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 1.44,
-      "median_return_pct": 1.17,
-      "best_return_pct": 9.05,
-      "worst_return_pct": -5.64
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 2.34,
-      "median_return_pct": 2.47,
-      "best_return_pct": 17.05,
-      "worst_return_pct": -20.7
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {

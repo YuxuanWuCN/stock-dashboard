@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "002475",
   "name": "立讯精密",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": 0.0008331646502469565,
-    "alpha_p_value": 0.2940865771109842,
-    "information_ratio": 0.030112539055474608,
-    "betas": {
-      "MKT": 0.060022948230376925,
-      "SMB": -0.2376690786883641,
-      "HML": -0.03517791852466055,
-      "MOM": -0.09014986272498961
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 46.3,
-    "risk": 45.7,
+    "risk_adjusted": 39.1,
+    "risk": 45.6,
     "technical": 68.0,
     "industry": 35.0,
     "leading": 50.0
@@ -50,14 +45,14 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:59:28"
+    "updated_at": "2026-08-23 21:58:28"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
     "annualized_volatility_20d_pct": 55.87,
-    "max_drawdown_60d_pct": -28.76,
-    "atr14_pct": 5.63,
+    "max_drawdown_60d_pct": -28.79,
+    "atr14_pct": 5.64,
     "factors": [
       {
         "name": "20日波动率",
@@ -67,12 +62,12 @@
       {
         "name": "60日最大回撤",
         "score": 53.4,
-        "value": -28.76
+        "value": -28.79
       },
       {
         "name": "ATR百分比",
         "score": 60.3,
-        "value": 5.63
+        "value": 5.64
       },
       {
         "name": "量价异常",
@@ -81,31 +76,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.33,
-    "return_5d_pct": 1.02,
-    "up_probability_3d_pct": 63.3,
-    "up_probability_5d_pct": 63.3,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 55.614,
+    "ma5": 55.61400000000001,
     "ma10": 55.948,
     "ma20": 56.93000000000001,
-    "ma60": 62.79666666666666,
+    "ma60": 62.808333333333344,
     "rsi14": 42.8,
-    "macd_dif": -1.7528358390818113,
-    "macd_dea": -1.7796754062364308,
-    "macd_hist": 0.053679134309239096,
-    "atr14_pct": 5.63289805017309,
-    "boll_position": 0.2765357021389021,
+    "macd_dif": -1.7547884960901712,
+    "macd_dea": -1.7823119957818312,
+    "macd_hist": 0.05504699938332003,
+    "atr14_pct": 5.636049357561952,
+    "boll_position": 0.2765357021388794,
     "return_5d_pct": -3.4110993283845925,
     "return_20d_pct": -9.803597953457677,
     "volume_ratio_5d": 0.86
@@ -121,22 +116,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 1.33,
-      "median_return_pct": 1.91,
-      "best_return_pct": 9.21,
-      "worst_return_pct": -8.95
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 1.02,
-      "median_return_pct": 1.62,
-      "best_return_pct": 8.95,
-      "worst_return_pct": -11.26
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {

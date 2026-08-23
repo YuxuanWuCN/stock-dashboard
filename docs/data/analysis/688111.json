@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "688111",
   "name": "金山办公",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": 0.00017507790190080877,
-    "alpha_p_value": 0.8643280269793892,
-    "information_ratio": 0.00505840601913711,
-    "betas": {
-      "MKT": -0.025561365524004304,
-      "SMB": -0.11569004751571568,
-      "HML": -0.07998788430383252,
-      "MOM": -0.27035986694641845
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 51.4,
-    "risk": 43.2,
+    "risk_adjusted": 43.3,
+    "risk": 43.1,
     "technical": 65.0,
     "industry": 61.0,
     "leading": 50.0
@@ -47,13 +42,13 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:57:26"
+    "updated_at": "2026-08-23 21:58:12"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
     "annualized_volatility_20d_pct": 43.98,
-    "max_drawdown_60d_pct": -23.72,
+    "max_drawdown_60d_pct": -23.84,
     "atr14_pct": 5.02,
     "factors": [
       {
@@ -64,7 +59,7 @@
       {
         "name": "60日最大回撤",
         "score": 45.8,
-        "value": -23.72
+        "value": -23.84
       },
       {
         "name": "ATR百分比",
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.09,
-    "return_5d_pct": 1.44,
-    "up_probability_3d_pct": 60.0,
-    "up_probability_5d_pct": 56.7,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "rebound",
     "ma5": 248.66199999999998,
-    "ma10": 253.87400000000002,
-    "ma20": 257.4245,
-    "ma60": 235.58483333333334,
+    "ma10": 253.87399999999997,
+    "ma20": 257.42449999999997,
+    "ma60": 235.601,
     "rsi14": 43.3,
-    "macd_dif": 2.2173902058699753,
-    "macd_dea": 5.986383087201635,
-    "macd_hist": -7.53798576266332,
-    "atr14_pct": 5.018887847783296,
-    "boll_position": 0.13984184391057713,
+    "macd_dif": 2.214844703161191,
+    "macd_dea": 5.982643069932318,
+    "macd_hist": -7.5355967335422545,
+    "atr14_pct": 5.02060013034035,
+    "boll_position": 0.13984184391062487,
     "return_5d_pct": -6.21953597192435,
     "return_20d_pct": 5.979817564887857,
     "volume_ratio_5d": 0.69
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 1.09,
-      "median_return_pct": 1.79,
-      "best_return_pct": 16.61,
-      "worst_return_pct": -10.14
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.44,
-      "median_return_pct": 1.58,
-      "best_return_pct": 18.71,
-      "worst_return_pct": -13.23
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {
@@ -261,13 +256,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 23.7%，风险偏高。",
+      "detail": "近60日最大回撤 23.8%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 23.7%，风险扣分。",
+      "detail": "近60日最大回撤 23.8%，风险扣分。",
       "contribution": -7.0
     },
     {

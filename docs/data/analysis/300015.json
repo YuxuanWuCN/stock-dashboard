@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "300015",
   "name": "爱尔眼科",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -0.0008315434178985539,
-    "alpha_p_value": 0.28560335711595763,
-    "information_ratio": -0.03228244827844671,
-    "betas": {
-      "MKT": -0.03201787384924933,
-      "SMB": -0.22462512863933048,
-      "HML": 0.14363254848730211,
-      "MOM": -0.07507325731218499
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 46.1,
-    "risk": 20.9,
+    "risk_adjusted": 42.0,
+    "risk": 20.6,
     "technical": 42.0,
     "industry": 42.3,
     "leading": 50.0
@@ -47,29 +42,29 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:58:10"
+    "updated_at": "2026-08-23 21:58:16"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
     "annualized_volatility_20d_pct": 26.04,
-    "max_drawdown_60d_pct": -13.08,
-    "atr14_pct": 2.9,
+    "max_drawdown_60d_pct": -13.19,
+    "atr14_pct": 2.91,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 17.6,
+        "score": 16.8,
         "value": 26.04
       },
       {
         "name": "60日最大回撤",
         "score": 19.1,
-        "value": -13.08
+        "value": -13.19
       },
       {
         "name": "ATR百分比",
-        "score": 23.7,
-        "value": 2.9
+        "score": 24.4,
+        "value": 2.91
       },
       {
         "name": "量价异常",
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.51,
-    "return_5d_pct": 0.84,
-    "up_probability_3d_pct": 60.0,
-    "up_probability_5d_pct": 46.7,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "range",
     "ma5": 8.518,
     "ma10": 8.690000000000001,
     "ma20": 8.78,
-    "ma60": 8.553666666666667,
+    "ma60": 8.549166666666668,
     "rsi14": 39.9,
-    "macd_dif": -0.04614783842084336,
-    "macd_dea": 0.019778939968103787,
-    "macd_hist": -0.1318535567778943,
-    "atr14_pct": 2.9016100916087497,
-    "boll_position": -0.033781165160010194,
+    "macd_dif": -0.04533899922070894,
+    "macd_dea": 0.020813182087225515,
+    "macd_hist": -0.13230436261586892,
+    "atr14_pct": 2.9078027674555575,
+    "boll_position": -0.03378116516292321,
     "return_5d_pct": -4.362801377726755,
     "return_20d_pct": -1.536643026004736,
     "volume_ratio_5d": 0.79
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.51,
-      "median_return_pct": 0.88,
-      "best_return_pct": 5.66,
-      "worst_return_pct": -8.29
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.84,
-      "median_return_pct": -0.24,
-      "best_return_pct": 10.0,
-      "worst_return_pct": -7.16
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {

@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "002415",
   "name": "海康威视",
@@ -9,21 +9,16 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -0.00037138321116516503,
-    "alpha_p_value": 0.5116589164670671,
-    "information_ratio": -0.019782013868631335,
-    "betas": {
-      "MKT": 0.05579962421777331,
-      "SMB": -0.030835581057493604,
-      "HML": 0.19369366365885737,
-      "MOM": -0.046724173602229226
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 39.2,
-    "risk": 27.7,
+    "risk_adjusted": 44.5,
+    "risk": 27.8,
     "technical": 66.0,
     "industry": 42.3,
     "leading": 50.0
@@ -47,29 +42,29 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:56:13"
+    "updated_at": "2026-08-23 21:57:48"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 34.31,
-    "max_drawdown_60d_pct": -10.89,
-    "atr14_pct": 3.16,
+    "annualized_volatility_20d_pct": 34.8,
+    "max_drawdown_60d_pct": -11.0,
+    "atr14_pct": 3.21,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 35.1,
-        "value": 34.31
+        "score": 35.9,
+        "value": 34.8
       },
       {
         "name": "60日最大回撤",
         "score": 10.7,
-        "value": -10.89
+        "value": -11.0
       },
       {
         "name": "ATR百分比",
         "score": 26.7,
-        "value": 3.16
+        "value": 3.21
       },
       {
         "name": "量价异常",
@@ -78,31 +73,31 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.06,
-    "return_5d_pct": -0.15,
-    "up_probability_3d_pct": 56.7,
-    "up_probability_5d_pct": 46.7,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "rebound",
     "ma5": 34.306,
-    "ma10": 34.951,
-    "ma20": 35.777,
-    "ma60": 33.48633333333333,
+    "ma10": 34.96,
+    "ma20": 35.7975,
+    "ma60": 33.468666666666664,
     "rsi14": 45.9,
-    "macd_dif": -0.03269416204993547,
-    "macd_dea": 0.3480863666390354,
-    "macd_hist": -0.7615610573779418,
-    "atr14_pct": 3.1618339090524645,
-    "boll_position": 0.226502267443732,
+    "macd_dif": -0.031759475089984335,
+    "macd_dea": 0.3544906903933706,
+    "macd_hist": -0.7725003309667099,
+    "atr14_pct": 3.2056158083899557,
+    "boll_position": 0.22624160628564327,
     "return_5d_pct": 0.2039032915817085,
     "return_20d_pct": -1.5455065827132186,
     "volume_ratio_5d": 0.55
@@ -118,22 +113,22 @@
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.06,
-      "median_return_pct": 0.39,
-      "best_return_pct": 10.79,
-      "worst_return_pct": -9.05
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.15,
-      "median_return_pct": -0.46,
-      "best_return_pct": 10.87,
-      "worst_return_pct": -14.05
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": {

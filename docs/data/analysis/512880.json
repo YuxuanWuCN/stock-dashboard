@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 19:02:09+08:00",
+  "generated_at": "2026-08-23 21:58:44+08:00",
   "trade_date": "2026-08-21",
   "code": "512880",
   "name": "证券ETF",
@@ -9,23 +9,18 @@
   "stale": false,
   "alpha_gate": {
     "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -9.444865432989847e-05,
-    "alpha_p_value": 0.8494872770745183,
-    "information_ratio": -0.00569740637902743,
-    "betas": {
-      "MKT": -0.012016522989291716,
-      "SMB": 0.0654255682372575,
-      "HML": 0.09083928661900688,
-      "MOM": -0.03516544465101897
-    },
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 41.6,
-    "risk": 5.4,
+    "risk_adjusted": 44.7,
+    "risk": 5.8,
     "technical": 42.0,
-    "industry": 38.8,
+    "industry": 38.1,
     "leading": 50.0
   },
   "leading": {
@@ -47,29 +42,29 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 18:58:51"
+    "updated_at": "2026-08-23 21:58:20"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 13.67,
-    "max_drawdown_60d_pct": -9.69,
-    "atr14_pct": 1.69,
+    "annualized_volatility_20d_pct": 15.8,
+    "max_drawdown_60d_pct": -10.17,
+    "atr14_pct": 1.59,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 2.3,
-        "value": 13.67
+        "score": 3.8,
+        "value": 15.8
       },
       {
         "name": "60日最大回撤",
-        "score": 6.1,
-        "value": -9.69
+        "score": 7.6,
+        "value": -10.17
       },
       {
         "name": "ATR百分比",
-        "score": 3.8,
-        "value": 1.69
+        "score": 2.3,
+        "value": 1.59
       },
       {
         "name": "量价异常",
@@ -78,33 +73,33 @@
       },
       {
         "name": "行业波动",
-        "score": 0.8,
+        "score": 0.0,
         "value": 34.37
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.07,
-    "return_5d_pct": 0.14,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 46.7,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
   },
   "technical": {
     "trend": "range",
-    "ma5": 1.0715999999999999,
-    "ma10": 1.0835000000000001,
-    "ma20": 1.0926500000000001,
-    "ma60": 1.0918666666666668,
-    "rsi14": 37.7,
-    "macd_dif": -0.009884809187534538,
-    "macd_dea": -0.005495247092790362,
-    "macd_hist": -0.008779124189488351,
-    "atr14_pct": 1.6850620097825508,
-    "boll_position": 0.0016377354596528132,
-    "return_5d_pct": -2.2079116835326595,
-    "return_20d_pct": -3.2757051865332176,
+    "ma5": 1.07,
+    "ma10": 1.0830000000000002,
+    "ma20": 1.0925,
+    "ma60": 1.0915,
+    "rsi14": 36.3,
+    "macd_dif": -0.010270745836776562,
+    "macd_dea": -0.005462927346310203,
+    "macd_hist": -0.009615636980932719,
+    "atr14_pct": 1.5928825334592476,
+    "boll_position": -0.005106771130383648,
+    "return_5d_pct": -2.752293577981657,
+    "return_20d_pct": -3.6363636363636376,
     "volume_ratio_5d": 0.92
   },
   "industry": {
@@ -114,26 +109,26 @@
     "return_5d_pct": -1.81,
     "return_20d_pct": 2.32,
     "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": -5.6
+    "relative_strength_20d_pct": -5.96
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 0,
     "minimum_sample_size": 15,
-    "confidence": "medium",
+    "confidence": "low",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.07,
-      "median_return_pct": 0.21,
-      "best_return_pct": 9.35,
-      "worst_return_pct": -9.6
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.14,
-      "median_return_pct": -0.25,
-      "best_return_pct": 7.66,
-      "worst_return_pct": -6.37
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
     }
   },
   "fundamental": null,
