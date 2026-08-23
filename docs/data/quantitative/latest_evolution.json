@@ -1,188 +1,221 @@
 {
-  "analysis_date": "20260815_165817",
+  "analysis_date": "20260823_120347",
   "champion": {
-    "name": "aggressive",
+    "name": "global",
     "stats": {
-      "cumulative_return": 2.47,
-      "avg_daily_return": 0.412,
-      "volatility": 0.998,
-      "win_rate": 50.0,
-      "max_drawdown": 0.85,
-      "sharpe": 0.412,
-      "score": 7.22,
-      "trading_days": 6
+      "cumulative_return": 0.04,
+      "avg_daily_return": 0.006,
+      "volatility": 0.147,
+      "win_rate": 57.1,
+      "max_drawdown": 0.42,
+      "sharpe": 0.039,
+      "score": 5.77,
+      "trading_days": 7
     },
     "analysis": {
       "core_holdings": [
         {
-          "code": "WDC",
-          "name": "西部数据",
+          "code": "005380",
+          "name": "现代汽车",
+          "appearances": 4,
+          "avg_return": 1.91
+        },
+        {
+          "code": "601899",
+          "name": "紫金矿业",
+          "appearances": 4,
+          "avg_return": 1.09
+        },
+        {
+          "code": "PEP",
+          "name": "百事",
           "appearances": 3,
-          "avg_return": 3.64
+          "avg_return": 0.69
         },
         {
-          "code": "001258",
-          "name": "立新能源",
+          "code": "105560",
+          "name": "KB金融",
           "appearances": 6,
-          "avg_return": 2.31
+          "avg_return": 0.35
         },
         {
-          "code": "WMT",
-          "name": "沃尔玛",
+          "code": "00011",
+          "name": "恒生银行",
           "appearances": 3,
-          "avg_return": 0.9
-        },
-        {
-          "code": "600809",
-          "name": "山西汾酒",
-          "appearances": 6,
-          "avg_return": 0.57
-        },
-        {
-          "code": "03690",
-          "name": "美团-W",
-          "appearances": 5,
-          "avg_return": 0.03
+          "avg_return": 0
         }
       ],
-      "prediction_accuracy": 44.5945945945946,
-      "llm_analysis": {
-        "success_factors": [
-          "跨市场分散配置（美股、A股、港股）降低了单一市场波动风险",
-          "高收益个股集中出现（如WDC）带动整体收益，同时高频持仓（立新能源、山西汾酒）提供稳定回报",
-          "策略对成长型与消费型股票混合持有，在震荡市中兼顾进攻与防御"
-        ],
-        "holdings_characteristics": {
-          "industry": "混合行业，以消费（白酒、零售）、科技（存储）和新能源为主",
-          "market_cap": "以中大盘股为主（沃尔玛、美团、西部数据等），小盘为辅（立新能源）",
-          "volatility": "中高波动率，既有高波动的科技新能源股，也有低波动的消费零售股"
-        },
-        "sustainability": {
-          "score": 6.0,
-          "reasoning": "预测准确率仅44.6%，但近期收益为正，主要依赖少数高收益个股（如WDC）的贡献，这种集中依赖存在不确定性；若高收益个股行情消退，策略可能面临回撤。跨市场分散和稳定持仓提供一定缓冲，但整体可持续性一般。",
-          "risk_factors": [
-            "高收益个股（如WDC）的行情不可持续，平均收益回归后策略优势减弱",
-            "预测准确率低于50%，长期可能因随机性导致收益不稳定",
-            "跨市场投资面临汇率、政策、流动性等额外风险"
-          ]
-        },
-        "improvement_directions": [
-          {
-            "direction": "优化选股模型，提升预测准确率",
-            "reason": "当前准确率44.6%偏低，改善预测质量可从源头提高策略胜率",
-            "expected_impact": "若准确率提升至55%以上，策略收益和稳定性将显著增强"
-          },
-          {
-            "direction": "动态调整持仓权重，减少低收益股票占比",
-            "reason": "美团平均收益仅0.03%，低于其他持仓，降低其权重可提升整体组合收益",
-            "expected_impact": "组合平均收益有望提升，同时减少无效占用资金"
-          },
-          {
-            "direction": "设置止损和止盈机制，控制尾部风险",
-            "reason": "近期存在负收益天数，回撤控制可平滑净值曲线",
-            "expected_impact": "降低最大回撤，提升风险调整后收益（如夏普比率）"
-          }
-        ]
-      }
+      "prediction_accuracy": 30.357142857142854,
+      "llm_analysis": null
     },
-    "cumulative_return": 2.47,
-    "sharpe_ratio": 0.412,
-    "win_rate": 0.5,
-    "max_drawdown": 0.85
+    "cumulative_return": 0.04,
+    "sharpe_ratio": 0.039,
+    "win_rate": 0.571,
+    "max_drawdown": 0.42
   },
   "all_strategies": {
     "aggressive": {
-      "cumulative_return": 2.47,
-      "avg_daily_return": 0.412,
-      "volatility": 0.998,
-      "win_rate": 50.0,
-      "max_drawdown": 0.85,
-      "sharpe": 0.412,
-      "score": 7.22,
-      "trading_days": 6
+      "cumulative_return": -2.04,
+      "avg_daily_return": -0.291,
+      "volatility": 0.421,
+      "win_rate": 28.6,
+      "max_drawdown": 2.18,
+      "sharpe": -0.692,
+      "score": 0.03,
+      "trading_days": 7
     },
     "robust": {
-      "cumulative_return": -0.72,
-      "avg_daily_return": -0.12,
-      "volatility": 0.257,
-      "win_rate": 33.3,
-      "max_drawdown": 0.79,
-      "sharpe": -0.466,
-      "score": 1.89,
-      "trading_days": 6
+      "cumulative_return": 0.05,
+      "avg_daily_return": 0.007,
+      "volatility": 2.007,
+      "win_rate": 42.9,
+      "max_drawdown": 4.44,
+      "sharpe": 0.004,
+      "score": 3.88,
+      "trading_days": 7
     },
     "bluechip": {
-      "cumulative_return": -2.03,
-      "avg_daily_return": -0.338,
-      "volatility": 0.705,
-      "win_rate": 33.3,
-      "max_drawdown": 2.92,
-      "sharpe": -0.48,
-      "score": 0.86,
-      "trading_days": 6
+      "cumulative_return": -1.53,
+      "avg_daily_return": -0.219,
+      "volatility": 0.331,
+      "win_rate": 28.6,
+      "max_drawdown": 1.63,
+      "sharpe": -0.66,
+      "score": 0.46,
+      "trading_days": 7
     },
     "defensive": {
-      "cumulative_return": 0.27,
-      "avg_daily_return": 0.045,
-      "volatility": 0.422,
-      "win_rate": 66.7,
+      "cumulative_return": -0.5,
+      "avg_daily_return": -0.071,
+      "volatility": 0.318,
+      "win_rate": 57.1,
       "max_drawdown": 0.8,
-      "sharpe": 0.107,
-      "score": 6.96,
-      "trading_days": 6
+      "sharpe": -0.224,
+      "score": 4.89,
+      "trading_days": 7
     },
     "global": {
-      "cumulative_return": 0.31,
-      "avg_daily_return": 0.052,
-      "volatility": 0.383,
-      "win_rate": 33.3,
-      "max_drawdown": 0.79,
-      "sharpe": 0.135,
-      "score": 3.71,
-      "trading_days": 6
+      "cumulative_return": 0.04,
+      "avg_daily_return": 0.006,
+      "volatility": 0.147,
+      "win_rate": 57.1,
+      "max_drawdown": 0.42,
+      "sharpe": 0.039,
+      "score": 5.77,
+      "trading_days": 7
     },
     "tech": {
-      "cumulative_return": 0.99,
-      "avg_daily_return": 0.165,
-      "volatility": 0.726,
-      "win_rate": 50.0,
-      "max_drawdown": 1.15,
-      "sharpe": 0.227,
-      "score": 5.93,
-      "trading_days": 6
+      "cumulative_return": 0.06,
+      "avg_daily_return": 0.009,
+      "volatility": 0.261,
+      "win_rate": 42.9,
+      "max_drawdown": 0.52,
+      "sharpe": 0.033,
+      "score": 4.34,
+      "trading_days": 7
+    },
+    "aggressive_v1": {
+      "cumulative_return": -1.59,
+      "avg_daily_return": -0.318,
+      "volatility": 0.649,
+      "win_rate": 40.0,
+      "max_drawdown": 1.82,
+      "sharpe": -0.49,
+      "score": 1.88,
+      "trading_days": 5
+    },
+    "aggressive_v2": {
+      "cumulative_return": -0.8,
+      "avg_daily_return": -0.16,
+      "volatility": 1.379,
+      "win_rate": 40.0,
+      "max_drawdown": 2.84,
+      "sharpe": -0.116,
+      "score": 3.0,
+      "trading_days": 5
+    },
+    "aggressive_v3": {
+      "cumulative_return": -0.93,
+      "avg_daily_return": -0.186,
+      "volatility": 1.014,
+      "win_rate": 40.0,
+      "max_drawdown": 1.43,
+      "sharpe": -0.183,
+      "score": 2.93,
+      "trading_days": 5
+    },
+    "global_v1": {
+      "cumulative_return": -0.74,
+      "avg_daily_return": -0.148,
+      "volatility": 0.385,
+      "win_rate": 40.0,
+      "max_drawdown": 1.36,
+      "sharpe": -0.384,
+      "score": 2.65,
+      "trading_days": 5
+    },
+    "global_v2": {
+      "cumulative_return": -0.74,
+      "avg_daily_return": -0.148,
+      "volatility": 0.385,
+      "win_rate": 40.0,
+      "max_drawdown": 1.36,
+      "sharpe": -0.384,
+      "score": 2.65,
+      "trading_days": 5
+    },
+    "global_v3": {
+      "cumulative_return": -0.74,
+      "avg_daily_return": -0.148,
+      "volatility": 0.385,
+      "win_rate": 40.0,
+      "max_drawdown": 1.36,
+      "sharpe": -0.384,
+      "score": 2.65,
+      "trading_days": 5
     }
   },
   "variants": [
     {
-      "name": "aggressive_v1",
-      "display_name": "置信度过滤增强策略",
-      "description": "提高收益和稳定性",
+      "name": "global_us_heavy",
+      "display_name": "全球-美股偏重",
+      "description": "A股2 + 港股1 + 美股5 + 韩股2",
       "changes": {
-        "预测置信度阈值": "0.6"
-      },
-      "llm_reasoning": "若准确率提升至55%以上，组合收益和夏普比率显著增强，回撤可能略微降低，整体稳定性提升。"
+        "allocation": {
+          "cn": 2,
+          "hk": 1,
+          "us": 5,
+          "kr": 2
+        }
+      }
     },
     {
-      "name": "aggressive_v2",
-      "display_name": "高收益加权聚焦策略",
-      "description": "提高收益",
+      "name": "global_cn_heavy",
+      "display_name": "全球-A股偏重",
+      "description": "A股5 + 港股2 + 美股2 + 韩股1",
       "changes": {
-        "权重分配方式": "按预测收益排名加权（Top10%权重翻倍）",
-        "最低预期收益阈值": "0.1%"
-      },
-      "llm_reasoning": "组合平均预期收益有望提升20-30%，收益集中度上升，但需监控个股集中风险。"
+        "allocation": {
+          "cn": 5,
+          "hk": 2,
+          "us": 2,
+          "kr": 1
+        }
+      }
     },
     {
-      "name": "aggressive_v3",
-      "display_name": "止损止盈风控策略",
-      "description": "降低风险",
+      "name": "global_balanced",
+      "display_name": "全球-极致平衡",
+      "description": "A股3 + 港股3 + 美股3 + 韩股3",
       "changes": {
-        "止损线": "-5%",
-        "止盈线": "+15%"
-      },
-      "llm_reasoning": "最大回撤预计降低至0.5%以下，夏普比率提升至0.5以上，可能放弃部分潜在收益但风险更可控。"
+        "allocation": {
+          "cn": 3,
+          "hk": 3,
+          "us": 3,
+          "kr": 3
+        }
+      }
     }
   ],
-  "llm_analysis": "**成功因素：**跨市场分散配置（美股、A股、港股）降低了单一市场波动风险；高收益个股集中出现（如WDC）带动整体收益，同时高频持仓（立新能源、山西汾酒）提供稳定回报；策略对成长型与消费型股票混合持有，在震荡市中兼顾进攻与防御\n**可持续性（6.0/10）：**预测准确率仅44.6%，但近期收益为正，主要依赖少数高收益个股（如WDC）的贡献，这种集中依赖存在不确定性；若高收益个股行情消退，策略可能面临回撤。跨市场分散和稳定持仓提供一定缓冲，但整体可持续性一般。\n**改进方向：**优化选股模型，提升预测准确率（当前准确率44.6%偏低，改善预测质量可从源头提高策略胜率）；动态调整持仓权重，减少低收益股票占比（美团平均收益仅0.03%，低于其他持仓，降低其权重可提升整体组合收益）；设置止损和止盈机制，控制尾部风险（近期存在负收益天数，回撤控制可平滑净值曲线）",
-  "source_file": "weekly_analysis_20260815_165817.json"
+  "llm_analysis": "（无 LLM 深度分析）",
+  "source_file": "weekly_analysis_20260823_120347.json"
 }

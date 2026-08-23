@@ -180,12 +180,15 @@ def select_variant_holdings(parent: str, changes: dict, scan_list: list, ranking
 
     for s, pct in zip(selected, pcts):
         amount = int(capital * pct / 100.0)
+        score = s.get('aggressive_score') or 0
+        up3 = s.get('up3') or 0
+        ret20 = s.get('return_20d_pct') or 0
         items.append({
             "code": s.get("code"),
             "name": s.get("name"),
             "amount": amount,
             "pct": pct,
-            "reason": f"变体评分{s.get('aggressive_score', 0):.1f} | 3日↑{s.get('up3', 0):.0f}% | 20日{s.get('return_20d_pct', 0):+.1f}%{risk_note}"
+            "reason": f"变体评分{score:.1f} | 3日↑{up3:.0f}% | 20日{ret20:+.1f}%{risk_note}"
         })
 
     return items, cash_pct

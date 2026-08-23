@@ -1,15 +1,19 @@
 {
   "schema_version": "2.0",
-  "name": "动态风控版",
+  "name": "全球-A股偏重",
   "parent_strategy": "global",
-  "variant_name": "global_v2",
-  "description": "降低风险",
+  "variant_name": "global_cn_heavy",
+  "description": "A股5 + 港股2 + 美股2 + 韩股1",
   "changes": {
-    "risk_per_trade": "1%",
-    "position_sizing": "ATR动态仓位（仓位=风险金额/(ATR*合约乘数)）"
+    "allocation": {
+      "cn": 5,
+      "hk": 2,
+      "us": 2,
+      "kr": 1
+    }
   },
   "capital": 1000000,
-  "created_at": "2026-08-11T15:41:39.572634",
+  "created_at": "2026-08-23T12:03:47.933189",
   "status": "active",
   "test_duration_days": 7,
   "color": "#f59e0b",
