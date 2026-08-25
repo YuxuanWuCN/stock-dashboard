@@ -36,6 +36,8 @@ jobs:
 
       - name: 运行数据抓取脚本
         id: fetch
+        env:
+          ENABLE_DYNAMIC_SCREEN: "true"
         run: python src/fetch_data.py
         # 脚本内部已处理节假日识别和部分失败容错
         # 仅真正失败时返回非零退出码

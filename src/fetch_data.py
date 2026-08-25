@@ -905,6 +905,36 @@ def main() -> int:
     # ---- 6.1 读自选股 ----
     watchlist = read_watchlist(WATCHLIST_PATH)
 
+    # ---- 6.1.5 全市场动态初筛 (Tier-1 Market Screener) ----
+    enable_dynamic = os.environ.get("ENABLE_DYNAMIC_SCREEN", "true").strip().lower() in ("true", "1", "yes")
+    if enable_dynamic:
+        try:
+            try:
+                from .analysis.market_screener import fetch_market_snapshot, screen_active_stocks
+            except ImportError:
+                from analysis.market_screener import fetch_market_snapshot, screen_active_stocks
+
+            logger.info("正在执行全市场动态初筛 (Tier-1 Market Screener)...")
+            snapshot = fetch_market_snapshot()
+            if not snapshot.empty:
+                active_df = screen_active_stocks(snapshot, min_amount=3e8, min_turnover=2.5, max_candidates=30)
+                existing_codes = {item["code"] for item in watchlist}
+                added_count = 0
+                for _, row in active_df.iterrows():
+                    code_str = str(row["code"]).zfill(6)
+                    if code_str not in existing_codes:
+                        watchlist.append({
+                            "code": code_str,
+                            "name": str(row["name"]),
+                            "type": "stock",
+                            "category": "全市场热点精选",
+                        })
+                        existing_codes.add(code_str)
+                        added_count += 1
+                logger.info("全市场动态初筛完成：新增 %d 只高流动性热点标的进入今日分析池 (总计 %d 只)", added_count, len(watchlist))
+        except Exception as e:
+            logger.warning("全市场动态初筛跳过或异常: %s", e)
+
     # ---- 6.2 确定日期范围 ----
     today = beijing_today()
     start_date = calc_start_date(today, LOOKBACK_DAYS)
