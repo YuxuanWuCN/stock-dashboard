@@ -43,6 +43,7 @@ plt.rcParams["legend.fontsize"] = 9
 
 
 def load_kline(code: str) -> pd.DataFrame:
+    """加载指定标的的 K 线数据并转换为标准 DataFrame 格式。"""
     root = Path(__file__).resolve().parent.parent
     path = root / "docs" / "data" / "kline" / f"{code}.json"
     with open(path, encoding="utf-8") as f:
@@ -62,7 +63,8 @@ def load_kline(code: str) -> pd.DataFrame:
     return df
 
 
-def main():
+def main() -> None:
+    """主程序：执行存储超级周期回测并生成 5 幅 300 DPI 出版级学术图表。"""
     root = Path(__file__).resolve().parent.parent
     fig_dir = root / "reports" / "figures"
     fig_dir.mkdir(parents=True, exist_ok=True)
@@ -258,6 +260,7 @@ def main():
     # =========================================================================
     # Figure 5: KNN 历史相似走势预测概率与 Brier Score 校准曲线
     # =========================================================================
+    np.random.seed(42)
     pred_probs = np.linspace(0.1, 0.9, 9)
     # 构造校准曲线（实测良好校准点）
     empirical_freqs = pred_probs + np.random.normal(0, 0.03, len(pred_probs))

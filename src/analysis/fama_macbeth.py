@@ -28,6 +28,83 @@ FACTOR_COLS = ["MKT", "SMB", "HML", "MOM"]
 FM_MIN_CROSS_SECTION = 20  # 阶段二每日横截面最少股票数
 
 
+def calc_newey_west_lags(n_obs: int) -> int:
+    """计算 Newey-West HAC 自适应滞后阶数 q = floor(4 * (T / 100)^(2/9))."""
+    if n_obs <= 0:
+        return 1
+    q = int(np.floor(4.0 * (float(n_obs) / 100.0) ** (2.0 / 9.0)))
+    return max(1, q)
+
+
+class FamaMacBethEngine:
+    """标准 Fama-MacBeth 两阶段资产定价引擎。"""
+
+    def __init__(self, lag_nw: Optional[int] = None):
+        self.lag_nw = lag_nw
+
+    def run_stage_one_rolling(
+        self,
+        excess_returns_df: pd.DataFrame,
+        factors_df: pd.DataFrame,
+        window: int = 252,
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """阶段一：滚动时间序列回归 (OLS + Newey-West HAC)。
+        
+        excess_returns_df: (T, N) 超额收益矩阵
+        factors_df: (T, K) 因子矩阵 (MKT, SMB, HML, MOM)
+        """
+        T, N = excess_returns_df.shape
+        K = factors_df.shape[1]
+
+        betas = np.zeros((T, N, K))
+        alphas = np.zeros((T, N))
+        p_values = np.zeros((T, N))
+        effective_lags = self.lag_nw or calc_newey_west_lags(window)
+
+        for t in range(window, T):
+            y_window = excess_returns_df.iloc[t - window : t]
+            x_window = factors_df.iloc[t - window : t]
+            X = sm.add_constant(x_window.values)
+
+            for i in range(N):
+                y = y_window.iloc[:, i].values
+                try:
+                    model = sm.OLS(y, X)
+                    results = model.fit(cov_type="HAC", cov_kwds={"maxlags": effective_lags})
+                    alphas[t, i] = results.params[0]
+                    betas[t, i, :] = results.params[1:]
+                    p_values[t, i] = results.pvalues[0]
+                except Exception:
+                    pass
+
+        return alphas, betas, p_values
+
+    def run_stage_two_cross_section(
+        self,
+        excess_returns_df: pd.DataFrame,
+        betas_matrix: np.ndarray,
+    ) -> pd.DataFrame:
+        """阶段二：每日横截面回归求解风险溢价 gamma_t。"""
+        T, N = excess_returns_df.shape
+        K = betas_matrix.shape[2]
+        risk_premia = np.zeros((T, K + 1))
+
+        for t in range(T):
+            r_t = excess_returns_df.iloc[t, :].values
+            betas_t = betas_matrix[t, :, :]
+            if np.all(betas_t == 0):
+                continue
+            try:
+                X_cross = sm.add_constant(betas_t)
+                model_cross = sm.OLS(r_t, X_cross).fit()
+                risk_premia[t, :] = model_cross.params
+            except Exception:
+                pass
+
+        columns = ["const_premium"] + [f"factor_{k}_premium" for k in range(K)]
+        return pd.DataFrame(risk_premia, index=excess_returns_df.index, columns=columns)
+
+
 def _empty_result(status: str, reason: str, n_obs: int,
                   window_start=None, window_end=None) -> dict:
     return {
@@ -82,7 +159,8 @@ def regress_one(factors_df: pd.DataFrame, returns: Sequence,
     X = sm.add_constant(f[FACTOR_COLS].to_numpy(dtype=float), has_constant="add")
 
     try:
-        maxlags = max(1, min(hac_maxlags, n // 5))
+        adaptive_lag = calc_newey_west_lags(n)
+        maxlags = max(1, min(adaptive_lag if hac_maxlags is None else min(hac_maxlags, adaptive_lag), n // 5))
         model = sm.OLS(r_excess, X).fit(
             cov_type="HAC", cov_kwds={"maxlags": maxlags}
         )

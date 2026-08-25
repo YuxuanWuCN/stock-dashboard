@@ -226,7 +226,9 @@ def report(portfolio_path: str = None) -> int:
     with open(performance_path, "w", encoding="utf-8") as f:
         json.dump(perf, f, ensure_ascii=False, indent=2)
 
-    print(f"[{today}] 组合收益 {weighted_return_pct:.2f}% | 等权基准 {equal_weight_pct:.2f}% | 有效 {len(valid_changes)} 只")
+    w_str = f"{weighted_return_pct:.2f}%" if weighted_return_pct is not None else "--"
+    eq_str = f"{equal_weight_pct:.2f}%" if equal_weight_pct is not None else "--"
+    print(f"[{today}] 组合收益 {w_str} | 等权基准 {eq_str} | 有效 {len(valid_changes)} 只")
     for r in rows:
         chg = "无数据" if r.get("change_pct") is None else f"{r['change_pct']}%"
         print(f"  {r['code']} {r['name']}: {chg}")

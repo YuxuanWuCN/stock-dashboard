@@ -477,6 +477,30 @@ def compute_leading_score(leading_signal: Optional[dict] = None) -> dict:
             "momentum": momentum, "data_source": data_source, "reason": None}
 
 
+def _load_calibrated_weights() -> dict:
+    """读取 config/strategy_params.json 中的最新校准权重，无则回退默认。"""
+    import json
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent.parent
+    cfg_p = root / "config" / "strategy_params.json"
+    if cfg_p.exists():
+        try:
+            with open(cfg_p, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            w = data.get("weights")
+            if isinstance(w, dict) and "technical" in w:
+                return {
+                    "forecast_percentile": OPPORTUNITY_WEIGHTS["forecast_percentile"],
+                    "up_probability_5d": OPPORTUNITY_WEIGHTS["up_probability_5d"],
+                    "technical_score": w.get("technical", OPPORTUNITY_WEIGHTS["technical_score"]),
+                    "industry_score": w.get("fundamental", OPPORTUNITY_WEIGHTS["industry_score"]),
+                    "leading_score": w.get("leading", OPPORTUNITY_WEIGHTS["leading_score"]),
+                }
+        except Exception:
+            pass
+    return OPPORTUNITY_WEIGHTS
+
+
 # ============================================================
 # 5. 综合评分
 # ============================================================
@@ -532,13 +556,14 @@ def compute_composite_score(
     leading_result = compute_leading_score(leading_signal)
     leading_score = leading_result["score"]
 
-    # 机会分
+    # 机会分（动态融合贝叶斯校准权重）
+    w = _load_calibrated_weights()
     opportunity = (
-        OPPORTUNITY_WEIGHTS["forecast_percentile"] * fc_component
-        + OPPORTUNITY_WEIGHTS["up_probability_5d"] * up_component
-        + OPPORTUNITY_WEIGHTS["technical_score"] * tech_score
-        + OPPORTUNITY_WEIGHTS["industry_score"] * ind_score
-        + OPPORTUNITY_WEIGHTS["leading_score"] * leading_score
+        w["forecast_percentile"] * fc_component
+        + w["up_probability_5d"] * up_component
+        + w["technical_score"] * tech_score
+        + w["industry_score"] * ind_score
+        + w["leading_score"] * leading_score
     )
 
     # 风险调整

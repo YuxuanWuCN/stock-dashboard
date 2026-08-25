@@ -27,6 +27,12 @@ import argparse
 import shutil
 from datetime import datetime
 
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.config import DATA_DIR
@@ -269,24 +275,33 @@ def rebalance_aggressive(scan_results, dry_run=False, temperature=None, config=N
 
 
 def robust_candidates(ranking):
-    """稳健组合候选：风险分 < 40 且 3日上涨概率 > 60%，按综合分降序。
+    """稳健组合候选：风险分 < 40 且（3日/5日上涨概率 >= 50% 或无预测数据但综合分高），按综合分降序。
 
     spec-kit 004b 修复：读取嵌套字段 risk.score 与 total_score，
-    不再误读不存在的顶层 risk_score / score（旧 bug 导致永远选不出标的）。
+    安全支持无 KNN 预测概率的低风险标的（如各类核心 ETF）。
     """
     candidates = []
     for item in ranking:
-        risk = (item.get('risk') or {}).get('score', 100)
-        fc = item.get('forecast', {})
-        up3 = fc.get('up_probability_3d_pct', 0)
+        risk_obj = item.get('risk') or {}
+        risk = risk_obj.get('score')
+        if risk is None:
+            risk = 100.0
+        fc = item.get('forecast') or {}
+        up3 = fc.get('up_probability_3d_pct')
+        if up3 is None:
+            up3 = fc.get('up_probability_5d_pct')
 
-        if risk < 40 and up3 > 60:
+        score = item.get('total_score')
+        if score is None:
+            score = 0.0
+
+        if risk < 40 and (up3 is None or up3 >= 50):
             candidates.append({
                 'code': item['code'],
                 'name': item['name'],
                 'risk': risk,
-                'up3': up3,
-                'score': item.get('total_score', 0),
+                'up3': up3 if up3 is not None else 50.0,
+                'score': score,
             })
 
     candidates.sort(key=lambda x: x['score'], reverse=True)
@@ -552,7 +567,7 @@ def rebalance_global(ranking, dry_run=False, temperature=None, config=None):
     for region, n in counts.items():
         selected.extend(region_pool.get(region, [])[:n])
 
-    if len(selected) < 5:
+    if len(selected) < 1:
         print("❌ 全球股票数量不足")
         return
 

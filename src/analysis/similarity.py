@@ -22,6 +22,7 @@ from .config import (
     FORECAST_HORIZONS,
     CONFIDENCE_HIGH_SAMPLES,
     CONFIDENCE_LOW_SAMPLES,
+    ENABLE_PROCESS_NODE_KNN,
 )
 
 logger = logging.getLogger("stock-dashboard.similarity")
@@ -169,6 +170,8 @@ def find_similar_samples(
     min_interval: int = KNN_MIN_INTERVAL,
     std_window: int = STANDARDIZATION_WINDOW,
     feature_names: list = None,
+    process_node: Optional[str] = None,
+    enable_node_gate: Optional[bool] = None,
 ) -> dict:
     """
     核心入口：为当前时点寻找历史相似走势。
@@ -181,6 +184,8 @@ def find_similar_samples(
         min_interval: 相邻样本最小间隔（交易日）
         std_window: 标准化窗口
         feature_names: 使用的特征列表
+        process_node: SCNU-SC 工艺节点名称 (Substrate/Epitaxy/Device/Module/Integration)
+        enable_node_gate: 是否启用工艺节点硬隔离约束 (默认读取 config.ENABLE_PROCESS_NODE_KNN)
 
     返回:
         {
@@ -207,12 +212,16 @@ def find_similar_samples(
 
     n = len(df)
 
+    gate_active = bool(ENABLE_PROCESS_NODE_KNN if enable_node_gate is None else enable_node_gate)
+
     # 初始化结果
     result = {
         "method": "standardized_knn_v1",
         "sample_size": 0,
         "minimum_sample_size": min_samples,
         "confidence": "low",
+        "process_node": process_node,
+        "node_gate_enabled": gate_active,
     }
     for h in horizons:
         result[f"horizon_{h}d"] = {

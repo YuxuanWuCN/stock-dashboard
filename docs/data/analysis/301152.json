@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-24 23:09:23+08:00",
-  "trade_date": "2026-08-24",
+  "generated_at": "2026-08-25 23:36:05+08:00",
+  "trade_date": "2026-08-25",
   "code": "301152",
   "name": "天力锂能",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 45.2,
-    "risk": 49.4,
+    "risk_adjusted": 42.6,
+    "risk": 58.1,
     "technical": 85.0,
     "industry": 65.0,
     "leading": 50.0
@@ -42,39 +42,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-24 23:04:36"
+    "updated_at": "2026-08-25 23:34:32"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 80.59,
-    "max_drawdown_60d_pct": -34.13,
-    "atr14_pct": 4.86,
+    "annualized_volatility_20d_pct": 80.63,
+    "max_drawdown_60d_pct": -32.32,
+    "atr14_pct": 5.03,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 76.5,
-        "value": 80.59
+        "score": 80.9,
+        "value": 80.63
       },
       {
         "name": "60日最大回撤",
-        "score": 61.0,
-        "value": -34.13
+        "score": 58.1,
+        "value": -32.32
       },
       {
         "name": "ATR百分比",
-        "score": 46.3,
-        "value": 4.86
+        "score": 50.0,
+        "value": 5.03
       },
       {
         "name": "量价异常",
-        "score": 17.6,
-        "value": 1.07
+        "score": 91.2,
+        "value": 1.6
       },
       {
         "name": "行业波动",
         "score": 1.5,
-        "value": 33.86
+        "value": 29.81
       }
     ]
   },
@@ -88,28 +88,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 20.072,
-    "ma10": 20.125,
-    "ma20": 20.1195,
-    "ma60": 22.292000000000005,
-    "rsi14": 65.1,
-    "macd_dif": -0.2515212401451308,
-    "macd_dea": -0.5720541366316417,
-    "macd_hist": 0.6410657929730219,
-    "atr14_pct": 4.855271966751791,
-    "boll_position": 1.3831892687830365,
-    "return_5d_pct": 15.274345032130498,
-    "return_20d_pct": 14.313725490196095,
-    "volume_ratio_5d": 1.07
+    "ma5": 20.93,
+    "ma10": 20.493000000000002,
+    "ma20": 20.308,
+    "ma60": 22.229666666666667,
+    "rsi14": 67.4,
+    "macd_dif": 0.0643947074304485,
+    "macd_dea": -0.4447643678192237,
+    "macd_hist": 1.0183181504993444,
+    "atr14_pct": 5.027773887288434,
+    "boll_position": 1.242164833534908,
+    "return_5d_pct": 21.7877094972067,
+    "return_20d_pct": 18.654131618010883,
+    "volume_ratio_5d": 1.6
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.19,
-    "return_20d_pct": -2.51,
-    "return_60d_pct": -11.43,
-    "relative_strength_20d_pct": 16.82
+    "return_5d_pct": -6.0,
+    "return_20d_pct": 1.75,
+    "return_60d_pct": -10.39,
+    "relative_strength_20d_pct": 16.91
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -255,20 +255,27 @@
       "industry_return_60d_pct": null,
       "cycle_observation_days": 0,
       "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    }
+    },
+    "cached_at": "2026-08-24 23:05:38"
   },
   "reasons": [
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 34.1%，风险偏高。",
+      "detail": "近60日最大回撤 32.3%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 34.1%，风险扣分。",
+      "detail": "近60日最大回撤 32.3%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.60倍。",
+      "contribution": 5.0
     },
     {
       "type": "negative",
