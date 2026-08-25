@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 21:58:44+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24 23:09:23+08:00",
+  "trade_date": "2026-08-24",
   "code": "601799",
   "name": "星宇股份",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 38.8,
-    "risk": 32.0,
+    "risk_adjusted": 38.0,
+    "risk": 36.8,
     "technical": 42.0,
-    "industry": 38.7,
+    "industry": 41.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,39 +42,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 21:58:34"
+    "updated_at": "2026-08-24 23:04:28"
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
-    "annualized_volatility_20d_pct": 33.08,
-    "max_drawdown_60d_pct": -32.4,
-    "atr14_pct": 3.95,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 34.67,
+    "max_drawdown_60d_pct": -34.6,
+    "atr14_pct": 4.18,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 29.8,
-        "value": 33.08
+        "score": 33.1,
+        "value": 34.67
       },
       {
         "name": "60日最大回撤",
-        "score": 59.5,
-        "value": -32.4
+        "score": 63.2,
+        "value": -34.6
       },
       {
         "name": "ATR百分比",
-        "score": 36.6,
-        "value": 3.95
+        "score": 38.2,
+        "value": 4.18
       },
       {
         "name": "量价异常",
-        "score": 8.4,
-        "value": 1.03
+        "score": 32.4,
+        "value": 1.14
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 34.37
+        "score": 1.5,
+        "value": 33.86
       }
     ]
   },
@@ -88,28 +88,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 89.678,
-    "ma10": 92.228,
-    "ma20": 93.5565,
-    "ma60": 101.87333333333332,
-    "rsi14": 32.1,
-    "macd_dif": -2.331178897188991,
-    "macd_dea": -1.9309021409783156,
-    "macd_hist": -0.800553512421351,
-    "atr14_pct": 3.9534769536513035,
-    "boll_position": -0.07225495080331884,
-    "return_5d_pct": -5.9884795130964115,
-    "return_20d_pct": -3.3519553072625663,
-    "volume_ratio_5d": 1.03
+    "ma5": 88.024,
+    "ma10": 90.985,
+    "ma20": 93.2405,
+    "ma60": 101.15133333333333,
+    "rsi14": 28.3,
+    "macd_dif": -2.7788392561761412,
+    "macd_dea": -2.100489564017881,
+    "macd_hist": -1.3566993843165207,
+    "atr14_pct": 4.17891699192578,
+    "boll_position": -0.14696380761500777,
+    "return_5d_pct": -8.994018488308864,
+    "return_20d_pct": -7.022222222222219,
+    "volume_ratio_5d": 1.14
   },
   "industry": {
     "name": "汽车车灯",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": -5.67
+    "return_5d_pct": -6.19,
+    "return_20d_pct": -2.51,
+    "return_60d_pct": -11.43,
+    "relative_strength_20d_pct": -4.52
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -268,14 +268,20 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 32.4%，风险偏高。",
+      "detail": "近60日最大回撤 34.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 32.4%，风险扣分。",
+      "detail": "近60日最大回撤 34.6%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=28.3，短期超卖。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/601799.json",

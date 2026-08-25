@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 21:58:44+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24 23:09:23+08:00",
+  "trade_date": "2026-08-24",
   "code": "300839",
   "name": "博汇股份",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 43.1,
-    "risk": 60.0,
-    "technical": 93.0,
+    "risk_adjusted": 40.4,
+    "risk": 65.4,
+    "technical": 85.0,
     "industry": 65.0,
     "leading": 50.0
   },
@@ -42,39 +42,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 21:58:39"
+    "updated_at": "2026-08-24 23:04:32"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 76.29,
+    "annualized_volatility_20d_pct": 86.93,
     "max_drawdown_60d_pct": -42.01,
-    "atr14_pct": 4.93,
+    "atr14_pct": 5.34,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 75.6,
-        "value": 76.29
+        "score": 83.1,
+        "value": 86.93
       },
       {
         "name": "60日最大回撤",
-        "score": 78.6,
+        "score": 79.4,
         "value": -42.01
       },
       {
         "name": "ATR百分比",
-        "score": 51.1,
-        "value": 4.93
+        "score": 54.4,
+        "value": 5.34
       },
       {
         "name": "量价异常",
-        "score": 74.8,
-        "value": 1.28
+        "score": 94.9,
+        "value": 1.92
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 34.37
+        "score": 1.5,
+        "value": 33.86
       }
     ]
   },
@@ -88,28 +88,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 11.002,
-    "ma10": 10.876000000000001,
-    "ma20": 10.629000000000001,
-    "ma60": 12.177666666666665,
-    "rsi14": 66.4,
-    "macd_dif": -0.07559471109630422,
-    "macd_dea": -0.2795085193854272,
-    "macd_hist": 0.40782761657824596,
-    "atr14_pct": 4.927196113118691,
-    "boll_position": 1.3475771475306582,
-    "return_5d_pct": 17.752596789424004,
-    "return_20d_pct": 25.452716297786736,
-    "volume_ratio_5d": 1.28
+    "ma5": 11.662,
+    "ma10": 11.206999999999999,
+    "ma20": 10.8325,
+    "ma60": 12.134833333333331,
+    "rsi14": 75.5,
+    "macd_dif": 0.1855431646479797,
+    "macd_dea": -0.18649818257874584,
+    "macd_hist": 0.7440826944534511,
+    "atr14_pct": 5.340690823035567,
+    "boll_position": 1.3935278143981291,
+    "return_5d_pct": 30.499075785582242,
+    "return_20d_pct": 40.497512437810926,
+    "volume_ratio_5d": 1.92
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": 23.13
+    "return_5d_pct": -6.19,
+    "return_20d_pct": -2.51,
+    "return_60d_pct": -11.43,
+    "relative_strength_20d_pct": 43.0
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -278,9 +278,21 @@
       "contribution": -7.0
     },
     {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.92倍。",
+      "contribution": 5.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=75.5，短期超买。",
+      "contribution": -5.0
+    },
+    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 76.3%，波动偏高。",
+      "detail": "20日年化波动率 86.9%，波动偏高。",
       "contribution": -5.0
     }
   ],

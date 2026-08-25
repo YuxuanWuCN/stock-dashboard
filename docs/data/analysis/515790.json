@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 21:58:44+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24 23:09:23+08:00",
+  "trade_date": "2026-08-24",
   "code": "515790",
   "name": "光伏ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 51.7,
-    "risk": 30.6,
-    "technical": 90.0,
-    "industry": 57.9,
+    "risk_adjusted": 50.8,
+    "risk": 29.9,
+    "technical": 80.0,
+    "industry": 61.1,
     "leading": 65.0
   },
   "leading": {
@@ -786,48 +786,49 @@
       155400.0,
       150660.0,
       152160.0,
-      158680.0
+      158680.0,
+      158860.0
     ],
     "momentum_metrics": {
-      "slope_pct": 7.78,
+      "slope_pct": 10.72,
       "momentum": "accelerating",
       "inflection_flag": "none",
-      "latest_value": 158680.0,
+      "latest_value": 158860.0,
       "confidence": "high"
     },
-    "updated_at": "2026-08-23 21:58:39"
+    "updated_at": "2026-08-24 23:04:32"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 35.15,
+    "annualized_volatility_20d_pct": 34.52,
     "max_drawdown_60d_pct": -26.17,
-    "atr14_pct": 2.84,
+    "atr14_pct": 2.92,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 38.2,
-        "value": 35.15
+        "score": 32.4,
+        "value": 34.52
       },
       {
         "name": "60日最大回撤",
-        "score": 50.4,
+        "score": 50.0,
         "value": -26.17
       },
       {
         "name": "ATR百分比",
-        "score": 20.6,
-        "value": 2.84
+        "score": 22.8,
+        "value": 2.92
       },
       {
         "name": "量价异常",
-        "score": 24.4,
-        "value": 0.91
+        "score": 29.4,
+        "value": 0.87
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 34.37
+        "score": 1.5,
+        "value": 33.86
       }
     ]
   },
@@ -840,29 +841,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "range",
-    "ma5": 0.8640000000000001,
-    "ma10": 0.865,
-    "ma20": 0.8479999999999999,
-    "ma60": 0.9218333333333334,
-    "rsi14": 46.2,
-    "macd_dif": -0.006500864574324194,
-    "macd_dea": -0.011141884383341396,
-    "macd_hist": 0.009282039618034404,
-    "atr14_pct": 2.8363705629007194,
-    "boll_position": 0.5203111115925697,
-    "return_5d_pct": -1.1627906976744207,
-    "return_20d_pct": 4.938271604938271,
-    "volume_ratio_5d": 0.91
+    "trend": "downtrend",
+    "ma5": 0.8540000000000001,
+    "ma10": 0.8630000000000001,
+    "ma20": 0.8484999999999999,
+    "ma60": 0.918,
+    "rsi14": 44.0,
+    "macd_dif": -0.007430978082404782,
+    "macd_dea": -0.010399703123154073,
+    "macd_hist": 0.0059374500814985826,
+    "atr14_pct": 2.9202291428616456,
+    "boll_position": 0.41271830872751225,
+    "return_5d_pct": -5.61797752808989,
+    "return_20d_pct": 1.2048192771084265,
+    "volume_ratio_5d": 0.87
   },
   "industry": {
     "name": "光伏绿电",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": 2.62
+    "return_5d_pct": -6.19,
+    "return_20d_pct": -2.51,
+    "return_60d_pct": -11.43,
+    "relative_strength_20d_pct": 3.71
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -891,6 +892,12 @@
       "title": "领先指标",
       "detail": "领先指标动能加速",
       "contribution": 30.0
+    },
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
     },
     {
       "type": "negative",

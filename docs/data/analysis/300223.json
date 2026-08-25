@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 21:58:44+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24 23:09:23+08:00",
+  "trade_date": "2026-08-24",
   "code": "300223",
   "name": "北京君正",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 35.0,
+    "risk_adjusted": 33.7,
     "risk": 71.0,
-    "technical": 83.0,
-    "industry": 38.2,
+    "technical": 73.0,
+    "industry": 38.5,
     "leading": 50.0
   },
   "leading": {
@@ -45,39 +45,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 21:58:00"
+    "updated_at": "2026-08-24 23:03:53"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 84.06,
+    "annualized_volatility_20d_pct": 84.7,
     "max_drawdown_60d_pct": -54.15,
-    "atr14_pct": 8.98,
+    "atr14_pct": 9.09,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 84.7,
-        "value": 84.06
+        "score": 80.9,
+        "value": 84.7
       },
       {
         "name": "60日最大回撤",
-        "score": 92.4,
+        "score": 91.9,
         "value": -54.15
       },
       {
         "name": "ATR百分比",
-        "score": 94.7,
-        "value": 8.98
+        "score": 92.6,
+        "value": 9.09
       },
       {
         "name": "量价异常",
-        "score": 35.9,
-        "value": 0.87
+        "score": 50.0,
+        "value": 0.79
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 34.37
+        "score": 1.5,
+        "value": 33.86
       }
     ]
   },
@@ -90,29 +90,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "range",
-    "ma5": 144.43400000000003,
-    "ma10": 142.018,
-    "ma20": 136.5155,
-    "ma60": 169.62883333333332,
-    "rsi14": 44.4,
-    "macd_dif": -6.817699582772121,
-    "macd_dea": -9.248156663686444,
-    "macd_hist": 4.860914161828646,
-    "atr14_pct": 8.982761678895237,
-    "boll_position": 0.5525820377320716,
-    "return_5d_pct": -3.578888734159602,
-    "return_20d_pct": -3.599025408980172,
-    "volume_ratio_5d": 0.87
+    "trend": "downtrend",
+    "ma5": 140.088,
+    "ma10": 141.536,
+    "ma20": 135.9155,
+    "ma60": 169.23216666666667,
+    "rsi14": 42.2,
+    "macd_dif": -6.95176628469045,
+    "macd_dea": -8.788878587887245,
+    "macd_hist": 3.67422460639359,
+    "atr14_pct": 9.086555912023236,
+    "boll_position": 0.43814590731544684,
+    "return_5d_pct": -13.984168865435354,
+    "return_20d_pct": -8.23836331182205,
+    "volume_ratio_5d": 0.79
   },
   "industry": {
     "name": "存储",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": -5.92
+    "return_5d_pct": -6.19,
+    "return_20d_pct": -2.51,
+    "return_60d_pct": -11.43,
+    "relative_strength_20d_pct": -5.73
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -258,6 +258,12 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 54.2%，风险偏高。",
       "contribution": -7.0
@@ -271,7 +277,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 84.1%，波动偏高。",
+      "detail": "20日年化波动率 84.7%，波动偏高。",
       "contribution": -5.0
     }
   ],

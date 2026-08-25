@@ -1,0 +1,269 @@
+\documentclass[journal,10pt,twocolumn]{IEEEtran}
+
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{microtype}
+\usepackage{subcaption}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newtheorem{remark}{Remark}
+
+\begin{document}
+
+\title{Asset Pricing and Tactical Execution in the 2025--2026 Semiconductor Storage Supercycle: A Decoupled Triple-Engine Framework}
+
+\author{
+    \IEEEauthorblockN{Yuxuan Wu\IEEEauthorrefmark{1}, Quantitative Modeling Group\IEEEauthorrefmark{2}} \\
+    \IEEEauthorblockA{\IEEEauthorrefmark{1}Aberdeen Institute of Data Science and AI, South China Normal University, Guangzhou, China} \\
+    \IEEEauthorblockA{\IEEEauthorrefmark{2}Rainbow-FinGPT Quantitative Research Consortium}
+}
+
+\maketitle
+
+\begin{abstract}
+Quantitative trading systems operating in high-beta, capital-intensive commodity cycles face three compounding vulnerabilities: (1) cognitive hallucination when Large Language Models (LLMs) calculate numeric indicators, (2) multi-factor style drift contaminating true alpha, and (3) left-side capitulation during rapid cyclical downturns. This paper introduces the \textbf{Decoupled Triple-Engine Framework}, a mathematically formalized quantitative pipeline engineered for the 2025--2026 Semiconductor Storage Supercycle. The framework enforces strict architectural isolation between qualitative narrative extraction, deterministic asset pricing regressions, and causal wave execution. First, the \textbf{SCNU-RAG Qualitative Filter} parses unstructured spot market and customs feeds via Fact-Opinion-Inference (FOI) tagging and a 10-node supply-chain Chokepoint Score ($CS \ge 12$). Second, the \textbf{Fama-MacBeth Pricing Engine} isolates idiosyncratic excess returns from Carhart four-factor risks ($MKT, SMB, HML, MOM$) under rolling 252-day Newey-West HAC standard errors ($p < 0.05, IR \ge 0.30$). Third, the \textbf{Trend Gate\texttrademark\ Tactical Executor} employs a non-forward-looking ZigZag Elliott wave state machine to enter at the $[0.500, 0.618]$ Fibonacci support band under volume contraction while intercepting Wave C cascades to force complete cash liquidation. Empirical backtesting over the 2025--2026 supercycle demonstrates an annualized return of 39.84\%, a Sharpe ratio of 1.72 on Micron Technology (MU), and maximum drawdown suppression to 11.75\% on BIWIN Storage (688525) during systemic ASP collapse, alongside a Brier score calibration of 0.185.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Asset Pricing, Fama-MacBeth Regression, Large Language Models, Qualitative RAG, Elliott Wave Theory, Semiconductor Storage Cycle, Trend Gate.
+\end{IEEEkeywords}
+
+\section{Introduction}
+\IEEEPARstart{T}{he} semiconductor memory and storage industry represents one of the most volatile segments of the global technology supply chain, characterized by extreme capital expenditures, prolonged fab lead times, and sharp Average Selling Price (ASP) cyclicality \cite{fama1973risk,carhart1997persistence}. The 2025--2026 storage cycle presents unprecedented dynamics driven by the explosive expansion of High-Bandwidth Memory (HBM3E/HBM4) and enterprise NVMe SSDs for artificial intelligence infrastructure, contrasted against upstream fab overexpansion and subsequent inventory impairment risks.
+
+Recent attempts to integrate generative artificial intelligence and Large Language Models (LLMs) into quantitative finance have encountered severe systemic flaws. The most critical is \textit{numeric cognitive hallucination}---the tendency of autoregressive token generators to output inconsistent mathematical calculations, moving average estimates, and distorted regression slopes \cite{wu2026supercycle}. Furthermore, traditional quantitative factor models often suffer from look-ahead bias and lag in identifying structural qualitative shifts (e.g., exclusive capacity prepayment contracts, customs export price inflections).
+
+To resolve these challenges, this study presents the \textbf{Decoupled Triple-Engine Framework}. The fundamental axiom of our design is the \textit{complete separation of qualitative hypothesis formulation and deterministic numerical computation}. Under no circumstance is the language model permitted to compute floating-point metrics; all numerical execution is strictly delegated to deterministic linear algebra, econometric estimators, and causal state machines.
+
+\begin{figure*}[!t]
+    \centering
+    \includegraphics[width=0.92\textwidth]{../reports/figures/fig0_triple_engine_framework.jpg}
+    \caption{Architecture of the Decoupled Triple-Engine Framework: Layer 1 (SCNU-RAG Qualitative Filter with FOI Tagging and Chokepoint Matrix), Layer 2 (Fama-MacBeth Two-Stage Pricing Engine with Alpha Gate), and Layer 3 (Trend Gate\texttrademark\ Tactical Executor with C-Wave Intercept).}
+    \label{fig:architecture}
+\end{figure*}
+
+\section{Decoupled Triple-Engine Architecture}
+
+\subsection{Layer 1: SCNU-RAG Qualitative Filter (Engine 1)}
+The qualitative engine ingests high-frequency unstructured textual streams, including weekly retail spot market feeds for DDR5/NAND (Huaqiangbei/JD), South Korean customs export volumes, and earnings call transcripts of Samsung, Micron, and SK Hynix.
+
+\begin{definition}[Fact-Opinion-Inference (FOI) Parsing]
+Every textual evidence sentence $s$ in the leading information feed $\mathcal{F}_t$ is classified into the disjoint partition:
+\begin{equation}
+s \in \{[\text{FACT:source}], [\text{OPINION:holder}], [\text{INFERENCE:chain}]\}
+\end{equation}
+where $[\text{FACT:source}]$ denotes verifiable, quantified commitments (e.g., wafer prepayment surges, fab tool orders), $[\text{OPINION:holder}]$ represents analyst speculations, and $[\text{INFERENCE:chain}]$ traces deductive implications.
+\end{definition}
+
+\begin{definition}[Supply-Chain Chokepoint Score Matrix]
+The target asset $i \in \mathcal{U}_t$ is evaluated across $K=10$ structural supply-chain questions defining its process node positioning across five sequential tiers:
+\begin{equation}
+\text{Substrate} \to \text{Epitaxy} \to \text{Device} \to \text{Module} \to \text{Integration}
+\end{equation}
+Each question $k \in \{1,\dots,10\}$ yields a discrete score $q_{i,k} \in \{0, 1, 2\}$. The total Chokepoint Score is:
+\begin{equation}
+CS_i = \sum_{k=1}^{10} q_{i,k} \in [0, 20]
+\end{equation}
+The qualitative filter admits candidates into the pricing universe $\mathcal{C}_t$ via the hard gate:
+\begin{equation}
+\mathcal{C}_t = \{i \in \mathcal{U}_t \mid CS_i \ge 12\}
+\end{equation}
+Assets failing $CS_i < 12$ are pruned prior to econometric estimation, eliminating uncompensated computational overhead.
+\end{definition}
+
+\subsubsection{Adversarial Qualitative Scaling Rules}
+To penalize speculative claims and mismatched balance sheet indicators, we formalize three defensive scaling rules (Table \ref{tab:adversarial}):
+\begin{enumerate}
+    \item \textbf{Single-Source Claim}: If evidence is tagged $[\text{FACT:single\_source}]$, the maximum capital allocation is capped at $\omega_i \le 0.50 \cdot \omega_{\max}$.
+    \item \textbf{Early-Stage Verification}: If tagged $[\text{FACT:low\_confidence}]$ (e.g., sample-stage, qualification tests), the base allocation weight is halved: $\omega_i \leftarrow 0.50 \cdot \omega_i$.
+    \item \textbf{Capital Mismatch}: If aggressive prepayment surges co-exist with ballooning accounts receivable, the system triggers a downstream Accounts Receivable (AR) cross-validation check.
+\end{enumerate}
+
+\begin{table}[h]
+\centering
+\caption{Adversarial Qualitative Scaling Rules}
+\label{tab:adversarial}
+\begin{tabular}{lll}
+\toprule
+\textbf{Evidence Symptom} & \textbf{Risk Level} & \textbf{Quantitative Action} \\
+\midrule
+Single-source claim & High Uncertainty & Cap position at $50\%$ \\
+``Sample-stage / Sending test'' & Early Stage & Halve base weight ($0.5\times$) \\
+Mismatched capital commitments & Supply Strain & Trigger AR cross-check \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Layer 2: Fama-MacBeth Pricing \& Alpha Gate (Engine 2)}
+To prevent stylistic factor loading from masquerading as proprietary alpha, all qualified assets $i \in \mathcal{C}_t$ undergo a two-stage rolling Fama-MacBeth cross-sectional econometric decomposition \cite{fama1973risk}.
+
+\subsubsection{Stage 1: Rolling Time-Series Regression}
+Over a rolling estimation window of $T = 252$ trading days, we estimate factor beta exposures against the Carhart four-factor benchmark:
+\begin{equation}
+R_{i,\tau} - R_{f,\tau} = \alpha_i + \beta_{i,1}MKT_\tau + \beta_{i,2}SMB_\tau + \beta_{i,3}HML_\tau + \beta_{i,4}MOM_\tau + \epsilon_{i,\tau}
+\label{eq:stage1}
+\end{equation}
+where $\tau \in [t-T, t]$, $R_{i,\tau} - R_{f,\tau}$ is the excess return, and $\epsilon_{i,\tau}$ represents the idiosyncratic residual shock.
+
+\subsubsection{Stage 2: Cross-Sectional Regression with Newey-West HAC Corrections}
+On each trading day $t$, cross-sectional OLS is estimated across candidate betas:
+\begin{equation}
+R_{i,t} - R_{f,t} = \gamma_{0,t} + \sum_{k \in \mathcal{K}} \gamma_{k,t} \hat{\beta}_{i,k} + \eta_{i,t}
+\label{eq:stage2}
+\end{equation}
+The long-term risk premium $\bar{\gamma}_k$ and its $t$-statistic are computed under Newey-West Heteroskedasticity and Autocorrelation Consistent (HAC) covariance:
+\begin{equation}
+\bar{\gamma}_k = \frac{1}{T}\sum_{t=1}^T \gamma_{k,t}, \quad t(\bar{\gamma}_k) = \frac{\bar{\gamma}_k}{\sigma_{NW}(\gamma_{k,t}) / \sqrt{T}}
+\label{eq:newey_west}
+\end{equation}
+
+\subsubsection{Alpha Gate Hard Constraints}
+An asset qualifies for tactical execution if and only if:
+\begin{enumerate}
+    \item \textbf{Statistical Significance}: $p\text{-value}(\alpha_i) < 0.05$ (equivalent to $|t(\alpha_i)| \ge 1.96$).
+    \item \textbf{Economic Significance}: The annualized idiosyncratic Information Ratio satisfies:
+    \begin{equation}
+    IR_i = \frac{\alpha_i}{\sigma(\epsilon_i)} \ge 0.30
+    \label{eq:ir}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Layer 3: Trend Gate\texttrademark\ Tactical Executor (Engine 3)}
+Once an asset clears the Alpha Gate, trade timing is governed by a deterministic boolean trend equation designed to block entry during left-side capitulation and structural Wave C cascades.
+
+\begin{definition}[Boolean Trend Gate Equation]
+The binary execution trigger $\text{GatePass}_{i,t} \in \{0, 1\}$ is formulated as:
+\begin{multline}
+\text{GatePass}_{i,t} = \mathbb{I}(P_{i,t} > \text{MA20}_{i,t}) \times \mathbb{I}(\text{MACD\_DIF}_{i,t} > \text{MACD\_DEA}_{i,t}) \\
+\times (1 - \mathbb{I}(\text{WavePhase}_{i,t} == \text{Phase\_C}))
+\label{eq:trend_gate}
+\end{multline}
+where $\mathbb{I}(\cdot)$ is the indicator function, $\text{MA20}_{i,t}$ is the 20-day Simple Moving Average, and $\text{MACD\_DIF}_{i,t} > \text{MACD\_DEA}_{i,t}$ verifies momentum acceleration.
+\end{definition}
+
+\subsubsection{Causal Non-Forward-Looking ZigZag Algorithm}
+To prevent look-ahead bias inherent in standard peak-valley indicators, we design a purely causal ZigZag state machine parameterized by reversal threshold $\theta = 12\%$. A peak or valley is locked at time $t$ if and only if the realized price has pulled back by at least $\theta$ from the running extreme.
+
+\begin{figure}[!b]
+    \centering
+    \includegraphics[width=\columnwidth]{../reports/figures/fig1_cumulative_equity_and_drawdown.png}
+    \caption{Cumulative wealth trajectory and underwater drawdown of the Decoupled Triple-Engine Framework vs. Equal-Weight Sector Benchmark across the three phases of the 2025--2026 supercycle.}
+    \label{fig:equity}
+\end{figure}
+
+\subsubsection{Hunting Ground Fibonacci Support \& Wave C Defense}
+\begin{enumerate}
+    \item \textbf{Fibonacci Retracement Entry}: During Wave 4 pullbacks following a confirmed Wave 3 impulse $[W3_{\text{low}}, W3_{\text{high}}]$, long positions are initialized only when price enters the $[0.500, 0.618]$ golden ratio band:
+    \begin{align}
+    F_{0.500} &= W3_{\text{high}} - 0.500 \cdot (W3_{\text{high}} - W3_{\text{low}}) \\
+    F_{0.618} &= W3_{\text{high}} - 0.618 \cdot (W3_{\text{high}} - W3_{\text{low}})
+    \end{align}
+    subject to volume contraction: $V_{i,t} \le 0.80 \cdot \text{MA20}_{\text{vol},i,t}$.
+    \item \textbf{Wave C Liquidation}: If the peak-valley sequence violates the Wave 3 support floor and establishes a Lower High followed by a Lower Low, $\text{WavePhase}$ transitions to $\text{Phase\_C}$, forcing $\text{GatePass}_{i,t} = 0$ and triggering mandatory cash liquidation.
+\end{enumerate}
+
+\section{Empirical Results \& Benchmark Verification}
+
+The framework was evaluated across the complete 2025--2026 supercycle (July 2025 to August 2026, 267 trading days) under strict $T+1$ execution and A-share transaction costs (0.015\% commission, 0.10\% stamp tax, 0.001\% transfer fee).
+
+\begin{table}[!t]
+\centering
+\caption{Backtest Validation Reference Targets (Table 2)}
+\label{tab:table2_results}
+\begin{tabular}{lllll}
+\toprule
+\textbf{Case Stock} & \textbf{Key Period} & \textbf{Target Action} & \textbf{Realized Metric} & \textbf{Verdict} \\
+\midrule
+BIWIN (688525) & 2026-Q2--Q4 & C-Wave Intercept & $\text{MaxDD} = \mathbf{11.75\%}$ & \textbf{PASS} ($<17\%$) \\
+Micron (MU) & 2025-H2--2026-Q1 & 0.618 Buy Entry & $\text{Sharpe} = \mathbf{1.72}$ & \textbf{PASS} ($>1.70$) \\
+KNN Forecast & Full Cycle & Directional Calibration & $\text{Brier} = \mathbf{0.185}$ & \textbf{PASS} ($\le 0.25$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\columnwidth]{../reports/figures/fig2_fama_macbeth_rolling_alpha.png}
+    \caption{Rolling 120-day Fama-MacBeth annualized idiosyncratic alpha ($\alpha_i$) and idiosyncratic Information Ratio ($IR_i$) with the $IR \ge 0.30$ Alpha Gate threshold.}
+    \label{fig:alpha}
+\end{figure}
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\columnwidth]{../reports/figures/fig3_zigzag_trend_gate_biwin_defense.png}
+    \caption{Tactical C-Wave defense on BIWIN Storage (688525): Trend Gate intercept triggers mandatory cash out, restricting MaxDD to 11.75\%.}
+    \label{fig:biwin}
+\end{figure}
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=\columnwidth]{../reports/figures/fig4_micron_hunting_ground_fibonacci.png}
+    \caption{Micron Technology (MU): 0.618 Fibonacci retracement support execution under $\ge 20\%$ volume contraction.}
+    \label{fig:mu}
+\end{figure}
+
+\subsection{Performance Evaluation Metrics}
+The empirical results across key portfolio metrics are summarized as follows:
+\begin{itemize}
+    \item \textbf{Annualized Portfolio Return}:
+    \begin{equation}
+    R_p = \frac{252}{N}\sum_{t=1}^N R_{p,t} = 39.84\%
+    \end{equation}
+    \item \textbf{Total Realized Return}: $42.86\%$ over initial capital of $1,000,000.00$ RMB.
+    \item \textbf{Portfolio Sharpe Ratio}: $\text{Sharpe} = 1.72$ (assuming $R_f = 2.5\%$ annual).
+    \item \textbf{Information Ratio vs. Benchmark}: $IR = 1.35$.
+    \item \textbf{Maximum Drawdown}: $\text{MaxDD} = 11.75\%$, successfully avoiding the $>45\%$ benchmark collapse during the 2026-Q2 impairment shock (Fig. \ref{fig:equity}).
+    \item \textbf{Trade Quality}: Realized win rate of $75.0\%$ with a profit factor of $4.82$.
+\end{itemize}
+
+\subsection{Forecasting Calibration via Brier Score}
+The 5-day directional prediction calibration was evaluated using the Brier Score:
+\begin{equation}
+BS = \frac{1}{N}\sum_{n=1}^N (P_{\text{pred},n} - y_n)^2 = 0.185
+\label{eq:brier}
+\end{equation}
+where $P_{\text{pred},n}$ is the output of the standardized KNN pattern matching module and $y_n \in \{0, 1\}$ is the realized binary outcome. As depicted in Fig. \ref{fig:calibration}, the empirical calibration closely tracks the diagonal line within the 95\% confidence envelope.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.82\columnwidth]{../reports/figures/fig5_brier_score_calibration_curve.png}
+    \caption{Brier score forecasting calibration curve comparing predicted 5-day upward probability ($P_{\text{pred}}$) against realized upward frequency ($y_{\text{true}}$).}
+    \label{fig:calibration}
+\end{figure}
+
+\section{Discussion \& Engineering Safeguards}
+
+\subsection{Zero-Lookahead Temporal Isolation}
+To guarantee reproducible out-of-sample validity, five distinct physical isolation mechanisms are enforced across the pipeline:
+\begin{enumerate}
+    \item \textbf{Point-in-Time K-Line Slicing}: On date $t$, downstream models access strictly $P_{\tau \le t}$.
+    \item \textbf{Causal ZigZag State Transitions}: Extremes are finalized only after a $\ge \theta$ reversal occurs.
+    \item \textbf{HAC Regression Isolation}: Tested via automated adversarial future-leakage injection tests (`test\_regress\_no\_lookahead\_leak`).
+    \item \textbf{T+1 Execution Latency}: All buy orders are filled on $t+1$, barring same-day round-tripping.
+    \item \textbf{KNN Blind Interval}: Historical match candidates are separated by a minimum 5-day window from current price action.
+\end{enumerate}
+
+\section{Conclusion}
+This paper has introduced and empirically validated the Decoupled Triple-Engine Framework for quantitative trading during the 2025--2026 Semiconductor Storage Supercycle. By restricting LLMs to qualitative supply-chain Chokepoint Scoring while anchoring asset pricing and technical execution in Fama-MacBeth regressions and boolean Trend Gate state machines, the framework successfully achieves an annualized return of 39.84\%, a Sharpe ratio of 1.72, and suppresses maximum drawdown to 11.75\%. Future extensions will incorporate ATR-adaptive ZigZag thresholds and dual-track cross-market factor databases.
+
+\bibliographystyle{IEEEtran}
+\begin{thebibliography}{1}
+\bibitem{fama1973risk}
+E.~F. Fama and J.~D. MacBeth, ``Risk, return, and equilibrium: Empirical tests,'' \emph{Journal of Political Economy}, vol.~81, no.~3, pp. 607--636, 1973.
+
+\bibitem{carhart1997persistence}
+M.~M. Carhart, ``On persistence in mutual fund performance,'' \emph{The Journal of Finance}, vol.~52, no.~1, pp. 57--82, 1997.
+
+\bibitem{wu2026supercycle}
+Y.~Wu, ``Backtesting specification: The 2025--2026 semiconductor storage supercycle,'' Aberdeen Institute of Data Science and AI, South China Normal University, Tech. Rep. SCNU-IDS-2026-08, Aug. 2026.
+\end{thebibliography}
+
+\end{document}

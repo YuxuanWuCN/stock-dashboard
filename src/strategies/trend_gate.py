@@ -120,3 +120,102 @@ def get_trend_weight(trend_state: str) -> float:
         return 0.5
     else:
         return 1.0
+
+
+def evaluate_boolean_trend_gate(
+    df: "pd.DataFrame",
+    wave_phase: Optional[str] = None,
+    reversal_pct: float = 12.0,
+) -> dict:
+    """计算 Specification 5.1 节布尔趋势门控方程 (Equation 8):
+
+    GatePass_{i,t} = I(P_{i,t} > MA20_{i,t}) * I(MACD_DIF_{i,t} > MACD_DEA_{i,t}) * (1 - I(WavePhase_{i,t} == Phase_C))
+
+    Args:
+        df: 包含 close, volume, high, low 的历史 DataFrame（时间升序，至少 26 个交易日）
+        wave_phase: 外部传入的波浪阶段，若为 None 则通过 NonForwardLookingZigZag 自动计算
+        reversal_pct: ZigZag 反转阈值
+
+    Returns:
+        {
+            "gate_pass": int (0 or 1),
+            "cond_price_above_ma20": bool,
+            "cond_macd_momentum": bool,
+            "cond_not_wave_c": bool,
+            "current_price": float,
+            "ma20": float,
+            "macd_dif": float,
+            "macd_dea": float,
+            "wave_phase": str,
+            "hunting_ground_entry": bool,
+            "fib_0_500": Optional[float],
+            "fib_0_618": Optional[float],
+        }
+    """
+    import pandas as pd
+    from src.analysis.indicators import calc_ma, calc_macd
+    from src.strategies.zigzag_wave import NonForwardLookingZigZag
+
+    if df is None or len(df) < 20:
+        return {
+            "gate_pass": 0,
+            "cond_price_above_ma20": False,
+            "cond_macd_momentum": False,
+            "cond_not_wave_c": False,
+            "current_price": float(df["close"].iloc[-1]) if df is not None and len(df) > 0 else 0.0,
+            "ma20": 0.0,
+            "macd_dif": 0.0,
+            "macd_dea": 0.0,
+            "wave_phase": "Unknown",
+            "hunting_ground_entry": False,
+            "fib_0_500": None,
+            "fib_0_618": None,
+        }
+
+    close_series = pd.Series(df["close"].to_numpy(dtype=float))
+    curr_price = float(close_series.iloc[-1])
+
+    # 1. MA20
+    ma20_series = calc_ma(close_series, 20)
+    ma20_val = float(ma20_series.iloc[-1]) if not pd.isna(ma20_series.iloc[-1]) else curr_price
+    cond_ma20 = curr_price > ma20_val
+
+    # 2. MACD DIF > DEA
+    macd_df = calc_macd(close_series)
+    dif_val = float(macd_df["dif"].iloc[-1]) if not pd.isna(macd_df["dif"].iloc[-1]) else 0.0
+    dea_val = float(macd_df["dea"].iloc[-1]) if not pd.isna(macd_df["dea"].iloc[-1]) else 0.0
+    cond_macd = dif_val > dea_val
+
+    # 3. WavePhase != Phase_C
+    hunting_entry = False
+    fib_500 = None
+    fib_618 = None
+
+    if wave_phase is None:
+        zigzag = NonForwardLookingZigZag(reversal_pct=reversal_pct)
+        wave_res = zigzag.analyze_wave_structure(df)
+        wave_phase = wave_res.wave_phase
+        hunting_entry = wave_res.hunting_ground_entry
+        fib_500 = wave_res.fib_0_500
+        fib_618 = wave_res.fib_0_618
+
+    cond_not_c = (wave_phase != "Phase_C")
+
+    # GatePass = I(P > MA20) * I(DIF > DEA) * (1 - I(WavePhase == Phase_C))
+    gate_pass = 1 if (cond_ma20 and cond_macd and cond_not_c) else 0
+
+    return {
+        "gate_pass": gate_pass,
+        "cond_price_above_ma20": cond_ma20,
+        "cond_macd_momentum": cond_macd,
+        "cond_not_wave_c": cond_not_c,
+        "current_price": round(curr_price, 3),
+        "ma20": round(ma20_val, 3),
+        "macd_dif": round(dif_val, 4),
+        "macd_dea": round(dea_val, 4),
+        "wave_phase": wave_phase,
+        "hunting_ground_entry": hunting_entry,
+        "fib_0_500": fib_500,
+        "fib_0_618": fib_618,
+    }
+

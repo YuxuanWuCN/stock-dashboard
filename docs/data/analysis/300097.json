@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 21:58:44+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24 23:09:23+08:00",
+  "trade_date": "2026-08-24",
   "code": "300097",
   "name": "智云股份",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 39.5,
-    "risk": 74.7,
-    "technical": 100.0,
+    "risk_adjusted": 35.3,
+    "risk": 84.9,
+    "technical": 92.0,
     "industry": 65.0,
     "leading": 50.0
   },
@@ -42,39 +42,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 21:58:35"
+    "updated_at": "2026-08-24 23:04:29"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 63.09,
+    "annualized_volatility_20d_pct": 90.7,
     "max_drawdown_60d_pct": -34.91,
-    "atr14_pct": 6.61,
+    "atr14_pct": 9.12,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 64.9,
-        "value": 63.09
+        "score": 86.8,
+        "value": 90.7
       },
       {
         "name": "60日最大回撤",
-        "score": 64.9,
+        "score": 64.0,
         "value": -34.91
       },
       {
         "name": "ATR百分比",
-        "score": 73.3,
-        "value": 6.61
+        "score": 93.4,
+        "value": 9.12
       },
       {
         "name": "量价异常",
-        "score": 97.7,
-        "value": 1.99
+        "score": 97.1,
+        "value": 2.08
       },
       {
         "name": "行业波动",
-        "score": 96.9,
-        "value": 34.37
+        "score": 96.3,
+        "value": 33.86
       }
     ]
   },
@@ -87,29 +87,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 9.988000000000001,
-    "ma10": 9.499,
-    "ma20": 8.8485,
-    "ma60": 8.813500000000001,
-    "rsi14": 70.7,
-    "macd_dif": 0.4752498604715054,
-    "macd_dea": 0.26921961189009813,
-    "macd_hist": 0.41206049716281457,
-    "atr14_pct": 6.607064991154429,
-    "boll_position": 0.9694289518690448,
-    "return_5d_pct": 19.235095613048347,
-    "return_20d_pct": 34.860050890585235,
-    "volume_ratio_5d": 1.99
+    "trend": "range",
+    "ma5": 9.838000000000001,
+    "ma10": 9.463000000000001,
+    "ma20": 8.886999999999999,
+    "ma60": 8.805000000000001,
+    "rsi14": 48.1,
+    "macd_dif": 0.3838551928633649,
+    "macd_dea": 0.2921467280847515,
+    "macd_hist": 0.18341692955722677,
+    "atr14_pct": 9.12344252994696,
+    "boll_position": 0.4707029539000079,
+    "return_5d_pct": -7.869884575026232,
+    "return_20d_pct": 9.612983770287142,
+    "volume_ratio_5d": 2.08
   },
   "industry": {
     "name": "自动化装备",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": 32.54
+    "return_5d_pct": -6.19,
+    "return_20d_pct": -2.51,
+    "return_60d_pct": -11.43,
+    "relative_strength_20d_pct": 12.12
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -260,12 +260,6 @@
   },
   "reasons": [
     {
-      "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
-    },
-    {
       "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 34.9%，风险偏高。",
@@ -278,16 +272,16 @@
       "contribution": -7.0
     },
     {
-      "type": "positive",
-      "title": "成交活跃",
-      "detail": "近5日量能为前期1.99倍。",
-      "contribution": 5.0
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 90.7%，波动偏高。",
+      "contribution": -5.0
     },
     {
       "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=70.7，短期超买。",
-      "contribution": -5.0
+      "title": "成交活跃",
+      "detail": "近5日量能为前期2.08倍。",
+      "contribution": 2.0
     }
   ],
   "kline_file": "../kline/300097.json",

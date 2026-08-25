@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 21:58:44+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24 23:09:23+08:00",
+  "trade_date": "2026-08-24",
   "code": "600276",
   "name": "恒瑞医药",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 38.4,
-    "risk": 30.9,
+    "risk_adjusted": 38.1,
+    "risk": 32.3,
     "technical": 42.0,
     "industry": 35.0,
     "leading": 50.0
@@ -42,39 +42,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 21:57:49"
+    "updated_at": "2026-08-24 23:03:38"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 34.55,
-    "max_drawdown_60d_pct": -16.97,
-    "atr14_pct": 4.04,
+    "annualized_volatility_20d_pct": 34.8,
+    "max_drawdown_60d_pct": -18.68,
+    "atr14_pct": 4.08,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 34.4,
-        "value": 34.55
+        "score": 36.0,
+        "value": 34.8
       },
       {
         "name": "60日最大回撤",
-        "score": 24.4,
-        "value": -16.97
+        "score": 29.4,
+        "value": -18.68
       },
       {
         "name": "ATR百分比",
-        "score": 38.2,
-        "value": 4.04
+        "score": 36.8,
+        "value": 4.08
       },
       {
         "name": "量价异常",
-        "score": 67.9,
-        "value": 1.24
+        "score": 65.4,
+        "value": 1.26
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 34.37
+        "score": 1.5,
+        "value": 33.86
       }
     ]
   },
@@ -88,28 +88,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 51.028,
-    "ma10": 52.503,
-    "ma20": 53.0615,
-    "ma60": 51.972166666666666,
-    "rsi14": 31.5,
-    "macd_dif": -0.8188475190911291,
-    "macd_dea": -0.1841562398246321,
-    "macd_hist": -1.2693825585329939,
-    "atr14_pct": 4.042778349183619,
-    "boll_position": -0.2864894981440964,
-    "return_5d_pct": -9.274040288863539,
-    "return_20d_pct": -10.682881197380734,
-    "volume_ratio_5d": 1.24
+    "ma5": 49.806,
+    "ma10": 51.761,
+    "ma20": 52.7195,
+    "ma60": 51.915,
+    "rsi14": 29.4,
+    "macd_dif": -1.1745130884697232,
+    "macd_dea": -0.3822276095536503,
+    "macd_hist": -1.5845709578321459,
+    "atr14_pct": 4.078621989292341,
+    "boll_position": -0.18611407903656935,
+    "return_5d_pct": -11.556648382825795,
+    "return_20d_pct": -12.761194029850753,
+    "volume_ratio_5d": 1.26
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": -13.0
+    "return_5d_pct": -6.19,
+    "return_20d_pct": -2.51,
+    "return_60d_pct": -11.43,
+    "relative_strength_20d_pct": -10.26
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -256,14 +256,20 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 17.0%，风险偏高。",
+      "detail": "近60日最大回撤 18.7%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 17.0%，风险扣分。",
+      "detail": "近60日最大回撤 18.7%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=29.4，短期超卖。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/600276.json",

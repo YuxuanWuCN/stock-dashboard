@@ -156,27 +156,48 @@ def fama_macbeth_stage2(factors_df: pd.DataFrame,
             lambdas[k].append(float(coef[i + 1]))
         periods += 1
 
-    def _mean_se(values):
+    def _newey_west_mean_se(values, maxlags: Optional[int] = None):
         if not values:
-            return None, None
+            return None, None, None
         arr = np.asarray(values, dtype=float)
-        mean = float(np.mean(arr))
-        se = float(np.std(arr, ddof=1) / np.sqrt(len(arr))) if len(arr) > 1 else None
-        return mean, se
+        T = len(arr)
+        if T <= 1:
+            return float(arr[0]), None, None
+        mean_val = float(np.mean(arr))
+        e = arr - mean_val
+        if maxlags is None:
+            maxlags = int(np.floor(4.0 * (T / 100.0) ** (2.0 / 9.0)))
+        maxlags = max(1, min(maxlags, T - 1))
+
+        gamma_0 = float(np.sum(e ** 2) / T)
+        gamma_sum = 0.0
+        for l in range(1, maxlags + 1):
+            w = 1.0 - (l / (maxlags + 1.0))
+            gamma_l = float(np.sum(e[l:] * e[:-l]) / T)
+            gamma_sum += 2.0 * w * gamma_l
+
+        omega = max(1e-12, gamma_0 + gamma_sum)
+        se_nw = float(np.sqrt(omega / T))
+        t_stat = float(mean_val / se_nw) if se_nw > 0 else None
+        return mean_val, se_nw, t_stat
 
     lambda_mean = {}
     lambda_se = {}
+    lambda_t_stat = {}
     for k in FACTOR_COLS:
-        lambda_mean[k], lambda_se[k] = _mean_se(lambdas[k])
-    intercept_mean, intercept_se = _mean_se(intercepts)
+        m, s, t = _newey_west_mean_se(lambdas[k])
+        lambda_mean[k], lambda_se[k], lambda_t_stat[k] = m, s, t
+    intercept_mean, intercept_se, intercept_t = _newey_west_mean_se(intercepts)
 
     return {
         "n_periods": periods,
         "min_cross_section": min_cross_section,
         "lambda_mean": lambda_mean,
         "lambda_se": lambda_se,
+        "lambda_t_stat": lambda_t_stat,
         "intercept_mean": intercept_mean,
         "intercept_se": intercept_se,
+        "intercept_t_stat": intercept_t,
     }
 
 

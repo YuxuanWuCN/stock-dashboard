@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 21:58:44+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24 23:09:23+08:00",
+  "trade_date": "2026-08-24",
   "code": "688041",
   "name": "海光信息",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 34.0,
-    "risk": 50.3,
+    "risk_adjusted": 33.3,
+    "risk": 53.1,
     "technical": 42.0,
     "industry": 35.0,
     "leading": 50.0
@@ -42,39 +42,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 21:58:15"
+    "updated_at": "2026-08-24 23:04:05"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 54.22,
-    "max_drawdown_60d_pct": -33.51,
-    "atr14_pct": 6.9,
+    "annualized_volatility_20d_pct": 56.9,
+    "max_drawdown_60d_pct": -37.67,
+    "atr14_pct": 7.42,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 52.7,
-        "value": 54.22
+        "score": 52.2,
+        "value": 56.9
       },
       {
         "name": "60日最大回撤",
-        "score": 61.1,
-        "value": -33.51
+        "score": 69.9,
+        "value": -37.67
       },
       {
         "name": "ATR百分比",
-        "score": 76.3,
-        "value": 6.9
+        "score": 77.9,
+        "value": 7.42
       },
       {
         "name": "量价异常",
-        "score": 39.7,
-        "value": 1.15
+        "score": 41.2,
+        "value": 1.19
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 34.37
+        "score": 1.5,
+        "value": 33.86
       }
     ]
   },
@@ -88,28 +88,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 264.232,
-    "ma10": 275.326,
-    "ma20": 280.5775,
-    "ma60": 305.46999999999997,
-    "rsi14": 32.0,
-    "macd_dif": -14.264920370197387,
-    "macd_dea": -11.081552874784876,
-    "macd_hist": -6.366734990825023,
-    "atr14_pct": 6.897654361254729,
-    "boll_position": -0.02423020993766578,
-    "return_5d_pct": -12.377664685575995,
-    "return_20d_pct": -21.659030164184788,
-    "volume_ratio_5d": 1.15
+    "ma5": 252.63400000000001,
+    "ma10": 269.363,
+    "ma20": 276.43850000000003,
+    "ma60": 304.421,
+    "rsi14": 28.3,
+    "macd_dif": -16.556667898661942,
+    "macd_dea": -12.17657587956029,
+    "macd_hist": -8.760184038203306,
+    "atr14_pct": 7.424637841792832,
+    "boll_position": -0.13684873436862272,
+    "return_5d_pct": -20.079639889196677,
+    "return_20d_pct": -26.397525431295634,
+    "volume_ratio_5d": 1.19
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": -23.98
+    "return_5d_pct": -6.19,
+    "return_20d_pct": -2.51,
+    "return_60d_pct": -11.43,
+    "relative_strength_20d_pct": -23.89
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -256,19 +256,25 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 33.5%，风险偏高。",
+      "detail": "近60日最大回撤 37.7%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 33.5%，风险扣分。",
+      "detail": "近60日最大回撤 37.7%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=28.3，短期超卖。",
+      "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 54.2%，波动偏高。",
+      "detail": "20日年化波动率 56.9%，波动偏高。",
       "contribution": -5.0
     }
   ],

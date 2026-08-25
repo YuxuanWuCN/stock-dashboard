@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-23 21:58:44+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24 23:09:23+08:00",
+  "trade_date": "2026-08-24",
   "code": "300475",
   "name": "香农芯创",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-05-28"
   },
   "scores": {
-    "risk_adjusted": 36.0,
-    "risk": 68.7,
-    "technical": 83.0,
-    "industry": 41.0,
+    "risk_adjusted": 34.4,
+    "risk": 68.8,
+    "technical": 73.0,
+    "industry": 39.5,
     "leading": 50.0
   },
   "leading": {
@@ -45,39 +45,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-23 21:57:59"
+    "updated_at": "2026-08-24 23:03:52"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 81.83,
+    "annualized_volatility_20d_pct": 82.0,
     "max_drawdown_60d_pct": -56.22,
-    "atr14_pct": 8.76,
+    "atr14_pct": 8.84,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 81.7,
-        "value": 81.83
+        "score": 77.9,
+        "value": 82.0
       },
       {
         "name": "60日最大回撤",
-        "score": 94.7,
+        "score": 94.1,
         "value": -56.22
       },
       {
         "name": "ATR百分比",
-        "score": 93.1,
-        "value": 8.76
+        "score": 89.7,
+        "value": 8.84
       },
       {
         "name": "量价异常",
-        "score": 19.1,
-        "value": 0.92
+        "score": 37.5,
+        "value": 0.83
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 34.37
+        "score": 1.5,
+        "value": 33.86
       }
     ]
   },
@@ -90,29 +90,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "range",
-    "ma5": 163.044,
-    "ma10": 161.212,
-    "ma20": 154.8105,
-    "ma60": 199.91883333333334,
-    "rsi14": 44.2,
-    "macd_dif": -8.777007890972385,
-    "macd_dea": -12.199535833804802,
-    "macd_hist": 6.845055885664834,
-    "atr14_pct": 8.757826220277364,
-    "boll_position": 0.5828908657901791,
-    "return_5d_pct": -1.819536732285909,
-    "return_20d_pct": -2.1597871155393356,
-    "volume_ratio_5d": 0.92
+    "trend": "downtrend",
+    "ma5": 159.246,
+    "ma10": 160.848,
+    "ma20": 154.1685,
+    "ma60": 199.46866666666668,
+    "rsi14": 42.1,
+    "macd_dif": -8.713428544058871,
+    "macd_dea": -11.502314375855615,
+    "macd_hist": 5.577771663593488,
+    "atr14_pct": 8.842184981576128,
+    "boll_position": 0.4695602373636066,
+    "return_5d_pct": -11.041339612768187,
+    "return_20d_pct": -7.742402315484808,
+    "volume_ratio_5d": 0.83
   },
   "industry": {
     "name": "存储",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": -4.48
+    "return_5d_pct": -6.19,
+    "return_20d_pct": -2.51,
+    "return_60d_pct": -11.43,
+    "relative_strength_20d_pct": -5.24
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -276,6 +276,12 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 56.2%，风险偏高。",
       "contribution": -7.0
@@ -289,7 +295,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 81.8%，波动偏高。",
+      "detail": "20日年化波动率 82.0%，波动偏高。",
       "contribution": -5.0
     }
   ],
