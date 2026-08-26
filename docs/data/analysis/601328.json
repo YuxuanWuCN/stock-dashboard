@@ -84,15 +84,15 @@
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.04,
-    "return_5d_pct": 0.19,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 53.3,
-    "confidence": "medium",
-    "rationale": "基于历史量价形态 KNN 相似走势统计推断",
-    "risk_warning": "样本统计仅供参考，注意防范市场系统性风险",
-    "source": "knn_fallback",
-    "model": "knn_v1"
+    "return_3d_pct": 0.35,
+    "return_5d_pct": 0.65,
+    "up_probability_3d_pct": 53.5,
+    "up_probability_5d_pct": 55.0,
+    "confidence": "low",
+    "rationale": "银行板块防御属性强，技术评分极高，短期预计维持低波动偏强震荡格局。",
+    "risk_warning": "行情基准数据缺失及宏观流动性扰动风险",
+    "source": "v3_llm_direct",
+    "model": "gemini-3.7-flash"
   },
   "technical": {
     "trend": "uptrend",
