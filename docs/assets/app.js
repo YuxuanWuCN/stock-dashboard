@@ -1991,8 +1991,11 @@ document.addEventListener('DOMContentLoaded', () => {
         var risk = detail.risk || {};
         var scores = detail.scores || {};
         var similarity = detail.similarity || {};
-        var fiveDayReturn = forecast.return_5d_pct;
-        var fiveDayProbability = forecast.up_probability_5d_pct;
+        var h3 = similarity.horizon_3d || {};
+        var h5 = similarity.horizon_5d || {};
+        var threeDayReturn = Number.isFinite(forecast.return_3d_pct) ? forecast.return_3d_pct : h3.average_return_pct;
+        var fiveDayReturn = Number.isFinite(forecast.return_5d_pct) ? forecast.return_5d_pct : h5.average_return_pct;
+        var fiveDayProbability = Number.isFinite(forecast.up_probability_5d_pct) ? forecast.up_probability_5d_pct : h5.up_probability_pct;
 
         el.analysisDetail.hidden = false;
         renderObservationAdvice(detail);
@@ -2028,9 +2031,9 @@ document.addEventListener('DOMContentLoaded', () => {
         el.analysisRiskBadge.textContent = (risk.label || '未知风险') + ' ' + formatScore(scores.risk);
         el.analysisCompositeScore.textContent = formatScore(scores.risk_adjusted);
         el.analysisRiskScore.textContent = formatScore(scores.risk);
-        setReturnMetric(el.analysisReturn3d, forecast.return_3d_pct);
-        setReturnMetric(el.analysisReturn5d, forecast.return_5d_pct);
-        el.analysisUpProbability.textContent = formatProbability(forecast.up_probability_5d_pct);
+        setReturnMetric(el.analysisReturn3d, threeDayReturn);
+        setReturnMetric(el.analysisReturn5d, fiveDayReturn);
+        el.analysisUpProbability.textContent = formatProbability(fiveDayProbability);
 
         renderAnalysisReasons(detail.reasons || []);
         renderMarketMetrics(detail);

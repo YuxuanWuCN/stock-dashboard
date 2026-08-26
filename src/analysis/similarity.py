@@ -232,12 +232,22 @@ def find_similar_samples(
             "worst_return_pct": None,
         }
 
+    # ---- 自适应标准化窗口与最低样本数 ----
+    if std_window is None or std_window > max(20, n // 3):
+        std_window = min(STANDARDIZATION_WINDOW, max(20, n // 4)) if n < 500 else STANDARDIZATION_WINDOW
+
+    if min_samples > 5 and n < 500:
+        min_samples = min(min_samples, max(5, n // 30))
+
     # ---- 构建特征矩阵 ----
     raw_features, idx = build_raw_features(df)
 
     if n < std_window + min_samples:
-        logger.warning("数据行数 %d 不足以做相似分析（需至少 %d）", n, std_window + min_samples)
-        return result
+        std_window = max(10, n // 4)
+        min_samples = min(min_samples, 3)
+        if n < std_window + min_samples:
+            logger.warning("数据行数 %d 不足以做相似分析（需至少 %d）", n, std_window + min_samples)
+            return result
 
     # ---- 滚动标准化 ----
     standardized = rolling_standardize(raw_features, window=std_window)
