@@ -1,26 +1,18 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "512880",
   "name": "证券ETF",
   "type": "etf",
   "category": "通用",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 48.4,
-    "risk": 8.5,
-    "technical": 58.0,
-    "industry": 44.7,
+    "risk_adjusted": 53.9,
+    "risk": 5.1,
+    "technical": 81.0,
+    "industry": 45.5,
     "leading": 50.0
   },
   "leading": {
@@ -42,39 +34,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:29:36"
+    "updated_at": "2026-08-26 19:33:52"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.05,
+    "annualized_volatility_20d_pct": 15.11,
     "max_drawdown_60d_pct": -10.17,
-    "atr14_pct": 1.49,
+    "atr14_pct": 1.61,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 4.4,
-        "value": 15.05
+        "score": 2.1,
+        "value": 15.11
       },
       {
         "name": "60日最大回撤",
-        "score": 9.5,
+        "score": 9.9,
         "value": -10.17
       },
       {
         "name": "ATR百分比",
-        "score": 1.5,
-        "value": 1.49
+        "score": 2.8,
+        "value": 1.61
       },
       {
         "name": "量价异常",
-        "score": 40.9,
-        "value": 0.8
+        "score": 13.5,
+        "value": 0.92
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -87,29 +79,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 1.064,
-    "ma10": 1.078,
-    "ma20": 1.0905,
-    "ma60": 1.0928333333333333,
-    "rsi14": 41.3,
-    "macd_dif": -0.010419177172124927,
-    "macd_dea": -0.007247398014527674,
-    "macd_hist": -0.006343558315194507,
-    "atr14_pct": 1.4893618970240785,
-    "boll_position": 0.20148444730736703,
-    "return_5d_pct": -0.92592592592593,
-    "return_20d_pct": -0.92592592592593,
-    "volume_ratio_5d": 0.8
+    "trend": "range",
+    "ma5": 1.0719999999999998,
+    "ma10": 1.0779999999999998,
+    "ma20": 1.09,
+    "ma60": 1.0938333333333332,
+    "rsi14": 54.0,
+    "macd_dif": -0.00790619685883609,
+    "macd_dea": -0.007379157783389358,
+    "macd_hist": -0.0010540781508934643,
+    "atr14_pct": 1.6050015599556635,
+    "boll_position": 0.6494035761668608,
+    "return_5d_pct": 3.7735849056603765,
+    "return_20d_pct": -0.9009009009009028,
+    "volume_ratio_5d": 0.92
   },
   "industry": {
     "name": "通用",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": -2.67
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -2.24
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -132,14 +124,7 @@
     }
   },
   "fundamental": null,
-  "reasons": [
-    {
-      "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/512880.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

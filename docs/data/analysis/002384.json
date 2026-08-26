@@ -1,26 +1,18 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "002384",
   "name": "东山精密",
   "type": "stock",
   "category": "PCB/电子",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 36.4,
-    "risk": 68.3,
-    "technical": 80.0,
-    "industry": 46.6,
+    "risk_adjusted": 41.1,
+    "risk": 65.3,
+    "technical": 90.0,
+    "industry": 65.0,
     "leading": 50.0
   },
   "leading": {
@@ -45,39 +37,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:30:31"
+    "updated_at": "2026-08-26 19:34:06"
   },
   "risk": {
-    "level": "high",
-    "label": "高风险",
-    "annualized_volatility_20d_pct": 81.0,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 78.26,
     "max_drawdown_60d_pct": -41.33,
-    "atr14_pct": 8.63,
+    "atr14_pct": 8.44,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 81.8,
-        "value": 81.0
+        "score": 77.3,
+        "value": 78.26
       },
       {
         "name": "60日最大回撤",
-        "score": 78.8,
+        "score": 78.0,
         "value": -41.33
       },
       {
         "name": "ATR百分比",
-        "score": 89.1,
-        "value": 8.63
+        "score": 88.7,
+        "value": 8.44
       },
       {
         "name": "量价异常",
-        "score": 58.4,
-        "value": 0.73
+        "score": 47.5,
+        "value": 0.74
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -90,29 +82,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 196.058,
-    "ma10": 201.926,
-    "ma20": 191.2905,
-    "ma60": 221.5896666666667,
-    "rsi14": 44.6,
-    "macd_dif": -4.345332314245894,
-    "macd_dea": -5.684470123699314,
-    "macd_hist": 2.6782756189068397,
-    "atr14_pct": 8.628527509590391,
-    "boll_position": 0.49222169195016907,
-    "return_5d_pct": -10.747357590496676,
-    "return_20d_pct": 0.06816632583503957,
-    "volume_ratio_5d": 0.73
+    "trend": "range",
+    "ma5": 195.51,
+    "ma10": 201.34300000000002,
+    "ma20": 192.0195,
+    "ma60": 221.3135,
+    "rsi14": 46.3,
+    "macd_dif": -4.32025935948252,
+    "macd_dea": -5.41162796993129,
+    "macd_hist": 2.1827372208975397,
+    "atr14_pct": 8.442245045626196,
+    "boll_position": 0.541071039735746,
+    "return_5d_pct": -1.3901572805682272,
+    "return_20d_pct": 8.109912114806983,
+    "volume_ratio_5d": 0.74
   },
   "industry": {
     "name": "PCB/电子",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": -1.68
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": 6.77
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -264,12 +256,6 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 41.3%，风险偏高。",
       "contribution": -7.0
@@ -283,7 +269,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 81.0%，波动偏高。",
+      "detail": "20日年化波动率 78.3%，波动偏高。",
       "contribution": -5.0
     }
   ],

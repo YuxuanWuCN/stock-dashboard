@@ -1,26 +1,18 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "600030",
   "name": "中信证券",
   "type": "stock",
   "category": "券商",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 47.9,
-    "risk": 6.5,
-    "technical": 58.0,
-    "industry": 39.8,
+    "risk_adjusted": 53.6,
+    "risk": 3.7,
+    "technical": 81.0,
+    "industry": 42.2,
     "leading": 50.0
   },
   "leading": {
@@ -42,39 +34,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:29:10"
+    "updated_at": "2026-08-26 19:33:33"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 11.9,
+    "annualized_volatility_20d_pct": 13.56,
     "max_drawdown_60d_pct": -8.25,
-    "atr14_pct": 1.74,
+    "atr14_pct": 1.78,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 0.0,
-        "value": 11.9
+        "score": 0.7,
+        "value": 13.56
       },
       {
         "name": "60日最大回撤",
-        "score": 4.4,
+        "score": 5.7,
         "value": -8.25
       },
       {
         "name": "ATR百分比",
-        "score": 6.6,
-        "value": 1.74
+        "score": 7.1,
+        "value": 1.78
       },
       {
         "name": "量价异常",
-        "score": 36.5,
-        "value": 0.81
+        "score": 5.0,
+        "value": 0.94
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -87,29 +79,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "range",
-    "ma5": 27.145999999999997,
-    "ma10": 27.351,
-    "ma20": 27.747000000000003,
-    "ma60": 27.637,
-    "rsi14": 41.2,
-    "macd_dif": -0.23885892795061636,
-    "macd_dea": -0.15684146464790158,
-    "macd_hist": -0.16403492660542957,
-    "atr14_pct": 1.7421240252078356,
-    "boll_position": 0.18282062727647375,
-    "return_5d_pct": -0.8762322015334112,
-    "return_20d_pct": -3.346386614453545,
-    "volume_ratio_5d": 0.81
+    "trend": "uptrend",
+    "ma5": 27.27,
+    "ma10": 27.357999999999997,
+    "ma20": 27.710499999999996,
+    "ma60": 27.680333333333333,
+    "rsi14": 51.5,
+    "macd_dif": -0.19304084405737498,
+    "macd_dea": -0.16408134057183157,
+    "macd_hist": -0.05791900697108682,
+    "atr14_pct": 1.7821973270336176,
+    "boll_position": 0.5339682040049145,
+    "return_5d_pct": 2.283609576427259,
+    "return_20d_pct": -2.561403508771931,
+    "volume_ratio_5d": 0.94
   },
   "industry": {
     "name": "券商",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": -5.09
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -3.9
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -132,7 +124,14 @@
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
   "kline_file": "../kline/600030.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

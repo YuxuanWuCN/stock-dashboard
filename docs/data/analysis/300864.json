@@ -1,25 +1,17 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "300864",
   "name": "南大环境",
   "type": "stock",
   "category": "热点龙头",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 44.5,
-    "risk": 47.5,
-    "technical": 77.0,
+    "risk_adjusted": 47.0,
+    "risk": 46.9,
+    "technical": 92.0,
     "industry": 65.0,
     "leading": 50.0
   },
@@ -42,39 +34,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:31:15"
+    "updated_at": "2026-08-26 19:34:18"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 60.79,
+    "annualized_volatility_20d_pct": 60.78,
     "max_drawdown_60d_pct": -23.67,
-    "atr14_pct": 4.31,
+    "atr14_pct": 4.25,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 59.1,
-        "value": 60.79
+        "score": 58.9,
+        "value": 60.78
       },
       {
         "name": "60日最大回撤",
-        "score": 45.3,
+        "score": 44.7,
         "value": -23.67
       },
       {
         "name": "ATR百分比",
-        "score": 40.9,
-        "value": 4.31
+        "score": 40.4,
+        "value": 4.25
       },
       {
         "name": "量价异常",
-        "score": 97.8,
-        "value": 2.47
+        "score": 98.6,
+        "value": 2.56
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -87,29 +79,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "range",
-    "ma5": 23.194000000000003,
-    "ma10": 21.341,
-    "ma20": 19.9375,
-    "ma60": 20.025833333333335,
-    "rsi14": 81.6,
-    "macd_dif": 1.2730678458372573,
-    "macd_dea": 0.4732198105034616,
-    "macd_hist": 1.5996960706675913,
-    "atr14_pct": 4.313908911847321,
-    "boll_position": 1.1080517967761465,
-    "return_5d_pct": 28.355957767722483,
-    "return_20d_pct": 44.80998298355079,
-    "volume_ratio_5d": 2.47
+    "trend": "uptrend",
+    "ma5": 24.476,
+    "ma10": 21.987000000000002,
+    "ma20": 20.34,
+    "ma60": 20.084833333333332,
+    "rsi14": 82.8,
+    "macd_dif": 1.5272577366290676,
+    "macd_dea": 0.6840273959527456,
+    "macd_hist": 1.686460681352644,
+    "atr14_pct": 4.2466973949375655,
+    "boll_position": 1.050368488840812,
+    "return_5d_pct": 32.55459624174708,
+    "return_20d_pct": 44.5983379501385,
+    "volume_ratio_5d": 2.56
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": 43.06
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": 43.26
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -254,6 +246,12 @@
   },
   "reasons": [
     {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 23.7%，风险偏高。",
@@ -268,19 +266,13 @@
     {
       "type": "positive",
       "title": "成交活跃",
-      "detail": "近5日量能为前期2.47倍。",
+      "detail": "近5日量能为前期2.56倍。",
       "contribution": 5.0
     },
     {
       "type": "warning",
       "title": "RSI偏高",
-      "detail": "RSI14=81.6，短期超买。",
-      "contribution": -5.0
-    },
-    {
-      "type": "negative",
-      "title": "波动较大",
-      "detail": "20日年化波动率 60.8%，波动偏高。",
+      "detail": "RSI14=82.8，短期超买。",
       "contribution": -5.0
     }
   ],

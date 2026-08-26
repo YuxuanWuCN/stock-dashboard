@@ -1,26 +1,18 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "688111",
   "name": "金山办公",
   "type": "stock",
   "category": "科技",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 38.2,
-    "risk": 41.6,
-    "technical": 50.0,
-    "industry": 41.1,
+    "risk_adjusted": 36.9,
+    "risk": 38.8,
+    "technical": 42.0,
+    "industry": 37.1,
     "leading": 50.0
   },
   "leading": {
@@ -42,39 +34,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:29:26"
+    "updated_at": "2026-08-26 19:33:45"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 40.02,
-    "max_drawdown_60d_pct": -23.84,
-    "atr14_pct": 4.93,
+    "annualized_volatility_20d_pct": 39.45,
+    "max_drawdown_60d_pct": -20.26,
+    "atr14_pct": 4.77,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 39.4,
-        "value": 40.02
+        "score": 38.3,
+        "value": 39.45
       },
       {
         "name": "60日最大回撤",
-        "score": 46.0,
-        "value": -23.84
+        "score": 36.2,
+        "value": -20.26
       },
       {
         "name": "ATR百分比",
-        "score": 48.2,
-        "value": 4.93
+        "score": 47.5,
+        "value": 4.77
       },
       {
         "name": "量价异常",
-        "score": 82.5,
-        "value": 0.56
+        "score": 86.5,
+        "value": 0.48
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -88,28 +80,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 239.46400000000003,
-    "ma10": 248.279,
-    "ma20": 256.725,
-    "ma60": 235.20016666666666,
-    "rsi14": 40.4,
-    "macd_dif": -0.6539122906282557,
-    "macd_dea": 3.7853011527683487,
-    "macd_hist": -8.878426886793209,
-    "atr14_pct": 4.928381952090118,
-    "boll_position": 0.07285023883932681,
-    "return_5d_pct": -9.222737819025529,
-    "return_20d_pct": -2.6902669540706414,
-    "volume_ratio_5d": 0.56
+    "ma5": 236.644,
+    "ma10": 245.53400000000002,
+    "ma20": 256.09749999999997,
+    "ma60": 234.734,
+    "rsi14": 39.3,
+    "macd_dif": -1.72294807298141,
+    "macd_dea": 2.6836513092575824,
+    "macd_hist": -8.813198764477985,
+    "atr14_pct": 4.772282430670537,
+    "boll_position": 0.07815383326608721,
+    "return_5d_pct": -5.705499130012537,
+    "return_20d_pct": -5.110351005782232,
+    "volume_ratio_5d": 0.48
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": -4.44
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -6.45
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -256,20 +248,20 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 23.8%，风险偏高。",
+      "detail": "近60日最大回撤 20.3%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 23.8%，风险扣分。",
+      "detail": "近60日最大回撤 20.3%，风险扣分。",
       "contribution": -7.0
     },
     {
-      "type": "negative",
-      "title": "波动较大",
-      "detail": "20日年化波动率 40.0%，波动偏高。",
-      "contribution": -5.0
+      "type": "warning",
+      "title": "成交缩量",
+      "detail": "近5日量能仅为前期0.48倍。",
+      "contribution": -3.0
     }
   ],
   "kline_file": "../kline/688111.json",

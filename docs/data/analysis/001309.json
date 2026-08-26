@@ -1,25 +1,17 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "001309",
   "name": "德明利",
   "type": "stock",
   "category": "存储",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 37.4,
-    "risk": 74.1,
-    "technical": 82.0,
+    "risk_adjusted": 36.4,
+    "risk": 73.1,
+    "technical": 72.0,
     "industry": 65.0,
     "leading": 50.0
   },
@@ -45,39 +37,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:29:07"
+    "updated_at": "2026-08-26 19:33:32"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 76.74,
+    "annualized_volatility_20d_pct": 76.63,
     "max_drawdown_60d_pct": -64.02,
-    "atr14_pct": 8.78,
+    "atr14_pct": 8.52,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 77.4,
-        "value": 76.74
+        "score": 75.9,
+        "value": 76.63
       },
       {
         "name": "60日最大回撤",
-        "score": 98.5,
+        "score": 98.6,
         "value": -64.02
       },
       {
         "name": "ATR百分比",
-        "score": 92.0,
-        "value": 8.78
+        "score": 90.1,
+        "value": 8.52
       },
       {
         "name": "量价异常",
-        "score": 74.5,
-        "value": 0.65
+        "score": 75.2,
+        "value": 0.57
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -90,29 +82,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "range",
-    "ma5": 400.882,
-    "ma10": 408.744,
-    "ma20": 395.579,
-    "ma60": 591.1693333333334,
-    "rsi14": 39.9,
-    "macd_dif": -38.290288956452116,
-    "macd_dea": -50.822595547972206,
-    "macd_hist": 25.06461318304018,
-    "atr14_pct": 8.781818898046149,
-    "boll_position": 0.5168815923174132,
-    "return_5d_pct": -9.215009260741326,
-    "return_20d_pct": 9.846724214254099,
-    "volume_ratio_5d": 0.65
+    "trend": "downtrend",
+    "ma5": 400.26000000000005,
+    "ma10": 407.055,
+    "ma20": 397.3845,
+    "ma60": 587.5825,
+    "rsi14": 38.9,
+    "macd_dif": -36.817402487006575,
+    "macd_dea": -48.02155693217851,
+    "macd_hist": 22.408308890343875,
+    "atr14_pct": 8.519796889498485,
+    "boll_position": 0.4136456545723219,
+    "return_5d_pct": -0.7897409852717141,
+    "return_20d_pct": 10.18387951943145,
+    "volume_ratio_5d": 0.57
   },
   "industry": {
     "name": "存储",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": 8.1
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": 8.84
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -264,6 +256,12 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 64.0%，风险偏高。",
       "contribution": -7.0
@@ -277,7 +275,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 76.7%，波动偏高。",
+      "detail": "20日年化波动率 76.6%，波动偏高。",
       "contribution": -5.0
     }
   ],

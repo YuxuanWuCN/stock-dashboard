@@ -1,26 +1,18 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "510050",
   "name": "上证50ETF",
   "type": "etf",
   "category": "通用",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 50.0,
-    "risk": 1.6,
-    "technical": 58.0,
-    "industry": 43.9,
+    "risk_adjusted": 54.4,
+    "risk": 2.6,
+    "technical": 79.0,
+    "industry": 46.7,
     "leading": 50.0
   },
   "leading": {
@@ -42,19 +34,19 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:29:33"
+    "updated_at": "2026-08-26 19:33:50"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 12.65,
+    "annualized_volatility_20d_pct": 13.19,
     "max_drawdown_60d_pct": -5.48,
-    "atr14_pct": 1.37,
+    "atr14_pct": 1.38,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 1.5,
-        "value": 12.65
+        "score": 0.0,
+        "value": 13.19
       },
       {
         "name": "60日最大回撤",
@@ -64,17 +56,17 @@
       {
         "name": "ATR百分比",
         "score": 0.7,
-        "value": 1.37
+        "value": 1.38
       },
       {
         "name": "量价异常",
-        "score": 4.4,
-        "value": 1.01
+        "score": 21.3,
+        "value": 1.14
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -88,28 +80,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 2.9880000000000004,
-    "ma10": 3.0140000000000002,
-    "ma20": 3.0220000000000002,
-    "ma60": 3.0188333333333333,
-    "rsi14": 42.0,
-    "macd_dif": -0.010853959196107876,
-    "macd_dea": -0.003593816106438123,
-    "macd_hist": -0.014520286179339505,
-    "atr14_pct": 1.3714432922225837,
-    "boll_position": 0.1431954753339307,
-    "return_5d_pct": -2.2950819672131084,
-    "return_20d_pct": -1.3245033112582738,
-    "volume_ratio_5d": 1.01
+    "ma5": 2.99,
+    "ma10": 3.011,
+    "ma20": 3.0215,
+    "ma60": 3.0191666666666666,
+    "rsi14": 48.1,
+    "macd_dif": -0.010023483363984287,
+    "macd_dea": -0.004879749585967156,
+    "macd_hist": -0.010287467556034262,
+    "atr14_pct": 1.379442646907994,
+    "boll_position": 0.40268205709691546,
+    "return_5d_pct": 0.3333333333333188,
+    "return_20d_pct": -0.33112582781458233,
+    "volume_ratio_5d": 1.14
   },
   "industry": {
     "name": "通用",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": -3.07
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -1.67
   },
   "similarity": {
     "method": "standardized_knn_v1",

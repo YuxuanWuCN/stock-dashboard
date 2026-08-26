@@ -1,24 +1,16 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "688185",
   "name": "康希诺",
   "type": "stock",
   "category": "热点龙头",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 45.6,
-    "risk": 53.9,
+    "risk_adjusted": 45.5,
+    "risk": 54.1,
     "technical": 97.0,
     "industry": 65.0,
     "leading": 50.0
@@ -42,39 +34,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:31:13"
+    "updated_at": "2026-08-26 19:34:17"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 105.1,
-    "max_drawdown_60d_pct": -12.56,
-    "atr14_pct": 5.62,
+    "annualized_volatility_20d_pct": 122.01,
+    "max_drawdown_60d_pct": -10.97,
+    "atr14_pct": 5.54,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 92.0,
-        "value": 105.1
+        "score": 97.9,
+        "value": 122.01
       },
       {
         "name": "60日最大回撤",
-        "score": 17.5,
-        "value": -12.56
+        "score": 13.5,
+        "value": -10.97
       },
       {
         "name": "ATR百分比",
-        "score": 58.4,
-        "value": 5.62
+        "score": 56.7,
+        "value": 5.54
       },
       {
         "name": "量价异常",
-        "score": 98.5,
-        "value": 2.58
+        "score": 99.3,
+        "value": 2.63
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -88,28 +80,28 @@
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 68.458,
-    "ma10": 62.44200000000001,
-    "ma20": 57.087,
-    "ma60": 52.88616666666667,
-    "rsi14": 69.0,
-    "macd_dif": 4.997412756375375,
-    "macd_dea": 2.7545280619088492,
-    "macd_hist": 4.485769388933052,
-    "atr14_pct": 5.618076789843441,
-    "boll_position": 0.9327942103286114,
-    "return_5d_pct": 27.547372184483375,
-    "return_20d_pct": 45.612244897959165,
-    "volume_ratio_5d": 2.58
+    "ma5": 74.844,
+    "ma10": 65.47999999999999,
+    "ma20": 58.8925,
+    "ma60": 53.400166666666664,
+    "rsi14": 78.0,
+    "macd_dif": 6.411441492272047,
+    "macd_dea": 3.4859107489621843,
+    "macd_hist": 5.8510614866197255,
+    "atr14_pct": 5.5377975148777345,
+    "boll_position": 1.160131016547461,
+    "return_5d_pct": 59.47103743713915,
+    "return_20d_pct": 72.93476065441327,
+    "volume_ratio_5d": 2.63
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": 43.86
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": 71.6
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -268,13 +260,19 @@
     {
       "type": "positive",
       "title": "成交活跃",
-      "detail": "近5日量能为前期2.58倍。",
+      "detail": "近5日量能为前期2.63倍。",
       "contribution": 5.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=78.0，短期超买。",
+      "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 105.1%，波动偏高。",
+      "detail": "20日年化波动率 122.0%，波动偏高。",
       "contribution": -5.0
     }
   ],

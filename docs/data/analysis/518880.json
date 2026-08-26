@@ -1,24 +1,16 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "518880",
   "name": "黄金ETF",
   "type": "etf",
   "category": "通用",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 58.9,
-    "risk": 13.0,
+    "risk_adjusted": 59.4,
+    "risk": 11.3,
     "technical": 100.0,
     "industry": 65.0,
     "leading": 50.0
@@ -42,39 +34,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:29:38"
+    "updated_at": "2026-08-26 19:33:53"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 18.47,
-    "max_drawdown_60d_pct": -12.11,
-    "atr14_pct": 1.5,
+    "annualized_volatility_20d_pct": 18.46,
+    "max_drawdown_60d_pct": -10.98,
+    "atr14_pct": 1.46,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 7.3,
-        "value": 18.47
+        "score": 7.1,
+        "value": 18.46
       },
       {
         "name": "60日最大回撤",
-        "score": 16.8,
-        "value": -12.11
+        "score": 14.2,
+        "value": -10.98
       },
       {
         "name": "ATR百分比",
-        "score": 2.9,
-        "value": 1.5
+        "score": 1.4,
+        "value": 1.46
       },
       {
         "name": "量价异常",
-        "score": 55.5,
-        "value": 1.26
+        "score": 52.5,
+        "value": 1.29
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -88,28 +80,28 @@
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 9.336,
-    "ma10": 9.192,
-    "ma20": 8.9135,
-    "ma60": 8.729000000000001,
-    "rsi14": 73.0,
-    "macd_dif": 0.22073711550025976,
-    "macd_dea": 0.14975261528733602,
-    "macd_hist": 0.14196900042584748,
-    "atr14_pct": 1.4979395981074248,
-    "boll_position": 0.9231541376129658,
-    "return_5d_pct": 4.955947136563865,
-    "return_20d_pct": 13.452380952380949,
-    "volume_ratio_5d": 1.26
+    "ma5": 9.446000000000002,
+    "ma10": 9.234,
+    "ma20": 8.97,
+    "ma60": 8.730833333333333,
+    "rsi14": 72.5,
+    "macd_dif": 0.23224139990246861,
+    "macd_dea": 0.1662503721823435,
+    "macd_hist": 0.1319820554402502,
+    "atr14_pct": 1.4599319999428122,
+    "boll_position": 0.8753973247919283,
+    "return_5d_pct": 6.1315496098104605,
+    "return_20d_pct": 13.468414779499383,
+    "volume_ratio_5d": 1.29
   },
   "industry": {
     "name": "通用",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": 11.7
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": 12.13
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -142,7 +134,7 @@
     {
       "type": "warning",
       "title": "RSI偏高",
-      "detail": "RSI14=73.0，短期超买。",
+      "detail": "RSI14=72.5，短期超买。",
       "contribution": -5.0
     }
   ],

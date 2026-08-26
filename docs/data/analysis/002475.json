@@ -1,25 +1,17 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "002475",
   "name": "立讯精密",
   "type": "stock",
   "category": "消费电子/汽车电子",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 40.5,
-    "risk": 43.1,
-    "technical": 73.0,
+    "risk_adjusted": 43.7,
+    "risk": 41.5,
+    "technical": 91.0,
     "industry": 35.0,
     "leading": 50.0
   },
@@ -45,39 +37,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:30:30"
+    "updated_at": "2026-08-26 19:34:06"
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 52.85,
+    "annualized_volatility_20d_pct": 53.22,
     "max_drawdown_60d_pct": -28.79,
-    "atr14_pct": 5.67,
+    "atr14_pct": 5.58,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 48.9,
-        "value": 52.85
+        "score": 47.5,
+        "value": 53.22
       },
       {
         "name": "60日最大回撤",
-        "score": 54.0,
+        "score": 53.2,
         "value": -28.79
       },
       {
         "name": "ATR百分比",
-        "score": 59.1,
-        "value": 5.67
+        "score": 57.4,
+        "value": 5.58
       },
       {
         "name": "量价异常",
-        "score": 27.0,
-        "value": 0.86
+        "score": 24.1,
+        "value": 0.85
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -90,29 +82,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 54.013999999999996,
-    "ma10": 55.664,
-    "ma20": 56.209500000000006,
-    "ma60": 62.22266666666667,
-    "rsi14": 44.0,
-    "macd_dif": -1.7312688234204927,
-    "macd_dea": -1.7755925271151178,
-    "macd_hist": 0.08864740738925025,
-    "atr14_pct": 5.665972239079676,
-    "boll_position": 0.33985454686810473,
-    "return_5d_pct": -4.9878766886040875,
-    "return_20d_pct": -8.718801996672221,
-    "volume_ratio_5d": 0.86
+    "trend": "range",
+    "ma5": 54.736000000000004,
+    "ma10": 55.64,
+    "ma20": 55.94749999999999,
+    "ma60": 61.9435,
+    "rsi14": 49.5,
+    "macd_dif": -1.474975513899274,
+    "macd_dea": -1.7154691236733832,
+    "macd_hist": 0.48098721954821855,
+    "atr14_pct": 5.57928068796129,
+    "boll_position": 0.6829057369633479,
+    "return_5d_pct": 6.747663551401861,
+    "return_20d_pct": -8.404170008019252,
+    "volume_ratio_5d": 0.85
   },
   "industry": {
     "name": "消费电子/汽车电子",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": -10.47
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -9.74
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -264,12 +256,6 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 28.8%，风险偏高。",
       "contribution": -7.0
@@ -283,7 +269,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 52.9%，波动偏高。",
+      "detail": "20日年化波动率 53.2%，波动偏高。",
       "contribution": -5.0
     }
   ],

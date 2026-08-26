@@ -1,25 +1,17 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "688766",
   "name": "普冉股份",
   "type": "stock",
   "category": "存储",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 37.8,
-    "risk": 76.1,
-    "technical": 90.0,
+    "risk_adjusted": 32.5,
+    "risk": 89.9,
+    "technical": 80.0,
     "industry": 65.0,
     "leading": 50.0
   },
@@ -45,19 +37,19 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:29:09"
+    "updated_at": "2026-08-26 19:33:33"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 106.37,
+    "annualized_volatility_20d_pct": 103.81,
     "max_drawdown_60d_pct": -64.37,
-    "atr14_pct": 12.1,
+    "atr14_pct": 12.12,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 92.7,
-        "value": 106.37
+        "score": 91.5,
+        "value": 103.81
       },
       {
         "name": "60日最大回撤",
@@ -67,17 +59,17 @@
       {
         "name": "ATR百分比",
         "score": 99.3,
-        "value": 12.1
+        "value": 12.12
       },
       {
         "name": "量价异常",
-        "score": 32.1,
-        "value": 0.83
+        "score": 39.7,
+        "value": 0.78
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 92.2,
+        "value": 29.67
       }
     ]
   },
@@ -90,29 +82,29 @@
     "sample_size": 0
   },
   "technical": {
-    "trend": "range",
-    "ma5": 442.442,
-    "ma10": 433.40199999999993,
-    "ma20": 396.5255,
-    "ma60": 505.26216666666664,
-    "rsi14": 46.2,
-    "macd_dif": -9.62924549801187,
-    "macd_dea": -20.510840803401834,
-    "macd_hist": 21.76319061077993,
-    "atr14_pct": 12.099599631901112,
-    "boll_position": 0.5718705535685635,
-    "return_5d_pct": -12.169833551123588,
-    "return_20d_pct": 32.26233104293688,
-    "volume_ratio_5d": 0.83
+    "trend": "downtrend",
+    "ma5": 432.438,
+    "ma10": 433.66,
+    "ma20": 399.4595,
+    "ma60": 505.6813333333333,
+    "rsi14": 44.5,
+    "macd_dif": -11.227244374869883,
+    "macd_dea": -18.654121516455277,
+    "macd_hist": 14.853754283170787,
+    "atr14_pct": 12.115209735534158,
+    "boll_position": 0.4873202281389505,
+    "return_5d_pct": -11.185152057245073,
+    "return_20d_pct": 17.335302806499264,
+    "volume_ratio_5d": 0.78
   },
   "industry": {
     "name": "存储",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": 30.51
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": 16.0
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -258,6 +250,12 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 64.4%，风险偏高。",
       "contribution": -7.0
@@ -271,7 +269,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 106.4%，波动偏高。",
+      "detail": "20日年化波动率 103.8%，波动偏高。",
       "contribution": -5.0
     }
   ],

@@ -1,25 +1,17 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "301591",
   "name": "肯特股份",
   "type": "stock",
   "category": "热点龙头",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 38.5,
-    "risk": 75.1,
-    "technical": 93.0,
+    "risk_adjusted": 37.1,
+    "risk": 76.4,
+    "technical": 85.0,
     "industry": 65.0,
     "leading": 50.0
   },
@@ -42,39 +34,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:31:13"
+    "updated_at": "2026-08-26 19:34:17"
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 100.47,
+    "annualized_volatility_20d_pct": 100.62,
     "max_drawdown_60d_pct": -57.37,
-    "atr14_pct": 7.54,
+    "atr14_pct": 8.01,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 90.5,
-        "value": 100.47
+        "score": 90.1,
+        "value": 100.62
       },
       {
         "name": "60日最大回撤",
-        "score": 94.9,
+        "score": 95.0,
         "value": -57.37
       },
       {
         "name": "ATR百分比",
-        "score": 78.8,
-        "value": 7.54
+        "score": 83.7,
+        "value": 8.01
       },
       {
         "name": "量价异常",
-        "score": 80.3,
-        "value": 1.4
+        "score": 87.9,
+        "value": 1.55
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -88,28 +80,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 35.70399999999999,
-    "ma10": 34.944,
-    "ma20": 31.406,
-    "ma60": 38.42783333333333,
-    "rsi14": 63.8,
-    "macd_dif": 1.091933829524045,
-    "macd_dea": -0.2250674547868821,
-    "macd_hist": 2.6340025686218542,
-    "atr14_pct": 7.541266067910751,
-    "boll_position": 0.9952606592346889,
-    "return_5d_pct": 13.803943983995426,
-    "return_20d_pct": 51.062215477996965,
-    "volume_ratio_5d": 1.4
+    "ma5": 37.724000000000004,
+    "ma10": 35.995,
+    "ma20": 32.190999999999995,
+    "ma60": 38.280833333333334,
+    "rsi14": 66.9,
+    "macd_dif": 1.6087649705409675,
+    "macd_dea": 0.14169903062893782,
+    "macd_hist": 2.934131879824059,
+    "atr14_pct": 8.014986042578386,
+    "boll_position": 1.0260466966349213,
+    "return_5d_pct": 31.661442006269592,
+    "return_20d_pct": 59.695817490494285,
+    "volume_ratio_5d": 1.55
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": 49.31
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": 58.36
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -260,9 +252,15 @@
       "contribution": -7.0
     },
     {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.55倍。",
+      "contribution": 5.0
+    },
+    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 100.5%，波动偏高。",
+      "detail": "20日年化波动率 100.6%，波动偏高。",
       "contribution": -5.0
     }
   ],

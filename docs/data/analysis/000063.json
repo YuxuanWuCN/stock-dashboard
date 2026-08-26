@@ -1,26 +1,18 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:32:37+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
   "code": "000063",
   "name": "中兴通讯",
   "type": "stock",
   "category": "科技",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "insufficient_data",
-    "alpha": null,
-    "alpha_p_value": null,
-    "information_ratio": null,
-    "betas": null,
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 43.6,
-    "risk": 28.0,
+    "risk_adjusted": 43.3,
+    "risk": 28.4,
     "technical": 58.0,
-    "industry": 45.3,
+    "industry": 44.2,
     "leading": 50.0
   },
   "leading": {
@@ -42,39 +34,39 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 16:29:28"
+    "updated_at": "2026-08-26 19:33:46"
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 29.42,
+    "annualized_volatility_20d_pct": 29.02,
     "max_drawdown_60d_pct": -17.42,
-    "atr14_pct": 3.68,
+    "atr14_pct": 3.48,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 20.4,
-        "value": 29.42
+        "score": 22.0,
+        "value": 29.02
       },
       {
         "name": "60日最大回撤",
-        "score": 27.7,
+        "score": 27.0,
         "value": -17.42
       },
       {
         "name": "ATR百分比",
-        "score": 32.1,
-        "value": 3.68
+        "score": 29.8,
+        "value": 3.48
       },
       {
         "name": "量价异常",
-        "score": 81.0,
-        "value": 0.6
+        "score": 89.4,
+        "value": 0.44
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 29.81
+        "score": 0.7,
+        "value": 29.67
       }
     ]
   },
@@ -88,28 +80,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 33.568000000000005,
-    "ma10": 34.469,
-    "ma20": 34.345000000000006,
-    "ma60": 36.00233333333333,
-    "rsi14": 42.4,
-    "macd_dif": -0.5430750680741667,
-    "macd_dea": -0.45914513896069936,
-    "macd_hist": -0.16785985822693472,
-    "atr14_pct": 3.6777025972791098,
-    "boll_position": 0.19273952250123197,
-    "return_5d_pct": -4.813443463400735,
-    "return_20d_pct": -0.5948839976204545,
-    "volume_ratio_5d": 0.6
+    "ma5": 33.542,
+    "ma10": 34.263999999999996,
+    "ma20": 34.318,
+    "ma60": 35.963166666666666,
+    "rsi14": 43.1,
+    "macd_dif": -0.5537399369944467,
+    "macd_dea": -0.47806409814714185,
+    "macd_hist": -0.15135167769460967,
+    "atr14_pct": 3.4773291385696083,
+    "boll_position": 0.24776310363069468,
+    "return_5d_pct": -0.38610038610039643,
+    "return_20d_pct": -1.5845070422535135,
+    "volume_ratio_5d": 0.44
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.0,
-    "return_20d_pct": 1.75,
-    "return_60d_pct": -10.39,
-    "relative_strength_20d_pct": -2.34
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -2.92
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -276,6 +268,12 @@
       "title": "回撤风险",
       "detail": "近60日最大回撤 17.4%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "成交缩量",
+      "detail": "近5日量能仅为前期0.44倍。",
+      "contribution": -3.0
     }
   ],
   "kline_file": "../kline/000063.json",

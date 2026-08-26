@@ -1,0 +1,274 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
+  "code": "300333",
+  "name": "兆日科技",
+  "type": "stock",
+  "category": "热点龙头",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 34.1,
+    "risk": 86.2,
+    "technical": 93.0,
+    "industry": 57.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-26 19:35:36"
+  },
+  "risk": {
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 119.38,
+    "max_drawdown_60d_pct": -42.64,
+    "atr14_pct": 7.89,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 95.7,
+        "value": 119.38
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 79.4,
+        "value": -42.64
+      },
+      {
+        "name": "ATR百分比",
+        "score": 82.3,
+        "value": 7.89
+      },
+      {
+        "name": "量价异常",
+        "score": 62.4,
+        "value": 1.36
+      },
+      {
+        "name": "行业波动",
+        "score": 99.3,
+        "value": 43.9
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": null,
+    "return_5d_pct": null,
+    "up_probability_3d_pct": null,
+    "up_probability_5d_pct": null,
+    "confidence": "low",
+    "sample_size": 0
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 11.114,
+    "ma10": 11.274,
+    "ma20": 9.249500000000001,
+    "ma60": 9.409333333333334,
+    "rsi14": 70.3,
+    "macd_dif": 0.8737333722630538,
+    "macd_dea": 0.5849583882884317,
+    "macd_hist": 0.5775499679492442,
+    "atr14_pct": 7.890112848054151,
+    "boll_position": 0.8665096454200687,
+    "return_5d_pct": 9.300265721877764,
+    "return_20d_pct": 69.9724517906336,
+    "volume_ratio_5d": 1.36
+  },
+  "industry": {
+    "name": "热点龙头",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -0.35,
+    "return_20d_pct": -6.35,
+    "return_60d_pct": -11.1,
+    "relative_strength_20d_pct": 76.32
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 0,
+    "minimum_sample_size": 15,
+    "confidence": "low",
+    "horizon_3d": {
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
+    },
+    "horizon_5d": {
+      "up_probability_pct": null,
+      "average_return_pct": null,
+      "median_return_pct": null,
+      "best_return_pct": null,
+      "worst_return_pct": null
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-06-30",
+    "score": 26.7,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 60.0,
+      "profit_quality": 2.0,
+      "cash_health": 8.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 642595621.36,
+      "total_assets_yoy": 4.3966244495,
+      "inventory": 34373661.29,
+      "prepayment": 1240065.61,
+      "receivable": 36725374.79,
+      "inventory_prepay_ratio": 0.05542167689320154,
+      "receivable_revenue": 0.9775819307773108,
+      "goodwill_equity": 0.011139013363691155,
+      "debt_ratio": 0.02688303366188377,
+      "short_debt_ratio": null,
+      "roe": 0.07568281671621659,
+      "gross_margin": 9.267029589130086,
+      "deduct_ratio": -0.10425125423500084,
+      "netprofit_yoy": 959.629568805,
+      "ocf_np_ratio": -0.5578086351986379,
+      "financing_debt": -0.11114378712724925,
+      "retained_profit_equity": -0.23401317084260997
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +4.4%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 5.5%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 97.8%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 2.7%，财务结构稳健。",
+          "contribution": 10.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 7.6%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +959.6%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "warning",
+          "title": "依赖非经常损益",
+          "detail": "扣非净利润占归母净利润 -10.4%，利润含金量低。",
+          "contribution": -12.0
+        },
+        {
+          "type": "negative",
+          "title": "毛利率偏低",
+          "detail": "毛利率 9.3%，产品竞争力或成本控制存疑。",
+          "contribution": -8.0
+        },
+        {
+          "type": "negative",
+          "title": "累计未弥补亏损",
+          "detail": "未分配利润/归母权益 -23.4%，历史亏损削弱资本缓冲。",
+          "contribution": -8.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "negative",
+          "title": "经营现金流为负",
+          "detail": "经营现金流/净利润 -0.56，账面利润缺乏现金支撑，警惕应收与存货占款。",
+          "contribution": -45.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -11.1%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "净利润同比 +959.6%",
+      "negative_view": "经营现金流/净利润 -0.56，利润兑现存疑；应收账款/营收 97.8%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    }
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 42.6%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 42.6%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=70.3，短期超买。",
+      "contribution": -5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 119.4%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/300333.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}
