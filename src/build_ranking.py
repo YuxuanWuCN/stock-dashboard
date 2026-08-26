@@ -1097,13 +1097,15 @@ def build_stock_detail(r: dict, generated_at: str) -> dict:
             "atr14_pct": risk.get("atr14_pct"),
             "factors": risk["factors"],
         },
-        "forecast": {
+        "forecast": r.get("forecast") or {
             "return_3d_pct": fc_3d.get("average_return_pct"),
             "return_5d_pct": fc_5d.get("average_return_pct"),
             "up_probability_3d_pct": fc_3d.get("up_probability_pct"),
             "up_probability_5d_pct": fc_5d.get("up_probability_pct"),
             "confidence": sim.get("confidence", "low"),
             "sample_size": sim.get("sample_size", 0),
+            "source": "knn_fallback",
+            "model": "knn_v1",
         },
         "technical": {
             "trend": tech["trend"],

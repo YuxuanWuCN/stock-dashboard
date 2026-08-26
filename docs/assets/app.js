@@ -1999,7 +1999,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         el.analysisDetail.hidden = false;
         renderObservationAdvice(detail);
-        if (Number.isFinite(fiveDayReturn)) {
+        if (forecast.source === 'v3_llm_direct') {
+            var modelTag = forecast.model ? ' (' + forecast.model + ')' : '';
+            var rationaleText = forecast.rationale ? ' ｜ 研判依据：' + forecast.rationale : '';
+            el.analysisSummary.textContent = '【v3 AI 大模型直接预测' + modelTag + '】：未来 5 日预期收益 '
+                + formatPct(fiveDayReturn) + '，看涨置信胜率 ' + formatProbability(fiveDayProbability)
+                + rationaleText + '。';
+        } else if (Number.isFinite(fiveDayReturn)) {
             el.analysisSummary.textContent = '历史相似样本中，未来 5 日平均收益为 '
                 + formatPct(fiveDayReturn) + '，上涨样本占 ' + formatProbability(fiveDayProbability)
                 + '；当前技术状态为' + trendLabel(detail.technical && detail.technical.trend) + '。';

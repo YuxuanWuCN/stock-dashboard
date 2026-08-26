@@ -84,12 +84,15 @@
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.05,
-    "return_5d_pct": -0.34,
-    "up_probability_3d_pct": 50.0,
-    "up_probability_5d_pct": 43.3,
-    "confidence": "medium",
-    "sample_size": 30
+    "return_3d_pct": 0.2,
+    "return_5d_pct": 0.5,
+    "up_probability_3d_pct": 48.0,
+    "up_probability_5d_pct": 50.0,
+    "confidence": "low",
+    "rationale": "行情数据缺失或停牌，综合评分偏低，动量不足，短期预计维持低波动震荡。",
+    "risk_warning": "行情异常停牌风险，以及油价与汇率大幅波动影响。",
+    "source": "v3_llm_direct",
+    "model": "gemini-3.7-flash"
   },
   "technical": {
     "trend": "downtrend",

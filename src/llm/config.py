@@ -129,7 +129,7 @@ LLM_MAX_TOKENS = int(os.environ.get("LLM_MAX_TOKENS", "1200"))
 # 每次调用超时（秒）
 LLM_TIMEOUT_SECONDS = float(os.environ.get("LLM_TIMEOUT_SECONDS", "30"))
 # 每日全管线调用次数上限（保护 API 预算；本地测试可调高）
-LLM_DAILY_CALL_LIMIT = int(os.environ.get("LLM_DAILY_CALL_LIMIT", "50"))
+LLM_DAILY_CALL_LIMIT = int(os.environ.get("LLM_DAILY_CALL_LIMIT", "2000"))
 
 # ============================================================
 # 嵌入与向量检索
