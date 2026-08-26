@@ -283,6 +283,65 @@ def _resolve_via_akshare(code: str) -> str:
 
 
 # ============================================================
+# 自选股管理工具与自动入库
+# ============================================================
+
+import csv as _csv
+import tempfile as _tempfile
+_WATCHLIST_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "watchlist.csv")
+_WATCHLIST_HEADER = ["code", "name", "type", "category"]
+
+
+def _read_watchlist() -> list[dict]:
+    items: list[dict] = []
+    if not os.path.exists(_WATCHLIST_PATH):
+        return items
+
+    with open(_WATCHLIST_PATH, "r", encoding="utf-8-sig") as f:
+        reader = _csv.DictReader(f)
+        for row in reader:
+            if not row or all((value or "").strip() == "" for value in row.values()):
+                continue
+            code = (row.get("code") or "").strip()
+            if not code or code.startswith("#"):
+                continue
+            items.append({
+                "code": code,
+                "name": (row.get("name") or code).strip(),
+                "type": (row.get("type") or "stock").strip().lower(),
+                "category": (row.get("category") or "").strip(),
+            })
+    return items
+
+
+def _auto_add_to_watchlist(code: str, name: str, typ: str = "stock", category: str = "搜索自选") -> bool:
+    """自动将搜索查询的有效标的加入自选池，使其纳入每晚自动化深度分析流水线。"""
+    try:
+        existing = _read_watchlist()
+        if any(row["code"] == code for row in existing):
+            return False
+
+        existing.append({"code": code, "name": name, "type": typ, "category": category})
+        watchlist_path = _WATCHLIST_PATH
+        os.makedirs(os.path.dirname(watchlist_path), exist_ok=True)
+        fd, tmp_path = _tempfile.mkstemp(suffix=".csv", prefix=".tmp_", dir=os.path.dirname(watchlist_path) or ".", text=True)
+        with os.fdopen(fd, "w", encoding="utf-8-sig", newline="") as f:
+            writer = _csv.DictWriter(f, fieldnames=_WATCHLIST_HEADER, extrasaction="ignore")
+            writer.writeheader()
+            for row in existing:
+                writer.writerow({k: row.get(k, "") for k in _WATCHLIST_HEADER})
+        if os.path.exists(watchlist_path):
+            os.replace(tmp_path, watchlist_path)
+        else:
+            os.rename(tmp_path, watchlist_path)
+        logger.info("已自动将搜索标的加入自选池: %s(%s)", name, code)
+        return True
+    except Exception as e:
+        logger.warning("自动加入自选池失败 %s: %s", code, e)
+        return False
+
+
+# ============================================================
 # API 路由
 # ============================================================
 
@@ -348,6 +407,9 @@ def api_query():
     stock_item = {**stock_item, "name": stock_name}
     stock_json = build_kline_json(stock_item, df_stock)
 
+    # ---- 自动入库到自选池（供每晚 60日/5年 深度自动化分析） ----
+    _auto_add_to_watchlist(code, stock_name, stock_item["type"])
+
     # ---- 2. 抓取对应大盘指数 ----
     index_info = get_index_for_code(code)
     index_json = fetch_index(
@@ -371,10 +433,11 @@ def api_query():
             "stock_code": code,
             "index_name": index_info["name"],
             "index_code": index_info["code"],
+            "auto_enqueued_nightly": True,
         },
     }
 
-    logger.info("查询成功: %s(%s) + %s", stock_name, code, index_info["name"])
+    logger.info("查询成功: %s(%s) + %s (已自动排期每晚自动化分析)", stock_name, code, index_info["name"])
     return jsonify(result)
 
 
@@ -396,36 +459,7 @@ def api_health():
     })
 
 
-# ============================================================
-# 自选股管理 API
-# ============================================================
 
-import csv as _csv
-import tempfile as _tempfile
-_WATCHLIST_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "watchlist.csv")
-_WATCHLIST_HEADER = ["code", "name", "type", "category"]
-
-
-def _read_watchlist() -> list[dict]:
-    items: list[dict] = []
-    if not os.path.exists(_WATCHLIST_PATH):
-        return items
-
-    with open(_WATCHLIST_PATH, "r", encoding="utf-8-sig") as f:
-        reader = _csv.DictReader(f)
-        for row in reader:
-            if not row or all((value or "").strip() == "" for value in row.values()):
-                continue
-            code = (row.get("code") or "").strip()
-            if not code or code.startswith("#"):
-                continue
-            items.append({
-                "code": code,
-                "name": (row.get("name") or code).strip(),
-                "type": (row.get("type") or "stock").strip().lower(),
-                "category": (row.get("category") or "").strip(),
-            })
-    return items
 
 
 @app.route("/api/watchlist")
