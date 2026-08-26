@@ -222,3 +222,25 @@ class WindCSMARStubProvider(BaseFactorProvider):
                 "待返校后配置终端凭证即可无缝切换。"
             )
         return pd.DataFrame(columns=["date", "MKT", "SMB", "HML", "MOM", "rf"])
+
+
+class EastMoneyMiaoXiangProvider(BaseFactorProvider):
+    """东方财富“妙想”金融技能因子适配器 (WorkBuddy / MiaoXiang Skills)。
+    
+    支持获取标准 Carhart 4 因子及微观资金流衍生因子（主力大单、北向增减仓、机构席位）。
+    """
+
+    def __init__(self, db_path: Optional[str | Path] = None):
+        from src.skills.eastmoney_miaoxiang_skill import EastMoneyMiaoXiangSkill
+        self.skill = EastMoneyMiaoXiangSkill(cache_db=db_path)
+
+    def get_daily_factors(self, start_date: str, end_date: str) -> pd.DataFrame:
+        df = self.skill.get_daily_factors_with_capital_flows(start_date, end_date)
+        if df.empty:
+            return pd.DataFrame(columns=["date", "MKT", "SMB", "HML", "MOM", "rf"])
+        return df[["date", "MKT", "SMB", "HML", "MOM", "rf"]]
+
+    def get_factors_with_flows(self, start_date: str, end_date: str) -> pd.DataFrame:
+        """获取包含微观资金流的完整多因子矩阵。"""
+        return self.skill.get_daily_factors_with_capital_flows(start_date, end_date)
+

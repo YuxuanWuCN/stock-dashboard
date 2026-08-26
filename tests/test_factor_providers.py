@@ -65,3 +65,33 @@ def test_wind_csmar_stub_provider():
     # 无 Wind 环境时优雅处理
     connected = provider_wind.connect()
     assert isinstance(connected, bool)
+
+
+def test_eastmoney_miaoxiang_provider(tmp_path):
+    """测试东方财富妙想技能套件与多因子资金流适配器。"""
+    from src.analysis.factor_providers import EastMoneyMiaoXiangProvider
+    from src.skills.eastmoney_miaoxiang_skill import EastMoneyMiaoXiangSkill
+
+    db_path = tmp_path / "eastmoney_test.db"
+    provider = EastMoneyMiaoXiangProvider(db_path=db_path)
+    
+    # 1. 因子与资金流测试
+    df = provider.get_factors_with_flows("2025-01-01", "2025-01-10")
+    assert not df.empty
+    assert "LARGE_ORDER_INFLOW" in df.columns
+    assert "NORTHBOUND_DELTA" in df.columns
+    assert "INST_SEAT_RATIO" in df.columns
+    assert "MKT" in df.columns
+
+    # 2. 产业链图谱测试 (德明利 001309)
+    skill = EastMoneyMiaoXiangSkill(cache_db=db_path)
+    onto = skill.get_supply_chain_ontology("001309")
+    assert onto is not None
+    assert onto.target_name == "德明利"
+    assert len(onto.upstream_suppliers) > 0
+
+    # 3. 市场情绪快照测试
+    breadth = skill.get_market_breadth_snapshot("2025-01-10")
+    assert breadth.temperature_score >= 0.0
+    assert breadth.total_turnover_cny > 0
+
