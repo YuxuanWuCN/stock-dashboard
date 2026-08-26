@@ -2752,13 +2752,6 @@ body {
     max-height: none;
 }
 
-.page-watchlist .stock-list-container {
-    overflow-y: visible;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 10px;
-}
-
 @media (min-width: 900px) {
     .page-watchlist .stock-list-container {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -2767,25 +2760,25 @@ body {
 
 /* ========== 模拟盘对比页 ========== */
 .paper-page { display: flex; flex-direction: column; gap: 18px; padding: 4px 2px; }
-.paper-heading h2 { margin: 0 0 4px; font-size: 20px; }
-.paper-meta { margin: 0; font-size: 12px; color: #6b7280; }
-.paper-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
-.paper-card { background: var(--card-bg, #fff); border: 1px solid var(--border-color, #e5e7eb); border-top: 3px solid #3b82f6; border-radius: 10px; padding: 12px 14px; }
-.paper-card-name { font-weight: 600; margin-bottom: 8px; }
-.paper-card-row { font-size: 13px; color: #4b5563; padding: 2px 0; display: flex; justify-content: space-between; }
-.paper-card-value { font-weight: 600; color: #111827; }
-.paper-section h3 { font-size: 15px; margin: 0 0 8px; }
-.paper-curve { background: var(--card-bg, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 10px; padding: 12px; }
-.paper-empty { color: #9ca3af; font-size: 13px; padding: 30px 0; text-align: center; }
-.paper-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: #374151; }
-.paper-legend-item { display: inline-flex; align-items: center; gap: 6px; }
-.paper-legend-item i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
-.paper-table-wrap { overflow-x: auto; }
-.paper-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.paper-table th, .paper-table td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--border-color, #e5e7eb); }
-.paper-table th:first-child, .paper-table td:first-child { text-align: left; }
-.paper-table th { background: var(--muted-bg, #f3f4f6); color: #374151; }
-.paper-disclaimer { font-size: 11px; color: #9ca3af; margin: 4px 0 0; }
+.paper-heading h2 { margin: 0 0 4px; font-size: 20px; font-weight: 800; color: #0f172a; }
+.paper-meta { margin: 0; font-size: 13px; color: #64748b; font-weight: 500; }
+.paper-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.paper-card { background: var(--card-bg, #fff); border: 1px solid var(--border-color, #e2e8f0); border-top: 3px solid #3b82f6; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.paper-card-name { font-weight: 700; margin-bottom: 8px; font-size: 15px; color: #0f172a; }
+.paper-card-row { font-size: 13px; color: #475569; padding: 3px 0; display: flex; justify-content: space-between; }
+.paper-card-value { font-weight: 700; color: #0f172a; font-family: monospace; }
+.paper-section h3 { font-size: 16px; margin: 0 0 10px; font-weight: 800; color: #0f172a; }
+.paper-curve { background: var(--card-bg, #fff); border: 1px solid var(--border-color, #e2e8f0); border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.paper-empty { color: #94a3b8; font-size: 13px; padding: 30px 0; text-align: center; }
+.paper-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; padding: 8px 4px; font-size: 12px; color: #334155; }
+.paper-legend-item { display: inline-flex; align-items: center; gap: 6px; background: #f8fafc; padding: 4px 10px; border-radius: 6px; border: 1px solid #e2e8f0; font-weight: 600; }
+.paper-legend-item i { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+.paper-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border-color, #e2e8f0); margin-top: 10px; background: #fff; }
+.paper-table { width: 100%; min-width: 920px; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
+.paper-table th, .paper-table td { padding: 10px 16px; text-align: right; border-bottom: 1px solid var(--border-color, #e2e8f0); white-space: nowrap; }
+.paper-table th:first-child, .paper-table td:first-child { text-align: left; position: sticky; left: 0; background: #f8fafc; z-index: 2; font-weight: 700; }
+.paper-table th { background: #f1f5f9; color: #1e293b; font-weight: 700; }
+.paper-disclaimer { font-size: 11px; color: #94a3b8; margin: 6px 0 0; }
 /* ========== 自选股搜索 ========== */
 .watchlist-search-wrap { position: relative; display: flex; align-items: center; margin: 10px 0 6px; }
 .watchlist-search-input { width: 100%; padding: 8px 30px 8px 10px; border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; font-size: 13px; background: var(--card-bg, #fff); color: inherit; outline: none; box-sizing: border-box; }
