@@ -383,9 +383,60 @@
                                 </div>
                 </section>
 
-                <!-- 页面：模拟盘对比 -->
+                <!-- 页面：模拟盘对比 & 2025Q2-2026Q7 存储超级周期回测 -->
                 <section class="page" data-page="paper" id="page-paper" hidden>
                     <div class="paper-page">
+                        <!-- 2025Q2-2026Q7 存储市场学术量化回测专属模块 -->
+                        <div class="storage-backtest-card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <span style="background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">Physical Isolation Backtest</span>
+                                    <h2 style="font-size: 22px; margin-top: 6px; color: #f8fafc;">⚡ 2025Q2–2026Q7 存储市场样本外量化回测 (拟真交易人)</h2>
+                                    <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">GFCA 几何因子空间对齐 · NALE 供应链网络传导 (α=0.4) · Nowcasting 二次减值惩罚 · Trend Gate™ C浪清仓</p>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;">夏普比率: 4.627</span>
+                                    <span style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #dc2626; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;">最大回撤: 6.51% (控盘)</span>
+                                </div>
+                            </div>
+
+                            <!-- 核心数据对比指标小格子 -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="color: #94a3b8; font-size: 12px;">策略累计总收益率</div>
+                                    <div style="color: #f87171; font-size: 24px; font-weight: 800; margin-top: 4px;">+159.01%</div>
+                                    <div style="color: #64748b; font-size: 11px;">年化 +105.65%</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="color: #94a3b8; font-size: 12px;">存储5巨头等权买入持有</div>
+                                    <div style="color: #fbbf24; font-size: 24px; font-weight: 800; margin-top: 4px;">+222.30%</div>
+                                    <div style="color: #f87171; font-size: 11px;">C浪最大回撤 -32.04% ⚠️</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="color: #94a3b8; font-size: 12px;">卡玛比率 (收益/回撤)</div>
+                                    <div style="color: #38bdf8; font-size: 24px; font-weight: 800; margin-top: 4px;">16.223</div>
+                                    <div style="color: #64748b; font-size: 11px;">买入持有仅 4.453</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="color: #94a3b8; font-size: 12px;">Harvey (2016) Alpha t值</div>
+                                    <div style="color: #a78bfa; font-size: 24px; font-weight: 800; margin-top: 4px;">t = 3.774</div>
+                                    <div style="color: #34d399; font-size: 11px;">通过 |t|≥3.0 伪因子门禁 ✅</div>
+                                </div>
+                            </div>
+
+                            <!-- 出版级图表展示网格 -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+                                <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
+                                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">📈 累计净值走势实证对比 (全周期)</div>
+                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png" alt="累计净值走势图" style="width: 100%; border-radius: 6px;" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png'">
+                                </div>
+                                <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
+                                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">🛡️ 动态水下回撤对比 (Trend Gate 截断 C 浪主跌)</div>
+                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png" alt="水下回撤对比图" style="width: 100%; border-radius: 6px;" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png'">
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="paper-heading">
                             <h2>💼 模拟盘对比（60天宏观温度与风控联动版）</h2>
                             <p id="paper-meta" class="paper-meta">正在读取数据...</p>
