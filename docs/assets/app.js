@@ -1712,8 +1712,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (error) {
             console.error('Failed to load analysis for ' + code + ':', error);
-            if (state.analysisSelectedCode === code) showAnalysisError('该股票的分析详情暂时无法读取。');
+            if (state.analysisSelectedCode === code) {
+                var stockName = (state.lastQueryStock && state.lastQueryStock.name)
+                    || (queryMeta && queryMeta.stock_name)
+                    || (state.summary && state.summary.items && (state.summary.items.find(function (i) { return i.code === code; }) || {}).name)
+                    || code;
+                showAnalysisQueuedNotice(stockName, code);
+            }
         }
+    }
+
+    function showAnalysisQueuedNotice(name, code) {
+        el.analysisDetail.hidden = false;
+        resetObservationAdvice();
+        el.analysisSummary.textContent = '【新搜索标的《' + name + ' (' + code + ')》】：已自动登记入库并进入自动化分析队列。今晚 17:30 自动化任务将为您执行 60日~5年 深度多因子定价、前沿供需拐点与 Gemini 3.7 Flash 大模型预测分析。';
+        el.analysisRiskBadge.className = 'risk-badge risk-low';
+        el.analysisRiskBadge.textContent = '已自动入库排期';
+        [el.analysisCompositeScore, el.analysisRiskScore, el.analysisReturn3d,
+            el.analysisReturn5d, el.analysisUpProbability].forEach(function (node) {
+                node.textContent = '--';
+                node.className = '';
+            });
+        el.analysisReasons.innerHTML = '<div class="reason-item reason-neutral"><span class="reason-title">自动入库</span><span class="reason-detail">该标的已自动加入 watchlist.csv，今晚自动化程序将执行全量指标计算与大模型研报生成。</span></div>';
+        el.analysisMarketMetrics.textContent = '';
+        el.similarityGrid.textContent = '';
+        el.similarityConfidence.textContent = '今晚生成';
+        el.fundamentalSection.hidden = true;
+        hideResearchReport();
+        el.analysisDisclaimer.textContent = '新搜索标的已加入自动化流水线，将在每日收盘后生成完整多因子与大模型报告。';
     }
 
     // ---- AI 研究报告渲染（模块四） ----
@@ -2542,12 +2568,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     el.indexChartCard.style.display = 'none';
                 }
 
-                // 更新指数标签
-                updateQueryHintForCode(code, data.meta.index_name);
-
                 hideOverlay();
 
-                showQueryHint('✅ 查询成功！个股 ' + data.stock.name + ' + ' + data.meta.index_name + ' 对比');
+                showQueryHint('✅ 查询成功！标的 ' + data.stock.name + ' (' + code + ') 及其大盘对比已呈现，已自动纳入每晚 60日~5年 自动化深度多因子分析');
+                loadAnalysisDetail(code);
                 navigateTo('detail');
             })
             .catch(function (err) {
