@@ -1,0 +1,16 @@
+- [x] **Task 1: 实现核心大模型预测引擎 (`src/llm/llm_forecaster.py`)** <!-- id: 0 -->
+  - 实现 Prompt 模板拼装，包含个股均线偏离、量价动能、GFCA 多因子打分与领先指标。
+  - 实现结构化 JSON 解析与防爆限幅过滤器（$\pm 15\%$ / $\pm 20\%$）。
+  - 实现异常降级回退机制。
+- [x] **Task 2: 编写单元测试 (`tests/test_llm_forecaster.py`)** <!-- id: 1 -->
+  - 编写对 mock LLM 返回及真实接口的解析测试。
+  - 验证防爆限幅截断与异常安全回退。
+- [x] **Task 3: 流水线整合与数据落盘 (`src/build_ranking.py`)** <!-- id: 2 -->
+  - 将 `LLMForecaster` 接入流水线分析流程。
+  - 批量为自选股全池生成并落盘最新 Gemini 3.7 Flash 预测指标。
+- [x] **Task 4: 前端 Dashboard 视觉与交互升级 (`docs/index.html`, `docs/assets/app.js`)** <!-- id: 3 -->
+  - 将“3日统计收益”等标签升级为“3日 LLM 预测”、“5日 LLM 预测”、“5日看涨置信概率”。
+  - 支持渲染展示 Gemini 的研判逻辑与信心等级。
+- [x] **Task 5: 运行全量测试与 Code-Review 双向审查** <!-- id: 4 -->
+  - 运行 `pytest tests/test_llm_forecaster.py`。
+  - 派发 Standards Review 与 Spec Review 审查子代理进行代码异味与需求一致性审查。
