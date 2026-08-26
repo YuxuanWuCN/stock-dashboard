@@ -1,60 +1,294 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 16:27:35+08:00",
+  "generated_at": "2026-08-26 16:32:37+08:00",
   "trade_date": "2026-08-26",
   "code": "003040",
   "name": "楚天龙",
   "type": "stock",
   "category": "数字货币",
   "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "statistical",
+    "alpha": 0.0012909037681861867,
+    "alpha_p_value": 0.4313272092834658,
+    "information_ratio": 0.0378143597868212,
+    "betas": {
+      "MKT": 0.07667908514113012,
+      "SMB": -0.1845254077355873,
+      "HML": -1.0980836269339223,
+      "MOM": -0.25860781619635653
+    },
+    "window_end": "2026-05-28"
+  },
   "scores": {
-    "risk_adjusted": 40.8,
-    "risk": 35.5,
-    "technical": 68.0,
-    "industry": 62.0,
-    "leading": 58.0
+    "risk_adjusted": 31.9,
+    "risk": 54.0,
+    "technical": 95.0,
+    "industry": 65.0,
+    "leading": 50.0
   },
-  "latest": {
-    "date": "2026-08-26",
-    "close": 17.03,
-    "change_pct": 10.01,
-    "volume": 1085010,
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-26 16:32:36"
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 82.77,
+    "max_drawdown_60d_pct": -22.69,
+    "atr14_pct": 5.05,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 82.5,
+        "value": 82.77
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 39.4,
+        "value": -22.69
+      },
+      {
+        "name": "ATR百分比",
+        "score": 50.4,
+        "value": 5.05
+      },
+      {
+        "name": "量价异常",
+        "score": 93.4,
+        "value": 1.87
+      },
+      {
+        "name": "行业波动",
+        "score": 0.0,
+        "value": 29.58
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -3.37,
+    "return_5d_pct": -2.15,
+    "up_probability_3d_pct": 13.3,
+    "up_probability_5d_pct": 33.3,
+    "confidence": "medium",
+    "sample_size": 30
+  },
+  "technical": {
+    "trend": "uptrend",
     "ma5": 14.2,
-    "ma10": 12.89,
-    "ma20": 12.39,
-    "ma60": 11.51
+    "ma10": 12.889,
+    "ma20": 12.388,
+    "ma60": 11.505500000000001,
+    "rsi14": 80.2,
+    "macd_dif": 0.9416602388258379,
+    "macd_dea": 0.4611764589937055,
+    "macd_hist": 0.9609675596642648,
+    "atr14_pct": 5.04918159558255,
+    "boll_position": 1.2585929840704497,
+    "return_5d_pct": 56.958525345622135,
+    "return_20d_pct": 57.53931544865865,
+    "volume_ratio_5d": 1.87
   },
-  "bet_type": "volatile",
-  "bet_type_metrics": {
-    "monster_score": 62.9,
-    "volatility_annual": 0.8631,
-    "atr_ratio": 0.0562,
-    "momentum_half_life": 5
+  "industry": {
+    "name": "数字货币",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -6.0,
+    "return_20d_pct": 1.75,
+    "return_60d_pct": -10.39,
+    "relative_strength_20d_pct": 56.9
   },
-  "strategy_recommendation": {
-    "bet_type": "volatile",
-    "description": "数字货币与智能卡题材活跃标的，建议结合 Trend Gate 均线突破顺势参与，设 8% 硬止损。"
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 13.3,
+      "average_return_pct": -3.37,
+      "median_return_pct": -3.52,
+      "best_return_pct": 2.88,
+      "worst_return_pct": -10.79
+    },
+    "horizon_5d": {
+      "up_probability_pct": 33.3,
+      "average_return_pct": -2.15,
+      "median_return_pct": -3.53,
+      "best_return_pct": 19.44,
+      "worst_return_pct": -11.87
+    }
   },
-  "technical_summary": {
-    "trend": "多头突破",
-    "support": 11.89,
-    "resistance": 18.39,
-    "signal_count": 3
-  },
-  "signals": [
-    {
-      "type": "buy",
-      "name": "GFCA动量金叉",
-      "strength": 0.75,
-      "reasons": [
-        "20日均线支撑有效",
-        "数字货币板块资金异动"
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-06-30",
+    "score": 39.1,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 63.0,
+      "profit_quality": 3.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 1913956751.52,
+      "total_assets_yoy": 2.6738149749,
+      "inventory": 231564951.75,
+      "prepayment": 4334613.3,
+      "receivable": 451343569.1,
+      "inventory_prepay_ratio": 0.12325229651226786,
+      "receivable_revenue": 2.8301492577930096,
+      "goodwill_equity": null,
+      "debt_ratio": 0.2803784221998876,
+      "short_debt_ratio": 0.020144129276487215,
+      "roe": -0.044850378043568354,
+      "gross_margin": -22.046736178666677,
+      "deduct_ratio": 1.0573179969368762,
+      "netprofit_yoy": -55.9856784201,
+      "ocf_np_ratio": 1.8587351156575118,
+      "financing_debt": 0.008779395323179208,
+      "retained_profit_equity": 0.07897210872902695
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +2.7%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 12.3%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 283.0%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 28.0%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 2.0%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 -4.5%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "negative",
+          "title": "利润下滑",
+          "detail": "净利润同比 -56.0%，盈利收缩。",
+          "contribution": -12.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 105.7%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "negative",
+          "title": "毛利率偏低",
+          "detail": "毛利率 -22.0%，产品竞争力或成本控制存疑。",
+          "contribution": -8.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 1.86，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 0.9%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
       ]
+    },
+    "dual_view": {
+      "positive_view": "经营现金流/净利润 1.86，利润含金量高",
+      "negative_view": "应收账款/营收 283.0%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-26 16:29:40"
+  },
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 22.7%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 22.7%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.87倍。",
+      "contribution": 5.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=80.2，短期超买。",
+      "contribution": -5.0
     }
   ],
-  "buyJudge": {
-    "in_buy_zone": false,
-    "action": "near_support",
-    "distance_pct": 37.47
-  }
+  "kline_file": "../kline/003040.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }
