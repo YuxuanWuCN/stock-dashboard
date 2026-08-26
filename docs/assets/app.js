@@ -48,9 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         indexChart: null,
         queryActive: false,
         ranking: null,
-        rankingEngine: 'v3',
-        rankingV2: null,
-        rankingV3: null,
         rankingMode: 'balanced',
         rankingSortKey: 'risk_adjusted_score',
         rankingSortDirection: 'desc',
@@ -435,9 +432,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             state.meta = metaRes;
             state.summary = summaryRes;
-            state.rankingV3 = rankingV3Res;
-            state.rankingV2 = rankingV2Res;
-            state.ranking = (state.rankingEngine === 'v3' && state.rankingV3) ? state.rankingV3 : (state.rankingV2 || state.rankingV3);
+            state.ranking = rankingV3Res || rankingV2Res;
             state.selection = selectionRes;
             state.huntingGround = huntingRes;
             state.marketTemperature = tempRes;
@@ -1371,10 +1366,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var statusText = state.ranking.status === 'partial'
             ? '部分标的使用旧数据'
             : '全部分析完成';
-        var engineTag = (state.rankingEngine === 'v3')
-            ? '⚡ 3.0 前沿驱动 (Leading-45%)'
-            : '📜 2.0 传统财报 (Legacy-50%)';
-        el.rankingMeta.textContent = '[' + engineTag + '] · 交易日 ' + (state.ranking.trade_date || '--')
+        el.rankingMeta.textContent = '交易日 ' + (state.ranking.trade_date || '--')
             + ' · ' + items.length + ' 只标的 · ' + statusText
             + ' · ' + generated.substring(0, 16);
 
@@ -1384,19 +1376,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function bindRankingControls() {
         if (el.rankingSearch.dataset.bound === 'true') return;
         el.rankingSearch.dataset.bound = 'true';
-
-        // 3.0 前沿驱动 vs 2.0 传统财报 双轨切换器
-        document.querySelectorAll('.ranking-engine-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                state.rankingEngine = btn.dataset.engine;
-                document.querySelectorAll('.ranking-engine-btn').forEach(function (b) {
-                    b.classList.toggle('active', b === btn);
-                });
-                state.ranking = (state.rankingEngine === 'v3' && state.rankingV3) ? state.rankingV3 : state.rankingV2;
-                initRankingModule();
-                renderTop3Matrix();
-            });
-        });
 
         document.querySelectorAll('.ranking-tab').forEach(function (tab) {
             tab.addEventListener('click', function () {
