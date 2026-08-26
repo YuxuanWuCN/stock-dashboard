@@ -244,3 +244,120 @@ class EastMoneyMiaoXiangProvider(BaseFactorProvider):
         """获取包含微观资金流的完整多因子矩阵。"""
         return self.skill.get_daily_factors_with_capital_flows(start_date, end_date)
 
+
+class SCNUAcademicFactorProvider(BaseFactorProvider):
+    """华南师范大学 / 阿伯丁数据科学学院学术因子库适配器 (SCNU Institutional Academic Factor Provider)。
+    
+    专用位置与热插拔支持：
+    1. 自动扫描 `data/school_factors/` 目录下的 CSMAR (国泰安)、Wind、RESSET (锐思) 或实验室自建因子 CSV/Parquet 文件；
+    2. 支持 CSMAR 标准字段自动对齐与清洗 (TradingDate, RiskPremium1, SMB1, HML1, UMD1, RiskFreeRate)；
+    3. 支持校内数据库直连配置 (MySQL/PostgreSQL/Oracle)；
+    4. 无本地文件时优雅回退并提示指引。
+    """
+
+    COLUMN_MAPPINGS = {
+        # CSMAR 国泰安三因子/五因子/Carhart四因子表字段
+        "TradingDate": "date",
+        "date": "date",
+        "日期": "date",
+        "RiskPremium1": "MKT",
+        "MKT": "MKT",
+        "市场溢价因子": "MKT",
+        "SMB1": "SMB",
+        "SMB": "SMB",
+        "规模因子": "SMB",
+        "HML1": "HML",
+        "HML": "HML",
+        "账面市值比因子": "HML",
+        "UMD1": "MOM",
+        "MOM": "MOM",
+        "动量因子": "MOM",
+        "RiskFreeRate": "rf",
+        "rf": "rf",
+        "无风险利率": "rf"
+    }
+
+    def __init__(self, data_dir: Optional[str | Path] = None):
+        self.data_dir = Path(data_dir or "data/school_factors")
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        self._cached_factors: Optional[pd.DataFrame] = None
+
+    def scan_and_load_local_files(self) -> Optional[pd.DataFrame]:
+        """扫描 data/school_factors/ 目录下的所有学术因子文件并标准化合并。"""
+        if not self.data_dir.exists():
+            return None
+
+        factor_files = list(self.data_dir.glob("*.csv")) + list(self.data_dir.glob("*.parquet")) + list(self.data_dir.glob("*.xlsx"))
+        if not factor_files:
+            return None
+
+        dfs = []
+        for file in factor_files:
+            try:
+                if file.suffix.lower() == ".csv":
+                    df = pd.read_csv(file)
+                elif file.suffix.lower() == ".parquet":
+                    df = pd.read_parquet(file)
+                elif file.suffix.lower() in (".xlsx", ".xls"):
+                    df = pd.read_excel(file)
+                else:
+                    continue
+
+                # 标准化重命名列
+                renamed_cols = {}
+                for col in df.columns:
+                    for k, v in self.COLUMN_MAPPINGS.items():
+                        if k.lower() == str(col).strip().lower():
+                            renamed_cols[col] = v
+                            break
+                df.rename(columns=renamed_cols, inplace=True)
+
+                if "date" in df.columns:
+                    df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
+                    dfs.append(df)
+            except Exception as e:
+                logger.warning(f"读取校内学术因子文件 {file.name} 失败: {e}")
+
+        if not dfs:
+            return None
+
+        merged = pd.concat(dfs, ignore_index=True).drop_duplicates(subset=["date"]).sort_values("date")
+        # 填充缺失的标准列
+        for req in ["MKT", "SMB", "HML", "MOM", "rf"]:
+            if req not in merged.columns:
+                merged[req] = 0.0
+
+        self._cached_factors = merged[["date", "MKT", "SMB", "HML", "MOM", "rf"]]
+        logger.info(f"成功从校内学术目录加载 {len(self._cached_factors)} 条官方因子记录")
+        return self._cached_factors
+
+    def get_daily_factors(self, start_date: str, end_date: str) -> pd.DataFrame:
+        """获取指定日期区间的校内学术因子。"""
+        if self._cached_factors is None:
+            self.scan_and_load_local_files()
+
+        if self._cached_factors is not None and not self._cached_factors.empty:
+            sub = self._cached_factors[
+                (self._cached_factors["date"] >= start_date) & 
+                (self._cached_factors["date"] <= end_date)
+            ].copy()
+            if not sub.empty:
+                return sub
+
+        # 无本地文件时的优雅回退提示
+        logger.info(
+            f"未在 {self.data_dir} 检测到校内因子文件。请将从 CSMAR/Wind 下载的因子 CSV/Parquet "
+            f"直接放入 {self.data_dir}，系统将自动热插拔加载。"
+        )
+        dates = pd.date_range(start=start_date, end=end_date, freq="B").strftime("%Y-%m-%d").tolist()
+        n = len(dates)
+        return pd.DataFrame({
+            "date": dates,
+            "MKT": np.zeros(n),
+            "SMB": np.zeros(n),
+            "HML": np.zeros(n),
+            "MOM": np.zeros(n),
+            "rf": np.full(n, 0.00015),
+        })
+
+

@@ -61,3 +61,33 @@ def test_market_data_packet_assembly(tmp_path):
     assert len(packet.returns) == 10
     assert not packet.factors.empty
     assert packet.cash_flow_indicators["prepayment_yoy"] == 0.45
+
+
+def test_scnu_academic_factor_provider(tmp_path):
+    """测试华南师范大学/阿伯丁学院校内因子库 (CSMAR/Wind) 本地热插拔与自动清洗。"""
+    from src.analysis.factor_providers import SCNUAcademicFactorProvider
+
+    school_dir = tmp_path / "school_factors"
+    school_dir.mkdir(parents=True, exist_ok=True)
+
+    # 模拟从 CSMAR 导出的三因子/四因子 CSV 文件
+    csmar_csv = school_dir / "STK_MKT_Thrfac.csv"
+    dates = pd.date_range("2024-01-01", periods=10, freq="B").strftime("%Y-%m-%d")
+    df_csmar = pd.DataFrame({
+        "TradingDate": dates,
+        "RiskPremium1": 0.0015,
+        "SMB1": 0.0008,
+        "HML1": -0.0004,
+        "RiskFreeRate": 0.0001
+    })
+    df_csmar.to_csv(csmar_csv, index=False)
+
+    # 实例化校内因子提供器
+    provider = SCNUAcademicFactorProvider(data_dir=school_dir)
+    factors_df = provider.get_daily_factors("2024-01-01", "2024-01-05")
+
+    assert not factors_df.empty
+    assert list(factors_df.columns) == ["date", "MKT", "SMB", "HML", "MOM", "rf"]
+    assert factors_df["MKT"].iloc[0] == pytest.approx(0.0015)
+    assert factors_df["SMB"].iloc[0] == pytest.approx(0.0008)
+

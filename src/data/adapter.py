@@ -24,7 +24,8 @@ from src.analysis.factor_providers import (
     AkshareProxyFactorProvider,
     KennethFrenchFactorProvider,
     WindCSMARStubProvider,
-    EastMoneyMiaoXiangProvider
+    EastMoneyMiaoXiangProvider,
+    SCNUAcademicFactorProvider
 )
 
 logger = logging.getLogger("data_adapter")
@@ -49,6 +50,7 @@ class UnifiedDataAdapter:
     - 自动对齐时序日历（处理节假日、跳空与交易日交集）
     - 提供纯学术 Carhart 4 因子矩阵与实盘 7 因子增强矩阵的自由切换
     - 自动提取并勾稽资产现金流先行指标（预付款项、合同负债、Capex）
+    - 原生支持华南师范大学/阿伯丁学院校内因子库 (data/school_factors/)
     """
 
     STANDARD_FACTOR_COLS = ["MKT", "SMB", "HML", "MOM", "rf"]
@@ -56,7 +58,7 @@ class UnifiedDataAdapter:
 
     def __init__(
         self,
-        mode: str = "dual_track",  # 'academic_4factor', 'production_7factor', 'dual_track'
+        mode: str = "dual_track",  # 'academic_4factor', 'production_7factor', 'dual_track', 'school_scnu'
         cache_db: Optional[str | Path] = None
     ):
         self.mode = mode
@@ -65,7 +67,9 @@ class UnifiedDataAdapter:
         self.us_provider = KennethFrenchFactorProvider(cache_dir=Path("data/cache/kenneth_french"))
         self.eastmoney_provider = EastMoneyMiaoXiangProvider(db_path=self.cache_db)
         self.csmar_provider = WindCSMARStubProvider(backend_type="csmar")
+        self.scnu_provider = SCNUAcademicFactorProvider(data_dir="data/school_factors")
         self._ensure_cache()
+
 
     def _ensure_cache(self) -> None:
         """确保本地统一缓存数据库完备。"""
