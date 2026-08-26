@@ -962,7 +962,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 选中并加载特定股票
     async function selectStock(code) {
-            if (state.selectedCode === code) return;
         state.selectedCode = code;
 
         // 更新列表卡片高亮状态
@@ -975,23 +974,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 查找该标的的最新汇总信息
-        const summaryItem = state.summary.items.find(i => i.code === code);
-        if (summaryItem) {
-            updateDetailHeader(summaryItem);
-        }
+        // 查找该标的的最新汇总信息或分析缓存信息
+        const summaryItem = state.summary && state.summary.items ? state.summary.items.find(i => i.code === code) : null;
+        const cachedAnalysis = state.analysisCache[code];
+        updateDetailHeader(summaryItem, null, cachedAnalysis);
 
         // 显示图表加载遮罩
         showLoadingOverlay();
 
         try {
-            const response = await fetch(dataUrl(`data/kline/${code}.json`));
+            const response = await fetch(dataUrl(`data/kline/${encodeURIComponent(code)}.json`));
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const klineData = await response.json();
             
-            // 渲染 K 线图
+            // 渲染 K 线图并再次校准 Header
+            updateDetailHeader(summaryItem, klineData, cachedAnalysis || state.analysisCache[code]);
             renderChart(klineData);
             hideOverlay();
         } catch (error) {
@@ -1000,35 +999,74 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 更新详情区顶部的大字价钱与涨跌幅
-    function updateDetailHeader(item) {
-        el.detailName.textContent = item.name;
-        el.detailCode.textContent = item.code;
+    // 更新详情区顶部的大字价钱与涨跌幅（增强多源融合与防崩兜底）
+    function updateDetailHeader(item, klineData, detailData) {
+        if (!item && !klineData && !detailData) return;
+        item = item || {};
+        detailData = detailData || {};
         
-        const typeLabel = item.type === 'etf' ? '场内基金/ETF' : 'A股股票';
-        el.detailTypeBadge.textContent = typeLabel;
-        el.detailTypeBadge.className = `type-badge ${item.type}`;
+        const code = item.code || detailData.code || state.selectedCode || '--';
+        const name = item.name || detailData.name || code;
+        const type = item.type || detailData.type || (String(code).startsWith('5') || String(code).startsWith('1') ? 'etf' : 'stock');
+        
+        el.detailName.textContent = name;
+        el.detailCode.textContent = code;
+        
+        const typeLabels = { etf: '场内基金/ETF', us: '美股', hk: '港股', kr: '韩股', stock: 'A股股票' };
+        el.detailTypeBadge.textContent = typeLabels[type] || 'A股股票';
+        el.detailTypeBadge.className = `type-badge ${type === 'etf' ? 'etf' : 'stock'}`;
 
-        el.detailPrice.textContent = item.last_close.toFixed(2);
-        
+        let close = Number.isFinite(item.last_close) ? item.last_close : null;
+        let changePct = Number.isFinite(item.change_pct) ? item.change_pct : null;
+        let changeAmt = Number.isFinite(item.change_amt) ? item.change_amt : null;
+        let lastDate = item.last_date || detailData.trade_date || '--';
+
+        // 如果 summary 没有该标的（例如排行榜/外盘/新股），从 klineData 或 detailData 提取
+        if (close == null && klineData && Array.isArray(klineData.kline) && klineData.kline.length > 0) {
+            const kline = klineData.kline;
+            const dates = klineData.dates || [];
+            const lastBar = kline[kline.length - 1];
+            if (Array.isArray(lastBar) && lastBar.length >= 2) {
+                close = lastBar[1];
+                if (kline.length >= 2) {
+                    const prevBar = kline[kline.length - 2];
+                    const prevClose = prevBar[1];
+                    changeAmt = close - prevClose;
+                    changePct = prevClose > 0 ? (changeAmt / prevClose) * 100 : 0.0;
+                }
+            }
+            if (dates.length > 0) {
+                lastDate = dates[dates.length - 1];
+            }
+        }
+        if (close == null && detailData.technical && Number.isFinite(detailData.technical.close)) {
+            close = detailData.technical.close;
+        }
+
         let changeClass = 'text-flat';
         let changeSign = '';
         let arrow = '';
-        if (item.change_pct > 0) {
+        if (changePct != null && changePct > 0) {
             changeClass = 'text-up';
             changeSign = '+';
             arrow = '↑';
-        } else if (item.change_pct < 0) {
+        } else if (changePct != null && changePct < 0) {
             changeClass = 'text-down';
             changeSign = '';
             arrow = '↓';
         }
         
-        el.detailChange.textContent = `${changeSign}${item.change_pct.toFixed(2)}% (${changeSign}${item.change_amt.toFixed(2)}元) ${arrow}`;
+        el.detailPrice.textContent = close != null ? close.toFixed(2) : '--';
+        if (changePct != null) {
+            const amtStr = changeAmt != null ? ` (${changeSign}${changeAmt.toFixed(2)}元)` : '';
+            el.detailChange.textContent = `${changeSign}${changePct.toFixed(2)}%${amtStr} ${arrow}`;
+        } else {
+            el.detailChange.textContent = '--';
+        }
         el.detailChange.className = `detail-change ${changeClass}`;
         el.detailPrice.className = `detail-price ${changeClass}`;
         
-        el.detailDateLabel.textContent = `最新交易日期：${item.last_date || '--'}`;
+        el.detailDateLabel.textContent = `最新交易日期：${lastDate}`;
         el.detailHeader.style.display = 'block';
     }
 
@@ -1628,15 +1666,21 @@ document.addEventListener('DOMContentLoaded', () => {
         el.queryResultHeader.style.display = 'none';
         el.indexChartCard.style.display = 'none';
 
+        // 优先切换到 detail 页面使得 DOM 可见，避免图表 0 宽渲染
+        if (!state.suppressDetailNavigation) navigateTo('detail');
+
         var summaryItem = state.summary && state.summary.items
             ? state.summary.items.find(function (item) { return item.code === code; })
             : null;
-        if (summaryItem) updateDetailHeader(summaryItem);
+        updateDetailHeader(summaryItem || { code: code, name: code }, null, state.analysisCache[code]);
 
         await Promise.all([selectStock(code), loadAnalysisDetail(code)]);
 
-        // v2.6：用户点击进入个股研究页；初始化预载时由 init 标记跳过
-        if (!state.suppressDetailNavigation) navigateTo('detail');
+        if (state.chart) {
+            setTimeout(function () {
+                try { state.chart.resize(); } catch (e) {}
+            }, 60);
+        }
 
         if (scrollToDetail && window.innerWidth < 900) {
             el.analysisDetail.scrollIntoView({behavior: 'smooth', block: 'start'});
@@ -1654,7 +1698,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 var response = await fetch(dataUrl('data/analysis/' + encodeURIComponent(code) + '.json'));
                 if (!response.ok) throw new Error('HTTP ' + response.status);
                 detail = await response.json();
-                if (String(detail.schema_version || '').split('.')[0] !== '2') {
+                var major = String(detail.schema_version || '').split('.')[0];
+                if (major !== '2' && major !== '3') {
                     throw new Error('分析数据版本不兼容');
                 }
                 state.analysisCache[code] = detail;
@@ -1662,6 +1707,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (state.analysisSelectedCode === code) {
                 renderAnalysisDetail(detail);
+                updateDetailHeader(state.summary && state.summary.items ? state.summary.items.find(function (i) { return i.code === code; }) : null, null, detail);
                 loadResearchReport(code, detail.trade_date);
             }
         } catch (error) {
