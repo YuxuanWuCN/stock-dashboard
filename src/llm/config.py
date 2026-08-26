@@ -67,15 +67,42 @@ LLM_REPORTS_SKIP_EXISTING = _env_flag("LLM_REPORTS_SKIP_EXISTING", True)
 # RAG 检索开关
 RAG_ENABLED = _env_flag("LLM_RAG_ENABLED", True)
 
-# ============================================================
-# LLM 客户端（OpenAI 兼容接口，默认 DeepSeek）
-# ============================================================
+# 尝试从 .env 文件自动加载环境变量
+_env_file = ROOT_PATH / ".env"
+if _env_file.exists():
+    try:
+        with open(_env_file, "r", encoding="utf-8") as _f:
+            for _line in _f:
+                _line = _line.strip()
+                if _line and not _line.startswith("#") and "=" in _line:
+                    _k, _v = _line.split("=", 1)
+                    _k = _k.strip()
+                    _v = _v.strip().strip("'\"")
+                    if _k and _k not in os.environ:
+                        os.environ[_k] = _v
+    except Exception:
+        pass
 
-# 后端选择: "deepseek" | "dashscope" | "openai" | ""
-# 为空且无 API Key 时，报告退化为模板生成（不调用外部 API）。
-LLM_BACKEND = os.environ.get("LLM_BACKEND", "deepseek")
+# 后端选择: "gemini" | "deepseek" | "dashscope" | "openai" | ""
+# 默认优先检查 GEMINI 或 DEEPSEEK
+_default_backend = "gemini" if os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_GEMINI_BASE_URL") else "deepseek"
+LLM_BACKEND = os.environ.get("LLM_BACKEND", _default_backend)
+
+_gemini_raw_base = os.environ.get("GOOGLE_GEMINI_BASE_URL", "https://uuapi.shop").rstrip("/")
+_gemini_base_url = _gemini_raw_base if _gemini_raw_base.endswith("/v1") else f"{_gemini_raw_base}/v1"
 
 LLM_CONFIG = {
+    "gemini": {
+        "api_key_env": "GEMINI_API_KEY",
+        "api_key_file": resolve_api_key_file_path(
+            os.environ.get("GEMINI_API_KEY_FILE"),
+            ROOT_PATH.parent / "api-key.txt",
+            ROOT_PATH / "api-key.txt",
+        ),
+        "base_url": _gemini_base_url,
+        "model": os.environ.get("GEMINI_MODEL", "gemini-3.7-flash"),
+        "default_api_key": os.environ.get("GEMINI_API_KEY", ""),
+    },
     "deepseek": {
         "api_key_env": "DEEPSEEK_API_KEY",
         "api_key_file": DEEPSEEK_API_KEY_FILE,
