@@ -1631,6 +1631,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return Number.isFinite(value) ? Number(value).toFixed(1) + '%' : '样本不足';
     }
 
+    function returnClass(value) {
+        if (!Number.isFinite(value) || value === 0) return 'text-flat';
+        return value > 0 ? 'text-up' : 'text-down';
+    }
+
+    function formatForecastHtml(value) {
+        if (!Number.isFinite(value)) return '<span class="forecast-empty">样本不足</span>';
+        return '<span class="forecast-value ' + returnClass(value) + '">' + formatPct(value) + '</span>';
+    }
+
     function formatProbabilityHtml(value, confidence) {
         if (!Number.isFinite(value)) return '<span class="forecast-empty">样本不足</span>';
         var cls = value >= 60 ? 'text-up' : (value <= 40 ? 'text-down' : 'text-flat');
