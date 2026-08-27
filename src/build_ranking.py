@@ -747,6 +747,26 @@ def build_ranking(
     根据所有标的分结果构建 ranking.json。
     results 中 None 表示该只分析失败。
     """
+    # ---- 0. 构建 NALE 板块拓扑图谱与涨停龙头识别 ----
+    sector_engine = None
+    try:
+        from src.graph.sector_graph_engine import SectorGraphEngine
+        sector_engine = SectorGraphEngine(corr_threshold=0.40)
+        kline_map = {}
+        for w in watchlist:
+            c = w.get("code")
+            kp = os.path.join(KLINE_DIR, f"{c}.json")
+            if os.path.exists(kp):
+                try:
+                    with open(kp, "r", encoding="utf-8") as kf:
+                        kline_map[c] = json.load(kf)
+                except Exception:
+                    pass
+        sector_engine.build_graph(watchlist, kline_map, lookback_days=60)
+        logger.info("NALE 板块拓扑图谱构建成功，共覆盖 %d 个板块", len(sector_engine.sector_states))
+    except Exception as ge_err:
+        logger.warning("NALE SectorGraphEngine 初始化失败: %s", ge_err)
+
     # 收集所有 valid results 用于跨标的百分位排名
     all_latest = []
     for code, r in results.items():
@@ -898,6 +918,33 @@ def build_ranking(
             "model": "knn_v1",
         }
 
+        # 计算 NALE 增强负载
+        nale_payload = None
+        if sector_engine:
+            try:
+                nale_payload = sector_engine.get_nale_network_payload(code, r.get("category", ""), final_forecast)
+                r["nale_network"] = nale_payload
+                if nale_payload.get("has_limit_up_resonance") and nale_payload.get("spillover_return_5d_pct", 0) > 0:
+                    spill_ret = nale_payload["spillover_return_5d_pct"]
+                    spill_prob = nale_payload.get("spillover_prob_5d_pct", 0)
+                    leader_info = nale_payload.get("leader_stock") or {}
+                    leader_name = leader_info.get("name", "龙头")
+                    if final_forecast.get("return_5d_pct") is not None:
+                        final_forecast["return_5d_pct"] = round(final_forecast["return_5d_pct"] + spill_ret, 2)
+                    if final_forecast.get("up_probability_5d_pct") is not None:
+                        final_forecast["up_probability_5d_pct"] = round(min(98.0, final_forecast["up_probability_5d_pct"] + spill_prob), 1)
+                    
+                    spill_reason = {
+                        "title": f"NALE·{nale_payload['sector_name']}涨停共振",
+                        "detail": f"同板块身位龙头【{leader_name}】强势封板，注入 +{spill_ret}% 溢出预期及 +{spill_prob}% 看涨胜率",
+                        "impact": "positive",
+                        "score_delta": 4.0
+                    }
+                    if "reasons" in r and isinstance(r["reasons"], list):
+                        r["reasons"].insert(0, spill_reason)
+            except Exception as pe:
+                logger.warning("%s 计算 NALE payload 失败: %s", code, pe)
+
         item_entry = {
             "rank": rank_idx,
             "code": code,
@@ -909,6 +956,7 @@ def build_ranking(
             "risk_adjusted_score": technical_composite,
             "fundamental_score": fundamental_score,
             "total_score": total_score,
+            "nale_network": nale_payload,
             "risk": {
                 "score": risk["score"],
                 "level": risk["level"],
@@ -1103,6 +1151,7 @@ def build_stock_detail(r: dict, generated_at: str) -> dict:
             "leading": comp.get("leading", 50.0),
         },
         "leading": r.get("leading"),
+        "nale_network": r.get("nale_network"),
         "risk": {
             "level": risk["level"],
             "label": risk["label"],

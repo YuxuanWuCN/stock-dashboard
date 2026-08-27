@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>A股智能量化投研看板</title>
-    <link rel="stylesheet" href="assets/style.css?v=20260827_v31_ranking_aligned">
+    <link rel="stylesheet" href="assets/style.css?v=20260827_v33_nale_engine">
     <!-- 🌈 年轻化 FinTech 轻奢风覆盖层 -->
     <link rel="stylesheet" href="assets/style_young.css?v=20260822_v1">
     <!-- 引入 ECharts 5.5.1 CDN -->
@@ -298,6 +298,23 @@
                             <span id="similarity-confidence" class="confidence-badge">--</span>
                         </div>
                         <div id="similarity-grid" class="similarity-grid"></div>
+                    </section>
+
+                    <!-- NALE 网络增强型板块协同与涨停龙头图谱 (Spec 015) -->
+                    <section id="nale-network-section" class="nale-network-section" aria-labelledby="nale-network-title" hidden>
+                        <div class="nale-network-heading">
+                            <div>
+                                <h3 id="nale-network-title">🌐 NALE 板块协同与涨停龙头图谱</h3>
+                                <p id="nale-sector-subtitle" class="nale-sector-subtitle">所属板块：-- ｜ 板块同涨广度：--</p>
+                            </div>
+                            <span id="nale-tier-badge" class="confidence-badge">--</span>
+                        </div>
+                        <div id="nale-leader-card" class="nale-leader-card" style="display:none;"></div>
+                        <div id="nale-spillover-banner" class="nale-spillover-banner" style="display:none;"></div>
+                        <div class="nale-peers-block">
+                            <h4 class="nale-peers-title">🔗 板块同盟军与走势协同度 (ρ &gt; 0.40)</h4>
+                            <div id="nale-peers-grid" class="nale-peers-grid"></div>
+                        </div>
                     </section>
 
                     <!-- 基本面分析（来自研究成果框架：资产/负债/盈利/现金） -->
@@ -628,6 +645,6 @@
     </div>
 
     <!-- 引入前端交互脚本 -->
-    <script src="assets/app.js?v=20260827_v32_forecast_fixed"></script>
+    <script src="assets/app.js?v=20260827_v33_nale_engine"></script>
 </body>
 </html>

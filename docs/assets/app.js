@@ -112,6 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
         dailyBriefFocus: document.getElementById('daily-brief-focus'),
         dailyBriefPosition: document.getElementById('daily-brief-position'),
         dailyBriefDisclaimer: document.getElementById('daily-brief-disclaimer'),
+        // Spec 015 NALE 板块图谱与涨停龙头
+        naleNetworkSection: document.getElementById('nale-network-section'),
+        naleSectorSubtitle: document.getElementById('nale-sector-subtitle'),
+        naleTierBadge: document.getElementById('nale-tier-badge'),
+        naleLeaderCard: document.getElementById('nale-leader-card'),
+        naleSpilloverBanner: document.getElementById('nale-spillover-banner'),
+        nalePeersGrid: document.getElementById('nale-peers-grid'),
         // 模拟盘对比
         paperMeta: document.getElementById('paper-meta'),
         paperCards: document.getElementById('paper-cards'),
@@ -2107,6 +2114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderMarketMetrics(detail);
         renderSimilarity(similarity);
         renderFundamental(detail.fundamental);
+        renderNaleNetworkCard(detail.nale_network);
         el.analysisDisclaimer.textContent = detail.disclaimer
             || '基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。';
     }
@@ -3410,3 +3418,95 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+    // ---- Spec 015 NALE 网络增强型板块协同与涨停龙头图谱渲染 ----
+    function renderNaleNetworkCard(nale) {
+        if (!el.naleNetworkSection) return;
+        if (!nale || typeof nale !== 'object') {
+            el.naleNetworkSection.hidden = true;
+            return;
+        }
+
+        el.naleNetworkSection.hidden = false;
+        var breadthText = Number.isFinite(nale.sector_breadth_pct) ? nale.sector_breadth_pct.toFixed(1) + '%' : '--';
+        el.naleSectorSubtitle.textContent = '所属题材：' + (nale.sector_name || '通用板块') + ' ｜ 板块同涨广度：' + breadthText;
+
+        // 梯队标签
+        var role = nale.tier_role || 'neutral';
+        var roleLabel = '中性标的';
+        var roleClass = 'confidence-low';
+        if (role === 'leader') {
+            roleLabel = '🏆 身位龙头 / 领涨先锋';
+            roleClass = 'confidence-high';
+        } else if (role === 'follower_catchup') {
+            roleLabel = '⚡ 滞涨补涨 / 龙头溢出受益';
+            roleClass = 'confidence-high';
+        } else if (role === 'core_mid') {
+            roleLabel = '🛡️ 中军主力 / 板块基石';
+            roleClass = 'confidence-medium';
+        } else if (role === 'divergent') {
+            roleLabel = '⚠️ 走势钝化 / 掉队标的';
+            roleClass = 'confidence-low';
+        }
+        el.naleTierBadge.textContent = roleLabel;
+        el.naleTierBadge.className = 'confidence-badge ' + roleClass;
+
+        // 龙头卡片
+        var leader = nale.leader_stock;
+        if (leader) {
+            el.naleLeaderCard.style.display = 'flex';
+            var limitUpTag = leader.is_limit_up ? '<span class="nale-limitup-tag">🔥 封涨停板</span>' : '<span class="nale-lead-tag">领跑标的</span>';
+            var chgText = Number.isFinite(leader.change_pct) ? (leader.change_pct > 0 ? '+' : '') + leader.change_pct.toFixed(2) + '%' : '--';
+            el.naleLeaderCard.innerHTML = '<div class="nale-leader-left">'
+                + '<span class="nale-leader-label">当前板块领跑身位</span>'
+                + '<strong class="nale-leader-name">' + escapeHtml(leader.name) + ' <small>(' + escapeHtml(leader.code) + ')</small></strong>'
+                + '</div>'
+                + '<div class="nale-leader-right">'
+                + '<span class="nale-leader-change ' + returnClass(leader.change_pct) + '">' + chgText + '</span>'
+                + limitUpTag
+                + '</div>';
+        } else {
+            el.naleLeaderCard.style.display = 'none';
+        }
+
+        // 涨停溢出 Banner
+        if (nale.has_limit_up_resonance && nale.spillover_return_5d_pct > 0) {
+            el.naleSpilloverBanner.style.display = 'block';
+            el.naleSpilloverBanner.innerHTML = '<div class="nale-spillover-content">'
+                + '<span class="nale-spillover-icon">🚀</span>'
+                + '<div>'
+                + '<strong>NALE 涨停溢出激活：</strong>同板块龙头强势涨停，向本标的注入 <strong>+'
+                + nale.spillover_return_5d_pct.toFixed(2) + '%</strong> 5日预期收益上修及 <strong>+'
+                + nale.spillover_prob_5d_pct.toFixed(1) + '%</strong> 胜率提振！'
+                + '</div>'
+                + '</div>';
+        } else {
+            el.naleSpilloverBanner.style.display = 'none';
+        }
+
+        // 同盟军相关性矩阵列表
+        el.nalePeersGrid.innerHTML = '';
+        var peers = nale.co_movement_peers || [];
+        if (peers.length === 0) {
+            el.nalePeersGrid.innerHTML = '<div class="nale-no-peers">暂无强相关（ρ > 0.40）同盟军标的</div>';
+        } else {
+            peers.forEach(function (peer) {
+                var item = document.createElement('div');
+                item.className = 'nale-peer-chip';
+                var corrPct = Math.round(peer.corr * 100);
+                item.innerHTML = '<div class="nale-peer-info">'
+                    + '<strong class="nale-peer-name">' + escapeHtml(peer.name) + '</strong>'
+                    + '<small class="nale-peer-code">' + escapeHtml(peer.code) + '</small>'
+                    + '</div>'
+                    + '<div class="nale-peer-corr" title="近 60 交易日走势协同相关度">'
+                    + '<div class="nale-corr-bar-wrap"><div class="nale-corr-bar" style="width: ' + corrPct + '%;"></div></div>'
+                    + '<span>ρ = ' + peer.corr.toFixed(2) + '</span>'
+                    + '</div>';
+                item.addEventListener('click', function () {
+                    selectTrackedStock(peer.code, true);
+                });
+                el.nalePeersGrid.appendChild(item);
+            });
+        }
+    }

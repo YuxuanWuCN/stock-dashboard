@@ -72,9 +72,9 @@
   },
   "forecast": {
     "return_3d_pct": -1.2,
-    "return_5d_pct": 0.8,
+    "return_5d_pct": 2.9,
     "up_probability_3d_pct": 43.0,
-    "up_probability_5d_pct": 51.0,
+    "up_probability_5d_pct": 56.0,
     "confidence": "medium",
     "rationale": "短期涨幅过大且MA20乖离偏高，面临获利回吐与均线修复，震荡整固后或有反复。",
     "risk_warning": "均线高位乖离回踩及题材退潮风险。",
@@ -259,6 +259,12 @@
   },
   "reasons": [
     {
+      "title": "NALE·热点龙头涨停共振",
+      "detail": "同板块身位龙头【迪阿股份】强势封板，注入 +2.1% 溢出预期及 +5.0% 看涨胜率",
+      "impact": "positive",
+      "score_delta": 4.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 32.3%，风险偏高。",
@@ -284,5 +290,46 @@
     }
   ],
   "kline_file": "../kline/301152.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "热点龙头",
+    "sector_breadth_pct": 40.0,
+    "tier_role": "follower_catchup",
+    "leader_stock": {
+      "code": "301177",
+      "name": "迪阿股份",
+      "change_pct": 20.00835421888053,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 2.1,
+    "spillover_prob_5d_pct": 5.0,
+    "has_limit_up_resonance": true,
+    "co_movement_peers": [
+      {
+        "code": "301216",
+        "name": "万凯新材",
+        "corr": 0.73
+      },
+      {
+        "code": "301598",
+        "name": "博科测试",
+        "corr": 0.72
+      },
+      {
+        "code": "300839",
+        "name": "博汇股份",
+        "corr": 0.53
+      },
+      {
+        "code": "688356",
+        "name": "键凯科技",
+        "corr": 0.51
+      },
+      {
+        "code": "688835",
+        "name": "C高凯",
+        "corr": 0.5
+      }
+    ]
+  }
 }

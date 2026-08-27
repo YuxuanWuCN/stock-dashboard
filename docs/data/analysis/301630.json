@@ -72,9 +72,9 @@
   },
   "forecast": {
     "return_3d_pct": 2.8,
-    "return_5d_pct": 1.5,
+    "return_5d_pct": 3.6,
     "up_probability_3d_pct": 58.0,
-    "up_probability_5d_pct": 52.0,
+    "up_probability_5d_pct": 57.0,
     "confidence": "medium",
     "rationale": "20CM涨停突破动能强劲，但短期均线乖离过大，惯性冲高后易现分化震荡。",
     "risk_warning": "短线严重超买引发获利盘砸盘回撤风险。",
@@ -252,6 +252,12 @@
   },
   "reasons": [
     {
+      "title": "NALE·热点龙头涨停共振",
+      "detail": "同板块身位龙头【迪阿股份】强势封板，注入 +2.1% 溢出预期及 +5.0% 看涨胜率",
+      "impact": "positive",
+      "score_delta": 4.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 51.5%，风险偏高。",
@@ -271,5 +277,46 @@
     }
   ],
   "kline_file": "../kline/301630.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "热点龙头",
+    "sector_breadth_pct": 40.0,
+    "tier_role": "follower_catchup",
+    "leader_stock": {
+      "code": "301177",
+      "name": "迪阿股份",
+      "change_pct": 20.00835421888053,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 2.1,
+    "spillover_prob_5d_pct": 5.0,
+    "has_limit_up_resonance": true,
+    "co_movement_peers": [
+      {
+        "code": "688598",
+        "name": "金博股份",
+        "corr": 0.66
+      },
+      {
+        "code": "300647",
+        "name": "超频三",
+        "corr": 0.61
+      },
+      {
+        "code": "300382",
+        "name": "斯莱克",
+        "corr": 0.51
+      },
+      {
+        "code": "688419",
+        "name": "耐科装备",
+        "corr": 0.51
+      },
+      {
+        "code": "688835",
+        "name": "C高凯",
+        "corr": 0.5
+      }
+    ]
+  }
 }

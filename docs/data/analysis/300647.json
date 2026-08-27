@@ -72,9 +72,9 @@
   },
   "forecast": {
     "return_3d_pct": -1.2,
-    "return_5d_pct": -2.8,
+    "return_5d_pct": 0.2,
     "up_probability_3d_pct": 42.0,
-    "up_probability_5d_pct": 38.0,
+    "up_probability_5d_pct": 44.5,
     "confidence": "medium",
     "rationale": "短期动量极强，但均线乖离与RSI超买严重，面临获利回吐与修整压力。",
     "risk_warning": "均线严重超买易引发剧烈冲高回落与退潮风险。",
@@ -258,6 +258,12 @@
   },
   "reasons": [
     {
+      "title": "NALE·热点龙头涨停共振",
+      "detail": "同板块身位龙头【迪阿股份】强势封板，注入 +3.0% 溢出预期及 +6.5% 看涨胜率",
+      "impact": "positive",
+      "score_delta": 4.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 29.5%，风险偏高。",
@@ -283,5 +289,46 @@
     }
   ],
   "kline_file": "../kline/300647.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "热点龙头",
+    "sector_breadth_pct": 40.0,
+    "tier_role": "follower_catchup",
+    "leader_stock": {
+      "code": "301177",
+      "name": "迪阿股份",
+      "change_pct": 20.00835421888053,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 3.0,
+    "spillover_prob_5d_pct": 6.5,
+    "has_limit_up_resonance": true,
+    "co_movement_peers": [
+      {
+        "code": "301177",
+        "name": "迪阿股份",
+        "corr": 0.65
+      },
+      {
+        "code": "300128",
+        "name": "锦富技术",
+        "corr": 0.61
+      },
+      {
+        "code": "301630",
+        "name": "同宇新材",
+        "corr": 0.61
+      },
+      {
+        "code": "688835",
+        "name": "C高凯",
+        "corr": 0.5
+      },
+      {
+        "code": "301591",
+        "name": "肯特股份",
+        "corr": 0.49
+      }
+    ]
+  }
 }
