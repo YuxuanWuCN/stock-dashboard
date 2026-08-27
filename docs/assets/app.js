@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         var cards = [
             { icon: '⚡', title: '前沿供需驱动', desc: '现货/期货/订单动能最强', list: leading, metric: function (i) { return '领先 ' + numOf(i, ['leading', 'score']).toFixed(0); }, reason: leadingReason },
-            { icon: '🚀', title: '高弹性预期收益', desc: 'KNN 5日期望收益最高', list: gain, metric: function (i) { return '5日 ' + numOf(i, ['forecast', 'return_5d_pct']).toFixed(1) + '%'; }, reason: gainReason },
+            { icon: '🚀', title: '高弹性预期收益', desc: 'LLM 5日期望收益最高', list: gain, metric: function (i) { return '5日 ' + numOf(i, ['forecast', 'return_5d_pct']).toFixed(1) + '%'; }, reason: gainReason },
             { icon: '🎯', title: '趋势主升浪', desc: '长动量半衰期 · 稳健主升', list: trend, metric: function (i) { return '综合 ' + numOf(i, ['risk_adjusted_score']).toFixed(0); }, reason: betReason },
             { icon: '🔥', title: '妖股题材弹性', desc: '高波动 · 短线择时博弈', list: volatile, metric: function (i) { return '综合 ' + numOf(i, ['risk_adjusted_score']).toFixed(0); }, reason: betReason },
             { icon: '🧱', title: '震荡筑底', desc: '低位蓄势 · 等待突破', list: rangeBound, metric: function (i) { return '综合 ' + numOf(i, ['risk_adjusted_score']).toFixed(0); }, reason: betReason },
@@ -1485,6 +1485,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function getRankingValue(item, key) {
         if (key === 'return_3d_pct') return item.forecast && item.forecast.return_3d_pct;
         if (key === 'return_5d_pct') return item.forecast && item.forecast.return_5d_pct;
+        if (key === 'up_probability_5d_pct') return item.forecast && item.forecast.up_probability_5d_pct;
         if (key === 'risk_score') return item.risk && item.risk.score;
         return item.risk_adjusted_score;
     }
@@ -1570,13 +1571,15 @@ document.addEventListener('DOMContentLoaded', () => {
         var reasonText = firstReason ? firstReason.title + '：' + firstReason.detail : '暂无明确加减分项';
         var risk = item.risk || {};
         var leadingBadge = leadingBadgeHtml(item.leading);
+        var fc = item.forecast || {};
 
         tr.innerHTML = '<td class="ranking-number ' + (rank <= 3 ? 'top-three' : '') + '">' + rank + '</td>'
             + '<td><span class="ranking-stock-name">' + escapeHtml(item.name) + '</span>'
             + '<span class="ranking-stock-meta"><span>' + escapeHtml(item.code) + '</span><span>' + escapeHtml(displayCategory(item)) + '</span></span></td>'
             + '<td><span class="score-value">' + formatScore(item.risk_adjusted_score) + '</span></td>'
-            + '<td>' + formatForecastHtml(item.forecast && item.forecast.return_3d_pct) + '</td>'
-            + '<td>' + formatForecastHtml(item.forecast && item.forecast.return_5d_pct) + '</td>'
+            + '<td>' + formatForecastHtml(fc.return_3d_pct) + '</td>'
+            + '<td>' + formatForecastHtml(fc.return_5d_pct) + '</td>'
+            + '<td>' + formatProbabilityHtml(fc.up_probability_5d_pct, fc.confidence) + '</td>'
             + '<td><span class="risk-badge ' + riskClass(risk.level) + '">' + escapeHtml(risk.label || '未知风险') + ' ' + formatScore(risk.score) + '</span></td>'
             + '<td><span class="ranking-reason">' + leadingBadge + escapeHtml(reasonText) + '</span></td>';
 
@@ -1596,15 +1599,16 @@ document.addEventListener('DOMContentLoaded', () => {
         button.className = 'ranking-mobile-card';
         button.dataset.analysisCode = item.code;
         var risk = item.risk || {};
+        var fc = item.forecast || {};
         button.innerHTML = '<div class="ranking-mobile-top">'
             + '<div class="ranking-mobile-name">' + rank + '. ' + escapeHtml(item.name)
             + '<small>' + escapeHtml(item.code) + ' · ' + escapeHtml(displayCategory(item)) + '</small></div>'
             + '<span class="risk-badge ' + riskClass(risk.level) + '">' + escapeHtml(risk.label || '未知风险') + '</span>'
             + '</div>'
             + '<div class="ranking-mobile-metrics">'
-            + mobileMetric('风险收益分', formatScore(item.risk_adjusted_score), '')
-            + mobileMetric('3日统计', formatPct(item.forecast && item.forecast.return_3d_pct), returnClass(item.forecast && item.forecast.return_3d_pct))
-            + mobileMetric('5日统计', formatPct(item.forecast && item.forecast.return_5d_pct), returnClass(item.forecast && item.forecast.return_5d_pct))
+            + mobileMetric('综合评分', formatScore(item.risk_adjusted_score), '')
+            + mobileMetric('5日 LLM 预测', formatPct(fc.return_5d_pct), returnClass(fc.return_5d_pct))
+            + mobileMetric('5日看涨胜率', formatProbability(fc.up_probability_5d_pct), returnClass(fc.up_probability_5d_pct != null ? fc.up_probability_5d_pct - 50 : null))
             + '</div>';
         button.addEventListener('click', function () { selectTrackedStock(item.code, true); });
         el.rankingMobileList.appendChild(button);
@@ -1627,14 +1631,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return Number.isFinite(value) ? Number(value).toFixed(1) + '%' : '样本不足';
     }
 
-    function returnClass(value) {
-        if (!Number.isFinite(value) || value === 0) return 'text-flat';
-        return value > 0 ? 'text-up' : 'text-down';
-    }
-
-    function formatForecastHtml(value) {
+    function formatProbabilityHtml(value, confidence) {
         if (!Number.isFinite(value)) return '<span class="forecast-empty">样本不足</span>';
-        return '<span class="forecast-value ' + returnClass(value) + '">' + formatPct(value) + '</span>';
+        var cls = value >= 60 ? 'text-up' : (value <= 40 ? 'text-down' : 'text-flat');
+        var confBadge = confidence ? '<span class="ranking-conf-tag ' + (confidence === 'high' ? 'conf-high' : (confidence === 'medium' ? 'conf-mid' : 'conf-low')) + '">' + confidenceLabel(confidence) + '</span>' : '';
+        return '<span class="forecast-value ' + cls + '">' + Number(value).toFixed(1) + '% ' + confBadge + '</span>';
     }
 
     function riskClass(level) {

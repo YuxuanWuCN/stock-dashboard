@@ -877,6 +877,27 @@ def build_ranking(
             )
             total_score = round(max(0.0, min(100.0, total_score)), 1)
 
+        # 优先复用已有分析文件中的 v3 LLM 直接预测结果
+        existing_fc = None
+        analysis_path = os.path.join(ANALYSIS_DIR, f"{code}.json")
+        if os.path.exists(analysis_path):
+            try:
+                with open(analysis_path, "r", encoding="utf-8") as afp:
+                    existing_fc = json.load(afp).get("forecast")
+            except Exception:
+                pass
+
+        final_forecast = existing_fc or r.get("forecast") or {
+            "return_3d_pct": fc_3d.get("average_return_pct"),
+            "return_5d_pct": fc_5d.get("average_return_pct"),
+            "up_probability_3d_pct": fc_3d.get("up_probability_pct"),
+            "up_probability_5d_pct": fc_5d.get("up_probability_pct"),
+            "confidence": sim.get("confidence", "low"),
+            "sample_size": sim.get("sample_size", 0),
+            "source": "knn_fallback",
+            "model": "knn_v1",
+        }
+
         item_entry = {
             "rank": rank_idx,
             "code": code,
@@ -894,14 +915,7 @@ def build_ranking(
                 "label": risk["label"],
                 "factors": risk["factors"],
             },
-            "forecast": {
-                "return_3d_pct": fc_3d.get("average_return_pct"),
-                "return_5d_pct": fc_5d.get("average_return_pct"),
-                "up_probability_3d_pct": fc_3d.get("up_probability_pct"),
-                "up_probability_5d_pct": fc_5d.get("up_probability_pct"),
-                "confidence": sim.get("confidence", "low"),
-                "sample_size": sim.get("sample_size", 0),
-            },
+            "forecast": final_forecast,
             "technical": {
                 "score": tech["score"],
                 "trend": tech["trend"],
