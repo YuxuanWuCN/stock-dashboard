@@ -1,0 +1,175 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
+  "code": "159920",
+  "name": "恒生ETF",
+  "type": "etf",
+  "category": "通用",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 46.3,
+    "risk": 11.2,
+    "technical": 63.0,
+    "industry": 43.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:15:09"
+  },
+  "nale_network": {
+    "sector_name": "通用",
+    "sector_breadth_pct": 42.9,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "513050",
+        "name": "中概互联网ETF",
+        "corr": 0.87
+      },
+      {
+        "code": "513180",
+        "name": "恒生科技ETF",
+        "corr": 0.78
+      },
+      {
+        "code": "513090",
+        "name": "香港证券ETF",
+        "corr": 0.55
+      },
+      {
+        "code": "512690",
+        "name": "白酒ETF",
+        "corr": 0.44
+      },
+      {
+        "code": "510050",
+        "name": "上证50ETF",
+        "corr": 0.4
+      }
+    ]
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 13.75,
+    "max_drawdown_60d_pct": -8.84,
+    "atr14_pct": 1.2,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 1.9,
+        "value": 13.75
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 10.3,
+        "value": -8.84
+      },
+      {
+        "name": "ATR百分比",
+        "score": 1.9,
+        "value": 1.2
+      },
+      {
+        "name": "量价异常",
+        "score": 74.4,
+        "value": 0.58
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.28,
+    "return_5d_pct": -0.17,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 43.3,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "rebound",
+    "ma5": 1.502,
+    "ma10": 1.5050000000000001,
+    "ma20": 1.5065000000000002,
+    "ma60": 1.4591666666666667,
+    "rsi14": 51.4,
+    "macd_dif": 0.006572761904697799,
+    "macd_dea": 0.00944004676732459,
+    "macd_hist": -0.005734569725253581,
+    "atr14_pct": 1.1985691370688267,
+    "boll_position": 0.3829541090143824,
+    "return_5d_pct": -1.3157894736842146,
+    "return_20d_pct": -1.3157894736842146,
+    "volume_ratio_5d": 0.58
+  },
+  "industry": {
+    "name": "通用",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -7.7
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.28,
+      "median_return_pct": 0.0,
+      "best_return_pct": 4.97,
+      "worst_return_pct": -5.06
+    },
+    "horizon_5d": {
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.17,
+      "median_return_pct": 0.0,
+      "best_return_pct": 5.15,
+      "worst_return_pct": -6.16
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    }
+  ],
+  "kline_file": "../kline/159920.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

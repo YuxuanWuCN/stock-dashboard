@@ -1,0 +1,175 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
+  "code": "513090",
+  "name": "香港证券ETF",
+  "type": "etf",
+  "category": "通用",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 43.0,
+    "risk": 7.8,
+    "technical": 100.0,
+    "industry": 53.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:15:12"
+  },
+  "nale_network": {
+    "sector_name": "通用",
+    "sector_breadth_pct": 42.9,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "512880",
+        "name": "证券ETF",
+        "corr": 0.86
+      },
+      {
+        "code": "510050",
+        "name": "上证50ETF",
+        "corr": 0.68
+      },
+      {
+        "code": "159919",
+        "name": "沪深300ETF易方达",
+        "corr": 0.66
+      },
+      {
+        "code": "510300",
+        "name": "沪深300ETF",
+        "corr": 0.65
+      },
+      {
+        "code": "515030",
+        "name": "新能源车ETF",
+        "corr": 0.58
+      }
+    ]
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 16.32,
+    "max_drawdown_60d_pct": -7.94,
+    "atr14_pct": 1.56,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 5.8,
+        "value": 16.32
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 7.7,
+        "value": -7.94
+      },
+      {
+        "name": "ATR百分比",
+        "score": 6.4,
+        "value": 1.56
+      },
+      {
+        "name": "量价异常",
+        "score": 26.3,
+        "value": 1.14
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -1.59,
+    "return_5d_pct": -1.33,
+    "up_probability_3d_pct": 23.3,
+    "up_probability_5d_pct": 26.7,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 1.8699999999999999,
+    "ma10": 1.844,
+    "ma20": 1.8380000000000003,
+    "ma60": 1.823,
+    "rsi14": 64.0,
+    "macd_dif": 0.011885932380703457,
+    "macd_dea": 0.003595807375808169,
+    "macd_hist": 0.016580250009790576,
+    "atr14_pct": 1.5565646486149922,
+    "boll_position": 1.0752589547445255,
+    "return_5d_pct": 3.82513661202184,
+    "return_20d_pct": 3.2608695652173836,
+    "volume_ratio_5d": 1.14
+  },
+  "industry": {
+    "name": "通用",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -2.48
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 23.3,
+      "average_return_pct": -1.59,
+      "median_return_pct": -1.29,
+      "best_return_pct": 4.57,
+      "worst_return_pct": -7.57
+    },
+    "horizon_5d": {
+      "up_probability_pct": 26.7,
+      "average_return_pct": -1.33,
+      "median_return_pct": -0.82,
+      "best_return_pct": 5.14,
+      "worst_return_pct": -9.85
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/513090.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

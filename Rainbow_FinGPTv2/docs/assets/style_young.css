@@ -1,0 +1,1317 @@
+/* ============================================================
+   🌈 Rainbow FinGPT v2 — 年轻化 FinTech 轻奢风覆盖层
+   保持浅色底，增加玻璃质感 / 渐变 / 微动效 / 等宽数字
+   加载顺序：style.css → style_young.css（后者覆盖前者）
+   ============================================================ */
+
+:root {
+    /* —— 更鲜活的品牌色 —— */
+    --accent-primary: #6366f1;        /* 靛蓝紫，比纯蓝更潮 */
+    --accent-secondary: #8b5cf6;      /* 紫罗兰 */
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --accent-gradient-hover: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    --accent-glow: 0 4px 20px rgba(99, 102, 241, 0.3);
+    --accent-glow-strong: 0 8px 30px rgba(99, 102, 241, 0.4);
+
+    /* —— 玻璃质感变量 —— */
+    --glass-bg: rgba(255, 255, 255, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.9);
+    --glass-blur: blur(20px);
+    --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+
+    /* —— 更潮的背景 —— */
+    --bg-color: #f0f4ff;
+    --bg-gradient: radial-gradient(ellipse at top, #e0e7ff 0%, #f0f4ff 50%, #f8fafc 100%);
+
+    /* —— 涨跌色优化（带光晕辅助） —— */
+    --color-up: #ef4444;
+    --color-up-glow: 0 0 12px rgba(239, 68, 68, 0.25);
+    --color-down: #10b981;
+    --color-down-glow: 0 0 12px rgba(16, 185, 129, 0.25);
+
+    /* —— 阴影升级 —— */
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.1);
+    --shadow-lg: 0 16px 40px -8px rgba(15, 23, 42, 0.15);
+    --shadow-hover: 0 20px 48px -8px rgba(99, 102, 241, 0.2);
+
+    /* —— 圆角加大 —— */
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+
+    /* —— 等宽数字字体 —— */
+    --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, Monaco, Consolas, monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+/* —— 全局背景：微妙的径向渐变网格 —— */
+body {
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* —— 容器加宽 —— */
+.container {
+    max-width: 1440px;
+    padding: 20px;
+}
+
+/* ============================================================
+   🏠 Header — 玻璃质感深色头部
+   ============================================================ */
+.header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px -5px rgba(67, 56, 202, 0.4);
+    overflow: hidden;
+    position: relative;
+}
+
+.header::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(ellipse, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #ffffff 0%, #c4b5fd 50%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    z-index: 1;
+}
+
+.header .subtitle {
+    font-size: 0.95rem;
+    color: #a5b4fc;
+    margin-top: 6px;
+    position: relative;
+    z-index: 1;
+}
+
+.portfolio-link {
+    background: var(--accent-gradient);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: var(--accent-glow);
+    border-radius: var(--radius-md);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.portfolio-link:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--accent-glow-strong);
+    background: var(--accent-gradient-hover);
+}
+
+.status-bar {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    position: relative;
+    z-index: 1;
+}
+
+.status-bar.ok {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+}
+.status-bar.ok .status-indicator {
+    background: #34d399;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+}
+.status-bar.loading .status-indicator {
+    background: #818cf8;
+    box-shadow: 0 0 8px rgba(129, 140, 248, 0.5);
+}
+.status-bar.partial .status-indicator {
+    background: #fbbf24;
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+}
+.status-bar.failed .status-indicator {
+    background: #f87171;
+    box-shadow: 0 0 8px rgba(248, 113, 113, 0.6);
+}
+
+/* ============================================================
+   🧭 导航 — 玻璃质感 Tab + 流光选中态
+   ============================================================ */
+.app-nav {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glass-shadow);
+    padding: 8px;
+    margin-bottom: 16px;
+}
+
+.app-nav-btn {
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.app-nav-btn::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: var(--accent-gradient);
+    border-radius: 3px 3px 0 0;
+    transform: translateX(-50%);
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.app-nav-btn:hover {
+    background: rgba(99, 102, 241, 0.08);
+    color: var(--accent-primary);
+    transform: translateY(-1px);
+}
+
+.app-nav-btn.active {
+    background: var(--accent-gradient);
+    color: #fff;
+    box-shadow: var(--accent-glow);
+    border: none;
+}
+
+.app-nav-btn.active::after {
+    width: 60%;
+}
+
+/* —— 侧边导航 —— */
+.page-sidebar {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--glass-shadow);
+    padding: 12px;
+}
+
+.page-sidebar-btn {
+    border-radius: var(--radius-sm);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.page-sidebar-btn:hover {
+    background: rgba(99, 102, 241, 0.08);
+    color: var(--accent-primary);
+    padding-left: 18px;
+}
+
+.page-sidebar-btn.active {
+    background: var(--accent-gradient);
+    color: #fff;
+    box-shadow: var(--accent-glow);
+}
+
+/* ============================================================
+   🃏 卡片 — 玻璃质感 + 入场动画
+   ============================================================ */
+.dashboard-card,
+.stock-sidebar,
+.query-bar,
+.detail-header,
+.chart-card,
+.ranking-section,
+.analysis-detail,
+.fundamental-section,
+.top3-matrix-section {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--glass-shadow) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.dashboard-card:hover,
+.stock-sidebar:hover,
+.detail-header:hover,
+.chart-card:hover,
+.top3-matrix-section:hover {
+    box-shadow: var(--shadow-hover) !important;
+    transform: translateY(-3px);
+}
+
+/* —— 卡片入场动画 —— */
+@keyframes cardFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page:not([hidden]) {
+    animation: cardFadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ============================================================
+   📊 排行榜 — 暗色列表 + 悬停光效 + 奖牌排名
+   ============================================================ */
+.ranking-section {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+    overflow: hidden;
+}
+
+.ranking-tabs {
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0 16px;
+}
+
+.ranking-tab {
+    border-bottom: 3px solid transparent;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    color: var(--text-secondary);
+}
+
+.ranking-tab:hover {
+    color: var(--accent-primary);
+    background: rgba(99, 102, 241, 0.06);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.ranking-tab.active {
+    color: var(--accent-primary);
+    border-bottom-color: var(--accent-primary);
+    font-weight: 800;
+}
+
+.ranking-table-wrap {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.ranking-table th {
+    background: rgba(99, 102, 241, 0.06) !important;
+    color: var(--accent-primary) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    padding: 14px 16px !important;
+    border-bottom: 2px solid rgba(99, 102, 241, 0.15) !important;
+}
+
+.ranking-table th button:hover,
+.ranking-table th button.active {
+    color: var(--accent-secondary) !important;
+}
+
+.ranking-table td {
+    border-bottom: 1px solid var(--border-subtle) !important;
+    padding: 14px 16px !important;
+    font-size: 15px !important;
+}
+
+.ranking-table tbody tr {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ranking-table tbody tr:hover {
+    background: rgba(99, 102, 241, 0.06) !important;
+    box-shadow: inset 3px 0 0 var(--accent-primary);
+}
+
+.ranking-table tbody tr.active {
+    background: rgba(99, 102, 241, 0.1) !important;
+    box-shadow: inset 3px 0 0 var(--accent-primary);
+}
+
+/* —— 排名序号奖牌风格 —— */
+.ranking-number {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    background: #f1f5f9 !important;
+    color: var(--text-secondary) !important;
+    font-variant-numeric: tabular-nums !important;
+    transition: all 0.2s ease;
+}
+
+.ranking-number.top-three {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%) !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+}
+
+/* —— 评分数字用等宽 + 品牌色 —— */
+.score-value {
+    color: var(--accent-primary) !important;
+    font-family: var(--font-mono) !important;
+    font-variant-numeric: tabular-nums;
+}
+
+.forecast-value {
+    font-family: var(--font-mono) !important;
+    font-variant-numeric: tabular-nums;
+}
+
+.text-up, .forecast-value.text-up {
+    color: var(--color-up) !important;
+    text-shadow: var(--color-up-glow);
+}
+
+.text-down, .forecast-value.text-down {
+    color: var(--color-down) !important;
+    text-shadow: var(--color-down-glow);
+}
+
+/* ============================================================
+   🌡️ 市场温度条 — 渐变霓虹 + 发光填充
+   ============================================================ */
+.market-temp-bar {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md);
+    box-shadow: var(--glass-shadow);
+}
+
+.market-temp-value {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--font-mono);
+}
+
+.market-temp-scale {
+    height: 12px !important;
+    background: rgba(99, 102, 241, 0.1) !important;
+    border-radius: 6px !important;
+    box-shadow: inset 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.market-temp-scale-fill {
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    border-radius: 6px !important;
+}
+
+/* ============================================================
+   💡 今日关注 / 每日简报 — 玻璃质感 + 品牌色边框
+   ============================================================ */
+.daily-brief-section {
+    background: rgba(99, 102, 241, 0.06) !important;
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(10px);
+}
+
+.daily-brief-heading h2 {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+}
+
+.daily-brief-item {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.daily-brief-item:hover {
+    border-color: var(--accent-primary) !important;
+    box-shadow: var(--accent-glow) !important;
+    transform: translateY(-2px);
+}
+
+.buy-today-section {
+    background: rgba(251, 191, 36, 0.06) !important;
+    border: 1px solid rgba(251, 191, 36, 0.2) !important;
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(10px);
+}
+
+.buy-today-card {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.buy-today-card:hover {
+    border-color: var(--accent-primary) !important;
+    box-shadow: var(--accent-glow) !important;
+    transform: translateY(-2px);
+}
+
+/* ============================================================
+   📈 自选股列表 — 玻璃卡片 + 悬停光效
+   ============================================================ */
+.stock-item {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(8px);
+}
+
+.stock-item:hover {
+    background: rgba(99, 102, 241, 0.06) !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+}
+
+.stock-item.active {
+    background: rgba(99, 102, 241, 0.1) !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: inset 3px 0 0 var(--accent-primary);
+}
+
+.stock-item-pct {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    border-radius: var(--radius-sm) !important;
+}
+
+.stock-item-price {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================
+   🔍 查询栏 / 输入框 — 聚焦发光
+   ============================================================ */
+.query-bar {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+.query-input {
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+}
+
+.query-input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    background: #fff;
+}
+
+.code-input {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+}
+
+.query-go-btn {
+    background: var(--accent-gradient) !important;
+    border: none;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--accent-glow);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.query-go-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--accent-glow-strong);
+    background: var(--accent-gradient-hover);
+}
+
+/* ============================================================
+   📊 个股研究 — 玻璃卡片 + 等宽数字
+   ============================================================ */
+.detail-header {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+.detail-name {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+}
+
+.detail-code {
+    font-family: var(--font-mono);
+    background: rgba(99, 102, 241, 0.1) !important;
+    color: var(--accent-primary) !important;
+    padding: 2px 10px !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: 700;
+}
+
+.detail-price {
+    font-family: var(--font-mono) !important;
+    font-variant-numeric: tabular-nums;
+    font-weight: 900;
+}
+
+.detail-change {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+/* —— 分析评分格子 —— */
+.analysis-score-item strong {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.analysis-kicker {
+    color: var(--accent-primary) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* —— 风险徽章优化 —— */
+.risk-badge {
+    border-radius: var(--radius-sm) !important;
+    font-weight: 800 !important;
+    border: 1px solid currentColor !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.risk-low {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.06)) !important;
+    color: #059669 !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+.risk-medium {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.06)) !important;
+    color: #d97706 !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.risk-high {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.12), rgba(239, 68, 68, 0.06)) !important;
+    color: #dc2626 !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* ============================================================
+   🔥 Top3 精选矩阵 — 玻璃卡片 + 渐变标题
+   ============================================================ */
+.top3-matrix-section {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+.top3-matrix-heading h2 {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+}
+
+.top3-card {
+    background: rgba(255, 255, 255, 0.5) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.top3-card:hover {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: var(--accent-glow) !important;
+    transform: translateY(-3px);
+}
+
+.top3-item:hover {
+    border-color: var(--accent-primary) !important;
+    background: rgba(99, 102, 241, 0.06) !important;
+    transform: translateX(4px);
+}
+
+.top3-item-metric {
+    color: var(--accent-primary) !important;
+    background: rgba(99, 102, 241, 0.1) !important;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    border-radius: var(--radius-sm) !important;
+}
+
+.top3-rank {
+    border-radius: 50% !important;
+    font-family: var(--font-mono);
+    transition: all 0.2s ease;
+}
+
+.top3-item.top3-rank-1 .top3-rank {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+}
+
+/* ============================================================
+   💼 模拟盘 — 玻璃卡片 + 渐变顶部条
+   ============================================================ */
+.paper-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-top: 3px solid var(--accent-primary) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--glass-shadow) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.paper-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.paper-card-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-primary) !important;
+}
+
+.paper-curve {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+}
+
+/* ============================================================
+   📜 基本面 / AI研报 — 玻璃面板
+   ============================================================ */
+.fundamental-section {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+}
+
+.fundamental-metric {
+    background: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.2s ease;
+}
+
+.fundamental-metric:hover {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+}
+
+.fundamental-metric strong {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+.report-section {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+}
+
+.report-elder {
+    background: rgba(99, 102, 241, 0.06) !important;
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+/* ============================================================
+   🎯 按钮通用 — 渐变 + 发光
+   ============================================================ */
+.editor-btn,
+.ranking-engine-btn {
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.editor-btn:hover,
+.ranking-engine-btn:hover {
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.12);
+}
+
+.ranking-engine-btn.active {
+    background: var(--accent-gradient) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: var(--accent-glow);
+}
+
+.editor-action-btn.primary {
+    background: var(--accent-gradient) !important;
+    box-shadow: var(--accent-glow);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.editor-action-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--accent-glow-strong);
+}
+
+.add-watchlist-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.add-watchlist-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* ============================================================
+   🎨 滚动条 — 自定义暗色窄条
+   ============================================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(99, 102, 241, 0.04);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #c7d2fe 0%, #a5b4fc 100%);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #818cf8 0%, #6366f1 100%);
+    background-clip: content-box;
+}
+
+/* ============================================================
+   ✨ 全局微动效
+   ============================================================ */
+/* —— 数字变化动画 —— */
+@keyframes numberFlash {
+    0% { color: var(--accent-primary); transform: scale(1.05); }
+    100% { color: inherit; transform: scale(1); }
+}
+
+/* —— 链接/按钮通用 hover lift —— */
+a, button {
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* —— 筛选按钮 —— */
+.watchlist-filter-btn {
+    border: 1px solid var(--border-color) !important;
+    border-radius: 999px !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.watchlist-filter-btn:hover {
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+    background: rgba(99, 102, 241, 0.06);
+}
+
+.watchlist-filter-btn.active {
+    background: var(--accent-gradient) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow: var(--accent-glow);
+}
+
+/* —— 搜索框 —— */
+.watchlist-search-input,
+.ranking-search,
+.ranking-industry-filter {
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-sm) !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.2s ease;
+}
+
+.watchlist-search-input:focus,
+.ranking-search:focus,
+.ranking-industry-filter:focus {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12) !important;
+    background: #fff !important;
+}
+
+/* —— Toast 优化 —— */
+.toast {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+}
+
+/* —— 骨架屏颜色匹配 —— */
+.skeleton-box {
+    background: linear-gradient(90deg, rgba(199, 210, 254, 0.3) 25%, rgba(165, 180, 252, 0.5) 50%, rgba(199, 210, 254, 0.3) 75%);
+    background-size: 200% 100%;
+}
+
+/* —— 编辑器模态面板 —— */
+.editor-panel {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+/* —— 领先指标徽章 —— */
+.leading-badge {
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    transition: all 0.2s ease;
+}
+
+.leading-badge.leading-up {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #dc2626 !important;
+    border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+.leading-badge.leading-down {
+    background: rgba(16, 185, 129, 0.1) !important;
+    color: #059669 !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+/* —— 置信度徽章 —— */
+.confidence-badge {
+    border-radius: 999px !important;
+    font-family: var(--font-mono);
+}
+
+/* —— 基本面进度条 —— */
+.fundamental-bar-wrap {
+    border-radius: 999px !important;
+    background: rgba(99, 102, 241, 0.08) !important;
+    overflow: hidden;
+}
+
+.fundamental-bar {
+    border-radius: 999px !important;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================
+   📱 移动端增强
+   ============================================================ */
+@media (max-width: 768px) {
+    .container {
+        padding: 12px;
+    }
+
+    .header {
+        padding: 20px 16px;
+        border-radius: var(--radius-md);
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .app-nav {
+        padding: 6px;
+        gap: 4px;
+    }
+
+    .app-nav-btn {
+        font-size: 0.85rem;
+        padding: 10px 12px;
+        min-width: 100px;
+    }
+
+    .ranking-table th,
+    .ranking-table td {
+        padding: 12px 10px !important;
+        font-size: 14px !important;
+    }
+
+    .detail-price {
+        font-size: 1.8rem !important;
+    }
+}
+
+/* ============================================================
+   📈 模拟盘页面 (portfolio.html) — 年轻化 FinTech 覆盖
+   ============================================================ */
+
+/* —— Portfolio Header — 玻璃质感深色头部 —— */
+.portfolio-header {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: 0 10px 40px -5px rgba(67, 56, 202, 0.4) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.portfolio-header::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 60%;
+    height: 200%;
+    background: radial-gradient(ellipse, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.portfolio-header h1 {
+    background: linear-gradient(90deg, #ffffff 0%, #c4b5fd 50%, #a78bfa 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 28px !important;
+    font-weight: 900 !important;
+    position: relative;
+    z-index: 1;
+}
+
+.nav-back {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #a5b4fc !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    z-index: 1;
+}
+
+.nav-back:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+    transform: translateX(-3px);
+    box-shadow: 0 4px 12px rgba(165, 180, 252, 0.3);
+}
+
+.update-time {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #a5b4fc !important;
+    border-radius: 999px !important;
+    font-family: var(--font-mono);
+    position: relative;
+    z-index: 1;
+}
+
+/* —— Section Header 通用 —— */
+.section-header h2 {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900 !important;
+    font-size: 22px !important;
+}
+
+/* —— 市场情绪卡片 — 玻璃质感 —— */
+.sentiment-section {
+    margin-bottom: 32px;
+}
+
+.sentiment-grid {
+    gap: 20px !important;
+}
+
+.sentiment-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--glass-shadow) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sentiment-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.sentiment-card.main-sentiment {
+    background: linear-gradient(135deg, #312e81 0%, #4338ca 100%) !important;
+    border: 1px solid rgba(139, 92, 246, 0.3) !important;
+    box-shadow: 0 8px 32px rgba(67, 56, 202, 0.3) !important;
+}
+
+.sentiment-card.main-sentiment .sentiment-mood {
+    background: linear-gradient(90deg, #a78bfa, #c4b5fd) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 32px !important;
+}
+
+.sentiment-card.main-sentiment .sentiment-score-fill {
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa) !important;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+}
+
+.sentiment-card.recommend {
+    background: rgba(16, 185, 129, 0.06) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+.sentiment-card.recommend .recommend-name {
+    background: linear-gradient(90deg, #10b981, #059669) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+.sentiment-card.recommend .recommend-position {
+    background: rgba(16, 185, 129, 0.12) !important;
+    color: #059669 !important;
+    border-radius: 999px !important;
+}
+
+.sentiment-mood {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+}
+
+.sentiment-score-text {
+    font-family: var(--font-mono);
+}
+
+/* —— 六大组合卡片 — 玻璃质感 + 顶部渐变条 —— */
+.portfolios-grid {
+    gap: 20px !important;
+}
+
+.portfolio-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--glass-shadow) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.portfolio-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--accent-gradient);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.portfolio-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.portfolio-card:hover::before {
+    opacity: 1;
+}
+
+.portfolio-name {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+}
+
+.portfolio-return {
+    font-family: var(--font-mono) !important;
+    font-variant-numeric: tabular-nums;
+    font-size: 36px !important;
+}
+
+.portfolio-return.up {
+    color: #dc2626 !important;
+    text-shadow: 0 0 12px rgba(220, 38, 38, 0.2);
+}
+
+.portfolio-return.down {
+    color: #16a34a !important;
+    text-shadow: 0 0 12px rgba(22, 163, 74, 0.2);
+}
+
+.portfolio-stats {
+    background: rgba(99, 102, 241, 0.04) !important;
+    border: 1px solid rgba(99, 102, 241, 0.1) !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.portfolio-stat-value {
+    font-family: var(--font-mono) !important;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-primary) !important;
+}
+
+.portfolio-holdings {
+    border-top: 1px solid var(--border-subtle) !important;
+}
+
+/* —— 图例点 — 发光效果 —— */
+.legend-dot {
+    width: 10px !important;
+    height: 10px !important;
+    box-shadow: 0 0 6px currentColor;
+}
+
+.legend-dot.aggressive { box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+.legend-dot.robust { box-shadow: 0 0 8px rgba(139, 92, 246, 0.4); }
+.legend-dot.defensive { box-shadow: 0 0 8px rgba(16, 185, 129, 0.4); }
+.legend-dot.tech { box-shadow: 0 0 8px rgba(2, 132, 199, 0.4); }
+.legend-dot.bluechip { box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+.legend-dot.global { box-shadow: 0 0 8px rgba(99, 102, 241, 0.4); }
+
+/* —— 图表区 — 玻璃质感 —— */
+.chart-section {
+    margin-bottom: 36px;
+}
+
+.chart-controls {
+    gap: 10px !important;
+}
+
+.period-btn {
+    background: rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 999px !important;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    font-weight: 700 !important;
+}
+
+.period-btn:hover {
+    background: rgba(99, 102, 241, 0.08) !important;
+    border-color: var(--accent-primary) !important;
+    color: var(--accent-primary) !important;
+}
+
+.period-btn.active {
+    background: var(--accent-gradient) !important;
+    border-color: transparent !important;
+    color: #fff !important;
+    box-shadow: var(--accent-glow);
+}
+
+.chart-card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+/* —— 策略进化区 — 玻璃质感 —— */
+.evolution-section {
+    margin-bottom: 36px;
+}
+
+.evolution-content {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+
+.evolution-date {
+    font-family: var(--font-mono);
+    color: var(--accent-primary) !important;
+    background: rgba(99, 102, 241, 0.08);
+    padding: 4px 12px;
+    border-radius: 999px;
+}
+
+/* —— 页脚 —— */
+.portfolio-footer {
+    color: var(--text-muted);
+    font-size: 13px;
+    padding: 28px 0 16px;
+}
+
+/* —— 模拟盘页面移动端 —— */
+@media (max-width: 768px) {
+    .portfolio-header {
+        padding: 16px !important;
+    }
+
+    .portfolio-header h1 {
+        font-size: 22px !important;
+    }
+
+    .portfolios-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .portfolio-return {
+        font-size: 28px !important;
+    }
+
+    .sentiment-mood {
+        font-size: 24px !important;
+    }
+}

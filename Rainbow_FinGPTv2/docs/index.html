@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A股智能量化投研看板</title>
+    <link rel="stylesheet" href="assets/style.css?v=20260827_v33_nale_engine">
+    <!-- 🌈 年轻化 FinTech 轻奢风覆盖层 -->
+    <link rel="stylesheet" href="assets/style_young.css?v=20260822_v1">
+    <!-- 引入 ECharts 5.5.1 CDN -->
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部状态栏 -->
+        <header class="header">
+            <div class="header-main">
+                <h1>📊 A股智能量化投研看板 v3.0</h1>
+                <p class="subtitle">可插拔多因子定价 (Fama-MacBeth) · 存储超级周期战术执行 (Trend Gate) · 全市场两级动态初筛</p>
+            </div>
+            <div class="header-actions">
+                <a href="portfolio.html" class="portfolio-link">📈 量化组合</a>
+                <div id="status-bar" class="status-bar loading">
+                    <span class="status-indicator"></span>
+                    <span id="status-text">正在加载运行信息...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 顶部页面导航：拆分后的功能入口 -->
+        <nav class="app-nav" id="app-nav" aria-label="页面切换">
+            <button type="button" class="app-nav-btn active" data-page="today">🏠 今日关注</button>
+            <button type="button" class="app-nav-btn" data-page="watchlist">⭐ 自选股</button>
+            <button type="button" class="app-nav-btn" data-page="ranking">📊 排行榜</button>
+            <button type="button" class="app-nav-btn" data-page="query">🔍 单股查询</button>
+            <button type="button" class="app-nav-btn" data-page="detail">📈 个股研究</button>
+            <button type="button" class="app-nav-btn" data-page="paper">💼 模拟盘</button>
+            <button type="button" class="app-nav-btn" data-page="monster">🔥 妖股鉴定器</button>
+        </nav>
+
+        <!-- 主框架：左侧功能导航 + 中间内容区 -->
+        <div class="app-shell">
+            <aside class="page-sidebar" id="page-sidebar" aria-label="功能导航">
+                <div class="page-sidebar-title">功能导航</div>
+                <button type="button" class="page-sidebar-btn active" data-page="today">🏠 今日关注</button>
+                <button type="button" class="page-sidebar-btn" data-page="watchlist">⭐ 自选股</button>
+                <button type="button" class="page-sidebar-btn" data-page="ranking">📊 排行榜</button>
+                <button type="button" class="page-sidebar-btn" data-page="query">🔍 单股查询</button>
+                <button type="button" class="page-sidebar-btn" data-page="detail">📈 个股研究</button>
+                <button type="button" class="page-sidebar-btn" data-page="paper">💼 模拟盘</button>
+            </aside>
+            <main class="app-main">
+
+                <!-- 页面：今日关注（默认首页，只显示今日关注） -->
+                <section class="page" data-page="today" id="page-today">
+
+
+        <!-- v2.5 市场温度条 -->
+        <section id="market-temp-bar" class="market-temp-bar" aria-labelledby="market-temp-title" hidden>
+            <div class="market-temp-info">
+                <span class="market-temp-label">今日市场温度</span>
+                <strong id="market-temp-value" class="market-temp-value">--</strong>
+                <span id="market-temp-status" class="market-temp-status">--</span>
+            </div>
+            <div class="market-temp-scale" role="img" aria-label="市场温度刻度">
+                <div class="market-temp-scale-fill" id="market-temp-fill"></div>
+            </div>
+            <span id="market-temp-ratio" class="market-temp-ratio">仓位参考 --</span>
+        </section>
+
+        <!-- v3.0 全榜单 Top 3 精选矩阵（首页置顶，突破单一低风险偏好） -->
+        <section id="top3-matrix-section" class="top3-matrix-section" aria-labelledby="top3-matrix-title" hidden>
+            <div class="top3-matrix-heading">
+                <h2 id="top3-matrix-title">⚡ 全榜单 Top 3 精选矩阵</h2>
+                <p class="top3-matrix-subtitle">前沿供需驱动 / 高弹性预期 / 大趋势主升 / 妖股题材 / 震荡筑底 / 低风险防御 —— 每类各取前三，不再只看低风险</p>
+            </div>
+            <div id="top3-matrix-grid" class="top3-matrix-grid"></div>
+        </section>
+
+        <!-- v2.10 明日重点关注（AI 每日总结，置顶） -->
+        <section id="daily-brief-section" class="daily-brief-section" aria-labelledby="daily-brief-title" hidden>
+            <div class="daily-brief-heading">
+                <h2 id="daily-brief-title">📋 明日重点关注</h2>
+                <p id="daily-brief-meta" class="daily-brief-meta"></p>
+            </div>
+            <p id="daily-brief-summary" class="daily-brief-summary"></p>
+            <div id="daily-brief-focus" class="daily-brief-focus"></div>
+            <p id="daily-brief-position" class="daily-brief-position"></p>
+            <p id="daily-brief-disclaimer" class="daily-brief-disclaimer"></p>
+        </section>
+        <!-- v2.5 今日可买（置顶，老年友好大字号） -->
+        <section id="buy-today-section" class="buy-today-section" aria-labelledby="buy-today-title" hidden>
+            <div class="buy-today-heading">
+                <h2 id="buy-today-title">💰 今日可以关注</h2>
+                <p class="buy-today-subtitle">策略选出、靠近支撑位的标的（研究参考，不构成买卖建议）</p>
+            </div>
+            <div id="buy-today-list" class="buy-today-list">
+                <div class="buy-today-empty">今日没有策略信号，可前往「排行榜」查看其他自选股</div>
+            </div>
+        </section>
+
+        </section>
+
+                <!-- 页面：单股查询 -->
+                <section class="page" data-page="query" id="page-query" hidden>
+                <!-- 单股查询栏 -->
+        <div class="query-bar" id="query-bar">
+            <div class="query-bar-inner">
+                <label class="query-label" for="query-code-input">🔍 单股查询对比</label>
+                <div class="query-controls">
+                    <input
+                        type="text"
+                        id="query-code-input"
+                        class="query-input code-input"
+                        placeholder="股票代码 (6位)"
+                        maxlength="6"
+                        inputmode="numeric"
+                        pattern="[0-9]*"
+                        autocomplete="off"
+                    >
+                    <input
+                        type="date"
+                        id="query-date-input"
+                        class="query-input date-input"
+                        title="数据起始日期"
+                    >
+                    <button id="query-go-btn" class="query-go-btn" type="button">查询对比</button>
+                </div>
+                <div class="query-hint" id="query-hint">
+                    📌 6开头→上证指数｜0开头→深证成指｜3开头→创业板指｜688开头→科创50
+                </div>
+            </div>
+        </div>
+
+        </section>
+
+                <!-- 页面：排行榜 -->
+                <section class="page" data-page="ranking" id="page-ranking" hidden>
+                <!-- 2.1 风险收益排行榜 -->
+        <section class="ranking-section" aria-labelledby="ranking-title">
+            <div class="ranking-heading-row">
+                <div>
+                    <h2 id="ranking-title">自选股短线排行榜</h2>
+                    <p id="ranking-meta" class="ranking-meta">正在读取分析数据...</p>
+                </div>
+                <div class="ranking-filters">
+                    <label class="sr-only" for="ranking-search">搜索股票</label>
+                    <input id="ranking-search" class="ranking-search" type="search" placeholder="搜索名称或代码" autocomplete="off">
+                    <label class="sr-only" for="ranking-industry-filter">筛选行业</label>
+                    <select id="ranking-industry-filter" class="ranking-industry-filter">
+                        <option value="">全部行业</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="ranking-tabs" role="tablist" aria-label="排行榜类型">
+                <button class="ranking-tab active" type="button" role="tab" aria-selected="true" data-mode="balanced">风险收益榜</button>
+                <button class="ranking-tab" type="button" role="tab" aria-selected="false" data-mode="return">收益预估榜</button>
+                <button class="ranking-tab" type="button" role="tab" aria-selected="false" data-mode="risk">低风险榜</button>
+            </div>
+
+            <div id="ranking-state" class="ranking-state">分析数据加载中...</div>
+            <div id="ranking-table-wrap" class="ranking-table-wrap" hidden>
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">排名</th>
+                            <th>股票</th>
+                            <th><button type="button" data-sort="risk_adjusted_score">风险收益分</button></th>
+                            <th><button type="button" data-sort="return_3d_pct">3日 LLM 预测</button></th>
+                            <th><button type="button" data-sort="return_5d_pct">5日 LLM 预测</button></th>
+                            <th><button type="button" data-sort="up_probability_5d_pct">5日看涨置信度</button></th>
+                            <th><button type="button" data-sort="risk_score">风险</button></th>
+                            <th>主要依据</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-tbody"></tbody>
+                </table>
+            </div>
+            <div id="ranking-mobile-list" class="ranking-mobile-list" hidden></div>
+        </section>
+
+        </section>
+
+                <!-- 页面：自选股 -->
+                <section class="page" data-page="watchlist" id="page-watchlist" hidden>
+                    <div class="stock-sidebar watchlist-panel">
+                <!-- 主布局 -->
+        
+            <!-- 左侧/上方 自选股概览列表 -->
+            
+                <div class="sidebar-header">
+                    <div class="sidebar-title-row">
+                        <h2>自选股列表</h2>
+                        <button id="open-editor-btn" class="editor-btn" type="button">✏️ 编辑列表</button>
+                    </div>
+                    <span class="tip">点击股票查看走势图</span>
+                </div>
+                <div class="watchlist-search-wrap">
+                    <input id="watchlist-search-input" class="watchlist-search-input" type="search" placeholder="搜索名称或代码" autocomplete="off" aria-label="搜索自选股">
+                    <button id="watchlist-search-clear" class="watchlist-search-clear" type="button" hidden aria-label="清空搜索">✕</button>
+                </div>
+                <div id="watchlist-filter" class="watchlist-filter" aria-label="自选股分区筛选">
+                    <button type="button" class="watchlist-filter-btn active" data-region="all">全部</button>
+                    <button type="button" class="watchlist-filter-btn" data-region="stock">A股</button>
+                    <button type="button" class="watchlist-filter-btn" data-region="hk">港股</button>
+                    <button type="button" class="watchlist-filter-btn" data-region="us">美股</button>
+                    <button type="button" class="watchlist-filter-btn" data-region="kr">韩股</button>
+                    <button type="button" class="watchlist-filter-btn" data-region="etf">基金</button>
+                </div>
+                <div id="stock-list" class="stock-list-container">
+                    <div class="list-loading">正在加载自选股...</div>
+                </div>
+                    </div>
+                </section>
+
+                <!-- 页面：个股研究（K线 + 分析 + AI 研报 + 查询对比结果） -->
+                <section class="page" data-page="detail" id="page-detail" hidden>
+                    <div class="chart-container-wrapper">
+
+            <!-- 右侧/下方 K线图详情区域 -->
+            
+                <!-- 选中股票的大字概要 -->
+                <div id="detail-header" class="detail-header" style="display: none;">
+                    <div class="detail-title-row">
+                        <div class="stock-info">
+                            <span id="detail-name" class="detail-name">--</span>
+                            <span id="detail-code" class="detail-code">------</span>
+                            <span id="detail-type-badge" class="type-badge">--</span>
+                        </div>
+                        <div class="stock-price-block">
+                            <span id="detail-price" class="detail-price">--</span>
+                            <span id="detail-change" class="detail-change">--</span>
+                        </div>
+                    </div>
+                    <div class="detail-meta-row">
+                        <span id="detail-date-label">交易日期：--</span>
+                        <span id="detail-adjust-label">复权方式：前复权</span>
+                    </div>
+                </div>
+
+                <!-- 2.1 个股研究摘要 -->
+                <section id="analysis-detail" class="analysis-detail" hidden aria-labelledby="analysis-title">
+                    <section id="analysis-observation" class="analysis-observation" hidden aria-labelledby="analysis-observation-title">
+                        <div class="analysis-observation-heading">
+                            <span id="analysis-observation-title" class="analysis-kicker">短线观察建议</span>
+                            <strong id="analysis-observation-status" class="analysis-observation-status">--</strong>
+                        </div>
+                        <p id="analysis-observation-reason" class="analysis-observation-reason">--</p>
+                        <p class="analysis-observation-note">由历史风险与样本统计自动归纳，仅供学习和研究，不构成投资建议。</p>
+                    </section>
+                    <div class="analysis-detail-header">
+                        <div>
+                            <span class="analysis-kicker">3–5 个交易日研究</span>
+                            <h2 id="analysis-title">短线风险收益分析</h2>
+                            <p id="analysis-summary" class="analysis-summary">--</p>
+                        </div>
+                        <div id="analysis-risk-badge" class="risk-badge risk-medium">中等风险</div>
+                    </div>
+
+                    <div class="analysis-score-grid">
+                        <div class="analysis-score-item">
+                            <span>风险收益分</span>
+                            <strong id="analysis-composite-score">--</strong>
+                        </div>
+                        <div class="analysis-score-item">
+                            <span>风险分</span>
+                            <strong id="analysis-risk-score">--</strong>
+                        </div>
+                        <div class="analysis-score-item">
+                            <span>3日 LLM 预测</span>
+                            <strong id="analysis-return-3d">--</strong>
+                        </div>
+                        <div class="analysis-score-item">
+                            <span>5日 LLM 预测</span>
+                            <strong id="analysis-return-5d">--</strong>
+                        </div>
+                        <div class="analysis-score-item">
+                            <span>5日看涨置信概率</span>
+                            <strong id="analysis-up-probability">--</strong>
+                        </div>
+                    </div>
+
+                    <div class="analysis-columns">
+                        <section class="analysis-block" aria-labelledby="analysis-reasons-title">
+                            <h3 id="analysis-reasons-title">主要评分依据</h3>
+                            <div id="analysis-reasons" class="analysis-reasons"></div>
+                        </section>
+                        <section class="analysis-block" aria-labelledby="analysis-market-title">
+                            <h3 id="analysis-market-title">技术与行业</h3>
+                            <dl id="analysis-market-metrics" class="analysis-metric-list"></dl>
+                        </section>
+                    </div>
+
+                    <section class="similarity-section" aria-labelledby="similarity-title">
+                        <div class="similarity-heading">
+                            <h3 id="similarity-title">历史相似走势</h3>
+                            <span id="similarity-confidence" class="confidence-badge">--</span>
+                        </div>
+                        <div id="similarity-grid" class="similarity-grid"></div>
+                    </section>
+
+                    <!-- NALE 网络增强型板块协同与涨停龙头图谱 (Spec 015) -->
+                    <section id="nale-network-section" class="nale-network-section" aria-labelledby="nale-network-title" hidden>
+                        <div class="nale-network-heading">
+                            <div>
+                                <h3 id="nale-network-title">🌐 NALE 板块协同与涨停龙头图谱</h3>
+                                <p id="nale-sector-subtitle" class="nale-sector-subtitle">所属板块：-- ｜ 板块同涨广度：--</p>
+                            </div>
+                            <span id="nale-tier-badge" class="confidence-badge">--</span>
+                        </div>
+                        <div id="nale-leader-card" class="nale-leader-card" style="display:none;"></div>
+                        <div id="nale-spillover-banner" class="nale-spillover-banner" style="display:none;"></div>
+                        <div class="nale-peers-block">
+                            <h4 class="nale-peers-title">🔗 板块同盟军与走势协同度 (ρ &gt; 0.40)</h4>
+                            <div id="nale-peers-grid" class="nale-peers-grid"></div>
+                        </div>
+                    </section>
+
+                    <!-- 基本面分析（来自研究成果框架：资产/负债/盈利/现金） -->
+                    <section id="fundamental-section" class="fundamental-section" aria-labelledby="fundamental-title" hidden>
+                        <div class="fundamental-heading">
+                            <div>
+                                <h3 id="fundamental-title">基本面分析</h3>
+                                <p id="fundamental-report-date" class="fundamental-report-date">--</p>
+                            </div>
+                            <span id="fundamental-score-badge" class="confidence-badge">--</span>
+                        </div>
+                        <div id="fundamental-dimensions" class="fundamental-dimensions"></div>
+                        <div id="fundamental-metrics" class="fundamental-metrics"></div>
+                        <div class="fundamental-views">
+                            <div class="fundamental-view positive-view">
+                                <h4>📈 扩张逻辑</h4>
+                                <p id="fundamental-positive-view">--</p>
+                            </div>
+                            <div class="fundamental-view negative-view">
+                                <h4>⚠️ 风险警示</h4>
+                                <p id="fundamental-negative-view">--</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- AI 研究报告（模块四：LLM + RAG） -->
+                    <section id="report-section" class="report-section" aria-labelledby="report-title" hidden>
+                        <div class="report-heading">
+                            <div>
+                                <h3 id="report-title">AI 研究报告</h3>
+                                <p id="report-meta" class="report-meta">--</p>
+                            </div>
+                            <span id="report-confidence" class="confidence-badge">--</span>
+                        </div>
+                        <p id="report-status" class="report-status" hidden></p>
+                        <div id="report-elder" class="report-elder" hidden></div>
+                        <div id="report-sections" class="report-sections"></div>
+                        <div id="report-citations" class="report-citations" hidden>
+                            <h4>🔗 来源引用</h4>
+                            <div id="report-citation-list" class="report-citation-list"></div>
+                        </div>
+                        <div id="report-disclaimer" class="report-disclaimer"></div>
+                    </section>
+
+                    <p id="analysis-disclaimer" class="analysis-disclaimer"></p>
+                </section>
+
+                <!-- 图表渲染容器 -->
+                <div class="chart-card">
+                    <div id="kline-chart" class="chart-element"></div>
+                    <div id="chart-overlay" class="chart-overlay">
+                        <div class="overlay-content">请从左侧选择股票以查看 K 线图</div>
+                    </div>
+                </div>
+
+                <!-- 查询结果股票概要 -->
+                <div id="query-result-header" class="detail-header" style="display: none;">
+                    <div class="detail-title-row">
+                        <div class="stock-info">
+                            <span id="query-stock-name" class="detail-name">--</span>
+                            <span id="query-stock-code" class="detail-code">------</span>
+                        </div>
+                        <div class="query-result-actions">
+                            <button id="add-to-watchlist-btn" class="add-watchlist-btn" type="button" title="添加到自选股">➕ 加到自选股</button>
+                            <span id="query-result-hint" class="query-result-hint"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 指数对比图表容器（查询模式下显示） -->
+                <div class="chart-card index-chart-card" id="index-chart-card" style="display: none;">
+                    <div class="index-chart-header">
+                        <span id="index-chart-label">📊 大盘指数对比</span>
+                    </div>
+                    <div id="index-chart" class="chart-element index-chart-element"></div>
+                </div>
+                                </div>
+                </section>
+
+                <!-- 页面：模拟盘对比 & 2025Q2-2026Q7 存储超级周期回测 -->
+                <section class="page" data-page="paper" id="page-paper" hidden>
+                    <div class="paper-page">
+                        <!-- 2025Q2-2026Q7 存储市场学术量化回测专属模块 -->
+                        <div class="storage-backtest-card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <span style="background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">Physical Isolation Backtest</span>
+                                    <h2 style="font-size: 22px; margin-top: 6px; color: #f8fafc;">⚡ 2025Q2–2026Q7 存储市场样本外量化回测 (拟真交易人)</h2>
+                                    <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">GFCA 几何因子空间对齐 · NALE 供应链网络传导 (α=0.4) · Nowcasting 二次减值惩罚 · Trend Gate™ C浪清仓</p>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;">夏普比率: 4.627</span>
+                                    <span style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #dc2626; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;">最大回撤: 6.51% (控盘)</span>
+                                </div>
+                            </div>
+
+                            <!-- 核心数据对比指标小格子 -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="color: #94a3b8; font-size: 12px;">策略累计总收益率</div>
+                                    <div style="color: #f87171; font-size: 24px; font-weight: 800; margin-top: 4px;">+159.01%</div>
+                                    <div style="color: #64748b; font-size: 11px;">年化 +105.65%</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="color: #94a3b8; font-size: 12px;">存储5巨头等权买入持有</div>
+                                    <div style="color: #fbbf24; font-size: 24px; font-weight: 800; margin-top: 4px;">+222.30%</div>
+                                    <div style="color: #f87171; font-size: 11px;">C浪最大回撤 -32.04% ⚠️</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="color: #94a3b8; font-size: 12px;">卡玛比率 (收益/回撤)</div>
+                                    <div style="color: #38bdf8; font-size: 24px; font-weight: 800; margin-top: 4px;">16.223</div>
+                                    <div style="color: #64748b; font-size: 11px;">买入持有仅 4.453</div>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                                    <div style="color: #94a3b8; font-size: 12px;">Harvey (2016) Alpha t值</div>
+                                    <div style="color: #a78bfa; font-size: 24px; font-weight: 800; margin-top: 4px;">t = 3.774</div>
+                                    <div style="color: #34d399; font-size: 11px;">通过 |t|≥3.0 伪因子门禁 ✅</div>
+                                </div>
+                            </div>
+
+                            <!-- 出版级图表展示网格 -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
+                                <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
+                                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">📈 累计净值走势实证对比 (全周期)</div>
+                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png" alt="累计净值走势图" style="width: 100%; border-radius: 6px;" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png'">
+                                </div>
+                                <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
+                                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">🛡️ 动态水下回撤对比 (Trend Gate 截断 C 浪主跌)</div>
+                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png" alt="水下回撤对比图" style="width: 100%; border-radius: 6px;" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png'">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="paper-heading">
+                            <h2>💼 模拟盘对比（60天宏观温度与风控联动版）</h2>
+                            <p id="paper-meta" class="paper-meta">正在读取数据...</p>
+                        </div>
+                        <div id="paper-cards" class="paper-cards"></div>
+                        <section class="paper-section" aria-labelledby="paper-curve-title">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                                <h3 id="paper-curve-title">📈 60天长跑累计净值曲线（起点 = 100）</h3>
+                                <span style="font-size:14px;color:#059669;font-weight:700;background:#d1fae5;padding:4px 10px;border-radius:6px;">🛡️ 已启用大盘温度仓位门控 & 单股-8%严格止损</span>
+                            </div>
+                            <div id="paper-curve" class="paper-curve" style="height:360px;"></div>
+                        </section>
+                        <section class="paper-section" aria-labelledby="paper-compare-title">
+                            <h3 id="paper-compare-title">📅 每日收益与净值明细</h3>
+                            <div id="paper-compare-wrap" class="paper-table-wrap" hidden>
+                                <table class="paper-table">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>妖股·温度联动</th>
+                                            <th>激进·温度联动</th>
+                                            <th>全池等权基准</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="paper-compare-tbody"></tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <p class="paper-disclaimer">模拟盘与等权基准均为研究用途，不构成投资建议，市场有风险，入市需谨慎。</p>
+                    </div>
+                </section>
+
+                <!-- 页面：🔥 股票性质分辨器 · 妖股鉴定器 -->
+                <section class="page" data-page="monster" id="page-monster" hidden>
+                    <div class="monster-detector-page">
+                        <div class="monster-heading" style="margin-bottom:20px;">
+                            <h2 style="font-size:26px;color:#111827;display:flex;align-items:center;gap:10px;">
+                                <span>🔥 股票性质分辨器 · 妖股鉴定器</span>
+                            </h2>
+                            <p style="font-size:15px;color:#4b5563;margin-top:4px;">基于 SFM 因子流形（波动率、ATR日均振幅比、动量衰减半衰期）的大数据属性判定与操盘策略匹配</p>
+                        </div>
+
+                        <!-- 统计概览卡片 -->
+                        <div class="monster-stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+                            <div class="stat-card" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;">
+                                <div style="font-size:13px;color:#64748b;">📊 全池A股标的</div>
+                                <div id="monster-stat-total" style="font-size:28px;font-weight:800;color:#0f172a;margin-top:4px;">--</div>
+                            </div>
+                            <div class="stat-card" style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px;">
+                                <div style="font-size:13px;color:#b91c1c;">🔥 妖股题材型 (高波动)</div>
+                                <div id="monster-stat-volatile" style="font-size:28px;font-weight:800;color:#dc2626;margin-top:4px;">--</div>
+                            </div>
+                            <div class="stat-card" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:16px;">
+                                <div style="font-size:13px;color:#1d4ed8;">🎯 趋势主升型 (长动量)</div>
+                                <div id="monster-stat-trend" style="font-size:28px;font-weight:800;color:#2563eb;margin-top:4px;">--</div>
+                            </div>
+                            <div class="stat-card" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:16px;">
+                                <div style="font-size:13px;color:#15803d;">🧱 震荡蓄势型 (低波动)</div>
+                                <div id="monster-stat-range" style="font-size:28px;font-weight:800;color:#16a34a;margin-top:4px;">--</div>
+                            </div>
+                        </div>
+
+                        <!-- 筛选器切换 Tab -->
+                        <div class="monster-filters-row" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+                            <button type="button" class="ranking-tab active" data-monster-type="all">全部标的</button>
+                            <button type="button" class="ranking-tab" data-monster-type="volatile">🔥 妖股题材榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="trend">🎯 趋势主升榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="range_bound">🧱 震荡蓄势榜</button>
+                        </div>
+
+                        <!-- 股票卡片网格 -->
+                        <div id="monster-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;">
+                            <div style="color:#64748b;padding:30px;text-align:center;">正在分析股票性质...</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    
+    <!-- 备用 CDN 兜底逻辑 -->
+    <script>
+        if (typeof echarts === 'undefined') {
+            console.warn('Primary ECharts CDN failed, switching to backup CDN...');
+            var backupScript = document.createElement('script');
+            backupScript.src = 'https://cdn.bootcdn.net/ajax/libs/echarts/5.5.1/echarts.min.js';
+            document.head.appendChild(backupScript);
+        }
+    </script>
+    <!-- 编辑自选股模态面板 -->
+    <div id="editor-modal" class="editor-modal" style="display: none;">
+        <div class="editor-overlay"></div>
+        <div class="editor-panel">
+            <div class="editor-panel-header">
+                <h2>✏️ 编辑自选股列表</h2>
+                <button id="editor-close-btn" class="editor-close-btn" type="button">✕</button>
+            </div>
+            <div class="editor-body">
+                <table class="editor-table">
+                    <thead>
+                        <tr>
+                            <th class="col-name">名称</th>
+                            <th class="col-code">代码</th>
+                            <th class="col-type">类型</th>
+                            <th class="col-category">行业</th>
+                            <th class="col-del"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="editor-tbody">
+                        <!-- JS 动态填充 -->
+                    </tbody>
+                </table>
+                <button id="editor-add-row-btn" class="editor-add-btn" type="button">+ 添加一行</button>
+            </div>
+            <div class="editor-footer">
+                <div class="editor-warn" id="editor-warn" style="display:none;"></div>
+                <p class="editor-hint">在线添加会立即保存在当前浏览器。要让新股票参与每日排行榜，请下载新的 watchlist.csv 并更新到 GitHub 仓库根目录。</p>
+                <div class="editor-actions">
+                    <button id="editor-copy-btn" class="editor-action-btn primary" type="button">📋 复制为 watchlist.csv</button>
+                    <button id="editor-download-btn" class="editor-action-btn" type="button">💾 下载 watchlist.csv</button>
+                    <button id="editor-cancel-btn" class="editor-action-btn secondary" type="button">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加到自选股分类弹窗 -->
+    <div id="add-watchlist-modal" class="editor-modal" style="display: none;">
+        <div class="editor-overlay"></div>
+        <div class="editor-panel add-watchlist-panel">
+            <div class="editor-panel-header">
+                <h2>➕ 添加到自选股</h2>
+                <button id="add-watchlist-close-btn" class="editor-close-btn" type="button">✕</button>
+            </div>
+            <div class="editor-body">
+                <div class="add-watchlist-info" id="add-watchlist-info">
+                    <span class="add-watchlist-stock-name">--</span>
+                    <span class="add-watchlist-stock-code">(--)</span>
+                </div>
+                <div class="add-watchlist-field">
+                    <label class="add-watchlist-label" for="add-category-select">📂 分类标签</label>
+                    <div class="add-watchlist-category-row">
+                        <input
+                            type="text"
+                            id="add-category-select"
+                            class="query-input category-input"
+                            placeholder="输入或选择分类"
+                            list="category-datalist"
+                            autocomplete="off"
+                        >
+                        <datalist id="category-datalist">
+                            <option value="白酒">
+                            <option value="科技">
+                            <option value="银行">
+                            <option value="新能源">
+                            <option value="医药">
+                            <option value="消费">
+                            <option value="汽车">
+                            <option value="半导体">
+                            <option value="军工">
+                            <option value="券商">
+                            <option value="保险">
+                            <option value="地产">
+                            <option value="电力">
+                            <option value="农业">
+                            <option value="ETF">
+                            <option value="其他">
+                        </datalist>
+                    </div>
+                </div>
+                <div class="category-presets">
+                    <span class="preset-label">快捷选择：</span>
+                    <span class="preset-chip" data-cat="白酒">白酒</span>
+                    <span class="preset-chip" data-cat="科技">科技</span>
+                    <span class="preset-chip" data-cat="银行">银行</span>
+                    <span class="preset-chip" data-cat="新能源">新能源</span>
+                    <span class="preset-chip" data-cat="医药">医药</span>
+                    <span class="preset-chip" data-cat="消费">消费</span>
+                    <span class="preset-chip" data-cat="汽车">汽车</span>
+                    <span class="preset-chip" data-cat="半导体">半导体</span>
+                    <span class="preset-chip" data-cat="军工">军工</span>
+                    <span class="preset-chip" data-cat="券商">券商</span>
+                    <span class="preset-chip" data-cat="ETF">ETF</span>
+                    <span class="preset-chip" data-cat="其他">其他</span>
+                </div>
+            </div>
+            <div class="editor-footer">
+                <div class="editor-warn" id="add-watchlist-warn" style="display:none;"></div>
+                <div class="editor-actions">
+                    <button id="add-watchlist-confirm-btn" class="editor-action-btn primary" type="button">✅ 确认添加</button>
+                    <button id="add-watchlist-cancel-btn" class="editor-action-btn secondary" type="button">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入前端交互脚本 -->
+    <script src="assets/app.js?v=20260828_paper_fix"></script>
+</body>
+</html>

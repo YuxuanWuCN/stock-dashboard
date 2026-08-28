@@ -1,0 +1,318 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
+  "code": "301216",
+  "name": "万凯新材",
+  "type": "stock",
+  "category": "热点龙头",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 41.9,
+    "risk": 62.1,
+    "technical": 90.0,
+    "industry": 73.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:16:00"
+  },
+  "nale_network": {
+    "sector_name": "热点龙头",
+    "sector_breadth_pct": 32.0,
+    "tier_role": "neutral",
+    "leader_stock": {
+      "code": "301591",
+      "name": "肯特股份",
+      "change_pct": 17.142857142857146,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "301152",
+        "name": "天力锂能",
+        "corr": 0.7
+      },
+      {
+        "code": "301598",
+        "name": "博科测试",
+        "corr": 0.66
+      },
+      {
+        "code": "688419",
+        "name": "耐科装备",
+        "corr": 0.54
+      },
+      {
+        "code": "688835",
+        "name": "C高凯",
+        "corr": 0.5
+      },
+      {
+        "code": "300839",
+        "name": "博汇股份",
+        "corr": 0.49
+      }
+    ]
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 70.69,
+    "max_drawdown_60d_pct": -39.94,
+    "atr14_pct": 4.89,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 74.4,
+        "value": 70.69
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 76.3,
+        "value": -39.94
+      },
+      {
+        "name": "ATR百分比",
+        "score": 55.1,
+        "value": 4.89
+      },
+      {
+        "name": "量价异常",
+        "score": 94.9,
+        "value": 2.04
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -1.33,
+    "return_5d_pct": -0.24,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 46.7,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 18.296,
+    "ma10": 17.6,
+    "ma20": 17.180500000000002,
+    "ma60": 19.494666666666667,
+    "rsi14": 56.8,
+    "macd_dif": 0.01133541853973341,
+    "macd_dea": -0.31386407040023473,
+    "macd_hist": 0.6503989778799363,
+    "atr14_pct": 4.890274451087893,
+    "boll_position": 0.9728920302077521,
+    "return_5d_pct": 13.082980012113875,
+    "return_20d_pct": 18.389346861128743,
+    "volume_ratio_5d": 2.04
+  },
+  "industry": {
+    "name": "热点龙头",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 9.39
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": -1.33,
+      "median_return_pct": -1.97,
+      "best_return_pct": 18.41,
+      "worst_return_pct": -13.58
+    },
+    "horizon_5d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.24,
+      "median_return_pct": -0.66,
+      "best_return_pct": 21.19,
+      "worst_return_pct": -19.97
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-06-30",
+    "score": 51.0,
+    "dimensions": {
+      "asset_quality": 68.0,
+      "liability_safety": 36.7,
+      "profit_quality": 45.0,
+      "cash_health": 51.1
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 20911537026.49,
+      "total_assets_yoy": 17.1954280448,
+      "inventory": 4040032133.08,
+      "prepayment": 344973421.59,
+      "receivable": 1143664174.51,
+      "inventory_prepay_ratio": 0.20969312533627868,
+      "receivable_revenue": 0.236975713120341,
+      "goodwill_equity": null,
+      "debt_ratio": 0.6793824953595309,
+      "short_debt_ratio": 0.4213836338199255,
+      "roe": 0.08536446179358431,
+      "gross_margin": 5.4007119322900445,
+      "deduct_ratio": 0.6154121467614957,
+      "netprofit_yoy": 953.7531902341,
+      "ocf_np_ratio": 0.9468830511708257,
+      "financing_debt": 0.061768592849782686,
+      "retained_profit_equity": 0.27827840365103823
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "positive",
+          "title": "资产稳步扩张",
+          "detail": "总资产同比 +17.2%，处于健康扩张区间。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 21.0%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "positive",
+          "title": "回款效率良好",
+          "detail": "应收账款/营收 23.7%，回款健康。",
+          "contribution": 3.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "warning",
+          "title": "杠杆中等",
+          "detail": "资产负债率 67.9%，处于中间区间。",
+          "contribution": -16.3
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 42.1%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "positive",
+          "title": "ROE 良好",
+          "detail": "净资产收益率 8.5%，盈利水平正常。",
+          "contribution": 5.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +953.8%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "warning",
+          "title": "依赖非经常损益",
+          "detail": "扣非净利润占归母净利润 61.5%，利润含金量低。",
+          "contribution": -12.0
+        },
+        {
+          "type": "negative",
+          "title": "毛利率偏低",
+          "detail": "毛利率 5.4%，产品竞争力或成本控制存疑。",
+          "contribution": -8.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "warning",
+          "title": "现金流偏弱",
+          "detail": "经营现金流/净利润 0.95，利润兑现能力一般。",
+          "contribution": -1.9
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 6.2%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "总资产同比 +17.2%，规模扩张有力；净利润同比 +953.8%",
+      "negative_view": "资产负债率 67.9%，杠杆偏高；经营现金流/净利润 0.95，利润兑现存疑",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-24 23:09:22"
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 39.9%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 39.9%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期2.04倍。",
+      "contribution": 5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 70.7%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/301216.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

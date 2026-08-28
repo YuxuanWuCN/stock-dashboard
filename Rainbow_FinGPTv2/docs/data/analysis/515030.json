@@ -1,0 +1,187 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
+  "code": "515030",
+  "name": "新能源车ETF",
+  "type": "etf",
+  "category": "通用",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 38.0,
+    "risk": 23.9,
+    "technical": 80.0,
+    "industry": 50.3,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:15:10"
+  },
+  "nale_network": {
+    "sector_name": "通用",
+    "sector_breadth_pct": 42.9,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "510500",
+        "name": "中证500ETF",
+        "corr": 0.76
+      },
+      {
+        "code": "510300",
+        "name": "沪深300ETF",
+        "corr": 0.74
+      },
+      {
+        "code": "159919",
+        "name": "沪深300ETF易方达",
+        "corr": 0.72
+      },
+      {
+        "code": "159915",
+        "name": "创业板ETF",
+        "corr": 0.71
+      },
+      {
+        "code": "512660",
+        "name": "军工ETF",
+        "corr": 0.7
+      }
+    ]
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 19.86,
+    "max_drawdown_60d_pct": -22.84,
+    "atr14_pct": 2.56,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 12.2,
+        "value": 19.86
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 45.5,
+        "value": -22.84
+      },
+      {
+        "name": "ATR百分比",
+        "score": 24.4,
+        "value": 2.56
+      },
+      {
+        "name": "量价异常",
+        "score": 37.8,
+        "value": 0.76
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.71,
+    "return_5d_pct": -1.07,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 36.7,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 1.626,
+    "ma10": 1.64,
+    "ma20": 1.6480000000000001,
+    "ma60": 1.7173333333333334,
+    "rsi14": 46.0,
+    "macd_dif": -0.012783437207929627,
+    "macd_dea": -0.013701467086120956,
+    "macd_hist": 0.001836059756382659,
+    "atr14_pct": 2.558395689142689,
+    "boll_position": 0.3229498680429451,
+    "return_5d_pct": -0.6097560975609762,
+    "return_20d_pct": 0.6172839506172645,
+    "volume_ratio_5d": 0.76
+  },
+  "industry": {
+    "name": "通用",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -3.87
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.71,
+      "median_return_pct": -0.59,
+      "best_return_pct": 7.53,
+      "worst_return_pct": -8.51
+    },
+    "horizon_5d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": -1.07,
+      "median_return_pct": -1.03,
+      "best_return_pct": 8.6,
+      "worst_return_pct": -11.22
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 22.8%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 22.8%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/515030.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

@@ -1,0 +1,160 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-27",
+  "code": "513500",
+  "name": "标普500ETF",
+  "type": "etf",
+  "category": "通用",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 59.1,
+    "risk": 13.8,
+    "technical": 80.0,
+    "industry": 68.6,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:15:08"
+  },
+  "nale_network": {
+    "sector_name": "通用",
+    "sector_breadth_pct": 42.9,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "513100",
+        "name": "纳指ETF",
+        "corr": 0.76
+      },
+      {
+        "code": "026487",
+        "name": "大成竞先成长混合C",
+        "corr": 0.53
+      }
+    ]
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 20.95,
+    "max_drawdown_60d_pct": -5.04,
+    "atr14_pct": 1.52,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 14.7,
+        "value": 20.95
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 0.6,
+        "value": -5.04
+      },
+      {
+        "name": "ATR百分比",
+        "score": 5.1,
+        "value": 1.52
+      },
+      {
+        "name": "量价异常",
+        "score": 80.1,
+        "value": 0.53
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.06,
+    "return_5d_pct": 0.24,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 53.3,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 2.69,
+    "ma10": 2.698,
+    "ma20": 2.674,
+    "ma60": 2.5733333333333333,
+    "rsi14": 60.4,
+    "macd_dif": 0.03660210468681102,
+    "macd_dea": 0.040454512643742405,
+    "macd_hist": -0.007704815913862767,
+    "atr14_pct": 1.5160485950357183,
+    "boll_position": 0.6396398145391236,
+    "return_5d_pct": 1.4981273408239737,
+    "return_20d_pct": 9.2741935483871,
+    "volume_ratio_5d": 0.53
+  },
+  "industry": {
+    "name": "通用",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 3.53
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.06,
+      "median_return_pct": -0.2,
+      "best_return_pct": 6.32,
+      "worst_return_pct": -3.67
+    },
+    "horizon_5d": {
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.24,
+      "median_return_pct": 0.4,
+      "best_return_pct": 6.72,
+      "worst_return_pct": -4.51
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/513500.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

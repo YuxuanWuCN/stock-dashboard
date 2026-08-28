@@ -1,0 +1,163 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
+  "code": "601211",
+  "name": "国泰君安",
+  "type": "stock",
+  "category": "券商",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 49.1,
+    "risk": 14.4,
+    "technical": 81.0,
+    "industry": 43.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:14:59"
+  },
+  "nale_network": {
+    "sector_name": "券商",
+    "sector_breadth_pct": 20.0,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "601688",
+        "name": "华泰证券",
+        "corr": 0.74
+      },
+      {
+        "code": "600030",
+        "name": "中信证券",
+        "corr": 0.73
+      },
+      {
+        "code": "300059",
+        "name": "东方财富",
+        "corr": 0.56
+      },
+      {
+        "code": "601066",
+        "name": "中信建投",
+        "corr": 0.46
+      }
+    ]
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 20.3,
+    "max_drawdown_60d_pct": -12.58,
+    "atr14_pct": 2.31,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 12.8,
+        "value": 20.3
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 23.7,
+        "value": -12.58
+      },
+      {
+        "name": "ATR百分比",
+        "score": 19.2,
+        "value": 2.31
+      },
+      {
+        "name": "量价异常",
+        "score": 6.4,
+        "value": 1.02
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.33,
+    "return_5d_pct": -0.03,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 36.7,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 17.722,
+    "ma10": 17.713,
+    "ma20": 17.879,
+    "ma60": 18.0545,
+    "rsi14": 48.7,
+    "macd_dif": -0.1524309840393201,
+    "macd_dea": -0.150227938113565,
+    "macd_hist": -0.0044060918515101966,
+    "atr14_pct": 2.314397573204082,
+    "boll_position": 0.5207818547932305,
+    "return_5d_pct": 2.9919447640966546,
+    "return_20d_pct": -2.505446623093688,
+    "volume_ratio_5d": 1.02
+  },
+  "industry": {
+    "name": "券商",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -11.63
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.33,
+      "median_return_pct": -1.08,
+      "best_return_pct": 9.89,
+      "worst_return_pct": -5.62
+    },
+    "horizon_5d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.03,
+      "median_return_pct": -0.73,
+      "best_return_pct": 11.32,
+      "worst_return_pct": -6.15
+    }
+  },
+  "fundamental": null,
+  "reasons": [],
+  "kline_file": "../kline/601211.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

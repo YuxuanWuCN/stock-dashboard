@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 妖股鉴定器 Demo - 股票性质分辨器</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #111827;
+        }
+        .stat-value.volatile { color: #dc2626; }
+        .stat-value.trend { color: #2563eb; }
+        .stat-value.range { color: #059669; }
+        .filters {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover {
+            border-color: #667eea;
+            background: #f3f4f6;
+        }
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .stock-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .stock-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        .stock-info h3 {
+            font-size: 20px;
+            color: #111827;
+            margin-bottom: 4px;
+        }
+        .stock-meta {
+            font-size: 13px;
+            color: #6b7280;
+        }
+        .badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-volatile {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+        .badge-trend {
+            background: #dbeafe;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
+        }
+        .badge-range {
+            background: #d1fae5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+        .monster-score {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .monster-score-label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 4px;
+        }
+        .monster-score-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: white;
+        }
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .metric-item {
+            padding: 10px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+        .metric-label {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        .metric-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #111827;
+        }
+        .strategy {
+            padding: 12px;
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #92400e;
+        }
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔥 妖股鉴定器</h1>
+            <p>基于 SFM 因子流形的股票性质量化分类系统</p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-label">📊 全池标的总数</div>
+                <div class="stat-value" id="total-count">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🔥 妖股题材型</div>
+                <div class="stat-value volatile" id="volatile-count">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🎯 趋势主升型</div>
+                <div class="stat-value trend" id="trend-count">--</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">🧱 震荡蓄势型</div>
+                <div class="stat-value range" id="range-count">--</div>
+            </div>
+        </div>
+
+        <div class="filters">
+            <div class="filter-tabs">
+                <button class="filter-btn active" data-type="all">全部 (<span id="all-count">0</span>)</button>
+                <button class="filter-btn" data-type="volatile">🔥 妖股题材 (<span id="filter-volatile-count">0</span>)</button>
+                <button class="filter-btn" data-type="trend">🎯 趋势主升 (<span id="filter-trend-count">0</span>)</button>
+                <button class="filter-btn" data-type="range_bound">🧱 震荡蓄势 (<span id="filter-range-count">0</span>)</button>
+            </div>
+        </div>
+
+        <div class="stock-grid" id="stock-grid">
+            <div class="empty">正在加载数据...</div>
+        </div>
+    </div>
+
+    <script>
+        const state = {
+            stocks: [],
+            filter: 'all'
+        };
+
+        async function loadData() {
+            try {
+                const res = await fetch('data/analysis/ranking.json');
+                const data = await res.json();
+                state.stocks = data.items.filter(item => item.bet_type && item.bet_type_metrics);
+                updateStats();
+                renderStocks();
+            } catch (err) {
+                document.getElementById('stock-grid').innerHTML = `
+                    <div class="empty">
+                        <p>❌ 数据加载失败</p>
+                        <p style="margin-top:10px;font-size:14px;">${err.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function updateStats() {
+            const total = state.stocks.length;
+            const volatile = state.stocks.filter(s => s.bet_type === 'volatile').length;
+            const trend = state.stocks.filter(s => s.bet_type === 'trend').length;
+            const range = state.stocks.filter(s => s.bet_type === 'range_bound').length;
+
+            document.getElementById('total-count').textContent = total;
+            document.getElementById('volatile-count').textContent = volatile;
+            document.getElementById('trend-count').textContent = trend;
+            document.getElementById('range-count').textContent = range;
+            
+            document.getElementById('all-count').textContent = total;
+            document.getElementById('filter-volatile-count').textContent = volatile;
+            document.getElementById('filter-trend-count').textContent = trend;
+            document.getElementById('filter-range-count').textContent = range;
+        }
+
+        function renderStocks() {
+            let filtered = state.stocks;
+            if (state.filter !== 'all') {
+                filtered = state.stocks.filter(s => s.bet_type === state.filter);
+            }
+
+            // 按 monster_score 或 risk_adjusted_score 排序
+            filtered.sort((a, b) => {
+                const scoreA = (a.bet_type_metrics && a.bet_type_metrics.monster_score) || a.risk_adjusted_score || 0;
+                const scoreB = (b.bet_type_metrics && b.bet_type_metrics.monster_score) || b.risk_adjusted_score || 0;
+                return scoreB - scoreA;
+            });
+
+            const grid = document.getElementById('stock-grid');
+            if (filtered.length === 0) {
+                grid.innerHTML = '<div class="empty">该分类暂无标的</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(stock => {
+                const metrics = stock.bet_type_metrics || {};
+                const strategy = stock.strategy_recommendation || {};
+                const badgeClass = stock.bet_type === 'volatile' ? 'badge-volatile' : 
+                                   stock.bet_type === 'trend' ? 'badge-trend' : 'badge-range';
+                const badgeText = stock.bet_type === 'volatile' ? '🔥 妖股题材型' :
+                                  stock.bet_type === 'trend' ? '🎯 趋势主升型' : '🧱 震荡蓄势型';
+                
+                const monsterScore = metrics.monster_score || 0;
+                const vol = (metrics.volatility_annual || 0) * 100;
+                const atr = (metrics.atr_ratio || 0) * 100;
+                const halfLife = metrics.momentum_half_life || '极短';
+
+                return `
+                    <div class="stock-card">
+                        <div class="stock-header">
+                            <div class="stock-info">
+                                <h3>${stock.name}</h3>
+                                <div class="stock-meta">${stock.code} · ${stock.category || '未分类'}</div>
+                            </div>
+                            <span class="badge ${badgeClass}">${badgeText}</span>
+                        </div>
+                        
+                        ${stock.bet_type === 'volatile' ? `
+                            <div class="monster-score">
+                                <div class="monster-score-label">妖股指数 Monster Score</div>
+                                <div class="monster-score-value">${monsterScore.toFixed(1)}</div>
+                            </div>
+                        ` : ''}
+
+                        <div class="metrics">
+                            <div class="metric-item">
+                                <div class="metric-label">20日年化波动率</div>
+                                <div class="metric-value">${vol.toFixed(1)}%</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">ATR日均振幅比</div>
+                                <div class="metric-value">${atr.toFixed(2)}%</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">动量半衰期</div>
+                                <div class="metric-value">${halfLife === null ? '长期' : halfLife + '天'}</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">综合风险收益分</div>
+                                <div class="metric-value">${(stock.risk_adjusted_score || 0).toFixed(1)}</div>
+                            </div>
+                        </div>
+
+                        <div class="strategy">
+                            <strong>💡 操盘建议：</strong>${strategy.description || '暂无策略建议'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 筛选按钮事件
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                state.filter = btn.dataset.type;
+                renderStocks();
+            });
+        });
+
+        loadData();
+    </script>
+</body>
+</html>
