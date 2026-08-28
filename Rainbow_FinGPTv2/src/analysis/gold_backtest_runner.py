@@ -70,6 +70,29 @@ class GoldBacktestRunner:
         self.allocator = DynamicBetAllocator(total_portfolio_capital=initial_capital)
         self.nowcast_validator = NowcastingTriangleValidator(penalty_lambda=0.5)
 
+        # 黄金与贵金属资源储备与产业链传导邻接矩阵
+        # 600547 (山东黄金), 600489 (中金黄金), 601899 (紫金矿业), 002155 (湖南黄金), 000975 (山金国际), 600988 (赤峰黄金), 601069 (西部黄金)
+        self.adj_matrix = np.array([
+            [1.0, 0.7, 0.8, 0.4, 0.5, 0.4, 0.3],  # 600547
+            [0.7, 1.0, 0.9, 0.5, 0.6, 0.5, 0.4],  # 600489
+            [0.8, 0.9, 1.0, 0.6, 0.7, 0.8, 0.5],  # 601899
+            [0.4, 0.5, 0.6, 1.0, 0.4, 0.4, 0.3],  # 002155
+            [0.5, 0.6, 0.7, 0.4, 1.0, 0.6, 0.4],  # 000975
+            [0.4, 0.5, 0.8, 0.4, 0.6, 1.0, 0.4],  # 600988
+            [0.3, 0.4, 0.5, 0.3, 0.4, 0.4, 1.0],  # 601069
+        ])
+
+        # 矿山储量与克金全维持成本 (AISC) 护城河打分
+        self.moats = {
+            "601899": 0.95,  # 紫金矿业 (全球多金属铜金龙头，低成本扩张)
+            "600489": 0.90,  # 中金黄金 (央企黄金中枢平台)
+            "600988": 0.88,  # 赤峰黄金 (海外矿山高成长高弹性)
+            "000975": 0.85,  # 山金国际 (高品位矿山，低现金成本)
+            "601069": 0.75,  # 西部黄金 (新疆战略资源储备)
+            "600547": 0.70,  # 山东黄金 (国内资源龙头，成本稳健)
+            "002155": 0.65,  # 湖南黄金 (金锑双主业)
+        }
+
     def load_isolated_raw_data(self) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """读取物理隔离目录中的原始数据。"""
         prices_df = pd.read_csv(self.raw_data_dir / "market_prices.csv", index_col=0, parse_dates=True)
@@ -103,28 +126,77 @@ class GoldBacktestRunner:
             sub_prices = prices_df.iloc[:t]
             sub_nowcast = nowcast_df.iloc[:t]
 
-            target_weights: Dict[str, float] = {}
-            gate_status: Dict[str, bool] = {}
-
             curr_spot = float(sub_nowcast["gold_spot_price"].iloc[-1])
             curr_geo = float(sub_nowcast["geopolitical_risk_index"].iloc[-1])
+            curr_cb = float(sub_nowcast["central_bank_gold_purchase_index"].iloc[-1])
+
+            gate_decs: Dict[str, TrendGateDecision] = {}
+            raw_factor_dict: Dict[str, List[float]] = {
+                "alpha_momentum_20d": [],
+                "alpha_volatility_20d": [],
+                "alpha_macro_geo": [],
+                "alpha_resource_moat": []
+            }
 
             for ticker in self.GOLD_TICKERS:
-                stock_kline = pd.DataFrame({"close": sub_prices[ticker]})
+                p_series = sub_prices[ticker]
+                stock_kline = pd.DataFrame({"close": p_series})
                 gate_dec = self.trend_gate.evaluate_gate(ticker, stock_kline)
+                gate_decs[ticker] = gate_dec
+
+                mom20 = (p_series.iloc[-1] / p_series.iloc[-20] - 1.0) if len(p_series) >= 20 else 0.0
+                vol20 = float(p_series.pct_change().iloc[-20:].std() * np.sqrt(250)) if len(p_series) >= 20 else 0.30
+                geo_score = 0.85 if (curr_geo > 50.0 and curr_cb >= 100.0) else 0.40
+                moat_score = self.moats.get(ticker, 0.70)
+
+                raw_factor_dict["alpha_momentum_20d"].append(mom20)
+                raw_factor_dict["alpha_volatility_20d"].append(vol20)
+                raw_factor_dict["alpha_macro_geo"].append(geo_score)
+                raw_factor_dict["alpha_resource_moat"].append(moat_score)
+
+            raw_factor_df = pd.DataFrame(raw_factor_dict, index=self.GOLD_TICKERS)
+
+            # 1. GFCA 几何因子空间坐标对齐
+            gfca_coords = self.scoring_engine.align_gfca_coordinates(raw_factor_df=raw_factor_df)
+            node_scores = {tk: gfca_coords[tk].composite_score for tk in self.GOLD_TICKERS}
+
+            # 2. NALE 资源与产业链网络传导增强
+            nale_results = self.scoring_engine.calculate_nale_score(
+                node_scores=node_scores,
+                adjacency_matrix=self.adj_matrix,
+                ticker_list=self.GOLD_TICKERS
+            )
+
+            # 3. 截面优选排序 (动态聚焦 Top 3 领头羊)
+            sorted_tickers = sorted(self.GOLD_TICKERS, key=lambda k: nale_results[k].final_nale_score, reverse=True)
+            top1, top2, top3 = sorted_tickers[0], sorted_tickers[1], sorted_tickers[2]
+
+            desired_weights: Dict[str, float] = {tk: 0.0 for tk in self.GOLD_TICKERS}
+            gate_status: Dict[str, bool] = {}
+
+            for ticker in self.GOLD_TICKERS:
+                gate_dec = gate_decs[ticker]
                 gate_status[ticker] = gate_dec.gate_open
 
-                # 黄金板块特有定性打分与地缘避险溢价
-                base_score = 0.70 if curr_geo > 50.0 else 0.35
-                gfca_score = base_score + (0.15 if gate_dec.gate_open else -0.30)
+                if gate_dec.gate_open:
+                    if ticker == top1:
+                        desired_weights[ticker] = 0.45
+                    elif ticker == top2:
+                        desired_weights[ticker] = 0.35
+                    elif ticker == top3:
+                        desired_weights[ticker] = 0.15
+                else:
+                    desired_weights[ticker] = 0.0
 
-                alloc_order = self.allocator.allocate_position(
-                    ticker=ticker,
-                    gfca_composite_score=gfca_score,
-                    trend_gate_decision=gate_dec,
-                    bet_type=BetType.CATALYST_ALPHA if gate_dec.gate_open else BetType.SUPER_BETA
-                )
-                target_weights[ticker] = alloc_order.target_weight_pct
+            # 4. 5% 死区防过度调仓摩擦
+            target_weights: Dict[str, float] = {}
+            for ticker in self.GOLD_TICKERS:
+                w_des = desired_weights[ticker]
+                w_cur = current_weights.get(ticker, 0.0)
+                if abs(w_des - w_cur) < 0.05:
+                    target_weights[ticker] = w_cur
+                else:
+                    target_weights[ticker] = w_des
 
             # 归一化总仓位（上限 95%，留 5% 现金）
             total_target_w = sum(target_weights.values())
