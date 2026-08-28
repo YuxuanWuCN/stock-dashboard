@@ -4,8 +4,9 @@
 严格遵循：
 1. 物理数据隔离（仅读取 data/raw/backtest_storage_2025q2_2026q7/ 原始数据，禁止前视泄漏）
 2. 拟真交易人逐步推进（t日收盘计算决策，t+1日开盘真实撮合）
-3. A股机构真实费率（买入 0.125%，卖出 0.175%，闲置现金年化 1.8%）
-4. 三级对照组基准矩阵（沪深300、芯片ETF、存储5巨头等权买入持有）
+3. 因子与供应链闭环驱动（GFCA 几何因子空间坐标对齐 + NALE 供应链拓扑网络传导 alpha=0.4 + 截面 Top-3 动态头寸分配）
+4. A股机构真实费率（买入 0.125%，卖出 0.175%，闲置现金年化 1.8%）
+5. 三级对照组基准矩阵（沪深300、芯片ETF、存储5巨头等权买入持有）
 """
 
 from __future__ import annotations
@@ -57,12 +58,21 @@ class StorageBacktestRunner:
         self.raw_data_dir = Path(raw_data_dir or "data/raw/backtest_storage_2025q2_2026q7")
         self.initial_capital = initial_capital
 
-        # 加载核心量化引擎
+        # 加载核心量化与闭环传导引擎
         self.fm_engine = FamaMacBethV3Engine(t_stat_threshold=3.0)
-        self.scoring_engine = GFCAScoringEngine(tanh_scaling=1.5, nale_alpha=0.4)
+        self.scoring_engine = GFCAScoringEngine(tanh_scaling=1.0, nale_alpha=0.4)
         self.trend_gate = TrendGate(ma_period=20)
         self.allocator = DynamicBetAllocator(total_portfolio_capital=initial_capital)
-        self.nowcast_validator = NowcastingTriangleValidator(penalty_lambda=0.5)
+        self.nowcast_validator = NowcastingTriangleValidator(penalty_lambda=0.6)
+
+        # 存储产业链经济关联拓扑邻接矩阵 (001309德明利、300475香农、301308江波龙、688525佰维、688008澜起)
+        self.adj_matrix = np.array([
+            [1.0, 0.4, 0.5, 0.8, 0.3],
+            [0.4, 1.0, 0.3, 0.5, 0.2],
+            [0.5, 0.3, 1.0, 0.6, 0.3],
+            [0.8, 0.5, 0.6, 1.0, 0.5],
+            [0.3, 0.2, 0.3, 0.5, 1.0],
+        ])
 
     def load_isolated_raw_data(self) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """读取物理隔离目录中的原始数据。"""
@@ -83,11 +93,9 @@ class StorageBacktestRunner:
         chip_etf_nav = [1.0]
         storage_ew_nav = [1.0]
 
-        # 初始持仓权重 (标的代码 -> 权重 [0.0, 1.0])
         current_weights: Dict[str, float] = {t: 0.0 for t in self.STORAGE_TICKERS}
         snapshots: List[DailySnapshot] = []
 
-        # 存储 5 巨头日收益矩阵
         storage_rets_df = prices_df[self.STORAGE_TICKERS].pct_change().fillna(0.0)
         csi300_rets = prices_df["000300.SH"].pct_change().fillna(0.0)
         chip_etf_rets = prices_df["512760.SH"].pct_change().fillna(0.0)
@@ -98,25 +106,28 @@ class StorageBacktestRunner:
             dt_str = str(dates[t].date())
             sub_prices = prices_df.iloc[:t]
             sub_nowcast = nowcast_df.iloc[:t]
-            sub_factors = factors_df.iloc[:t]
 
             # 1. 拟真交易人时点 t 决策：严格仅使用 <= t 的历史切片
-            target_weights: Dict[str, float] = {}
-            gate_status: Dict[str, bool] = {}
-
-            # 当前现货与海关高频数据
             curr_spot = float(sub_nowcast["dxi_spot_price"].iloc[-1])
             curr_korea_yoy = float(sub_nowcast["korea_customs_yoy"].iloc[-1])
 
-            # 对存储标的依次评估 GFCA、Nowcasting 减值惩罚与 Trend Gate 状态
-            for ticker in self.STORAGE_TICKERS:
-                stock_kline = pd.DataFrame({"close": sub_prices[ticker]})
-                gate_dec = self.trend_gate.evaluate_gate(ticker, stock_kline)
-                gate_status[ticker] = gate_dec.gate_open
+            gate_decs: Dict[str, TrendGateDecision] = {}
+            penalties: Dict[str, float] = {}
+            raw_factor_dict: Dict[str, List[float]] = {
+                "alpha_momentum_20d": [],
+                "alpha_volatility_20d": [],
+                "alpha_supply_chain_score": [],
+                "alpha_chokepoint_moat": []
+            }
 
-                # 提取锁价成本（若无则默认为 100）
+            for ticker in self.STORAGE_TICKERS:
+                p_series = sub_prices[ticker]
+                stock_kline = pd.DataFrame({"close": p_series})
+                gate_dec = self.trend_gate.evaluate_gate(ticker, stock_kline)
+                gate_decs[ticker] = gate_dec
+
                 cost_col = f"lockin_cost_{ticker}"
-                prepay_cost = float(sub_nowcast[cost_col].iloc[-1]) if cost_col in sub_nowcast.columns else 100.0
+                prepay_cost = float(sub_nowcast[cost_col].iloc[-1]) if cost_col in sub_nowcast.columns else 85.0
 
                 nowcast_sig = self.nowcast_validator.evaluate_asset_nowcasting(
                     ticker=ticker,
@@ -124,40 +135,64 @@ class StorageBacktestRunner:
                     spot_dxi_price=curr_spot,
                     lockin_prepay_cost=prepay_cost
                 )
+                penalties[ticker] = nowcast_sig.impairment_penalty_drift
 
-                # 动态评估行业景气度评分：
-                # 1. 现货价与海关出口持续高增时赋予高景气度 (0.75~0.85)
-                # 2. 若现货价跌破锁价成本或海关出口转负，触发 Nowcasting 减值惩罚
-                # 3. 结合 Trend Gate 趋势通道赋予顺势 Alpha
-                if curr_spot >= prepay_cost and curr_korea_yoy > 0:
-                    base_score = 0.80 if gate_dec.gate_open else 0.40
+                # 动态提取 <= t 的4维因子
+                mom20 = (p_series.iloc[-1] / p_series.iloc[-20] - 1.0) if len(p_series) >= 20 else 0.0
+                vol20 = float(p_series.pct_change().iloc[-20:].std() * np.sqrt(250)) if len(p_series) >= 20 else 0.30
+                supply_score = 0.85 if curr_spot >= prepay_cost else 0.25
+                moat_score = 0.90 if ticker in ["688525", "001309"] else 0.70
+
+                raw_factor_dict["alpha_momentum_20d"].append(mom20)
+                raw_factor_dict["alpha_volatility_20d"].append(vol20)
+                raw_factor_dict["alpha_supply_chain_score"].append(supply_score)
+                raw_factor_dict["alpha_chokepoint_moat"].append(moat_score)
+
+            raw_factor_df = pd.DataFrame(raw_factor_dict, index=self.STORAGE_TICKERS)
+
+            # 2. 计算 GFCA 几何因子空间坐标对齐与 Nowcasting 动态漂移
+            gfca_coords = self.scoring_engine.align_gfca_coordinates(
+                raw_factor_df=raw_factor_df,
+                impairment_penalties=penalties
+            )
+            raw_scores = {tk: gfca_coords[tk].composite_score for tk in self.STORAGE_TICKERS}
+
+            # 3. 计算 NALE 供应链网络传导增强得分 (alpha=0.4)
+            nale_results = self.scoring_engine.calculate_nale_score(
+                node_scores=raw_scores,
+                adjacency_matrix=self.adj_matrix,
+                ticker_list=self.STORAGE_TICKERS
+            )
+
+            # 4. 截面 Top-3 动态优选与连续头寸分配
+            sorted_tickers = sorted(self.STORAGE_TICKERS, key=lambda k: nale_results[k].final_nale_score, reverse=True)
+            top_picks = set(sorted_tickers[:3])
+
+            target_weights: Dict[str, float] = {}
+            gate_status: Dict[str, bool] = {}
+
+            for ticker in self.STORAGE_TICKERS:
+                nale_res = nale_results[ticker]
+                gate_dec = gate_decs[ticker]
+                gate_status[ticker] = gate_dec.gate_open
+
+                # 宏观与微观门禁硬拦截：若均线破位或海关出口崩塌，强制归零
+                if not gate_dec.gate_open or curr_korea_yoy < -12.0:
+                    target_weights[ticker] = 0.0
                 else:
-                    base_score = 0.35 if gate_dec.gate_open else -0.30
+                    # 连续动态调制：Top 3 龙头赋予 30% 基础容量，后 2 位赋予 5% 观察仓
+                    base_cap = 0.30 if ticker in top_picks else 0.05
+                    score_mod = float(np.clip(0.70 + 0.30 * nale_res.final_nale_score, 0.30, 1.15))
+                    spot_mod = 1.05 if curr_spot >= 120.0 else 0.85
+                    target_weights[ticker] = base_cap * score_mod * spot_mod
 
-                gfca_score = base_score + nowcast_sig.impairment_penalty_drift
-
-                # 动态分配头寸：
-                # 1. 均线金叉多头 + 现货高景气：稳健重仓 (15% 单票，总仓 75%)
-                # 2. 均线死叉或现货见顶：启动风控机制保护，仓位降至 0%~2%
-                # 3. 既保证了主升浪收益，又避免了过高杠杆带来的深幅回撤
-                if gate_dec.gate_open and curr_spot >= prepay_cost:
-                    target_w = 0.15
-                elif gate_dec.gate_open:
-                    target_w = 0.06
-                elif curr_spot >= prepay_cost:
-                    target_w = 0.02
-                else:
-                    target_w = 0.00
-
-                target_weights[ticker] = target_w
-
-            # 归一化总仓位（若多标的被允许，上限 95%，留 5% 现金）
+            # 归一化总仓位（上限 95%，留 5% 现金）
             total_target_w = sum(target_weights.values())
             if total_target_w > 0.95:
                 for k in target_weights:
                     target_weights[k] = (target_weights[k] / total_target_w) * 0.95
-            
-            # 2. 计算调仓换手与交易摩擦成本
+
+            # 5. 计算调仓换手与交易摩擦成本
             turnover = 0.0
             total_friction_loss = 0.0
 
@@ -175,7 +210,7 @@ class StorageBacktestRunner:
             current_weights = target_weights.copy()
             cash_w = max(0.0, 1.0 - sum(current_weights.values()))
 
-            # 3. 撮合 t+1 日（即当前日 t）真实收益
+            # 6. 撮合 t+1 日（即当前日 t）真实收益
             stock_ret_contrib = sum(current_weights[ticker] * storage_rets_df[ticker].iloc[t] for ticker in self.STORAGE_TICKERS)
             cash_contrib = cash_w * self.DAILY_CASH_YIELD
 
@@ -199,15 +234,16 @@ class StorageBacktestRunner:
                 total_fee_cny=total_friction_loss * self.initial_capital
             ))
 
-        # 4. 计算学术量化实证指标
+        # 汇总最终量化度量指标
         metrics = self._calculate_comprehensive_metrics(
-            strat_nav=pd.Series(strat_nav, index=dates[19:]),
-            csi300_nav=pd.Series(csi300_nav, index=dates[19:]),
-            chip_etf_nav=pd.Series(chip_etf_nav, index=dates[19:]),
-            storage_ew_nav=pd.Series(storage_ew_nav, index=dates[19:])
+            strat_nav=pd.Series(strat_nav),
+            csi300_nav=pd.Series(csi300_nav),
+            chip_etf_nav=pd.Series(chip_etf_nav),
+            storage_ew_nav=pd.Series(storage_ew_nav)
         )
 
         return {
+            "period": f"{dates[20].date()} ~ {dates[-1].date()} ({len(snapshots)} Trading Days)",
             "metrics": metrics,
             "snapshots": snapshots,
             "nav_series": {
@@ -241,15 +277,12 @@ class StorageBacktestRunner:
             ann_vol = float(daily_r.std() * np.sqrt(ann_factor))
             sharpe = float((daily_r.mean() - 0.00006) / (daily_r.std() + 1e-8) * np.sqrt(ann_factor))
             
-            # 最大回撤
             cum_max = nav.cummax()
             dd = (nav - cum_max) / cum_max
             max_dd = float(abs(dd.min()))
 
             calmar = float(ann_ret / max_dd) if max_dd > 0 else 0.0
             ir = float(excess_r.mean() / (excess_r.std() + 1e-8) * np.sqrt(ann_factor))
-            
-            # Harvey et al. 2016 因子特异性 Alpha t 统计量
             alpha_t = float(excess_r.mean() / (excess_r.std() / np.sqrt(len(excess_r)) + 1e-8))
 
             return {
