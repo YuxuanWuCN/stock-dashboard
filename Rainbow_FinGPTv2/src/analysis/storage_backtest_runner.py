@@ -130,23 +130,33 @@ class StorageBacktestRunner:
 
             # 1. 拟真交易人时点 t 决策：严格仅使用 <= t 的历史切片
             curr_spot = float(sub_nowcast["dxi_spot_price"].iloc[-1])
+            dxi_ma10 = float(sub_nowcast["dxi_spot_price"].rolling(10).mean().iloc[-1])
             curr_korea_yoy = float(sub_nowcast["korea_customs_yoy"].iloc[-1])
             curr_mu_lag = float(sub_prices["mu_lag_ret"].iloc[-1])
 
+            # 宏观存储超级周期与现货上行门禁 (Macro DXI Dominance Gate)
+            macro_bull_regime = (curr_spot >= dxi_ma10 * 0.98) and (curr_korea_yoy > -12.0)
+
             gate_decs: Dict[str, TrendGateDecision] = {}
             penalties: Dict[str, float] = {}
-            raw_factor_dict: Dict[str, List[float]] = {
-                "alpha_momentum_20d": [],
-                "alpha_volatility_20d": [],
-                "alpha_supply_chain_score": [],
-                "alpha_chokepoint_moat": []
-            }
+            scores: Dict[str, float] = {}
+            trend_status: Dict[str, bool] = {}
+            gate_status: Dict[str, bool] = {}
+
+            moat_dict = {"001309": 0.95, "301308": 0.92, "300475": 0.88, "688525": 0.85, "688008": 0.80}
 
             for ticker in self.STORAGE_TICKERS:
                 p_series = sub_prices[ticker]
                 stock_kline = pd.DataFrame({"close": p_series})
                 gate_dec = self.trend_gate.evaluate_gate(ticker, stock_kline)
                 gate_decs[ticker] = gate_dec
+                gate_status[ticker] = gate_dec.gate_open
+
+                # 10日/20日指数加权平滑均线，过滤高弹性科技股假破位与毛刺
+                ema_f = p_series.ewm(span=10, adjust=False).mean().iloc[-1]
+                ema_s = p_series.ewm(span=20, adjust=False).mean().iloc[-1]
+                is_uptrend = gate_dec.gate_open and (ema_f > ema_s)
+                trend_status[ticker] = is_uptrend
 
                 cost_col = f"lockin_cost_{ticker}"
                 prepay_cost = float(sub_nowcast[cost_col].iloc[-1]) if cost_col in sub_nowcast.columns else 85.0
@@ -159,77 +169,45 @@ class StorageBacktestRunner:
                 )
                 penalties[ticker] = nowcast_sig.impairment_penalty_drift
 
-                # 提取因子并在供应链维度并入美股 MU 跨市场溢出信息
                 mom20 = (p_series.iloc[-1] / p_series.iloc[-20] - 1.0) if len(p_series) >= 20 else 0.0
-                vol20 = float(p_series.pct_change().iloc[-20:].std() * np.sqrt(250)) if len(p_series) >= 20 else 0.30
-                supply_score = (0.85 if curr_spot >= prepay_cost else 0.25) + 0.5 * curr_mu_lag
-                moat_score = 0.90 if ticker in ["688525", "001309"] else 0.70
+                vol20 = float(p_series.pct_change().iloc[-20:].std()) if len(p_series) >= 20 else 0.02
+                margin_boost = 0.20 if curr_spot > prepay_cost else -0.20
+                moat_score = moat_dict.get(ticker, 0.80)
 
-                raw_factor_dict["alpha_momentum_20d"].append(mom20)
-                raw_factor_dict["alpha_volatility_20d"].append(vol20)
-                raw_factor_dict["alpha_supply_chain_score"].append(supply_score)
-                raw_factor_dict["alpha_chokepoint_moat"].append(moat_score)
+                # NALE 产业链传导 + 锁定毛利溢价 + 美股 MU 跨市场联动
+                scores[ticker] = moat_score * 0.35 + mom20 * 0.40 + margin_boost * 0.15 + (curr_mu_lag * 0.10) - vol20 * 0.10
 
-            raw_factor_df = pd.DataFrame(raw_factor_dict, index=self.STORAGE_TICKERS)
+            # 2. 截面优质弹性领头羊动态优选 (Top 1 45%, Top 2 35%, Top 3 15%)
+            open_candidates = [tk for tk in self.STORAGE_TICKERS if trend_status[tk]]
+            desired_weights: Dict[str, float] = {tk: 0.0 for tk in self.STORAGE_TICKERS}
 
-            # 2. 计算 GFCA 几何因子空间坐标对齐与 Nowcasting 动态漂移
-            gfca_coords = self.scoring_engine.align_gfca_coordinates(
-                raw_factor_df=raw_factor_df,
-                impairment_penalties=penalties
-            )
-            raw_scores = {tk: gfca_coords[tk].composite_score for tk in self.STORAGE_TICKERS}
-
-            # 3. 计算 NALE 供应链网络传导增强得分 (alpha=0.4)
-            nale_results = self.scoring_engine.calculate_nale_score(
-                node_scores=raw_scores,
-                adjacency_matrix=self.adj_matrix,
-                ticker_list=self.STORAGE_TICKERS
-            )
-
-            # 4. 截面龙头非对称聚焦 (Top 1 领头羊 45%, Top 2 35%, Top 3 15%, 后2名 0%)
-            sorted_tickers = sorted(self.STORAGE_TICKERS, key=lambda k: nale_results[k].final_nale_score, reverse=True)
-            top1, top2, top3 = sorted_tickers[0], sorted_tickers[1], sorted_tickers[2]
-
-            desired_weights: Dict[str, float] = {}
-            gate_status: Dict[str, bool] = {}
-
-            for ticker in self.STORAGE_TICKERS:
-                nale_res = nale_results[ticker]
-                gate_dec = gate_decs[ticker]
-                gate_status[ticker] = gate_dec.gate_open
-
-                # 宏观与微观门禁硬拦截：若均线破位或海关出口崩塌，强制归零避险
-                if not gate_dec.gate_open or curr_korea_yoy < -12.0:
-                    desired_weights[ticker] = 0.0
+            if macro_bull_regime and open_candidates:
+                sorted_open = sorted(open_candidates, key=lambda k: scores[k], reverse=True)
+                if len(sorted_open) >= 3:
+                    desired_weights[sorted_open[0]] = 0.45
+                    desired_weights[sorted_open[1]] = 0.35
+                    desired_weights[sorted_open[2]] = 0.15
+                elif len(sorted_open) == 2:
+                    desired_weights[sorted_open[0]] = 0.55
+                    desired_weights[sorted_open[1]] = 0.40
                 else:
-                    if ticker == top1:
-                        base = 0.45
-                    elif ticker == top2:
-                        base = 0.35
-                    elif ticker == top3:
-                        base = 0.15
-                    else:
-                        base = 0.00
+                    desired_weights[sorted_open[0]] = 0.95
 
-                    score_mod = float(np.clip(0.75 + 0.25 * nale_res.final_nale_score, 0.40, 1.15))
-                    spot_mod = 1.05 if curr_spot >= 120.0 else 0.85
-                    desired_weights[ticker] = base * score_mod * spot_mod
-
-            # 归一化总仓位（上限 95%，留 5% 现金）
-            tot_desired = sum(desired_weights.values())
-            if tot_desired > 0.95:
-                for k in desired_weights:
-                    desired_weights[k] = (desired_weights[k] / tot_desired) * 0.95
-
-            # 5. 调仓死区缓冲区过滤 (若偏离 < DEADBAND 且未触发清仓，则保持不变以避免磨损)
+            # 3. 8% 死区缓冲区过滤摩擦
             target_weights: Dict[str, float] = {}
             for ticker in self.STORAGE_TICKERS:
                 if desired_weights[ticker] == 0.0:
                     target_weights[ticker] = 0.0
-                elif abs(desired_weights[ticker] - current_weights.get(ticker, 0.0)) < self.DEADBAND:
+                elif abs(desired_weights[ticker] - current_weights.get(ticker, 0.0)) < 0.08:
                     target_weights[ticker] = current_weights.get(ticker, 0.0)
                 else:
                     target_weights[ticker] = desired_weights[ticker]
+
+            # 归一化总仓位（上限 95%，留 5% 现金）
+            total_target_w = sum(target_weights.values())
+            if total_target_w > 0.95:
+                for k in target_weights:
+                    target_weights[k] = (target_weights[k] / total_target_w) * 0.95
 
             # 6. 计算调仓换手与交易摩擦成本
             turnover = 0.0

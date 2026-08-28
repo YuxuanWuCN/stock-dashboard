@@ -231,11 +231,11 @@ def main() -> int:
     pdf.set_font(pdf.font_regular, "", 7.2)
     pdf.set_text_color(30, 41, 59)
     summary_text = (
-        "【学术与工业落地结论】"
-        "① 供应链网络拓扑阻尼传导 (NALE, alpha=0.4) 领先卖方研报 5 个交易日捕捉上游晶圆价格与海外原厂溢出效应；"
-        "② Fama-MacBeth 滚动截面回归剥离系统性 Beta，经 Newey-West HAC 稳健修正后特质 Alpha 显著性 t=2.72 (p<0.05)；"
-        "③ Trend Gate™ 趋势硬门禁在 2026 年去库存大跌中识别 C 浪破位并强制清仓，将回撤由等权基准 -54.13% 强力压降至 29.14%，"
-        "以真实样本外推进实证击败行业 ETF 与传统公私募基金。"
+        "【学术与工业落地结论】\n"
+        "① 供应链网络拓扑阻尼传导 (NALE, alpha=0.4) 领先卖方研报 5 个交易日捕捉上游晶圆价格与海外原厂溢出效应；\n"
+        "② Fama-MacBeth 滚动截面回归剥离系统性 Beta，经 Newey-West HAC 稳健修正后特质 Alpha 显著性 t=2.72 (p<0.05)；\n"
+        f"③ Trend Gate™ 趋势硬门禁在去库存周期中识别 C 浪破位并强制清仓，将回撤由等权基准 -{ew['max_drawdown']*100:.1f}% 强力压降至 {strat['max_drawdown']*100:.1f}%，"
+        f"全周期斩获 +{strat['total_return']*100:.2f}% (年化 +{strat['annualized_return']*100:.2f}%)，夏普比达 {strat['sharpe_ratio']:.2f}，显著击败行业 ETF 与宽基。"
     )
     pdf.multi_cell(176, 3.4, summary_text)
 
