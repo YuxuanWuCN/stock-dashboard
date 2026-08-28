@@ -147,14 +147,14 @@ def main():
     set_cell(table.cell(11, 1), "吴宇轩")
     set_cell(table.cell(11, 2), "项目负责人 (系统架构/定价风控/存储实证)")
     table.cell(11, 3).merge(table.cell(11, 4))
-    set_cell(table.cell(11, 3), "阿伯丁数据科学与人工智能学院")
-    set_cell(table.cell(11, 5), "2022级 本科")
+    set_cell(table.cell(11, 3), "信息管理与信息系统 / 阿伯丁数据科学学院")
+    set_cell(table.cell(11, 5), "2025级 本科")
 
     set_cell(table.cell(12, 1), "团队核心成员")
     set_cell(table.cell(12, 2), "算法与数据工程 (黄金/绿电板块实证)")
     table.cell(12, 3).merge(table.cell(12, 4))
-    set_cell(table.cell(12, 3), "数据科学 / 计算机科学与技术")
-    set_cell(table.cell(12, 5), "2022/2023级 本科")
+    set_cell(table.cell(12, 3), "人工智能 / 计算机科学与技术")
+    set_cell(table.cell(12, 5), "2025级 本科")
     table.cell(10, 0).merge(table.cell(12, 0))
 
     # Row 13: 项目介绍 (300字以内)
@@ -162,8 +162,8 @@ def main():
     table.cell(13, 1).merge(table.cell(13, 5))
     p_intro = (
         "针对金融量化投研中初级研究员人力投入大、研报复现周期长（4-20h/篇）、通用大模型存在严重数值幻觉与前视未来函数泄漏等行业痛点，"
-        "本项目针对达观数据产业命题，首创“定性认知(SCNU-RAG事实抽取) — 资产定价(Fama-MacBeth 3.0滚动回归) — 战术风控(Trend Gate C浪拦截)”三层解耦架构。"
-        "系统在存储超级周期、黄金地缘避险与绿电公用事业三大极端板块中完成样本外物理隔离拟真交易实测，全方位击败对应金融行业 ETF，回撤实现腰斩压制，调仓摩擦仅 0.15%（免除公募 1.5%~2% 管理费）。"
+        "本项目针对达观数据产业命题，首创【FinRobot多专家审议 -> FinGPT领域后训练 -> NALE资源图谱 -> KHunter计量模拟器】四位一体全流程技术链。"
+        "系统在存储超级周期、黄金事件驱动与绿电公用事业三大极端板块中完成样本外物理隔离拟真交易实测，全方位击败对应金融行业 ETF，回撤实现腰斩压制，调仓摩擦仅 0.15%（免除公募 1.5%~2% 管理费）。"
         "实测研报提取准确率 92.4%，代码运行率 98.9%，端到端投研耗时缩短 85% 以上，全面超额达成达观数据 10 项考核指标。"
     )
     set_cell(table.cell(13, 1), p_intro)
@@ -172,10 +172,11 @@ def main():
     set_cell(table.cell(14, 0), "参赛对策简述\n（200字以内）", bold=True, align=WD_ALIGN_PARAGRAPH.CENTER, bg_color="F1F5F9")
     table.cell(14, 1).merge(table.cell(14, 5))
     p_strategy = (
-        "本项目采用三层解耦与自主决策闭环解决方案："
-        "① 定性认知层：SCNU-RAG 严格 FOI 事实-观点-推论三元分离，绑定 100% 段落坐标锚点消除幻觉；"
-        "② 资产定价层：252日滚动 Fama-MacBeth 回归结合 NALE 供应链网络拓扑传导，领先卖方研报 5 日捕捉上游调价，剥离稳健特质 Alpha；"
-        "③ 战术风控层：纯因果 ZigZag 状态机与 Trend Gate 趋势硬门禁，在极端暴跌与 C 浪破位中强制清仓，兼具主升浪高弹性与硬核防守。"
+        "本项目采用四位一体自主决策闭环解决方案："
+        "① FinRobot 多专家博弈审议（宏观+行业+风控多角色辩论）；"
+        "② FinGPT 领域后训练 SCNU-RAG 抽取带坐标事实三元组，拒绝臆造；"
+        "③ NALE 产业与资源网络拓扑传导，领先卖方研报 5 日捕捉上游调价，剥离稳健特质 Alpha；"
+        "④ KHunter 纯数学计量引擎（Fama-MacBeth 3.0 回归 + HAC 检验 + Trend Gate 因果状态机），极端暴跌与 C 浪破位强制清仓，兼具高弹性与硬核防守。"
     )
     set_cell(table.cell(14, 1), p_strategy)
 
