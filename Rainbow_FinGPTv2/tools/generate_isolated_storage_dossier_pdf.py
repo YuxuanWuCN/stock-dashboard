@@ -16,10 +16,10 @@ from typing import Any
 
 from fpdf import FPDF
 
-ROOT = Path(r"D:\股票分析项目\Rainbow_FinGPTv2")
+ROOT = Path(__file__).resolve().parent.parent
 JSON_PATH = ROOT / "docs" / "data" / "paper" / "backtest_storage_2025q2_2026q7.json"
 FIG_DIR = ROOT / "reports" / "figures" / "backtest_storage_2025q2_2026q7"
-OUTPUT_PDF = Path(r"D:\股票分析项目\research-outputs\reports\存储超级周期_物理隔绝真实交易实测研报.pdf")
+OUTPUT_PDF = ROOT.parent / "research-outputs" / "reports" / "存储超级周期_物理隔绝真实交易实测研报.pdf"
 
 
 class IsolatedDossierPDF(FPDF):
