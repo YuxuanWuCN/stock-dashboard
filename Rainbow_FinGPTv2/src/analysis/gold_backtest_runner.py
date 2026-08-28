@@ -101,7 +101,7 @@ class GoldBacktestRunner:
         return prices_df, nowcast_df, factors_df
 
     def run_walk_forward_backtest(self) -> Dict[str, Any]:
-        """执行日频拟真交易人全流程样本外回测。"""
+        """执行日频拟真交易人全流程样本外回测 (四位一体事件驱动战术策略)。"""
         prices_df, nowcast_df, factors_df = self.load_isolated_raw_data()
         dates = prices_df.index
         T = len(dates)
@@ -126,74 +126,60 @@ class GoldBacktestRunner:
             sub_prices = prices_df.iloc[:t]
             sub_nowcast = nowcast_df.iloc[:t]
 
+            # 1. 宏观 Nowcasting 现货锚定与地缘事件门控 (Macro Spot Gold Dominance Gate)
             curr_spot = float(sub_nowcast["gold_spot_price"].iloc[-1])
+            spot_ma10 = float(sub_nowcast["gold_spot_price"].rolling(10).mean().iloc[-1])
             curr_geo = float(sub_nowcast["geopolitical_risk_index"].iloc[-1])
             curr_cb = float(sub_nowcast["central_bank_gold_purchase_index"].iloc[-1])
 
-            gate_decs: Dict[str, TrendGateDecision] = {}
-            raw_factor_dict: Dict[str, List[float]] = {
-                "alpha_momentum_20d": [],
-                "alpha_volatility_20d": [],
-                "alpha_macro_geo": [],
-                "alpha_resource_moat": []
-            }
+            macro_bull_regime = (curr_spot >= spot_ma10 * 0.985) and (curr_geo >= 48.0 or curr_cb >= 98.0)
+
+            # 2. 个股多因子与平滑 EMA 趋势状态
+            scores: Dict[str, float] = {}
+            trend_status: Dict[str, bool] = {}
+            gate_status: Dict[str, bool] = {}
 
             for ticker in self.GOLD_TICKERS:
                 p_series = sub_prices[ticker]
                 stock_kline = pd.DataFrame({"close": p_series})
                 gate_dec = self.trend_gate.evaluate_gate(ticker, stock_kline)
-                gate_decs[ticker] = gate_dec
-
-                mom20 = (p_series.iloc[-1] / p_series.iloc[-20] - 1.0) if len(p_series) >= 20 else 0.0
-                vol20 = float(p_series.pct_change().iloc[-20:].std() * np.sqrt(250)) if len(p_series) >= 20 else 0.30
-                geo_score = 0.85 if (curr_geo > 50.0 and curr_cb >= 100.0) else 0.40
-                moat_score = self.moats.get(ticker, 0.70)
-
-                raw_factor_dict["alpha_momentum_20d"].append(mom20)
-                raw_factor_dict["alpha_volatility_20d"].append(vol20)
-                raw_factor_dict["alpha_macro_geo"].append(geo_score)
-                raw_factor_dict["alpha_resource_moat"].append(moat_score)
-
-            raw_factor_df = pd.DataFrame(raw_factor_dict, index=self.GOLD_TICKERS)
-
-            # 1. GFCA 几何因子空间坐标对齐
-            gfca_coords = self.scoring_engine.align_gfca_coordinates(raw_factor_df=raw_factor_df)
-            node_scores = {tk: gfca_coords[tk].composite_score for tk in self.GOLD_TICKERS}
-
-            # 2. NALE 资源与产业链网络传导增强
-            nale_results = self.scoring_engine.calculate_nale_score(
-                node_scores=node_scores,
-                adjacency_matrix=self.adj_matrix,
-                ticker_list=self.GOLD_TICKERS
-            )
-
-            # 3. 截面优选排序 (动态聚焦 Top 3 领头羊)
-            sorted_tickers = sorted(self.GOLD_TICKERS, key=lambda k: nale_results[k].final_nale_score, reverse=True)
-            top1, top2, top3 = sorted_tickers[0], sorted_tickers[1], sorted_tickers[2]
-
-            desired_weights: Dict[str, float] = {tk: 0.0 for tk in self.GOLD_TICKERS}
-            gate_status: Dict[str, bool] = {}
-
-            for ticker in self.GOLD_TICKERS:
-                gate_dec = gate_decs[ticker]
                 gate_status[ticker] = gate_dec.gate_open
 
-                if gate_dec.gate_open:
-                    if ticker == top1:
-                        desired_weights[ticker] = 0.45
-                    elif ticker == top2:
-                        desired_weights[ticker] = 0.35
-                    elif ticker == top3:
-                        desired_weights[ticker] = 0.15
-                else:
-                    desired_weights[ticker] = 0.0
+                # 5日/20日指数加权平滑均线，过滤单日震荡毛刺
+                ema_f = p_series.ewm(span=5, adjust=False).mean().iloc[-1]
+                ema_s = p_series.ewm(span=20, adjust=False).mean().iloc[-1]
+                is_uptrend = (ema_f > ema_s) and (p_series.iloc[-1] > p_series.rolling(20).mean().iloc[-1] * 0.98)
+                trend_status[ticker] = is_uptrend
 
-            # 4. 5% 死区防过度调仓摩擦
+                mom20 = (p_series.iloc[-1] / p_series.iloc[-20] - 1.0) if len(p_series) >= 20 else 0.0
+                vol20 = float(p_series.pct_change().iloc[-20:].std()) if len(p_series) >= 20 else 0.02
+                moat_score = self.moats.get(ticker, 0.70)
+
+                # NALE 资源与成本护城河 + 动量增强得分
+                scores[ticker] = moat_score * 0.40 + mom20 * 0.45 - vol20 * 0.15
+
+            # 3. 选出处于上升通道的优质弹性矿山标的
+            open_candidates = [tk for tk in self.GOLD_TICKERS if trend_status[tk]]
+            desired_weights: Dict[str, float] = {tk: 0.0 for tk in self.GOLD_TICKERS}
+
+            if macro_bull_regime and open_candidates:
+                sorted_open = sorted(open_candidates, key=lambda k: scores[k], reverse=True)
+                if len(sorted_open) >= 3:
+                    desired_weights[sorted_open[0]] = 0.45
+                    desired_weights[sorted_open[1]] = 0.35
+                    desired_weights[sorted_open[2]] = 0.15
+                elif len(sorted_open) == 2:
+                    desired_weights[sorted_open[0]] = 0.55
+                    desired_weights[sorted_open[1]] = 0.40
+                else:
+                    desired_weights[sorted_open[0]] = 0.95
+
+            # 4. 8% 死区防过度频繁调仓摩擦
             target_weights: Dict[str, float] = {}
             for ticker in self.GOLD_TICKERS:
                 w_des = desired_weights[ticker]
                 w_cur = current_weights.get(ticker, 0.0)
-                if abs(w_des - w_cur) < 0.05:
+                if abs(w_des - w_cur) < 0.08:
                     target_weights[ticker] = w_cur
                 else:
                     target_weights[ticker] = w_des
@@ -346,7 +332,8 @@ class GoldBacktestRunner:
         # ----------------------------------------------------
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(11, 7.2), sharex=True, gridspec_kw={"height_ratios": [2.3, 1.0]})
         
-        ax1.plot(dates, strat_nav, label=f"Rainbow-FinGPT 四位一体事件驱动策略 (Sharpe={result['metrics']['strategy_stats']['sharpe_ratio']:.2f}, 年化+{result['metrics']['strategy_stats']['annualized_return']*100:.1f}%, 相对ETF超额+18.4%)", color="#d97706", lw=2.4)
+        excess_etf = (result['metrics']['strategy_stats']['total_return'] - result['metrics']['benchmark_gold_etf_stats']['total_return']) * 100.0
+        ax1.plot(dates, strat_nav, label=f"Rainbow-FinGPT 四位一体事件驱动策略 (Sharpe={result['metrics']['strategy_stats']['sharpe_ratio']:.2f}, 年化+{result['metrics']['strategy_stats']['annualized_return']*100:.1f}%, 相对ETF超额+{excess_etf:.1f}%)", color="#d97706", lw=2.4)
         ax1.plot(dates, ew_nav, label=f"黄金7巨头等权买入死拿 (Sharpe={result['metrics']['benchmark_gold_ew_stats']['sharpe_ratio']:.2f}, MaxDD=-49.8%高危回撤)", color="#854d0e", lw=1.5, ls=":")
         ax1.plot(dates, etf_nav, label=f"黄金ETF (518880) (Sharpe={result['metrics']['benchmark_gold_etf_stats']['sharpe_ratio']:.2f})", color="#eab308", lw=1.4, ls="--")
         ax1.plot(dates, csi_nav, label=f"沪深300基准 (000300) (Sharpe={result['metrics']['benchmark_csi300_stats']['sharpe_ratio']:.2f})", color="#94a3b8", lw=1.1)

@@ -231,11 +231,12 @@ def main() -> int:
     pdf.set_xy(17, summary_box_y + 1.2)
     pdf.set_font(pdf.font_regular, "", 7.1)
     pdf.set_text_color(30, 41, 59)
+    excess_etf_pct = (strat['total_return'] - etf['total_return']) * 100.0
     summary_text = (
         "【学术与工业落地结论】\n"
         "① 解决常年满仓伪命题：策略通过【事件驱动脉冲配置】在震荡期持有无风险日息现金，彻底规避了死拿策略高达 -49.76% 的腰斩暴跌；\n"
         "② 解决大模型参数捏造：FinRobot+FinGPT 仅负责真实文档的事实抽取与坐标溯源，所有资产定价与仓位由 KHunter 纯数学计量公式推导；\n"
-        "③ 卓越实测绩效：相比黄金 ETF (+28.22%)，策略斩获 +46.64% (年化 +51.33%)，实现 +18.42% 显著超额，夏普比达 1.09。"
+        f"③ 卓越实测绩效：相比黄金 ETF (+{etf['total_return']*100:.2f}%)，策略斩获 +{strat['total_return']*100:.2f}% (年化 +{strat['annualized_return']*100:.2f}%)，实现 +{excess_etf_pct:.2f}% 显著超额，夏普比达 {strat['sharpe_ratio']:.2f}。"
     )
     pdf.multi_cell(176, 3.4, summary_text)
 
