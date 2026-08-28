@@ -125,8 +125,15 @@ class StorageBacktestRunner:
                     lockin_prepay_cost=prepay_cost
                 )
 
-                # 计算资产 GFCA 分数并叠加减值漂移
-                base_score = 0.85 if t < 130 else (0.40 if t < 220 else -0.30)
+                # 动态评估行业景气度评分：
+                # 1. 现货价与海关出口持续高增时赋予高景气度 (0.75~0.85)
+                # 2. 若现货价跌破锁价成本或海关出口转负，触发 Nowcasting 减值惩罚
+                # 3. 结合 Trend Gate 趋势通道赋予顺势 Alpha
+                if curr_spot >= prepay_cost and curr_korea_yoy > 0:
+                    base_score = 0.80 if gate_dec.gate_open else 0.40
+                else:
+                    base_score = 0.35 if gate_dec.gate_open else -0.30
+
                 gfca_score = base_score + nowcast_sig.impairment_penalty_drift
 
                 # 动态分配头寸
@@ -134,7 +141,7 @@ class StorageBacktestRunner:
                     ticker=ticker,
                     gfca_composite_score=gfca_score,
                     trend_gate_decision=gate_dec,
-                    bet_type=BetType.CATALYST_ALPHA if t < 150 else BetType.SUPER_BETA
+                    bet_type=BetType.CATALYST_ALPHA if gate_dec.gate_open else BetType.SUPER_BETA
                 )
                 target_weights[ticker] = alloc_order.target_weight_pct
 
