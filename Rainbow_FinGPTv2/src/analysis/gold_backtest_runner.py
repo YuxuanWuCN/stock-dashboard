@@ -54,7 +54,7 @@ class GoldBacktestRunner:
     DAILY_CASH_YIELD = 0.00005  # 闲置现金日息 (年化约 1.8%)
 
     def __init__(self, raw_data_dir: Optional[str | Path] = None, initial_capital: float = 1_000_000.0):
-        self.raw_data_dir = Path(raw_data_dir or "data/raw/backtest_gold_2025q3_2026q8")
+        self.raw_data_dir = Path(raw_data_dir or "data/raw/backtest_gold_2025q3_2026q3")
         self.initial_capital = initial_capital
 
         # 加载核心量化引擎 (保持论文经典 NALE alpha=0.4)

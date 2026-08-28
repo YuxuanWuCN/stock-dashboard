@@ -17,8 +17,8 @@ from typing import Any
 from fpdf import FPDF
 
 ROOT = Path(__file__).resolve().parent.parent
-JSON_PATH = ROOT / "docs" / "data" / "paper" / "backtest_storage_2025q2_2026q7.json"
-FIG_DIR = ROOT / "reports" / "figures" / "backtest_storage_2025q2_2026q7"
+JSON_PATH = ROOT / "docs" / "data" / "paper" / "backtest_storage_2025q2_2026q3.json"
+FIG_DIR = ROOT / "reports" / "figures" / "backtest_storage_2025q2_2026q3"
 OUTPUT_PDF = ROOT.parent / "research-outputs" / "reports" / "存储超级周期_物理隔绝真实交易实测研报.pdf"
 
 
@@ -89,13 +89,13 @@ def main() -> int:
 
     pdf.set_font(pdf.font_regular, "", 8.5)
     pdf.set_text_color(71, 85, 105)
-    pdf.cell(180, 4.5, "样本外逐日推进 (2025Q2-2026Q7) · 机构摩擦成本 · 三级基准对照 · Trend Gate C浪清仓", ln=True)
+    pdf.cell(180, 4.5, "样本外逐日推进 (2025Q2-2026Q3) · 机构摩擦成本 · 三级基准对照 · Trend Gate C浪清仓", ln=True)
     pdf.ln(2)
 
     # KPI 网格
-    period_str = str(data.get("period", "2025-04-28 ~ 2026-07-31"))
+    period_str = str(data.get("period", "2025-06-09 ~ 2026-08-27"))
     kpis = [
-        ("实测样本区间", "2025Q2~2026Q7", (15, 23, 42)),
+        ("实测样本区间", "2025Q2~2026Q3", (15, 23, 42)),
         ("策略累积收益", f"+{strat['total_return']*100:.2f}%", (22, 163, 74)),
         ("年化夏普比率", f"{strat['sharpe_ratio']:.2f}", (2, 132, 199)),
         ("最大动态回撤", f"{strat['max_drawdown']*100:.2f}%", (220, 38, 38)),
@@ -133,7 +133,7 @@ def main() -> int:
     pdf.set_font(pdf.font_regular, "", 7.8)
     pdf.set_text_color(30, 41, 59)
     desc = (
-        "【无未来函数与样本外推进】数据物理隔离于 data/raw/backtest_storage_2025q2_2026q7/ 目录，"
+        "【无未来函数与样本外推进】数据物理隔离于 data/raw/backtest_storage_2025q2_2026q3/ 目录，"
         "仅使用 <= t 日切片数据进行决策。买入费率 0.125%，卖出费率 0.175%，闲置资金计入 1.8% 年化收益。"
         "标的池涵盖 001309、300475、301308、688525、688008 五大存储核心资产，并同台对比行业等权、芯片 ETF 与沪深 300。"
     )

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-"""src/analysis/storage_backtest_runner.py —— 2025Q2-2026Q7 存储市场物理隔离拟真交易人逐步推进回测执行器
+"""src/analysis/storage_backtest_runner.py —— 2025Q2-2026Q3 存储市场物理隔离拟真交易人逐步推进回测执行器
 
 严格遵循：
-1. 物理数据隔离（仅读取 data/raw/backtest_storage_2025q2_2026q7/ 原始数据，禁止前视泄漏）
+1. 物理数据隔离（仅读取 data/raw/backtest_storage_2025q2_2026q3/ 原始数据，禁止前视泄漏）
 2. 拟真交易人逐步推进（t日收盘计算决策，t+1日开盘真实撮合）
 3. 因子与供应链闭环驱动（GFCA 几何因子空间坐标对齐 + NALE 供应链拓扑网络传导 alpha=0.4 + 截面 Top-3 动态头寸分配）
 4. A股机构真实费率（买入 0.125%，卖出 0.175%，闲置现金年化 1.8%）
@@ -55,7 +55,7 @@ class StorageBacktestRunner:
     DAILY_CASH_YIELD = 0.00005  # 闲置现金日息 (年化约 1.8%)
 
     def __init__(self, raw_data_dir: Optional[str | Path] = None, initial_capital: float = 1_000_000.0):
-        self.raw_data_dir = Path(raw_data_dir or "data/raw/backtest_storage_2025q2_2026q7")
+        self.raw_data_dir = Path(raw_data_dir or "data/raw/backtest_storage_2025q2_2026q3")
         self.initial_capital = initial_capital
 
         # 加载核心量化与闭环传导引擎

@@ -9,7 +9,7 @@ from src.analysis.storage_backtest_runner import StorageBacktestRunner
 
 def test_storage_backtest_runner_execution():
     """测试存储市场日频因果逐步推进回测执行与三级基准度量输出。"""
-    raw_dir = Path("data/raw/backtest_storage_2025q2_2026q7")
+    raw_dir = Path("data/raw/backtest_storage_2025q2_2026q3")
     assert raw_dir.exists(), "必须先生成物理隔离原始数据"
 
     runner = StorageBacktestRunner(raw_data_dir=raw_dir)
@@ -37,7 +37,7 @@ def test_storage_backtest_runner_execution():
 
 def test_storage_backtest_runner_boundary_and_c_wave_liquidation():
     """测试边界异常路径与极端行情下 Trend Gate 的硬切断行为。"""
-    raw_dir = Path("data/raw/backtest_storage_2025q2_2026q7")
+    raw_dir = Path("data/raw/backtest_storage_2025q2_2026q3")
     runner = StorageBacktestRunner(raw_data_dir=raw_dir)
     res = runner.run_walk_forward_backtest()
     

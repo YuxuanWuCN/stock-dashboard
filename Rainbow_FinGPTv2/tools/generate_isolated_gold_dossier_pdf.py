@@ -16,10 +16,10 @@ from typing import Any
 
 from fpdf import FPDF
 
-ROOT = Path(r"D:\股票分析项目\Rainbow_FinGPTv2")
-JSON_PATH = ROOT / "docs" / "data" / "paper" / "backtest_gold_2025q3_2026q8.json"
-FIG_DIR = ROOT / "reports" / "figures" / "backtest_gold_2025q3_2026q8"
-OUTPUT_PDF = Path(r"D:\股票分析项目\research-outputs\reports\黄金地缘避险_物理隔绝真实交易实测研报.pdf")
+ROOT = Path(__file__).resolve().parent.parent
+JSON_PATH = ROOT / "docs" / "data" / "paper" / "backtest_gold_2025q3_2026q3.json"
+FIG_DIR = ROOT / "reports" / "figures" / "backtest_gold_2025q3_2026q3"
+OUTPUT_PDF = ROOT.parent / "research-outputs" / "reports" / "黄金地缘避险_物理隔绝真实交易实测研报.pdf"
 
 
 class IsolatedGoldDossierPDF(FPDF):
@@ -89,12 +89,12 @@ def main() -> int:
 
     pdf.set_font(pdf.font_regular, "", 8.5)
     pdf.set_text_color(71, 85, 105)
-    pdf.cell(180, 4.5, "样本外逐日推进 (2025Q3-2026Q8) · 机构摩擦成本 · 三级基准对照 · 地缘风险动态调仓")
+    pdf.cell(180, 4.5, "样本外逐日推进 (2025Q3-2026Q3) · 机构摩擦成本 · 三级基准对照 · 地缘风险动态调仓")
     pdf.ln(6)
 
     # KPI 网格
     kpis = [
-        ("实测样本区间", "2025Q3~2026Q8", (15, 23, 42)),
+        ("实测样本区间", "2025Q3~2026Q3", (15, 23, 42)),
         ("策略累积收益", f"+{strat['total_return']*100:.2f}%", (22, 163, 74)),
         ("年化夏普比率", f"{strat['sharpe_ratio']:.2f}", (2, 132, 199)),
         ("最大动态回撤", f"{strat['max_drawdown']*100:.2f}%", (220, 38, 38)),
@@ -133,7 +133,7 @@ def main() -> int:
     pdf.set_font(pdf.font_regular, "", 7.8)
     pdf.set_text_color(30, 41, 59)
     desc = (
-        "【无未来函数与样本外推进】数据物理隔离于 data/raw/backtest_gold_2025q3_2026q8/ 目录，"
+        "【无未来函数与样本外推进】数据物理隔离于 data/raw/backtest_gold_2025q3_2026q3/ 目录，"
         "仅使用 <= t 日历史切片数据进行决策。买入费率 0.125%，卖出费率 0.175%，闲置资金计入 1.8% 年化收益。"
         "标的池涵盖 600547(山东黄金)、600489(中金黄金)、601899(紫金矿业)、002155(湖南黄金)、000975(山金国际)、"
         "600988(赤峰黄金)、601069(西部黄金) 七大核心资产，并同台对比黄金股等权、黄金 ETF (518880) 与沪深 300。"
