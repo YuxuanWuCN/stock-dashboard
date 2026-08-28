@@ -83,15 +83,76 @@ if _env_file.exists():
     except Exception:
         pass
 
-# 后端选择: "gemini" | "deepseek" | "dashscope" | "openai" | ""
-# 默认优先检查 GEMINI 或 DEEPSEEK
-_default_backend = "gemini" if os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_GEMINI_BASE_URL") else "deepseek"
-LLM_BACKEND = os.environ.get("LLM_BACKEND", _default_backend)
+# 后端选择: "deepseek" | "openai" | "siliconflow" | "dashscope" | "ollama" | "gemini"
+def _detect_default_backend() -> str:
+    if os.environ.get("LLM_BACKEND"):
+        return os.environ["LLM_BACKEND"].strip().lower()
+    if os.environ.get("DEEPSEEK_API_KEY") or Path(DEEPSEEK_API_KEY_FILE).exists():
+        return "deepseek"
+    if os.environ.get("SILICONFLOW_API_KEY"):
+        return "siliconflow"
+    if os.environ.get("OPENAI_API_KEY"):
+        return "openai"
+    if os.environ.get("DASHSCOPE_API_KEY"):
+        return "dashscope"
+    if os.environ.get("GEMINI_API_KEY"):
+        return "gemini"
+    # 检查本地是否有运行中的 Ollama
+    return "deepseek"
+
+LLM_BACKEND = _detect_default_backend()
 
 _gemini_raw_base = os.environ.get("GOOGLE_GEMINI_BASE_URL", "https://uuapi.shop").rstrip("/")
 _gemini_base_url = _gemini_raw_base if _gemini_raw_base.endswith("/v1") else f"{_gemini_raw_base}/v1"
 
 LLM_CONFIG = {
+    "deepseek": {
+        "api_key_env": "DEEPSEEK_API_KEY",
+        "api_key_file": DEEPSEEK_API_KEY_FILE,
+        "base_url": os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"),
+        "model": os.environ.get("DEEPSEEK_MODEL", "deepseek-chat"),
+        "default_api_key": "",
+    },
+    "siliconflow": {
+        "api_key_env": "SILICONFLOW_API_KEY",
+        "api_key_file": resolve_api_key_file_path(
+            os.environ.get("SILICONFLOW_API_KEY_FILE"),
+            ROOT_PATH.parent / "api-key.txt",
+            ROOT_PATH / "api-key.txt",
+        ),
+        "base_url": os.environ.get("SILICONFLOW_BASE_URL", "https://api.siliconflow.cn/v1"),
+        "model": os.environ.get("SILICONFLOW_MODEL", "deepseek-ai/DeepSeek-V3"),
+        "default_api_key": "",
+    },
+    "openai": {
+        "api_key_env": "OPENAI_API_KEY",
+        "api_key_file": resolve_api_key_file_path(
+            os.environ.get("OPENAI_API_KEY_FILE"),
+            ROOT_PATH.parent / "api-key.txt",
+            ROOT_PATH / "api-key.txt",
+        ),
+        "base_url": os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+        "model": os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
+        "default_api_key": "",
+    },
+    "dashscope": {
+        "api_key_env": "DASHSCOPE_API_KEY",
+        "api_key_file": resolve_api_key_file_path(
+            os.environ.get("DASHSCOPE_API_KEY_FILE"),
+            ROOT_PATH.parent / "api-key.txt",
+            ROOT_PATH / "api-key.txt",
+        ),
+        "base_url": os.environ.get("DASHSCOPE_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"),
+        "model": os.environ.get("DASHSCOPE_MODEL", "qwen-plus"),
+        "default_api_key": "",
+    },
+    "ollama": {
+        "api_key_env": "OLLAMA_API_KEY",
+        "api_key_file": "",
+        "base_url": os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
+        "model": os.environ.get("OLLAMA_MODEL", "qwen2.5:7b"),
+        "default_api_key": "ollama",
+    },
     "gemini": {
         "api_key_env": "GEMINI_API_KEY",
         "api_key_file": resolve_api_key_file_path(
@@ -100,27 +161,8 @@ LLM_CONFIG = {
             ROOT_PATH / "api-key.txt",
         ),
         "base_url": _gemini_base_url,
-        "model": os.environ.get("GEMINI_MODEL", "gemini-3.7-flash"),
+        "model": os.environ.get("GEMINI_MODEL", "gemini-2.5-flash"),
         "default_api_key": os.environ.get("GEMINI_API_KEY", ""),
-    },
-    "deepseek": {
-        "api_key_env": "DEEPSEEK_API_KEY",
-        "api_key_file": DEEPSEEK_API_KEY_FILE,
-        "base_url": os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"),
-        "model": DEEPSEEK_V4_FLASH_MODEL,
-        "default_api_key": "",  # 由环境变量提供
-    },
-    "dashscope": {
-        "api_key_env": "DASHSCOPE_API_KEY",
-        "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-        "model": os.environ.get("DASHSCOPE_MODEL", "qwen-turbo"),
-        "default_api_key": "",
-    },
-    "openai": {
-        "api_key_env": "OPENAI_API_KEY",
-        "base_url": os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"),
-        "model": os.environ.get("OPENAI_MODEL", "gpt-4o-mini"),
-        "default_api_key": "",
     },
 }
 

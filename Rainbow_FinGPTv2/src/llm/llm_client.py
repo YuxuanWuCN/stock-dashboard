@@ -288,3 +288,33 @@ class LLMClient:
                 _safe_error_message(category),
                 category=category,
             ) from exc
+
+
+def diagnose_llm_connection(verbose: bool = True) -> dict[str, Any]:
+    """诊断当前环境中的 LLM 凭证与连接状态，输出清晰的调试报告。"""
+    client = LLMClient()
+    status = {
+        "enabled": client.is_available,
+        "backend": client.backend,
+        "model": client.model,
+        "api_key_source": client._api_key_source or "none",
+        "unavailable_reason": client.unavailable_reason or "none",
+    }
+    if verbose:
+        print("\n" + "="*55)
+        print(" [Rainbow-FinGPT] LLM 后端智能诊断")
+        print("="*55)
+        ready_text = "[OK] 已就绪 (Ready)" if client.is_available else "[WARN] 离线降级 (Offline)"
+        print(f" - 状态 (Available):     {ready_text}")
+        print(f" - 当前后端 (Backend):   {client.backend}")
+        print(f" - 模型名称 (Model):     {client.model}")
+        key_text = client._api_key_source or "未检测到密钥 (建议配置 api-key.txt 或启动本地 Ollama)"
+        print(f" - 密钥来源 (Key Source): {key_text}")
+        if not client.is_available:
+            print(f" - 离线原因 (Reason):     {client.unavailable_reason}")
+            print("\n [提示]：在根目录新建 api-key.txt 填入 API Key，或启动本地 Ollama 即可开启实时推理。")
+        print("="*55 + "\n")
+    return status
+
+
+

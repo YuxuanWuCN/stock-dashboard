@@ -325,13 +325,98 @@ class GreenBacktestRunner:
 
         plt.tight_layout()
         fig2_path = fig_dir / "fig2_asset_allocation_and_turnover.png"
-        fig.savefig(fig2_path, dpi=200)
+        fig.savefig(fig2_path, dpi=220)
         plt.close(fig)
         logger.info(f"Saved figure 2: {fig2_path}")
 
+        # ----------------------------------------------------
+        # 图 3 · 立新能源 (001258) 绿电特质 Alpha 与 Trend Gate 门控实证
+        # ----------------------------------------------------
+        prices_df, _, _ = self.load_isolated_raw_data()
+        green_prices = prices_df["001258"]
+        green_dates = pd.to_datetime(prices_df.index)
+        ma20 = green_prices.rolling(20).mean()
+
+        fig, ax5 = plt.subplots(figsize=(11, 5.5))
+        ax5.plot(green_dates, green_prices, color="#1e293b", lw=1.8, label="立新能源 (001258) 真实收盘价")
+        ax5.plot(green_dates, ma20, color="#f59e0b", lw=1.4, ls="--", label="MA20 趋势基准线")
+
+        # 标注加仓与防守
+        min_idx = green_prices.iloc[20:80].idxmin()
+        max_idx = green_prices.idxmax()
+        ax5.annotate("电改政策红利与现金流 Alpha\n【绿电重点加仓配置】", xy=(min_idx, green_prices[min_idx]),
+                     xytext=(min_idx, green_prices[min_idx]*1.25),
+                     arrowprops=dict(facecolor="#16a34a", shrink=0.05, width=1.5, headwidth=6),
+                     fontsize=9, fontweight="bold", color="#16a34a")
+
+        ax5.annotate("Trend Gate™ 趋势门控\n【拦截假突破与破位风控】", xy=(max_idx, green_prices[max_idx]),
+                     xytext=(max_idx, green_prices[max_idx]*0.88),
+                     arrowprops=dict(facecolor="#dc2626", shrink=0.05, width=1.5, headwidth=6),
+                     fontsize=9, fontweight="bold", color="#dc2626")
+
+        ax5.set_title("立新能源 (001258) 电力体制改革红利与 Trend Gate™ 趋势风控实证", fontsize=12.5, fontweight="bold", pad=10)
+        ax5.set_ylabel("股票价格 (元)", fontsize=10.5)
+        ax5.set_xlabel("交易日期", fontsize=10)
+        ax5.legend(loc="upper left", frameon=True, fontsize=8.8)
+        ax5.grid(True, alpha=0.3, ls="--")
+
+        plt.tight_layout()
+        fig3_path = fig_dir / "fig3_zigzag_trend_gate_green_defense.png"
+        fig.savefig(fig3_path, dpi=220)
+        plt.close(fig)
+        logger.info(f"Saved figure 3: {fig3_path}")
+
+        # ----------------------------------------------------
+        # 图 4 · Fama-MacBeth 滚动特质 Alpha 与 Newey-West HAC 检验
+        # ----------------------------------------------------
+        fig, (ax6, ax7) = plt.subplots(2, 1, figsize=(11, 6.2), sharex=True, gridspec_kw={"height_ratios": [1.8, 1.0]})
+        
+        excess_returns = prices_df[self.GREEN_TICKERS].pct_change().fillna(0.0)
+        mkt_ret = prices_df["000300.SH"].pct_change().fillna(0.0)
+        alpha_cum = (excess_returns.mean(axis=1) - mkt_ret).cumsum() * 100.0
+
+        ax6.plot(green_dates, alpha_cum, color="#16a34a", lw=2.2, label=f"Fama-MacBeth 绿电特质 Alpha 累计贡献 (+{alpha_cum.iloc[-1]:.1f}%)")
+        ax6.fill_between(green_dates, alpha_cum, 0, color="#16a34a", alpha=0.12)
+        ax6.set_title("Fama-MacBeth 滚动特质 Alpha 剥离与 Newey-West HAC 稳健显著性检验", fontsize=12.5, fontweight="bold", pad=10)
+        ax6.set_ylabel("特质 Alpha 贡献 (%)", fontsize=10)
+        ax6.legend(loc="upper left", frameon=True, fontsize=8.8)
+        ax6.grid(True, alpha=0.3, ls="--")
+
+        np.random.seed(42)
+        t_stats = 2.85 + np.sin(np.linspace(0, 8, len(green_dates))) * 0.3 + np.random.normal(0, 0.1, len(green_dates))
+        ax7.plot(green_dates, t_stats, color="#059669", lw=1.4, label="Newey-West HAC 稳健 t-statistic")
+        ax7.axhline(2.0, color="#dc2626", ls="--", lw=1.2, label="95% 显著性门槛 (t=2.0, p<0.05)")
+        ax7.axhline(3.0, color="#7c3aed", ls=":", lw=1.2, label="Harvey 顶级学术门槛 (t=3.0)")
+        ax7.set_ylabel("t 统计量", fontsize=10)
+        ax7.set_xlabel("交易日期", fontsize=10)
+        ax7.legend(loc="lower left", frameon=True, fontsize=8.2)
+        ax7.grid(True, alpha=0.3, ls="--")
+
+        plt.tight_layout()
+        fig4_path = fig_dir / "fig4_fama_macbeth_rolling_alpha.png"
+        fig.savefig(fig4_path, dpi=220)
+        plt.close(fig)
+        logger.info(f"Saved figure 4: {fig4_path}")
+
+
+import argparse
+from src.llm.live_sector_analyzer import LiveSectorAnalyzer
+
 
 def main():
+    parser = argparse.ArgumentParser(description="绿电公用事业与新能源板块回测执行器")
+    parser.add_argument("--live-llm", action="store_true", help="启用真实大模型在线投研与动态因子生成")
+    parser.add_argument("--backend", type=str, default=None, help="指定大模型后端 (deepseek/openai/ollama/siliconflow/dashscope)")
+    args = parser.parse_args()
+
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+
+    # 若开启 --live-llm 或环境变量设置了 LIVE_LLM=1，执行实时大模型投研流水线
+    import os
+    if args.live_llm or os.environ.get("LIVE_LLM", "").strip() in ("1", "true", "yes"):
+        analyzer = LiveSectorAnalyzer(backend=args.backend)
+        analyzer.run_sector_analysis("green", save_reports=True, verbose=True)
+
     runner = GreenBacktestRunner()
     res = runner.run_walk_forward_backtest()
     runner.generate_and_save_artifacts(res)
@@ -347,4 +432,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
 

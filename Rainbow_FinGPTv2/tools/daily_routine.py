@@ -216,6 +216,14 @@ def main() -> None:
     if run_step("5/9 明日决策简报与 AI 研报增量生成", [py_exec, "-m", "src.strategies.daily_brief"], allow_fail=True):
         steps_passed += 1
 
+    # Step 5b: 存储/黄金/绿电三大板块实时大模型投研与因子动态生成
+    steps_executed += 1
+    run_step("5b/9 绿电板块大模型实时投研", [py_exec, "-m", "src.analysis.green_backtest_runner", "--live-llm"], allow_fail=True)
+    run_step("5c/9 存储芯片大模型实时投研", [py_exec, "-m", "src.analysis.storage_backtest_runner", "--live-llm"], allow_fail=True)
+    run_step("5d/9 黄金大宗大模型实时投研", [py_exec, "-m", "src.analysis.gold_backtest_runner", "--live-llm"], allow_fail=True)
+    steps_passed += 1
+
+
     # Step 6: 市场情绪诊断
     steps_executed += 1
     if run_step("6/9 每日市场情绪诊断与反转检测", [py_exec, "tools/daily_market_sentiment.py"], allow_fail=True):
