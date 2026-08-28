@@ -1,0 +1,5 @@
+#!/bin/sh
+root=$(git rev-parse --show-toplevel) || exit 1
+exec powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$root/tools/run_quality.ps1" verify-commit
+
+

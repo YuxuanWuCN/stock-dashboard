@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "source_roots": ["src", "tests", "tools", "docs", "start_local.py"],
+  "project_code_roots": ["src"],
+  "source_extensions": [".py", ".js", ".html", ".css", ".json"],
+  "exclude_directories": [
+    ".git", ".quality-state", ".venv", "venv", "__pycache__", ".pytest_cache",
+    "node_modules", "bug合集", "测试记录", "data"
+  ],
+  "additional_control_files": [
+    "README.md", "QUALITY_WORKFLOW.md", "项目背书.md", "requirements.txt", "render.yaml", "watchlist.csv", "strategy_pool.csv", "config/strategy_params.json"
+  ],
+  "custom_commands": {
+    "small": [
+      {
+        "name": "股票业务单元测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_analysis.py", "tests/test_fundamental.py", "tests/test_server.py", "tests/test_quality_history_migration.py"],
+        "timeout": 300
+      },
+      {
+        "name": "LLM 模块单元测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_llm_client.py", "tests/test_llm_chunker.py", "tests/test_llm_sentiment.py", "tests/test_llm_news.py", "tests/test_llm_citation.py", "tests/test_llm_rag.py", "tests/test_llm_report.py", "tests/test_llm_generate_reports.py", "tests/test_market_feedback.py"],
+        "timeout": 300
+      },
+      {
+        "name": "v2.5 策略模块单元测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_strategies.py", "tests/test_backtest_engine.py", "tests/test_hunting_ground.py"],
+        "timeout": 300
+      },
+      {
+        "name": "Fama-MacBeth 多因子引擎单元测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_fama_macbeth.py"],
+        "timeout": 300
+      },
+      {
+        "name": "情绪信号度量与数据口径修复单元测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_market_feedback_realized.py"],
+        "timeout": 300
+      },
+      {
+        "name": "校准系统建议与applier单元测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_calibration_suggestions.py"],
+        "timeout": 300
+      },
+      {
+        "name": "稳健组合选股字段修复测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_rebalance_selection.py"],
+        "timeout": 300
+      }
+    ],
+    "medium": [
+      {
+        "name": "股票离线综合流程测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_integration_pipeline.py"],
+        "timeout": 300
+      },
+      {
+        "name": "Fama-MacBeth Alpha 门控集成测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_fama_macbeth_integration.py"],
+        "timeout": 300
+      }
+    ],
+    "heavy": [
+      {
+        "name": "股票可复现性测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "tests/test_reproducibility_pipeline.py"],
+        "timeout": 300
+      },
+      {
+        "name": "股票全量回归测试",
+        "argv": ["{python}", "-m", "pytest", "-q"],
+        "timeout": 300
+      }
+    ]
+  },
+  "test_policy": {
+    "require_unit_tests_when_code_exists": true,
+    "require_integration_tests_when_code_exists": true,
+    "require_reproducibility_tests_when_code_exists": true,
+    "quality_system_test_files": ["test_quality_system.py"]
+  }
+}

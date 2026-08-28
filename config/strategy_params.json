@@ -1,0 +1,83 @@
+{
+  "portfolios": {
+    "aggressive": {
+      "enabled": true,
+      "max_size": 20,
+      "min_size": 5,
+      "base_ratio": 1.0
+    },
+    "robust": {
+      "enabled": true,
+      "max_size": 15,
+      "min_size": 4,
+      "base_ratio": 0.8
+    },
+    "bluechip": {
+      "enabled": true,
+      "max_size": 20,
+      "min_size": 5,
+      "base_ratio": 1.0
+    },
+    "defensive": {
+      "enabled": true,
+      "max_size": 20,
+      "min_size": 5,
+      "base_ratio": 1.0
+    },
+    "global": {
+      "enabled": true,
+      "max_size": 20,
+      "min_size": 5,
+      "base_ratio": 1.0,
+      "regions": {"stock": 0.3, "hk": 0.2, "us": 0.3, "kr": 0.2}
+    },
+    "tech": {
+      "enabled": true,
+      "max_size": 20,
+      "min_size": 5,
+      "base_ratio": 1.0
+    }
+  },
+  "strategies": {
+    "MultiGoldenCrossStrategy": {
+      "display_name": "多金叉共振",
+      "description": "均线、KDJ、MACD 金叉共振选股",
+      "icon": "cross",
+      "color": "gold",
+      "params": {
+        "ma_short_period": 5,
+        "ma_long_period": 20,
+        "kdj_n": 9,
+        "kdj_m1": 3,
+        "kdj_m2": 3,
+        "macd_short": 12,
+        "macd_long": 26,
+        "macd_signal": 9,
+        "resonance_days": 3,
+        "lookback_days": 10
+      }
+    },
+    "LimitUpPullbackStrategy": {
+      "display_name": "涨停回马枪",
+      "description": "涨停后回调再次启动",
+      "icon": "up",
+      "color": "red",
+      "params": {
+        "limit_up_pct": 9.8,
+        "pullback_days": 5,
+        "pullback_max_pct": 8.0,
+        "lookback_days": 10
+      }
+    },
+    "MorningStarStrategy": {
+      "display_name": "启明星",
+      "description": "三根K线底部反转形态",
+      "icon": "star",
+      "color": "blue",
+      "params": {
+        "lookback_days": 30,
+        "decline_threshold": -10.0
+      }
+    }
+  }
+}

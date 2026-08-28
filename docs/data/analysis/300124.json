@@ -1,0 +1,286 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
+  "code": "300124",
+  "name": "汇川技术",
+  "type": "stock",
+  "category": "工业自动化/工控",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 48.5,
+    "risk": 25.4,
+    "technical": 78.0,
+    "industry": 50.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-26 19:34:09"
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 31.51,
+    "max_drawdown_60d_pct": -22.64,
+    "atr14_pct": 3.28,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 27.7,
+        "value": 31.51
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 39.7,
+        "value": -22.64
+      },
+      {
+        "name": "ATR百分比",
+        "score": 27.7,
+        "value": 3.28
+      },
+      {
+        "name": "量价异常",
+        "score": 14.9,
+        "value": 0.9
+      },
+      {
+        "name": "行业波动",
+        "score": 0.7,
+        "value": 29.67
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.8,
+    "return_5d_pct": 1.5,
+    "up_probability_3d_pct": 55.0,
+    "up_probability_5d_pct": 53.0,
+    "confidence": "medium",
+    "rationale": "超跌反弹逼近MA20阻力位，短期量能略显不足，面临均线压制与震荡整固。",
+    "risk_warning": "量能持续萎缩及上方均线压制导致反弹受阻",
+    "source": "v3_llm_direct",
+    "model": "gemini-3.7-flash"
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 59.948,
+    "ma10": 60.59100000000001,
+    "ma20": 62.2765,
+    "ma60": 64.8335,
+    "rsi14": 49.5,
+    "macd_dif": -0.9241293577911165,
+    "macd_dea": -0.9098783451673325,
+    "macd_hist": -0.028502025247568064,
+    "atr14_pct": 3.2752595426767015,
+    "boll_position": 0.4519445230036969,
+    "return_5d_pct": 3.5983263598326376,
+    "return_20d_pct": 0.4707028079857123,
+    "volume_ratio_5d": 0.9,
+    "close": 61.9,
+    "change_pct": 0.8307541944942141
+  },
+  "industry": {
+    "name": "工业自动化/工控",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -0.87
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "process_node": null,
+    "node_gate_enabled": false,
+    "horizon_3d": {
+      "up_probability_pct": 23.3,
+      "average_return_pct": -1.99,
+      "median_return_pct": -1.46,
+      "best_return_pct": 4.38,
+      "worst_return_pct": -6.84
+    },
+    "horizon_5d": {
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.98,
+      "median_return_pct": -1.44,
+      "best_return_pct": 15.04,
+      "worst_return_pct": -11.1
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 35.7,
+    "dimensions": {
+      "asset_quality": 50.0,
+      "liability_safety": 49.8,
+      "profit_quality": 16.0,
+      "cash_health": 21.2
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 70109425391.87,
+      "total_assets_yoy": 21.1838407382,
+      "inventory": 9267382665.47,
+      "prepayment": 764808016.29,
+      "receivable": 10912713738.22,
+      "inventory_prepay_ratio": 0.14309332341102524,
+      "receivable_revenue": 2.559673153478572,
+      "goodwill_equity": 0.05745616765631238,
+      "debt_ratio": 0.45551590381716844,
+      "short_debt_ratio": 0.04368559283121753,
+      "roe": 0.02785569978462987,
+      "gross_margin": 10.679017568286724,
+      "deduct_ratio": 1.031808458108457,
+      "netprofit_yoy": -23.8678085925,
+      "ocf_np_ratio": 0.09280291884159526,
+      "financing_debt": -0.0419750786937613,
+      "retained_profit_equity": 0.6334089826793784
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "positive",
+          "title": "资产稳步扩张",
+          "detail": "总资产同比 +21.2%，处于健康扩张区间。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 14.3%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 256.0%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "warning",
+          "title": "杠杆中等",
+          "detail": "资产负债率 45.6%，处于中间区间。",
+          "contribution": -3.2
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 4.4%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 2.8%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "negative",
+          "title": "利润下滑",
+          "detail": "净利润同比 -23.9%，盈利收缩。",
+          "contribution": -12.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 103.2%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 63.3%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "warning",
+          "title": "现金流偏弱",
+          "detail": "经营现金流/净利润 0.09，利润兑现能力一般。",
+          "contribution": -31.8
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -4.2%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "总资产同比 +21.2%，规模扩张有力",
+      "negative_view": "经营现金流/净利润 0.09，利润兑现存疑；应收账款/营收 256.0%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-21 10:10:28"
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 22.6%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 22.6%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/300124.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "工业自动化/工控",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
+  }
+}

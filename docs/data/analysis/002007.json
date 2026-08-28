@@ -1,0 +1,280 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
+  "code": "002007",
+  "name": "华兰生物",
+  "type": "stock",
+  "category": "血制品/流感疫苗",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 49.9,
+    "risk": 18.9,
+    "technical": 78.0,
+    "industry": 47.5,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-26 19:34:15"
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 26.83,
+    "max_drawdown_60d_pct": -7.69,
+    "atr14_pct": 2.74,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 18.4,
+        "value": 26.83
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 3.5,
+        "value": -7.69
+      },
+      {
+        "name": "ATR百分比",
+        "score": 18.4,
+        "value": 2.74
+      },
+      {
+        "name": "量价异常",
+        "score": 87.2,
+        "value": 1.53
+      },
+      {
+        "name": "行业波动",
+        "score": 0.7,
+        "value": 29.67
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.25,
+    "return_5d_pct": 2.1,
+    "up_probability_3d_pct": 57.5,
+    "up_probability_5d_pct": 60.5,
+    "confidence": "medium",
+    "rationale": "量比温和放大，RSI指标健康，技术面呈企稳反弹并有望突破MA20。",
+    "risk_warning": "MA20上方均线压制及医药板块量能持续性不足。",
+    "source": "v3_llm_direct",
+    "model": "gemini-3.7-flash"
+  },
+  "technical": {
+    "trend": "rebound",
+    "ma5": 13.190000000000001,
+    "ma10": 13.197,
+    "ma20": 13.2965,
+    "ma60": 13.024666666666665,
+    "rsi14": 51.4,
+    "macd_dif": 0.0008685119327349611,
+    "macd_dea": 0.029092634448572373,
+    "macd_hist": -0.056448245031674824,
+    "atr14_pct": 2.741722036309509,
+    "boll_position": 0.4656106224964473,
+    "return_5d_pct": 1.7638036809815905,
+    "return_20d_pct": 0.07541478129713397,
+    "volume_ratio_5d": 1.53,
+    "close": 13.27,
+    "change_pct": 1.0662604722010571
+  },
+  "industry": {
+    "name": "血制品/流感疫苗",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -1.26
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 29,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "process_node": null,
+    "node_gate_enabled": false,
+    "horizon_3d": {
+      "up_probability_pct": 37.9,
+      "average_return_pct": -0.7,
+      "median_return_pct": -0.47,
+      "best_return_pct": 3.62,
+      "worst_return_pct": -5.7
+    },
+    "horizon_5d": {
+      "up_probability_pct": 41.4,
+      "average_return_pct": -0.37,
+      "median_return_pct": -0.23,
+      "best_return_pct": 8.58,
+      "worst_return_pct": -8.21
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 31.0,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 63.0,
+      "profit_quality": 16.0,
+      "cash_health": 8.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 15058777690.16,
+      "total_assets_yoy": -9.4966690797,
+      "inventory": 2539915799.42,
+      "prepayment": 61367548.19,
+      "receivable": 1875277462.17,
+      "inventory_prepay_ratio": 0.17274199813108215,
+      "receivable_revenue": 4.921268359418744,
+      "goodwill_equity": null,
+      "debt_ratio": 0.09464173976293405,
+      "short_debt_ratio": 0.00027215975703102707,
+      "roe": 0.019653808237840964,
+      "gross_margin": 28.436379797608762,
+      "deduct_ratio": 0.9846229758457429,
+      "netprofit_yoy": -25.0861651634,
+      "ocf_np_ratio": -0.02773868746697734,
+      "financing_debt": -0.31364262937123444,
+      "retained_profit_equity": 0.6493443075430315
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +-9.5%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 17.3%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 492.1%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 9.5%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 0.0%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 2.0%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "negative",
+          "title": "利润下滑",
+          "detail": "净利润同比 -25.1%，盈利收缩。",
+          "contribution": -12.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 98.5%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 64.9%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "negative",
+          "title": "经营现金流为负",
+          "detail": "经营现金流/净利润 -0.03，账面利润缺乏现金支撑，警惕应收与存货占款。",
+          "contribution": -45.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -31.4%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "未发现明显扩张逻辑",
+      "negative_view": "经营现金流/净利润 -0.03，利润兑现存疑；应收账款/营收 492.1%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-21 10:29:08"
+  },
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.53倍。",
+      "contribution": 5.0
+    }
+  ],
+  "kline_file": "../kline/002007.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "血制品/流感疫苗",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
+  }
+}

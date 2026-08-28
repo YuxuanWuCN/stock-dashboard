@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>量化组合实盘看板</title>
+    <link rel="stylesheet" href="assets/style.css?v=20260821_v34_font_fixed">
+    <link rel="stylesheet" href="assets/portfolio.css?v=20260821_v32_clear_tables">
+    <!-- 🌈 年轻化 FinTech 轻奢风覆盖层 -->
+    <link rel="stylesheet" href="assets/style_young.css?v=20260822_v1">
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <header class="portfolio-header">
+            <div class="header-nav">
+                <a href="index.html" class="nav-back">← 返回自选股</a>
+                <h1>📈 量化组合实盘</h1>
+            </div>
+            <div id="update-time" class="update-time">数据加载中...</div>
+        </header>
+
+        <!-- 今日市场情绪卡片 -->
+        <section class="sentiment-section" id="sentiment-section">
+            <div class="section-header">
+                <h2>🌡️ 今日市场情绪</h2>
+                <span id="sentiment-date" class="sentiment-date">--</span>
+            </div>
+            <div class="sentiment-grid">
+                <div class="sentiment-card main-sentiment">
+                    <div class="sentiment-label">市场情绪</div>
+                    <div id="sentiment-mood" class="sentiment-mood">--</div>
+                    <div class="sentiment-score-bar">
+                        <div id="sentiment-score-fill" class="sentiment-score-fill" style="width: 0%"></div>
+                    </div>
+                    <div id="sentiment-score-text" class="sentiment-score-text">0/10</div>
+                </div>
+                <div class="sentiment-card">
+                    <div class="sentiment-label">💰 资金流向</div>
+                    <div id="capital-flow" class="sentiment-value">--</div>
+                </div>
+                <div class="sentiment-card">
+                    <div class="sentiment-label">🔥 热点板块</div>
+                    <div id="hot-sectors" class="sentiment-value sectors">--</div>
+                </div>
+                <div class="sentiment-card recommend">
+                    <div class="sentiment-label">✨ 推荐组合</div>
+                    <div id="recommend-portfolio" class="recommend-name">--</div>
+                    <div id="recommend-reason" class="recommend-reason">--</div>
+                    <div id="recommend-position" class="recommend-position">建议仓位: --</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6组合今日表现 -->
+        <section class="portfolios-section">
+            <div class="section-header">
+                <h2>📊 六大组合今日表现</h2>
+                <div class="portfolio-legend">
+                    <span class="legend-item"><span class="legend-dot aggressive"></span>激进成长</span>
+                    <span class="legend-item"><span class="legend-dot robust"></span>均衡稳健</span>
+                    <span class="legend-item"><span class="legend-dot defensive"></span>防御保守</span>
+                    <span class="legend-item"><span class="legend-dot tech"></span>科技主题</span>
+                    <span class="legend-item"><span class="legend-dot bluechip"></span>蓝筹价值</span>
+                    <span class="legend-item"><span class="legend-dot global"></span>全球配置</span>
+                </div>
+            </div>
+            <div id="portfolios-grid" class="portfolios-grid">
+                <!-- 动态填充 -->
+            </div>
+        </section>
+
+        <!-- 累计收益曲线 -->
+        <section class="chart-section">
+            <div class="section-header">
+                <h2>📈 累计收益曲线对比</h2>
+                <div class="chart-controls">
+                    <button class="period-btn active" data-period="7">近7天</button>
+                    <button class="period-btn" data-period="30">近30天</button>
+                    <button class="period-btn" data-period="all">全部</button>
+                </div>
+            </div>
+            <div class="chart-card">
+                <div id="returns-chart" class="chart-element" style="height: 500px;"></div>
+            </div>
+        </section>
+
+        <!-- 策略进化 -->
+        <section class="evolution-section" id="evolution-section">
+            <div class="section-header">
+                <h2>🧬 策略进化追踪</h2>
+                <span id="evolution-date" class="evolution-date">--</span>
+            </div>
+            <div id="evolution-content" class="evolution-content">
+                <!-- 动态填充 -->
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="portfolio-footer">
+            <p>⚠️ 本页面展示模拟盘数据，仅供研究学习，不构成投资建议</p>
+        </footer>
+    </div>
+
+    <script>
+        if (typeof echarts === 'undefined') {
+            console.warn('Primary ECharts CDN failed, switching to backup...');
+            var backupScript = document.createElement('script');
+            backupScript.src = 'https://cdn.bootcdn.net/ajax/libs/echarts/5.5.1/echarts.min.js';
+            document.head.appendChild(backupScript);
+        }
+    </script>
+    <script>
+        document.write('<script src="assets/portfolio.js?t=' + Date.now() + '"><\/script>');
+    </script>
+</body>
+</html>

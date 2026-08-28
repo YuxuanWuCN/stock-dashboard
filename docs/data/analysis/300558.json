@@ -1,0 +1,286 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
+  "code": "300558",
+  "name": "贝达药业",
+  "type": "stock",
+  "category": "靶向抗癌药",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 31.7,
+    "risk": 65.2,
+    "technical": 50.0,
+    "industry": 35.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-26 19:34:15"
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 107.56,
+    "max_drawdown_60d_pct": -33.59,
+    "atr14_pct": 8.92,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 92.2,
+        "value": 107.56
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 59.6,
+        "value": -33.59
+      },
+      {
+        "name": "ATR百分比",
+        "score": 94.3,
+        "value": 8.92
+      },
+      {
+        "name": "量价异常",
+        "score": 36.9,
+        "value": 1.21
+      },
+      {
+        "name": "行业波动",
+        "score": 0.7,
+        "value": 29.67
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.2,
+    "return_5d_pct": 2.1,
+    "up_probability_3d_pct": 54.0,
+    "up_probability_5d_pct": 56.0,
+    "confidence": "medium",
+    "rationale": "均线负偏离较深且RSI处于弱势低位，短期存在技术性超跌修复动能。",
+    "risk_warning": "中长周期均线空头压制，量能不足或限制反弹空间。",
+    "source": "v3_llm_direct",
+    "model": "gemini-3.7-flash"
+  },
+  "technical": {
+    "trend": "range",
+    "ma5": 50.6,
+    "ma10": 56.67,
+    "ma20": 59.553999999999995,
+    "ma60": 59.34483333333333,
+    "rsi14": 35.9,
+    "macd_dif": -2.9542747923148553,
+    "macd_dea": -0.9822492977811679,
+    "macd_hist": -3.944050989067375,
+    "atr14_pct": 8.924604751967284,
+    "boll_position": 0.13757797323649623,
+    "return_5d_pct": -5.393785421145214,
+    "return_20d_pct": -16.56325405032748,
+    "volume_ratio_5d": 1.21,
+    "close": 48.41,
+    "change_pct": -1.5656771045140363
+  },
+  "industry": {
+    "name": "靶向抗癌药",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -17.9
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "process_node": null,
+    "node_gate_enabled": false,
+    "horizon_3d": {
+      "up_probability_pct": 76.7,
+      "average_return_pct": 3.59,
+      "median_return_pct": 2.06,
+      "best_return_pct": 20.72,
+      "worst_return_pct": -8.15
+    },
+    "horizon_5d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.58,
+      "median_return_pct": 0.37,
+      "best_return_pct": 25.95,
+      "worst_return_pct": -18.2
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-06-30",
+    "score": 49.5,
+    "dimensions": {
+      "asset_quality": 50.0,
+      "liability_safety": 63.0,
+      "profit_quality": 23.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 10299391770.42,
+      "total_assets_yoy": 11.9575989885,
+      "inventory": 363353429.11,
+      "prepayment": 16141100.72,
+      "receivable": 624883513.04,
+      "inventory_prepay_ratio": 0.03684630493617242,
+      "receivable_revenue": 0.632496304156178,
+      "goodwill_equity": 0.05790220425871273,
+      "debt_ratio": 0.3556279491367126,
+      "short_debt_ratio": 0.32258724967489183,
+      "roe": 0.04559941259903321,
+      "gross_margin": 16.45333626980109,
+      "deduct_ratio": 0.673222864981871,
+      "netprofit_yoy": 123.9276959122,
+      "ocf_np_ratio": 1.3647564648619381,
+      "financing_debt": -0.03712775491646814,
+      "retained_profit_equity": 0.465507096736084
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "positive",
+          "title": "资产稳步扩张",
+          "detail": "总资产同比 +12.0%，处于健康扩张区间。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 3.7%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 63.2%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "positive",
+          "title": "杠杆适中",
+          "detail": "资产负债率 35.6%，财务结构稳健。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 32.3%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 4.6%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "positive",
+          "title": "利润高增",
+          "detail": "净利润同比 +123.9%，盈利动能强。",
+          "contribution": 10.0
+        },
+        {
+          "type": "warning",
+          "title": "依赖非经常损益",
+          "detail": "扣非净利润占归母净利润 67.3%，利润含金量低。",
+          "contribution": -12.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 46.6%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 1.36，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 -3.7%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "总资产同比 +12.0%，规模扩张有力；净利润同比 +123.9%；经营现金流/净利润 1.36，利润含金量高",
+      "negative_view": "应收账款/营收 63.2%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-21 10:29:27"
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 33.6%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 33.6%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 107.6%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/300558.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "靶向抗癌药",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
+  }
+}

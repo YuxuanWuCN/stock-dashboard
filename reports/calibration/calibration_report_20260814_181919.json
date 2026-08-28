@@ -1,0 +1,183 @@
+{
+  "generated_at": "2026-08-14T18:19:19.840237",
+  "trading_days": 6,
+  "trigger_condition": "met",
+  "market_feedback_summary": {
+    "total": 144,
+    "positive_surprise": 26,
+    "negative_surprise": 10,
+    "neutral": 108,
+    "avg_excess_3d_pct": null,
+    "avg_excess_5d_pct": 0.79,
+    "avg_rlsp_reward_5d": 0.1118,
+    "alignment_rate": 0.347
+  },
+  "portfolio_performance": {
+    "robust": {
+      "cumulative_return": -0.719816977871246,
+      "volatility": 0.25729360660537215,
+      "max_drawdown": -0.788229446374213,
+      "daily_returns": [
+        -0.29,
+        0.36,
+        -0.27,
+        0.07,
+        -0.2,
+        -0.39
+      ]
+    },
+    "aggressive": {
+      "cumulative_return": 2.4653720513588384,
+      "volatility": 0.9982220305233812,
+      "max_drawdown": -0.8490412405056115,
+      "daily_returns": [
+        0.97,
+        2.35,
+        -0.45,
+        -0.24,
+        0.28,
+        -0.44
+      ]
+    },
+    "equal_weight": {
+      "cumulative_return": -0.8494657366602709,
+      "daily_returns": [
+        -0.31,
+        0.39,
+        -0.35,
+        0.07,
+        -0.2,
+        -0.45
+      ]
+    }
+  },
+  "stock_accuracy": {
+    "total_stocks": 6,
+    "top_performers": [
+      {
+        "code": "518880",
+        "name": "黄金ETF",
+        "alignment_3d": 0.16666666666666666,
+        "alignment_5d": 1.0,
+        "sample_count": 6
+      },
+      {
+        "code": "600016",
+        "name": "民生银行",
+        "alignment_3d": 0.8333333333333334,
+        "alignment_5d": 1.0,
+        "sample_count": 6
+      },
+      {
+        "code": "00005",
+        "name": "汇丰控股",
+        "alignment_3d": 1.0,
+        "alignment_5d": 1.0,
+        "sample_count": 6
+      },
+      {
+        "code": "000001",
+        "name": "平安银行",
+        "alignment_3d": 0.5,
+        "alignment_5d": 0.5,
+        "sample_count": 6
+      },
+      {
+        "code": "00941",
+        "name": "中国移动",
+        "alignment_3d": 0.16666666666666666,
+        "alignment_5d": 0.5,
+        "sample_count": 6
+      },
+      {
+        "code": "MA",
+        "name": "万事达",
+        "alignment_3d": 0.0,
+        "alignment_5d": 0.16666666666666666,
+        "sample_count": 6
+      }
+    ],
+    "bottom_performers": [
+      {
+        "code": "518880",
+        "name": "黄金ETF",
+        "alignment_3d": 0.16666666666666666,
+        "alignment_5d": 1.0,
+        "sample_count": 6
+      },
+      {
+        "code": "600016",
+        "name": "民生银行",
+        "alignment_3d": 0.8333333333333334,
+        "alignment_5d": 1.0,
+        "sample_count": 6
+      },
+      {
+        "code": "00005",
+        "name": "汇丰控股",
+        "alignment_3d": 1.0,
+        "alignment_5d": 1.0,
+        "sample_count": 6
+      },
+      {
+        "code": "000001",
+        "name": "平安银行",
+        "alignment_3d": 0.5,
+        "alignment_5d": 0.5,
+        "sample_count": 6
+      },
+      {
+        "code": "00941",
+        "name": "中国移动",
+        "alignment_3d": 0.16666666666666666,
+        "alignment_5d": 0.5,
+        "sample_count": 6
+      },
+      {
+        "code": "MA",
+        "name": "万事达",
+        "alignment_3d": 0.0,
+        "alignment_5d": 0.16666666666666666,
+        "sample_count": 6
+      }
+    ]
+  },
+  "calibration_suggestions": [
+    {
+      "type": "probability_threshold",
+      "priority": "high",
+      "current_value": 50,
+      "suggested_value": 60,
+      "reason": "当前对齐率 34.7% < 50%，存在乐观偏差，建议提高概率阈值",
+      "affected_files": [
+        "src/strategies/daily_brief.py",
+        "tools/aggressive_scan.py"
+      ],
+      "implementation": "将候选股票的 pred_up5 阈值从 50% 提高到 60%"
+    },
+    {
+      "type": "portfolio_strategy",
+      "priority": "medium",
+      "reason": "激进组合跑赢稳健组合 3.19%，可提高动量权重",
+      "affected_files": [
+        "tools/aggressive_scan.py"
+      ],
+      "implementation": "在 aggressive_scan.py 中增加动量因子权重 10-20%"
+    },
+    {
+      "type": "scoring_weights",
+      "priority": "low",
+      "reason": "需要更多交易日数据（建议 ≥10 天）才能准确评估各因子贡献",
+      "affected_files": [
+        "src/analysis/scoring.py"
+      ],
+      "implementation": "待数据积累后，通过特征重要性分析调整 TECHNICAL_WEIGHT / FUNDAMENTAL_WEIGHT"
+    }
+  ],
+  "next_steps": [
+    "1. 审核调参建议，确认是否合理",
+    "2. 运行 python tools/apply_calibration.py 应用参数调整",
+    "3. 继续运行 5 个交易日以验证效果",
+    "4. 运行 python tools/verify_calibration.py 生成验证报告"
+  ]
+}

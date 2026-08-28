@@ -1,0 +1,1045 @@
+# fetch_data.py —— 主脚本：抓取 → 计算 → 产出标准化 JSON 数据
+#
+# 用法：python src/fetch_data.py
+# 也可被 GitHub Actions 调用。
+#
+# 产出：
+#   docs/data/kline/{code}.json  每只标的 K 线 + 均线
+#   docs/data/summary.json        当日摘要列表
+#   docs/data/meta.json           运行元信息
+
+import csv
+import json
+import os
+import re
+import sys
+import time
+import traceback
+import urllib.request
+from datetime import date, datetime, timedelta
+from typing import Optional
+
+# ---- 在 import akshare 之前清除系统代理 ----
+try:
+    from .proxy import configure_proxy_from_system
+except ImportError:  # Support direct execution from src/.
+    from proxy import configure_proxy_from_system
+
+if os.environ.get("STOCK_PROXY", "").strip().lower() == "direct":
+    # 直连模式：绕过系统/Clash 代理，A股东财与腾讯备用源均直连
+    for _k in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"):
+        os.environ.pop(_k, None)
+    os.environ["NO_PROXY"] = "*"
+    os.environ["no_proxy"] = "*"
+else:
+    configure_proxy_from_system()
+
+import akshare as ak
+import pandas as pd
+
+try:
+    from .config import (
+        LOOKBACK_DAYS, ADJUST, PERIOD, REQUEST_INTERVAL, REQUEST_TIMEOUT,
+        MAX_RETRIES, MIN_VALID_ROWS, MA_WINDOWS, WATCHLIST_PATH, DATA_DIR, STALE_DATA_DAYS,
+        KLINE_DIR, SUMMARY_PATH, META_PATH,
+    )
+    from .utils import (
+        setup_logging, beijing_now, beijing_today, beijing_date_str,
+        beijing_datetime_str, calc_start_date, validate_ohlcv, calc_ma,
+        atomic_write_json, has_existing_data,
+    )
+except ImportError:  # Support direct execution from src/.
+    from config import (
+        LOOKBACK_DAYS, ADJUST, PERIOD, REQUEST_INTERVAL, REQUEST_TIMEOUT,
+        MAX_RETRIES, MIN_VALID_ROWS, MA_WINDOWS, WATCHLIST_PATH, DATA_DIR, STALE_DATA_DAYS,
+        KLINE_DIR, SUMMARY_PATH, META_PATH,
+    )
+    from utils import (
+        setup_logging, beijing_now, beijing_today, beijing_date_str,
+        beijing_datetime_str, calc_start_date, validate_ohlcv, calc_ma,
+        atomic_write_json, has_existing_data,
+    )
+
+logger = setup_logging()
+
+
+# ============================================================
+# 1. 读自选股列表
+# ============================================================
+
+def read_watchlist(path: str) -> list[dict]:
+    """
+    读取 watchlist.csv，返回标的列表。
+    做健壮校验：跳过空行/注释行、代码非 6 位数字警告、type 非法时默认 stock。
+    """
+    if not os.path.exists(path):
+        logger.error("自选股文件不存在: %s", path)
+        sys.exit(1)
+
+    items = []
+    with open(path, "r", encoding="utf-8-sig") as f:  # utf-8-sig 兼容 BOM
+        reader = csv.DictReader(f)
+        if reader.fieldnames is None:
+            logger.error("watchlist.csv 内容为空或格式错误")
+            sys.exit(1)
+
+        # 标准化表头（去空格）
+        reader.fieldnames = [h.strip() for h in reader.fieldnames]
+
+        for line_no, row in enumerate(reader, start=2):  # 第 1 行是表头
+            # 跳过空行
+            if not row or all(v.strip() == "" for v in row.values()):
+                continue
+
+            code = row.get("code", "").strip()
+            name = row.get("name", "").strip()
+            typ = row.get("type", "").strip().lower()
+
+            # 跳过注释行
+            if code.startswith("#"):
+                continue
+
+            # 代码校验：A股/韩股要求 6 位数字；美股允许 1-6 位字母代码
+            if typ == "us":
+                if not re.fullmatch(r"[A-Za-z]{1,6}", code):
+                    logger.warning("第 %d 行美股代码 '%s' 非法，跳过", line_no, code)
+                    continue
+            elif typ == "hk":
+                if not re.fullmatch(r"\d{5}", code):
+                    logger.warning("第 %d 行港股代码 '%s' 非法，跳过", line_no, code)
+                    continue
+            elif typ == "kr":
+                if not code.isdigit() or len(code) != 6:
+                    logger.warning("第 %d 行韩股代码 '%s' 非法，跳过", line_no, code)
+                    continue
+            elif not code.isdigit() or len(code) != 6:
+                logger.warning(
+                    "第 %d 行代码 '%s' 不是 6 位数字，跳过", line_no, code
+                )
+                continue
+
+            # 类型校验
+            if typ not in ("stock", "etf", "us", "kr", "hk"):
+                logger.warning(
+                    "第 %d 行 type='%s' 非法，按 stock 处理", line_no, typ
+                )
+                typ = "stock"
+
+            # 名称兜底
+            if not name:
+                name = code
+
+            items.append({"code": code, "name": name, "type": typ, "category": row.get("category", "").strip()})
+
+    if not items:
+        logger.error("watchlist.csv 中没有有效标的")
+        sys.exit(1)
+
+    logger.info("读取自选股列表：共 %d 只标的", len(items))
+    return items
+
+
+# ============================================================
+# 2. 抓取单只标的
+# ============================================================
+
+def fetch_one(
+    item: dict, start_date: str, end_date: str
+) -> Optional[pd.DataFrame]:
+    """
+    抓取一只标的的历史日线数据，返回清洗后的 DataFrame。
+    失败 / 超时 / 数据不足均返回 None。
+    支持 stock 和 etf 两种类型，失败时自动重试备用源。
+    """
+    code = item["code"]
+    typ = item["type"]
+
+    for attempt in range(1 + MAX_RETRIES):
+        try:
+            if typ == "stock":
+                # ---- A 股 ----
+                # 主源：东财 stock_zh_a_hist
+                df = _fetch_stock_zh_a_hist(code, start_date, end_date, attempt)
+                if df is None:
+                    continue
+            elif typ == "us":
+                # ---- 美股（腾讯行情，.OQ/.N 兜底） ----
+                df = _fetch_us_kline(code, start_date, end_date, count=1500)
+                if df is None:
+                    continue
+            elif typ == "kr":
+                # ---- 韩股（Naver Finance 日线） ----
+                df = _fetch_kr_kline(code, start_date, end_date, count=1500)
+                if df is None:
+                    continue
+            elif typ == "hk":
+                # ---- 港股（腾讯行情，hk 前缀） ----
+                df = _fetch_hk_kline(code, start_date, end_date, count=1500)
+                if df is None:
+                    continue
+            else:
+                # ---- ETF / 场内基金 / 场外基金 ----
+                df = _fetch_etf_hist_em(code, start_date, end_date, attempt)
+                if df is None:
+                    continue
+
+            # --- 清洗与校验 ---
+            df = _clean_and_validate(df, code, item["name"])
+            if df is None:
+                return None
+
+            # 按日期升序
+            df = df.sort_values("date").reset_index(drop=True)
+
+            return df
+
+        except Exception:
+            logger.warning(
+                "%s(%s) 第 %d 次抓取异常: %s",
+                item["name"], code, attempt + 1, traceback.format_exc(),
+            )
+
+        if attempt < MAX_RETRIES:
+            logger.info("%s(%s) 第 %d 次失败，%d 秒后重试...", item["name"], code, attempt + 1, REQUEST_INTERVAL)
+            time.sleep(REQUEST_INTERVAL)
+
+    logger.error("%s(%s) 所有 %d 次尝试均失败", item["name"], code, 1 + MAX_RETRIES)
+    return None
+
+
+def _fetch_stock_zh_a_hist(
+    code: str, start_date: str, end_date: str, attempt: int
+) -> Optional[pd.DataFrame]:
+    """抓取 A 股日线：主源新浪，备用源腾讯与东财。"""
+    # 先尝试腾讯高速行情源（与 ETF 一致，秒级响应且不受代理干扰）
+    df = _fetch_tencent_kline(code, start_date, end_date, count=500)
+    if df is not None and not df.empty and len(df) >= MIN_VALID_ROWS:
+        return df
+
+    start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+    end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+
+    if attempt == 0:
+        logger.info("主源 stock_zh_a_daily 尝试 %s", code)
+        try:
+            df = ak.stock_zh_a_daily(
+                symbol=f"sh{code}" if (code.startswith("6") or code.startswith("688")) else f"sz{code}",
+                start_date=start_fmt,
+                end_date=end_fmt,
+                adjust=ADJUST,
+            )
+        except Exception:
+            df = None
+    else:
+        logger.info("切换备用源东财尝试 %s", code)
+        try:
+            df = ak.stock_zh_a_hist(
+                symbol=code,
+                period=PERIOD,
+                start_date=start_date,
+                end_date=end_date,
+                adjust=ADJUST,
+            )
+        except Exception:
+            df = None
+
+    if df is None or df.empty:
+        logger.warning("%s 返回空数据", code)
+        return None
+
+    # 统一列名映射
+    col_map = {
+        "日期": "date", "开盘": "open", "收盘": "close",
+        "最高": "high", "最低": "low", "成交量": "volume",
+        "成交额": "amount", "振幅": "amplitude", "涨跌幅": "change_pct",
+        "涨跌额": "change_amt", "换手率": "turnover",
+    }
+    df = df.rename(columns=col_map)
+    return df
+
+
+def _fetch_etf_hist_em(
+    code: str, start_date: str, end_date: str, attempt: int = 0
+) -> Optional[pd.DataFrame]:
+    """抓取 ETF 日线：主源 fund_etf_hist_em，备用源 stock_zh_a_daily。
+
+    ETF 在新浪也用 stock_zh_a_daily 接口（加交易所前缀），
+    与股票备用源一致，已验证可绕开本机代理问题。
+    """
+    df = _fetch_tencent_kline(code, start_date, end_date, count=500)
+    if df is not None and not df.empty:
+        return df
+
+    if attempt == 0:
+        # 主源：东财 fund_etf_hist_em
+        df = ak.fund_etf_hist_em(
+            symbol=code,
+            period=PERIOD,
+            start_date=start_date,
+            end_date=end_date,
+            adjust=ADJUST,
+        )
+    else:
+        # 备用源：新浪 stock_zh_a_daily（ETF 也支持）
+        logger.info("ETF %s 切换备用源 stock_zh_a_daily", code)
+        prefix = "sh" if code.startswith("5") else "sz"
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        try:
+            df = ak.stock_zh_a_daily(
+                symbol=f"{prefix}{code}",
+                start_date=start_fmt,
+                end_date=end_fmt,
+                adjust=ADJUST,
+            )
+        except Exception:
+            df = None
+
+    # 第三备用源：新浪 fund_etf_hist_sina（与 build_ranking.py 保持一致）
+    if df is None or df.empty:
+        try:
+            logger.info("ETF %s 尝试备用源 fund_etf_hist_sina", code)
+            df = ak.fund_etf_hist_sina(symbol=code)
+        except Exception:
+            df = None
+
+    if df is None or df.empty:
+        logger.info("ETF %s 尝试备用源 Tencent qfqday", code)
+        df = _fetch_tencent_kline(code, start_date, end_date, count=500)
+
+    if df is None or df.empty:
+        # 场外基金兜底源：东财天天基金历史净值（单位净值）
+        logger.info("ETF/基金 %s 尝试场外基金净值源 fund_nav", code)
+        df = _fetch_fund_nav(code, start_date, end_date)
+
+    if df is None or df.empty:
+        return None
+
+    # 统一列名映射
+    col_map = {
+        "日期": "date", "开盘": "open", "收盘": "close",
+        "最高": "high", "最低": "low", "成交量": "volume",
+        "成交额": "amount", "振幅": "amplitude", "涨跌幅": "change_pct",
+        "涨跌额": "change_amt", "换手率": "turnover",
+    }
+    df = df.rename(columns=col_map)
+    return df
+
+
+
+def _fetch_fund_nav(
+    code: str, start_date: str, end_date: str
+) -> Optional[pd.DataFrame]:
+    """场外基金兜底源：东财天天基金历史净值（单位净值）。
+
+    场外基金没有 OHLC 行情，只有每日净值：
+    开盘=最高=最低=收盘=净值，成交量记 0。
+    """
+    try:
+        import requests
+        headers = {
+            "Referer": "https://fundf10.eastmoney.com/",
+            "User-Agent": "Mozilla/5.0",
+        }
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        rows_all: list = []
+        page = 1
+        while page <= 30:
+            url = (
+                "https://api.fund.eastmoney.com/f10/lsjz"
+                f"?fundCode={code}&pageIndex={page}&pageSize=200"
+            )
+            resp = requests.get(url, headers=headers, timeout=15, proxies={"http": None, "https": None})
+            resp.raise_for_status()
+            payload = resp.json()
+            rows = ((payload.get("Data") or {}).get("LSJZList")) or []
+            if not rows:
+                break
+            rows_all.extend(rows)
+            # 已覆盖到 start_date 之前即可停止
+            last_date = rows[-1].get("FSRQ", "")
+            if last_date <= start_fmt:
+                break
+            page += 1
+
+        if not rows_all:
+            return None
+        rows_all.sort(key=lambda r: r.get("FSRQ", ""))
+        data_rows = []
+        for r in rows_all:
+            fsrq = r.get("FSRQ", "")
+            nav = r.get("DWJZ")
+            if not fsrq or nav in (None, ""):
+                continue
+            try:
+                nav_f = float(nav)
+            except (TypeError, ValueError):
+                continue
+            data_rows.append({
+                "日期": fsrq,
+                "开盘": nav_f,
+                "收盘": nav_f,
+                "最高": nav_f,
+                "最低": nav_f,
+                "成交量": 0,
+            })
+        df = pd.DataFrame(data_rows)
+        if df.empty:
+            return None
+        # 过滤到请求日期范围
+        df = df[(df["日期"] >= start_fmt) & (df["日期"] <= end_fmt)]
+        return df if not df.empty else None
+    except Exception:
+        logger.warning("%s 场外基金净值抓取失败: %s", code, traceback.format_exc())
+        return None
+
+def _fetch_tencent_kline(
+    code: str,
+    start_date: str,
+    end_date: str,
+    count: int = 500,
+) -> Optional[pd.DataFrame]:
+    """Fetch qfq daily K-line data from Tencent as a fallback source."""
+    market = "sh" if code.startswith(("5", "6")) else "sz"
+    symbol = f"{market}{code}"
+    url = f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={symbol},day,,,{count},qfq"
+
+    try:
+        request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        with opener.open(request, timeout=20) as response:
+            payload = response.read().decode("utf-8")
+
+        data = json.loads(payload)
+        rows = data.get("data", {}).get(symbol, {}).get("qfqday") or data.get("data", {}).get(symbol, {}).get("day") or []
+        if not rows:
+            return None
+
+        clean_rows = []
+        for r in rows:
+            if isinstance(r, list) and len(r) >= 6:
+                clean_rows.append({
+                    "date": str(r[0]),
+                    "open": float(r[1]),
+                    "close": float(r[2]),
+                    "high": float(r[3]),
+                    "low": float(r[4]),
+                    "volume": float(r[5]),
+                })
+        if not clean_rows:
+            return None
+        df = pd.DataFrame(clean_rows)
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
+        return df
+    except Exception:
+        logger.warning("ETF %s Tencent 备用源失败: %s", code, traceback.format_exc())
+        return None
+
+
+
+def _fetch_us_kline(
+    code: str, start_date: str, end_date: str, count: int = 1500
+) -> Optional[pd.DataFrame]:
+    """美股日线（腾讯行情）：NASDAQ 用 .OQ，失败再试 NYSE .N。
+
+    返回列名与 A 股一致（日期/开盘/收盘/最高/最低/成交量）。
+    """
+    try:
+        import requests
+        headers = {"User-Agent": "Mozilla/5.0"}
+        symbols = [f"us{code}.OQ", f"us{code}.N"]
+        for sym in symbols:
+            try:
+                url = f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={sym},day,,,{count},qfq"
+                resp = requests.get(url, headers=headers, timeout=15, proxies={"http": None, "https": None})
+                resp.raise_for_status()
+                payload = resp.json()
+                day = ((payload.get("data") or {}).get(sym) or {}).get("day") or []
+                if not day:
+                    continue
+                rows = []
+                for bar in day:
+                    if not isinstance(bar, list) or len(bar) < 6:
+                        continue
+                    try:
+                        rows.append({
+                            "日期": bar[0],
+                            "开盘": float(bar[1]),
+                            "收盘": float(bar[2]),
+                            "最高": float(bar[3]),
+                            "最低": float(bar[4]),
+                            "成交量": float(bar[5]),
+                        })
+                    except (TypeError, ValueError):
+                        continue
+                if rows:
+                    df = pd.DataFrame(rows)
+                    df = df.rename(columns={
+                        "日期": "date", "开盘": "open", "收盘": "close",
+                        "最高": "high", "最低": "low", "成交量": "volume",
+                    })
+                    start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+                    end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+                    df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
+                    if df is not None and not df.empty and len(df) >= MIN_VALID_ROWS:
+                        return df
+                    # 该 symbol 行数不足（无效前缀，如 .OQ 对纽交所股只返回最新1条），继续尝试下一个
+                    continue
+            except Exception as exc:
+                logger.warning("%s 美股源 %s 失败: %s", code, sym, exc)
+        return None
+    except Exception:
+        logger.warning("%s 美股行情抓取失败: %s", code, traceback.format_exc())
+        return None
+
+
+def _fetch_kr_kline(
+    code: str, start_date: str, end_date: str, count: int = 1500
+) -> Optional[pd.DataFrame]:
+    """韩股日线（Naver Finance，EUC-KR XML）。
+
+    item data 格式：日期|开盘|最高|最低|收盘|成交量。
+    """
+    try:
+        import requests
+        headers = {
+            "User-Agent": "Mozilla/5.0",
+            "Referer": "https://finance.naver.com/",
+        }
+        url = f"https://fchart.stock.naver.com/sise.nhn?symbol={code}&timeframe=day&count={count}&requestType=0"
+        resp = requests.get(url, headers=headers, timeout=15, proxies={"http": None, "https": None})
+        resp.raise_for_status()
+        resp.encoding = "euc-kr"
+        rows = []
+        for m in re.finditer(r'<item data="([^"]+)"\s*/>', resp.text):
+            fields = m.group(1).split("|")
+            if len(fields) < 6:
+                continue
+            try:
+                date_s = fields[0]
+                rows.append({
+                    "日期": date_s,
+                    "开盘": float(fields[1]),
+                    "收盘": float(fields[4]),
+                    "最高": float(fields[2]),
+                    "最低": float(fields[3]),
+                    "成交量": float(fields[5]),
+                })
+            except (TypeError, ValueError):
+                continue
+        if not rows:
+            return None
+        df = pd.DataFrame(rows)
+        df = df.rename(columns={
+            "日期": "date", "开盘": "open", "收盘": "close",
+            "最高": "high", "最低": "low", "成交量": "volume",
+        })
+        # Naver 日期为 YYYYMMDD，转 YYYY-MM-DD 后按范围过滤
+        df["date"] = df["date"].str.replace(r"(\d{4})(\d{2})(\d{2})", r"\1-\2-\3", regex=True)
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
+        return df if not df.empty else None
+    except Exception:
+        logger.warning("%s 韩股行情抓取失败: %s", code, traceback.format_exc())
+        return None
+
+def _fetch_hk_kline(
+    code: str, start_date: str, end_date: str, count: int = 1500
+) -> Optional[pd.DataFrame]:
+    """港股日线（腾讯行情，hk 前缀，直连）。
+
+    返回列名与 A 股一致（日期/开盘/收盘/最高/最低/成交量）。
+    """
+    try:
+        import requests
+        headers = {"User-Agent": "Mozilla/5.0"}
+        symbol = f"hk{code}"
+        url = f"https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param={symbol},day,,,{count},qfq"
+        resp = requests.get(url, headers=headers, timeout=15, proxies={"http": None, "https": None})
+        resp.raise_for_status()
+        payload = resp.json()
+        day = ((payload.get("data") or {}).get(symbol) or {}).get("day") or []
+        rows = []
+        for bar in day:
+            if not isinstance(bar, list) or len(bar) < 6:
+                continue
+            try:
+                rows.append({
+                    "日期": bar[0],
+                    "开盘": float(bar[1]),
+                    "收盘": float(bar[2]),
+                    "最高": float(bar[3]),
+                    "最低": float(bar[4]),
+                    "成交量": float(bar[5]),
+                })
+            except (TypeError, ValueError):
+                continue
+        if not rows:
+            return None
+        df = pd.DataFrame(rows)
+        df = df.rename(columns={
+            "日期": "date", "开盘": "open", "收盘": "close",
+            "最高": "high", "最低": "low", "成交量": "volume",
+        })
+        start_fmt = f"{start_date[:4]}-{start_date[4:6]}-{start_date[6:8]}"
+        end_fmt = f"{end_date[:4]}-{end_date[4:6]}-{end_date[6:8]}"
+        df = df[(df["date"] >= start_fmt) & (df["date"] <= end_fmt)]
+        return df if not df.empty else None
+    except Exception:
+        logger.warning("港股 %s 行情抓取失败: %s", code, traceback.format_exc())
+        return None
+
+def _clean_and_validate(
+    df: pd.DataFrame, code: str, name: str
+) -> Optional[pd.DataFrame]:
+    """清洗 DataFrame：日期解析、OHLCV 校验、剔除异常行。"""
+    # 日期列转为 date 类型
+    if "date" not in df.columns:
+        logger.warning("%s(%s) 缺少日期列", name, code)
+        return None
+
+    df["date"] = pd.to_datetime(df["date"], errors="coerce")
+    df = df.dropna(subset=["date"])
+    df["date"] = df["date"].dt.date
+
+    # 数值列转 float/int
+    for col in ["open", "high", "low", "close", "volume"]:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # 如果涨跌幅缺失，后面会计算，先不管
+    # 逐行校验
+    valid_mask = []
+    for idx, row in df.iterrows():
+        ok = validate_ohlcv(
+            row_index=idx,
+            open_=row.get("open"),
+            high=row.get("high"),
+            low=row.get("low"),
+            close=row.get("close"),
+            volume=row.get("volume"),
+            logger=logger,
+        )
+        valid_mask.append(ok)
+
+    df = df[valid_mask].copy()
+
+    if len(df) < MIN_VALID_ROWS:
+        logger.warning(
+            "%s(%s) 有效行数 %d < %d，视为抓取失败",
+            name, code, len(df), MIN_VALID_ROWS,
+        )
+        return None
+
+    logger.info("%s(%s) 有效数据 %d 行", name, code, len(df))
+    return df
+
+
+# ============================================================
+# 3. 衍生指标计算
+# ============================================================
+
+def compute_derived(df: pd.DataFrame) -> pd.DataFrame:
+    """基于收盘价计算 MA 均线、当日涨跌幅、涨跌额。"""
+    df = df.copy()
+    closes = df["close"].tolist()
+
+    # 均线
+    for w in MA_WINDOWS:
+        df[f"ma{w}"] = calc_ma(closes, w)
+
+    # 当日涨跌幅 & 涨跌额（若接口未提供或为空）
+    if "change_pct" not in df.columns:
+        df["change_pct"] = None
+    if "change_amt" not in df.columns:
+        df["change_amt"] = None
+
+    # 对缺失的涨跌幅/涨跌额做兜底计算
+    prev_close = df["close"].shift(1)
+    mask_pct = df["change_pct"].isna()
+    mask_amt = df["change_amt"].isna()
+
+    if mask_pct.any():
+        df.loc[mask_pct, "change_pct"] = (
+            ((df.loc[mask_pct, "close"] - prev_close[mask_pct]) / prev_close[mask_pct]) * 100
+        ).round(2)
+
+    if mask_amt.any():
+        df.loc[mask_amt, "change_amt"] = (
+            (df.loc[mask_amt, "close"] - prev_close[mask_amt])
+        ).round(2)
+
+    return df
+
+
+# ============================================================
+# 4. 输出 K 线 JSON
+# ============================================================
+
+def build_kline_json(item: dict, df: pd.DataFrame) -> dict:
+    """将一只标的的 DataFrame 转为第 6.1 节规定的 JSON 结构。"""
+    # 日期格式化为 YYYY-MM-DD 字符串
+    dates = [d.isoformat() if isinstance(d, date) else str(d) for d in df["date"].tolist()]
+
+    # kline: [开盘, 收盘, 最低, 最高] —— ECharts candlestick 顺序
+    kline = []
+    for _, row in df.iterrows():
+        kline.append([
+            round(float(row["open"]), 2),
+            round(float(row["close"]), 2),
+            round(float(row["low"]), 2),
+            round(float(row["high"]), 2),
+        ])
+
+    # volume: 整数
+    volume = [int(row["volume"]) if pd.notna(row["volume"]) else 0 for _, row in df.iterrows()]
+
+    # 均线
+    ma_data = {}
+    for w in MA_WINDOWS:
+        col = f"ma{w}"
+        vals = []
+        for _, row in df.iterrows():
+            v = row.get(col)
+            if pd.isna(v) or v is None:
+                vals.append(None)
+            else:
+                vals.append(round(float(v), 2))
+        ma_data[f"ma{w}"] = vals
+
+    return {
+        "code": item["code"],
+        "name": item["name"],
+        "type": item["type"],
+        "adjust": ADJUST,
+        "dates": dates,
+        "kline": kline,
+        "volume": volume,
+        "ma5": ma_data["ma5"],
+        "ma10": ma_data["ma10"],
+        "ma20": ma_data["ma20"],
+        "ma60": ma_data["ma60"],
+    }
+
+
+def save_kline_json(item: dict, kline_data: dict) -> None:
+    """原子写入单只标的 K 线 JSON 文件。"""
+    path = os.path.join(KLINE_DIR, f"{item['code']}.json")
+    atomic_write_json(kline_data, path, logger)
+
+
+# ============================================================
+# 5. 摘要 & 元信息
+# ============================================================
+
+def build_summary_and_meta(
+    watchlist: list[dict],
+    results: dict,       # {code: df or None}
+    run_start: datetime,
+) -> tuple[dict, dict]:
+    """
+    构建 summary.json 和 meta.json。
+    results 中 value 为 None 表示该只抓取失败。
+    """
+    total = len(watchlist)
+    success = sum(1 for v in results.values() if v is not None)
+    failed = total - success
+    failed_list = [code for code, v in results.items() if v is None]
+
+    # 确定交易日：取所有成功标的中最新日期
+    trade_dates = []
+    for df in results.values():
+        if df is not None and not df.empty:
+            max_date = df["date"].max()
+            trade_dates.append(max_date)
+
+    trade_date_str = ""
+    if trade_dates:
+        latest = max(trade_dates)
+        trade_date_str = latest.isoformat() if isinstance(latest, date) else str(latest)
+
+    # 判断是否节假日（无新交易数据）
+    today = beijing_today()
+    is_holiday = False
+    if trade_dates and trade_date_str != today.isoformat():
+        is_holiday = True
+        logger.info(
+            "最新交易日 %s 与今天 %s 不一致，可能是节假日/周末，数据视为正常",
+            trade_date_str, today.isoformat(),
+        )
+
+    # run_status
+    if failed == 0:
+        run_status = "ok"
+    elif success == 0:
+        run_status = "failed"
+    else:
+        run_status = "partial"
+
+    # 节假日且全部成功/部分失败不算失败
+    if is_holiday and run_status == "failed":
+        # 节假日无新数据是正常的，把之前有旧数据的视为 ok
+        if has_existing_data(DATA_DIR):
+            run_status = "ok"
+            logger.info("节假日无新数据 + 旧数据存在，run_status 设为 ok")
+
+    # ---- summary.json ----
+    summary_items = []
+    for item in watchlist:
+        code = item["code"]
+        df = results.get(code)
+
+        # 从已有 kline JSON 读旧数据（如果本次抓取失败）
+        if df is None:
+            stale_data = _load_existing_kline_summary(code)
+            if stale_data:
+                stale_data["status"] = "stale"
+                summary_items.append(stale_data)
+            else:
+                summary_items.append({
+                    "code": code,
+                    "name": item["name"],
+                    "type": item["type"],
+                    "last_close": None,
+                    "change_pct": None,
+                    "change_amt": None,
+                    "last_date": None,
+                    "status": "failed",
+                })
+            continue
+
+        last_row = df.iloc[-1]
+        summary_items.append({
+            "code": code,
+            "name": item["name"],
+            "type": item["type"],
+            "last_close": (
+                round(float(last_row["close"]), 2)
+                if pd.notna(last_row.get("close"))
+                else None
+            ),
+            "change_pct": (
+                round(float(last_row["change_pct"]), 2)
+                if pd.notna(last_row.get("change_pct"))
+                else None
+            ),
+            "change_amt": (
+                round(float(last_row["change_amt"]), 2)
+                if pd.notna(last_row.get("change_amt"))
+                else None
+            ),
+            "last_date": str(last_row["date"])[:10],
+            "status": "stale" if (beijing_today() - pd.to_datetime(last_row["date"]).date()).days > STALE_DATA_DAYS else "ok",
+        })
+
+    summary = {"items": summary_items}
+
+    # ---- meta.json ----
+    meta = {
+        "updated_at": beijing_datetime_str(),
+        "trade_date": trade_date_str,
+        "total": total,
+        "success": success,
+        "failed": failed,
+        "failed_list": failed_list,
+        "run_status": run_status,
+    }
+
+    return summary, meta
+
+
+def _load_existing_kline_summary(code: str) -> Optional[dict]:
+    """从已有的 kline JSON 读取摘要所需信息（用于失败时保留旧数据）。"""
+    path = os.path.join(KLINE_DIR, f"{code}.json")
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        last_idx = -1
+        last_close = data["kline"][last_idx][1]  # close
+        last_date = data["dates"][last_idx]
+
+        # 计算涨跌幅（与倒数第二天比）
+        if len(data["kline"]) >= 2:
+            prev_close = data["kline"][-2][1]
+            change_amt = round(last_close - prev_close, 2)
+            change_pct = (
+                round((last_close - prev_close) / prev_close * 100, 2)
+                if prev_close != 0 else None
+            )
+        else:
+            change_amt = None
+            change_pct = None
+
+        return {
+            "code": code,
+            "name": data.get("name", code),
+            "type": data.get("type", "stock"),
+            "last_close": last_close,
+            "change_pct": change_pct,
+            "change_amt": change_amt,
+            "last_date": last_date,
+            "status": "stale",
+        }
+    except Exception:
+        logger.warning("读取 %s 旧 K 线数据失败: %s", code, traceback.format_exc())
+        return None
+
+
+# ============================================================
+# 6. 主流程
+# ============================================================
+
+def main() -> int:
+    """主函数。返回 0 表示成功，非 0 表示需要发失败邮件。"""
+    run_start = beijing_now()
+    logger.info("=" * 60)
+    logger.info("股票看板数据抓取开始 —— %s", run_start.strftime("%Y-%m-%d %H:%M:%S"))
+    logger.info("=" * 60)
+
+    # ---- 6.1 读自选股 ----
+    watchlist = read_watchlist(WATCHLIST_PATH)
+
+    # ---- 6.1.5 全市场动态初筛 (Tier-1 Market Screener) ----
+    enable_dynamic = os.environ.get("ENABLE_DYNAMIC_SCREEN", "true").strip().lower() in ("true", "1", "yes")
+    if enable_dynamic:
+        try:
+            try:
+                from .analysis.market_screener import fetch_market_snapshot, screen_active_stocks
+            except ImportError:
+                from analysis.market_screener import fetch_market_snapshot, screen_active_stocks
+
+            logger.info("正在执行全市场动态初筛 (Tier-1 Market Screener)...")
+            snapshot = fetch_market_snapshot()
+            if not snapshot.empty:
+                active_df = screen_active_stocks(snapshot, min_amount=3e8, min_turnover=2.5, max_candidates=30)
+                existing_codes = {item["code"] for item in watchlist}
+                added_count = 0
+                for _, row in active_df.iterrows():
+                    code_str = str(row["code"]).zfill(6)
+                    if code_str not in existing_codes:
+                        watchlist.append({
+                            "code": code_str,
+                            "name": str(row["name"]),
+                            "type": "stock",
+                            "category": "全市场热点精选",
+                        })
+                        existing_codes.add(code_str)
+                        added_count += 1
+                logger.info("全市场动态初筛完成：新增 %d 只高流动性热点标的进入今日分析池 (总计 %d 只)", added_count, len(watchlist))
+        except Exception as e:
+            logger.warning("全市场动态初筛跳过或异常: %s", e)
+
+    # ---- 6.2 确定日期范围 ----
+    today = beijing_today()
+    start_date = calc_start_date(today, LOOKBACK_DAYS)
+    end_date = today.strftime("%Y%m%d")
+    logger.info("抓取范围：%s ~ %s（%d 自然日）", start_date, end_date, LOOKBACK_DAYS)
+
+    # ---- 6.3 并发抓取 ----
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
+    max_workers_str = os.environ.get("FETCH_WORKERS", "10").strip()
+    try:
+        max_workers = max(1, int(max_workers_str))
+    except ValueError:
+        max_workers = 10
+
+    results: dict[str, Optional[pd.DataFrame]] = {}
+
+    def _fetch_worker(idx_item: tuple[int, dict]) -> tuple[str, Optional[pd.DataFrame]]:
+        idx, item = idx_item
+        code = item["code"]
+        name = item["name"]
+        logger.info("[%d/%d] 开始抓取 %s(%s) ...", idx + 1, len(watchlist), name, code)
+        try:
+            df = fetch_one(item, start_date, end_date)
+            if df is not None:
+                df = compute_derived(df)
+                logger.info("%s(%s) ✓ 抓取成功，%d 行数据", name, code, len(df))
+            else:
+                logger.warning("%s(%s) ✗ 抓取失败", name, code)
+            return code, df
+        except Exception:
+            logger.warning("%s(%s) 抓取异常: %s", name, code, traceback.format_exc())
+            return code, None
+
+    if max_workers == 1:
+        # 单线程调试模式
+        for i, item in enumerate(watchlist):
+            code, df = _fetch_worker((i, item))
+            results[code] = df
+            if i < len(watchlist) - 1:
+                time.sleep(REQUEST_INTERVAL)
+    else:
+        logger.info("启动 ThreadPoolExecutor 并发抓取 (workers=%d)...", max_workers)
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_code = {
+                executor.submit(_fetch_worker, (i, item)): item["code"]
+                for i, item in enumerate(watchlist)
+            }
+            for future in as_completed(future_to_code):
+                code = future_to_code[future]
+                try:
+                    c, df = future.result()
+                    results[c] = df
+                except Exception as exc:
+                    logger.warning("标的 %s 并发执行异常: %s", code, exc)
+                    results[code] = None
+
+    # ---- 6.4 全部失败保护 ----
+    success_count = sum(1 for v in results.values() if v is not None)
+    if success_count == 0:
+        logger.error("所有标的均抓取失败！")
+        if has_existing_data(DATA_DIR):
+            logger.warning("保留 docs/data/ 旧数据，不覆盖")
+            # 仍更新 meta.json 标注失败状态
+            meta = {
+                "updated_at": beijing_datetime_str(),
+                "trade_date": "",
+                "total": len(watchlist),
+                "success": 0,
+                "failed": len(watchlist),
+                "failed_list": [item["code"] for item in watchlist],
+                "run_status": "failed",
+            }
+            atomic_write_json(meta, META_PATH, logger)
+        return 1  # 非零退出码 → 触发邮件
+
+    # ---- 6.5 写入 K 线 JSON ----
+    logger.info("写入 K 线数据...")
+    for item in watchlist:
+        df = results[item["code"]]
+        if df is not None:
+            kline_data = build_kline_json(item, df)
+            save_kline_json(item, kline_data)
+
+    # ---- 6.6 生成摘要 & 元信息 ----
+    logger.info("生成摘要与元信息...")
+    summary, meta = build_summary_and_meta(watchlist, results, run_start)
+
+    atomic_write_json(summary, SUMMARY_PATH, logger)
+    atomic_write_json(meta, META_PATH, logger)
+
+    # ---- 6.7 汇总日志 ----
+    elapsed = (beijing_now() - run_start).total_seconds()
+    logger.info("=" * 60)
+    logger.info("抓取完成！总 %d / 成功 %d / 失败 %d / 耗时 %.1f 秒",
+                meta["total"], meta["success"], meta["failed"], elapsed)
+    logger.info("run_status: %s", meta["run_status"])
+    logger.info("数据目录: %s", DATA_DIR)
+    logger.info("=" * 60)
+
+    # 返回码：全失败 → 非零；partial/ok → 0
+    if meta["run_status"] == "failed":
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

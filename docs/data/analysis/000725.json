@@ -1,0 +1,329 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
+  "code": "000725",
+  "name": "京东方A",
+  "type": "stock",
+  "category": "科技",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 40.9,
+    "risk": 52.6,
+    "technical": 80.0,
+    "industry": 47.7,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-26 19:33:46"
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 56.55,
+    "max_drawdown_60d_pct": -41.1,
+    "atr14_pct": 5.71,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 52.5,
+        "value": 56.55
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 76.6,
+        "value": -41.1
+      },
+      {
+        "name": "ATR百分比",
+        "score": 61.0,
+        "value": 5.71
+      },
+      {
+        "name": "量价异常",
+        "score": 53.9,
+        "value": 0.7
+      },
+      {
+        "name": "行业波动",
+        "score": 0.7,
+        "value": 29.67
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.65,
+    "return_5d_pct": 1.15,
+    "up_probability_3d_pct": 51.5,
+    "up_probability_5d_pct": 53.0,
+    "confidence": "medium",
+    "rationale": "均线呈空头排列但量能持续萎缩且负乖离较大，短期具备弱反抽与筑底需求。",
+    "risk_warning": "下行趋势延续，若成交量未放大则反弹易受均线压制回落。",
+    "source": "v3_llm_direct",
+    "model": "gemini-3.7-flash"
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 5.822,
+    "ma10": 5.933999999999999,
+    "ma20": 5.849500000000001,
+    "ma60": 6.454833333333332,
+    "rsi14": 44.1,
+    "macd_dif": -0.1135158079734726,
+    "macd_dea": -0.12255392675581714,
+    "macd_hist": 0.01807623756468907,
+    "atr14_pct": 5.708715987795655,
+    "boll_position": 0.3680545561372291,
+    "return_5d_pct": -4.825291181364388,
+    "return_20d_pct": 0.17513134851137035,
+    "volume_ratio_5d": 0.7,
+    "close": 5.72,
+    "change_pct": -0.34843205574913694
+  },
+  "industry": {
+    "name": "科技",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -1.16
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "process_node": null,
+    "node_gate_enabled": false,
+    "horizon_3d": {
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.28,
+      "median_return_pct": 0.26,
+      "best_return_pct": 15.07,
+      "worst_return_pct": -15.94
+    },
+    "horizon_5d": {
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.84,
+      "median_return_pct": 0.28,
+      "best_return_pct": 28.21,
+      "worst_return_pct": -20.03
+    }
+  },
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 36.1,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 46.0,
+      "profit_quality": 8.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 437705366743.0,
+      "total_assets_yoy": 4.1626926429,
+      "inventory": 25523938823.0,
+      "prepayment": 781957648.0,
+      "receivable": 31800918705.0,
+      "inventory_prepay_ratio": 0.06009955204969096,
+      "receivable_revenue": 1.2572369850296121,
+      "goodwill_equity": 0.004802275864534235,
+      "debt_ratio": 0.519160558957515,
+      "short_debt_ratio": 0.14137192183211755,
+      "roe": 0.012544147940866538,
+      "gross_margin": 2.9557595643537096,
+      "deduct_ratio": 0.8423834947920329,
+      "netprofit_yoy": -11.7708358486,
+      "ocf_np_ratio": 7.204401457026915,
+      "financing_debt": 0.010799276076760947,
+      "retained_profit_equity": 0.33017092905809414
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +4.2%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 6.0%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 125.7%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "warning",
+          "title": "杠杆中等",
+          "detail": "资产负债率 51.9%，处于中间区间。",
+          "contribution": -7.0
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 14.1%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 1.3%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "negative",
+          "title": "利润下滑",
+          "detail": "净利润同比 -11.8%，盈利收缩。",
+          "contribution": -12.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 84.2%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "negative",
+          "title": "毛利率偏低",
+          "detail": "毛利率 3.0%，产品竞争力或成本控制存疑。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 33.0%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 7.20，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 1.1%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "经营现金流/净利润 7.20，利润含金量高",
+      "negative_view": "应收账款/营收 125.7%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-09 22:17:50"
+  },
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 41.1%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 41.1%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 56.5%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/000725.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "科技",
+    "sector_breadth_pct": 61.1,
+    "tier_role": "divergent",
+    "leader_stock": {
+      "code": "003040",
+      "name": "楚天龙",
+      "change_pct": 10.012919896640831,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": true,
+    "co_movement_peers": [
+      {
+        "code": "000021",
+        "name": "深科技",
+        "corr": 0.61
+      },
+      {
+        "code": "002371",
+        "name": "北方华创",
+        "corr": 0.57
+      },
+      {
+        "code": "300812",
+        "name": "易天股份",
+        "corr": 0.55
+      },
+      {
+        "code": "688525",
+        "name": "佰维存储",
+        "corr": 0.54
+      },
+      {
+        "code": "688008",
+        "name": "澜起科技",
+        "corr": 0.53
+      }
+    ]
+  }
+}

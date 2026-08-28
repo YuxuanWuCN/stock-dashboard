@@ -1,0 +1,51 @@
+# calibrate.yml —— 每周日北京时间 20:00 自动运行贝叶斯参数校准闭环
+#
+# 触发方式：
+#   1. 定时：每周日 UTC 12:00（= 北京时间 20:00）
+#   2. 手动：在 GitHub Actions 页面点击 "Run workflow"
+
+name: Weekly Strategy Parameter Calibration
+
+on:
+  schedule:
+    # 每周日 UTC 12:00 = 北京时间 20:00
+    - cron: "0 12 * * 0"
+  workflow_dispatch:   # 允许手动触发
+
+permissions:
+  contents: write
+
+jobs:
+  calibrate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 仓库代码
+        uses: actions/checkout@v4
+
+      - name: 设置 Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 安装 Python 依赖
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 运行贝叶斯闭环校准
+        run: python -m src.analysis.calibrate_weights
+
+      - name: 提交并推送参数更新
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add config/strategy_params.json
+
+          if git diff --cached --quiet; then
+            echo "策略参数无变化，跳过提交"
+          else
+            git commit -m "chore(config): weekly automated bayesian calibration update"
+            git push
+          fi

@@ -1,7 +1,44 @@
 # Local API credentials. Keep real keys out of every checkout and PR.
 .env
+.env.*
+!.env.example
 **/.env
 api-key.txt
 **/api-key.txt
 api_key.txt
 **/api_key.txt
+*api*key*.txt
+*.key
+secrets*.txt
+
+# Local Python artifacts
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.quality-state/
+bug合集/
+
+# Coverage tooling
+.coverage
+htmlcov/
+
+# 因子库生成产物（fixture CSV 入库后生成，可随时重建）
+docs/data/factors/factors.db
+docs/data/factors/quality_report.json
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local diagnostics and private research material
+server.*.log
+test_api*.py
+本人研究成果/
+reports/user_research_extract.txt
+scratch/
+data/cache/
+data/school_factors/*
+!data/school_factors/README.md

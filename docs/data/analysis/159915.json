@@ -1,0 +1,192 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
+  "code": "159915",
+  "name": "创业板ETF",
+  "type": "etf",
+  "category": "通用",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 44.2,
+    "risk": 33.3,
+    "technical": 65.0,
+    "industry": 50.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-26 19:33:50"
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 39.29,
+    "max_drawdown_60d_pct": -25.51,
+    "atr14_pct": 3.78,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 37.6,
+        "value": 39.29
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 47.5,
+        "value": -25.51
+      },
+      {
+        "name": "ATR百分比",
+        "score": 34.0,
+        "value": 3.78
+      },
+      {
+        "name": "量价异常",
+        "score": 32.6,
+        "value": 0.82
+      },
+      {
+        "name": "行业波动",
+        "score": 0.7,
+        "value": 29.67
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.35,
+    "return_5d_pct": -0.45,
+    "up_probability_3d_pct": 51.5,
+    "up_probability_5d_pct": 45.0,
+    "confidence": "medium",
+    "rationale": "均线呈空头排列，负乖离率偏大存在弱修复动能，但量能偏弱承压均线。",
+    "risk_warning": "下行趋势延续与量能萎缩风险",
+    "source": "v3_llm_direct",
+    "model": "gemini-3.7-flash"
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 3.4760000000000004,
+    "ma10": 3.561,
+    "ma20": 3.5260000000000007,
+    "ma60": 3.7939999999999996,
+    "rsi14": 41.9,
+    "macd_dif": -0.05485852148702941,
+    "macd_dea": -0.05084212122910601,
+    "macd_hist": -0.008032800515846802,
+    "atr14_pct": 3.7809523184577984,
+    "boll_position": 0.29904881265053906,
+    "return_5d_pct": -1.9999999999999907,
+    "return_20d_pct": 0.8823529411764675,
+    "volume_ratio_5d": 0.82,
+    "close": 3.43,
+    "change_pct": 0.2923976608187202
+  },
+  "industry": {
+    "name": "通用",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": -0.46
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "process_node": null,
+    "node_gate_enabled": false,
+    "horizon_3d": {
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.05,
+      "median_return_pct": 0.46,
+      "best_return_pct": 9.21,
+      "worst_return_pct": -9.42
+    },
+    "horizon_5d": {
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.3,
+      "median_return_pct": -0.61,
+      "best_return_pct": 13.77,
+      "worst_return_pct": -9.37
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 25.5%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 25.5%，风险扣分。",
+      "contribution": -7.0
+    }
+  ],
+  "kline_file": "../kline/159915.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "通用",
+    "sector_breadth_pct": 76.2,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "510300",
+        "name": "沪深300ETF",
+        "corr": 0.93
+      },
+      {
+        "code": "159919",
+        "name": "沪深300ETF易方达",
+        "corr": 0.92
+      },
+      {
+        "code": "510500",
+        "name": "中证500ETF",
+        "corr": 0.92
+      },
+      {
+        "code": "026487",
+        "name": "大成竞先成长混合C",
+        "corr": 0.91
+      },
+      {
+        "code": "512760",
+        "name": "芯片ETF",
+        "corr": 0.82
+      }
+    ]
+  }
+}

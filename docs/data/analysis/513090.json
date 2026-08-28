@@ -1,0 +1,180 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-26 19:38:01+08:00",
+  "trade_date": "2026-08-26",
+  "code": "513090",
+  "name": "香港证券ETF",
+  "type": "etf",
+  "category": "通用",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 55.9,
+    "risk": 3.7,
+    "technical": 85.0,
+    "industry": 50.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-26 19:33:53"
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 16.44,
+    "max_drawdown_60d_pct": -7.94,
+    "atr14_pct": 1.61,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 5.0,
+        "value": 16.44
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 5.0,
+        "value": -7.94
+      },
+      {
+        "name": "ATR百分比",
+        "score": 3.5,
+        "value": 1.61
+      },
+      {
+        "name": "量价异常",
+        "score": 1.4,
+        "value": 1.02
+      },
+      {
+        "name": "行业波动",
+        "score": 0.7,
+        "value": 29.67
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 1.15,
+    "return_5d_pct": 2.28,
+    "up_probability_3d_pct": 62.0,
+    "up_probability_5d_pct": 65.5,
+    "confidence": "medium",
+    "rationale": "均线呈多头排列，RSI处于强势区间且未严重超买，量能匹配良好，短期动能有望延续。",
+    "risk_warning": "港股市场高Beta波动及均线短线乖离回踩风险。",
+    "source": "v3_llm_direct",
+    "model": "gemini-3.7-flash"
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 1.8379999999999999,
+    "ma10": 1.829,
+    "ma20": 1.832,
+    "ma60": 1.8188333333333335,
+    "rsi14": 62.4,
+    "macd_dif": 0.0032894416358970613,
+    "macd_dea": -0.00013632207910361572,
+    "macd_hist": 0.006851527430001354,
+    "atr14_pct": 1.6050364048484076,
+    "boll_position": 1.3289098281885299,
+    "return_5d_pct": 4.999999999999982,
+    "return_20d_pct": 2.1621621621621623,
+    "volume_ratio_5d": 1.02,
+    "close": 1.89,
+    "change_pct": 3.2786885245901543
+  },
+  "industry": {
+    "name": "通用",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -0.35,
+    "return_20d_pct": 1.34,
+    "return_60d_pct": -11.22,
+    "relative_strength_20d_pct": 0.82
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "process_node": null,
+    "node_gate_enabled": false,
+    "horizon_3d": {
+      "up_probability_pct": 23.3,
+      "average_return_pct": -1.34,
+      "median_return_pct": -1.1,
+      "best_return_pct": 4.57,
+      "worst_return_pct": -7.57
+    },
+    "horizon_5d": {
+      "up_probability_pct": 26.7,
+      "average_return_pct": -1.26,
+      "median_return_pct": -0.82,
+      "best_return_pct": 5.14,
+      "worst_return_pct": -9.85
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/513090.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
+  "nale_network": {
+    "sector_name": "通用",
+    "sector_breadth_pct": 76.2,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "512880",
+        "name": "证券ETF",
+        "corr": 0.86
+      },
+      {
+        "code": "510050",
+        "name": "上证50ETF",
+        "corr": 0.68
+      },
+      {
+        "code": "159919",
+        "name": "沪深300ETF易方达",
+        "corr": 0.67
+      },
+      {
+        "code": "510300",
+        "name": "沪深300ETF",
+        "corr": 0.66
+      },
+      {
+        "code": "515030",
+        "name": "新能源车ETF",
+        "corr": 0.58
+      }
+    ]
+  }
+}
