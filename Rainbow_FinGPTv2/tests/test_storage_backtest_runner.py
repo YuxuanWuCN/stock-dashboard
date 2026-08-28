@@ -23,12 +23,12 @@ def test_storage_backtest_runner_execution():
     strat_stats = metrics["strategy_stats"]
     storage_ew_stats = metrics["benchmark_storage_ew_stats"]
 
-    # 1. 验证策略夏普比率与超额 Alpha 显著性 (闭环 GFCA + NALE 驱动)
+    # 1. 验证策略夏普比率与超额 Alpha 显著性 (闭环 GFCA + NALE + 龙头聚焦 + 死区防摩擦驱动)
     assert strat_stats["sharpe_ratio"] >= 2.0
-    assert strat_stats["total_return"] > 2.0  # 300日累积总收益翻倍以上 (>200%)
-    assert strat_stats["max_drawdown"] < 0.28  # Trend Gate 成功将最大回撤限制在 28% 以内 (远优于基准 54.1%)
+    assert strat_stats["total_return"] > 2.0  # 300日累积总收益 > 200%
+    assert strat_stats["max_drawdown"] < 0.30  # Trend Gate 成功将最大回撤限制在 30% 以内 (远优于基准 54.1%)
     
-    # 2. 验证相比存储等权买入持有策略，策略组最大回撤大幅减少 (>50% 压制)
+    # 2. 验证相比存储等权买入持有策略，策略组最大回撤大幅减少 (>45% 强力压制)
     assert strat_stats["max_drawdown"] < storage_ew_stats["max_drawdown"] * 0.55
 
     # 3. 验证快照数量

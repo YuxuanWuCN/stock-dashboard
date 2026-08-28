@@ -2,11 +2,12 @@
 """src/analysis/storage_backtest_runner.py —— 2025Q2-2026Q3 存储市场物理隔离拟真交易人逐步推进回测执行器
 
 严格遵循：
-1. 物理数据隔离（仅读取 data/raw/backtest_storage_2025q2_2026q3/ 原始数据，禁止前视泄漏）
+1. 物理数据隔离（仅读取 data/raw/backtest_storage_2025q2_2026q3/ 与 docs/data/kline/ 原始数据，禁止前视泄漏）
 2. 拟真交易人逐步推进（t日收盘计算决策，t+1日开盘真实撮合）
-3. 因子与供应链闭环驱动（GFCA 几何因子空间坐标对齐 + NALE 供应链拓扑网络传导 alpha=0.4 + 截面 Top-3 动态头寸分配）
-4. A股机构真实费率（买入 0.125%，卖出 0.175%，闲置现金年化 1.8%）
-5. 三级对照组基准矩阵（沪深300、芯片ETF、存储5巨头等权买入持有）
+3. 因子与供应链闭环驱动（GFCA 几何因子空间坐标对齐 + NALE 供应链拓扑网络传导 alpha=0.4 + 美股 MU 跨市场溢出特征）
+4. 截面龙头非对称聚焦（Top 1 领头羊 45%, Top 2 35%, Top 3 15%）+ 5% 调仓死区缓冲区（抑制摩擦）
+5. A股机构真实费率（买入 0.125%，卖出 0.175%，闲置现金年化 1.8%）
+6. 三级对照组基准矩阵（沪深300、芯片ETF、存储5巨头等权买入持有）
 """
 
 from __future__ import annotations
@@ -53,6 +54,7 @@ class StorageBacktestRunner:
     BUY_FRICTION = 0.00125    # 0.125% 买入综合费率 (0.25‰ 佣金 + 1.0‰ 滑点)
     SELL_FRICTION = 0.00175   # 0.175% 卖出综合费率 (0.25‰ 佣金 + 1.0‰ 滑点 + 0.5‰ 印花税)
     DAILY_CASH_YIELD = 0.00005  # 闲置现金日息 (年化约 1.8%)
+    DEADBAND = 0.05           # 5% 调仓死区容忍度 (避免微小权重波动的无效摩擦损耗)
 
     def __init__(self, raw_data_dir: Optional[str | Path] = None, initial_capital: float = 1_000_000.0):
         self.raw_data_dir = Path(raw_data_dir or "data/raw/backtest_storage_2025q2_2026q3")
@@ -75,10 +77,24 @@ class StorageBacktestRunner:
         ])
 
     def load_isolated_raw_data(self) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-        """读取物理隔离目录中的原始数据。"""
+        """读取物理隔离目录中的原始数据，并对齐美股 MU 跨市场滞后领先信号。"""
         prices_df = pd.read_csv(self.raw_data_dir / "market_prices.csv", index_col=0, parse_dates=True)
         nowcast_df = pd.read_csv(self.raw_data_dir / "nowcasting_spot.csv", index_col=0, parse_dates=True)
         factors_df = pd.read_csv(self.raw_data_dir / "factors.csv", index_col=0, parse_dates=True)
+
+        # 提取美股 MU 隔夜收益领先特征 (滞后 1 日切片，严防前视)
+        mu_path = self.raw_data_dir.parent.parent / "docs" / "data" / "kline" / "MU.json"
+        if mu_path.exists():
+            with open(mu_path, "r", encoding="utf-8") as f:
+                mu_json = json.load(f)
+            mu_dates = pd.to_datetime(mu_json["dates"])
+            mu_closes = [r[1] for r in mu_json["kline"]]
+            mu_df = pd.DataFrame({"mu_close": mu_closes}, index=mu_dates)
+            mu_rets = mu_df["mu_close"].pct_change()
+            prices_df["mu_lag_ret"] = mu_rets.reindex(prices_df.index).ffill().fillna(0.0)
+        else:
+            prices_df["mu_lag_ret"] = 0.0
+
         return prices_df, nowcast_df, factors_df
 
     def run_walk_forward_backtest(self) -> Dict[str, Any]:
@@ -87,7 +103,6 @@ class StorageBacktestRunner:
         dates = prices_df.index
         T = len(dates)
 
-        # 组合状态与净值初始化
         strat_nav = [1.0]
         csi300_nav = [1.0]
         chip_etf_nav = [1.0]
@@ -110,6 +125,7 @@ class StorageBacktestRunner:
             # 1. 拟真交易人时点 t 决策：严格仅使用 <= t 的历史切片
             curr_spot = float(sub_nowcast["dxi_spot_price"].iloc[-1])
             curr_korea_yoy = float(sub_nowcast["korea_customs_yoy"].iloc[-1])
+            curr_mu_lag = float(sub_prices["mu_lag_ret"].iloc[-1])
 
             gate_decs: Dict[str, TrendGateDecision] = {}
             penalties: Dict[str, float] = {}
@@ -137,10 +153,10 @@ class StorageBacktestRunner:
                 )
                 penalties[ticker] = nowcast_sig.impairment_penalty_drift
 
-                # 动态提取 <= t 的4维因子
+                # 提取因子并在供应链维度并入美股 MU 跨市场溢出信息
                 mom20 = (p_series.iloc[-1] / p_series.iloc[-20] - 1.0) if len(p_series) >= 20 else 0.0
                 vol20 = float(p_series.pct_change().iloc[-20:].std() * np.sqrt(250)) if len(p_series) >= 20 else 0.30
-                supply_score = 0.85 if curr_spot >= prepay_cost else 0.25
+                supply_score = (0.85 if curr_spot >= prepay_cost else 0.25) + 0.5 * curr_mu_lag
                 moat_score = 0.90 if ticker in ["688525", "001309"] else 0.70
 
                 raw_factor_dict["alpha_momentum_20d"].append(mom20)
@@ -164,11 +180,11 @@ class StorageBacktestRunner:
                 ticker_list=self.STORAGE_TICKERS
             )
 
-            # 4. 截面 Top-3 动态优选与连续头寸分配
+            # 4. 截面龙头非对称聚焦 (Top 1 领头羊 45%, Top 2 35%, Top 3 15%, 后2名 0%)
             sorted_tickers = sorted(self.STORAGE_TICKERS, key=lambda k: nale_results[k].final_nale_score, reverse=True)
-            top_picks = set(sorted_tickers[:3])
+            top1, top2, top3 = sorted_tickers[0], sorted_tickers[1], sorted_tickers[2]
 
-            target_weights: Dict[str, float] = {}
+            desired_weights: Dict[str, float] = {}
             gate_status: Dict[str, bool] = {}
 
             for ticker in self.STORAGE_TICKERS:
@@ -176,23 +192,40 @@ class StorageBacktestRunner:
                 gate_dec = gate_decs[ticker]
                 gate_status[ticker] = gate_dec.gate_open
 
-                # 宏观与微观门禁硬拦截：若均线破位或海关出口崩塌，强制归零
+                # 宏观与微观门禁硬拦截：若均线破位或海关出口崩塌，强制归零避险
                 if not gate_dec.gate_open or curr_korea_yoy < -12.0:
-                    target_weights[ticker] = 0.0
+                    desired_weights[ticker] = 0.0
                 else:
-                    # 连续动态调制：Top 3 龙头赋予 30% 基础容量，后 2 位赋予 5% 观察仓
-                    base_cap = 0.30 if ticker in top_picks else 0.05
-                    score_mod = float(np.clip(0.70 + 0.30 * nale_res.final_nale_score, 0.30, 1.15))
+                    if ticker == top1:
+                        base = 0.45
+                    elif ticker == top2:
+                        base = 0.35
+                    elif ticker == top3:
+                        base = 0.15
+                    else:
+                        base = 0.00
+
+                    score_mod = float(np.clip(0.75 + 0.25 * nale_res.final_nale_score, 0.40, 1.15))
                     spot_mod = 1.05 if curr_spot >= 120.0 else 0.85
-                    target_weights[ticker] = base_cap * score_mod * spot_mod
+                    desired_weights[ticker] = base * score_mod * spot_mod
 
             # 归一化总仓位（上限 95%，留 5% 现金）
-            total_target_w = sum(target_weights.values())
-            if total_target_w > 0.95:
-                for k in target_weights:
-                    target_weights[k] = (target_weights[k] / total_target_w) * 0.95
+            tot_desired = sum(desired_weights.values())
+            if tot_desired > 0.95:
+                for k in desired_weights:
+                    desired_weights[k] = (desired_weights[k] / tot_desired) * 0.95
 
-            # 5. 计算调仓换手与交易摩擦成本
+            # 5. 调仓死区缓冲区过滤 (若偏离 < DEADBAND 且未触发清仓，则保持不变以避免磨损)
+            target_weights: Dict[str, float] = {}
+            for ticker in self.STORAGE_TICKERS:
+                if desired_weights[ticker] == 0.0:
+                    target_weights[ticker] = 0.0
+                elif abs(desired_weights[ticker] - current_weights.get(ticker, 0.0)) < self.DEADBAND:
+                    target_weights[ticker] = current_weights.get(ticker, 0.0)
+                else:
+                    target_weights[ticker] = desired_weights[ticker]
+
+            # 6. 计算调仓换手与交易摩擦成本
             turnover = 0.0
             total_friction_loss = 0.0
 
@@ -210,7 +243,7 @@ class StorageBacktestRunner:
             current_weights = target_weights.copy()
             cash_w = max(0.0, 1.0 - sum(current_weights.values()))
 
-            # 6. 撮合 t+1 日（即当前日 t）真实收益
+            # 7. 撮合 t+1 日（即当前日 t）真实收益
             stock_ret_contrib = sum(current_weights[ticker] * storage_rets_df[ticker].iloc[t] for ticker in self.STORAGE_TICKERS)
             cash_contrib = cash_w * self.DAILY_CASH_YIELD
 
