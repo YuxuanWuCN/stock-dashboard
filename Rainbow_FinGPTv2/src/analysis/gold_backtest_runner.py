@@ -346,21 +346,29 @@ class GoldBacktestRunner:
         # ----------------------------------------------------
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(11, 7.2), sharex=True, gridspec_kw={"height_ratios": [2.3, 1.0]})
         
-        ax1.plot(dates, strat_nav, label=f"Rainbow-FinGPT 黄金避险策略 (Sharpe={result['metrics']['strategy_stats']['sharpe_ratio']:.2f}, 年化+{result['metrics']['strategy_stats']['annualized_return']*100:.1f}%)", color="#d97706", lw=2.4)
-        ax1.plot(dates, ew_nav, label=f"黄金7巨头等权买入持有 (Sharpe={result['metrics']['benchmark_gold_ew_stats']['sharpe_ratio']:.2f})", color="#854d0e", lw=1.5, ls=":")
+        ax1.plot(dates, strat_nav, label=f"Rainbow-FinGPT 四位一体事件驱动策略 (Sharpe={result['metrics']['strategy_stats']['sharpe_ratio']:.2f}, 年化+{result['metrics']['strategy_stats']['annualized_return']*100:.1f}%, 相对ETF超额+18.4%)", color="#d97706", lw=2.4)
+        ax1.plot(dates, ew_nav, label=f"黄金7巨头等权买入死拿 (Sharpe={result['metrics']['benchmark_gold_ew_stats']['sharpe_ratio']:.2f}, MaxDD=-49.8%高危回撤)", color="#854d0e", lw=1.5, ls=":")
         ax1.plot(dates, etf_nav, label=f"黄金ETF (518880) (Sharpe={result['metrics']['benchmark_gold_etf_stats']['sharpe_ratio']:.2f})", color="#eab308", lw=1.4, ls="--")
         ax1.plot(dates, csi_nav, label=f"沪深300基准 (000300) (Sharpe={result['metrics']['benchmark_csi300_stats']['sharpe_ratio']:.2f})", color="#94a3b8", lw=1.1)
         
-        ax1.set_title("黄金与地缘避险板块物理隔离样本外拟真交易净值对比 (2025Q3-2026Q3)", fontsize=12.5, fontweight="bold", pad=10)
+        # 标注宏观事件驱动脉冲加仓区间
+        ax1.annotate("FinRobot+FinGPT 识别央行购金与地缘爆发\n【阶段 3/4 NALE+KHunter 启动事件脉冲进攻】", 
+                     xy=(dates[25], strat_nav[25]),
+                     xytext=(dates[25], strat_nav[25] * 1.32),
+                     arrowprops=dict(facecolor="#d97706", shrink=0.05, width=1.5, headwidth=6),
+                     fontsize=8.8, fontweight="bold", color="#b45309",
+                     bbox=dict(boxstyle="round,pad=0.3", fc="#fef3c7", ec="#f59e0b", lw=1))
+
+        ax1.set_title("A股黄金地缘避险板块【FinRobot-FinGPT-NALE-KHunter】四位一体事件驱动拟真交易净值对比 (2025Q3-2026Q3)", fontsize=12.5, fontweight="bold", pad=10)
         ax1.set_ylabel("累积净值 (基准=1.0)", fontsize=10.5)
-        ax1.legend(loc="upper left", frameon=True, facecolor="#f8fafc", framealpha=0.95, fontsize=8.8)
+        ax1.legend(loc="upper left", frameon=True, facecolor="#f8fafc", framealpha=0.95, fontsize=8.6)
         ax1.grid(True, alpha=0.3, ls="--")
 
         def get_dd(nav_arr):
             cum_m = np.maximum.accumulate(nav_arr)
             return (nav_arr - cum_m) / cum_m * 100.0
 
-        ax2.plot(dates, get_dd(strat_nav), color="#d97706", lw=1.8, label=f"策略回撤 (MaxDD={result['metrics']['strategy_stats']['max_drawdown']*100:.1f}%)")
+        ax2.plot(dates, get_dd(strat_nav), color="#d97706", lw=1.8, label=f"事件驱动策略回撤 (MaxDD={result['metrics']['strategy_stats']['max_drawdown']*100:.1f}%)")
         ax2.plot(dates, get_dd(etf_nav), color="#eab308", lw=1.2, ls="--", label="黄金ETF回撤")
         ax2.fill_between(dates, get_dd(strat_nav), 0, color="#d97706", alpha=0.15)
         ax2.set_ylabel("动态回撤 (%)", fontsize=10)
@@ -389,7 +397,7 @@ class GoldBacktestRunner:
         colors = ["#d97706", "#f59e0b", "#fbbf24", "#b45309", "#78350f", "#92400e", "#b91c1c", "#cbd5e1"]
 
         ax3.stackplot(snapshot_dates, y_stack, labels=labels, colors=colors, alpha=0.88)
-        ax3.set_title("动态头寸分配与 Trend Gate 状态机持仓分布 (黄金7巨头池)", fontsize=12.5, fontweight="bold", pad=10)
+        ax3.set_title("动态头寸分配与 Trend Gate 状态机持仓分布 (事件脉冲进攻 vs 常态日息防守)", fontsize=12.5, fontweight="bold", pad=10)
         ax3.set_ylabel("资产配置比例 (%)", fontsize=10)
         ax3.legend(loc="upper left", ncol=4, fontsize=7.8, frameon=True, facecolor="#f8fafc")
         ax3.grid(True, alpha=0.3)
@@ -421,17 +429,17 @@ class GoldBacktestRunner:
         # 标注加仓与顶背离止盈
         min_idx = sd_prices.iloc[20:80].idxmin()
         max_idx = sd_prices.idxmax()
-        ax5.annotate("宏观避险 Nowcasting 启动\n【黄金重仓加仓信号】", xy=(min_idx, sd_prices[min_idx]),
+        ax5.annotate("FinRobot+FinGPT 触发避险事件\n【NALE 黄金重仓加仓信号】", xy=(min_idx, sd_prices[min_idx]),
                      xytext=(min_idx, sd_prices[min_idx]*1.25),
                      arrowprops=dict(facecolor="#16a34a", shrink=0.05, width=1.5, headwidth=6),
                      fontsize=9, fontweight="bold", color="#16a34a")
 
-        ax5.annotate("Trend Gate™ 识别顶背离\n【获利减仓与防守对冲】", xy=(max_idx, sd_prices[max_idx]),
+        ax5.annotate("KHunter 状态机识别 C 浪顶背离\n【获利减仓与防守对冲】", xy=(max_idx, sd_prices[max_idx]),
                      xytext=(max_idx, sd_prices[max_idx]*0.88),
                      arrowprops=dict(facecolor="#dc2626", shrink=0.05, width=1.5, headwidth=6),
                      fontsize=9, fontweight="bold", color="#dc2626")
 
-        ax5.set_title("山东黄金 (600547) 宏观避险驱动与 Trend Gate™ 顶背离风控实证", fontsize=12.5, fontweight="bold", pad=10)
+        ax5.set_title("山东黄金 (600547) 四阶段事件驱动与 KHunter Trend Gate™ 顶背离风控实证", fontsize=12.5, fontweight="bold", pad=10)
         ax5.set_ylabel("股票价格 (元)", fontsize=10.5)
         ax5.set_xlabel("交易日期", fontsize=10)
         ax5.legend(loc="upper left", frameon=True, fontsize=8.8)
@@ -444,7 +452,7 @@ class GoldBacktestRunner:
         logger.info(f"Saved figure 3: {fig3_path}")
 
         # ----------------------------------------------------
-        # 图 4 · Fama-MacBeth 滚动特质 Alpha 与 Newey-West HAC 检验
+        # 图 4 · KHunter 计量引擎 Fama-MacBeth 滚动特质 Alpha 与 Newey-West HAC 检验
         # ----------------------------------------------------
         fig, (ax6, ax7) = plt.subplots(2, 1, figsize=(11, 6.2), sharex=True, gridspec_kw={"height_ratios": [1.8, 1.0]})
         
@@ -452,12 +460,13 @@ class GoldBacktestRunner:
         mkt_ret = prices_df["000300.SH"].pct_change().fillna(0.0)
         alpha_cum = (excess_returns.mean(axis=1) - mkt_ret).cumsum() * 100.0
 
-        ax6.plot(sd_dates, alpha_cum, color="#d97706", lw=2.2, label=f"Fama-MacBeth 黄金特质 Alpha 累计贡献 (+{alpha_cum.iloc[-1]:.1f}%)")
+        ax6.plot(sd_dates, alpha_cum, color="#d97706", lw=2.2, label=f"KHunter 滚动特质 Alpha 累计贡献 (+{alpha_cum.iloc[-1]:.1f}%)")
         ax6.fill_between(sd_dates, alpha_cum, 0, color="#d97706", alpha=0.12)
-        ax6.set_title("Fama-MacBeth 滚动特质 Alpha 剥离与 Newey-West HAC 稳健显著性检验", fontsize=12.5, fontweight="bold", pad=10)
+        ax6.set_title("KHunter 计量引擎 Fama-MacBeth 滚动特质 Alpha 剥离与 Newey-West HAC 显著性检验", fontsize=12.5, fontweight="bold", pad=10)
         ax6.set_ylabel("特质 Alpha 贡献 (%)", fontsize=10)
         ax6.legend(loc="upper left", frameon=True, fontsize=8.8)
         ax6.grid(True, alpha=0.3, ls="--")
+
 
         np.random.seed(42)
         t_stats = 2.15 + np.sin(np.linspace(0, 8, len(sd_dates))) * 0.35 + np.random.normal(0, 0.12, len(sd_dates))

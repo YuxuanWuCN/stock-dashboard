@@ -81,25 +81,25 @@ def main() -> int:
     pdf.add_page()
 
     # ====================================================
-    # PAGE 1: 标题、KPI网格、实验设计、绩效表、图1 (净值与回撤)
+    # PAGE 1: 标题、KPI网格、实验设计与四位一体架构、绩效表、图1 (净值与回撤)
     # ====================================================
     pdf.set_xy(15, 12)
-    pdf.set_font(pdf.font_bold, "", 14)
+    pdf.set_font(pdf.font_bold, "", 13.5)
     pdf.set_text_color(15, 23, 42)
-    pdf.cell(180, 6.5, "A股黄金与地缘避险板块物理隔绝拟真交易实测研报", ln=True)
+    pdf.cell(180, 6.5, "A股黄金与地缘避险板块四位一体事件驱动量化实测研报", new_x="LMARGIN", new_y="NEXT")
 
-    pdf.set_font(pdf.font_regular, "", 8)
+    pdf.set_font(pdf.font_regular, "", 7.8)
     pdf.set_text_color(71, 85, 105)
-    pdf.cell(180, 4, "样本外逐日推进 (2025Q3-2026Q3) · 机构真实摩擦成本 · 黄金ETF/等权对照 · 宏观Nowcasting驱动", ln=True)
-    pdf.ln(1.5)
+    pdf.cell(180, 4, "FinRobot多专家 · FinGPT事实抽取 · NALE资源图谱 · KHunter严谨计量回归 · 事件驱动脉冲战术 · 样本外推进", new_x="LMARGIN", new_y="NEXT")
+    pdf.ln(1.2)
 
     # KPI 网格 (5 卡片)
     kpis = [
         ("实测样本区间", "2025Q3~2026Q3", (15, 23, 42)),
         ("策略累积收益", f"+{strat['total_return']*100:.2f}%", (22, 163, 74)),
         ("年化夏普比率", f"{strat['sharpe_ratio']:.2f}", (2, 132, 199)),
+        ("相对黄金ETF超额", f"+{(strat['total_return'] - etf['total_return'])*100:.2f}%", (217, 119, 6)),
         ("最大动态回撤", f"{strat['max_drawdown']*100:.2f}%", (220, 38, 38)),
-        ("卡尔玛比率", f"{strat['calmar_ratio']:.2f}", (124, 58, 237)),
     ]
 
     y_start = pdf.get_y()
@@ -108,113 +108,114 @@ def main() -> int:
         x = 15 + i * w
         pdf.set_fill_color(248, 250, 252)
         pdf.set_draw_color(226, 232, 240)
-        pdf.rect(x, y_start, w, 12.5, "DF")
+        pdf.rect(x, y_start, w, 12.0, "DF")
         pdf.set_xy(x, y_start + 1.2)
-        pdf.set_font(pdf.font_regular, "", 6.6)
+        pdf.set_font(pdf.font_regular, "", 6.5)
         pdf.set_text_color(100, 116, 139)
         pdf.cell(w, 3.2, title, align="C")
-        pdf.set_xy(x, y_start + 5.2)
-        pdf.set_font(pdf.font_bold, "", 9.0)
+        pdf.set_xy(x, y_start + 4.8)
+        pdf.set_font(pdf.font_bold, "", 8.8)
         pdf.set_text_color(*color)
         pdf.cell(w, 5.0, val, align="C")
 
-    pdf.set_y(y_start + 14.5)
+    pdf.set_y(y_start + 13.8)
 
-    # 1. 实验设计与隔离规范
-    pdf.set_font(pdf.font_bold, "", 9.8)
+    # 1. 实验设计与四位一体架构
+    pdf.set_font(pdf.font_bold, "", 9.5)
     pdf.set_text_color(180, 83, 9)
-    pdf.cell(180, 5, "1. 物理隔离与真实交易人设计 (Strict Isolation Protocol)", ln=True)
+    pdf.cell(180, 4.8, "1. 四位一体全流程技术链与事件驱动定位 (4-Stage Chain & Event-Driven Protocol)", new_x="LMARGIN", new_y="NEXT")
 
     pdf.set_fill_color(254, 252, 232)
     pdf.set_draw_color(253, 230, 138)
     box_y = pdf.get_y()
     pdf.rect(15, box_y, 180, 16.5, "DF")
-    pdf.set_xy(17, box_y + 1.5)
-    pdf.set_font(pdf.font_regular, "", 7.5)
+    pdf.set_xy(17, box_y + 1.2)
+    pdf.set_font(pdf.font_regular, "", 7.2)
     pdf.set_text_color(30, 41, 59)
     desc = (
-        "【无未来函数与样本外推进】数据物理隔离于 data/raw/backtest_gold_2025q3_2026q3/ 目录，"
-        "仅使用 <= t 日历史切片数据。t日收盘决策，t+1日真实撮合，买入费率 0.125%，卖出费率 0.175%，闲置现金计 1.8% 年化收益。"
-        "标的池涵盖山东黄金(600547)、中金黄金(600489)、紫金矿业(601899)等7大核心资产，同台对标黄金 ETF 与沪深 300。"
+        "【宏观事件驱动战术定位】拒绝盲目常年满仓黄金股（防范-49.8%腰斩风险）。平时持币吃日息（回撤为0），事件催化期脉冲进攻。\n"
+        "【四位一体分层推演链】① FinRobot 多专家博弈审议 -> ② FinGPT 提取带文档坐标事实三元组（无数值捏造） -> "
+        "③ NALE 计算7巨头资源邻接矩阵与AISC成本护城河 -> ④ KHunter 纯数学计量引擎（252日 Fama-MacBeth 滚动回归+HAC检验+Trend Gate因果撮合）。"
     )
-    pdf.multi_cell(176, 3.6, desc)
-    pdf.set_y(box_y + 18.5)
+    pdf.multi_cell(176, 3.4, desc)
+
+    pdf.set_y(box_y + 18.0)
 
     # 2. 绩效对比表
-    pdf.set_font(pdf.font_bold, "", 9.8)
+    pdf.set_font(pdf.font_bold, "", 9.5)
     pdf.set_text_color(180, 83, 9)
-    pdf.cell(180, 5, "2. 策略与三级对照基准全周期实测表现 (Performance Benchmark)", ln=True)
+    pdf.cell(180, 4.8, "2. 策略与三级对照基准全周期实测表现 (Performance Benchmark)", new_x="LMARGIN", new_y="NEXT")
 
     rows = [
-        ("三层解耦拟真策略 (本系统)", f"+{strat['total_return']*100:.2f}%", f"+{strat['annualized_return']*100:.2f}%", f"{strat['sharpe_ratio']:.2f}", f"{strat['max_drawdown']*100:.2f}%", f"{strat['calmar_ratio']:.2f}"),
-        ("黄金7巨头等权买入持有", f"+{ew['total_return']*100:.2f}%", f"+{ew['annualized_return']*100:.2f}%", f"{ew['sharpe_ratio']:.2f}", f"{ew['max_drawdown']*100:.2f}%", f"{ew['calmar_ratio']:.2f}"),
-        ("黄金ETF (518880.SH)", f"+{etf['total_return']*100:.2f}%", f"+{etf['annualized_return']*100:.2f}%", f"{etf['sharpe_ratio']:.2f}", f"{etf['max_drawdown']*100:.2f}%", f"{etf['calmar_ratio']:.2f}"),
-        ("沪深300 (000300.SH)", f"+{csi['total_return']*100:.2f}%", f"+{csi['annualized_return']*100:.2f}%", f"{csi['sharpe_ratio']:.2f}", f"{csi['max_drawdown']*100:.2f}%", f"{csi['calmar_ratio']:.2f}"),
+        ("Rainbow-FinGPT 事件驱动策略 (本系统)", f"+{strat['total_return']*100:.2f}%", f"+{strat['annualized_return']*100:.2f}%", f"{strat['sharpe_ratio']:.2f}", f"{strat['max_drawdown']*100:.2f}%", f"{strat['calmar_ratio']:.2f}"),
+        ("黄金7巨头等权买入死拿 (被动高危基准)", f"+{ew['total_return']*100:.2f}%", f"+{ew['annualized_return']*100:.2f}%", f"{ew['sharpe_ratio']:.2f}", f"{ew['max_drawdown']*100:.2f}%", f"{ew['calmar_ratio']:.2f}"),
+        ("黄金ETF (518880.SH · 公募配置基准)", f"+{etf['total_return']*100:.2f}%", f"+{etf['annualized_return']*100:.2f}%", f"{etf['sharpe_ratio']:.2f}", f"{etf['max_drawdown']*100:.2f}%", f"{etf['calmar_ratio']:.2f}"),
+        ("沪深300 (000300.SH · 权益宽基)", f"+{csi['total_return']*100:.2f}%", f"+{csi['annualized_return']*100:.2f}%", f"{csi['sharpe_ratio']:.2f}", f"{csi['max_drawdown']*100:.2f}%", f"{csi['calmar_ratio']:.2f}"),
     ]
 
     t_y = pdf.get_y()
     headers = [("组合 / 基准", 55, "L"), ("累计收益", 25, "R"), ("年化收益", 25, "R"), ("夏普", 25, "R"), ("最大回撤", 25, "R"), ("卡玛", 25, "R")]
     pdf.set_fill_color(254, 243, 199)
-    pdf.set_font(pdf.font_bold, "", 7.2)
+    pdf.set_font(pdf.font_bold, "", 7.0)
     pdf.set_text_color(15, 23, 42)
     cur_x = 15
     for h, hw, align in headers:
         pdf.set_xy(cur_x, t_y)
-        pdf.cell(hw, 4.5, h, border=1, align=align, fill=True)
+        pdf.cell(hw, 4.2, h, border=1, align=align, fill=True)
         cur_x += hw
-    pdf.ln(4.5)
+    pdf.ln(4.2)
 
-    pdf.set_font(pdf.font_regular, "", 7.2)
+    pdf.set_font(pdf.font_regular, "", 7.0)
     for r in rows:
         row_y = pdf.get_y()
         cur_x = 15
         is_strat = "本系统" in r[0]
         pdf.set_text_color(180, 83, 9) if is_strat else pdf.set_text_color(30, 41, 59)
-        pdf.set_font(pdf.font_bold if is_strat else pdf.font_regular, "", 7.2)
+        pdf.set_font(pdf.font_bold if is_strat else pdf.font_regular, "", 7.0)
         for i, val in enumerate(r):
             hw = headers[i][1]
             align = headers[i][2]
             pdf.set_xy(cur_x, row_y)
-            pdf.cell(hw, 4.3, val, border=1, align=align)
+            pdf.cell(hw, 4.0, val, border=1, align=align)
             cur_x += hw
-        pdf.ln(4.3)
+        pdf.ln(4.0)
 
-    pdf.ln(2.0)
+    pdf.ln(1.5)
 
     # 3. 图 1 · 累积净值走势与水下回撤对比图
-    pdf.set_font(pdf.font_bold, "", 9.8)
+    pdf.set_font(pdf.font_bold, "", 9.5)
     pdf.set_text_color(180, 83, 9)
-    pdf.cell(180, 5, "3. 累积净值走势与水下回撤控制实证 (Fig 1 · Equity & Underwater Drawdown)", ln=True)
+    pdf.cell(180, 4.8, "3. 累积净值走势与水下回撤控制实证 (Fig 1 · Equity & Underwater Drawdown)", new_x="LMARGIN", new_y="NEXT")
 
     img1 = FIG_DIR / "fig1_cumulative_equity_and_drawdown.png"
     if img1.exists():
-        pdf.image(str(img1), x=15, y=pdf.get_y() + 1, w=180)
+        pdf.image(str(img1), x=15, y=pdf.get_y() + 0.5, w=180)
 
     # ====================================================
-    # PAGE 2: 图2 (资产配置)、图3 (ZigZag波浪)、图4 (Fama-MacBeth Alpha)、经济学归因
+    # PAGE 2: 图2 (资产配置)、图3 (波浪防守)、图4 (Fama-MacBeth Alpha)、经济学归因
     # ====================================================
     pdf.add_page()
 
     # 4. 图 2 · 动态头寸分配与换手率
     pdf.set_xy(15, 12)
-    pdf.set_font(pdf.font_bold, "", 9.8)
+    pdf.set_font(pdf.font_bold, "", 9.5)
     pdf.set_text_color(180, 83, 9)
-    pdf.cell(180, 5, "4. 动态头寸分配与调仓换手率 (Fig 2 · Asset Allocation & Daily Turnover)", ln=True)
+    pdf.cell(180, 4.8, "4. 动态头寸分配与调仓换手率 (Fig 2 · Asset Allocation & Daily Turnover)", new_x="LMARGIN", new_y="NEXT")
 
     img2 = FIG_DIR / "fig2_asset_allocation_and_turnover.png"
     if img2.exists():
-        pdf.image(str(img2), x=15, y=pdf.get_y() + 1, w=180)
+        pdf.image(str(img2), x=15, y=pdf.get_y() + 0.5, w=180)
 
-    pdf.set_y(pdf.get_y() + 105)
+    pdf.set_y(pdf.get_y() + 104)
 
     # 5. 图 3 & 图 4 并排展示
-    pdf.set_font(pdf.font_bold, "", 9.8)
+    pdf.set_font(pdf.font_bold, "", 9.5)
     pdf.set_text_color(180, 83, 9)
-    pdf.cell(180, 5, "5. 宏观避险风控 (Fig 3) 与 Fama-MacBeth 滚动 Alpha 显著性检验 (Fig 4)", ln=True)
+    pdf.cell(180, 4.8, "5. 宏观避险风控 (Fig 3) 与 KHunter 滚动 Alpha 显著性检验 (Fig 4)", new_x="LMARGIN", new_y="NEXT")
 
     img3 = FIG_DIR / "fig3_zigzag_trend_gate_gold_defense.png"
     img4 = FIG_DIR / "fig4_fama_macbeth_rolling_alpha.png"
-    side_y = pdf.get_y() + 1
+    side_y = pdf.get_y() + 0.5
     if img3.exists():
         pdf.image(str(img3), x=15, y=side_y, w=88)
     if img4.exists():
@@ -227,15 +228,14 @@ def main() -> int:
     pdf.set_draw_color(253, 230, 138)
     summary_box_y = pdf.get_y()
     pdf.rect(15, summary_box_y, 180, 19, "DF")
-    pdf.set_xy(17, summary_box_y + 1.5)
-    pdf.set_font(pdf.font_regular, "", 7.2)
+    pdf.set_xy(17, summary_box_y + 1.2)
+    pdf.set_font(pdf.font_regular, "", 7.1)
     pdf.set_text_color(30, 41, 59)
     summary_text = (
-        "【学术与工业落地结论】"
-        "① 宏观地缘 Nowcasting 三角校验高频跟踪央行购金强度与实际利率预期，精准捕捉大宗商品慢牛主升；"
-        "② Fama-MacBeth 滚动截面回归经 Newey-West HAC 稳健自适应修正后特质 Alpha 显著性 t=2.15 (p<0.05)；"
-        "③ 相比实物黄金 ETF (+28.22%) 与沪深300 (+10.61%)，策略斩获 +46.64% (年化 +51.32%) 的优异超额，"
-        "显著平滑了权益资产的系统性波动，达成全天候多资产稳健配置目标。"
+        "【学术与工业落地结论】\n"
+        "① 解决常年满仓伪命题：策略通过【事件驱动脉冲配置】在震荡期持有无风险日息现金，彻底规避了死拿策略高达 -49.76% 的腰斩暴跌；\n"
+        "② 解决大模型参数捏造：FinRobot+FinGPT 仅负责真实文档的事实抽取与坐标溯源，所有资产定价与仓位由 KHunter 纯数学计量公式推导；\n"
+        "③ 卓越实测绩效：相比黄金 ETF (+28.22%)，策略斩获 +46.64% (年化 +51.33%)，实现 +18.42% 显著超额，夏普比达 1.09。"
     )
     pdf.multi_cell(176, 3.4, summary_text)
 

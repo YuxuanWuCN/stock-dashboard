@@ -35,7 +35,7 @@
 
 ---
 
-### 三、 核心技术方案：三层解耦与自主决策架构 (System Architecture)
+### 三、 核心技术方案：四位一体全流程技术链 (System Architecture)
 
 本项目彻底打破传统“单体大模型端到端生成”的脆弱模式，首创**定性语义、资产定价与战术风控深度分离的“三层解耦架构 (Triple-Engine Decoupled Architecture)”**：
 
