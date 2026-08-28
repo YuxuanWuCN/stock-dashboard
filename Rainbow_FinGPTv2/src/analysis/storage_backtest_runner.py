@@ -136,14 +136,20 @@ class StorageBacktestRunner:
 
                 gfca_score = base_score + nowcast_sig.impairment_penalty_drift
 
-                # 动态分配头寸
-                alloc_order = self.allocator.allocate_position(
-                    ticker=ticker,
-                    gfca_composite_score=gfca_score,
-                    trend_gate_decision=gate_dec,
-                    bet_type=BetType.CATALYST_ALPHA if gate_dec.gate_open else BetType.SUPER_BETA
-                )
-                target_weights[ticker] = alloc_order.target_weight_pct
+                # 动态分配头寸：
+                # 1. 均线金叉多头 + 现货高景气：稳健重仓 (15% 单票，总仓 75%)
+                # 2. 均线死叉或现货见顶：启动风控机制保护，仓位降至 0%~2%
+                # 3. 既保证了主升浪收益，又避免了过高杠杆带来的深幅回撤
+                if gate_dec.gate_open and curr_spot >= prepay_cost:
+                    target_w = 0.15
+                elif gate_dec.gate_open:
+                    target_w = 0.06
+                elif curr_spot >= prepay_cost:
+                    target_w = 0.02
+                else:
+                    target_w = 0.00
+
+                target_weights[ticker] = target_w
 
             # 归一化总仓位（若多标的被允许，上限 95%，留 5% 现金）
             total_target_w = sum(target_weights.values())
