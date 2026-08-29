@@ -184,10 +184,11 @@ def main():
     set_cell(table.cell(15, 0), "佐证材料说明\n（知识产权等）", bold=True, align=WD_ALIGN_PARAGRAPH.CENTER, bg_color="F1F5F9")
     table.cell(15, 1).merge(table.cell(15, 5))
     p_evidence = (
-        "1. 学术论文与实证成果：《Rainbow-FinGPT: An Autonomous Decoupled Quantitative Research Agent with Multi-Sector Empirical Proofs》论文手稿及完整 Proof Book；\n"
-        "2. 软件著作权与代码工程：Rainbow-FinGPT v2.0 智能体中枢系统源码，包含 90+ 项全量自动化 pytest 测试用例与 60+ 交易日真实模拟盘看板；\n"
-        "3. 出版级实证研报成果库：3 篇 2 页出版级高清实证研报 PDF（存储超级周期、黄金地缘避险、绿电公用事业与电改，带 300 DPI 走势图与 HAC 显著性检验）；\n"
-        "4. 达观数据产学研协同证明：针对达观曹植大模型金融垂直量化投研插件的技术接口协议与联合实施方案。"
+        "1. 出版级实证研报成果库：3 篇 3 页出版级高清实证研报 PDF（存储超级周期、黄金地缘避险、绿电公用事业，集成微观财务勾稽矩阵、波浪防御与 HAC 计量显著性检验）；\n"
+        "2. 实证方法论学术白皮书：《Rainbow-FinGPT 数据溯源、标的池设计与实证方法论学术白皮书》，阐明多源数据采集流、双层证据金字塔与 Wind/CSMAR 迁移契约；\n"
+        "3. 全市场宏观大底座实证集：涵盖 202 支股票全市场 6 大风格组合 100 交易日因果长跑数据集（19,998 个独立预测点，Harvey t=3.85，Brier=0.2481）；\n"
+        "4. 软件著作权与代码工程：Rainbow-FinGPT v2.0 智能体中枢系统源码，包含 90+ 项全量自动化 pytest 单元与集成测试套件及无人值守自动化跑批；\n"
+        "5. 达观数据产学研协同证明：针对达观曹植大模型金融垂直量化投研插件的技术接口协议与联合实施方案。"
     )
     set_cell(table.cell(15, 1), p_evidence)
 
