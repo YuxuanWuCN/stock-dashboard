@@ -1,4 +1,4 @@
-﻿# tools/daily_live.ps1 —— 组员本地一键运行日常真实大模型投研流水线
+# tools/daily_live.ps1 —— 组员本地一键运行日常真实大模型投研流水线
 param(
     [string]$Backend = ""
 )
@@ -25,12 +25,10 @@ Write-Host "
 [1/3] 正在诊断本地 API Key / Ollama 连通性..." -ForegroundColor Cyan
 python -c "from src.llm.llm_client import diagnose_llm_connection; diagnose_llm_connection(True)"
 
-# 2. 执行三大板块实时投研
+# 2. 执行绿电板块实时投研
 Write-Host "
-[2/3] 启动三大板块实时大模型事实抽取与策略调仓..." -ForegroundColor Cyan
+[2/3] 启动绿电公用事业板块实时大模型事实抽取与策略调仓..." -ForegroundColor Cyan
 python -m src.analysis.green_backtest_runner --live-llm
-python -m src.analysis.storage_backtest_runner --live-llm
-python -m src.analysis.gold_backtest_runner --live-llm
 
 # 3. 运行全量日常流水线
 Write-Host "

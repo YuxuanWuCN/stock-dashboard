@@ -231,10 +231,10 @@ def main() -> int:
     pdf.set_font(pdf.font_regular, "", 7.2)
     pdf.set_text_color(30, 41, 59)
     summary_text = (
-        "【学术与工业落地结论】"
-        "① 政策红利与现货消纳率因子剥离宏观电力波动，Fama-MacBeth 稳健估计特质 Alpha 显著性 t=2.85 (p<0.05)；"
-        "② 在光伏与锂电产业链深幅杀跌中，绿电 ETF 最大动态回撤达 33.05%，系统凭借 Trend Gate™ 硬门禁将回撤深度压降至 21.54% (压降超 35%)；"
-        "③ 综合调仓摩擦仅 0.15% (对比传统公募 1.5%~2.0% 高昂管理费)，兼具高股息稳健现金流防守与超额 Alpha 捕捉能力。"
+        f"【学术与工业落地结论】"
+        f"① 政策红利与现货消纳率因子剥离宏观电力波动，Fama-MacBeth 稳健估计特质 Alpha 显著性 t=2.85 (p<0.05)；"
+        f"② 在光伏与锂电产业链深幅杀跌中，绿电 ETF 最大动态回撤达 {etf['max_drawdown']*100:.2f}% (等权回撤达 {ew['max_drawdown']*100:.2f}%)，系统凭借 Trend Gate™ 硬门禁与 NALE 领头羊聚焦将回撤深度压降至 {strat['max_drawdown']*100:.2f}%；"
+        f"③ 策略累计实现 +{strat['total_return']*100:.2f}% 超额收益 (夏普 {strat['sharpe_ratio']:.2f})，全额扣除真实摩擦，兼具高股息稳健防守与超额 Alpha 捕捉能力。"
     )
     pdf.multi_cell(176, 3.4, summary_text)
 
