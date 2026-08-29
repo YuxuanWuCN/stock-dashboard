@@ -65,6 +65,18 @@ class GreenBacktestRunner:
         "002459": 0.38,  # 晶澳科技: 组件价格战
     }
 
+    # 标的名称映射字典
+    TICKER_NAMES: Dict[str, str] = {
+        "001258": "立新能源",
+        "002459": "晶澳科技",
+        "002466": "天齐锂业",
+        "601012": "隆基绿能",
+        "600438": "通威股份",
+        "300750": "宁德时代",
+        "515790.SH": "绿电/新能源ETF",
+        "000300.SH": "沪深300指数"
+    }
+
     BUY_FRICTION = 0.00125    # 0.125% 买入综合费率 (0.25‰ 佣金 + 1.0‰ 滑点)
     SELL_FRICTION = 0.00175   # 0.175% 卖出综合费率 (0.25‰ 佣金 + 1.0‰ 滑点 + 0.5‰ 印花税)
     DAILY_CASH_YIELD = 0.00005  # 闲置现金日息 (年化约 1.8%)
@@ -307,8 +319,8 @@ class GreenBacktestRunner:
         
         ax1.plot(dates, strat_nav, label=f"Rainbow-FinGPT 绿电增强策略 (Sharpe={result['metrics']['strategy_stats']['sharpe_ratio']:.2f})", color="#16a34a", lw=2.2)
         ax1.plot(dates, etf_nav, label=f"绿电/新能源ETF (515790) (Sharpe={result['metrics']['benchmark_green_etf_stats']['sharpe_ratio']:.2f})", color="#0284c7", lw=1.5, ls="--")
-        ax1.plot(dates, ew_nav, label="绿电6巨头等权买入持有", color="#d97706", lw=1.2, ls=":")
-        ax1.plot(dates, csi_nav, label="沪深300基准 (000300)", color="#94a3b8", lw=1.0)
+        ax1.plot(dates, ew_nav, label="绿电6股等权持有 (立新能源/宁德时代/天齐锂业/隆基等)", color="#d97706", lw=1.2, ls=":")
+        ax1.plot(dates, csi_nav, label="沪深300指数基准 (000300)", color="#94a3b8", lw=1.0)
         
         ax1.set_title("绿电公用事业与新能源板块物理隔离拟真交易人净值走势对比 (2025Q3-2026Q3)", fontsize=12, fontweight="bold")
         ax1.set_ylabel("累计净值 (基准=1.0)", fontsize=10)
@@ -343,13 +355,13 @@ class GreenBacktestRunner:
         turnovers = [s.turnover_rate * 100 for s in result["snapshots"]]
 
         y_stack = [holdings[t] for t in self.GREEN_TICKERS] + [cash]
-        labels = [f"标的 {t}" for t in self.GREEN_TICKERS] + ["闲置现金 (日息1.8%年化)"]
+        labels = [f"{self.TICKER_NAMES.get(t, t)} ({t})" for t in self.GREEN_TICKERS] + ["闲置现金 (日息1.8%年化)"]
         colors = ["#22c55e", "#10b981", "#059669", "#047857", "#065f46", "#0f766e", "#cbd5e1"]
 
         ax3.stackplot(snapshot_dates, y_stack, labels=labels, colors=colors, alpha=0.85)
-        ax3.set_title("动态头寸分配与 Trend Gate 状态机持仓分布 (001258/601012等)", fontsize=12, fontweight="bold")
+        ax3.set_title("动态头寸分配与 Trend Gate 状态机持仓分布 (立新能源/宁德时代/天齐锂业/晶澳/隆基/通威)", fontsize=12, fontweight="bold")
         ax3.set_ylabel("资产配置比例 (%)", fontsize=10)
-        ax3.legend(loc="upper left", ncol=3, fontsize=8, frameon=True)
+        ax3.legend(loc="upper left", ncol=3, fontsize=8.5, frameon=True)
         ax3.grid(True, alpha=0.3)
 
         ax4.bar(snapshot_dates, turnovers, color="#6366f1", width=1.0, alpha=0.7, label="逐日调仓换手率 (%)")
@@ -410,9 +422,9 @@ class GreenBacktestRunner:
         mkt_ret = prices_df["000300.SH"].pct_change().fillna(0.0)
         alpha_cum = (excess_returns.mean(axis=1) - mkt_ret).cumsum() * 100.0
 
-        ax6.plot(green_dates, alpha_cum, color="#16a34a", lw=2.2, label=f"Fama-MacBeth 绿电特质 Alpha 累计贡献 (+{alpha_cum.iloc[-1]:.1f}%)")
+        ax6.plot(green_dates, alpha_cum, color="#16a34a", lw=2.2, label=f"Fama-MacBeth 绿电6股 (立新能源/宁德时代/天齐锂业等) 特质 Alpha (+{alpha_cum.iloc[-1]:.1f}%)")
         ax6.fill_between(green_dates, alpha_cum, 0, color="#16a34a", alpha=0.12)
-        ax6.set_title("Fama-MacBeth 滚动特质 Alpha 剥离与 Newey-West HAC 稳健显著性检验", fontsize=12.5, fontweight="bold", pad=10)
+        ax6.set_title("Fama-MacBeth 绿电6大标的特质 Alpha 剥离与 Newey-West HAC 稳健显著性检验", fontsize=12.5, fontweight="bold", pad=10)
         ax6.set_ylabel("特质 Alpha 贡献 (%)", fontsize=10)
         ax6.legend(loc="upper left", frameon=True, fontsize=8.8)
         ax6.grid(True, alpha=0.3, ls="--")
