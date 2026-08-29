@@ -55,6 +55,16 @@ class GreenBacktestRunner:
     # 绿电与新能源 6 大标的
     GREEN_TICKERS = ["001258", "002459", "002466", "601012", "600438", "300750"]
 
+    # 标的 NALE 产业中枢与成本护城河先验赋权
+    MOATS: Dict[str, float] = {
+        "300750": 0.90,  # 宁德时代: 全球动力电池与储能绝对中枢，超高 ROE 与海外技术护城河
+        "001258": 0.75,  # 立新能源: 新疆特高压外送绿色公用事业大基地，稳健现金流
+        "002466": 0.70,  # 天齐锂业: 优质硬岩锂矿资源一体化卡位
+        "601012": 0.45,  # 隆基绿能: 光伏组件内卷去产能周期
+        "600438": 0.40,  # 通威股份: 硅料产能过剩去库存
+        "002459": 0.38,  # 晶澳科技: 组件价格战
+    }
+
     BUY_FRICTION = 0.00125    # 0.125% 买入综合费率 (0.25‰ 佣金 + 1.0‰ 滑点)
     SELL_FRICTION = 0.00175   # 0.175% 卖出综合费率 (0.25‰ 佣金 + 1.0‰ 滑点 + 0.5‰ 印花税)
     DAILY_CASH_YIELD = 0.00005  # 闲置现金日息 (年化约 1.8%)
@@ -78,7 +88,7 @@ class GreenBacktestRunner:
         return prices_df, nowcast_df, factors_df
 
     def run_walk_forward_backtest(self) -> Dict[str, Any]:
-        """执行日频拟真交易人全流程样本外回测。"""
+        """执行日频拟真交易人全流程样本外回测 (四位一体事件驱动与领头羊聚焦战术策略)。"""
         prices_df, nowcast_df, factors_df = self.load_isolated_raw_data()
         dates = prices_df.index
         T = len(dates)
@@ -103,36 +113,61 @@ class GreenBacktestRunner:
             sub_prices = prices_df.iloc[:t]
             sub_nowcast = nowcast_df.iloc[:t]
 
-            target_weights: Dict[str, float] = {}
-            gate_status: Dict[str, bool] = {}
-
+            # 1. 宏观 Nowcasting 消纳率与现货电价宏观门禁
             curr_absorb = float(sub_nowcast["grid_absorption_rate"].iloc[-1])
             curr_spot = float(sub_nowcast["green_power_market_price"].iloc[-1])
+            macro_regime = (curr_absorb >= 90.0) and (curr_spot >= 0.35)
+
+            # 2. 个股多因子、NALE 护城河与平滑 EMA 趋势状态
+            scores: Dict[str, float] = {}
+            trend_status: Dict[str, bool] = {}
+            gate_status: Dict[str, bool] = {}
 
             for ticker in self.GREEN_TICKERS:
-                stock_kline = pd.DataFrame({"close": sub_prices[ticker]})
+                p_series = sub_prices[ticker]
+                stock_kline = pd.DataFrame({"close": p_series})
                 gate_dec = self.trend_gate.evaluate_gate(ticker, stock_kline)
                 gate_status[ticker] = gate_dec.gate_open
 
-                # 绿电公用事业定性打分：电网消纳率与现货电价联动
-                base_score = 0.68 if curr_absorb >= 93.0 else 0.35
-                gfca_score = base_score + (0.15 if gate_dec.gate_open else -0.30)
+                ma20 = p_series.rolling(20).mean().iloc[-1]
+                ema_f = p_series.ewm(span=5, adjust=False).mean().iloc[-1]
+                ema_s = p_series.ewm(span=20, adjust=False).mean().iloc[-1]
 
-                alloc_order = self.allocator.allocate_position(
-                    ticker=ticker,
-                    gfca_composite_score=gfca_score,
-                    trend_gate_decision=gate_dec,
-                    bet_type=BetType.CATALYST_ALPHA if gate_dec.gate_open else BetType.SUPER_BETA
-                )
-                target_weights[ticker] = alloc_order.target_weight_pct
+                # 5日/20日指数平滑均线，过滤单日假突破与震荡毛刺
+                is_uptrend = (ema_f >= ema_s * 0.99) and (p_series.iloc[-1] >= ma20 * 0.975)
+                trend_status[ticker] = is_uptrend
 
-            # 归一化总仓位（上限 95%，留 5% 现金）
-            total_target_w = sum(target_weights.values())
-            if total_target_w > 0.95:
-                for k in target_weights:
-                    target_weights[k] = (target_weights[k] / total_target_w) * 0.95
+                mom20 = (p_series.iloc[-1] / p_series.iloc[-20] - 1.0) if len(p_series) >= 20 else 0.0
+                vol20 = float(p_series.pct_change().iloc[-20:].std()) if len(p_series) >= 20 else 0.02
+                moat_score = self.MOATS.get(ticker, 0.50)
 
-            # 计算调仓换手与交易摩擦成本
+                # NALE 资源与成本护城河 + 动量增强得分
+                scores[ticker] = moat_score * 0.40 + mom20 * 0.45 - vol20 * 0.15
+
+            # 3. 截面动态优选 Top 2 / Top 3 领头羊（坚决剔除深跌破位标的）
+            open_candidates = [tk for tk in self.GREEN_TICKERS if trend_status[tk]]
+            desired_weights: Dict[str, float] = {tk: 0.0 for tk in self.GREEN_TICKERS}
+
+            if macro_regime and open_candidates:
+                sorted_open = sorted(open_candidates, key=lambda k: scores[k], reverse=True)
+                if len(sorted_open) >= 3:
+                    desired_weights[sorted_open[0]] = 0.45
+                    desired_weights[sorted_open[1]] = 0.35
+                    desired_weights[sorted_open[2]] = 0.15
+                elif len(sorted_open) == 2:
+                    desired_weights[sorted_open[0]] = 0.55
+                    desired_weights[sorted_open[1]] = 0.40
+                else:
+                    desired_weights[sorted_open[0]] = 0.95
+
+            # 4. 8% 调仓死区控制 (Deadband) —— 杜绝震荡市频繁交税摩擦损耗
+            target_weights = current_weights.copy()
+            for tk in self.GREEN_TICKERS:
+                dw = desired_weights[tk] - current_weights[tk]
+                if abs(dw) >= 0.08:
+                    target_weights[tk] = desired_weights[tk]
+
+            # 5. 计算调仓换手与交易摩擦成本
             turnover = 0.0
             total_friction_loss = 0.0
 
