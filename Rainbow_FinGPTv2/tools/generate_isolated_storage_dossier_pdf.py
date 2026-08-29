@@ -3,8 +3,9 @@
 
 重构特性：
 1. 继承 BasePublicationPDF，严格执行 5 级规范字阶与 Microsoft YaHei 家族无衬线排版
-2. 表格与说明框具备专业斑马纹、内边距与左侧重色 Accent Bar，杜绝字体混乱与挤压变形
-3. 完整覆盖数据全景溯源、双层标的池金字塔、微观财务勾稽与全市场 100 交易日大底座
+2. 彻底解决中英混排空格拉伸 Bug（显式 Align.L + WrapMode.CHAR）
+3. 表格与说明框具备专业斑马纹、内边距与左侧重色 Accent Bar
+4. 完整覆盖数据全景溯源、双层标的池金字塔、微观财务勾稽与全市场 100 交易日大底座
 """
 
 from __future__ import annotations
@@ -43,11 +44,11 @@ def build_storage_pdf():
     # ====================================================
     pdf.add_page()
     pdf.set_xy(15, 11)
-    pdf.set_font(pdf.font_bold, "", pdf.FS_DOC_TITLE)
+    pdf.set_font("msyh", "B", pdf.FS_DOC_TITLE)
     pdf.set_text_color(15, 23, 42)
     pdf.cell(180, 6.0, "A股半导体存储超级周期物理隔绝拟真交易实测研报", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
-    pdf.set_font(pdf.font_regular, "", pdf.FS_BODY)
+    pdf.set_font("msyh", "", pdf.FS_BODY)
     pdf.set_text_color(71, 85, 105)
     pdf.cell(180, 3.8, "样本外逐日推进 (2025Q2-2026Q3) · 机构真实摩擦成本 · 芯片ETF/存储等权对照 · Trend Gate C浪清仓", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
     pdf.ln(1.0)
