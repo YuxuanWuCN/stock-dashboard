@@ -144,7 +144,53 @@ def add_financial_card(slide, left, top, width, height, title="", items=None, he
             p.space_after = Pt(3)
             first_p = False
 
-    return shape
+def add_picture_contain(slide, img_path, left, top, max_width, max_height, draw_card_bg=True, align_center=True, align_middle=True):
+    """
+    严谨无畸变自适应等比缩放放置图片：
+    1. 100% 保持图片天然像素纵横比，绝不拉伸、挤压或变形；
+    2. 自适应计算居中坐标；
+    3. 可选绘制极简浅灰线框纯白底卡，提升金融出版质感。
+    """
+    from PIL import Image
+    p_path = Path(img_path)
+    if not p_path.exists():
+        print(f"Warning: Image {img_path} not found!")
+        return None
+
+    with Image.open(p_path) as img:
+        orig_w, orig_h = img.size
+        img_ratio = orig_w / orig_h
+
+    # 可选绘制外层容器卡片
+    if draw_card_bg:
+        card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, max_width, max_height)
+        card.fill.solid()
+        card.fill.fore_color.rgb = BG_WHITE
+        card.line.color.rgb = BORDER_GRAY
+        card.line.width = Pt(0.75)
+
+    # 计算等比例缩放后的尺寸（留出小边距）
+    inner_pad = Inches(0.08) if draw_card_bg else Inches(0)
+    avail_w = max_width - inner_pad * 2
+    avail_h = max_height - inner_pad * 2
+    box_ratio = avail_w / avail_h
+
+    if box_ratio > img_ratio:
+        # 高度为限制因素
+        final_h = avail_h
+        final_w = avail_h * img_ratio
+        x_offset = inner_pad + ((avail_w - final_w) / 2 if align_center else 0)
+        y_offset = inner_pad
+    else:
+        # 宽度为限制因素
+        final_w = avail_w
+        final_h = avail_w / img_ratio
+        x_offset = inner_pad
+        y_offset = inner_pad + ((avail_h - final_h) / 2 if align_middle else 0)
+
+    # 插入图片
+    pic = slide.shapes.add_picture(str(p_path), left + x_offset, top + y_offset, final_w, final_h)
+    return pic
 
 
 def build_white_gold_presentation(output_path):
@@ -387,7 +433,7 @@ def build_white_gold_presentation(output_path):
     if not img_arch.exists():
         img_arch = Path("reports/figures/architecture_system_hd.png")
     if img_arch.exists():
-        s6.shapes.add_picture(str(img_arch), Inches(0.8), Inches(1.35), Inches(11.733), Inches(5.6))
+        add_picture_contain(s6, img_arch, Inches(0.8), Inches(1.35), Inches(11.733), Inches(5.6), draw_card_bg=True)
 
     # ====================================================
     # Slide 7: Layer 1 · FinEvidence 研报因果事实图谱抽取器
@@ -406,10 +452,10 @@ def build_white_gold_presentation(output_path):
         add_financial_card(s7, x, Inches(1.4), Inches(3.78), Inches(2.7),
                            title=p_t, items=[p_d], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=NAVY_PRIMARY)
 
-    # 嵌入知识流水平线图
+    # 嵌入知识流水平线图 (等比自适应缩放)
     img_pipe = Path("PPT素材包/03_架构图/知识本体流水线图.png")
     if img_pipe.exists():
-        s7.shapes.add_picture(str(img_pipe), Inches(0.8), Inches(4.3), Inches(11.733), Inches(2.7))
+        add_picture_contain(s7, img_pipe, Inches(0.8), Inches(4.3), Inches(11.733), Inches(2.7), draw_card_bg=True)
 
     # ====================================================
     # Slide 8: Layer 2 · Fama-MacBeth 3.0 滚动资产定价
@@ -434,10 +480,10 @@ def build_white_gold_presentation(output_path):
                            "未跨越门槛的标的一律被系统拒绝入池（如立新能源案例）。"
                        ], border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=NAVY_PRIMARY)
 
-    # 右侧嵌入 Fama-MacBeth 走势图
+    # 右侧嵌入 Fama-MacBeth 走势图 (等比自适应缩放)
     img_fm = Path("PPT素材包/01_三大板块核心图表/存储-03-滚动FamaMacBeth特质Alpha.png")
     if img_fm.exists():
-        s8.shapes.add_picture(str(img_fm), Inches(6.2), Inches(1.4), Inches(6.333), Inches(5.5))
+        add_picture_contain(s8, img_fm, Inches(6.2), Inches(1.4), Inches(6.333), Inches(5.5), draw_card_bg=True)
 
     # ====================================================
     # Slide 9: Layer 2 · NALE 产业链拓扑阻尼网络传导
@@ -461,10 +507,10 @@ def build_white_gold_presentation(output_path):
                            "• 领先卖方研报 5 个交易日捕捉上游现货跳涨与海外原厂溢出效应。"
                        ], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=NAVY_PRIMARY)
 
-    # 右侧嵌入 NALE 散点图
+    # 右侧嵌入 NALE 散点图 (等比自适应缩放)
     img_nale = Path("PPT素材包/01_三大板块核心图表/存储-04-GFCA因子坐标与NALE散点.png")
     if img_nale.exists():
-        s9.shapes.add_picture(str(img_nale), Inches(6.2), Inches(1.4), Inches(6.333), Inches(5.5))
+        add_picture_contain(s9, img_nale, Inches(6.2), Inches(1.4), Inches(6.333), Inches(5.5), draw_card_bg=True)
 
     # ====================================================
     # Slide 10: Layer 3 · Trend Gate™ 战术风控与 C 浪硬门禁
@@ -487,10 +533,10 @@ def build_white_gold_presentation(output_path):
                            "• 绿电板块回撤由 ETF -33.05% 强力压制至 21.54%。"
                        ], border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=NAVY_PRIMARY)
 
-    # 右侧嵌入佰维 C 浪拦截大图
+    # 右侧嵌入佰维 C 浪拦截大图 (等比自适应缩放)
     img_tg = Path("PPT素材包/01_三大板块核心图表/存储-02-TrendGate拦截C浪杀跌(佰维).png")
     if img_tg.exists():
-        s10.shapes.add_picture(str(img_tg), Inches(6.2), Inches(1.4), Inches(6.333), Inches(5.5))
+        add_picture_contain(s10, img_tg, Inches(6.2), Inches(1.4), Inches(6.333), Inches(5.5), draw_card_bg=True)
 
     # ====================================================
     # Slide 11: 每日 18:00 投研全流程自动闭环 (7 步全自动化)
@@ -566,10 +612,10 @@ def build_white_gold_presentation(output_path):
                        title="", items=["存储等权死拿最大回撤达 -54.13% (腰斩暴跌)，系统压降 25 个百分点"],
                        border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, hero_color=RED_HERO)
 
-    # 右侧嵌入存储净值与回撤大图
+    # Slide 13: 右侧嵌入存储净值与回撤大图 (等比自适应缩放)
     img_s1 = Path("PPT素材包/01_三大板块核心图表/存储-01-净值曲线与回撤.png")
     if img_s1.exists():
-        s13.shapes.add_picture(str(img_s1), Inches(4.6), Inches(1.4), Inches(7.933), Inches(5.5))
+        add_picture_contain(s13, img_s1, Inches(4.6), Inches(1.4), Inches(7.933), Inches(5.5), draw_card_bg=True)
 
     # ====================================================
     # Slide 14: 实证二与三 · 黄金地缘避险与绿电公用事业实测
@@ -581,7 +627,7 @@ def build_white_gold_presentation(output_path):
     # 左侧黄金板块大图与指标
     img_g1 = Path("PPT素材包/01_三大板块核心图表/黄金-01-净值曲线与回撤.png")
     if img_g1.exists():
-        s14.shapes.add_picture(str(img_g1), Inches(0.8), Inches(1.4), Inches(5.7), Inches(4.3))
+        add_picture_contain(s14, img_g1, Inches(0.8), Inches(1.4), Inches(5.7), Inches(4.3), draw_card_bg=True)
     
     add_financial_card(s14, Inches(0.8), Inches(5.8), Inches(5.7), Inches(1.2),
                        title="黄金避险：累积 +94.84% (年化 +105.82%)，夏普 1.67",
@@ -591,7 +637,7 @@ def build_white_gold_presentation(output_path):
     # 右侧绿电板块大图与指标
     img_gr1 = Path("PPT素材包/01_三大板块核心图表/绿电-01-净值曲线与回撤.png")
     if img_gr1.exists():
-        s14.shapes.add_picture(str(img_gr1), Inches(6.8), Inches(1.4), Inches(5.7), Inches(4.3))
+        add_picture_contain(s14, img_gr1, Inches(6.8), Inches(1.4), Inches(5.7), Inches(4.3), draw_card_bg=True)
 
     add_financial_card(s14, Inches(6.8), Inches(5.8), Inches(5.7), Inches(1.2),
                        title="绿电公用事业：累积 +56.09% (年化 +59.33%)，夏普 1.19",
@@ -625,10 +671,10 @@ def build_white_gold_presentation(output_path):
                            "• 同期沪深 300 下跌 -4.10%，全线斩获显著超额！"
                        ], border_color=BORDER_GRAY, bg_color=RGBColor(238, 246, 255), hero_color=GREEN_HERO)
 
-    # 右侧嵌入 202 股票 6 组合全景对比大图
+    # 右侧嵌入 202 股票 6 组合全景对比大图 (等比自适应缩放)
     img_u = Path("PPT素材包/02_全池与校准/全池-202股6组合净值对比.png")
     if img_u.exists():
-        s15.shapes.add_picture(str(img_u), Inches(4.6), Inches(1.4), Inches(7.933), Inches(5.5))
+        add_picture_contain(s15, img_u, Inches(4.6), Inches(1.4), Inches(7.933), Inches(5.5), draw_card_bg=True)
 
     # ====================================================
     # Slide 16: 达观数据 10 项核心考核指标达标总成绩单 (高管仪表盘架构)
@@ -751,10 +797,10 @@ def build_white_gold_presentation(output_path):
                            "Alpha 门控判定 REJECT (拒绝入池)！在后续退潮中立新能源回撤剧烈，系统成功避免追高被套亏损，展现严密的学术诚信！"
                        ], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=RED_HERO)
 
-    # 右侧嵌入立新能源波浪分析大图
+    # 右侧嵌入立新能源波浪分析大图 (等比自适应缩放)
     img_lx = Path("PPT素材包/02_全池与校准/失败案例-立新能源001258波浪分析.png")
     if img_lx.exists():
-        s17.shapes.add_picture(str(img_lx), Inches(6.2), Inches(1.4), Inches(6.333), Inches(5.5))
+        add_picture_contain(s17, img_lx, Inches(6.2), Inches(1.4), Inches(6.333), Inches(5.5), draw_card_bg=True)
 
     # ====================================================
     # Slide 18: 终章大总结 · 产教协同重塑投研生态
