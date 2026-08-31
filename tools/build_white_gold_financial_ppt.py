@@ -570,25 +570,78 @@ def build_dark_financial_presentation(output_path):
                        ], border_color=BORDER_DARK, bg_color=BG_CARD_ALT, title_color=GREEN_HERO)
 
     # ====================================================
-    # Slide 12: 技术栈协同架构
+    # Slide 12: 技术栈协同架构 (高密度工业级全栈工程拓扑)
     # ====================================================
     s12 = prs.slides.add_slide(blank_layout)
     set_slide_dark_bg(s12, is_light_dark=True)
-    add_slide_header(s12, "技术栈协同架构：各司其职，构成不可分割的有机投研整体", page_str="12 / 18")
+    add_slide_header(s12, "技术栈协同架构：全栈工业级工程拓扑与智能体协同中枢", page_str="12 / 18")
 
-    stacks = [
-        ("Python 3.11+", "智能体中枢总管", "调度全流程状态机与自动化流水线"),
-        ("pandas / numpy", "数据引擎与矩阵计算", "高维时序数据清洗与截面矩阵运算"),
-        ("statsmodels", "金融计量严谨审账员", "Fama-MacBeth 回归与 Newey-West HAC 修正"),
-        ("DeepSeek API", "研报阅读与语义理解", "解析非结构化研报文本与客观事实抽取"),
-        ("FinEvidence", "事实证据链锚定器", "FOI 三元解构与 100% Citation 坐标锚定"),
-        ("NALE 算法", "产业链拓扑阻尼中枢", "图拓扑阻尼传播与高频现货信号映射"),
-        ("Trend Gate™", "战术安全员与刹车片", "C 浪破位识别与强制清仓止损保护"),
+    # 1. 上半部分：三大核心计算与推理引擎 (3 大横向卡片)
+    top_engines = [
+        ("Layer 1 · 语义与认知感知引擎", [
+            "【技术栈】：DeepSeek API / Qwen / PyMuPDF / pdfplumber",
+            "• 核心职能：非结构化 PDF 研报事实抽取、FOI 三元分离；",
+            "• 证据锚定：Citation-Grounded 坐标级段落精准绑定；",
+            "• 核心成效：研报抽取正确率 92.4%，从源头消除数值幻觉。"
+        ], BLUE_ACCENT),
+        ("Layer 2 · 资产定价与计量引擎", [
+            "【技术栈】：statsmodels / pandas / numpy / Kenneth French 4 因子",
+            "• 核心职能：Carhart 4 因子两阶段截面滚动回归；",
+            "• 稳健修正：Newey-West HAC (q=4) 自适应异方差修正；",
+            "• 拓扑传导：NALE 阻尼网络 (α=0.4) 融合 DXI/Au99.99 现货。"
+        ], GREEN_HERO),
+        ("Layer 3 · 战术风控与执行引擎", [
+            "【技术栈】：纯因果 ZigZag 状态机 (θ=12%) / Trend Gate™ 门控",
+            "• 核心职能：多周期因果极值确立、斐波那契加仓带判定；",
+            "• 硬核风控：C 浪主跌破位强制清仓，截断腰斩杀跌风险；",
+            "• 摩擦控制：8% 调仓死区将年化换手率压制至 0.15%。"
+        ], GOLD_HERO),
     ]
-    for idx, (st_t, st_sub, st_d) in enumerate(stacks):
-        x = Inches(0.8 + idx * 1.7)
-        add_financial_card(s12, x, Inches(1.4), Inches(1.58), Inches(5.5),
-                           title=st_t, items=[f"【{st_sub}】", st_d], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=BLUE_ACCENT)
+    for idx, (e_title, e_items, e_col) in enumerate(top_engines):
+        x = Inches(0.8 + idx * 3.98)
+        add_financial_card(s12, x, Inches(1.35), Inches(3.78), Inches(2.55),
+                           title=e_title, items=e_items, border_color=BORDER_DARK, bg_color=BG_CARD, title_color=e_col)
+
+    # 2. 下半部分：四大工程基础设施与工具中台 (4 联横向卡片)
+    bottom_infra = [
+        ("自动化任务调度中枢", [
+            "【Task Scheduler + AsyncIO】",
+            "• 交易日 18:00 无人值守自动触发",
+            "• 多源容灾自动切换与优雅降级",
+            "• 耗时由 4-20h 压缩至 15min 内"
+        ], BLUE_ACCENT),
+        ("多源数据标准化契约", [
+            "【AkShare / Wind / CSMAR】",
+            "• 行情 qfq 前复权与停牌过滤",
+            "• 现货与进出口宏观月报对齐",
+            "• 严格物理时序隔离杜绝未来函数"
+        ], TEXT_WHITE),
+        ("出版级报告自动编译", [
+            "【ReportLab / Jinja2 / Matplotlib】",
+            "• 自动生成 300 DPI 矢量图表",
+            "• 每日编译 3 份 3 页出版级研报",
+            "• 一键同步推送 GitHub 网页看板"
+        ], GREEN_HERO),
+        ("工程质量门禁与复现", [
+            "【pytest / SHA-256 / CI/CD】",
+            "• 90+ 项全自动 pytest 测试通过",
+            "• 底层 CSV 数据哈希指纹防篡改",
+            "• 独立三账户独立 API 复现验证"
+        ], GOLD_HERO),
+    ]
+    for idx, (i_title, i_items, i_col) in enumerate(bottom_infra):
+        x = Inches(0.8 + idx * 2.98)
+        add_financial_card(s12, x, Inches(4.05), Inches(2.78), Inches(2.35),
+                           title=i_title, items=i_items, border_color=BORDER_DARK, bg_color=BG_CARD_ALT, title_color=i_col)
+
+    # 3. 底部工程保障栏
+    tb_foot12 = s12.shapes.add_textbox(Inches(0.8), Inches(6.5), Inches(11.733), Inches(0.45))
+    tf_f12 = tb_foot12.text_frame
+    p_f12 = tf_f12.paragraphs[0]
+    p_f12.text = "⚙️ 工业级工程保障：全流程零外部黑盒依赖，从底层多源感知到报告编译形成 100% 自治闭环 · 历史回测与模拟盘不代表未来收益"
+    p_f12.font.name = FONT_CN
+    p_f12.font.size = Pt(8.5)
+    p_f12.font.color.rgb = TEXT_MUTED
 
     # ====================================================
     # Slide 13: 实证一 · A股半导体存储超级周期 (大图大字化)
