@@ -631,33 +631,103 @@ def build_white_gold_presentation(output_path):
         s15.shapes.add_picture(str(img_u), Inches(4.6), Inches(1.4), Inches(7.933), Inches(5.5))
 
     # ====================================================
-    # Slide 16: 达观数据 10 项核心考核指标 100% 超额达标总成绩单
+    # Slide 16: 达观数据 10 项核心考核指标达标总成绩单 (高管仪表盘架构)
     # ====================================================
     s16 = prs.slides.add_slide(blank_layout)
     set_slide_white_bg(s16, is_light_gray=True)
     add_slide_header(s16, "达观数据 10 项核心考核指标达标总成绩单 (100% 超额达成矩阵)", page_str="16 / 18")
 
-    kpis_grid = [
-        ("1. 研报提取正确率", "92.4%", "门槛 >= 80%", "SCNU-FOI 结构化解析"),
-        ("2. 代码成功运行率", "98.9%", "门槛 >= 90%", "90+ 项全自动 pytest 通过"),
-        ("3. 证据可追溯率", "100.0%", "门槛 >= 95%", "Citation 坐标级段落绑定"),
-        ("4. 策略年化收益率", "+59%~+218%", "门槛 >= 10%", "三大板块实测年化全线跑赢 ETF"),
-        ("5. 夏普比率 (Sharpe)", "1.19 ~ 2.76", "门槛 >= 1.0", "存储 2.76, 黄金 1.67, 绿电 1.19"),
-        ("6. 信息比率 (IR)", "2.57 (通过池)", "门槛 >= 0.6", "Fama-MacBeth 剥离特质 Alpha 显著"),
-        ("7. 最大动态回撤", "21.5%~29.7%", "门槛 <= 30%", "Trend Gate 清仓实现回撤腰斩"),
-        ("8. 胜率 / 盈亏比", "57.4% / 1.65", "门槛 >=52%/1.3", "全额扣除买 0.125% 卖 0.175% 摩擦"),
-        ("9. 投研耗时缩短", "85%+", "门槛 >= 80%", "4-20h 压缩至 15 分钟内"),
-        ("10. 人工操作减少", "92%", "门槛 >= 90%", "Windows 自动化定时任务无人值守"),
+    # 1. 顶部 4 联 Hero Metric 高光卡片
+    top_heros = [
+        ("92.4%", "研报提取正确率", "门槛 ≥ 80% · 超额达成", GREEN_HERO),
+        ("98.9%", "代码成功运行率", "门槛 ≥ 90% · 90+项 pytest", BLUE_ACCENT),
+        ("100.0%", "证据可追溯覆盖率", "门槛 ≥ 95% · 坐标级锚定", GREEN_HERO),
+        ("+218.2%", "最高年化收益率", "门槛 ≥ 10% · 存储周期实测", GOLD_HERO),
     ]
-    for idx, (k_name, k_val, k_req, k_note) in enumerate(kpis_grid):
-        col_i = idx % 5
-        row_i = idx // 5
-        x = Inches(0.8 + col_i * 2.38)
-        y = Inches(1.4 + row_i * 2.75)
-        add_financial_card(s16, x, y, Inches(2.28), Inches(2.55),
-                           hero_num=k_val, hero_label=k_req,
-                           title=k_name, items=[k_note],
-                           border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=NAVY_PRIMARY, hero_color=GREEN_HERO)
+    for idx, (h_num, h_title, h_sub, h_col) in enumerate(top_heros):
+        x = Inches(0.8 + idx * 2.98)
+        shape_c = s16.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, x, Inches(1.35), Inches(2.78), Inches(1.4))
+        shape_c.fill.solid()
+        shape_c.fill.fore_color.rgb = BG_WHITE
+        shape_c.line.color.rgb = BORDER_GRAY
+        shape_c.line.width = Pt(0.75)
+
+        tb_c = s16.shapes.add_textbox(x + Inches(0.1), Inches(1.42), Inches(2.58), Inches(1.25))
+        tf_c = tb_c.text_frame
+        tf_c.word_wrap = True
+        tf_c.margin_left = tf_c.margin_right = tf_c.margin_top = tf_c.margin_bottom = 0
+
+        p_num = tf_c.paragraphs[0]
+        p_num.text = h_num
+        p_num.font.name = FONT_NUM
+        p_num.font.size = Pt(26)
+        p_num.font.bold = True
+        p_num.font.color.rgb = h_col
+
+        p_t = tf_c.add_paragraph()
+        p_t.text = h_title
+        p_t.font.name = FONT_CN
+        p_t.font.size = Pt(11)
+        p_t.font.bold = True
+        p_t.font.color.rgb = NAVY_PRIMARY
+
+        p_s = tf_c.add_paragraph()
+        p_s.text = h_sub
+        p_s.font.name = FONT_CN
+        p_s.font.size = Pt(8.5)
+        p_s.font.color.rgb = SLATE_MUTED
+
+    # 2. 下半部分：精美金融级评分对照表格 (Financial Scorecard Table)
+    table_headers = [("达观命题考核指标", Inches(3.2)), ("命题门槛", Inches(1.5)), ("Rainbow-FinGPT 实测", Inches(2.2)), ("达标评价", Inches(1.5)), ("核心依据与实证说明", Inches(3.333))]
+    table_data = [
+        ["5. 年化夏普比率 (Sharpe)", "≥ 1.0", "1.19 ~ 2.76", "🌟 超额达成", "存储 2.76, 黄金 1.67, 绿电 1.19 (全线跑赢 ETF)"],
+        ["6. 特质信息比率 (IR)", "≥ 0.6", "2.57 (通过池)", "🌟 超额达成", "Fama-MacBeth 3.0 滚动剥离 Alpha 极显著 (拒绝池 0.063)"],
+        ["7. 最大动态回撤 (Max Drawdown)", "≤ 30%", "21.5% ~ 29.7%", "🌟 全面达标", "Trend Gate C 浪硬门禁清仓，将腰斩回撤强力截断"],
+        ["8. 真实胜率 / 盈亏比", "≥52% / ≥1.3", "57.4% / 1.65", "🌟 超额达成", "全额扣除买 0.125% 卖 0.175% 印花税摩擦后统计"],
+        ["9. 投研端到端耗时缩短", "≥ 80%", "缩短 85%+", "🌟 超额达成", "单篇研报复现由 4–20 小时压缩至 15 分钟内"],
+        ["10. 重复人工操作减少", "≥ 90%", "减少 92%", "🌟 超额达成", "Windows 定时任务每日 18:00 无人值守自动跑批"],
+    ]
+
+    # 绘制表格
+    t_left = Inches(0.8)
+    t_top = Inches(2.9)
+    t_w = Inches(11.733)
+    t_h = Inches(3.8)
+    
+    table_shape = s16.shapes.add_table(7, 5, t_left, t_top, t_w, t_h)
+    table = table_shape.table
+    table.columns[0].width = Inches(3.1)
+    table.columns[1].width = Inches(1.4)
+    table.columns[2].width = Inches(2.0)
+    table.columns[3].width = Inches(1.5)
+    table.columns[4].width = Inches(3.733)
+
+    # 填充表头
+    for c_i, (h_name, _) in enumerate(table_headers):
+        cell = table.cell(0, c_i)
+        cell.fill.solid()
+        cell.fill.fore_color.rgb = NAVY_PRIMARY
+        p = cell.text_frame.paragraphs[0]
+        p.text = h_name
+        p.font.name = FONT_CN
+        p.font.size = Pt(9.5)
+        p.font.bold = True
+        p.font.color.rgb = BG_WHITE
+        p.alignment = PP_ALIGN.CENTER if c_i in [1, 2, 3] else PP_ALIGN.LEFT
+
+    # 填充数据行
+    for r_i, row_items in enumerate(table_data):
+        bg_row = BG_LIGHT_GRAY if r_i % 2 == 0 else BG_WHITE
+        for c_i, val in enumerate(row_items):
+            cell = table.cell(r_i + 1, c_i)
+            cell.fill.solid()
+            cell.fill.fore_color.rgb = bg_row
+            p = cell.text_frame.paragraphs[0]
+            p.text = val
+            p.font.name = FONT_CN if c_i != 2 else FONT_NUM
+            p.font.size = Pt(9.0)
+            p.font.color.rgb = GREEN_HERO if "🌟" in val or c_i == 2 else (NAVY_PRIMARY if c_i == 0 else SLATE_DARK)
+            p.alignment = PP_ALIGN.CENTER if c_i in [1, 2, 3] else PP_ALIGN.LEFT
 
     # ====================================================
     # Slide 17: 典型案例 · 涨了 +82.36%，系统为何依然果断判定 REJECT？
