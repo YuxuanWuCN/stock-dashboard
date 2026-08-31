@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """tools/generate_isolated_gold_dossier_pdf.py —— 生成黄金板块物理隔绝实测专属研报 3 页标准出版级 PDF
 
-重构特性：
-1. 继承 BasePublicationPDF，严格执行 5 级规范字阶与 Microsoft YaHei 家族无衬线排版
-2. 彻底解决中英混排空格拉伸 Bug（显式 Align.L + WrapMode.CHAR）
-3. 表格与说明框具备专业斑马纹、内边距与左侧重色 Accent Bar
-4. 完整覆盖数据全景溯源、双层标的池金字塔、微观财务勾稽与全市场 100 交易日大底座
+综合优化特性：
+1. 继承 BasePublicationPDF，严格 5 级规范字阶与 Microsoft YaHei 家族无衬线排版（Align.L + WrapMode.CHAR）
+2. 吸收组员严谨合规口径：规范为“日频历史回测 (<=t日历史切片收盘结算)”，全额计提 0.125% 买入 + 0.175% 卖出真实摩擦
+3. 注入数据指纹 SHA-256 防篡改校验码，明晰大模型事实抽取与数学公式定价的边界
+4. 完整保留第 3 页：黄金 7 标的 AISC 克金成本、探明储量与护城河矩阵表 + 全市场 202 支股票 100 交易日大底座实证 + 学术致谢
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ def build_gold_pdf():
 
     theme_color = (217, 119, 6)  # 黄金避险琥珀金
     pdf = BasePublicationPDF(
-        theme_title="Gold Geopolitical Physical Isolation Dossier",
+        theme_title="Gold Geopolitical Event-Driven Historical Backtest Dossier",
         theme_color_rgb=theme_color
     )
 
@@ -63,21 +63,22 @@ def build_gold_pdf():
     ]
     pdf.draw_kpi_cards(kpis, y_pos=pdf.get_y())
 
-    # 1. 物理隔离与数据溯源
+    # 1. 物理隔离与数据溯源 (含 SHA-256 指纹与 Wind/CSMAR 映射)
     pdf.set_y(pdf.get_y() + 13.0)
-    pdf.draw_section_header("1. 物理隔离协议、多源数据溯源与双层标的池认证 (Data Lineage & Strict Protocol)")
+    pdf.draw_section_header("1. 数据隔离协议、SHA-256 溯源指纹与双层标的池认证 (Data Lineage & Strict Protocol)")
 
     desc = (
-        "【多源数据溯源与商业终端映射】行情日K采用 AkShare 代理获取 7 只核心黄金矿业标的前复权数据；宏观现货对齐上海黄金交易所 Au99.99 现货基准；"
-        "因子库对接 Carhart 4 因子，并在代码层实现了向 Wind 终端 API (如 cn_bond_1y, stock_daily_adjclose) 与 国泰安 CSMAR (TRD_Dret, sz_rf_rate) 的标准化映射契约。"
-        "严格遵循无前视约束：仅使用 <= t 历史数据，t日收盘决策，t+1日真实撮合，买入费率 0.125%，卖出费率 0.175%，闲置现金计 1.8% 年化收益。\n"
-        "【双层证据金字塔认证】：本专题聚焦 SCNU-RAG CS >= 12 黄金矿山储量与 AISC 低成本核心龙头 (600547山东黄金、600489中金黄金、601899紫金矿业、002155湖南黄金、000975山金国际、600988赤峰黄金、601069西部黄金)；"
-        "系统已在底层通过 202 支股票全市场大池 (100 交易日、19,800+ 独立预测点，Harvey t=3.85) 完成通用性无偏检验，兼具全池广度与资源深度。"
+        "【数据来源与 SHA-256 溯源指纹】本报告基于本地回测数据集 data/raw/backtest_gold_2025q3_2026q3/，包含 7 只黄金矿业股前复权数据与 Au99.99 现货基准。"
+        "数据指纹校验：market_prices.csv SHA256=aa10fddce32d; nowcasting_spot.csv SHA256=338a2134d218; factors.csv SHA256=bb25295d61c8。"
+        "已规范实现向 Wind API (如 cn_bond_1y, stock_daily_adjclose) 与 国泰安 CSMAR (TRD_Dret, sz_rf_rate) 的标准化映射契约。\n"
+        "【回测口径与智能体分工】严格遵循无未来函数约束：仅使用 <= t 日历史切片计算信号，使用 t 日收盘收益近似结算，未提供开盘价不能视为真实开盘成交。"
+        "四位一体推演链：① FinRobot 多专家审议 -> ② FinGPT 提取带文档坐标事实三元组(拒绝臆造) -> ③ NALE 资源邻接与 AISC 成本评分 -> ④ KHunter 计量与 Trend Gate 规则。"
+        "本回测聚焦 7 只低成本黄金股，并在底层通过 202 支股票 100 交易日大池(19,998个预测点，Harvey t=3.85)完成通用性无偏检验。"
     )
-    pdf.draw_accent_box(15, pdf.get_y(), 180, 20.5, desc, line_h=3.1)
+    pdf.draw_accent_box(15, pdf.get_y(), 180, 21.0, desc, line_h=3.1)
 
     # 2. 绩效对比表
-    pdf.set_y(pdf.get_y() + 22.0)
+    pdf.set_y(pdf.get_y() + 22.5)
     pdf.draw_section_header("2. 策略与多级对照基准全周期实测表现 (Performance Benchmark Matrix)")
 
     headers = [("组合 / 基准", 55, "L"), ("累计收益", 25, "R"), ("年化收益", 25, "R"), ("夏普", 25, "R"), ("最大回撤", 25, "R"), ("卡玛", 25, "R")]
@@ -171,9 +172,9 @@ def build_gold_pdf():
     summary_text = (
         "【学术与工业落地结论】：\n"
         "① 资源储量与 AISC 低成本护城河构建了黄金矿业的坚实底层防御，NALE 传导图谱有效捕捉地缘冲突事件脉冲；\n"
-        "② Fama-MacBeth 滚动两阶段回归精准剥离风格 Beta，经 Newey-West HAC (q=4) 稳健修正后特质 Alpha 显著通过 t 检验 (p<0.05)；\n"
+        "② 明确智能体边界：FinRobot 与 FinGPT 仅负责真实研报的事实抽取与坐标溯源，所有资产定价与仓位由 KHunter 纯数学公式计算；\n"
         f"③ 策略全周期斩获 +{strat['total_return']*100:.2f}% (年化 +{strat['annualized_return']*100:.2f}%)，夏普比率达 {strat['sharpe_ratio']:.2f}，"
-        f"大幅跑赢黄金 ETF (+{etf['total_return']*100:.2f}%) 与沪深 300 (+{csi['total_return']*100:.2f}%)，实现宏观避险与超额增值的有机统一。\n"
+        f"大幅跑赢黄金 ETF (+{etf['total_return']*100:.2f}%) 与沪深 300 (+{csi['total_return']*100:.2f}%)，实现宏观避险与超额增值的有机统一 (本结果为设定摩擦下的历史回测)。\n"
         "【权威学术致谢】：本研究感谢 AkShare 开源社区、Dartmouth Kenneth French 因子库、国泰安 CSMAR 数据库、万得 Wind 资讯、"
         "华南师范大学阿伯丁数据科学与人工智能学院量化实验室以及达观数据产业命题赛道的支持。"
     )

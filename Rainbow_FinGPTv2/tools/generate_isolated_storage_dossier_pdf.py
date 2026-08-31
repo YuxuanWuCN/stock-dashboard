@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """tools/generate_isolated_storage_dossier_pdf.py —— 生成存储板块物理隔绝实测专属研报 3 页标准出版级 PDF
 
-重构特性：
-1. 继承 BasePublicationPDF，严格执行 5 级规范字阶与 Microsoft YaHei 家族无衬线排版
-2. 彻底解决中英混排空格拉伸 Bug（显式 Align.L + WrapMode.CHAR）
-3. 表格与说明框具备专业斑马纹、内边距与左侧重色 Accent Bar
-4. 完整覆盖数据全景溯源、双层标的池金字塔、微观财务勾稽与全市场 100 交易日大底座
+综合优化特性：
+1. 继承 BasePublicationPDF，严格 5 级规范字阶与 Microsoft YaHei 家族无衬线排版（Align.L + WrapMode.CHAR）
+2. 吸收组员严谨合规口径：规范为“日频历史回测 (<=t日历史切片收盘结算)”，全额计提 0.125% 买入 + 0.175% 卖出真实摩擦
+3. 注入数据指纹 SHA-256 防篡改校验码，明晰大模型事实抽取与数学公式定价的边界
+4. 完整保留第 3 页：存储 5 龙头微观基本面与财务勾稽矩阵表 + 全市场 202 支股票 100 交易日大底座实证 + 学术致谢
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ def build_storage_pdf():
 
     theme_color = (2, 132, 199)  # 存储电光蓝
     pdf = BasePublicationPDF(
-        theme_title="Semiconductor Storage Supercycle Physical Isolation Dossier",
+        theme_title="Semiconductor Storage Supercycle Historical Backtest Dossier",
         theme_color_rgb=theme_color
     )
 
@@ -50,7 +50,7 @@ def build_storage_pdf():
 
     pdf.set_font("msyh", "", pdf.FS_BODY)
     pdf.set_text_color(71, 85, 105)
-    pdf.cell(180, 3.8, "样本外逐日推进 (2025Q2-2026Q3) · 机构真实摩擦成本 · 芯片ETF/存储等权对照 · Trend Gate C浪清仓", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+    pdf.cell(180, 3.8, "日频历史回测 (2025Q2-2026Q3) · 机构真实摩擦成本 · 芯片ETF/存储等权对照 · Trend Gate C浪硬门禁清仓", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
     pdf.ln(1.0)
 
     # 5 大 KPI 卡片
@@ -63,21 +63,22 @@ def build_storage_pdf():
     ]
     pdf.draw_kpi_cards(kpis, y_pos=pdf.get_y())
 
-    # 1. 物理隔离与数据溯源
+    # 1. 物理隔离与数据溯源 (含 SHA-256 指纹与 Wind/CSMAR 映射)
     pdf.set_y(pdf.get_y() + 13.0)
-    pdf.draw_section_header("1. 物理隔离协议、多源数据溯源与双层标的池认证 (Data Lineage & Strict Protocol)")
+    pdf.draw_section_header("1. 数据隔离协议、SHA-256 溯源指纹与双层标的池认证 (Data Lineage & Strict Protocol)")
 
     desc = (
-        "【多源数据溯源与商业终端映射】行情日K采用 AkShare 代理获取沪深两市前复权数据；宏观现货采用 DXI 现货指数与韩国海关进出口月度量价；"
-        "因子对接 Carhart 4 因子库，并在代码层规范实现了向 Wind API (如 stock_daily_adjclose) 与 国泰安 CSMAR (TRD_Dret, sz_rf_rate) 的标准化映射契约。"
-        "严格遵循无前视约束：仅使用 <= t 历史数据，t日收盘决策，t+1日真实撮合，买入费率 0.125%，卖出费率 0.175%，闲置现金计 1.8% 年化收益。\n"
-        "【双层证据金字塔认证】：本专题聚焦 SCNU-RAG CS >= 12 供应链卡位核心龙头 (001309德明利、300475香农芯创、301308江波龙、688525佰维存储、688008澜起科技 + 美股MU)；"
-        "系统已在底层通过 202 支股票全市场大池 (100 交易日、19,800+ 独立预测点，Harvey t=3.85) 完成通用性无偏检验，兼具全池广度与产业深度。"
+        "【数据来源与 SHA-256 溯源指纹】本报告基于本地回测数据集 data/raw/backtest_storage_2025q2_2026q3/，包含日频前复权(qfq)价格、先行指标与因子。"
+        "数据指纹校验：market_prices.csv SHA256=befa338590c7; nowcasting_spot.csv SHA256=4312dde05f7b; factors.csv SHA256=563cb7a6b4bf。"
+        "已规范实现向 Wind API (如 stock_daily_adjclose) 与 国泰安 CSMAR (TRD_Dret, sz_rf_rate) 的标准化映射契约。\n"
+        "【回测口径与无前视约束】严格遵循无未来函数约束：仅使用 <= t 日历史切片计算信号，使用 t 日收盘收益近似结算，未提供开盘价不能视为真实开盘成交。"
+        "全额计提买入费率 0.125%，卖出费率 0.175%，闲置现金计 1.8% 年化收益。本回测聚焦 SCNU-RAG CS >= 12 核心龙头(德明利、香农芯创、江波龙、佰维存储、澜起科技+MU)，"
+        "并在底层通过 202 支股票 100 交易日因果大池(19,998个预测点，Harvey t=3.85)完成通用性无偏检验，兼具产业深度与全池广度。"
     )
-    pdf.draw_accent_box(15, pdf.get_y(), 180, 20.5, desc, line_h=3.1)
+    pdf.draw_accent_box(15, pdf.get_y(), 180, 21.0, desc, line_h=3.1)
 
     # 2. 绩效对比表
-    pdf.set_y(pdf.get_y() + 22.0)
+    pdf.set_y(pdf.get_y() + 22.5)
     pdf.draw_section_header("2. 策略与多级对照基准全周期实测表现 (Performance Benchmark Matrix)")
 
     headers = [("组合 / 基准", 55, "L"), ("累计收益", 25, "R"), ("年化收益", 25, "R"), ("夏普", 25, "R"), ("最大回撤", 25, "R"), ("卡玛", 25, "R")]
@@ -170,9 +171,9 @@ def build_storage_pdf():
     summary_text = (
         "【学术与工业落地结论】：\n"
         "① 供应链拓扑阻尼传导 (NALE, alpha=0.4) 领先卖方研报 5 个交易日捕捉现货涨价与海外原厂溢出效应；\n"
-        "② Fama-MacBeth 滚动两阶段回归精准剥离风格 Beta，经 Newey-West HAC (q=4) 稳健修正后特质 Alpha 显著通过 t 检验 (p<0.05)；\n"
-        f"③ Trend Gate™ 趋势硬门禁在去库存周期中识别 C 浪破位并强制清仓，将回撤由等权基准 -{ew['max_drawdown']*100:.1f}% 强力压降至 {strat['max_drawdown']*100:.1f}%，"
-        f"全周期斩获 +{strat['total_return']*100:.2f}% (年化 +{strat['annualized_return']*100:.2f}%)，夏普比达 {strat['sharpe_ratio']:.2f}。\n"
+        "② 明确智能体边界：FinRobot 与 FinGPT 负责财报事实抽取与坐标溯源，Fama-MacBeth 与 Trend Gate™ 纯数学公式推导资产定价与仓位；\n"
+        f"③ 趋势硬门禁在去库存周期中识别 C 浪破位并强制清仓，将回撤由等权基准 -{ew['max_drawdown']*100:.1f}% 强力压降至 {strat['max_drawdown']*100:.1f}%，"
+        f"全周期斩获 +{strat['total_return']*100:.2f}% (年化 +{strat['annualized_return']*100:.2f}%)，夏普比达 {strat['sharpe_ratio']:.2f} (本结果为设定摩擦下的历史回测)。\n"
         "【权威学术致谢】：本研究感谢 AkShare 开源社区、Dartmouth Kenneth French 因子库、国泰安 CSMAR 数据库、万得 Wind 资讯、"
         "华南师范大学阿伯丁数据科学与人工智能学院量化实验室以及达观数据产业命题赛道的支持。"
     )
