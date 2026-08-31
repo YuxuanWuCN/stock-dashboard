@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
-"""tools/build_white_gold_financial_ppt.py —— 构建麦肯锡/高盛顶奢金融机构商务风 18 页金牌路演网评 PPT
+"""tools/build_white_gold_financial_ppt.py —— 顶奢金融深海夜空蓝 (Wall-Street Institutional Dark Navy) 18 页金牌路演网评 PPT
 
-设计标准（彻底告别 AI 极黑霓虹味）：
-1. 背景色调：纯净白底 (#FFFFFF) 与极浅暖灰底 (#F8FAFC)
-2. 机构主色：华尔街深海藏青蓝 (#0F2942 / #1E3A8A)，石板深灰正文 (#334155 / #475569)
-3. 点缀高光：金融宝蓝 (#0284C7)、稳健森林绿 (#059669)、金融金 (#B45309)、风控绯红 (#DC2626)
-4. 排版结构：大图图表占 60% 视觉中心，重点数据大字化 (Hero Metric 30-36pt)，极简 0.5pt 浅灰边框 (#E2E8F0)
-5. 完整落实用户 7 大修改点与 PPT素材包/ 高清图表直接嵌入
+设计标准：
+1. 背景色调：深海夜空蓝 (#0B1120 与 #0F172A)，沉稳典雅，契合达观数据量化智能中台品牌；
+2. 卡片与容器：暗夜微透晶石卡片 (#1E293B 与 #162032) + 0.75pt 细石板线框 (#334155)；
+3. 文字对比度：高对比纯净白 (#FFFFFF / #F1F5F9) + 电光天蓝 (#38BDF8) + 次要石板灰 (#94A3B8)；
+4. 高光数据：重点数据大字化 (Hero Metric 28-36pt)，绿 (#4ADE80)、金 (#FBBF24)、红 (#F87171)；
+5. 全量图表：100% 保持原生纵横比 (Aspect Ratio Containment)，绝无拉伸变形；
+6. Slide 16 高管仪表盘架构（顶部 4 联 Hero 卡片 + 下部深色金融级评分对照表）。
 """
 
 import os
 from pathlib import Path
+from PIL import Image
 import pptx
 from pptx.util import Inches, Pt
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
@@ -18,39 +20,39 @@ from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 
 # ==========================================
-# 顶奢金融机构配色常量 (Wall-Street Institutional Palette)
+# 顶奢金融深蓝夜色调 (Wall-Street Dark Navy Palette)
 # ==========================================
-BG_WHITE = RGBColor(255, 255, 255)       # #FFFFFF
-BG_LIGHT_GRAY = RGBColor(248, 250, 252)  # #F8FAFC
-BG_CARD = RGBColor(255, 255, 255)        # #FFFFFF
-BG_HEADER_TINT = RGBColor(241, 245, 249) # #F1F5F9
+BG_DARK = RGBColor(11, 17, 32)            # #0B1120 (深海夜空蓝)
+BG_LIGHT_DARK = RGBColor(15, 23, 42)      # #0F172A (午夜暗蓝)
+BG_CARD = RGBColor(30, 41, 59)            # #1E293B (暗夜晶石卡片)
+BG_CARD_ALT = RGBColor(22, 32, 50)        # #162032 (交替微暗卡片)
+BG_HEADER_TINT = RGBColor(30, 58, 138)    # #1E3A8A (深蓝表头)
 
-NAVY_PRIMARY = RGBColor(15, 41, 66)      # #0F2942 (深海藏青)
-NAVY_SECONDARY = RGBColor(30, 58, 138)   # #1E3A8A (经典海军蓝)
-SLATE_DARK = RGBColor(51, 65, 85)        # #334155 (主要文本)
-SLATE_MUTED = RGBColor(100, 116, 139)    # #64748B (次要说明)
-SLATE_LIGHT = RGBColor(148, 163, 184)    # #94A3B8 (注释标签)
-BORDER_GRAY = RGBColor(226, 232, 240)    # #E2E8F0 (极细边框)
+TEXT_WHITE = RGBColor(255, 255, 255)      # #FFFFFF (纯净白标题)
+TEXT_PRIMARY = RGBColor(241, 245, 249)    # #F1F5F9 (一级文本)
+TEXT_MUTED = RGBColor(148, 163, 184)      # #94A3B8 (二级说明)
+TEXT_LIGHT = RGBColor(100, 116, 139)      # #64748B (低调注释)
+BORDER_DARK = RGBColor(51, 65, 85)        # #334155 (细线边框)
 
-BLUE_ACCENT = RGBColor(2, 132, 199)      # #0284C7 (金融宝蓝)
-GREEN_HERO = RGBColor(5, 150, 105)       # #059669 (稳健盈余绿)
-RED_HERO = RGBColor(220, 38, 38)         # #DC2626 (风控警示红)
-GOLD_HERO = RGBColor(180, 83, 9)         # #B45309 (金融琥珀金)
+BLUE_ACCENT = RGBColor(56, 189, 248)      # #38BDF8 (电光天蓝)
+GREEN_HERO = RGBColor(74, 222, 128)       # #4ADE80 (荧光绿高光)
+RED_HERO = RGBColor(248, 113, 113)        # #F87171 (风控绯红)
+GOLD_HERO = RGBColor(251, 191, 36)        # #FBBF24 (金融琥珀金)
 
 FONT_CN = "Microsoft YaHei"
 FONT_EN = "Segoe UI"
 FONT_NUM = "Arial"
 
 
-def set_slide_white_bg(slide, is_light_gray=False):
+def set_slide_dark_bg(slide, is_light_dark=False):
     bg = slide.background
     fill = bg.fill
     fill.solid()
-    fill.fore_color.rgb = BG_LIGHT_GRAY if is_light_gray else BG_WHITE
+    fill.fore_color.rgb = BG_LIGHT_DARK if is_light_dark else BG_DARK
 
 
 def add_slide_header(slide, title_text, category_text="2026 中国国际大学生创新大赛 · 达观数据产业命题", page_str=""):
-    # 顶部细装饰线 (0.5pt 深海军蓝)
+    # 顶部细装饰线 (电光天蓝)
     line = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(0.35), Inches(11.733), Inches(0.02))
     line.fill.solid()
     line.fill.fore_color.rgb = BLUE_ACCENT
@@ -76,7 +78,7 @@ def add_slide_header(slide, title_text, category_text="2026 中国国际大学�
     p_t.font.name = FONT_CN
     p_t.font.size = Pt(18.5)
     p_t.font.bold = True
-    p_t.font.color.rgb = NAVY_PRIMARY
+    p_t.font.color.rgb = TEXT_WHITE
 
     # 右上角页码徽标
     if page_str:
@@ -89,11 +91,11 @@ def add_slide_header(slide, title_text, category_text="2026 中国国际大学�
         p_p.font.name = FONT_NUM
         p_p.font.size = Pt(12)
         p_p.font.bold = True
-        p_p.font.color.rgb = NAVY_SECONDARY
+        p_p.font.color.rgb = BLUE_ACCENT
 
 
 def add_financial_card(slide, left, top, width, height, title="", items=None, hero_num="", hero_label="", 
-                       border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=NAVY_PRIMARY, hero_color=BLUE_ACCENT):
+                       border_color=BORDER_DARK, bg_color=BG_CARD, title_color=BLUE_ACCENT, hero_color=GREEN_HERO):
     shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
     shape.fill.solid()
     shape.fill.fore_color.rgb = bg_color
@@ -121,7 +123,7 @@ def add_financial_card(slide, left, top, width, height, title="", items=None, he
             p_lbl.text = hero_label
             p_lbl.font.name = FONT_CN
             p_lbl.font.size = Pt(9.5)
-            p_lbl.font.color.rgb = SLATE_MUTED
+            p_lbl.font.color.rgb = TEXT_MUTED
             p_lbl.space_after = Pt(6)
 
     if title:
@@ -140,18 +142,17 @@ def add_financial_card(slide, left, top, width, height, title="", items=None, he
             p.text = it
             p.font.name = FONT_CN
             p.font.size = Pt(9.5)
-            p.font.color.rgb = SLATE_DARK
+            p.font.color.rgb = TEXT_PRIMARY
             p.space_after = Pt(3)
             first_p = False
 
+    return shape
+
+
 def add_picture_contain(slide, img_path, left, top, max_width, max_height, draw_card_bg=True, align_center=True, align_middle=True):
     """
-    严谨无畸变自适应等比缩放放置图片：
-    1. 100% 保持图片天然像素纵横比，绝不拉伸、挤压或变形；
-    2. 自适应计算居中坐标；
-    3. 可选绘制极简浅灰线框纯白底卡，提升金融出版质感。
+    严谨无畸变自适应等比缩放放置图片（暗黑质感线框底卡）
     """
-    from PIL import Image
     p_path = Path(img_path)
     if not p_path.exists():
         print(f"Warning: Image {img_path} not found!")
@@ -161,12 +162,12 @@ def add_picture_contain(slide, img_path, left, top, max_width, max_height, draw_
         orig_w, orig_h = img.size
         img_ratio = orig_w / orig_h
 
-    # 可选绘制外层容器卡片
+    # 绘制外层深色容器卡片
     if draw_card_bg:
         card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, max_width, max_height)
         card.fill.solid()
-        card.fill.fore_color.rgb = BG_WHITE
-        card.line.color.rgb = BORDER_GRAY
+        card.fill.fore_color.rgb = BG_CARD
+        card.line.color.rgb = BORDER_DARK
         card.line.width = Pt(0.75)
 
     # 计算等比例缩放后的尺寸（留出小边距）
@@ -193,23 +194,23 @@ def add_picture_contain(slide, img_path, left, top, max_width, max_height, draw_
     return pic
 
 
-def build_white_gold_presentation(output_path):
+def build_dark_financial_presentation(output_path):
     prs = pptx.Presentation()
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
     blank_layout = prs.slide_layouts[6]
 
     # ====================================================
-    # Slide 1: 封面页 (Cover Page · 高奢金融白底)
+    # Slide 1: 封面页 (Cover Page · 深海夜空蓝)
     # ====================================================
     s1 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s1)
+    set_slide_dark_bg(s1)
 
     # 顶部装饰线
     line1 = s1.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(0.8), Inches(11.733), Inches(0.04))
     line1.fill.solid()
-    line1.fill.fore_color.rgb = NAVY_PRIMARY
-    line1.line.color.rgb = NAVY_PRIMARY
+    line1.fill.fore_color.rgb = BLUE_ACCENT
+    line1.line.color.rgb = BLUE_ACCENT
 
     # 赛道标签
     tb_tag = s1.shapes.add_textbox(Inches(0.8), Inches(1.1), Inches(10.0), Inches(0.4))
@@ -227,14 +228,14 @@ def build_white_gold_presentation(output_path):
     p_title.font.name = FONT_NUM
     p_title.font.size = Pt(40)
     p_title.font.bold = True
-    p_title.font.color.rgb = NAVY_PRIMARY
+    p_title.font.color.rgb = TEXT_WHITE
 
     p_title_sub = tb_title.text_frame.add_paragraph()
     p_title_sub.text = "面向金融量化投研全流程的自主智能体系统"
     p_title_sub.font.name = FONT_CN
     p_title_sub.font.size = Pt(24)
     p_title_sub.font.bold = True
-    p_title_sub.font.color.rgb = NAVY_PRIMARY
+    p_title_sub.font.color.rgb = TEXT_PRIMARY
 
     # 副标题定位
     tb_sub = s1.shapes.add_textbox(Inches(0.8), Inches(3.1), Inches(11.7), Inches(0.6))
@@ -242,19 +243,19 @@ def build_white_gold_presentation(output_path):
     p_sub.text = "基于「定性语义 (FinEvidence) — 资产定价 (Fama-MacBeth 3.0) — 战术风控 (Trend Gate)」三层解耦架构的产业级解决方案"
     p_sub.font.name = FONT_CN
     p_sub.font.size = Pt(12)
-    p_sub.font.color.rgb = SLATE_MUTED
+    p_sub.font.color.rgb = TEXT_MUTED
 
     # 4 大核心支柱横向网格
     pillars = [
         ("自动化全闭环", "每日 18:00 收盘后全自动抓取、清洗、定价、选股、风控与报告推送", BLUE_ACCENT),
-        ("三层解耦架构", "拒绝大模型直接炒股黑盒，大模型负责抽取事实，定价与风控由纯数学推导", NAVY_SECONDARY),
+        ("三层解耦架构", "拒绝大模型直接炒股黑盒，大模型负责抽取事实，定价与风控由纯数学推导", TEXT_WHITE),
         ("100% 坐标级溯源", "Citation-Grounded 段落锚定，每条推论精准对应研报原文，彻底消除幻觉", GREEN_HERO),
         ("双层金字塔实证", "3 大产业专题出版级研报 + 202 股票 100 日大底座 (Harvey t=3.85 ≥ 3.0)", GOLD_HERO),
     ]
     for idx, (p_t, p_d, p_c) in enumerate(pillars):
         x = Inches(0.8 + idx * 2.98)
         add_financial_card(s1, x, Inches(3.9), Inches(2.8), Inches(2.3), title=p_t, items=[p_d], 
-                           border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=p_c)
+                           border_color=BORDER_DARK, bg_color=BG_CARD, title_color=p_c)
 
     # 底部单位信息
     tb_foot = s1.shapes.add_textbox(Inches(0.8), Inches(6.45), Inches(11.733), Inches(0.6))
@@ -263,7 +264,7 @@ def build_white_gold_presentation(output_path):
     p_ft1.text = "🏫 参赛团队：华南师范大学阿伯丁数据科学与人工智能学院  |  负责人：吴宇轩  |  命题企业：达观数据有限公司"
     p_ft1.font.name = FONT_CN
     p_ft1.font.size = Pt(10.5)
-    p_ft1.font.color.rgb = SLATE_DARK
+    p_ft1.font.color.rgb = TEXT_PRIMARY
 
     p_ft2 = tf_ft.add_paragraph()
     p_ft2.text = "🌐 在线模拟盘与研报看板：https://yuxuanwucn.github.io/stock-dashboard/  |  开源测试套件：90+ 项 pytest 全量通过"
@@ -275,7 +276,7 @@ def build_white_gold_presentation(output_path):
     # Slide 2: 一个“永远不下班的研究助理” (含多源数据谱系小字注释)
     # ====================================================
     s2 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s2, is_light_gray=True)
+    set_slide_dark_bg(s2, is_light_dark=True)
     add_slide_header(s2, "一个“永远不下班的研究助理”：投研全流程数字化闭环", page_str="02 / 18")
 
     # 左侧：传统人工
@@ -286,7 +287,7 @@ def build_white_gold_presentation(output_path):
                            "• 耗时冗长：初级研究员 70% 精力被困在数据清洗与搬运，单篇研报复现需 4–20 小时；",
                            "• 经验断层：资深基金经理的定性直觉与行业认知难以数字化、可编程地沉淀；",
                            "• 情绪干扰：人工执行纪律性差，容易在恐慌杀跌中追涨杀跌造成巨额亏损。"
-                       ], border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=RED_HERO)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=RED_HERO)
 
     # 右侧：Rainbow-FinGPT
     add_financial_card(s2, Inches(6.8), Inches(1.4), Inches(5.7), Inches(3.6),
@@ -296,7 +297,7 @@ def build_white_gold_presentation(output_path):
                            "• 智能体分工：大模型专注研报因果事实抽取，资产定价与风控由纯数学公式推导；",
                            "• 多源容灾：全自动跨数据源清洗、智能降级与重试机制，确保流水线永不中断；",
                            "• 真实摩擦：全额计提买入 0.125% + 卖出 0.175% 真实印花税摩擦与 1.8% 现金日息。"
-                       ], border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=GREEN_HERO)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=GREEN_HERO)
 
     # 底部数据源小字注释
     tb_src = s2.shapes.add_textbox(Inches(0.8), Inches(5.2), Inches(11.733), Inches(1.6))
@@ -307,7 +308,7 @@ def build_white_gold_presentation(output_path):
     p_st.font.name = FONT_CN
     p_st.font.bold = True
     p_st.font.size = Pt(9.5)
-    p_st.font.color.rgb = NAVY_SECONDARY
+    p_st.font.color.rgb = BLUE_ACCENT
 
     src_text = (
         "① 行情数据源：东方财富 / 同花顺 / AkShare 开源日频行情（前复权 qfq，严格使用 t 日收盘收益近似结算，未提供开盘价因此不能视为真实开盘成交）；\n"
@@ -319,13 +320,13 @@ def build_white_gold_presentation(output_path):
     p_sd.text = src_text
     p_sd.font.name = FONT_CN
     p_sd.font.size = Pt(8.5)
-    p_sd.font.color.rgb = SLATE_MUTED
+    p_sd.font.color.rgb = TEXT_MUTED
 
     # ====================================================
     # Slide 3: 投研范式跃迁（麦肯锡三方横向对比表）
     # ====================================================
     s3 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s3)
+    set_slide_dark_bg(s3)
     add_slide_header(s3, "投研范式跃迁：传统人工 vs 通用单体大模型 vs Rainbow-FinGPT", page_str="03 / 18")
 
     cols = [
@@ -342,14 +343,14 @@ def build_white_gold_presentation(output_path):
         # 表头
         shape_h = s3.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(x_pos[c_i]), Inches(1.35), Inches(w_pos[c_i]), Inches(0.55))
         shape_h.fill.solid()
-        shape_h.fill.fore_color.rgb = NAVY_PRIMARY if c_i == 3 else (NAVY_SECONDARY if c_i > 0 else BG_HEADER_TINT)
-        shape_h.line.color.rgb = BORDER_GRAY
+        shape_h.fill.fore_color.rgb = BG_HEADER_TINT if c_i == 3 else (BG_CARD if c_i > 0 else BG_CARD_ALT)
+        shape_h.line.color.rgb = BORDER_DARK
         p_th = shape_h.text_frame.paragraphs[0]
         p_th.text = c_name
         p_th.font.name = FONT_CN
         p_th.font.bold = True
         p_th.font.size = Pt(11)
-        p_th.font.color.rgb = BG_WHITE if c_i > 0 else NAVY_PRIMARY
+        p_th.font.color.rgb = BLUE_ACCENT if c_i == 3 else TEXT_WHITE
         p_th.alignment = PP_ALIGN.CENTER
 
         # 内容单元格
@@ -357,20 +358,20 @@ def build_white_gold_presentation(output_path):
             y_r = Inches(1.95 + r_i * 0.72)
             shape_r = s3.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(x_pos[c_i]), y_r, Inches(w_pos[c_i]), Inches(0.68))
             shape_r.fill.solid()
-            shape_r.fill.fore_color.rgb = RGBColor(238, 246, 255) if c_i == 3 else (BG_LIGHT_GRAY if r_i % 2 == 0 else BG_WHITE)
-            shape_r.line.color.rgb = BORDER_GRAY
+            shape_r.fill.fore_color.rgb = BG_CARD if c_i == 3 else (BG_CARD_ALT if r_i % 2 == 0 else BG_CARD)
+            shape_r.line.color.rgb = BORDER_DARK
             p_tr = shape_r.text_frame.paragraphs[0]
             p_tr.text = text_val
             p_tr.font.name = FONT_CN
             p_tr.font.size = Pt(9.0)
-            p_tr.font.color.rgb = NAVY_PRIMARY if c_i == 3 else (RED_HERO if "❌" in text_val else SLATE_DARK)
+            p_tr.font.color.rgb = GREEN_HERO if c_i == 3 else (RED_HERO if "❌" in text_val else TEXT_PRIMARY)
             p_tr.alignment = PP_ALIGN.CENTER if c_i == 0 else PP_ALIGN.LEFT
 
     # ====================================================
     # Slide 4: 为什么不能把通用大模型直接丢进二级市场？
     # ====================================================
     s4 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s4, is_light_gray=True)
+    set_slide_dark_bg(s4, is_light_dark=True)
     add_slide_header(s4, "为什么不能把通用大模型直接丢进二级市场？三大死穴剖析", page_str="04 / 18")
 
     flaws = [
@@ -381,19 +382,19 @@ def build_white_gold_presentation(output_path):
     for idx, (f_t, f_d, f_c) in enumerate(flaws):
         x = Inches(0.8 + idx * 3.98)
         add_financial_card(s4, x, Inches(1.4), Inches(3.78), Inches(4.2), 
-                           title=f_t, items=[f_d], border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=f_c)
+                           title=f_t, items=[f_d], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=f_c)
 
     # 底部破局结论框
     add_financial_card(s4, Inches(0.8), Inches(5.8), Inches(11.733), Inches(1.1),
                        title="Rainbow-FinGPT 的解耦破局之道：",
                        items=["通过三层解耦架构，严格限制大模型作为‘非结构化研报事实抽取器’，所有资产定价与风控完全交由严格时序因果与确定性数学公式！"],
-                       border_color=BORDER_GRAY, bg_color=BG_HEADER_TINT, title_color=NAVY_PRIMARY)
+                       border_color=BORDER_DARK, bg_color=BG_CARD_ALT, title_color=BLUE_ACCENT)
 
     # ====================================================
     # Slide 5: 坚守金融学本质 —— 拒绝“因子动物园 (Factor Zoo)”与数据过拟合
     # ====================================================
     s5 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s5)
+    set_slide_dark_bg(s5)
     add_slide_header(s5, "坚守金融学本质：为什么我们坚决拒绝“因子动物园”与暴力过拟合？", page_str="05 / 18")
 
     add_financial_card(s5, Inches(0.8), Inches(1.4), Inches(5.7), Inches(4.5),
@@ -403,7 +404,7 @@ def build_white_gold_presentation(output_path):
                            "• 伪因子泛滥：通过无休止的参数调优在历史数据上硬凑完美曲线，实盘因市场微观结构突变立刻失效；",
                            "• 多重检验偏差 (Multiple Testing Problem)：Harvey (2016) 金融顶刊指出，检验数百个因子时，传统 t > 2.0 门槛彻底失效，必须提高至 |t| >= 3.0；",
                            "• 缺乏先验因果：只知相关不知因果，无法解释上游现货跳涨如何向中下游模组传导。"
-                       ], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=RED_HERO)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=RED_HERO)
 
     add_financial_card(s5, Inches(6.8), Inches(1.4), Inches(5.7), Inches(4.5),
                        title="Rainbow-FinGPT 的学术坚持：先验机理与稳健检验",
@@ -412,7 +413,7 @@ def build_white_gold_presentation(output_path):
                            "• 2. Fama-MacBeth 3.0 两阶段回归：严格剥离 MKT/SMB/HML/MOM 风格暴露，提取 Newey-West HAC (q=4) 稳健特质 Alpha；",
                            "• 3. 跨越 Harvey 稳健防线：全市场 202 股票 100 交易日大底座实测 Harvey t = 3.85 >= 3.0 (p < 0.01)，彻底粉碎伪因子质疑；",
                            "• 4. 真实案例检验：立新能源 (001258) 样本期暴涨 +82.36%，但因特质 Alpha p=0.3543 (IR=0.063 未达标)，系统果断判定 REJECT (拒绝拦截)！"
-                       ], border_color=BORDER_GRAY, bg_color=RGBColor(238, 246, 255), title_color=GREEN_HERO)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=GREEN_HERO)
 
     # 底部学术自律声明
     tb_a5 = s5.shapes.add_textbox(Inches(0.8), Inches(6.1), Inches(11.733), Inches(0.6))
@@ -426,7 +427,7 @@ def build_white_gold_presentation(output_path):
     # Slide 6: 三层解耦总体系统架构图 (插入高清图)
     # ====================================================
     s6 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s6, is_light_gray=True)
+    set_slide_dark_bg(s6, is_light_dark=True)
     add_slide_header(s6, "三层解耦总体架构：定性认知 · 资产定价 · 战术风控 (全景拓扑)", page_str="06 / 18")
 
     img_arch = Path("PPT素材包/03_架构图/解耦三引擎架构图.jpg")
@@ -439,7 +440,7 @@ def build_white_gold_presentation(output_path):
     # Slide 7: Layer 1 · FinEvidence 研报因果事实图谱抽取器
     # ====================================================
     s7 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s7)
+    set_slide_dark_bg(s7)
     add_slide_header(s7, "Layer 1 · FinEvidence 研报因果事实图谱抽取器 (Causal Fact Parser)", page_str="07 / 18")
 
     pillars_fe = [
@@ -450,7 +451,7 @@ def build_white_gold_presentation(output_path):
     for idx, (p_t, p_d) in enumerate(pillars_fe):
         x = Inches(0.8 + idx * 3.98)
         add_financial_card(s7, x, Inches(1.4), Inches(3.78), Inches(2.7),
-                           title=p_t, items=[p_d], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=NAVY_PRIMARY)
+                           title=p_t, items=[p_d], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=BLUE_ACCENT)
 
     # 嵌入知识流水平线图 (等比自适应缩放)
     img_pipe = Path("PPT素材包/03_架构图/知识本体流水线图.png")
@@ -461,7 +462,7 @@ def build_white_gold_presentation(output_path):
     # Slide 8: Layer 2 · Fama-MacBeth 3.0 滚动资产定价
     # ====================================================
     s8 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s8, is_light_gray=True)
+    set_slide_dark_bg(s8, is_light_dark=True)
     add_slide_header(s8, "Layer 2 · Fama-MacBeth 3.0 滚动两阶段回归：剥离风格 Beta，提取特质 Alpha", page_str="08 / 18")
 
     # 左侧公式与说明
@@ -478,7 +479,7 @@ def build_white_gold_presentation(output_path):
                            "• 特质 Alpha 检验 t 统计量显著 (p < 0.05)；",
                            "• 特质信息比率 IR = Alpha / σ(ε) >= 0.30；",
                            "未跨越门槛的标的一律被系统拒绝入池（如立新能源案例）。"
-                       ], border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=NAVY_PRIMARY)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=BLUE_ACCENT)
 
     # 右侧嵌入 Fama-MacBeth 走势图 (等比自适应缩放)
     img_fm = Path("PPT素材包/01_三大板块核心图表/存储-03-滚动FamaMacBeth特质Alpha.png")
@@ -489,7 +490,7 @@ def build_white_gold_presentation(output_path):
     # Slide 9: Layer 2 · NALE 产业链拓扑阻尼网络传导
     # ====================================================
     s9 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s9)
+    set_slide_dark_bg(s9)
     add_slide_header(s9, "Layer 2 · NALE 产业链拓扑图传导：将产业高频信号转化为可定价因子", page_str="09 / 18")
 
     # 左侧五级产业链与阻尼方程
@@ -505,7 +506,7 @@ def build_white_gold_presentation(output_path):
                            "\n【经典阻尼传播方程】：",
                            "  S_NALE = (1 - α) * S_0 + α * (W * S_0),   α = 0.4",
                            "• 领先卖方研报 5 个交易日捕捉上游现货跳涨与海外原厂溢出效应。"
-                       ], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=NAVY_PRIMARY)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=BLUE_ACCENT)
 
     # 右侧嵌入 NALE 散点图 (等比自适应缩放)
     img_nale = Path("PPT素材包/01_三大板块核心图表/存储-04-GFCA因子坐标与NALE散点.png")
@@ -516,7 +517,7 @@ def build_white_gold_presentation(output_path):
     # Slide 10: Layer 3 · Trend Gate™ 战术风控与 C 浪硬门禁
     # ====================================================
     s10 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s10, is_light_gray=True)
+    set_slide_dark_bg(s10, is_light_dark=True)
     add_slide_header(s10, "Layer 3 · Trend Gate™ 战术风控：纯因果波浪状态机与 C 浪清仓硬门禁", page_str="10 / 18")
 
     # 左侧因果波浪与清仓方程
@@ -531,7 +532,7 @@ def build_white_gold_presentation(output_path):
                            "\n【回撤强力腰斩实证】：",
                            "• 存储板块回撤由等权基准 -54.13% 强力压制至 29.14% (佰维单票回撤压至 11.75%)；",
                            "• 绿电板块回撤由 ETF -33.05% 强力压制至 21.54%。"
-                       ], border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=NAVY_PRIMARY)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=BLUE_ACCENT)
 
     # 右侧嵌入佰维 C 浪拦截大图 (等比自适应缩放)
     img_tg = Path("PPT素材包/01_三大板块核心图表/存储-02-TrendGate拦截C浪杀跌(佰维).png")
@@ -542,7 +543,7 @@ def build_white_gold_presentation(output_path):
     # Slide 11: 每日 18:00 投研全流程自动闭环 (7 步全自动化)
     # ====================================================
     s11 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s11)
+    set_slide_dark_bg(s11)
     add_slide_header(s11, "每日 18:00，投研全流程无人值守自动闭环 (7 步全自动化流水线)", page_str="11 / 18")
 
     steps = [
@@ -557,7 +558,7 @@ def build_white_gold_presentation(output_path):
     for idx, (s_t, s_d) in enumerate(steps):
         x = Inches(0.8 + idx * 1.7)
         add_financial_card(s11, x, Inches(1.4), Inches(1.58), Inches(3.6), 
-                           title=s_t, items=[s_d], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=BLUE_ACCENT)
+                           title=s_t, items=[s_d], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=BLUE_ACCENT)
 
     # 底部工程指标
     add_financial_card(s11, Inches(0.8), Inches(5.2), Inches(11.733), Inches(1.7),
@@ -566,13 +567,13 @@ def build_white_gold_presentation(output_path):
                            "• Windows Task Scheduler 定时任务无人值守长跑，集成多数据源自动切换与优雅降级机制；",
                            "• 8% 调仓死区控制将年化换手率压制在 0.15% 以内，全额扣除买 0.125% + 卖 0.175% 真实印花税与摩擦；",
                            "• 投研任务端到端耗时由 4-20 小时压缩至 15 分钟以内，减少 92% 重复人工劳动！"
-                       ], border_color=BORDER_GRAY, bg_color=RGBColor(238, 246, 255), title_color=GREEN_HERO)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD_ALT, title_color=GREEN_HERO)
 
     # ====================================================
     # Slide 12: 技术栈协同架构
     # ====================================================
     s12 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s12, is_light_gray=True)
+    set_slide_dark_bg(s12, is_light_dark=True)
     add_slide_header(s12, "技术栈协同架构：各司其职，构成不可分割的有机投研整体", page_str="12 / 18")
 
     stacks = [
@@ -587,32 +588,32 @@ def build_white_gold_presentation(output_path):
     for idx, (st_t, st_sub, st_d) in enumerate(stacks):
         x = Inches(0.8 + idx * 1.7)
         add_financial_card(s12, x, Inches(1.4), Inches(1.58), Inches(5.5),
-                           title=st_t, items=[f"【{st_sub}】", st_d], border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=NAVY_PRIMARY)
+                           title=st_t, items=[f"【{st_sub}】", st_d], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=BLUE_ACCENT)
 
     # ====================================================
     # Slide 13: 实证一 · A股半导体存储超级周期 (大图大字化)
     # ====================================================
     s13 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s13)
+    set_slide_dark_bg(s13)
     add_slide_header(s13, "实证一 · A股半导体存储超级周期 (2025Q2–2026Q3 物理隔离实测)", page_str="13 / 18")
 
     # 左侧 3 个 Hero Metric 卡片
     add_financial_card(s13, Inches(0.8), Inches(1.4), Inches(3.6), Inches(1.7), 
                        hero_num="+267.35%", hero_label="策略累积收益 (年化 +218.23%)", 
                        title="", items=["显著击败芯片 ETF (+98.90%) 与存储 5 股等权 (+159.20%)"], 
-                       border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, hero_color=GREEN_HERO)
+                       border_color=BORDER_DARK, bg_color=BG_CARD, hero_color=GREEN_HERO)
 
     add_financial_card(s13, Inches(0.8), Inches(3.2), Inches(3.6), Inches(1.7),
                        hero_num="2.51", hero_label="年化夏普比率 (Sharpe Ratio)",
                        title="", items=["卡尔玛比率 7.49，收益风险比极佳"],
-                       border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, hero_color=BLUE_ACCENT)
+                       border_color=BORDER_DARK, bg_color=BG_CARD, hero_color=BLUE_ACCENT)
 
     add_financial_card(s13, Inches(0.8), Inches(5.0), Inches(3.6), Inches(1.9),
                        hero_num="29.14%", hero_label="最大动态回撤 (Max Drawdown)",
                        title="", items=["存储等权死拿最大回撤达 -54.13% (腰斩暴跌)，系统压降 25 个百分点"],
-                       border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, hero_color=RED_HERO)
+                       border_color=BORDER_DARK, bg_color=BG_CARD, hero_color=RED_HERO)
 
-    # Slide 13: 右侧嵌入存储净值与回撤大图 (等比自适应缩放)
+    # 右侧嵌入存储净值与回撤大图 (等比自适应缩放)
     img_s1 = Path("PPT素材包/01_三大板块核心图表/存储-01-净值曲线与回撤.png")
     if img_s1.exists():
         add_picture_contain(s13, img_s1, Inches(4.6), Inches(1.4), Inches(7.933), Inches(5.5), draw_card_bg=True)
@@ -621,7 +622,7 @@ def build_white_gold_presentation(output_path):
     # Slide 14: 实证二与三 · 黄金地缘避险与绿电公用事业实测
     # ====================================================
     s14 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s14, is_light_gray=True)
+    set_slide_dark_bg(s14, is_light_dark=True)
     add_slide_header(s14, "实证二与三 · 黄金地缘避险与绿电公用事业实测 (跨周期多板块验证)", page_str="14 / 18")
 
     # 左侧黄金板块大图与指标
@@ -632,7 +633,7 @@ def build_white_gold_presentation(output_path):
     add_financial_card(s14, Inches(0.8), Inches(5.8), Inches(5.7), Inches(1.2),
                        title="黄金避险：累积 +94.84% (年化 +105.82%)，夏普 1.67",
                        items=["相对黄金 ETF (+28.22%) 斩获 +66.62% 显著超额，规避等权 -49.76% 杀跌。"],
-                       border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=GOLD_HERO)
+                       border_color=BORDER_DARK, bg_color=BG_CARD, title_color=GOLD_HERO)
 
     # 右侧绿电板块大图与指标
     img_gr1 = Path("PPT素材包/01_三大板块核心图表/绿电-01-净值曲线与回撤.png")
@@ -642,13 +643,13 @@ def build_white_gold_presentation(output_path):
     add_financial_card(s14, Inches(6.8), Inches(5.8), Inches(5.7), Inches(1.2),
                        title="绿电公用事业：累积 +56.09% (年化 +59.33%)，夏普 1.19",
                        items=["重仓宁德时代/立新能源，相对绿电 ETF (+7.59%) 斩获 +48.50% 超额，回撤压至 24.90%。"],
-                       border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=GREEN_HERO)
+                       border_color=BORDER_DARK, bg_color=BG_CARD, title_color=GREEN_HERO)
 
     # ====================================================
     # Slide 15: 实证四 · 全市场 202 股票 100 交易日因果大底座无偏实证
     # ====================================================
     s15 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s15)
+    set_slide_dark_bg(s15)
     add_slide_header(s15, "实证四 · 全市场 202 支股票 100 交易日因果大底座无偏实证 (破除幸存者偏差)", page_str="15 / 18")
 
     # 左侧 2 个 Hero Metric 卡片
@@ -659,7 +660,7 @@ def build_white_gold_presentation(output_path):
                            "• 独立因果预测样本总量：19,998 个日频样本点；",
                            "• 强势跨越国际顶刊公认的 |t| >= 3.0 伪因子防线；",
                            "• 扣费调仓胜率 48.50%，真实盈亏比 1.25。"
-                       ], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, hero_color=NAVY_PRIMARY)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, hero_color=BLUE_ACCENT)
 
     add_financial_card(s15, Inches(0.8), Inches(4.15), Inches(3.6), Inches(2.75),
                        hero_num="0.2481", hero_label="Brier Score 概率预测校准度 (<0.25 优秀)",
@@ -669,7 +670,7 @@ def build_white_gold_presentation(output_path):
                            "• 蓝筹价值 +21.80% | 防御保守 +18.90%",
                            "• 均衡稳健 +12.40% | 激进成长 +10.20%",
                            "• 同期沪深 300 下跌 -4.10%，全线斩获显著超额！"
-                       ], border_color=BORDER_GRAY, bg_color=RGBColor(238, 246, 255), hero_color=GREEN_HERO)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, hero_color=GREEN_HERO)
 
     # 右侧嵌入 202 股票 6 组合全景对比大图 (等比自适应缩放)
     img_u = Path("PPT素材包/02_全池与校准/全池-202股6组合净值对比.png")
@@ -680,7 +681,7 @@ def build_white_gold_presentation(output_path):
     # Slide 16: 达观数据 10 项核心考核指标达标总成绩单 (高管仪表盘架构)
     # ====================================================
     s16 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s16, is_light_gray=True)
+    set_slide_dark_bg(s16, is_light_dark=True)
     add_slide_header(s16, "达观数据 10 项核心考核指标达标总成绩单 (100% 超额达成矩阵)", page_str="16 / 18")
 
     # 1. 顶部 4 联 Hero Metric 高光卡片
@@ -694,8 +695,8 @@ def build_white_gold_presentation(output_path):
         x = Inches(0.8 + idx * 2.98)
         shape_c = s16.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, x, Inches(1.35), Inches(2.78), Inches(1.4))
         shape_c.fill.solid()
-        shape_c.fill.fore_color.rgb = BG_WHITE
-        shape_c.line.color.rgb = BORDER_GRAY
+        shape_c.fill.fore_color.rgb = BG_CARD
+        shape_c.line.color.rgb = BORDER_DARK
         shape_c.line.width = Pt(0.75)
 
         tb_c = s16.shapes.add_textbox(x + Inches(0.1), Inches(1.42), Inches(2.58), Inches(1.25))
@@ -715,13 +716,13 @@ def build_white_gold_presentation(output_path):
         p_t.font.name = FONT_CN
         p_t.font.size = Pt(11)
         p_t.font.bold = True
-        p_t.font.color.rgb = NAVY_PRIMARY
+        p_t.font.color.rgb = TEXT_WHITE
 
         p_s = tf_c.add_paragraph()
         p_s.text = h_sub
         p_s.font.name = FONT_CN
         p_s.font.size = Pt(8.5)
-        p_s.font.color.rgb = SLATE_MUTED
+        p_s.font.color.rgb = TEXT_MUTED
 
     # 2. 下半部分：精美金融级评分对照表格 (Financial Scorecard Table)
     table_headers = [("达观命题考核指标", Inches(3.2)), ("命题门槛", Inches(1.5)), ("Rainbow-FinGPT 实测", Inches(2.2)), ("达标评价", Inches(1.5)), ("核心依据与实证说明", Inches(3.333))]
@@ -752,18 +753,18 @@ def build_white_gold_presentation(output_path):
     for c_i, (h_name, _) in enumerate(table_headers):
         cell = table.cell(0, c_i)
         cell.fill.solid()
-        cell.fill.fore_color.rgb = NAVY_PRIMARY
+        cell.fill.fore_color.rgb = BG_HEADER_TINT
         p = cell.text_frame.paragraphs[0]
         p.text = h_name
         p.font.name = FONT_CN
         p.font.size = Pt(9.5)
         p.font.bold = True
-        p.font.color.rgb = BG_WHITE
+        p.font.color.rgb = BLUE_ACCENT
         p.alignment = PP_ALIGN.CENTER if c_i in [1, 2, 3] else PP_ALIGN.LEFT
 
     # 填充数据行
     for r_i, row_items in enumerate(table_data):
-        bg_row = BG_LIGHT_GRAY if r_i % 2 == 0 else BG_WHITE
+        bg_row = BG_CARD if r_i % 2 == 0 else BG_CARD_ALT
         for c_i, val in enumerate(row_items):
             cell = table.cell(r_i + 1, c_i)
             cell.fill.solid()
@@ -772,14 +773,14 @@ def build_white_gold_presentation(output_path):
             p.text = val
             p.font.name = FONT_CN if c_i != 2 else FONT_NUM
             p.font.size = Pt(9.0)
-            p.font.color.rgb = GREEN_HERO if "🌟" in val or c_i == 2 else (NAVY_PRIMARY if c_i == 0 else SLATE_DARK)
+            p.font.color.rgb = GREEN_HERO if "🌟" in val or c_i == 2 else (TEXT_WHITE if c_i == 0 else TEXT_PRIMARY)
             p.alignment = PP_ALIGN.CENTER if c_i in [1, 2, 3] else PP_ALIGN.LEFT
 
     # ====================================================
     # Slide 17: 典型案例 · 涨了 +82.36%，系统为何依然果断判定 REJECT？
     # ====================================================
     s17 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s17)
+    set_slide_dark_bg(s17)
     add_slide_header(s17, "学术诚信与风控边界：涨了 +82.36%，系统为何依然果断拒绝？", page_str="17 / 18")
 
     # 左侧拒绝原因
@@ -795,7 +796,7 @@ def build_white_gold_presentation(output_path):
                            "• 暴涨完全来自全市场绿电特高压 Beta 风格漂移，无个股超额；",
                            "\n【门禁裁决】：",
                            "Alpha 门控判定 REJECT (拒绝入池)！在后续退潮中立新能源回撤剧烈，系统成功避免追高被套亏损，展现严密的学术诚信！"
-                       ], border_color=BORDER_GRAY, bg_color=BG_LIGHT_GRAY, title_color=RED_HERO)
+                       ], border_color=BORDER_DARK, bg_color=BG_CARD, title_color=RED_HERO)
 
     # 右侧嵌入立新能源波浪分析大图 (等比自适应缩放)
     img_lx = Path("PPT素材包/02_全池与校准/失败案例-立新能源001258波浪分析.png")
@@ -806,7 +807,7 @@ def build_white_gold_presentation(output_path):
     # Slide 18: 终章大总结 · 产教协同重塑投研生态
     # ====================================================
     s18 = prs.slides.add_slide(blank_layout)
-    set_slide_white_bg(s18, is_light_gray=True)
+    set_slide_dark_bg(s18, is_light_dark=True)
     add_slide_header(s18, "终章总结：产教协同重塑投研生态，打造工业级自主量化智能体", page_str="18 / 18")
 
     cols_end = [
@@ -815,12 +816,12 @@ def build_white_gold_presentation(output_path):
             "• 首创三层解耦架构，攻克大模型数值幻觉与时序泄漏；",
             "• 3 大垂直出版级研报 + 202 股票 100 日大底座 (Harvey t=3.85)；",
             "• 13 页 Master 白皮书与实证研报全量开源。"
-        ], NAVY_PRIMARY),
+        ], BLUE_ACCENT),
         ("2. 商业化落地路径", [
             "• 达观‘曹植大模型’垂直插件：作为量化中台赋能券商与私募；",
             "• 单篇研报复现由 4-20h 压缩至 15 分钟，降低 90% 劳务成本；",
             "• 低费率 AI 增强组合：省去 1.5%~2.0% 主动管理费，年摩擦仅 0.15%。"
-        ], BLUE_ACCENT),
+        ], TEXT_WHITE),
         ("3. 华师阿伯丁学院团队", [
             "• 团队依托：华南师范大学阿伯丁数据科学与人工智能学院；",
             "• 学科交叉：信管、数科、AI 与数理金融跨学科深度融合；",
@@ -830,7 +831,7 @@ def build_white_gold_presentation(output_path):
     for idx, (c_t, c_items, c_col) in enumerate(cols_end):
         x = Inches(0.8 + idx * 3.98)
         add_financial_card(s18, x, Inches(1.4), Inches(3.78), Inches(4.5),
-                           title=c_t, items=c_items, border_color=BORDER_GRAY, bg_color=BG_WHITE, title_color=c_col)
+                           title=c_t, items=c_items, border_color=BORDER_DARK, bg_color=BG_CARD, title_color=c_col)
 
     # 底部学术与免责声明
     tb_e = s18.shapes.add_textbox(Inches(0.8), Inches(6.1), Inches(11.733), Inches(0.6))
@@ -838,13 +839,13 @@ def build_white_gold_presentation(output_path):
     p_e.text = "🏆 华南师范大学阿伯丁数据科学与人工智能学院 · 达观数据产学研联合答卷 | 历史回测与模拟盘不代表未来收益，不构成投资建议"
     p_e.font.name = FONT_CN
     p_e.font.size = Pt(10)
-    p_e.font.color.rgb = SLATE_MUTED
+    p_e.font.color.rgb = TEXT_MUTED
 
     # 保存 PPTX
     out_dir = Path(output_path).parent
     out_dir.mkdir(parents=True, exist_ok=True)
     prs.save(output_path)
-    print(f"Generated High-End Financial White PPT: {output_path}")
+    print(f"Generated High-End Financial Dark Navy PPT: {output_path}")
 
     # 同步保存大创.pptx
     try:
@@ -857,4 +858,4 @@ def build_white_gold_presentation(output_path):
 
 if __name__ == "__main__":
     out_file = "2026中国国际大学生创新大赛_网评路演PPT_Rainbow-FinGPT.pptx"
-    build_white_gold_presentation(out_file)
+    build_dark_financial_presentation(out_file)
