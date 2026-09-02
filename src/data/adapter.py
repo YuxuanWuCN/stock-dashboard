@@ -11,10 +11,12 @@ from __future__ import annotations
 
 import logging
 import os
+import re
 import sqlite3
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -23,6 +25,7 @@ from src.analysis.factor_providers import (
     BaseFactorProvider,
     AkshareProxyFactorProvider,
     KennethFrenchFactorProvider,
+    CSMARFactorProvider,
     WindCSMARStubProvider,
     EastMoneyMiaoXiangProvider,
     SCNUAcademicFactorProvider
@@ -56,18 +59,110 @@ class UnifiedDataAdapter:
     STANDARD_FACTOR_COLS = ["MKT", "SMB", "HML", "MOM", "rf"]
     EXTENDED_FLOW_COLS = ["LARGE_ORDER_INFLOW", "NORTHBOUND_DELTA", "INST_SEAT_RATIO"]
 
+    @staticmethod
+    def _normalise_date_bound(value: Any, label: str) -> pd.Timestamp:
+        """解析边界日期，避免 Pandas 将 YYYYMMDD 整数当成纳秒。"""
+        if value is None or (isinstance(value, str) and not value.strip()):
+            raise ValueError(f"{label} 不能为空")
+        candidate = value.strip() if isinstance(value, str) else value
+        if isinstance(candidate, (bool, np.bool_)):
+            raise ValueError(f"{label} 不是合法日期: {value!r}")
+        if isinstance(candidate, (int, np.integer)):
+            text = str(int(candidate))
+            if not re.fullmatch(r"\d{8}", text):
+                raise ValueError(f"{label} 不是合法日期: {value!r}")
+            parsed = pd.to_datetime(text, format="%Y%m%d", errors="coerce")
+        elif isinstance(candidate, (float, np.floating)):
+            if not np.isfinite(float(candidate)) or float(candidate) != int(candidate):
+                raise ValueError(f"{label} 不是合法日期: {value!r}")
+            text = str(int(candidate))
+            if not re.fullmatch(r"\d{8}", text):
+                raise ValueError(f"{label} 不是合法日期: {value!r}")
+            parsed = pd.to_datetime(text, format="%Y%m%d", errors="coerce")
+        elif isinstance(candidate, str) and re.fullmatch(r"\d{8}", candidate):
+            parsed = pd.to_datetime(candidate, format="%Y%m%d", errors="coerce")
+        else:
+            parsed = pd.to_datetime(candidate, errors="coerce")
+        if pd.isna(parsed):
+            raise ValueError(f"{label} 不是合法日期: {value!r}")
+        timestamp = pd.Timestamp(parsed)
+        if timestamp.tzinfo is not None:
+            timestamp = timestamp.tz_localize(None)
+        return timestamp.normalize()
+
     def __init__(
         self,
         mode: str = "dual_track",  # 'academic_4factor', 'production_7factor', 'dual_track', 'school_scnu'
-        cache_db: Optional[str | Path] = None
+        cache_db: Optional[str | Path] = None,
+        csmar_provider: Optional[BaseFactorProvider] = None,
+        scnu_provider: Optional[BaseFactorProvider] = None,
+        csmar_connection_params: Optional[Dict[str, Any]] = None,
+        school_factor_dir: Optional[str | Path] = None,
+        csmar_service: Any = None,
+        csmar_query: Optional[Callable[..., Any]] = None,
+        csmar_service_factory: Optional[Callable[..., Any]] = None,
+        csmar_query_method: Optional[str] = None,
+        csmar_query_params: Optional[Dict[str, Any]] = None,
+        csmar_expected_trading_dates: Optional[Iterable[Any]] = None,
+        school_expected_trading_dates: Optional[Iterable[Any]] = None,
+        expected_trading_dates: Optional[Iterable[Any]] = None,
     ):
-        self.mode = mode
+        self.mode = str(mode).strip().lower()
+        # ``expected_trading_dates`` 是便捷别名；显式的市场参数优先。
+        def freeze_calendar(value: Optional[Iterable[Any]]) -> Optional[tuple[Any, ...]]:
+            if value is None:
+                return None
+            if isinstance(value, (str, bytes, Mapping)):
+                raise ValueError(
+                    "expected_trading_dates 必须是日期序列，不能是字符串或映射"
+                )
+            try:
+                return tuple(value)
+            except TypeError as exc:
+                raise ValueError("expected_trading_dates 必须是可迭代日期序列") from exc
+
+        shared_expected = freeze_calendar(expected_trading_dates)
+        csmar_expected_trading_dates = freeze_calendar(csmar_expected_trading_dates)
+        school_expected_trading_dates = freeze_calendar(school_expected_trading_dates)
+        if csmar_expected_trading_dates is None:
+            csmar_expected_trading_dates = shared_expected
+        if school_expected_trading_dates is None:
+            school_expected_trading_dates = shared_expected
+        self.csmar_expected_trading_dates = csmar_expected_trading_dates
+        self.school_expected_trading_dates = school_expected_trading_dates
         self.cache_db = str(cache_db or Path("data/cache/unified_adapter.db"))
         self.cn_provider = AkshareProxyFactorProvider(db_path=self.cache_db)
         self.us_provider = KennethFrenchFactorProvider(cache_dir=Path("data/cache/kenneth_french"))
         self.eastmoney_provider = EastMoneyMiaoXiangProvider(db_path=self.cache_db)
-        self.csmar_provider = WindCSMARStubProvider(backend_type="csmar")
-        self.scnu_provider = SCNUAcademicFactorProvider(data_dir="data/school_factors")
+        # CSMAR 是学校提供的可选依赖。默认模式不导入 SDK，官方模式则必须
+        # 明确查询成功，不能回退为开源代理或合成数据。
+        self.csmar_provider = (
+            csmar_provider
+            if csmar_provider is not None
+            else CSMARFactorProvider(
+                service=csmar_service,
+                query=csmar_query,
+                service_factory=csmar_service_factory,
+                query_method=csmar_query_method,
+                query_params=csmar_query_params,
+                connection_params=csmar_connection_params,
+                expected_trading_dates=csmar_expected_trading_dates,
+            )
+        )
+        self.scnu_provider = (
+            scnu_provider
+            if scnu_provider is not None
+            else SCNUAcademicFactorProvider(
+                data_dir=school_factor_dir or "data/school_factors",
+                strict=self.mode in {"school_scnu", "scnu", "school"},
+                api_provider=(
+                    self.csmar_provider
+                    if self.mode in {"school_scnu", "scnu", "school"}
+                    else None
+                ),
+                expected_trading_dates=school_expected_trading_dates,
+            )
+        )
         self._ensure_cache()
 
 
@@ -91,6 +186,86 @@ class UnifiedDataAdapter:
             """)
             conn.commit()
 
+    def _factor_frame_to_index(
+        self,
+        frame: pd.DataFrame,
+        *,
+        source: str,
+        start_date: Any,
+        end_date: Any,
+        include_micro_flows: bool,
+        expected_trading_dates: Optional[Iterable[Any]] = None,
+    ) -> pd.DataFrame:
+        """校验官方 provider 输出并转为按自然日索引的标准矩阵。"""
+        start = self._normalise_date_bound(start_date, "start_date")
+        end = self._normalise_date_bound(end_date, "end_date")
+        if start > end:
+            raise ValueError("start_date 不能晚于 end_date")
+
+        if not isinstance(frame, pd.DataFrame):
+            raise ValueError(f"{source} 返回类型不是 DataFrame")
+        if frame.empty:
+            if expected_trading_dates is not None:
+                validator = CSMARFactorProvider(
+                    expected_trading_dates=expected_trading_dates,
+                    source=source,
+                )
+                expected = validator._normalise_expected_dates(start, end)
+                if expected is not None and expected.empty:
+                    empty = pd.DataFrame(
+                        columns=self.STANDARD_FACTOR_COLS,
+                        index=pd.DatetimeIndex([], name="date"),
+                    )
+                    empty.attrs["coverage_verified"] = True
+                    return empty
+                if expected is not None:
+                    validator._validate_expected_coverage([], expected, source=source)
+            raise ValueError(f"{source} 返回空结果，不能使用回退因子")
+
+        required = ["date", *self.STANDARD_FACTOR_COLS]
+        missing = [column for column in required if column not in frame.columns]
+        if missing:
+            raise ValueError(f"{source} 返回缺少标准列: {', '.join(missing)}")
+
+        result = frame.copy()
+        parsed_dates: List[pd.Timestamp | pd.NaT] = []
+        for value in result["date"]:
+            try:
+                parsed_dates.append(self._normalise_date_bound(value, "date"))
+            except (TypeError, ValueError, OverflowError):
+                parsed_dates.append(pd.NaT)
+        result["date"] = pd.Series(parsed_dates, index=result.index)
+        if result["date"].isna().any():
+            raise ValueError(f"{source} 返回非法日期")
+        if result["date"].duplicated().any():
+            raise ValueError(f"{source} 返回重复日期")
+        for column in self.STANDARD_FACTOR_COLS:
+            result[column] = pd.to_numeric(result[column], errors="coerce")
+            if result[column].isna().any() or not np.isfinite(result[column].to_numpy()).all():
+                raise ValueError(f"{source} 返回列 {column} 的非法数值")
+        result = result.loc[(result["date"] >= start) & (result["date"] <= end)].copy()
+        if result.empty:
+            raise ValueError(f"{source} 没有落在请求日期范围内的记录")
+        if expected_trading_dates is not None:
+            validator = CSMARFactorProvider(
+                expected_trading_dates=expected_trading_dates,
+                source=source,
+            )
+            expected = validator._normalise_expected_dates(start, end)
+            # ``expected`` 只能为 None when the input itself is None, which is
+            # ruled out above; the guard keeps type checkers and callers clear.
+            if expected is not None:
+                validator._validate_expected_coverage(
+                    result["date"], expected, source=source
+                )
+        result = result.sort_values("date").set_index("date")
+        columns = list(self.STANDARD_FACTOR_COLS)
+        if include_micro_flows:
+            columns += [
+                column for column in self.EXTENDED_FLOW_COLS if column in result.columns
+            ]
+        return result[columns]
+
     def get_market_factors(
         self,
         start_date: str,
@@ -109,11 +284,35 @@ class UnifiedDataAdapter:
         Returns:
             pd.DataFrame: 包含 date 索引与标准因子列的 DataFrame
         """
-        if market.upper() == "US":
+        market = str(market).strip().upper()
+        if market == "US":
             df = self.us_provider.get_daily_factors(start_date, end_date)
             df["date"] = pd.to_datetime(df["date"])
             df.set_index("date", inplace=True)
             return df[self.STANDARD_FACTOR_COLS]
+
+        if market != "CN":
+            raise ValueError(f"不支持的市场标识: {market!r}，仅支持 CN 或 US")
+
+        if self.mode in {"csmar", "school_csmar", "academic_csmar"}:
+            return self._factor_frame_to_index(
+                self.csmar_provider.get_daily_factors(start_date, end_date),
+                source="CSMAR",
+                start_date=start_date,
+                end_date=end_date,
+                include_micro_flows=False,
+                expected_trading_dates=self.csmar_expected_trading_dates,
+            )
+
+        if self.mode in {"school_scnu", "scnu", "school"}:
+            return self._factor_frame_to_index(
+                self.scnu_provider.get_daily_factors(start_date, end_date),
+                source="SCNU",
+                start_date=start_date,
+                end_date=end_date,
+                include_micro_flows=False,
+                expected_trading_dates=self.school_expected_trading_dates,
+            )
 
         # A 股市场
         if include_micro_flows and self.mode in ("production_7factor", "dual_track"):

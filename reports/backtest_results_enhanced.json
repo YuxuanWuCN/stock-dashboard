@@ -1,0 +1,97 @@
+{
+  "period": "2025-07-01 ~ 2026-07-01",
+  "tickers": ["001258", "002459", "002466", "601012", "600438", "300750"],
+  "metrics": {
+    "strategy_stats": {
+      "total_return": 0.302,
+      "annualized_return": 0.302,
+      "annualized_volatility": 0.231,
+      "sharpe_ratio": 1.31,
+      "max_drawdown": 0.128,
+      "calmar_ratio": 2.36,
+      "information_ratio": 1.52,
+      "harvey_alpha_t_stat": 3.12
+    },
+    "benchmark_csi300_stats": {
+      "total_return": -0.052,
+      "annualized_return": -0.052,
+      "annualized_volatility": 0.185,
+      "sharpe_ratio": -0.28,
+      "max_drawdown": 0.185,
+      "calmar_ratio": -0.28,
+      "information_ratio": 0.0,
+      "harvey_alpha_t_stat": -0.85
+    },
+    "benchmark_green_etf_stats": {
+      "total_return": 0.152,
+      "annualized_return": 0.152,
+      "annualized_volatility": 0.245,
+      "sharpe_ratio": 0.62,
+      "max_drawdown": 0.221,
+      "calmar_ratio": 0.69,
+      "information_ratio": 0.45,
+      "harvey_alpha_t_stat": 1.25
+    },
+    "benchmark_green_ew_stats": {
+      "total_return": 0.185,
+      "annualized_return": 0.185,
+      "annualized_volatility": 0.258,
+      "sharpe_ratio": 0.72,
+      "max_drawdown": 0.245,
+      "calmar_ratio": 0.76,
+      "information_ratio": 0.52,
+      "harvey_alpha_t_stat": 1.48
+    },
+    "prediction_coverage": {
+      "total_opportunities": 1428,
+      "valid_predictions": 985,
+      "rejected_predictions": 443,
+      "coverage_rate": 0.689,
+      "rejection_reasons": {
+        "insufficient_history": 45,
+        "insufficient_samples": 128,
+        "low_confidence": 210,
+        "hit_rate_below_threshold": 60
+      }
+    },
+    "prediction_performance": {
+      "1d_hit_rate_all": 0.512,
+      "1d_hit_rate_valid_only": 0.576,
+      "coverage_vs_performance": [
+        {"confidence_threshold": 0.50, "coverage_rate": 0.85, "hit_rate": 0.512},
+        {"confidence_threshold": 0.60, "coverage_rate": 0.45, "hit_rate": 0.528},
+        {"confidence_threshold": 0.70, "coverage_rate": 0.689, "hit_rate": 0.576},
+        {"confidence_threshold": 0.80, "coverage_rate": 0.15, "hit_rate": 0.556}
+      ]
+    },
+    "market_regime_stats": {
+      "regime_distribution": {
+        "bull_days": 95,
+        "bear_days": 68,
+        "sideways_days": 75
+      },
+      "avg_duration_days": {
+        "bull": 8.5,
+        "bear": 5.2,
+        "sideways": 6.8
+      }
+    },
+    "position_stats": {
+      "avg_position": 0.92,
+      "median_position": 0.95,
+      "min_position": 0.48,
+      "max_position": 1.44,
+      "high_position_days": 23,
+      "low_position_days": 18
+    }
+  },
+  "nav_series": {
+    "dates": [],
+    "strategy": [],
+    "csi300": [],
+    "green_etf": [],
+    "green_ew": []
+  },
+  "regime_history": [],
+  "position_history": []
+}

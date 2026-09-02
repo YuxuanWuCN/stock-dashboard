@@ -1,8 +1,15 @@
-"""DeepSeek 客户端与 FinGPT 适配器的离线契约测试。"""
-
 import logging
-from types import SimpleNamespace
+import sys
+from types import ModuleType, SimpleNamespace
 from unittest.mock import Mock, patch
+
+if "openai" not in sys.modules:
+    try:
+        import openai
+    except ImportError:
+        mock_openai_module = ModuleType("openai")
+        mock_openai_module.OpenAI = Mock()
+        sys.modules["openai"] = mock_openai_module
 
 import pytest
 

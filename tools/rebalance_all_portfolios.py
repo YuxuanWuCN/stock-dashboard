@@ -295,7 +295,7 @@ def robust_candidates(ranking):
         if score is None:
             score = 0.0
 
-        if risk < 40 and (up3 is None or up3 >= 50):
+        if risk < 40 and (up3 is None or up3 > 50):
             candidates.append({
                 'code': item['code'],
                 'name': item['name'],

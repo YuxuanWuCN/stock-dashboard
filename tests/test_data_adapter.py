@@ -9,6 +9,18 @@ from pathlib import Path
 from src.data.adapter import UnifiedDataAdapter, MarketDataPacket
 
 
+class _InjectedFactorProvider:
+    """离线 provider fake，用于验证官方模式的路由而非网络行为。"""
+
+    def __init__(self, frame):
+        self.frame = frame
+        self.calls = []
+
+    def get_daily_factors(self, start_date, end_date):
+        self.calls.append((start_date, end_date))
+        return self.frame.copy()
+
+
 def test_unified_data_adapter_factors(tmp_path):
     """测试多市场因子数据获取与列规范对齐。"""
     cache_db = tmp_path / "test_adapter.db"
@@ -78,6 +90,7 @@ def test_scnu_academic_factor_provider(tmp_path):
         "RiskPremium1": 0.0015,
         "SMB1": 0.0008,
         "HML1": -0.0004,
+        "UMD1": 0.0002,
         "RiskFreeRate": 0.0001
     })
     df_csmar.to_csv(csmar_csv, index=False)
@@ -91,3 +104,155 @@ def test_scnu_academic_factor_provider(tmp_path):
     assert factors_df["MKT"].iloc[0] == pytest.approx(0.0015)
     assert factors_df["SMB"].iloc[0] == pytest.approx(0.0008)
 
+
+def _official_factor_frame():
+    return pd.DataFrame(
+        {
+            "date": ["2024-01-02", "2024-01-01"],
+            "MKT": [0.002, 0.001],
+            "SMB": [0.001, 0.0005],
+            "HML": [-0.001, -0.0005],
+            "MOM": [0.003, 0.002],
+            "rf": [0.0001, 0.0001],
+        }
+    )
+
+
+def test_csmar_mode_routes_to_injected_provider_without_open_data_fallback(tmp_path):
+    csmar = _InjectedFactorProvider(_official_factor_frame())
+    adapter = UnifiedDataAdapter(
+        mode="csmar", cache_db=tmp_path / "csmar_route.db", csmar_provider=csmar
+    )
+
+    result = adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
+
+    assert result.columns.tolist() == ["MKT", "SMB", "HML", "MOM", "rf"]
+    assert result.index.strftime("%Y-%m-%d").tolist() == ["2024-01-01", "2024-01-02"]
+    assert csmar.calls == [("2024-01-01", "2024-01-02")]
+
+
+def test_school_scnu_mode_uses_api_provider_when_no_local_export(tmp_path):
+    csmar = _InjectedFactorProvider(_official_factor_frame())
+    adapter = UnifiedDataAdapter(
+        mode="school_scnu",
+        cache_db=tmp_path / "scnu_api.db",
+        school_factor_dir=tmp_path / "missing_school_factors",
+        csmar_provider=csmar,
+    )
+
+    result = adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
+
+    assert len(result) == 2
+    assert csmar.calls == [("2024-01-01", "2024-01-02")]
+
+
+def test_school_scnu_mode_prefers_injected_local_provider(tmp_path):
+    school = _InjectedFactorProvider(_official_factor_frame())
+    csmar = _InjectedFactorProvider(_official_factor_frame())
+    adapter = UnifiedDataAdapter(
+        mode="school_scnu",
+        cache_db=tmp_path / "school_route.db",
+        scnu_provider=school,
+        csmar_provider=csmar,
+    )
+
+    adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
+
+    assert school.calls == [("2024-01-01", "2024-01-02")]
+    assert csmar.calls == []
+
+
+@pytest.mark.parametrize(
+    "frame, message",
+    [
+        (pd.DataFrame(), "空结果"),
+        (_official_factor_frame().drop(columns=["MOM"]), "缺少标准列"),
+    ],
+)
+def test_official_mode_rejects_invalid_response_without_fallback(tmp_path, frame, message):
+    provider = _InjectedFactorProvider(frame)
+    adapter = UnifiedDataAdapter(
+        mode="csmar", cache_db=tmp_path / "csmar_invalid.db", csmar_provider=provider
+    )
+    with pytest.raises(ValueError, match=message):
+        adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
+
+
+def test_official_adapter_normalizes_yyyymmdd_and_rejects_intraday_duplicates(tmp_path):
+    frame = _official_factor_frame()
+    frame["date"] = [20240101, 20240102]
+    provider = _InjectedFactorProvider(frame)
+    adapter = UnifiedDataAdapter(
+        mode="csmar", cache_db=tmp_path / "numeric_dates.db", csmar_provider=provider
+    )
+    result = adapter.get_market_factors(20240101, 20240102, market="CN")
+    assert result.index.strftime("%Y-%m-%d").tolist() == ["2024-01-01", "2024-01-02"]
+
+    duplicate = _official_factor_frame()
+    duplicate["date"] = ["2024-01-01 09:30:00", "2024-01-01 18:00:00"]
+    duplicate_provider = _InjectedFactorProvider(duplicate)
+    duplicate_adapter = UnifiedDataAdapter(
+        mode="csmar", cache_db=tmp_path / "duplicate_dates.db", csmar_provider=duplicate_provider
+    )
+    with pytest.raises(ValueError, match="重复日期"):
+        duplicate_adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
+
+
+def test_adapter_exposes_csmar_connection_and_query_configuration(tmp_path):
+    service = object()
+    query = lambda *_: _official_factor_frame()
+    adapter = UnifiedDataAdapter(
+        mode="csmar",
+        cache_db=tmp_path / "csmar_options.db",
+        csmar_service=service,
+        csmar_query=query,
+        csmar_service_factory=lambda: service,
+        csmar_query_method="fetch_factors",
+        csmar_query_params={"table_name": "STK_MKT_Thrfac"},
+        csmar_connection_params={"username": "demo", "password": "secret"},
+    )
+
+    provider = adapter.csmar_provider
+    assert provider.service is service
+    assert provider.query is query
+    assert provider.service_factory is not None
+    assert provider.query_method == "fetch_factors"
+    assert provider.query_params == {"table_name": "STK_MKT_Thrfac"}
+    assert provider.connection_params == {"username": "demo", "password": "secret"}
+
+
+def test_adapter_rejects_unknown_market(tmp_path):
+    adapter = UnifiedDataAdapter(mode="csmar", cache_db=tmp_path / "market.db")
+    with pytest.raises(ValueError, match="仅支持 CN 或 US"):
+        adapter.get_market_factors("2024-01-01", "2024-01-02", market="EU")
+
+
+def test_strict_school_provider_rejects_missing_or_duplicate_local_data(tmp_path):
+    from src.analysis.factor_providers import CSMARDataError, SCNUAcademicFactorProvider
+
+    missing = SCNUAcademicFactorProvider(
+        data_dir=tmp_path / "missing_school_factors", strict=True
+    )
+    with pytest.raises(CSMARDataError, match="未在|覆盖"):
+        missing.get_daily_factors("2024-01-01", "2024-01-02")
+
+    school_dir = tmp_path / "duplicate_school_factors"
+    school_dir.mkdir()
+    duplicate = _official_factor_frame()
+    duplicate.loc[1, "date"] = duplicate.loc[0, "date"]
+    duplicate.to_csv(school_dir / "factors.csv", index=False)
+    provider = SCNUAcademicFactorProvider(data_dir=school_dir, strict=True)
+    with pytest.raises(CSMARDataError, match="重复日期"):
+        provider.get_daily_factors("2024-01-01", "2024-01-02")
+
+
+def test_official_adapter_applies_explicit_trading_calendar_to_injected_provider(tmp_path):
+    partial = _InjectedFactorProvider(_official_factor_frame().iloc[:1])
+    adapter = UnifiedDataAdapter(
+        mode="csmar",
+        cache_db=tmp_path / "calendar_route.db",
+        csmar_provider=partial,
+        csmar_expected_trading_dates=["2024-01-01", "2024-01-02"],
+    )
+    with pytest.raises(ValueError, match="缺失日期"):
+        adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
