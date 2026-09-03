@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "688598",
   "name": "金博股份",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 39.8,
-    "risk": 73.5,
-    "technical": 100.0,
-    "industry": 65.0,
+    "risk_adjusted": 47.4,
+    "risk": 72.7,
+    "technical": 90.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,96 +34,134 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:18"
+    "updated_at": "2026-08-28 10:15:57"
+  },
+  "nale_network": {
+    "sector_name": "热点龙头",
+    "sector_breadth_pct": 32.0,
+    "tier_role": "neutral",
+    "leader_stock": {
+      "code": "301591",
+      "name": "肯特股份",
+      "change_pct": 17.142857142857146,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "301630",
+        "name": "同宇新材",
+        "corr": 0.68
+      },
+      {
+        "code": "300004",
+        "name": "南风股份",
+        "corr": 0.62
+      },
+      {
+        "code": "688676",
+        "name": "金盘科技",
+        "corr": 0.57
+      },
+      {
+        "code": "688328",
+        "name": "深科达",
+        "corr": 0.56
+      },
+      {
+        "code": "300382",
+        "name": "斯莱克",
+        "corr": 0.55
+      }
+    ]
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 98.01,
+    "annualized_volatility_20d_pct": 95.33,
     "max_drawdown_60d_pct": -60.14,
-    "atr14_pct": 8.87,
+    "atr14_pct": 8.31,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 88.7,
-        "value": 98.01
+        "score": 91.0,
+        "value": 95.33
       },
       {
         "name": "60日最大回撤",
-        "score": 97.9,
+        "score": 98.1,
         "value": -60.14
       },
       {
         "name": "ATR百分比",
-        "score": 93.6,
-        "value": 8.87
+        "score": 96.2,
+        "value": 8.31
       },
       {
         "name": "量价异常",
-        "score": 35.5,
-        "value": 1.2
+        "score": 14.1,
+        "value": 0.93
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.09,
-    "return_5d_pct": 1.95,
-    "up_probability_3d_pct": 44.8,
-    "up_probability_5d_pct": 44.8,
+    "return_3d_pct": 1.1,
+    "return_5d_pct": 2.19,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
-    "rationale": "基于历史量价形态 KNN 相似走势统计推断",
-    "risk_warning": "样本统计仅供参考，注意防范市场系统性风险",
+    "sample_size": 30,
     "source": "knn_fallback",
     "model": "knn_v1"
   },
   "technical": {
     "trend": "range",
-    "ma5": 36.756,
-    "ma10": 36.372,
-    "ma20": 32.3625,
-    "ma60": 37.5795,
-    "rsi14": 54.5,
-    "macd_dif": 0.9370025278581835,
-    "macd_dea": 0.12717322965320021,
-    "macd_hist": 1.6196585964099666,
-    "atr14_pct": 8.871610070751705,
-    "boll_position": 0.7175357141668723,
-    "return_5d_pct": 9.028400597907304,
-    "return_20d_pct": 39.25162275677738,
-    "volume_ratio_5d": 1.2
+    "ma5": 36.724000000000004,
+    "ma10": 36.858000000000004,
+    "ma20": 33.5855,
+    "ma60": 37.74633333333334,
+    "rsi14": 54.8,
+    "macd_dif": 1.078875540074499,
+    "macd_dea": 0.46604597697115757,
+    "macd_hist": 1.2256591262066827,
+    "atr14_pct": 8.309153189795596,
+    "boll_position": 0.6954073924491279,
+    "return_5d_pct": -7.452948557089078,
+    "return_20d_pct": 45.82839066824833,
+    "volume_ratio_5d": 0.93
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 37.91
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 46.3
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 44.8,
-      "average_return_pct": 1.09,
-      "median_return_pct": -1.28,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 1.1,
+      "median_return_pct": -1.41,
       "best_return_pct": 46.87,
       "worst_return_pct": -14.34
     },
     "horizon_5d": {
-      "up_probability_pct": 44.8,
-      "average_return_pct": 1.95,
-      "median_return_pct": -0.64,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 2.19,
+      "median_return_pct": -0.16,
       "best_return_pct": 83.01,
       "worst_return_pct": -29.75
     }
@@ -271,51 +309,10 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 98.0%，波动偏高。",
+      "detail": "20日年化波动率 95.3%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/688598.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "热点龙头",
-    "sector_breadth_pct": 40.0,
-    "tier_role": "divergent",
-    "leader_stock": {
-      "code": "301177",
-      "name": "迪阿股份",
-      "change_pct": 20.00835421888053,
-      "is_limit_up": true
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": true,
-    "co_movement_peers": [
-      {
-        "code": "301630",
-        "name": "同宇新材",
-        "corr": 0.66
-      },
-      {
-        "code": "688676",
-        "name": "金盘科技",
-        "corr": 0.57
-      },
-      {
-        "code": "300004",
-        "name": "南风股份",
-        "corr": 0.57
-      },
-      {
-        "code": "300382",
-        "name": "斯莱克",
-        "corr": 0.57
-      },
-      {
-        "code": "688328",
-        "name": "深科达",
-        "corr": 0.54
-      }
-    ]
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

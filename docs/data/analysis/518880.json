@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "518880",
   "name": "黄金ETF",
   "type": "etf",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 59.4,
-    "risk": 11.3,
+    "risk_adjusted": 59.6,
+    "risk": 9.5,
     "technical": 100.0,
-    "industry": 65.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,100 +34,111 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:33:53"
+    "updated_at": "2026-08-28 10:15:11"
+  },
+  "nale_network": {
+    "sector_name": "通用",
+    "sector_breadth_pct": 42.9,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "513030",
+        "name": "德国ETF",
+        "corr": 0.57
+      }
+    ]
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 18.46,
-    "max_drawdown_60d_pct": -10.98,
-    "atr14_pct": 1.46,
+    "annualized_volatility_20d_pct": 19.09,
+    "max_drawdown_60d_pct": -10.59,
+    "atr14_pct": 1.37,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 7.1,
-        "value": 18.46
+        "score": 11.5,
+        "value": 19.09
       },
       {
         "name": "60日最大回撤",
-        "score": 14.2,
-        "value": -10.98
+        "score": 16.7,
+        "value": -10.59
       },
       {
         "name": "ATR百分比",
-        "score": 1.4,
-        "value": 1.46
+        "score": 3.2,
+        "value": 1.37
       },
       {
         "name": "量价异常",
-        "score": 52.5,
-        "value": 1.29
+        "score": 10.3,
+        "value": 1.05
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.65,
-    "return_5d_pct": 1.35,
-    "up_probability_3d_pct": 58.5,
-    "up_probability_5d_pct": 64.0,
+    "return_3d_pct": -0.32,
+    "return_5d_pct": -0.13,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
-    "rationale": "趋势多头排列且动量强劲，但RSI超买与均线偏离较大，短期偏向高位蓄势整固。",
-    "risk_warning": "海外宏观流动性扰动及高位回撤风险。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 9.446000000000002,
-    "ma10": 9.234,
-    "ma20": 8.97,
-    "ma60": 8.730833333333333,
-    "rsi14": 72.5,
-    "macd_dif": 0.23224139990246861,
-    "macd_dea": 0.1662503721823435,
-    "macd_hist": 0.1319820554402502,
-    "atr14_pct": 1.4599319999428122,
-    "boll_position": 0.8753973247919283,
-    "return_5d_pct": 6.1315496098104605,
-    "return_20d_pct": 13.468414779499383,
-    "volume_ratio_5d": 1.29,
-    "close": 9.52,
-    "change_pct": -0.10493179433368087
+    "ma5": 9.494,
+    "ma10": 9.321000000000002,
+    "ma20": 9.0735,
+    "ma60": 8.735666666666667,
+    "rsi14": 66.2,
+    "macd_dif": 0.2277908218247564,
+    "macd_dea": 0.18924225174920553,
+    "macd_hist": 0.07709714015110175,
+    "atr14_pct": 1.3749243059324627,
+    "boll_position": 0.7519765935030903,
+    "return_5d_pct": 0.21299254526090383,
+    "return_20d_pct": 11.625148279952558,
+    "volume_ratio_5d": 1.05
   },
   "industry": {
     "name": "通用",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 12.13
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 7.29
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.85,
-      "median_return_pct": -0.82,
-      "best_return_pct": 5.71,
-      "worst_return_pct": -6.95
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.32,
+      "median_return_pct": -0.57,
+      "best_return_pct": 6.58,
+      "worst_return_pct": -4.69
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.21,
-      "median_return_pct": -0.61,
-      "best_return_pct": 15.09,
-      "worst_return_pct": -12.59
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.13,
+      "median_return_pct": -0.7,
+      "best_return_pct": 8.43,
+      "worst_return_pct": -7.48
     }
   },
   "fundamental": null,
@@ -137,45 +148,8 @@
       "title": "中短期趋势向上",
       "detail": "收盘价位于20日和60日均线上方。",
       "contribution": 8.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=72.5，短期超买。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/518880.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "通用",
-    "sector_breadth_pct": 76.2,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": [
-      {
-        "code": "513030",
-        "name": "德国ETF",
-        "corr": 0.57
-      },
-      {
-        "code": "513100",
-        "name": "纳指ETF",
-        "corr": 0.44
-      },
-      {
-        "code": "513500",
-        "name": "标普500ETF",
-        "corr": 0.41
-      },
-      {
-        "code": "512660",
-        "name": "军工ETF",
-        "corr": 0.41
-      }
-    ]
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

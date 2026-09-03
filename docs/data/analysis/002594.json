@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "002594",
   "name": "比亚迪",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 52.5,
-    "risk": 14.5,
-    "technical": 91.0,
-    "industry": 42.2,
+    "risk_adjusted": 48.7,
+    "risk": 18.6,
+    "technical": 100.0,
+    "industry": 43.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,99 +34,104 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:33:20"
+    "updated_at": "2026-08-28 10:14:10"
+  },
+  "nale_network": {
+    "sector_name": "汽车",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 19.81,
-    "max_drawdown_60d_pct": -17.59,
-    "atr14_pct": 2.27,
+    "annualized_volatility_20d_pct": 19.08,
+    "max_drawdown_60d_pct": -15.98,
+    "atr14_pct": 2.1,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 8.5,
-        "value": 19.81
+        "score": 10.9,
+        "value": 19.08
       },
       {
         "name": "60日最大回撤",
-        "score": 27.7,
-        "value": -17.59
+        "score": 30.8,
+        "value": -15.98
       },
       {
         "name": "ATR百分比",
-        "score": 9.9,
-        "value": 2.27
+        "score": 15.4,
+        "value": 2.1
       },
       {
         "name": "量价异常",
-        "score": 29.8,
-        "value": 0.84
+        "score": 43.6,
+        "value": 0.73
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.45,
-    "return_5d_pct": 2.6,
-    "up_probability_3d_pct": 62.0,
-    "up_probability_5d_pct": 65.5,
+    "return_3d_pct": -0.2,
+    "return_5d_pct": -0.51,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 46.7,
     "confidence": "medium",
-    "rationale": "均线多头排列且技术分极高，RSI处于健康区间，缩量整理后具备震荡上行动能。",
-    "risk_warning": "量能持续萎缩可能导致上攻动能不足及板块轮动回调。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 91.012,
-    "ma10": 90.174,
-    "ma20": 91.047,
-    "ma60": 89.44866666666667,
-    "rsi14": 55.6,
-    "macd_dif": 0.03596775556187026,
-    "macd_dea": -0.05016636883892835,
-    "macd_hist": 0.17226824880159725,
-    "atr14_pct": 2.2659014278006784,
-    "boll_position": 0.6307757716106843,
-    "return_5d_pct": 3.868711933228064,
-    "return_20d_pct": -2.5399513175997424,
-    "volume_ratio_5d": 0.84,
-    "close": 92.09,
-    "change_pct": 0.7990367775831918
+    "ma5": 91.444,
+    "ma10": 90.624,
+    "ma20": 90.622,
+    "ma60": 89.37483333333333,
+    "rsi14": 53.6,
+    "macd_dif": 0.15030442782837383,
+    "macd_dea": 0.013133312332370983,
+    "macd_hist": 0.2743422309920057,
+    "atr14_pct": 2.103169022542983,
+    "boll_position": 0.6999428520425118,
+    "return_5d_pct": 1.271139604288729,
+    "return_20d_pct": -4.333298527722662,
+    "volume_ratio_5d": 0.73
   },
   "industry": {
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": -3.88
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -10.28
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.88,
-      "median_return_pct": -1.31,
-      "best_return_pct": 5.86,
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.2,
+      "median_return_pct": -0.49,
+      "best_return_pct": 8.27,
       "worst_return_pct": -6.76
     },
     "horizon_5d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": -0.98,
-      "median_return_pct": -0.99,
-      "best_return_pct": 8.4,
+      "average_return_pct": -0.51,
+      "median_return_pct": -0.96,
+      "best_return_pct": 8.01,
       "worst_return_pct": -9.11
     }
   },
@@ -267,26 +272,16 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 17.6%，风险偏高。",
+      "detail": "近60日最大回撤 16.0%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 17.6%，风险扣分。",
+      "detail": "近60日最大回撤 16.0%，风险扣分。",
       "contribution": -7.0
     }
   ],
   "kline_file": "../kline/002594.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "汽车",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

@@ -1,31 +1,18 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-22 00:18:22+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "600519",
   "name": "贵州茅台",
   "type": "stock",
-  "category": "白酒",
+  "category": "搜索自选",
   "stale": false,
-  "alpha_gate": {
-    "verdict": "reject",
-    "reject_reason": "statistical",
-    "alpha": -3.419309505479828e-05,
-    "alpha_p_value": 0.9444752530567345,
-    "information_ratio": -0.002122818410041273,
-    "betas": {
-      "MKT": -0.025258661860911063,
-      "SMB": 0.05484478276072695,
-      "HML": -0.010807886093417034,
-      "MOM": 0.0030135092496728607
-    },
-    "window_end": "2026-05-28"
-  },
+  "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 44.8,
-    "risk": 22.2,
-    "technical": 50.0,
-    "industry": 41.6,
+    "risk_adjusted": 46.5,
+    "risk": 14.5,
+    "technical": 66.0,
+    "industry": 43.0,
     "leading": 50.0
   },
   "leading": {
@@ -47,98 +34,105 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-22 00:05:24"
+    "updated_at": "2026-08-28 10:16:10"
+  },
+  "nale_network": {
+    "sector_name": "搜索自选",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 25.97,
-    "max_drawdown_60d_pct": -9.78,
-    "atr14_pct": 2.13,
+    "annualized_volatility_20d_pct": 23.4,
+    "max_drawdown_60d_pct": -7.54,
+    "atr14_pct": 1.92,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 38.0,
-        "value": 25.97
+        "score": 18.6,
+        "value": 23.4
       },
       {
         "name": "60日最大回撤",
-        "score": 13.0,
-        "value": -9.78
+        "score": 5.8,
+        "value": -7.54
       },
       {
         "name": "ATR百分比",
-        "score": 29.5,
-        "value": 2.13
+        "score": 12.2,
+        "value": 1.92
       },
       {
         "name": "量价异常",
-        "score": 15.0,
-        "value": 1.01
+        "score": 48.1,
+        "value": 0.7
       },
       {
         "name": "行业波动",
-        "score": 1.0,
-        "value": 34.37
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.25,
-    "return_5d_pct": 0.5,
-    "up_probability_3d_pct": 50.5,
-    "up_probability_5d_pct": 51.5,
-    "confidence": "low",
-    "rationale": "技术面呈现均线完全粘合与中性指标，多因子评分中性偏弱，短期预计呈窄幅震荡偏平稳走势。",
-    "risk_warning": "缺乏量能与动量指引，需防范白酒板块整体下行风险。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "return_3d_pct": 0.2,
+    "return_5d_pct": 0.01,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 36.7,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 1292.658,
-    "ma10": 1319.893,
-    "ma20": 1322.6675,
-    "ma60": 1262.2645,
-    "rsi14": 43.0,
-    "macd_dif": 5.924613072895454,
-    "macd_dea": 15.717094209274967,
-    "macd_hist": -19.584962272759025,
-    "atr14_pct": 2.1345782529588253,
-    "boll_position": 0.023521599509478703,
-    "return_5d_pct": -5.153540637411613,
-    "return_20d_pct": -1.8945437448455116,
-    "volume_ratio_5d": 1.01
+    "ma5": 1299.392,
+    "ma10": 1296.025,
+    "ma20": 1315.3725,
+    "ma60": 1265.0438333333332,
+    "rsi14": 47.8,
+    "macd_dif": 1.1820973013980165,
+    "macd_dea": 7.05868202109765,
+    "macd_hist": -11.753169439399267,
+    "atr14_pct": 1.9191655612531924,
+    "boll_position": 0.2741774372919694,
+    "return_5d_pct": 1.6003708272118056,
+    "return_20d_pct": -4.249962979416544,
+    "volume_ratio_5d": 0.7
   },
   "industry": {
-    "name": "白酒",
+    "name": "搜索自选",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.81,
-    "return_20d_pct": 2.32,
-    "return_60d_pct": -11.14,
-    "relative_strength_20d_pct": -4.21
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -10.84
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": 0.44,
-      "median_return_pct": -0.22,
+      "average_return_pct": 0.2,
+      "median_return_pct": -0.31,
       "best_return_pct": 5.6,
-      "worst_return_pct": -2.85
+      "worst_return_pct": -3.72
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.26,
-      "median_return_pct": -0.31,
-      "best_return_pct": 9.82,
-      "worst_return_pct": -3.92
+      "up_probability_pct": 36.7,
+      "average_return_pct": 0.01,
+      "median_return_pct": -0.94,
+      "best_return_pct": 10.03,
+      "worst_return_pct": -3.93
     }
   },
   "fundamental": {
@@ -271,15 +265,5 @@
     }
   ],
   "kline_file": "../kline/600519.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "搜索自选",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "300128",
   "name": "锦富技术",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 44.5,
-    "risk": 58.7,
-    "technical": 100.0,
-    "industry": 65.0,
+    "risk_adjusted": 32.2,
+    "risk": 54.9,
+    "technical": 85.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,99 +34,135 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:19"
+    "updated_at": "2026-08-28 10:15:58"
+  },
+  "nale_network": {
+    "sector_name": "热点龙头",
+    "sector_breadth_pct": 32.0,
+    "tier_role": "neutral",
+    "leader_stock": {
+      "code": "301591",
+      "name": "肯特股份",
+      "change_pct": 17.142857142857146,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "300004",
+        "name": "南风股份",
+        "corr": 0.71
+      },
+      {
+        "code": "300647",
+        "name": "超频三",
+        "corr": 0.61
+      },
+      {
+        "code": "688676",
+        "name": "金盘科技",
+        "corr": 0.6
+      },
+      {
+        "code": "300382",
+        "name": "斯莱克",
+        "corr": 0.59
+      },
+      {
+        "code": "688328",
+        "name": "深科达",
+        "corr": 0.56
+      }
+    ]
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 60.38,
-    "max_drawdown_60d_pct": -47.37,
-    "atr14_pct": 5.79,
+    "annualized_volatility_20d_pct": 56.89,
+    "max_drawdown_60d_pct": -46.16,
+    "atr14_pct": 5.32,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 56.7,
-        "value": 60.38
+        "score": 60.9,
+        "value": 56.89
       },
       {
         "name": "60日最大回撤",
-        "score": 85.1,
-        "value": -47.37
+        "score": 84.0,
+        "value": -46.16
       },
       {
         "name": "ATR百分比",
-        "score": 61.7,
-        "value": 5.79
+        "score": 60.9,
+        "value": 5.32
       },
       {
         "name": "量价异常",
-        "score": 79.4,
-        "value": 1.44
+        "score": 32.1,
+        "value": 1.21
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.6,
-    "return_5d_pct": 3.2,
-    "up_probability_3d_pct": 58.0,
-    "up_probability_5d_pct": 60.0,
+    "return_3d_pct": -3.14,
+    "return_5d_pct": -2.52,
+    "up_probability_3d_pct": 20.0,
+    "up_probability_5d_pct": 33.3,
     "confidence": "medium",
-    "rationale": "短线动量放量走强，技术指标强势，但上方受MA60均线压制，预计震荡偏多。",
-    "risk_warning": "冲高受阻MA60压制及获利盘抛压风险",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "range",
-    "ma5": 4.786,
-    "ma10": 4.702,
-    "ma20": 4.6255,
-    "ma60": 5.229833333333334,
-    "rsi14": 54.5,
-    "macd_dif": -0.011489440972851206,
-    "macd_dea": -0.0833600919374135,
-    "macd_hist": 0.1437413019291246,
-    "atr14_pct": 5.785629896810283,
-    "boll_position": 0.8065487667956501,
-    "return_5d_pct": 11.87214611872147,
-    "return_20d_pct": 15.294117647058837,
-    "volume_ratio_5d": 1.44,
-    "close": 4.9,
-    "change_pct": 0.8230452674897125
+    "ma5": 4.898000000000001,
+    "ma10": 4.765,
+    "ma20": 4.704,
+    "ma60": 5.143000000000001,
+    "rsi14": 54.9,
+    "macd_dif": 0.022897064536396172,
+    "macd_dea": -0.0471563131718329,
+    "macd_hist": 0.14010675541645815,
+    "atr14_pct": 5.319452045079862,
+    "boll_position": 0.8095530283890799,
+    "return_5d_pct": -0.40404040404041774,
+    "return_20d_pct": 15.727699530516425,
+    "volume_ratio_5d": 1.21
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 13.96
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 16.32
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
       "up_probability_pct": 20.0,
-      "average_return_pct": -3.23,
-      "median_return_pct": -2.75,
-      "best_return_pct": 11.05,
+      "average_return_pct": -3.14,
+      "median_return_pct": -3.67,
+      "best_return_pct": 11.2,
       "worst_return_pct": -17.33
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -2.34,
-      "median_return_pct": -2.05,
-      "best_return_pct": 13.02,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -2.52,
+      "median_return_pct": -2.02,
+      "best_return_pct": 16.72,
       "worst_return_pct": -14.93
     }
   },
@@ -267,63 +303,22 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 47.4%，风险偏高。",
+      "detail": "近60日最大回撤 46.2%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 47.4%，风险扣分。",
+      "detail": "近60日最大回撤 46.2%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 60.4%，波动偏高。",
+      "detail": "20日年化波动率 56.9%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300128.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "热点龙头",
-    "sector_breadth_pct": 40.0,
-    "tier_role": "divergent",
-    "leader_stock": {
-      "code": "301177",
-      "name": "迪阿股份",
-      "change_pct": 20.00835421888053,
-      "is_limit_up": true
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": true,
-    "co_movement_peers": [
-      {
-        "code": "300004",
-        "name": "南风股份",
-        "corr": 0.71
-      },
-      {
-        "code": "688676",
-        "name": "金盘科技",
-        "corr": 0.63
-      },
-      {
-        "code": "300647",
-        "name": "超频三",
-        "corr": 0.61
-      },
-      {
-        "code": "301591",
-        "name": "肯特股份",
-        "corr": 0.58
-      },
-      {
-        "code": "300382",
-        "name": "斯莱克",
-        "corr": 0.57
-      }
-    ]
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "002466",
   "name": "天齐锂业",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 51.0,
-    "risk": 37.2,
-    "technical": 100.0,
-    "industry": 55.6,
+    "risk_adjusted": 42.9,
+    "risk": 39.5,
+    "technical": 93.0,
+    "industry": 58.0,
     "leading": 65.0
   },
   "leading": {
@@ -2379,109 +2379,115 @@
       983.56,
       1004.21,
       1000.0,
-      1000.68
+      1000.68,
+      992.29
     ],
     "momentum_metrics": {
-      "slope_pct": 13.62,
+      "slope_pct": 12.13,
       "momentum": "accelerating",
       "inflection_flag": "none",
-      "latest_value": 1000.68,
+      "latest_value": 992.29,
       "confidence": "high"
     },
-    "updated_at": "2026-08-26 19:34:11"
+    "updated_at": "2026-08-28 10:15:48"
+  },
+  "nale_network": {
+    "sector_name": "锂矿资源",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 34.88,
+    "annualized_volatility_20d_pct": 35.0,
     "max_drawdown_60d_pct": -36.05,
-    "atr14_pct": 4.48,
+    "atr14_pct": 4.22,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 34.8,
-        "value": 34.88
+        "score": 40.4,
+        "value": 35.0
       },
       {
         "name": "60日最大回撤",
-        "score": 66.0,
+        "score": 68.6,
         "value": -36.05
       },
       {
         "name": "ATR百分比",
-        "score": 41.8,
-        "value": 4.48
+        "score": 44.9,
+        "value": 4.22
       },
       {
         "name": "量价异常",
-        "score": 18.4,
-        "value": 1.12
+        "score": 10.9,
+        "value": 1.06
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.25,
-    "return_5d_pct": 2.1,
-    "up_probability_3d_pct": 58.5,
-    "up_probability_5d_pct": 61.0,
+    "return_3d_pct": -1.45,
+    "return_5d_pct": -0.81,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
-    "rationale": "短期均线缠绕筑底，量价温和修复，虽受制于MA60压制但具备震荡反弹动能。",
-    "risk_warning": "锂矿现货价格波动及MA60上方抛压抑制反弹高度。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "range",
-    "ma5": 47.616,
-    "ma10": 47.745,
-    "ma20": 47.458000000000006,
-    "ma60": 52.69133333333333,
-    "rsi14": 47.4,
-    "macd_dif": -0.6190346433269482,
-    "macd_dea": -0.9540931634921409,
-    "macd_hist": 0.6701170403303853,
-    "atr14_pct": 4.477712722763644,
-    "boll_position": 0.5218925175768212,
-    "return_5d_pct": 3.099934966399309,
-    "return_20d_pct": 3.211805555555558,
-    "volume_ratio_5d": 1.12,
-    "close": 47.56,
-    "change_pct": 1.169963837481396
+    "ma5": 48.208,
+    "ma10": 47.833000000000006,
+    "ma20": 47.785999999999994,
+    "ma60": 52.30683333333333,
+    "rsi14": 52.6,
+    "macd_dif": -0.37382813875328935,
+    "macd_dea": -0.7694825439758812,
+    "macd_hist": 0.7913088104451838,
+    "atr14_pct": 4.218293727094209,
+    "boll_position": 0.838736520665838,
+    "return_5d_pct": 1.5708970649028542,
+    "return_20d_pct": 8.357221609702314,
+    "volume_ratio_5d": 1.06
   },
   "industry": {
     "name": "锂矿资源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 1.87
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 0.35
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
       "up_probability_pct": 50.0,
-      "average_return_pct": -1.69,
+      "average_return_pct": -1.45,
       "median_return_pct": 0.02,
       "best_return_pct": 7.07,
-      "worst_return_pct": -19.24
+      "worst_return_pct": -13.82
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.93,
-      "median_return_pct": -0.71,
-      "best_return_pct": 17.74,
-      "worst_return_pct": -20.0
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.81,
+      "median_return_pct": 0.43,
+      "best_return_pct": 11.75,
+      "worst_return_pct": -14.48
     }
   },
   "fundamental": {
@@ -2626,15 +2632,5 @@
     }
   ],
   "kline_file": "../kline/002466.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "锂矿资源",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

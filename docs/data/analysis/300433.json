@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "300433",
   "name": "蓝思科技",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 45.6,
-    "risk": 52.0,
+    "risk_adjusted": 54.6,
+    "risk": 50.7,
     "technical": 93.0,
-    "industry": 65.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,98 +34,103 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:06"
+    "updated_at": "2026-08-28 10:15:42"
+  },
+  "nale_network": {
+    "sector_name": "玻璃外观件",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 61.02,
+    "annualized_volatility_20d_pct": 52.54,
     "max_drawdown_60d_pct": -44.27,
-    "atr14_pct": 6.07,
+    "atr14_pct": 5.5,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 60.3,
-        "value": 61.02
+        "score": 54.5,
+        "value": 52.54
       },
       {
         "name": "60日最大回撤",
-        "score": 80.9,
+        "score": 81.4,
         "value": -44.27
       },
       {
         "name": "ATR百分比",
-        "score": 63.8,
-        "value": 6.07
+        "score": 64.1,
+        "value": 5.5
       },
       {
         "name": "量价异常",
-        "score": 7.8,
-        "value": 1.06
+        "score": 9.6,
+        "value": 0.95
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.85,
-    "return_5d_pct": 1.42,
-    "up_probability_3d_pct": 58.0,
-    "up_probability_5d_pct": 55.0,
+    "return_3d_pct": 1.11,
+    "return_5d_pct": 1.47,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 53.3,
     "confidence": "medium",
-    "rationale": "短期技术动能强劲但MA20偏离度偏高，上方临近MA60压制，短期或呈震荡微升。",
-    "risk_warning": "MA20偏离度较大引发回调及上方MA60阻力压制。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "range",
-    "ma5": 38.008,
-    "ma10": 37.269,
-    "ma20": 35.508500000000005,
-    "ma60": 41.66366666666667,
-    "rsi14": 55.2,
-    "macd_dif": -0.10233669231643461,
-    "macd_dea": -0.8163623601862706,
-    "macd_hist": 1.428051335739672,
-    "atr14_pct": 6.067551564510581,
-    "boll_position": 0.8729012400121368,
-    "return_5d_pct": 7.939142461964055,
-    "return_20d_pct": 16.861335729260276,
-    "volume_ratio_5d": 1.06,
-    "close": 39.02,
-    "change_pct": 2.955145118733521
+    "ma5": 38.762,
+    "ma10": 38.124,
+    "ma20": 36.335,
+    "ma60": 41.527166666666666,
+    "rsi14": 57.6,
+    "macd_dif": 0.24482037974180315,
+    "macd_dea": -0.46469256419832683,
+    "macd_hist": 1.41902588788026,
+    "atr14_pct": 5.496587640155794,
+    "boll_position": 0.9152876425609126,
+    "return_5d_pct": 7.260016133369196,
+    "return_20d_pct": 26.314122862571267,
+    "volume_ratio_5d": 0.95
   },
   "industry": {
     "name": "玻璃外观件",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 15.52
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 20.92
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.5,
-      "median_return_pct": -1.32,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 1.11,
+      "median_return_pct": -0.32,
       "best_return_pct": 21.5,
       "worst_return_pct": -15.83
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.77,
-      "median_return_pct": -0.23,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.47,
+      "median_return_pct": 0.7,
       "best_return_pct": 23.19,
       "worst_return_pct": -18.04
     }
@@ -273,20 +278,10 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 61.0%，波动偏高。",
+      "detail": "20日年化波动率 52.5%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300433.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "玻璃外观件",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

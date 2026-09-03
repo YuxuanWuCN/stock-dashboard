@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "300308",
   "name": "中际旭创",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 32.4,
-    "risk": 66.8,
-    "technical": 58.0,
-    "industry": 35.0,
+    "risk_adjusted": 41.4,
+    "risk": 66.1,
+    "technical": 73.0,
+    "industry": 47.0,
     "leading": 50.0
   },
   "leading": {
@@ -38,100 +38,110 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:05"
+    "updated_at": "2026-08-28 10:15:41"
+  },
+  "nale_network": {
+    "sector_name": "800G光模块",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "300308",
+      "name": "中际旭创",
+      "change_pct": 4.12183069320649,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 88.82,
+    "annualized_volatility_20d_pct": 82.89,
     "max_drawdown_60d_pct": -38.8,
-    "atr14_pct": 8.57,
+    "atr14_pct": 7.63,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 85.1,
-        "value": 88.82
+        "score": 85.9,
+        "value": 82.89
       },
       {
         "name": "60日最大回撤",
-        "score": 70.2,
+        "score": 73.1,
         "value": -38.8
       },
       {
         "name": "ATR百分比",
-        "score": 92.2,
-        "value": 8.57
+        "score": 89.1,
+        "value": 7.63
       },
       {
         "name": "量价异常",
-        "score": 51.8,
-        "value": 0.72
+        "score": 40.4,
+        "value": 0.75
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.45,
-    "return_5d_pct": -1.2,
-    "up_probability_3d_pct": 43.5,
-    "up_probability_5d_pct": 39.0,
+    "return_3d_pct": -0.51,
+    "return_5d_pct": 1.06,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
-    "rationale": "处于明显下行趋势，缩量反弹缺乏动能，均线负乖离较大或引发窄幅震荡修复。",
-    "risk_warning": "量能持续低迷，行业估值承压导致破位下行。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 882.8639999999999,
-    "ma10": 916.309,
-    "ma20": 917.4369999999999,
-    "ma60": 1082.9661666666666,
-    "rsi14": 40.6,
-    "macd_dif": -44.124193085637785,
-    "macd_dea": -42.70624533068967,
-    "macd_hist": -2.8358955098962326,
-    "atr14_pct": 8.56981005585682,
-    "boll_position": 0.1532703222047081,
-    "return_5d_pct": -4.991067440821806,
-    "return_20d_pct": -10.525762355415358,
-    "volume_ratio_5d": 0.72,
-    "close": 850.9,
-    "change_pct": 0.5791962174940871
+    "ma5": 867.0120000000001,
+    "ma10": 906.699,
+    "ma20": 917.5335000000001,
+    "ma60": 1069.8484999999998,
+    "rsi14": 45.9,
+    "macd_dif": -40.61784122116774,
+    "macd_dea": -42.5013827144921,
+    "macd_hist": 3.767082986648731,
+    "atr14_pct": 7.62898679219072,
+    "boll_position": 0.41792255727693123,
+    "return_5d_pct": -4.366914103923647,
+    "return_20d_pct": -0.021064068025844485,
+    "volume_ratio_5d": 0.75
   },
   "industry": {
     "name": "800G光模块",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": -11.86
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -5.5
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 1.48,
-      "median_return_pct": 1.45,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.51,
+      "median_return_pct": -0.95,
       "best_return_pct": 18.27,
       "worst_return_pct": -19.77
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 1.89,
-      "median_return_pct": -1.58,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.06,
+      "median_return_pct": 0.08,
       "best_return_pct": 26.27,
-      "worst_return_pct": -16.2
+      "worst_return_pct": -16.82
     }
   },
   "fundamental": {
@@ -277,20 +287,10 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 88.8%，波动偏高。",
+      "detail": "20日年化波动率 82.9%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300308.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "800G光模块",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "001258",
   "name": "立新能源",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 39.3,
-    "risk": 70.3,
+    "risk_adjusted": 47.7,
+    "risk": 66.3,
     "technical": 88.0,
-    "industry": 65.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,100 +34,105 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:33:33"
+    "updated_at": "2026-08-28 10:14:51"
+  },
+  "nale_network": {
+    "sector_name": "电力",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 102.63,
-    "max_drawdown_60d_pct": -41.32,
-    "atr14_pct": 9.17,
+    "annualized_volatility_20d_pct": 100.93,
+    "max_drawdown_60d_pct": -34.44,
+    "atr14_pct": 8.7,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 90.8,
-        "value": 102.63
+        "score": 91.7,
+        "value": 100.93
       },
       {
         "name": "60日最大回撤",
-        "score": 77.3,
-        "value": -41.32
+        "score": 64.7,
+        "value": -34.44
       },
       {
         "name": "ATR百分比",
-        "score": 97.2,
-        "value": 9.17
+        "score": 96.8,
+        "value": 8.7
       },
       {
         "name": "量价异常",
-        "score": 41.8,
-        "value": 0.77
+        "score": 30.8,
+        "value": 0.81
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 2.8,
-    "return_5d_pct": 3.5,
-    "up_probability_3d_pct": 63.0,
-    "up_probability_5d_pct": 58.0,
+    "return_3d_pct": 1.04,
+    "return_5d_pct": 1.63,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 46.7,
     "confidence": "medium",
-    "rationale": "涨停突破技术形态向好且RSI适中，短期有惯性冲高动能，但受制于长期高乖离率。",
-    "risk_warning": "MA60偏离过高及量比偏低，警惕冲高回落震荡加剧。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 12.580000000000002,
-    "ma10": 13.169,
-    "ma20": 13.363,
-    "ma60": 10.084166666666668,
-    "rsi14": 56.0,
-    "macd_dif": 0.5585223560994219,
-    "macd_dea": 0.8899723001087954,
-    "macd_hist": -0.6628998880187469,
-    "atr14_pct": 9.166430387136147,
-    "boll_position": 0.533741666584875,
-    "return_5d_pct": 12.479201331114819,
-    "return_20d_pct": 16.451335055986217,
-    "volume_ratio_5d": 0.77,
-    "close": 13.52,
-    "change_pct": 10.008136696501225
+    "ma5": 13.151999999999997,
+    "ma10": 13.005,
+    "ma20": 13.497500000000002,
+    "ma60": 10.175666666666666,
+    "rsi14": 56.2,
+    "macd_dif": 0.5711402222398014,
+    "macd_dea": 0.7758961985473584,
+    "macd_hist": -0.40951195261511386,
+    "atr14_pct": 8.697141603264232,
+    "boll_position": 0.527473177600294,
+    "return_5d_pct": 11.547911547911527,
+    "return_20d_pct": 10.372771474878428,
+    "volume_ratio_5d": 0.81
   },
   "industry": {
     "name": "电力",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 15.11
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 5.67
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": 1.35,
-      "median_return_pct": -0.47,
+      "average_return_pct": 1.04,
+      "median_return_pct": -0.21,
       "best_return_pct": 33.04,
-      "worst_return_pct": -14.51
+      "worst_return_pct": -20.59
     },
     "horizon_5d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": 1.4,
+      "average_return_pct": 1.63,
       "median_return_pct": -0.33,
       "best_return_pct": 60.96,
-      "worst_return_pct": -19.13
+      "worst_return_pct": -28.07
     }
   },
   "fundamental": {
@@ -261,37 +266,22 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 41.3%，风险偏高。",
+      "detail": "近60日最大回撤 34.4%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 41.3%，风险扣分。",
+      "detail": "近60日最大回撤 34.4%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 102.6%，波动偏高。",
+      "detail": "20日年化波动率 100.9%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/001258.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "电力",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "leader",
-    "leader_stock": {
-      "code": "001258",
-      "name": "立新能源",
-      "change_pct": 10.008136696501225,
-      "is_limit_up": true
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": true,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

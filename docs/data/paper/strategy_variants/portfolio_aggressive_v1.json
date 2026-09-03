@@ -1,79 +1,16 @@
 {
   "schema_version": "2.0",
-  "name": "置信度过滤增强策略",
-  "parent_strategy": "aggressive",
+  "name": "趋势过滤增强版",
+  "parent_strategy": "aggressive_v2",
   "variant_name": "aggressive_v1",
-  "description": "提高收益和稳定性",
+  "description": "提升策略稳定性，减少亏损交易",
   "changes": {
-    "预测置信度阈值": "0.6"
+    "大盘趋势过滤": "沪深300收盘价>20日均线",
+    "个股动量条件": "个股20日涨幅>0"
   },
   "capital": 1000000,
-  "created_at": "2026-08-15T16:58:17.755135",
+  "created_at": "2026-08-31T11:27:34.525116",
   "status": "active",
   "test_duration_days": 7,
-  "color": "#f59e0b",
-  "items": [
-    {
-      "code": "688041",
-      "name": "海光信息",
-      "amount": 125000,
-      "pct": 12.5,
-      "reason": "变体评分59.3 | 3日↑87% | 20日-21.7%"
-    },
-    {
-      "code": "300161",
-      "name": "华中数控",
-      "amount": 125000,
-      "pct": 12.5,
-      "reason": "变体评分58.8 | 3日↑67% | 20日+18.9%"
-    },
-    {
-      "code": "688766",
-      "name": "普冉股份",
-      "amount": 125000,
-      "pct": 12.5,
-      "reason": "变体评分54.2 | 3日↑47% | 20日+19.0%"
-    },
-    {
-      "code": "512010",
-      "name": "医药ETF",
-      "amount": 125000,
-      "pct": 12.5,
-      "reason": "变体评分52.0 | 3日↑67% | 20日+6.3%"
-    },
-    {
-      "code": "688180",
-      "name": "君实生物",
-      "amount": 125000,
-      "pct": 12.5,
-      "reason": "变体评分52.0 | 3日↑63% | 20日+4.3%"
-    },
-    {
-      "code": "518880",
-      "name": "黄金ETF",
-      "amount": 125000,
-      "pct": 12.5,
-      "reason": "变体评分51.9 | 3日↑50% | 20日+12.0%"
-    },
-    {
-      "code": "513500",
-      "name": "标普500ETF",
-      "amount": 125000,
-      "pct": 12.5,
-      "reason": "变体评分51.0 | 3日↑67% | 20日+6.6%"
-    },
-    {
-      "code": "159919",
-      "name": "沪深300ETF易方达",
-      "amount": 125000,
-      "pct": 12.5,
-      "reason": "变体评分50.7 | 3日↑67% | 20日-0.3%"
-    }
-  ],
-  "cash_pct": 0.0,
-  "cash": 0,
-  "base_trade_date": "2026-08-23",
-  "rebalanced": true,
-  "rebalance_date": "2026-08-23",
-  "updated_at": "2026-08-23 19:04:53"
+  "color": "#f59e0b"
 }

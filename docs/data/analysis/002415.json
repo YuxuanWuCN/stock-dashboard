@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "002415",
   "name": "海康威视",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 47.0,
-    "risk": 23.3,
+    "risk_adjusted": 52.5,
+    "risk": 21.8,
     "technical": 71.0,
-    "industry": 45.0,
+    "industry": 47.8,
     "leading": 50.0
   },
   "leading": {
@@ -34,98 +34,129 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:33:17"
+    "updated_at": "2026-08-28 10:14:06"
+  },
+  "nale_network": {
+    "sector_name": "科技",
+    "sector_breadth_pct": 61.1,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "002230",
+        "name": "科大讯飞",
+        "corr": 0.56
+      },
+      {
+        "code": "601138",
+        "name": "工业富联",
+        "corr": 0.55
+      },
+      {
+        "code": "688111",
+        "name": "金山办公",
+        "corr": 0.49
+      },
+      {
+        "code": "688981",
+        "name": "中芯国际",
+        "corr": 0.48
+      },
+      {
+        "code": "688008",
+        "name": "澜起科技",
+        "corr": 0.46
+      }
+    ]
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 30.62,
+    "annualized_volatility_20d_pct": 22.85,
     "max_drawdown_60d_pct": -11.0,
-    "atr14_pct": 3.04,
+    "atr14_pct": 2.81,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 26.2,
-        "value": 30.62
+        "score": 17.3,
+        "value": 22.85
       },
       {
         "name": "60日最大回撤",
-        "score": 14.9,
+        "score": 18.6,
         "value": -11.0
       },
       {
         "name": "ATR百分比",
-        "score": 24.8,
-        "value": 3.04
+        "score": 29.5,
+        "value": 2.81
       },
       {
         "name": "量价异常",
-        "score": 66.0,
-        "value": 0.63
+        "score": 59.0,
+        "value": 0.65
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.65,
-    "return_5d_pct": 1.35,
-    "up_probability_3d_pct": 53.5,
-    "up_probability_5d_pct": 56.0,
+    "return_3d_pct": 0.09,
+    "return_5d_pct": 0.33,
+    "up_probability_3d_pct": 46.7,
+    "up_probability_5d_pct": 56.7,
     "confidence": "medium",
-    "rationale": "技术面呈现超跌温和反弹，但量比偏低且受MA20压制，短期料维持窄幅震荡修复。",
-    "risk_warning": "量能持续萎缩可能导致反弹动能衰竭受阻回落。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "rebound",
-    "ma5": 34.42999999999999,
-    "ma10": 34.464999999999996,
-    "ma20": 35.6205,
-    "ma60": 33.70133333333333,
-    "rsi14": 49.2,
-    "macd_dif": -0.08895664075289744,
-    "macd_dea": 0.13688613567571342,
-    "macd_hist": -0.45168555285722173,
-    "atr14_pct": 3.043465893399088,
-    "boll_position": 0.343316545104259,
-    "return_5d_pct": 2.6261434051342514,
-    "return_20d_pct": -1.165103722648475,
-    "volume_ratio_5d": 0.63,
-    "close": 34.78,
-    "change_pct": 0.08633093525180183
+    "ma5": 34.824,
+    "ma10": 34.565000000000005,
+    "ma20": 35.534,
+    "ma60": 33.870333333333335,
+    "rsi14": 51.8,
+    "macd_dif": -0.01978718538594393,
+    "macd_dea": 0.07657872395707224,
+    "macd_hist": -0.19273181868603234,
+    "atr14_pct": 2.8134445205218,
+    "boll_position": 0.42599920243154155,
+    "return_5d_pct": 2.1802325581395277,
+    "return_20d_pct": -5.256064690026962,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": -2.5
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -5.12
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.61,
-      "median_return_pct": -0.32,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.09,
+      "median_return_pct": -0.43,
       "best_return_pct": 9.23,
       "worst_return_pct": -5.61
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.59,
-      "median_return_pct": 0.41,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.33,
+      "median_return_pct": 0.24,
       "best_return_pct": 9.44,
       "worst_return_pct": -6.97
     }
@@ -260,46 +291,5 @@
     }
   ],
   "kline_file": "../kline/002415.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "科技",
-    "sector_breadth_pct": 61.1,
-    "tier_role": "divergent",
-    "leader_stock": {
-      "code": "003040",
-      "name": "楚天龙",
-      "change_pct": 10.012919896640831,
-      "is_limit_up": true
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": true,
-    "co_movement_peers": [
-      {
-        "code": "002230",
-        "name": "科大讯飞",
-        "corr": 0.57
-      },
-      {
-        "code": "601138",
-        "name": "工业富联",
-        "corr": 0.53
-      },
-      {
-        "code": "688111",
-        "name": "金山办公",
-        "corr": 0.48
-      },
-      {
-        "code": "688981",
-        "name": "中芯国际",
-        "corr": 0.45
-      },
-      {
-        "code": "600570",
-        "name": "恒生电子",
-        "corr": 0.43
-      }
-    ]
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

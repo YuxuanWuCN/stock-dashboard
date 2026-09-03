@@ -69,12 +69,12 @@ def collect_market_data():
     items = data.get('items', [])
 
     # 统计涨跌
-    up_count = sum(1 for item in items if item.get('change_pct', 0) > 0)
-    down_count = sum(1 for item in items if item.get('change_pct', 0) < 0)
+    up_count = sum(1 for item in items if (item.get('change_pct') or 0) > 0)
+    down_count = sum(1 for item in items if (item.get('change_pct') or 0) < 0)
     flat_count = len(items) - up_count - down_count
 
     # 涨跌幅分布
-    changes = [item.get('change_pct', 0) for item in items if item.get('change_pct') is not None]
+    changes = [item.get('change_pct') for item in items if item.get('change_pct') is not None]
     avg_change = sum(changes) / len(changes) if changes else 0
 
     # 涨跌停
@@ -84,14 +84,14 @@ def collect_market_data():
     # 强势股（涨幅>5%）
     strong_stocks = [
         {"code": item['code'], "name": item['name'], "change": item['change_pct']}
-        for item in items if item.get('change_pct', 0) > 5
+        for item in items if (item.get('change_pct') or 0) > 5
     ]
     strong_stocks.sort(key=lambda x: x['change'], reverse=True)
 
     # 弱势股（跌幅<-5%）
     weak_stocks = [
         {"code": item['code'], "name": item['name'], "change": item['change_pct']}
-        for item in items if item.get('change_pct', 0) < -5
+        for item in items if (item.get('change_pct') or 0) < -5
     ]
     weak_stocks.sort(key=lambda x: x['change'])
 

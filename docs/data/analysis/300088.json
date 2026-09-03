@@ -1,0 +1,170 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
+  "code": "300088",
+  "name": "长信科技",
+  "type": "stock",
+  "category": "消费电子",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 50.4,
+    "risk": 57.2,
+    "technical": 70.0,
+    "industry": 73.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "semiconductor",
+    "industry_name": "半导体/存储芯片",
+    "description": "存储芯片现货价格、进出口均价、原厂报价通知",
+    "proxy_type": "customs_and_spot_price",
+    "keywords": [
+      "存储芯片",
+      "DRAM",
+      "NAND",
+      "InP衬底",
+      "晶圆代工",
+      "先进制程"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:16:10"
+  },
+  "nale_network": {
+    "sector_name": "消费电子",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 51.54,
+    "max_drawdown_60d_pct": -46.1,
+    "atr14_pct": 5.64,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 52.6,
+        "value": 51.54
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 82.7,
+        "value": -46.1
+      },
+      {
+        "name": "ATR百分比",
+        "score": 66.7,
+        "value": 5.64
+      },
+      {
+        "name": "量价异常",
+        "score": 71.8,
+        "value": 0.58
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 2.08,
+    "return_5d_pct": 1.99,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 53.3,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "downtrend",
+    "ma5": 7.040000000000001,
+    "ma10": 7.266999999999999,
+    "ma20": 7.3870000000000005,
+    "ma60": 8.114833333333333,
+    "rsi14": 45.9,
+    "macd_dif": -0.14636009407313288,
+    "macd_dea": -0.13409087014644083,
+    "macd_hist": -0.024538447853384104,
+    "atr14_pct": 5.642786869467325,
+    "boll_position": 0.3342321872128181,
+    "return_5d_pct": -2.0519835841313228,
+    "return_20d_pct": 7.346326836581718,
+    "volume_ratio_5d": 0.58
+  },
+  "industry": {
+    "name": "消费电子",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 5.02
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 56.7,
+      "average_return_pct": 2.08,
+      "median_return_pct": 1.09,
+      "best_return_pct": 32.27,
+      "worst_return_pct": -15.41
+    },
+    "horizon_5d": {
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.99,
+      "median_return_pct": 1.4,
+      "best_return_pct": 26.28,
+      "worst_return_pct": -20.34
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 46.1%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 46.1%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 51.5%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/300088.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

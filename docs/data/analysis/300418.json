@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "300418",
   "name": "昆仑万维",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 41.2,
-    "risk": 52.9,
-    "technical": 65.0,
-    "industry": 65.0,
+    "risk_adjusted": 36.6,
+    "risk": 49.4,
+    "technical": 63.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,99 +34,104 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:07"
+    "updated_at": "2026-08-28 10:15:43"
+  },
+  "nale_network": {
+    "sector_name": "大模型/游戏",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 87.47,
+    "annualized_volatility_20d_pct": 52.55,
     "max_drawdown_60d_pct": -28.6,
-    "atr14_pct": 6.51,
+    "atr14_pct": 5.78,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 83.7,
-        "value": 87.47
+        "score": 55.1,
+        "value": 52.55
       },
       {
         "name": "60日最大回撤",
-        "score": 52.5,
+        "score": 55.1,
         "value": -28.6
       },
       {
         "name": "ATR百分比",
-        "score": 70.2,
-        "value": 6.51
+        "score": 68.6,
+        "value": 5.78
       },
       {
         "name": "量价异常",
-        "score": 5.7,
-        "value": 0.94
+        "score": 51.3,
+        "value": 0.69
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.8,
-    "return_5d_pct": 1.5,
-    "up_probability_3d_pct": 52.0,
-    "up_probability_5d_pct": 54.5,
+    "return_3d_pct": -2.14,
+    "return_5d_pct": -0.72,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 40.0,
     "confidence": "medium",
-    "rationale": "均线负乖离偏大存在超跌修复需求，但整体动量与成交量偏弱，以弱反弹为主。",
-    "risk_warning": "AI板块持续走弱及量能不足跌破支撑位风险。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "range",
-    "ma5": 41.886,
-    "ma10": 42.692,
-    "ma20": 42.772999999999996,
-    "ma60": 42.118500000000004,
-    "rsi14": 42.4,
-    "macd_dif": -0.3100979008790006,
-    "macd_dea": 0.06335640301737866,
-    "macd_hist": -0.7469086077927585,
-    "atr14_pct": 6.508236788364591,
-    "boll_position": 0.14558711325431842,
-    "return_5d_pct": -6.632173095014116,
-    "return_20d_pct": 7.792560412707039,
-    "volume_ratio_5d": 0.94,
-    "close": 39.7,
-    "change_pct": -1.5376984126984063
+    "ma5": 40.68599999999999,
+    "ma10": 42.4,
+    "ma20": 42.956500000000005,
+    "ma60": 42.12833333333333,
+    "rsi14": 48.9,
+    "macd_dif": -0.36520496420335036,
+    "macd_dea": -0.09525401863881963,
+    "macd_hist": -0.5399018911290614,
+    "atr14_pct": 5.778469959876296,
+    "boll_position": 0.3477501888026699,
+    "return_5d_pct": -4.198995892286639,
+    "return_20d_pct": -2.82407407407409,
+    "volume_ratio_5d": 0.69
   },
   "industry": {
     "name": "大模型/游戏",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 6.45
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 7.84
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.8,
-      "median_return_pct": -0.96,
-      "best_return_pct": 14.86,
+      "up_probability_pct": 36.7,
+      "average_return_pct": -2.14,
+      "median_return_pct": -3.18,
+      "best_return_pct": 21.39,
       "worst_return_pct": -15.64
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.06,
-      "median_return_pct": -0.91,
-      "best_return_pct": 16.19,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.72,
+      "median_return_pct": -1.54,
+      "best_return_pct": 21.94,
       "worst_return_pct": -14.07
     }
   },
@@ -279,20 +284,10 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 87.5%，波动偏高。",
+      "detail": "20日年化波动率 52.5%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300418.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "大模型/游戏",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }
