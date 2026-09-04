@@ -98,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (el) {
             if (dates.length > 0) {
                 const latestDate = dates.sort().reverse()[0];
-                el.textContent = `数据更新至: ${latestDate} (60天周期)`;
+                const totalDays = state.portfolios.tech?.history?.length || dates.length;
+                el.textContent = `数据更新至: ${latestDate} (${totalDays}个交易日)`;
             } else {
                 el.textContent = '暂无数据';
             }
@@ -174,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="portfolio-return ${returnClass}">
                     ${returnSign}${totalReturn.toFixed(2)}%
-                    <span style="font-size:13px;font-weight:600;color:#64748b;margin-left:4px;">(60天累计)</span>
+                    <span style="font-size:13px;font-weight:600;color:#64748b;margin-left:4px;">(累计收益)</span>
                 </div>
                 <div class="portfolio-stats">
                     <div class="portfolio-stat">
@@ -226,15 +227,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const series = [];
 
         // 全池等权基准线
-        if (state.benchmark && state.benchmark.records) {
-            let cum = 0;
-            const bPoints = [];
-            state.benchmark.records.forEach(r => {
-                cum = (1 + cum / 100) * (1 + (r.daily_return_pct || 0) / 100) - 1;
-                if (dateSet.has(r.trade_date)) {
-                    bPoints.push([toTs(r.trade_date), +(cum * 100).toFixed(2)]);
-                }
-            });
+        if (state.benchmark) {
+            let bPoints = [];
+            if (state.benchmark.history && state.benchmark.history.length > 0) {
+                bPoints = state.benchmark.history
+                    .filter(h => dateSet.has(h.date) && h.total_return != null)
+                    .map(h => [toTs(h.date), +Number(h.total_return).toFixed(2)]);
+            } else if (state.benchmark.records) {
+                let nav = 1.0;
+                state.benchmark.records.forEach(r => {
+                    const dRet = (r.daily_return_pct !== undefined ? r.daily_return_pct : r.equal_weight_return_pct) || 0;
+                    nav *= (1.0 + dRet / 100.0);
+                    if (dateSet.has(r.trade_date)) {
+                        bPoints.push([toTs(r.trade_date), +((nav - 1.0) * 100.0).toFixed(2)]);
+                    }
+                });
+            }
             if (bPoints.length > 0) {
                 series.push({
                     name: '全池等权基准',
@@ -289,28 +297,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const option = {
+            animation: false,
             tooltip: {
                 trigger: 'axis',
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                backgroundColor: 'rgba(255, 255, 255, 0.98)',
                 borderColor: '#e2e8f0',
                 borderWidth: 1,
-                padding: [12, 16],
+                padding: [14, 18],
                 textStyle: { color: '#0f172a', fontSize: 13 },
                 formatter: function(params) {
                     if (!params || !params.length) return '';
                     const first = params[0];
                     const tsVal = Array.isArray(first.value) ? first.value[0] : first.axisValue;
                     const dateStr = fmtDate(tsVal);
-                    let html = `<div style="font-weight:800;margin-bottom:6px;border-bottom:1px solid #f1f5f9;padding-bottom:4px;">📅 ${dateStr}</div>`;
-                    params.forEach(param => {
+                    
+                    // 按累计收益从高到低排序对比
+                    const sortedParams = [...params].sort((a, b) => {
+                        const va = Array.isArray(a.value) ? a.value[1] : (typeof a.value === 'number' ? a.value : -999);
+                        const vb = Array.isArray(b.value) ? b.value[1] : (typeof b.value === 'number' ? b.value : -999);
+                        return vb - va;
+                    });
+
+                    let html = `<div style="font-weight:800;margin-bottom:8px;border-bottom:1px solid #e2e8f0;padding-bottom:4px;font-size:14px;">📅 ${dateStr}</div>`;
+                    sortedParams.forEach(param => {
                         const v = Array.isArray(param.value) ? param.value[1] : param.value;
                         const valStr = (v !== null && v !== undefined)
                             ? ((v > 0 ? '+' : '') + Number(v).toFixed(2) + '%')
                             : '--';
-                        const isMain = param.seriesName.includes('激进') || param.seriesName.includes('妖股');
-                        html += `<div style="display:flex;justify-content:space-between;gap:15px;line-height:1.6;${isMain ? 'font-weight:700;' : ''}">
+                        const isMain = param.seriesName.includes('科技') || param.seriesName.includes('全球') || param.seriesName.includes('激进');
+                        const retColor = (v >= 0) ? '#dc2626' : '#16a34a';
+                        html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:18px;line-height:1.7;${isMain ? 'font-weight:700;' : ''}">
                             <span>${param.marker} ${param.seriesName}</span>
-                            <span style="font-family:monospace;font-weight:800;">${valStr}</span>
+                            <span style="font-family:monospace;font-weight:800;color:${retColor};">${valStr}</span>
                         </div>`;
                     });
                     return html;
