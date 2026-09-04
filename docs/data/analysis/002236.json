@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-28 10:18:33+08:00",
-  "trade_date": "2026-08-28",
+  "generated_at": "2026-09-04 16:02:46+08:00",
+  "trade_date": "2026-09-04",
   "code": "002236",
   "name": "大华股份",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 40.8,
-    "risk": 14.4,
-    "technical": 71.0,
-    "industry": 48.1,
+    "risk_adjusted": 41.7,
+    "risk": 9.8,
+    "technical": 81.0,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-28 10:15:43"
+    "updated_at": "2026-09-04 15:59:10"
   },
   "nale_network": {
     "sector_name": "智能物联",
@@ -49,14 +49,14 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 16.64,
+    "annualized_volatility_20d_pct": 15.46,
     "max_drawdown_60d_pct": -7.35,
-    "atr14_pct": 2.09,
+    "atr14_pct": 2.0,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 7.7,
-        "value": 16.64
+        "score": 4.5,
+        "value": 15.46
       },
       {
         "name": "60日最大回撤",
@@ -66,54 +66,54 @@
       {
         "name": "ATR百分比",
         "score": 14.7,
-        "value": 2.09
+        "value": 2.0
       },
       {
         "name": "量价异常",
-        "score": 76.9,
-        "value": 0.56
+        "score": 41.7,
+        "value": 0.8
       },
       {
         "name": "行业波动",
-        "score": 1.3,
-        "value": 28.17
+        "score": 0.6,
+        "value": 24.95
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.57,
-    "return_5d_pct": -0.79,
+    "return_3d_pct": -0.59,
+    "return_5d_pct": -0.59,
     "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 40.0,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
     "model": "knn_v1"
   },
   "technical": {
-    "trend": "range",
-    "ma5": 16.236,
-    "ma10": 16.262,
-    "ma20": 16.532500000000002,
-    "ma60": 16.4895,
-    "rsi14": 48.2,
-    "macd_dif": -0.11072821074644423,
-    "macd_dea": -0.09273365621872814,
-    "macd_hist": -0.03598910905543218,
-    "atr14_pct": 2.085145714830755,
-    "boll_position": 0.388108761643198,
-    "return_5d_pct": 1.6759776536312776,
-    "return_20d_pct": -2.0334928229665095,
-    "volume_ratio_5d": 0.56
+    "trend": "downtrend",
+    "ma5": 16.4,
+    "ma10": 16.307,
+    "ma20": 16.3785,
+    "ma60": 16.486833333333333,
+    "rsi14": 46.7,
+    "macd_dif": -0.06820324587609505,
+    "macd_dea": -0.08029861280510704,
+    "macd_hist": 0.024190733858023977,
+    "atr14_pct": 1.9981941517709545,
+    "boll_position": 0.4173127336106487,
+    "return_5d_pct": 0.24585125998770607,
+    "return_20d_pct": -3.147268408551074,
+    "volume_ratio_5d": 0.8
   },
   "industry": {
     "name": "智能物联",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.54,
-    "return_20d_pct": 5.74,
-    "return_60d_pct": -10.54,
-    "relative_strength_20d_pct": -4.94
+    "return_5d_pct": -3.02,
+    "return_20d_pct": -3.44,
+    "return_60d_pct": -8.89,
+    "relative_strength_20d_pct": -0.85
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -122,17 +122,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": -0.57,
-      "median_return_pct": -0.06,
+      "average_return_pct": -0.59,
+      "median_return_pct": -0.48,
       "best_return_pct": 5.23,
-      "worst_return_pct": -6.86
+      "worst_return_pct": -8.05
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.79,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.59,
       "median_return_pct": -0.74,
       "best_return_pct": 8.5,
-      "worst_return_pct": -5.88
+      "worst_return_pct": -6.54
     }
   },
   "fundamental": {
@@ -256,7 +256,14 @@
     },
     "cached_at": "2026-08-21 10:05:36"
   },
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    }
+  ],
   "kline_file": "../kline/002236.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

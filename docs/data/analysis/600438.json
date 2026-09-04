@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-28 10:18:33+08:00",
-  "trade_date": "2026-08-28",
+  "generated_at": "2026-09-04 16:02:46+08:00",
+  "trade_date": "2026-09-04",
   "code": "600438",
   "name": "通威股份",
   "type": "stock",
@@ -9,11 +9,11 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 25.9,
-    "risk": 47.2,
-    "technical": 65.0,
-    "industry": 50.1,
-    "leading": 50.0
+    "risk_adjusted": 20.0,
+    "risk": 40.0,
+    "technical": 50.0,
+    "industry": 32.1,
+    "leading": 20.0
   },
   "leading": {
     "category": "new_energy",
@@ -782,30 +782,35 @@
       158860.0,
       150280.0,
       152160.0,
-      152020.0
+      152020.0,
+      159600.0,
+      161000.0,
+      157860.0,
+      154780.0,
+      149880.0
     ],
     "momentum_metrics": {
-      "slope_pct": 10.35,
-      "momentum": "flat",
-      "inflection_flag": "none",
-      "latest_value": 152020.0,
+      "slope_pct": 7.06,
+      "momentum": "decelerating",
+      "inflection_flag": "negative_reversal",
+      "latest_value": 149880.0,
       "confidence": "high"
     },
-    "updated_at": "2026-08-28 10:15:05"
+    "updated_at": "2026-09-04 15:58:52"
   },
   "nale_network": {
     "sector_name": "新能源",
-    "sector_breadth_pct": 60.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
         "code": "601012",
         "name": "隆基绿能",
-        "corr": 0.77
+        "corr": 0.78
       },
       {
         "code": "002459",
@@ -817,42 +822,42 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 54.45,
-    "max_drawdown_60d_pct": -26.2,
-    "atr14_pct": 3.64,
+    "annualized_volatility_20d_pct": 35.87,
+    "max_drawdown_60d_pct": -23.5,
+    "atr14_pct": 3.7,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 57.1,
-        "value": 54.45
+        "score": 43.6,
+        "value": 35.87
       },
       {
         "name": "60日最大回撤",
-        "score": 53.2,
-        "value": -26.2
+        "score": 47.4,
+        "value": -23.5
       },
       {
         "name": "ATR百分比",
-        "score": 38.5,
-        "value": 3.64
+        "score": 39.1,
+        "value": 3.7
       },
       {
         "name": "量价异常",
-        "score": 89.1,
-        "value": 0.42
+        "score": 71.8,
+        "value": 0.68
       },
       {
         "name": "行业波动",
-        "score": 1.3,
-        "value": 28.17
+        "score": 0.6,
+        "value": 24.95
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -1.89,
-    "return_5d_pct": -3.09,
-    "up_probability_3d_pct": 24.1,
-    "up_probability_5d_pct": 27.6,
+    "return_3d_pct": -0.98,
+    "return_5d_pct": -2.39,
+    "up_probability_3d_pct": 31.0,
+    "up_probability_5d_pct": 31.0,
     "confidence": "medium",
     "sample_size": 29,
     "source": "knn_fallback",
@@ -860,28 +865,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 11.998000000000001,
-    "ma10": 12.273,
-    "ma20": 12.5665,
-    "ma60": 12.179833333333335,
-    "rsi14": 44.8,
-    "macd_dif": -0.023695894936015094,
-    "macd_dea": 0.08406482286944726,
-    "macd_hist": -0.2155214356109247,
-    "atr14_pct": 3.639332775528243,
-    "boll_position": 0.13667620178711057,
-    "return_5d_pct": -3.8616251005631597,
-    "return_20d_pct": 2.3116438356164393,
-    "volume_ratio_5d": 0.42
+    "ma5": 11.488,
+    "ma10": 11.744000000000002,
+    "ma20": 12.2455,
+    "ma60": 12.006833333333333,
+    "rsi14": 39.6,
+    "macd_dif": -0.21129370061400898,
+    "macd_dea": -0.07817284963239099,
+    "macd_hist": -0.266241701963236,
+    "atr14_pct": 3.7049977682252337,
+    "boll_position": 0.1384102298766251,
+    "return_5d_pct": -4.76588628762542,
+    "return_20d_pct": -12.920489296636084,
+    "volume_ratio_5d": 0.68
   },
   "industry": {
     "name": "新能源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.54,
-    "return_20d_pct": 5.74,
-    "return_60d_pct": -10.54,
-    "relative_strength_20d_pct": -3.95
+    "return_5d_pct": -3.02,
+    "return_20d_pct": -3.44,
+    "return_60d_pct": -8.89,
+    "relative_strength_20d_pct": -4.93
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -889,18 +894,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 24.1,
-      "average_return_pct": -1.89,
-      "median_return_pct": -2.76,
-      "best_return_pct": 9.43,
-      "worst_return_pct": -12.31
+      "up_probability_pct": 31.0,
+      "average_return_pct": -0.98,
+      "median_return_pct": -1.61,
+      "best_return_pct": 9.99,
+      "worst_return_pct": -7.68
     },
     "horizon_5d": {
-      "up_probability_pct": 27.6,
-      "average_return_pct": -3.09,
-      "median_return_pct": -5.28,
+      "up_probability_pct": 31.0,
+      "average_return_pct": -2.39,
+      "median_return_pct": -4.01,
       "best_return_pct": 14.75,
-      "worst_return_pct": -11.77
+      "worst_return_pct": -10.11
     }
   },
   "fundamental": {
@@ -1033,27 +1038,21 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "领先指标",
+      "detail": "领先指标见顶回落，供需拐点向下",
+      "contribution": -60.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 26.2%，风险偏高。",
+      "detail": "近60日最大回撤 23.5%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 26.2%，风险扣分。",
+      "detail": "近60日最大回撤 23.5%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "波动较大",
-      "detail": "20日年化波动率 54.5%，波动偏高。",
-      "contribution": -5.0
-    },
-    {
-      "type": "warning",
-      "title": "成交缩量",
-      "detail": "近5日量能仅为前期0.42倍。",
-      "contribution": -3.0
     }
   ],
   "kline_file": "../kline/600438.json",

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-28 10:18:33+08:00",
-  "trade_date": "2026-08-28",
+  "generated_at": "2026-09-04 16:02:46+08:00",
+  "trade_date": "2026-09-04",
   "code": "001258",
   "name": "立新能源",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 47.7,
-    "risk": 66.3,
-    "technical": 88.0,
-    "industry": 73.0,
+    "risk_adjusted": 43.6,
+    "risk": 61.9,
+    "technical": 58.0,
+    "industry": 39.4,
     "leading": 50.0
   },
   "leading": {
@@ -34,104 +34,109 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-28 10:14:51"
+    "updated_at": "2026-09-04 15:58:37"
   },
   "nale_network": {
     "sector_name": "电力",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "001258",
+      "name": "立新能源",
+      "change_pct": 5.85701981050818,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": []
   },
   "risk": {
-    "level": "high",
-    "label": "高风险",
-    "annualized_volatility_20d_pct": 100.93,
-    "max_drawdown_60d_pct": -34.44,
-    "atr14_pct": 8.7,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 101.8,
+    "max_drawdown_60d_pct": -27.12,
+    "atr14_pct": 10.18,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 91.7,
-        "value": 100.93
+        "score": 93.6,
+        "value": 101.8
       },
       {
         "name": "60日最大回撤",
-        "score": 64.7,
-        "value": -34.44
+        "score": 53.2,
+        "value": -27.12
       },
       {
         "name": "ATR百分比",
-        "score": 96.8,
-        "value": 8.7
+        "score": 97.4,
+        "value": 10.18
       },
       {
         "name": "量价异常",
-        "score": 30.8,
-        "value": 0.81
+        "score": 9.6,
+        "value": 0.97
       },
       {
         "name": "行业波动",
-        "score": 1.3,
-        "value": 28.17
+        "score": 0.6,
+        "value": 24.95
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.04,
-    "return_5d_pct": 1.63,
-    "up_probability_3d_pct": 46.7,
-    "up_probability_5d_pct": 46.7,
+    "return_3d_pct": 3.63,
+    "return_5d_pct": 3.88,
+    "up_probability_3d_pct": 62.1,
+    "up_probability_5d_pct": 55.2,
     "confidence": "medium",
-    "sample_size": 30,
+    "sample_size": 29,
     "source": "knn_fallback",
     "model": "knn_v1"
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 13.151999999999997,
-    "ma10": 13.005,
-    "ma20": 13.497500000000002,
-    "ma60": 10.175666666666666,
-    "rsi14": 56.2,
-    "macd_dif": 0.5711402222398014,
-    "macd_dea": 0.7758961985473584,
-    "macd_hist": -0.40951195261511386,
-    "atr14_pct": 8.697141603264232,
-    "boll_position": 0.527473177600294,
-    "return_5d_pct": 11.547911547911527,
-    "return_20d_pct": 10.372771474878428,
-    "volume_ratio_5d": 0.81
+    "trend": "rebound",
+    "ma5": 12.684000000000001,
+    "ma10": 12.886,
+    "ma20": 13.402000000000001,
+    "ma60": 10.508666666666667,
+    "rsi14": 48.3,
+    "macd_dif": 0.19832752665335818,
+    "macd_dea": 0.4841089262721952,
+    "macd_hist": -0.5715627992376741,
+    "atr14_pct": 10.184510096165276,
+    "boll_position": 0.2668180713141471,
+    "return_5d_pct": -7.593984962406031,
+    "return_20d_pct": -6.610942249240126,
+    "volume_ratio_5d": 0.97
   },
   "industry": {
     "name": "电力",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.54,
-    "return_20d_pct": 5.74,
-    "return_60d_pct": -10.54,
-    "relative_strength_20d_pct": 5.67
+    "return_5d_pct": -3.02,
+    "return_20d_pct": -3.44,
+    "return_60d_pct": -8.89,
+    "relative_strength_20d_pct": -1.32
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 1.04,
-      "median_return_pct": -0.21,
-      "best_return_pct": 33.04,
+      "up_probability_pct": 62.1,
+      "average_return_pct": 3.63,
+      "median_return_pct": 1.54,
+      "best_return_pct": 30.68,
       "worst_return_pct": -20.59
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 1.63,
-      "median_return_pct": -0.33,
-      "best_return_pct": 60.96,
+      "up_probability_pct": 55.2,
+      "average_return_pct": 3.88,
+      "median_return_pct": 1.73,
+      "best_return_pct": 52.82,
       "worst_return_pct": -28.07
     }
   },
@@ -258,27 +263,27 @@
   },
   "reasons": [
     {
-      "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
-    },
-    {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 34.4%，风险偏高。",
+      "detail": "近60日最大回撤 27.1%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 34.4%，风险扣分。",
+      "detail": "近60日最大回撤 27.1%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 100.9%，波动偏高。",
+      "detail": "20日年化波动率 101.8%，波动偏高。",
       "contribution": -5.0
     }
   ],

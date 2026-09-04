@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-28 10:18:33+08:00",
-  "trade_date": "2026-08-28",
+  "generated_at": "2026-09-04 16:02:46+08:00",
+  "trade_date": "2026-09-04",
   "code": "515790",
   "name": "光伏ETF",
   "type": "etf",
@@ -9,11 +9,11 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 36.6,
-    "risk": 33.8,
-    "technical": 80.0,
-    "industry": 58.0,
-    "leading": 50.0
+    "risk_adjusted": 31.7,
+    "risk": 32.4,
+    "technical": 42.0,
+    "industry": 42.0,
+    "leading": 20.0
   },
   "leading": {
     "category": "new_energy",
@@ -782,16 +782,21 @@
       158860.0,
       150280.0,
       152160.0,
-      152020.0
+      152020.0,
+      159600.0,
+      161000.0,
+      157860.0,
+      154780.0,
+      149880.0
     ],
     "momentum_metrics": {
-      "slope_pct": 10.35,
-      "momentum": "flat",
-      "inflection_flag": "none",
-      "latest_value": 152020.0,
+      "slope_pct": 7.06,
+      "momentum": "decelerating",
+      "inflection_flag": "negative_reversal",
+      "latest_value": 149880.0,
       "confidence": "high"
     },
-    "updated_at": "2026-08-28 10:15:54"
+    "updated_at": "2026-09-04 15:59:24"
   },
   "nale_network": {
     "sector_name": "光伏绿电",
@@ -806,42 +811,42 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 30.87,
+    "annualized_volatility_20d_pct": 29.02,
     "max_drawdown_60d_pct": -24.04,
-    "atr14_pct": 2.67,
+    "atr14_pct": 2.69,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 32.7,
-        "value": 30.87
+        "score": 31.4,
+        "value": 29.02
       },
       {
         "name": "60日最大回撤",
-        "score": 50.0,
+        "score": 48.7,
         "value": -24.04
       },
       {
         "name": "ATR百分比",
-        "score": 26.9,
-        "value": 2.67
+        "score": 28.8,
+        "value": 2.69
       },
       {
         "name": "量价异常",
-        "score": 59.6,
-        "value": 0.63
+        "score": 49.4,
+        "value": 0.78
       },
       {
         "name": "行业波动",
-        "score": 1.3,
-        "value": 28.17
+        "score": 0.6,
+        "value": 24.95
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -1.18,
-    "return_5d_pct": -1.39,
-    "up_probability_3d_pct": 33.3,
-    "up_probability_5d_pct": 40.0,
+    "return_3d_pct": 0.0,
+    "return_5d_pct": -0.17,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
@@ -849,28 +854,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 0.8459999999999999,
-    "ma10": 0.8550000000000001,
-    "ma20": 0.8554999999999999,
-    "ma60": 0.9036666666666666,
-    "rsi14": 46.9,
-    "macd_dif": -0.006912189572735539,
-    "macd_dea": -0.00862141472275356,
-    "macd_hist": 0.003418450300036041,
-    "atr14_pct": 2.6651247653826315,
-    "boll_position": 0.4170466656065152,
-    "return_5d_pct": 0.0,
-    "return_20d_pct": 3.658536585365857,
-    "volume_ratio_5d": 0.63
+    "ma5": 0.818,
+    "ma10": 0.8320000000000001,
+    "ma20": 0.8485000000000001,
+    "ma60": 0.8878333333333334,
+    "rsi14": 36.7,
+    "macd_dif": -0.013800221924032074,
+    "macd_dea": -0.0106317611310379,
+    "macd_hist": -0.00633692158598835,
+    "atr14_pct": 2.6902551010713616,
+    "boll_position": 0.0829971636113207,
+    "return_5d_pct": -4.70588235294117,
+    "return_20d_pct": -6.896551724137923,
+    "volume_ratio_5d": 0.78
   },
   "industry": {
     "name": "光伏绿电",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": 0.54,
-    "return_20d_pct": 5.74,
-    "return_60d_pct": -10.54,
-    "relative_strength_20d_pct": 0.51
+    "return_5d_pct": -3.02,
+    "return_20d_pct": -3.44,
+    "return_60d_pct": -8.89,
+    "relative_strength_20d_pct": -0.13
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -878,22 +883,28 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -1.18,
-      "median_return_pct": -0.9,
-      "best_return_pct": 6.6,
-      "worst_return_pct": -7.69
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.0,
+      "median_return_pct": 0.09,
+      "best_return_pct": 7.69,
+      "worst_return_pct": -7.0
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -1.39,
-      "median_return_pct": -0.44,
-      "best_return_pct": 5.5,
-      "worst_return_pct": -10.58
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.17,
+      "median_return_pct": -0.45,
+      "best_return_pct": 7.55,
+      "worst_return_pct": -8.79
     }
   },
   "fundamental": null,
   "reasons": [
+    {
+      "type": "negative",
+      "title": "领先指标",
+      "detail": "领先指标见顶回落，供需拐点向下",
+      "contribution": -60.0
+    },
     {
       "type": "negative",
       "title": "趋势偏弱",
