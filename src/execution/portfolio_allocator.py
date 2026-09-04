@@ -37,6 +37,12 @@ class EvidencePhase(str, Enum):
     MASS_PRODUCTION = "Mass Production"  # 大规模量产落地 (100% 额度)
 
 
+class MacroRegime(str, Enum):
+    SUPER_BOOM = "Super Boom"    # 产业超级主升期 (仓位上限动态解锁至 45%)
+    NORMAL = "Normal"            # 常态平衡期 (标准 30% 上限)
+    RECESSION = "Recession"      # 衰退去库存期 (收紧至 15%)
+
+
 @dataclass
 class AllocationOrder:
     """最终头寸与委托指令。"""
@@ -48,6 +54,7 @@ class AllocationOrder:
     allocated_capital_cny: float  # 分配绝对资金 (元)
     action_directive: str  # 'OPEN_BUY', 'HOLD', 'LIQUIDATE_ALL'
     rationale: str
+    macro_regime: MacroRegime = MacroRegime.NORMAL
 
 
 class DynamicBetAllocator:
@@ -65,6 +72,18 @@ class DynamicBetAllocator:
         BetType.EVENT_DRIVEN: 0.20     # 20% 基础上限 (受证据阶段调制)
     }
 
+    REGIME_MULTIPLIERS = {
+        MacroRegime.SUPER_BOOM: 1.45,
+        MacroRegime.NORMAL: 1.00,
+        MacroRegime.RECESSION: 0.60
+    }
+
+    REGIME_CEILINGS = {
+        MacroRegime.SUPER_BOOM: 0.45,
+        MacroRegime.NORMAL: 0.30,
+        MacroRegime.RECESSION: 0.15
+    }
+
     def __init__(self, total_portfolio_capital: float = 1_000_000.0):
         self.total_portfolio_capital = total_portfolio_capital
 
@@ -75,15 +94,17 @@ class DynamicBetAllocator:
         trend_gate_decision: TrendGateDecision,
         bet_type: BetType = BetType.CATALYST_ALPHA,
         evidence_phase: EvidencePhase = EvidencePhase.MASS_PRODUCTION,
-        market_temperature: float = 50.0
+        market_temperature: float = 50.0,
+        macro_regime: MacroRegime = MacroRegime.NORMAL
     ) -> AllocationOrder:
-        """根据 GFCA 空间得分、Trend Gate 门禁与证据阶段计算目标头寸。"""
+        """根据 GFCA 空间得分、Trend Gate 门禁、宏观体制与证据阶段计算目标头寸。"""
         # 1. 检查 Trend Gate: G_i = 0 触发强制清仓
         if not trend_gate_decision.gate_open:
             return AllocationOrder(
                 ticker=ticker,
                 bet_type=bet_type,
                 evidence_phase=evidence_phase,
+                macro_regime=macro_regime,
                 trend_gate_open=False,
                 target_weight_pct=0.0,
                 allocated_capital_cny=0.0,
@@ -106,19 +127,26 @@ class DynamicBetAllocator:
         # 根据市场温度调制 (极寒 < 30℃ 折减 50%)
         temp_multiplier = 0.50 if market_temperature < 30.0 else (1.10 if market_temperature > 70.0 else 1.0)
 
-        final_weight = float(np.clip(base_cap * score_multiplier * phase_multiplier * temp_multiplier, 0.0, 0.30))
+        # 根据宏观/产业体制调制 (超级主升期 1.45 倍，上限突破至 45%；衰退期收紧至 15%)
+        regime_mult = self.REGIME_MULTIPLIERS.get(macro_regime, 1.00)
+        weight_ceiling = self.REGIME_CEILINGS.get(macro_regime, 0.30)
+
+        raw_weight = base_cap * score_multiplier * phase_multiplier * temp_multiplier * regime_mult
+        final_weight = float(np.clip(raw_weight, 0.0, weight_ceiling))
         allocated_capital = round(final_weight * self.total_portfolio_capital, 2)
 
         action = "OPEN_BUY" if final_weight > 0.02 else "HOLD"
         rationale = (
             f"GFCA={gfca_composite_score:.2f}, 催化类型={bet_type.value}, "
-            f"证据阶段={evidence_phase.value} ({phase_multiplier*100:.0f}%), 温度={market_temperature:.1f}℃ -> 权重 {final_weight*100:.1f}%"
+            f"证据阶段={evidence_phase.value} ({phase_multiplier*100:.0f}%), 体制={macro_regime.value}, "
+            f"温度={market_temperature:.1f}℃ -> 权重 {final_weight*100:.1f}% (上限 {weight_ceiling*100:.0f}%)"
         )
 
         return AllocationOrder(
             ticker=ticker,
             bet_type=bet_type,
             evidence_phase=evidence_phase,
+            macro_regime=macro_regime,
             trend_gate_open=True,
             target_weight_pct=final_weight,
             allocated_capital_cny=allocated_capital,

@@ -159,11 +159,14 @@ def calibrate_factor_direction(
     config: Optional[CalibrationConfig] = None,
     lookback_days: Optional[int] = None,
     min_samples: Optional[int] = None,
-    significance_level: Optional[float] = None
+    significance_level: Optional[float] = None,
+    factor_half_life: Optional[float] = None
 ) -> CalibrationResult:
-    """滚动方向校准核心算法（严格杜绝前视偏差）。
+    """滚动方向校准核心算法（严格杜绝前视偏差，支持因子时效性衰减惩罚）。
     
     在决策日 T，仅使用 [T-lookback_days, T-1] 的历史收益与打分进行假设检验。
+    若提供了 factor_half_life（因子半衰期天数），则在半衰期过短时动态施加置信度折价，
+    折价后若低于置信度阈值则安全触发 INVALID 拒绝预测。
     
     Parameters
     ----------
@@ -181,6 +184,8 @@ def calibrate_factor_direction(
         最小有效样本量门槛（若指定则覆盖 config）
     significance_level : Optional[float]
         统计显著性阈值 alpha（若指定则覆盖 config）
+    factor_half_life : Optional[float]
+        因子特征半衰期（天数），用于时效性感知与置信度折价
         
     Returns
     -------
@@ -279,61 +284,93 @@ def calibrate_factor_direction(
     p_value_neg = _binom_test_pvalue(sum(negative_hits), n_neg, 0.5, alternative="greater") if n_neg >= min_samp else 1.0
 
     # 决策逻辑
+    direction: FactorDirection
+    confidence: float
+    hit_rate: float
+    sample_size: int
+    p_value: float
+    reason: str
+
     # 1. 正向显著优于反向，且 p < sig_level
     if p_value_pos < sig_level and hit_rate_pos > hit_rate_neg:
+        direction = FactorDirection.POSITIVE
         confidence = float(max(0.0, min(1.0, 1.0 - p_value_pos)))
-        return CalibrationResult(
-            direction=FactorDirection.POSITIVE,
-            confidence=confidence,
-            hit_rate=hit_rate_pos,
-            sample_size=n_pos,
-            p_value=p_value_pos,
-            reason=f"正向命中率{hit_rate_pos:.2%}显著>50% (p={p_value_pos:.4f})"
-        )
+        hit_rate = hit_rate_pos
+        sample_size = n_pos
+        p_value = p_value_pos
+        reason = f"正向命中率{hit_rate_pos:.2%}显著>50% (p={p_value_pos:.4f})"
 
     # 2. 反向显著优于正向，且 p < sig_level
-    if p_value_neg < sig_level and hit_rate_neg > hit_rate_pos:
+    elif p_value_neg < sig_level and hit_rate_neg > hit_rate_pos:
+        direction = FactorDirection.NEGATIVE
         confidence = float(max(0.0, min(1.0, 1.0 - p_value_neg)))
-        return CalibrationResult(
-            direction=FactorDirection.NEGATIVE,
-            confidence=confidence,
-            hit_rate=hit_rate_neg,
-            sample_size=n_neg,
-            p_value=p_value_neg,
-            reason=f"反向命中率{hit_rate_neg:.2%}显著>50% (p={p_value_neg:.4f})"
-        )
+        hit_rate = hit_rate_neg
+        sample_size = n_neg
+        p_value = p_value_neg
+        reason = f"反向命中率{hit_rate_neg:.2%}显著>50% (p={p_value_neg:.4f})"
 
     # 3. 两者都不显著，或命中率均低于 min_hit → 严格拒绝预测
-    max_hit = max(hit_rate_pos, hit_rate_neg)
-    if max_hit < min_hit:
-        return CalibrationResult(
-            direction=FactorDirection.INVALID,
-            confidence=0.0,
-            hit_rate=max_hit,
-            sample_size=max(n_pos, n_neg),
-            p_value=min(p_value_pos, p_value_neg),
-            reason=f"命中率不足{min_hit:.0%}（正向{hit_rate_pos:.2%}，反向{hit_rate_neg:.2%}）"
-        )
-
-    # 4. 命中率 >= min_hit 但统计上不够显著（p >= sig_level）→ 降低置信度为 0.6
-    if hit_rate_pos >= hit_rate_neg:
-        return CalibrationResult(
-            direction=FactorDirection.POSITIVE,
-            confidence=0.6,
-            hit_rate=hit_rate_pos,
-            sample_size=n_pos,
-            p_value=p_value_pos,
-            reason=f"正向略优（{hit_rate_pos:.2%}）但不显著 (p={p_value_pos:.4f})"
-        )
     else:
-        return CalibrationResult(
-            direction=FactorDirection.NEGATIVE,
-            confidence=0.6,
-            hit_rate=hit_rate_neg,
-            sample_size=n_neg,
-            p_value=p_value_neg,
-            reason=f"反向略优（{hit_rate_neg:.2%}）但不显著 (p={p_value_neg:.4f})"
-        )
+        max_hit = max(hit_rate_pos, hit_rate_neg)
+        if max_hit < min_hit:
+            return CalibrationResult(
+                direction=FactorDirection.INVALID,
+                confidence=0.0,
+                hit_rate=max_hit,
+                sample_size=max(n_pos, n_neg),
+                p_value=min(p_value_pos, p_value_neg),
+                reason=f"命中率不足{min_hit:.0%}（正向{hit_rate_pos:.2%}，反向{hit_rate_neg:.2%}）",
+            )
+
+        # 4. 命中率 >= min_hit 但统计上不够显著（p >= sig_level）→ 降低置信度为 0.6
+        if hit_rate_pos >= hit_rate_neg:
+            direction = FactorDirection.POSITIVE
+            confidence = 0.6
+            hit_rate = hit_rate_pos
+            sample_size = n_pos
+            p_value = p_value_pos
+            reason = f"正向略优（{hit_rate_pos:.2%}）但不显著 (p={p_value_pos:.4f})"
+        else:
+            direction = FactorDirection.NEGATIVE
+            confidence = 0.6
+            hit_rate = hit_rate_neg
+            sample_size = n_neg
+            p_value = p_value_neg
+            reason = f"反向略优（{hit_rate_neg:.2%}）但不显著 (p={p_value_neg:.4f})"
+
+    # 5. 时效性衰减感知与置信度折价（Decay Penalty）
+    if factor_half_life is not None and getattr(cfg, "enable_decay_penalty", True):
+        min_hl = getattr(cfg, "min_acceptable_half_life", 2.0)
+        penalty_rate = getattr(cfg, "decay_penalty_rate", 0.20)
+        if factor_half_life < min_hl:
+            decay_ratio = max(0.0, factor_half_life / min_hl)
+            penalty = penalty_rate * (1.0 - decay_ratio)
+            adjusted_conf = float(max(0.0, confidence * (1.0 - penalty)))
+            if adjusted_conf < cfg.confidence_threshold:
+                return CalibrationResult(
+                    direction=FactorDirection.INVALID,
+                    confidence=adjusted_conf,
+                    hit_rate=hit_rate,
+                    sample_size=sample_size,
+                    p_value=p_value,
+                    reason=(
+                        f"时效衰减拦截：因子半衰期({factor_half_life:.1f}天)低于临界值({min_hl:.1f}天)，"
+                        f"折价后置信度({adjusted_conf:.2%})低于门槛({cfg.confidence_threshold:.0%})"
+                    ),
+                )
+            confidence = adjusted_conf
+            reason += f" [时效衰减折价: 半衰期{factor_half_life:.1f}天, 置信度->{confidence:.2%}]"
+        else:
+            reason += f" [时效平稳: 半衰期{factor_half_life:.1f}天]"
+
+    return CalibrationResult(
+        direction=direction,
+        confidence=confidence,
+        hit_rate=hit_rate,
+        sample_size=sample_size,
+        p_value=p_value,
+        reason=reason,
+    )
 
 
 def apply_calibrated_direction(
@@ -391,7 +428,8 @@ def generate_calibration_report(
     start_date: Optional[Any] = None,
     end_date: Optional[Any] = None,
     config: Optional[CalibrationConfig] = None,
-    lookback_days: Optional[int] = None
+    lookback_days: Optional[int] = None,
+    factor_half_life: Optional[float] = None
 ) -> pd.DataFrame:
     """生成全样本历史滚动方向校准报告。
     
@@ -420,7 +458,8 @@ def generate_calibration_report(
             returns_history=returns_history,
             current_date=date,
             config=cfg,
-            lookback_days=lb_days
+            lookback_days=lb_days,
+            factor_half_life=factor_half_life
         )
 
         results.append({

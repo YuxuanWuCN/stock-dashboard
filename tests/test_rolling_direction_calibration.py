@@ -296,3 +296,75 @@ def test_calibration_config_dataclass_and_validation():
     with pytest.raises(AssertionError):
         invalid_cfg.validate()
 
+
+def test_decay_penalty_reduces_confidence_or_rejects():
+    """测试因子半衰期过短时，时效衰减惩罚降低置信度并触发拒绝预测。"""
+    from src.pricing.calibration_config import CalibrationConfig
+    dates = pd.date_range("2026-01-01", periods=40, freq="D")
+    tickers = [f"STK_{i:02d}" for i in range(10)]
+
+    rng = np.random.default_rng(42)
+    scores_mat = rng.standard_normal((40, 10))
+    # 构造约 72% 命中率的信号
+    rets_mat = np.where(rng.random((40, 10)) < 0.72, np.sign(scores_mat) * 0.02, -np.sign(scores_mat) * 0.02)
+    scores_df = pd.DataFrame(scores_mat, index=dates, columns=tickers)
+    rets_df = pd.DataFrame(rets_mat, index=dates, columns=tickers)
+
+    cfg = CalibrationConfig(
+        confidence_threshold=0.70,
+        min_acceptable_half_life=2.0,
+        enable_decay_penalty=True,
+        decay_penalty_rate=0.40
+    )
+
+    # 1. 正常充裕半衰期（5.0天 > 2.0天）-> 不折价，保持 POSITIVE
+    res_healthy = calibrate_factor_direction(
+        factor_scores_history=scores_df,
+        returns_history=rets_df,
+        current_date=dates[35],
+        config=cfg,
+        lookback_days=30,
+        min_samples=50,
+        factor_half_life=5.0
+    )
+    assert res_healthy.direction == FactorDirection.POSITIVE
+    assert res_healthy.confidence >= 0.70
+    assert "时效平稳" in res_healthy.reason
+
+    # 2. 极短半衰期（0.2天 < 2.0天）-> 衰减折价导致置信度低于门槛，触发 INVALID 拒测
+    cfg_strict = CalibrationConfig(
+        confidence_threshold=0.85,
+        min_acceptable_half_life=2.0,
+        enable_decay_penalty=True,
+        decay_penalty_rate=0.40
+    )
+    res_decayed = calibrate_factor_direction(
+        factor_scores_history=scores_df,
+        returns_history=rets_df,
+        current_date=dates[35],
+        config=cfg_strict,
+        lookback_days=30,
+        min_samples=50,
+        factor_half_life=0.2
+    )
+    assert res_decayed.direction == FactorDirection.INVALID
+    assert "时效衰减拦截" in res_decayed.reason
+    assert res_decayed.confidence < 0.85
+
+
+def test_generate_calibration_report_with_half_life():
+    """测试生成全样本校准报告时传入 factor_half_life 正常运行。"""
+    dates = pd.date_range("2026-01-01", periods=45, freq="D")
+    tickers = ["001", "002"]
+    scores_df = pd.DataFrame(np.random.randn(45, 2), index=dates, columns=tickers)
+    rets_df = pd.DataFrame(np.random.randn(45, 2) * 0.01, index=dates, columns=tickers)
+
+    report_df = generate_calibration_report(
+        factor_scores_history=scores_df,
+        returns_history=rets_df,
+        lookback_days=30,
+        factor_half_life=4.0
+    )
+    assert isinstance(report_df, pd.DataFrame)
+    assert len(report_df) == 15
+

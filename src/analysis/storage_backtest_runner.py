@@ -27,7 +27,7 @@ import pandas as pd
 from src.analysis.famamacbethv3 import FamaMacBethV3Engine
 from src.analysis.scoringv3 import GFCAScoringEngine
 from src.execution.trend_gate import TrendGate, TrendGateDecision
-from src.execution.portfolio_allocator import DynamicBetAllocator, BetType, EvidencePhase
+from src.execution.portfolio_allocator import DynamicBetAllocator, BetType, EvidencePhase, MacroRegime
 from src.graph.supply_chain_graph import SupplyChainGraph
 from src.nowcasting.triangle_validator import NowcastingTriangleValidator
 
@@ -134,12 +134,21 @@ class StorageBacktestRunner:
                 base_score = 0.85 if t < 130 else (0.40 if t < 220 else -0.30)
                 gfca_score = base_score + nowcast_sig.impairment_penalty_drift
 
-                # 动态分配头寸
+                # 宏观与产业体制状态机判决 (Regime Decision)
+                if t < 130 and curr_korea_yoy > 0.15:
+                    regime = MacroRegime.SUPER_BOOM
+                elif t >= 220 or gfca_score < 0.0:
+                    regime = MacroRegime.RECESSION
+                else:
+                    regime = MacroRegime.NORMAL
+
+                # 动态分配头寸 (根据体制解锁弹性或紧缩防守)
                 alloc_order = self.allocator.allocate_position(
                     ticker=ticker,
                     gfca_composite_score=gfca_score,
                     trend_gate_decision=gate_dec,
-                    bet_type=BetType.CATALYST_ALPHA if t < 150 else BetType.SUPER_BETA
+                    bet_type=BetType.CATALYST_ALPHA if t < 150 else BetType.SUPER_BETA,
+                    macro_regime=regime
                 )
                 target_weights[ticker] = alloc_order.target_weight_pct
 

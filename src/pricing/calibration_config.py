@@ -31,6 +31,12 @@ class CalibrationConfig:
     # 是否启用调试日志（记录每日校准细节）
     debug_logging: bool = False
 
+    # 因子时效性与半衰期配置
+    min_acceptable_half_life: float = 2.0   # 最小可接受半衰期（天数），低于此值面临严重换手摩擦
+    max_acceptable_half_life: float = 120.0 # 最大可接受半衰期（天数）
+    enable_decay_penalty: bool = True       # 是否启用时效性衰减置信度折价
+    decay_penalty_rate: float = 0.20        # 衰减惩罚幅度（0.0 ~ 0.8）
+
     def validate(self) -> None:
         """参数合理性检查。"""
         assert 10 <= self.lookback_days <= 60, "lookback_days 应在 10-60 天范围"
@@ -39,6 +45,9 @@ class CalibrationConfig:
         assert 0.50 <= self.confidence_threshold <= 0.95, "confidence_threshold 应在 0.50-0.95 范围"
         assert 0.50 <= self.min_hit_rate <= 0.60, "min_hit_rate 应在 0.50-0.60 范围"
         assert 0.50 <= self.extreme_market_threshold <= 1.0, "extreme_market_threshold 应在 0.50-1.0 范围"
+        assert 0.5 <= self.min_acceptable_half_life <= 30.0, "min_acceptable_half_life 应在 0.5-30.0 天范围"
+        assert 10.0 <= self.max_acceptable_half_life <= 365.0, "max_acceptable_half_life 应在 10.0-365.0 天范围"
+        assert 0.0 <= self.decay_penalty_rate <= 0.80, "decay_penalty_rate 应在 0.0-0.80 范围"
 
 
 # 默认配置（用于回测与线上实测）
