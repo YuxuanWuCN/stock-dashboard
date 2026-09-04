@@ -1,0 +1,149 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
+  "code": "159985",
+  "name": "豆粕ETF",
+  "type": "etf",
+  "category": "农产品大宗",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 59.6,
+    "risk": 8.4,
+    "technical": 100.0,
+    "industry": 68.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:18:28"
+  },
+  "nale_network": {
+    "sector_name": "农产品大宗",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 16.45,
+    "max_drawdown_60d_pct": -8.73,
+    "atr14_pct": 1.65,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 6.4,
+        "value": 16.45
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 9.6,
+        "value": -8.73
+      },
+      {
+        "name": "ATR百分比",
+        "score": 9.6,
+        "value": 1.65
+      },
+      {
+        "name": "量价异常",
+        "score": 19.9,
+        "value": 0.88
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -0.68,
+    "return_5d_pct": -0.13,
+    "up_probability_3d_pct": 30.0,
+    "up_probability_5d_pct": 43.3,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 2.2299999999999995,
+    "ma10": 2.209,
+    "ma20": 2.163,
+    "ma60": 2.1155,
+    "rsi14": 66.3,
+    "macd_dif": 0.030217463049163396,
+    "macd_dea": 0.01844724383625439,
+    "macd_hist": 0.02354043842581801,
+    "atr14_pct": 1.6503695536526093,
+    "boll_position": 0.9850824655209126,
+    "return_5d_pct": 5.092592592592582,
+    "return_20d_pct": 8.61244019138756,
+    "volume_ratio_5d": 0.88
+  },
+  "industry": {
+    "name": "农产品大宗",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 3.35
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 30.0,
+      "average_return_pct": -0.68,
+      "median_return_pct": -0.92,
+      "best_return_pct": 5.83,
+      "worst_return_pct": -5.36
+    },
+    "horizon_5d": {
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.13,
+      "median_return_pct": 0.0,
+      "best_return_pct": 9.85,
+      "worst_return_pct": -7.59
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    }
+  ],
+  "kline_file": "../kline/159985.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

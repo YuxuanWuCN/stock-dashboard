@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "002241",
   "name": "歌尔股份",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 49.4,
-    "risk": 35.4,
+    "risk_adjusted": 41.9,
+    "risk": 31.4,
     "technical": 100.0,
-    "industry": 50.0,
+    "industry": 53.7,
     "leading": 50.0
   },
   "leading": {
@@ -34,100 +34,105 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:06"
+    "updated_at": "2026-08-28 10:15:42"
+  },
+  "nale_network": {
+    "sector_name": "声学/VR",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
-    "level": "medium",
-    "label": "中等风险",
-    "annualized_volatility_20d_pct": 33.42,
-    "max_drawdown_60d_pct": -23.87,
-    "atr14_pct": 3.73,
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 31.91,
+    "max_drawdown_60d_pct": -17.77,
+    "atr14_pct": 3.51,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 31.2,
-        "value": 33.42
+        "score": 34.0,
+        "value": 31.91
       },
       {
         "name": "60日最大回撤",
-        "score": 45.4,
-        "value": -23.87
+        "score": 35.9,
+        "value": -17.77
       },
       {
         "name": "ATR百分比",
-        "score": 31.9,
-        "value": 3.73
+        "score": 37.2,
+        "value": 3.51
       },
       {
         "name": "量价异常",
-        "score": 82.3,
-        "value": 1.47
+        "score": 46.2,
+        "value": 1.28
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.62,
-    "return_5d_pct": 2.75,
-    "up_probability_3d_pct": 62.5,
-    "up_probability_5d_pct": 58.0,
+    "return_3d_pct": -2.23,
+    "return_5d_pct": -1.41,
+    "up_probability_3d_pct": 26.7,
+    "up_probability_5d_pct": 53.3,
     "confidence": "medium",
-    "rationale": "量能温和放大且动量良好，但均线正乖离累积，面临区间震荡上沿压制。",
-    "risk_warning": "箱体上沿阻力回踩及消费电子板块冲高回落风险。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
-    "trend": "range",
-    "ma5": 23.158,
-    "ma10": 22.636000000000003,
-    "ma20": 22.869999999999997,
-    "ma60": 22.884333333333334,
-    "rsi14": 58.9,
-    "macd_dif": 0.07682170491102625,
-    "macd_dea": -0.0485195852204167,
-    "macd_hist": 0.2506825802628859,
-    "atr14_pct": 3.725034560788372,
-    "boll_position": 0.9014654770279081,
-    "return_5d_pct": 8.371246587807102,
-    "return_20d_pct": 0.5487547488391753,
-    "volume_ratio_5d": 1.47,
-    "close": 23.82,
-    "change_pct": 3.2509752925877766
+    "trend": "uptrend",
+    "ma5": 23.639999999999997,
+    "ma10": 23.019,
+    "ma20": 22.9535,
+    "ma60": 22.819000000000003,
+    "rsi14": 59.8,
+    "macd_dif": 0.20594455137556267,
+    "macd_dea": 0.03380518761339529,
+    "macd_hist": 0.34427872752433475,
+    "atr14_pct": 3.514616604125235,
+    "boll_position": 0.868543597624359,
+    "return_5d_pct": 2.3076923076923217,
+    "return_20d_pct": 3.6363636363636376,
+    "volume_ratio_5d": 1.28
   },
   "industry": {
     "name": "声学/VR",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": -0.79
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -2.14
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 20.0,
-      "average_return_pct": -2.19,
+      "up_probability_pct": 26.7,
+      "average_return_pct": -2.23,
       "median_return_pct": -1.82,
-      "best_return_pct": 5.41,
-      "worst_return_pct": -10.4
+      "best_return_pct": 4.09,
+      "worst_return_pct": -13.84
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -1.25,
-      "median_return_pct": -0.82,
-      "best_return_pct": 9.96,
-      "worst_return_pct": -8.93
+      "up_probability_pct": 53.3,
+      "average_return_pct": -1.41,
+      "median_return_pct": 0.16,
+      "best_return_pct": 6.19,
+      "worst_return_pct": -15.11
     }
   },
   "fundamental": {
@@ -259,28 +264,24 @@
   },
   "reasons": [
     {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 23.9%，风险偏高。",
+      "detail": "近60日最大回撤 17.8%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 23.9%，风险扣分。",
+      "detail": "近60日最大回撤 17.8%，风险扣分。",
       "contribution": -7.0
     }
   ],
   "kline_file": "../kline/002241.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "声学/VR",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

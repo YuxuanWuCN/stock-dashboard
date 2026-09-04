@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "512100",
   "name": "中证1000ETF",
   "type": "etf",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 54.5,
-    "risk": 25.6,
+    "risk_adjusted": 52.8,
+    "risk": 29.0,
     "technical": 98.0,
-    "industry": 64.7,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,100 +34,105 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:16"
+    "updated_at": "2026-08-28 10:15:54"
+  },
+  "nale_network": {
+    "sector_name": "小盘成长",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 29.74,
+    "annualized_volatility_20d_pct": 27.91,
     "max_drawdown_60d_pct": -21.79,
-    "atr14_pct": 2.78,
+    "atr14_pct": 2.6,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 24.8,
-        "value": 29.74
+        "score": 28.8,
+        "value": 27.91
       },
       {
         "name": "60日最大回撤",
-        "score": 38.3,
+        "score": 43.6,
         "value": -21.79
       },
       {
         "name": "ATR百分比",
-        "score": 20.6,
-        "value": 2.78
+        "score": 25.0,
+        "value": 2.6
       },
       {
         "name": "量价异常",
-        "score": 43.3,
-        "value": 0.77
+        "score": 42.3,
+        "value": 0.74
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.45,
-    "return_5d_pct": 0.85,
-    "up_probability_3d_pct": 52.0,
-    "up_probability_5d_pct": 54.0,
+    "return_3d_pct": -0.55,
+    "return_5d_pct": -0.31,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 46.7,
     "confidence": "medium",
-    "rationale": "短期均线粘合且量比偏低，RSI处于中性区间，整体呈现弱势窄幅震荡修复特征。",
-    "risk_warning": "量能持续萎缩及上方MA60均线压制风险。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "range",
-    "ma5": 3.06,
-    "ma10": 3.107,
-    "ma20": 3.0575,
-    "ma60": 3.207,
-    "rsi14": 47.6,
-    "macd_dif": -0.008326507714516929,
-    "macd_dea": -0.01186427603096804,
-    "macd_hist": 0.007075536632902224,
-    "atr14_pct": 2.776664079449091,
-    "boll_position": 0.5056472125235951,
-    "return_5d_pct": 0.3278688524590345,
-    "return_20d_pct": 6.25,
-    "volume_ratio_5d": 0.77,
-    "close": 3.06,
-    "change_pct": 0.327868852459024
+    "ma5": 3.088,
+    "ma10": 3.108,
+    "ma20": 3.0889999999999995,
+    "ma60": 3.199,
+    "rsi14": 54.6,
+    "macd_dif": 0.002411376637978524,
+    "macd_dea": -0.007554178779707488,
+    "macd_hist": 0.019931110835372023,
+    "atr14_pct": 2.602843358629394,
+    "boll_position": 0.6854934678136937,
+    "return_5d_pct": 2.2727272727272707,
+    "return_20d_pct": 10.139860139860147,
+    "volume_ratio_5d": 0.74
   },
   "industry": {
     "name": "小盘成长",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 4.91
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 6.4
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.46,
-      "median_return_pct": -0.83,
-      "best_return_pct": 5.78,
-      "worst_return_pct": -5.18
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.55,
+      "median_return_pct": -0.6,
+      "best_return_pct": 6.65,
+      "worst_return_pct": -8.33
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": -0.19,
-      "median_return_pct": 0.3,
-      "best_return_pct": 7.24,
-      "worst_return_pct": -8.1
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.31,
+      "median_return_pct": -0.96,
+      "best_return_pct": 6.12,
+      "worst_return_pct": -5.87
     }
   },
   "fundamental": null,
@@ -146,15 +151,5 @@
     }
   ],
   "kline_file": "../kline/512100.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "小盘成长",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

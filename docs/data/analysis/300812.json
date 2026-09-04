@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "300812",
   "name": "易天股份",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 44.7,
-    "risk": 52.5,
-    "technical": 88.0,
-    "industry": 65.0,
+    "risk_adjusted": 41.7,
+    "risk": 54.2,
+    "technical": 98.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,100 +34,131 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:33:21"
+    "updated_at": "2026-08-28 10:14:11"
+  },
+  "nale_network": {
+    "sector_name": "科技",
+    "sector_breadth_pct": 61.1,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "000021",
+        "name": "深科技",
+        "corr": 0.56
+      },
+      {
+        "code": "000725",
+        "name": "京东方A",
+        "corr": 0.56
+      },
+      {
+        "code": "601138",
+        "name": "工业富联",
+        "corr": 0.47
+      },
+      {
+        "code": "002371",
+        "name": "北方华创",
+        "corr": 0.45
+      },
+      {
+        "code": "688008",
+        "name": "澜起科技",
+        "corr": 0.45
+      }
+    ]
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 58.29,
+    "annualized_volatility_20d_pct": 46.86,
     "max_drawdown_60d_pct": -47.53,
-    "atr14_pct": 5.88,
+    "atr14_pct": 5.36,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 53.9,
-        "value": 58.29
+        "score": 48.1,
+        "value": 46.86
       },
       {
         "name": "60日最大回撤",
-        "score": 85.8,
+        "score": 87.2,
         "value": -47.53
       },
       {
         "name": "ATR百分比",
-        "score": 62.4,
-        "value": 5.88
+        "score": 61.5,
+        "value": 5.36
       },
       {
         "name": "量价异常",
-        "score": 23.4,
-        "value": 0.85
+        "score": 54.5,
+        "value": 0.67
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -1.1,
-    "return_5d_pct": -1.8,
-    "up_probability_3d_pct": 42.0,
-    "up_probability_5d_pct": 40.0,
+    "return_3d_pct": -0.79,
+    "return_5d_pct": -0.73,
+    "up_probability_3d_pct": 40.0,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
-    "rationale": "中期处于下降通道，MA60压制显著且反弹量能萎缩，短期回踩整理概率大。",
-    "risk_warning": "中长期均线空头排列，科技题材整体走弱可能加速下探。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 19.18,
-    "ma10": 19.369,
-    "ma20": 19.018,
-    "ma60": 22.61466666666667,
-    "rsi14": 44.8,
-    "macd_dif": -0.4355527356718163,
-    "macd_dea": -0.6179486248523678,
-    "macd_hist": 0.364791778361103,
-    "atr14_pct": 5.8819834147397065,
-    "boll_position": 0.47839652222432133,
-    "return_5d_pct": 2.5460455037919827,
-    "return_20d_pct": 11.156782149148547,
-    "volume_ratio_5d": 0.85,
-    "close": 18.93,
-    "change_pct": -1.5600624024961036
+    "trend": "range",
+    "ma5": 19.198,
+    "ma10": 19.333000000000002,
+    "ma20": 19.3,
+    "ma60": 22.382166666666667,
+    "rsi14": 49.5,
+    "macd_dif": -0.33554186140364806,
+    "macd_dea": -0.5256468606602961,
+    "macd_hist": 0.38020999851329607,
+    "atr14_pct": 5.357784486598911,
+    "boll_position": 0.6223294089359332,
+    "return_5d_pct": 0.8230452674897082,
+    "return_20d_pct": 13.425925925925931,
+    "volume_ratio_5d": 0.67
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 9.82
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 14.99
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.1,
-      "median_return_pct": -1.19,
-      "best_return_pct": 24.17,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.79,
+      "median_return_pct": -2.53,
+      "best_return_pct": 32.35,
       "worst_return_pct": -20.93
     },
     "horizon_5d": {
       "up_probability_pct": 50.0,
-      "average_return_pct": 0.83,
-      "median_return_pct": 1.04,
-      "best_return_pct": 30.86,
-      "worst_return_pct": -15.67
+      "average_return_pct": -0.73,
+      "median_return_pct": 0.49,
+      "best_return_pct": 35.64,
+      "worst_return_pct": -20.67
     }
   },
   "fundamental": {
@@ -254,12 +285,6 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 47.5%，风险偏高。",
       "contribution": -7.0
@@ -273,51 +298,10 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 58.3%，波动偏高。",
+      "detail": "20日年化波动率 46.9%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300812.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "科技",
-    "sector_breadth_pct": 61.1,
-    "tier_role": "divergent",
-    "leader_stock": {
-      "code": "003040",
-      "name": "楚天龙",
-      "change_pct": 10.012919896640831,
-      "is_limit_up": true
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": true,
-    "co_movement_peers": [
-      {
-        "code": "000725",
-        "name": "京东方A",
-        "corr": 0.55
-      },
-      {
-        "code": "000021",
-        "name": "深科技",
-        "corr": 0.53
-      },
-      {
-        "code": "601138",
-        "name": "工业富联",
-        "corr": 0.42
-      },
-      {
-        "code": "002371",
-        "name": "北方华创",
-        "corr": 0.42
-      },
-      {
-        "code": "688008",
-        "name": "澜起科技",
-        "corr": 0.41
-      }
-    ]
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

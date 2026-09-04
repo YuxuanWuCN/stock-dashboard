@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "600703",
   "name": "三安光电",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 41.7,
-    "risk": 58.5,
+    "risk_adjusted": 53.0,
+    "risk": 59.7,
     "technical": 80.0,
-    "industry": 65.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -37,96 +37,103 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:16"
+    "updated_at": "2026-08-28 10:15:55"
+  },
+  "nale_network": {
+    "sector_name": "光电芯片",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 61.84,
+    "annualized_volatility_20d_pct": 59.36,
     "max_drawdown_60d_pct": -46.81,
-    "atr14_pct": 6.07,
+    "atr14_pct": 5.45,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 61.7,
-        "value": 61.84
+        "score": 62.8,
+        "value": 59.36
       },
       {
         "name": "60日最大回撤",
-        "score": 83.7,
+        "score": 85.9,
         "value": -46.81
       },
       {
         "name": "ATR百分比",
-        "score": 65.2,
-        "value": 6.07
+        "score": 62.8,
+        "value": 5.45
       },
       {
         "name": "量价异常",
-        "score": 59.6,
-        "value": 0.67
+        "score": 66.0,
+        "value": 0.6
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 0.9,
-    "return_5d_pct": 1.6,
-    "up_probability_3d_pct": 53.5,
-    "up_probability_5d_pct": 55.0,
+    "return_3d_pct": 1.53,
+    "return_5d_pct": 2.11,
+    "up_probability_3d_pct": 50.0,
+    "up_probability_5d_pct": 66.7,
     "confidence": "medium",
-    "rationale": "技术面评分优异但综合性价比平淡，预计短期在均线密集处温和震荡筑底反弹。",
-    "risk_warning": "半导体板块整体回调及量能不足风险。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 13.334,
-    "ma10": 13.625,
-    "ma20": 13.381499999999999,
-    "ma60": 15.344333333333333,
-    "rsi14": 44.3,
-    "macd_dif": -0.2619052290201136,
-    "macd_dea": -0.31568367261206576,
-    "macd_hist": 0.10755688718390433,
-    "atr14_pct": 6.073287728371316,
-    "boll_position": 0.3785998352908267,
-    "return_5d_pct": -3.552923760177651,
-    "return_20d_pct": 6.367346938775498,
-    "volume_ratio_5d": 0.67
+    "ma5": 13.164000000000001,
+    "ma10": 13.584999999999999,
+    "ma20": 13.513499999999999,
+    "ma60": 15.246333333333332,
+    "rsi14": 47.3,
+    "macd_dif": -0.23917150162235146,
+    "macd_dea": -0.29049773790485667,
+    "macd_hist": 0.10265247256501042,
+    "atr14_pct": 5.446678226000358,
+    "boll_position": 0.44082974599202024,
+    "return_5d_pct": -2.97316896301667,
+    "return_20d_pct": 9.31372549019609,
+    "volume_ratio_5d": 0.6
   },
   "industry": {
     "name": "光电芯片",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 5.03
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 6.96
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 1.77,
-      "median_return_pct": 1.0,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.53,
+      "median_return_pct": 0.08,
       "best_return_pct": 24.34,
       "worst_return_pct": -15.9
     },
     "horizon_5d": {
       "up_probability_pct": 66.7,
-      "average_return_pct": 2.18,
-      "median_return_pct": 1.73,
+      "average_return_pct": 2.11,
+      "median_return_pct": 1.58,
       "best_return_pct": 27.86,
       "worst_return_pct": -24.06
     }
@@ -280,20 +287,10 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 61.8%，波动偏高。",
+      "detail": "20日年化波动率 59.4%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/600703.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "光电芯片",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

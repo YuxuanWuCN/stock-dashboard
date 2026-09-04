@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "300394",
   "name": "天孚通信",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 39.5,
-    "risk": 70.4,
+    "risk_adjusted": 44.2,
+    "risk": 70.8,
     "technical": 90.0,
-    "industry": 65.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -38,100 +38,105 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:05"
+    "updated_at": "2026-08-28 10:15:41"
+  },
+  "nale_network": {
+    "sector_name": "光器件",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 100.19,
-    "max_drawdown_60d_pct": -54.87,
-    "atr14_pct": 8.56,
+    "annualized_volatility_20d_pct": 85.57,
+    "max_drawdown_60d_pct": -53.18,
+    "atr14_pct": 7.81,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 89.4,
-        "value": 100.19
+        "score": 87.2,
+        "value": 85.57
       },
       {
         "name": "60日最大回撤",
         "score": 92.9,
-        "value": -54.87
+        "value": -53.18
       },
       {
         "name": "ATR百分比",
-        "score": 91.5,
-        "value": 8.56
+        "score": 89.7,
+        "value": 7.81
       },
       {
         "name": "量价异常",
-        "score": 19.1,
-        "value": 0.87
+        "score": 32.7,
+        "value": 0.78
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": 1.2,
-    "return_5d_pct": 2.6,
-    "up_probability_3d_pct": 53.0,
-    "up_probability_5d_pct": 56.5,
+    "return_3d_pct": 0.41,
+    "return_5d_pct": 0.93,
+    "up_probability_3d_pct": 43.3,
+    "up_probability_5d_pct": 43.3,
     "confidence": "medium",
-    "rationale": "短期超跌且MA5负乖离，缩量震荡蓄势，RSI中性，预期均线修复性反弹。",
-    "risk_warning": "CPO高位板块估值调整及资金分流风险",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "range",
-    "ma5": 261.902,
-    "ma10": 268.97799999999995,
-    "ma20": 238.58849999999998,
-    "ma60": 262.54,
-    "rsi14": 51.9,
-    "macd_dif": 8.206064186773204,
-    "macd_dea": 5.782224776489279,
-    "macd_hist": 4.84767882056785,
-    "atr14_pct": 8.55623609353093,
-    "boll_position": 0.6017924233419607,
-    "return_5d_pct": -8.586878154289824,
-    "return_20d_pct": 39.26080509638092,
-    "volume_ratio_5d": 0.87,
-    "close": 253.58,
-    "change_pct": -1.3691170750680708
+    "ma5": 259.53000000000003,
+    "ma10": 270.238,
+    "ma20": 248.9065,
+    "ma60": 259.8736666666667,
+    "rsi14": 57.1,
+    "macd_dif": 8.800284726605582,
+    "macd_dea": 6.813058319995065,
+    "macd_hist": 3.974452813221035,
+    "atr14_pct": 7.8064880311893665,
+    "boll_position": 0.688719344430521,
+    "return_5d_pct": -1.0143547678335918,
+    "return_20d_pct": 58.0667797204842,
+    "volume_ratio_5d": 0.78
   },
   "industry": {
     "name": "光器件",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 37.92
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 61.13
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 2.43,
-      "median_return_pct": 1.83,
-      "best_return_pct": 28.45,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.41,
+      "median_return_pct": -3.67,
+      "best_return_pct": 36.73,
       "worst_return_pct": -23.47
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 4.62,
-      "median_return_pct": 2.91,
-      "best_return_pct": 23.56,
-      "worst_return_pct": -15.54
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.93,
+      "median_return_pct": -0.6,
+      "best_return_pct": 35.84,
+      "worst_return_pct": -17.8
     }
   },
   "fundamental": {
@@ -259,32 +264,22 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 54.9%，风险偏高。",
+      "detail": "近60日最大回撤 53.2%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 54.9%，风险扣分。",
+      "detail": "近60日最大回撤 53.2%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 100.2%，波动偏高。",
+      "detail": "20日年化波动率 85.6%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300394.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "光器件",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

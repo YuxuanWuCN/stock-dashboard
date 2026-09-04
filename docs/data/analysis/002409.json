@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "002409",
   "name": "雅克科技",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 31.8,
-    "risk": 69.0,
-    "technical": 58.0,
-    "industry": 35.0,
+    "risk_adjusted": 51.5,
+    "risk": 69.2,
+    "technical": 98.0,
+    "industry": 58.0,
     "leading": 50.0
   },
   "leading": {
@@ -37,100 +37,105 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:08"
+    "updated_at": "2026-08-28 10:15:44"
+  },
+  "nale_network": {
+    "sector_name": "半导体材料",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 82.65,
+    "annualized_volatility_20d_pct": 77.62,
     "max_drawdown_60d_pct": -48.79,
-    "atr14_pct": 8.15,
+    "atr14_pct": 7.09,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 81.6,
-        "value": 82.65
+        "score": 81.4,
+        "value": 77.62
       },
       {
         "name": "60日最大回撤",
-        "score": 87.2,
+        "score": 88.5,
         "value": -48.79
       },
       {
         "name": "ATR百分比",
-        "score": 86.5,
-        "value": 8.15
+        "score": 84.0,
+        "value": 7.09
       },
       {
         "name": "量价异常",
-        "score": 53.2,
-        "value": 0.7
+        "score": 56.4,
+        "value": 0.66
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.85,
-    "return_5d_pct": -1.45,
-    "up_probability_3d_pct": 38.0,
-    "up_probability_5d_pct": 35.0,
+    "return_3d_pct": 1.51,
+    "return_5d_pct": 3.56,
+    "up_probability_3d_pct": 56.7,
+    "up_probability_5d_pct": 66.7,
     "confidence": "medium",
-    "rationale": "均线呈空头排列且缩量阴跌，动量偏弱，短期承压延续弱势寻底。",
-    "risk_warning": "下行趋势未见止跌企稳信号，需防范半导体板块进一步补跌风险。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 137.978,
-    "ma10": 145.145,
-    "ma20": 143.3865,
-    "ma60": 156.39516666666668,
-    "rsi14": 41.9,
-    "macd_dif": -4.578280385217113,
-    "macd_dea": -3.6886692257259783,
-    "macd_hist": -1.779222318982269,
-    "atr14_pct": 8.146926779456361,
-    "boll_position": 0.2931060723731653,
-    "return_5d_pct": -5.413723158704631,
-    "return_20d_pct": -11.1381259035353,
-    "volume_ratio_5d": 0.7,
-    "close": 135.23,
-    "change_pct": -1.428675559443114
+    "trend": "range",
+    "ma5": 140.7,
+    "ma10": 144.122,
+    "ma20": 144.373,
+    "ma60": 157.377,
+    "rsi14": 49.3,
+    "macd_dif": -3.623658424727779,
+    "macd_dea": -3.7557542575629634,
+    "macd_hist": 0.2641916656703689,
+    "atr14_pct": 7.091474931683398,
+    "boll_position": 0.5581501625871819,
+    "return_5d_pct": 5.83393501805054,
+    "return_20d_pct": 9.551569506726466,
+    "volume_ratio_5d": 0.66
   },
   "industry": {
     "name": "半导体材料",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": -12.48
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": -0.67
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 2.96,
-      "median_return_pct": 1.7,
-      "best_return_pct": 27.64,
-      "worst_return_pct": -22.66
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.51,
+      "median_return_pct": 1.44,
+      "best_return_pct": 19.88,
+      "worst_return_pct": -19.61
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 3.32,
-      "median_return_pct": 1.4,
+      "up_probability_pct": 66.7,
+      "average_return_pct": 3.56,
+      "median_return_pct": 2.72,
       "best_return_pct": 42.7,
-      "worst_return_pct": -23.44
+      "worst_return_pct": -30.01
     }
   },
   "fundamental": {
@@ -269,12 +274,6 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 48.8%，风险偏高。",
       "contribution": -7.0
@@ -288,20 +287,10 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 82.7%，波动偏高。",
+      "detail": "20日年化波动率 77.6%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/002409.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "半导体材料",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
-    "co_movement_peers": []
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

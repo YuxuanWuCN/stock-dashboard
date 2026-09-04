@@ -1,0 +1,155 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-27",
+  "code": "003095",
+  "name": "中欧医疗健康混合A",
+  "type": "etf",
+  "category": "公募医药",
+  "stale": false,
+  "alpha_gate": null,
+  "scores": {
+    "risk_adjusted": 50.7,
+    "risk": 28.3,
+    "technical": 70.0,
+    "industry": 58.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-08-28 10:18:30"
+  },
+  "nale_network": {
+    "sector_name": "公募医药",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": []
+  },
+  "risk": {
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 44.95,
+    "max_drawdown_60d_pct": -12.32,
+    "atr14_pct": 2.16,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 46.2,
+        "value": 44.95
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 23.1,
+        "value": -12.32
+      },
+      {
+        "name": "ATR百分比",
+        "score": 17.3,
+        "value": 2.16
+      },
+      {
+        "name": "量价异常",
+        "score": 50.0,
+        "value": null
+      },
+      {
+        "name": "行业波动",
+        "score": 1.3,
+        "value": 28.17
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": 0.49,
+    "return_5d_pct": 0.75,
+    "up_probability_3d_pct": 53.3,
+    "up_probability_5d_pct": 36.7,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
+  },
+  "technical": {
+    "trend": "rebound",
+    "ma5": 1.9940000000000002,
+    "ma10": 2.059,
+    "ma20": 2.0395,
+    "ma60": 1.8829999999999998,
+    "rsi14": 48.9,
+    "macd_dif": 0.01913337064653975,
+    "macd_dea": 0.03982506516111003,
+    "macd_hist": -0.04138338902914056,
+    "atr14_pct": 2.1593823762167457,
+    "boll_position": 0.3937296232430884,
+    "return_5d_pct": -6.542056074766355,
+    "return_20d_pct": 6.382978723404253,
+    "volume_ratio_5d": null
+  },
+  "industry": {
+    "name": "公募医药",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 0.64
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.49,
+      "median_return_pct": 0.55,
+      "best_return_pct": 13.53,
+      "worst_return_pct": -6.73
+    },
+    "horizon_5d": {
+      "up_probability_pct": 36.7,
+      "average_return_pct": 0.75,
+      "median_return_pct": -1.61,
+      "best_return_pct": 17.06,
+      "worst_return_pct": -6.25
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 45.0%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/003095.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

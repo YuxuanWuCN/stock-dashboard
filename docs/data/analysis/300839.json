@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-08-26 19:38:01+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-28 10:18:33+08:00",
+  "trade_date": "2026-08-28",
   "code": "300839",
   "name": "博汇股份",
   "type": "stock",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 39.4,
-    "risk": 67.4,
-    "technical": 82.0,
-    "industry": 65.0,
+    "risk_adjusted": 38.5,
+    "risk": 67.7,
+    "technical": 90.0,
+    "industry": 73.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,99 +34,135 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-08-26 19:34:17"
+    "updated_at": "2026-08-28 10:15:55"
+  },
+  "nale_network": {
+    "sector_name": "热点龙头",
+    "sector_breadth_pct": 32.0,
+    "tier_role": "neutral",
+    "leader_stock": {
+      "code": "301591",
+      "name": "肯特股份",
+      "change_pct": 17.142857142857146,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": false,
+    "co_movement_peers": [
+      {
+        "code": "300864",
+        "name": "南大环境",
+        "corr": 0.63
+      },
+      {
+        "code": "300004",
+        "name": "南风股份",
+        "corr": 0.53
+      },
+      {
+        "code": "301152",
+        "name": "天力锂能",
+        "corr": 0.52
+      },
+      {
+        "code": "300128",
+        "name": "锦富技术",
+        "corr": 0.51
+      },
+      {
+        "code": "301598",
+        "name": "博科测试",
+        "corr": 0.51
+      }
+    ]
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 93.95,
-    "max_drawdown_60d_pct": -38.94,
-    "atr14_pct": 6.18,
+    "annualized_volatility_20d_pct": 92.5,
+    "max_drawdown_60d_pct": -36.03,
+    "atr14_pct": 5.79,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 87.9,
-        "value": 93.95
+        "score": 89.7,
+        "value": 92.5
       },
       {
         "name": "60日最大回撤",
-        "score": 71.6,
-        "value": -38.94
+        "score": 67.9,
+        "value": -36.03
       },
       {
         "name": "ATR百分比",
-        "score": 66.7,
-        "value": 6.18
+        "score": 69.2,
+        "value": 5.79
       },
       {
         "name": "量价异常",
-        "score": 96.5,
-        "value": 2.35
+        "score": 97.4,
+        "value": 2.27
       },
       {
         "name": "行业波动",
-        "score": 0.7,
-        "value": 29.67
+        "score": 1.3,
+        "value": 28.17
       }
     ]
   },
   "forecast": {
-    "return_3d_pct": -0.85,
-    "return_5d_pct": 1.15,
-    "up_probability_3d_pct": 43.5,
-    "up_probability_5d_pct": 52.0,
+    "return_3d_pct": 0.09,
+    "return_5d_pct": -0.54,
+    "up_probability_3d_pct": 36.7,
+    "up_probability_5d_pct": 50.0,
     "confidence": "medium",
-    "rationale": "短期累积涨幅与MA20偏离较大，面临技术性震荡洗盘，消化获利盘后有望企稳。",
-    "risk_warning": "高位获利盘集中兑现及热点退潮风险。",
-    "source": "v3_llm_direct",
-    "model": "gemini-3.7-flash"
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1"
   },
   "technical": {
     "trend": "range",
-    "ma5": 12.544,
-    "ma10": 11.608,
-    "ma20": 11.1095,
-    "ma60": 12.011166666666666,
-    "rsi14": 60.8,
-    "macd_dif": 0.3637194759996216,
-    "macd_dea": 0.0007908228618017515,
-    "macd_hist": 0.7258573062756397,
-    "atr14_pct": 6.182532274780743,
-    "boll_position": 0.8903777679233311,
-    "return_5d_pct": 22.20095693779904,
-    "return_20d_pct": 25.19607843137255,
-    "volume_ratio_5d": 2.35,
-    "close": 12.77,
-    "change_pct": -1.5420200462606095
+    "ma5": 13.032,
+    "ma10": 12.017,
+    "ma20": 11.3835,
+    "ma60": 11.906,
+    "rsi14": 59.4,
+    "macd_dif": 0.42852557245445055,
+    "macd_dea": 0.1509200084292273,
+    "macd_hist": 0.5552111280504466,
+    "atr14_pct": 5.790274365690381,
+    "boll_position": 0.7908457478662543,
+    "return_5d_pct": 1.2830793905372895,
+    "return_20d_pct": 26.047904191616777,
+    "volume_ratio_5d": 2.27
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -0.35,
-    "return_20d_pct": 1.34,
-    "return_60d_pct": -11.22,
-    "relative_strength_20d_pct": 23.86
+    "return_5d_pct": 0.54,
+    "return_20d_pct": 5.74,
+    "return_60d_pct": -10.54,
+    "relative_strength_20d_pct": 23.54
   },
   "similarity": {
     "method": "standardized_knn_v1",
     "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
-    "process_node": null,
-    "node_gate_enabled": false,
     "horizon_3d": {
       "up_probability_pct": 36.7,
-      "average_return_pct": -0.95,
-      "median_return_pct": -2.42,
-      "best_return_pct": 19.15,
-      "worst_return_pct": -12.72
+      "average_return_pct": 0.09,
+      "median_return_pct": -2.61,
+      "best_return_pct": 35.12,
+      "worst_return_pct": -13.41
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.6,
-      "median_return_pct": -2.23,
-      "best_return_pct": 23.18,
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.54,
+      "median_return_pct": -0.73,
+      "best_return_pct": 22.2,
       "worst_return_pct": -15.92
     }
   },
@@ -267,69 +303,28 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 38.9%，风险偏高。",
+      "detail": "近60日最大回撤 36.0%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 38.9%，风险扣分。",
+      "detail": "近60日最大回撤 36.0%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "positive",
       "title": "成交活跃",
-      "detail": "近5日量能为前期2.35倍。",
+      "detail": "近5日量能为前期2.27倍。",
       "contribution": 5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 94.0%，波动偏高。",
+      "detail": "20日年化波动率 92.5%，波动偏高。",
       "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300839.json",
-  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。",
-  "nale_network": {
-    "sector_name": "热点龙头",
-    "sector_breadth_pct": 40.0,
-    "tier_role": "divergent",
-    "leader_stock": {
-      "code": "301177",
-      "name": "迪阿股份",
-      "change_pct": 20.00835421888053,
-      "is_limit_up": true
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": true,
-    "co_movement_peers": [
-      {
-        "code": "300864",
-        "name": "南大环境",
-        "corr": 0.66
-      },
-      {
-        "code": "300004",
-        "name": "南风股份",
-        "corr": 0.54
-      },
-      {
-        "code": "301152",
-        "name": "天力锂能",
-        "corr": 0.53
-      },
-      {
-        "code": "301598",
-        "name": "博科测试",
-        "corr": 0.52
-      },
-      {
-        "code": "300128",
-        "name": "锦富技术",
-        "corr": 0.51
-      }
-    ]
-  }
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }
