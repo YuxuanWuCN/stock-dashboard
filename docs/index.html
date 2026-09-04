@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>A股智能量化投研看板</title>
-    <link rel="stylesheet" href="assets/style.css?v=20260827_v33_nale_engine">
+    <link rel="stylesheet" href="assets/style.css?v=20260904_v10_ui_overhaul">
     <!-- 🌈 年轻化 FinTech 轻奢风覆盖层 -->
-    <link rel="stylesheet" href="assets/style_young.css?v=20260822_v1">
+    <link rel="stylesheet" href="assets/style_young.css?v=20260904_v10_ui_overhaul">
     <!-- 引入 ECharts 5.5.1 CDN -->
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
@@ -15,7 +15,7 @@
         <!-- 顶部状态栏 -->
         <header class="header">
             <div class="header-main">
-                <h1>📊 A股智能量化投研看板 v3.0</h1>
+                <h1><span class="header-icon">📊</span><span class="header-title-text">A股智能量化投研看板 v3.0</span></h1>
                 <p class="subtitle">可插拔多因子定价 (Fama-MacBeth) · 存储超级周期战术执行 (Trend Gate) · 全市场两级动态初筛</p>
             </div>
             <div class="header-actions">
@@ -27,7 +27,7 @@
             </div>
         </header>
 
-        <!-- 顶部页面导航：拆分后的功能入口 -->
+        <!-- 顶部页面导航：统揽全功能的一体化流光导航栏 -->
         <nav class="app-nav" id="app-nav" aria-label="页面切换">
             <button type="button" class="app-nav-btn active" data-page="today">🏠 今日关注</button>
             <button type="button" class="app-nav-btn" data-page="watchlist">⭐ 自选股</button>
@@ -38,21 +38,12 @@
             <button type="button" class="app-nav-btn" data-page="monster">🔥 妖股鉴定器</button>
         </nav>
 
-        <!-- 主框架：左侧功能导航 + 中间内容区 -->
+        <!-- 主框架：全宽内容区 -->
         <div class="app-shell">
-            <aside class="page-sidebar" id="page-sidebar" aria-label="功能导航">
-                <div class="page-sidebar-title">功能导航</div>
-                <button type="button" class="page-sidebar-btn active" data-page="today">🏠 今日关注</button>
-                <button type="button" class="page-sidebar-btn" data-page="watchlist">⭐ 自选股</button>
-                <button type="button" class="page-sidebar-btn" data-page="ranking">📊 排行榜</button>
-                <button type="button" class="page-sidebar-btn" data-page="query">🔍 单股查询</button>
-                <button type="button" class="page-sidebar-btn" data-page="detail">📈 个股研究</button>
-                <button type="button" class="page-sidebar-btn" data-page="paper">💼 模拟盘</button>
-            </aside>
             <main class="app-main">
 
                 <!-- 页面：今日关注（默认首页，只显示今日关注） -->
-                <section class="page" data-page="today" id="page-today">
+                <section class="page page-today" data-page="today" id="page-today">
 
 
         <!-- v2.5 市场温度条 -->
@@ -102,37 +93,45 @@
         </section>
 
                 <!-- 页面：单股查询 -->
-                <section class="page" data-page="query" id="page-query" hidden>
-                <!-- 单股查询栏 -->
-        <div class="query-bar" id="query-bar">
-            <div class="query-bar-inner">
-                <label class="query-label" for="query-code-input">🔍 单股查询对比</label>
-                <div class="query-controls">
-                    <input
-                        type="text"
-                        id="query-code-input"
-                        class="query-input code-input"
-                        placeholder="股票代码 (6位)"
-                        maxlength="6"
-                        inputmode="numeric"
-                        pattern="[0-9]*"
-                        autocomplete="off"
-                    >
-                    <input
-                        type="date"
-                        id="query-date-input"
-                        class="query-input date-input"
-                        title="数据起始日期"
-                    >
-                    <button id="query-go-btn" class="query-go-btn" type="button">查询对比</button>
-                </div>
-                <div class="query-hint" id="query-hint">
-                    📌 6开头→上证指数｜0开头→深证成指｜3开头→创业板指｜688开头→科创50
-                </div>
-            </div>
-        </div>
-
-        </section>
+                <section class="page page-query" data-page="query" id="page-query" hidden>
+                    <!-- 单股查询栏 -->
+                    <div class="query-bar" id="query-bar">
+                        <div class="query-bar-inner">
+                            <label class="query-label" for="query-code-input">🔍 单股查询对比</label>
+                            <div class="query-controls">
+                                <input
+                                    type="text"
+                                    id="query-code-input"
+                                    class="query-input code-input"
+                                    placeholder="股票代码 (6位)"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                                    pattern="[0-9]*"
+                                    autocomplete="off"
+                                >
+                                <input
+                                    type="date"
+                                    id="query-date-input"
+                                    class="query-input date-input"
+                                    title="数据起始日期"
+                                >
+                                <button id="query-go-btn" class="query-go-btn" type="button">查询对比</button>
+                            </div>
+                            <div class="query-hint" id="query-hint">
+                                📌 6开头→上证指数｜0开头→深证成指｜3开头→创业板指｜688开头→科创50
+                            </div>
+                        </div>
+                        <div class="query-presets-row">
+                            <span class="preset-label">🔥 热门速查标的：</span>
+                            <button type="button" class="query-preset-chip" data-code="688525">佰维存储 (688525)</button>
+                            <button type="button" class="query-preset-chip" data-code="300274">阳光电源 (300274)</button>
+                            <button type="button" class="query-preset-chip" data-code="300750">宁德时代 (300750)</button>
+                            <button type="button" class="query-preset-chip" data-code="600519">贵州茅台 (600519)</button>
+                            <button type="button" class="query-preset-chip" data-code="688981">中芯国际 (688981)</button>
+                            <button type="button" class="query-preset-chip" data-code="513500">标普500ETF (513500)</button>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- 页面：排行榜 -->
                 <section class="page" data-page="ranking" id="page-ranking" hidden>
@@ -183,7 +182,7 @@
         </section>
 
                 <!-- 页面：自选股 -->
-                <section class="page" data-page="watchlist" id="page-watchlist" hidden>
+                <section class="page page-watchlist" data-page="watchlist" id="page-watchlist" hidden>
                     <div class="stock-sidebar watchlist-panel">
                 <!-- 主布局 -->
         
@@ -194,7 +193,7 @@
                         <h2>自选股列表</h2>
                         <button id="open-editor-btn" class="editor-btn" type="button">✏️ 编辑列表</button>
                     </div>
-                    <span class="tip">点击股票查看走势图</span>
+                    <span class="tip">点击股票查看走势图与深度投研报告</span>
                 </div>
                 <div class="watchlist-search-wrap">
                     <input id="watchlist-search-input" class="watchlist-search-input" type="search" placeholder="搜索名称或代码" autocomplete="off" aria-label="搜索自选股">
@@ -215,7 +214,22 @@
                 </section>
 
                 <!-- 页面：个股研究（K线 + 分析 + AI 研报 + 查询对比结果） -->
-                <section class="page" data-page="detail" id="page-detail" hidden>
+                <section class="page page-detail" data-page="detail" id="page-detail" hidden>
+                    <!-- 快捷标的切换工具栏 -->
+                    <div class="detail-stock-toolbar" id="detail-stock-toolbar">
+                        <div class="detail-toolbar-main">
+                            <label for="detail-stock-select" class="detail-toolbar-label">🎯 快速切换股票：</label>
+                            <select id="detail-stock-select" class="detail-stock-select" aria-label="选择个股研究标的">
+                                <option value="">正在读取自选股列表...</option>
+                            </select>
+                        </div>
+                        <div class="detail-toolbar-actions">
+                            <button type="button" class="detail-nav-chip" id="detail-to-watchlist-btn">⭐ 自选股全景</button>
+                            <button type="button" class="detail-nav-chip" id="detail-to-ranking-btn">📊 综合排行榜</button>
+                            <button type="button" class="detail-nav-chip" id="detail-to-monster-btn">🔥 妖股鉴定</button>
+                        </div>
+                    </div>
+
                     <div class="chart-container-wrapper">
 
             <!-- 右侧/下方 K线图详情区域 -->
@@ -419,14 +433,14 @@
                                     <div style="color: #64748b; font-size: 11px;">年化 +105.65%</div>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">存储5巨头等权买入持有</div>
+                                    <div style="color: #94a3b8; font-size: 12px;">存储5巨头等权基准持有</div>
                                     <div style="color: #fbbf24; font-size: 24px; font-weight: 800; margin-top: 4px;">+222.30%</div>
                                     <div style="color: #f87171; font-size: 11px;">C浪最大回撤 -32.04% ⚠️</div>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
                                     <div style="color: #94a3b8; font-size: 12px;">卡玛比率 (收益/回撤)</div>
                                     <div style="color: #38bdf8; font-size: 24px; font-weight: 800; margin-top: 4px;">16.223</div>
-                                    <div style="color: #64748b; font-size: 11px;">买入持有仅 4.453</div>
+                                    <div style="color: #64748b; font-size: 11px;">等权基准仅 4.453</div>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
                                     <div style="color: #94a3b8; font-size: 12px;">Harvey (2016) Alpha t值</div>
@@ -645,6 +659,6 @@
     </div>
 
     <!-- 引入前端交互脚本 -->
-    <script src="assets/app.js?v=20260827_v34_scope_fixed"></script>
+    <script src="assets/app.js?v=20260904_v10_ui_overhaul"></script>
 </body>
 </html>

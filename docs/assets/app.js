@@ -129,6 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
         watchlistFilter: document.getElementById('watchlist-filter'),
         watchlistSearchInput: document.getElementById('watchlist-search-input'),
         watchlistSearchClear: document.getElementById('watchlist-search-clear'),
+        detailStockToolbar: document.getElementById('detail-stock-toolbar'),
+        detailStockSelect: document.getElementById('detail-stock-select'),
+        detailToWatchlistBtn: document.getElementById('detail-to-watchlist-btn'),
+        detailToRankingBtn: document.getElementById('detail-to-ranking-btn'),
+        detailToMonsterBtn: document.getElementById('detail-to-monster-btn'),
         detailHeader: document.getElementById('detail-header'),
         detailName: document.getElementById('detail-name'),
         detailCode: document.getElementById('detail-code'),
@@ -196,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================================
     // v2.6 页面导航：今日关注 / 自选股 / 排行榜 / 单股查询 / 个股研究
     // ============================================================
-    const PAGE_IDS = ['today', 'watchlist', 'ranking', 'query', 'detail', 'paper'];
+    const PAGE_IDS = ['today', 'watchlist', 'ranking', 'query', 'detail', 'paper', 'monster'];
 
     function currentPageFromHash() {
         const m = (window.location.hash || '').match(/^#\/([a-z]+)/);
@@ -212,12 +217,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('[data-page]').forEach(function (btn) {
             btn.classList.toggle('active', btn.getAttribute('data-page') === page);
         });
-        // 进入个股研究页时重绘图表（页面从隐藏变为可见）
+        // 进入个股研究页或模拟盘时重绘图表（页面从隐藏变为可见）
         if (page === 'detail') {
             setTimeout(function () {
                 if (state.chart) state.chart.resize();
                 if (state.indexChart) state.indexChart.resize();
             }, 60);
+        } else if (page === 'paper') {
+            setTimeout(function () {
+                if (state.paperCurveChart) state.paperCurveChart.resize();
+            }, 60);
+        } else if (page === 'monster') {
+            setTimeout(function () {
+                renderMonsterDetector();
+            }, 30);
         }
         const hash = '#/' + page;
         if (window.location.hash !== hash) {
@@ -503,6 +516,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 初始化查询栏
         initQueryBar();
+
+        // 绑定个股研究页标的快速切换器与快捷跳转
+        if (el.detailStockSelect) {
+            el.detailStockSelect.addEventListener('change', function () {
+                if (this.value) selectTrackedStock(this.value);
+            });
+        }
+        if (el.detailToWatchlistBtn) {
+            el.detailToWatchlistBtn.addEventListener('click', function () { navigateTo('watchlist'); });
+        }
+        if (el.detailToRankingBtn) {
+            el.detailToRankingBtn.addEventListener('click', function () { navigateTo('ranking'); });
+        }
+        if (el.detailToMonsterBtn) {
+            el.detailToMonsterBtn.addEventListener('click', function () { navigateTo('monster'); });
+        }
     }
 
     // v2.5 渲染市场温度条
@@ -863,6 +892,16 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         el.stockList.innerHTML = ''; // 清空加载状态
+
+        // 同步填充个股研究页面的快速下拉切换器
+        if (el.detailStockSelect && state.summary && state.summary.items) {
+            const currentVal = el.detailStockSelect.value || state.selectedCode;
+            el.detailStockSelect.innerHTML = '<option value="">-- 选择或切换个股研究标的 --</option>' +
+                state.summary.items.map(function (it) {
+                    return '<option value="' + escapeHtml(it.code) + '">' + escapeHtml(it.name || it.code) + ' (' + escapeHtml(it.code) + ')' + '</option>';
+                }).join('');
+            if (currentVal) el.detailStockSelect.value = currentVal;
+        }
 
         // 按行业分组（尊重顶部市场筛选）
         const groups = {};
@@ -1694,6 +1733,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         await Promise.all([selectStock(code), loadAnalysisDetail(code)]);
 
+        if (el.detailStockSelect && el.detailStockSelect.value !== code) {
+            el.detailStockSelect.value = code;
+        }
+
         if (state.chart) {
             setTimeout(function () {
                 try { state.chart.resize(); } catch (e) {}
@@ -2509,6 +2552,17 @@ document.addEventListener('DOMContentLoaded', () => {
         el.queryCodeInput.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') { doQuery(); }
         });
+
+        // 快捷预设标的点击
+        document.querySelectorAll('.query-preset-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                var code = chip.getAttribute('data-code');
+                if (code) {
+                    el.queryCodeInput.value = code;
+                    doQuery();
+                }
+            });
+        });
     }
 
     function doQuery() {
@@ -2594,6 +2648,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigateTo('detail');
             })
             .catch(function (err) {
+                // 如果后端 API 超时或不可用，但本地已有所查标的数据，自动平滑降级展示
+                var localItem = state.summary && state.summary.items
+                    ? state.summary.items.find(function (it) { return it.code === code; })
+                    : null;
+                if (localItem) {
+                    el.queryGoBtn.disabled = false;
+                    el.queryGoBtn.textContent = '查询对比';
+                    hideOverlay();
+                    showQueryHint('ℹ️ 标的 ' + (localItem.name || code) + ' (' + code + ') 位于跟踪自选池，已直接载入深度多因子研报');
+                    selectTrackedStock(code, true);
+                    return;
+                }
                 el.queryGoBtn.disabled = false;
                 el.queryGoBtn.textContent = '查询对比';
                 hideOverlay();
