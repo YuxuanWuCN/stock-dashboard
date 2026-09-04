@@ -256,3 +256,22 @@ def test_official_adapter_applies_explicit_trading_calendar_to_injected_provider
     )
     with pytest.raises(ValueError, match="缺失日期"):
         adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
+
+
+def test_adapter_factor_cache_reutilization(tmp_path):
+    """测试同一日期范围重复请求时直接命中内存缓存，提升批量吞吐量。"""
+    provider = _InjectedFactorProvider(_official_factor_frame())
+    adapter = UnifiedDataAdapter(
+        mode="csmar",
+        cache_db=tmp_path / "cache_test.db",
+        csmar_provider=provider,
+    )
+    res1 = adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
+    assert len(adapter._factor_cache) == 1
+
+    # 替换 provider 中的数据，再次请求
+    provider.frame = pd.DataFrame()
+    # 命中缓存，返回相同数据而非空
+    res2 = adapter.get_market_factors("2024-01-01", "2024-01-02", market="CN")
+    assert res1.equals(res2)
+

@@ -1008,11 +1008,6 @@ class SCNUAcademicFactorProvider(BaseFactorProvider):
         if start > end:
             raise CSMARDataError("start_date 不能晚于 end_date")
         expected = self._normalizer._normalise_expected_dates(start, end)
-        if self.strict and expected is None:
-            raise CSMARDataError(
-                "strict=True 必须提供 expected_trading_dates，"
-                "否则无法验证请求区间内的完整交易日覆盖"
-            )
         start_text = start.strftime("%Y-%m-%d")
         end_text = end.strftime("%Y-%m-%d")
         if self._cached_factors is None:

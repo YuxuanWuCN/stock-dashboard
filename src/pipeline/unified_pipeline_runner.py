@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
-"""src/pipeline/unified_pipeline_runner.py —— FinRobot 架构统一全流程 DAG 状态机调度器 (Week 8)
+﻿# -*- coding: utf-8 -*-
+"""src/pipeline/unified_pipeline_runner.py —— FinRobot 架构统一全流程 DAG 状态机调度器
 
 依据规范：
-1. 《StockDashboard v3.0 & Serenity Chokepoint 12-Week Roadmap》Phase II: Week 8
+1. 《StockDashboard v3.0 & Serenity Chokepoint 12-Week Roadmap》
 2. 状态机流转：
-   - 阶段 1: Qualitative FOI Discovery & Credibility Scoring
-   - 阶段 2: Pluggable Two-Stage Fama-MacBeth OLS & GFCA Coordinate Alignment
+   - 阶段 1: Qualitative FOI Discovery & Credibility Scoring & 数据多因子装配
+   - 阶段 2: Pluggable Two-Stage Fama-MacBeth OLS & 因子正交化 & GFCA 坐标映射
    - 阶段 3: NALE 拓扑网络传导与 Nowcasting 二次减值惩罚
-   - 阶段 4: Tactical Trend Gate™ 布尔硬门禁 & Dynamic Bet Allocator
+   - 阶段 4: Tactical Trend Gate™ 布尔硬门禁 & 市场状态机 (BULL/BEAR/SIDEWAYS) & Dynamic Bet Sizer
 3. 线程安全 SessionState 上下文数据封包
 """
 
@@ -27,6 +27,9 @@ from src.analysis.famamacbethv3 import FamaMacBethV3Engine, Stage1Result, Stage2
 from src.analysis.scoringv3 import GFCAScoringEngine, GFCACoordinates, NALEScoreResult
 from src.graph.supply_chain_graph import SupplyChainGraph
 from src.nowcasting.triangle_validator import NowcastingTriangleValidator, TriangulationSignal
+from src.pricing.factor_orthogonalization import orthogonalize_factor
+from src.risk.market_regime_detector import MarketRegimeDetector, RegimeType
+from src.risk.dynamic_position_sizer import DynamicPositionSizer
 
 logger = logging.getLogger("unified_pipeline")
 
@@ -49,9 +52,13 @@ class SessionState:
     current_state: PipelineStageState = PipelineStageState.IDLE
     data_packet: Optional[MarketDataPacket] = None
     stage1_result: Optional[Stage1Result] = None
+    orthogonal_residual: Optional[pd.Series] = None
+    orthogonal_exposures: Optional[Dict[str, float]] = None
     gfca_coords: Optional[GFCACoordinates] = None
     nale_result: Optional[NALEScoreResult] = None
     nowcasting_signal: Optional[TriangulationSignal] = None
+    detected_regime: str = "SIDEWAYS"
+    position_multiplier: float = 1.0
     trend_gate_passed: bool = True
     allocated_weight: float = 0.0
     execution_decision: str = "PENDING"
@@ -72,6 +79,8 @@ class UnifiedPipelineRunner:
         self.scoring_engine = GFCAScoringEngine(tanh_scaling=1.5, nale_alpha=0.4)
         self.nowcasting_validator = NowcastingTriangleValidator(penalty_lambda=penalty_lambda)
         self.graph = SupplyChainGraph()
+        self.regime_detector = MarketRegimeDetector()
+        self.position_sizer = DynamicPositionSizer()
 
     def run_dag_pipeline(
         self,
@@ -94,10 +103,23 @@ class UnifiedPipelineRunner:
         session.data_packet = data_packet
         session.log("Phase 1: 数据封包与多因子矩阵装配完成")
 
-        # 2. 计量时序回归 (Stage 1) 与 GFCA 坐标映射
+        # 2. 计量时序回归 (Stage 1) 与 GFCA 坐标映射，前置执行因子正交化（若样本充足）
         session.current_state = PipelineStageState.PHASE2_ECONOMETRIC_GFCA
         s1_res = self.fm_engine.run_stage1_time_series(data_packet.returns, data_packet.factors, ticker=ticker)
         session.stage1_result = s1_res
+
+        if len(data_packet.returns) >= 30 and data_packet.factors.shape[1] >= 1:
+            try:
+                orth_resid, orth_exp = orthogonalize_factor(
+                    data_packet.returns,
+                    data_packet.factors,
+                    return_exposure=True
+                )
+                session.orthogonal_residual = orth_resid
+                session.orthogonal_exposures = orth_exp
+                session.log(f"Phase 2: 因子正交化完成 (R2={orth_exp.get('R2', 0.0):.4f})")
+            except Exception as e:
+                session.log(f"Phase 2: 因子正交化跳过: {e}")
 
         # 3. Nowcasting 减值惩罚计算
         session.current_state = PipelineStageState.PHASE3_NALE_NOWCASTING
@@ -118,15 +140,35 @@ class UnifiedPipelineRunner:
         session.gfca_coords = gfca_map[ticker]
         session.log(f"Phase 2 & 3: GFCA 几何综合得分 = {session.gfca_coords.composite_score:.4f}, 减值漂移 = {nowcast_sig.impairment_penalty_drift:.4f}")
 
-        # 4. 战术决策与头寸计算
+        # 4. 战术决策、市场状态机识别与动态仓位计算
         session.current_state = PipelineStageState.PHASE4_EXECUTION_BET_SIZING
+
+        # 检测大盘/标的所处市场状态
+        try:
+            regime_series = self.regime_detector.detect_regime(kline_df)
+            current_regime = regime_series.iloc[-1]
+            regime_str = current_regime.value if hasattr(current_regime, "value") else str(current_regime)
+        except Exception:
+            regime_str = "SIDEWAYS"
+        session.detected_regime = regime_str
+
+        # 基于市场状态计算动态仓位调整系数
+        pos_multiplier = self.position_sizer.calculate_position(
+            regime=regime_str,
+            current_drawdown=0.0,
+            volatility=0.02
+        )
+        session.position_multiplier = pos_multiplier
+
         if nowcast_sig.is_impaired and abs(nowcast_sig.impairment_penalty_drift) > 0.05:
             session.trend_gate_passed = False
             session.allocated_weight = 0.0
             session.execution_decision = "REJECT_DUE_TO_IMPAIRMENT"
         elif session.gfca_coords.composite_score > 0.10:
             session.trend_gate_passed = True
-            session.allocated_weight = 0.10 if bet_type == "Catalyst Alpha" else 0.15
+            base_w = 0.10 if bet_type == "Catalyst Alpha" else 0.15
+            # 乘以市场状态仓位乘数并进行上限截断
+            session.allocated_weight = float(np.clip(base_w * pos_multiplier, 0.0, 1.0))
             session.execution_decision = "APPROVED_LONG"
         else:
             session.trend_gate_passed = True
@@ -134,5 +176,8 @@ class UnifiedPipelineRunner:
             session.execution_decision = "HOLD_WATCHLIST"
 
         session.current_state = PipelineStageState.COMPLETED
-        session.log(f"Pipeline 执行完毕: 决策 = {session.execution_decision}, 权重 = {session.allocated_weight*100:.1f}%")
+        session.log(
+            f"Pipeline 执行完毕: 状态={regime_str}, 乘数={pos_multiplier:.2f}, "
+            f"决策={session.execution_decision}, 最终权重={session.allocated_weight*100:.1f}%"
+        )
         return session

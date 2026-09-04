@@ -114,6 +114,11 @@ ANALYSIS_DIR = os.path.join(DATA_DIR, ANALYSIS_DIR_NAME)
 RANKING_PATH = os.path.join(ANALYSIS_DIR, "ranking.json")
 FUNDAMENTAL_CACHE_DIR = os.path.join(DATA_DIR, "fundamental")
 
+from src.data.cache_manager import KlineCacheManager, FundamentalCacheManager
+
+_kline_cache_mgr = KlineCacheManager(KLINE_DIR)
+_fundamental_cache_mgr = FundamentalCacheManager(FUNDAMENTAL_CACHE_DIR, max_age_days=STALE_DATA_DAYS)
+
 
 # ============================================================
 # 1. 5 年数据抓取
@@ -121,35 +126,8 @@ FUNDAMENTAL_CACHE_DIR = os.path.join(DATA_DIR, "fundamental")
 
 
 def _load_cached_kline(code: str) -> Optional[pd.DataFrame]:
-    """读取 docs/data/kline/{code}.json 缓存，转为分析用 DataFrame。
-
-    kline JSON 中每根 K 线为 [开盘, 收盘, 最低, 最高]。
-    """
-    try:
-        with open(os.path.join(KLINE_DIR, f"{code}.json"), "r", encoding="utf-8") as f:
-            data = json.load(f)
-        dates = data.get("dates") or []
-        kline = data.get("kline") or []
-        volume = data.get("volume") or []
-        if not dates or len(dates) != len(kline):
-            return None
-        rows = []
-        for i, d in enumerate(dates):
-            bar = kline[i]
-            if not isinstance(bar, list) or len(bar) < 4:
-                continue
-            rows.append({
-                "date": d,
-                "open": bar[0],
-                "high": bar[3],
-                "low": bar[2],
-                "close": bar[1],
-                "volume": volume[i] if i < len(volume) else 0,
-            })
-        return pd.DataFrame(rows) if rows else None
-    except Exception:
-        logger.warning("%s 读取本地 K 线缓存失败: %s", code, traceback.format_exc())
-        return None
+    """读取 docs/data/kline/{code}.json 缓存，转为分析用 DataFrame。"""
+    return _kline_cache_mgr.load_kline(code)
 
 def fetch_5y_data(item: dict) -> Optional[pd.DataFrame]:
     """
@@ -557,27 +535,18 @@ def analyze_single(
 
 def _fundamental_cache_path(code: str) -> str:
     """基本面缓存文件路径。"""
-    return os.path.join(FUNDAMENTAL_CACHE_DIR, f"{code}.json")
+    return str(_fundamental_cache_mgr.get_path(code))
 
 
 def _load_fundamental_cache(code: str) -> Optional[dict]:
     """读取基本面缓存；结构完整且带评分时直接复用，避免云端抓取东财超时。"""
-    try:
-        with open(_fundamental_cache_path(code), "r", encoding="utf-8") as f:
-            data = json.load(f)
-        if isinstance(data, dict) and isinstance(data.get("score"), (int, float)):
-            return data
-    except (OSError, ValueError):
-        pass
-    return None
+    return _fundamental_cache_mgr.load(code)
 
 
 def _write_fundamental_cache(code: str, result: dict) -> None:
     """把抓取成功的基本面结果写入缓存（供后续云端运行复用）。"""
     try:
-        payload = dict(result)
-        payload.setdefault("cached_at", beijing_datetime_str())
-        atomic_write_json(payload, _fundamental_cache_path(code), logger)
+        _fundamental_cache_mgr.save(code, result)
     except Exception:
         logger.warning("%s(%s) 基本面缓存写入失败: %s", code, code, traceback.format_exc())
 

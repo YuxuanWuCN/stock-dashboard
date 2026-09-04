@@ -163,6 +163,7 @@ class UnifiedDataAdapter:
                 expected_trading_dates=school_expected_trading_dates,
             )
         )
+        self._factor_cache: Dict[Tuple[str, str, str, bool], pd.DataFrame] = {}
         self._ensure_cache()
 
 
@@ -273,7 +274,30 @@ class UnifiedDataAdapter:
         market: str = "CN",
         include_micro_flows: bool = True
     ) -> pd.DataFrame:
-        """获取指定市场与日期的标准化多因子矩阵。
+        """获取指定市场与日期的标准化多因子矩阵（带内存缓存）。"""
+        market_norm = str(market).strip().upper()
+        cache_key = (start_date, end_date, market_norm, include_micro_flows)
+        if hasattr(self, "_factor_cache") and cache_key in self._factor_cache:
+            return self._factor_cache[cache_key].copy()
+
+        result = self._compute_market_factors(
+            start_date=start_date,
+            end_date=end_date,
+            market=market_norm,
+            include_micro_flows=include_micro_flows
+        )
+        if hasattr(self, "_factor_cache"):
+            self._factor_cache[cache_key] = result.copy()
+        return result
+
+    def _compute_market_factors(
+        self,
+        start_date: str,
+        end_date: str,
+        market: str = "CN",
+        include_micro_flows: bool = True
+    ) -> pd.DataFrame:
+        """内部实现：获取指定市场与日期的标准化多因子矩阵。
         
         Args:
             start_date: 'YYYY-MM-DD'
