@@ -21,6 +21,12 @@ import pandas as pd
 
 logger = logging.getLogger("scoringv3")
 
+from src.graph.temporal_nale import (
+    TemporalNALEEngine,
+    TemporalNALEResult,
+    TrajectoryResult,
+)
+
 
 @dataclass
 class GFCACoordinates:
@@ -150,3 +156,30 @@ class GFCAScoringEngine:
             )
 
         return results
+
+    def calculate_temporal_nale_score(
+        self,
+        node_scores: Dict[str, float],
+        adjacency_matrix: np.ndarray,
+        ticker_list: List[str],
+        horizon_days: float = 5.0,
+        node_ages_days: Optional[Dict[str, float]] = None,
+        node_source_types: Optional[Dict[str, str]] = None,
+        ticker_categories: Optional[Dict[str, str]] = None,
+        alpha: Optional[float] = None
+    ) -> Dict[str, TemporalNALEResult]:
+        r"""计算考虑物理库存时滞与信息半衰期的 Temporal-NALE (T-NALE) 连续时空扩散得分。"""
+        engine = TemporalNALEEngine(alpha=alpha if alpha is not None else self.nale_alpha)
+        # 归一化邻接矩阵行和 (若尚未归一化)
+        row_sums = adjacency_matrix.sum(axis=1, keepdims=True)
+        W_norm = np.divide(adjacency_matrix, row_sums, out=np.zeros_like(adjacency_matrix, dtype=float), where=row_sums != 0)
+        return engine.calculate_temporal_nale(
+            node_scores=node_scores,
+            adjacency_matrix=W_norm,
+            ticker_list=ticker_list,
+            horizon_days=horizon_days,
+            node_ages_days=node_ages_days,
+            node_source_types=node_source_types,
+            ticker_categories=ticker_categories,
+            alpha=alpha if alpha is not None else self.nale_alpha
+        )

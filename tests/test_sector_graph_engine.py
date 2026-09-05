@@ -100,3 +100,12 @@ def test_sector_graph_engine_limit_up_spillover():
     bj_nale = engine.get_nale_network_payload("600519", "白酒")
     assert bj_nale["has_limit_up_resonance"] is False
     assert bj_nale["tier_role"] in ("neutral", "core_mid")
+
+    # 5. 检验 T-NALE 物理时滞动力学属性
+    assert "temporal_dynamics" in zy_nale
+    t_dyn = zy_nale["temporal_dynamics"]
+    assert t_dyn["is_temporal_enhanced"] is True
+    assert t_dyn["physical_lag_tau_days"] == 20.0  # 存储链先验 tau = 20d
+    assert t_dyn["peak_horizon_days"] == 20
+    assert t_dyn["optimal_holding_days"] == 20
+    assert t_dyn["peak_spillover_return_pct"] > 0.0

@@ -50,7 +50,14 @@
         "name": "德国ETF",
         "corr": 0.49
       }
-    ]
+    ],
+    "temporal_dynamics": {
+      "physical_lag_tau_days": 14.0,
+      "peak_horizon_days": 14,
+      "peak_spillover_return_pct": 0.0,
+      "optimal_holding_days": 5.0,
+      "is_temporal_enhanced": true
+    }
   },
   "risk": {
     "level": "low",
@@ -94,7 +101,11 @@
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
-    "model": "knn_v1"
+    "model": "knn_v1",
+    "physical_lag_tau_days": 14.0,
+    "peak_horizon_days": 14,
+    "peak_spillover_return_pct": 0.0,
+    "optimal_holding_days": 5.0
   },
   "technical": {
     "trend": "rebound",

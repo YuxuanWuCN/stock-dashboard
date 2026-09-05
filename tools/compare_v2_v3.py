@@ -140,6 +140,7 @@ def main():
             "risk_adjusted_score": comp3["risk_adjusted"],
             "fundamental_score": None,  # 3.0 不再混入加分
             "total_score": comp3["risk_adjusted"],
+            "nale_network": d.get("nale_network"),
             "risk": {
                 "score": comp3["risk"],
                 "level": (d.get("risk") or {}).get("level", "medium"),

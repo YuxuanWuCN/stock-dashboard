@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """src/data/cache_manager.py —— 结构化量化数据与研报原子化缓存管理器
 
 为 build_ranking、fetch_data 及各个回测与分析引擎提供高效、原子化的本地缓存管理，

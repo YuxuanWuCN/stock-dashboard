@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """tests/test_factor_orthogonalization.py —— 因子正交化与 PCA 降维单元测试"""
 
 import numpy as np

@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """src/pipeline/unified_pipeline_runner.py —— FinRobot 架构统一全流程 DAG 状态机调度器
 
 依据规范：

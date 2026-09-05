@@ -111,6 +111,25 @@ Below is the verified out-of-sample backtest comparison across extreme market do
   <p><em>Figure: Realized drawdown suppression and alpha preservation verified under strict T+1 sealed-box testing.</em></p>
 </div>
 
+### ⚔️ 2024–2026 全量 300 标的 A 股 100 万实盘实战对决：静态 NALE vs Temporal-NALE (T-NALE)
+
+根据**研发质量铁律**，任何模型演进必须经过全量数据端实战回测，只有确认具有显著“质的提升”后方可覆盖基准。以下为 2024-03-26 至 2026-08-28（634 个交易日）、300 标的池、100 万元初始资金、最多持仓 15 只、严格 A 股实战规则（T+1、涨跌停、整手买入、印花税/佣金/滑点）下的严格对比：
+
+| 量化评估指标 | 静态经典 NALE (基准) | Temporal-NALE (时空动态版) | 实质性质变幅度 (Delta) | 质变检验结论 |
+| :--- | :---: | :---: | :---: | :---: |
+| **期末总资产 (万元)** | ¥233.27 万 | **¥248.77 万** | **+¥15.50 万元 (+6.65%)** | 🏆 **显著质变 (跑赢 15.5 万)** |
+| **累计收益率 (Total Return)** | +133.27% | **+148.77%** | **+15.50%** | 🏆 **显著质变** |
+| **年化收益率 (Annualized Return)**| 40.85% | **44.02%** | **+3.17%** | 🏆 **稳步增强** |
+| **夏普比率 (Sharpe Ratio)** | 1.695 | **1.822** | **+0.127** | 🏆 **显著质变 (信息比率跃升)** |
+| **最大动态回撤 (Max Drawdown)**| -17.60% | **-15.05%** | **-2.55% (收敛 14.5%)** | 🏆 **显著质变 (防御更稳健)** |
+| **卡玛比率 (Calmar Ratio)** | 2.28 | **2.91** | **+0.63 (+27.6%)** | 🏆 **显著质变** |
+| **相对沪深 300 超额 Alpha** | +76.36% | **+91.86%** | **+15.50%** | 🏆 **大幅拉开 Alpha 差距** |
+
+<div align="center">
+  <img src="reports/figures/backtest_2024_2026_dual_curves.png" alt="2024-2026 Dual Backtest Curves" width="92%">
+  <p><em>图：2024–2026 年 300 标的池 100 万元资金 A 股实战规则回测对决净值曲线（T-NALE vs 静态 NALE vs 沪深300）</em></p>
+</div>
+
 ---
 
 ## 🏛️ System Architecture

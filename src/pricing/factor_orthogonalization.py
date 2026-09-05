@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """src/pricing/factor_orthogonalization.py —— 因子正交化与降维模块
 
 基于 API 契约 specs/contest-2026/contracts/factor_orthogonalization.md：

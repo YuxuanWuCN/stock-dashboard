@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """src/analysis/storage_backtest_runner_enhanced.py —— 2025Q2-2026Q3 存储超级周期板块增强版回测执行器
 
 严格遵循：

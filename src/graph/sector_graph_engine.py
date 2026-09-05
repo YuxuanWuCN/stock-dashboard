@@ -20,6 +20,8 @@ import pandas as pd
 
 logger = logging.getLogger("sector_graph_engine")
 
+from src.graph.temporal_constants import get_supply_chain_lag
+
 
 def is_limit_up(code: str, change_pct: Optional[float]) -> bool:
     """判定是否触及或封死涨停板。"""
@@ -259,6 +261,20 @@ class SectorGraphEngine:
             else:
                 role = "neutral"
 
+        # 产业链物理流转时滞与波峰共振计算 (T-NALE 时空扩展)
+        lag_cfg = get_supply_chain_lag(category, category)
+        tau_days = float(lag_cfg.tau_days)
+        peak_horizon = round(tau_days)
+        peak_impulse = round(float(spillover_ret * lag_cfg.attenuation_factor * 1.15), 2) if spillover_ret > 0 else 0.0
+
+        temporal_dynamics = {
+            "physical_lag_tau_days": tau_days,
+            "peak_horizon_days": peak_horizon,
+            "peak_spillover_return_pct": peak_impulse,
+            "optimal_holding_days": peak_horizon if role == "follower_catchup" else 5.0,
+            "is_temporal_enhanced": True
+        }
+
         return {
             "sector_name": category,
             "sector_breadth_pct": sector_state.breadth_pct,
@@ -267,5 +283,6 @@ class SectorGraphEngine:
             "spillover_return_5d_pct": spillover_ret,
             "spillover_prob_5d_pct": spillover_prob,
             "has_limit_up_resonance": has_limit_up,
-            "co_movement_peers": sorted(peers, key=lambda x: x["corr"], reverse=True)[:5]
+            "co_movement_peers": sorted(peers, key=lambda x: x["corr"], reverse=True)[:5],
+            "temporal_dynamics": temporal_dynamics
         }

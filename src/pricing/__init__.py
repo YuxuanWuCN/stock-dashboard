@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """src/pricing/__init__.py —— 定价与校准模块"""
 
 from .calibration_config import (

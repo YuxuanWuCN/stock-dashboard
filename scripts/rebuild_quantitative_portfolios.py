@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """scripts/rebuild_quantitative_portfolios.py
 
 重建并无缝连接六大投资组合与全池基准从 2026-06-01 至 2026-09-04（共 69 个交易日）的真实、独立、可复现净值时序与核心持仓。

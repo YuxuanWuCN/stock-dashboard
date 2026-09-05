@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """tests/test_cache_manager.py —— 缓存管理器单元测试"""
 
 import json

@@ -887,12 +887,19 @@ def build_ranking(
             "model": "knn_v1",
         }
 
-        # 计算 NALE 增强负载
+        # 计算 NALE 增强负载 (集成 T-NALE 时空动态拓扑)
         nale_payload = None
         if sector_engine:
             try:
                 nale_payload = sector_engine.get_nale_network_payload(code, r.get("category", ""), final_forecast)
                 r["nale_network"] = nale_payload
+                t_dyn = (nale_payload.get("temporal_dynamics") or {}) if nale_payload else {}
+                if t_dyn:
+                    final_forecast["physical_lag_tau_days"] = t_dyn.get("physical_lag_tau_days")
+                    final_forecast["peak_horizon_days"] = t_dyn.get("peak_horizon_days")
+                    final_forecast["peak_spillover_return_pct"] = t_dyn.get("peak_spillover_return_pct")
+                    final_forecast["optimal_holding_days"] = t_dyn.get("optimal_holding_days")
+
                 if nale_payload.get("has_limit_up_resonance") and nale_payload.get("spillover_return_5d_pct", 0) > 0:
                     spill_ret = nale_payload["spillover_return_5d_pct"]
                     spill_prob = nale_payload.get("spillover_prob_5d_pct", 0)
@@ -903,14 +910,17 @@ def build_ranking(
                     if final_forecast.get("up_probability_5d_pct") is not None:
                         final_forecast["up_probability_5d_pct"] = round(min(98.0, final_forecast["up_probability_5d_pct"] + spill_prob), 1)
                     
+                    tau = t_dyn.get("physical_lag_tau_days", 14)
+                    peak_ret = t_dyn.get("peak_spillover_return_pct", spill_ret)
                     spill_reason = {
-                        "title": f"NALE·{nale_payload['sector_name']}涨停共振",
-                        "detail": f"同板块身位龙头【{leader_name}】强势封板，注入 +{spill_ret}% 溢出预期及 +{spill_prob}% 看涨胜率",
+                        "title": f"T-NALE·{nale_payload['sector_name']}时空时滞共振",
+                        "detail": f"同板块龙头【{leader_name}】封板催化，经产业链物理传导（时滞τ≈{int(tau)}天），注入 +{spill_ret}% 溢出预期及 +{spill_prob}% 看涨胜率（波峰前瞻+{peak_ret}%）",
                         "impact": "positive",
-                        "score_delta": 4.0
+                        "score_delta": 4.5
                     }
                     if "reasons" in r and isinstance(r["reasons"], list):
                         r["reasons"].insert(0, spill_reason)
+                r["forecast"] = final_forecast
             except Exception as pe:
                 logger.warning("%s 计算 NALE payload 失败: %s", code, pe)
 
