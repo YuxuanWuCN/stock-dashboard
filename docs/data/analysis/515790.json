@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "515790",
   "name": "光伏ETF",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 31.7,
+    "risk_adjusted": 28.1,
     "risk": 32.4,
     "technical": 42.0,
-    "industry": 42.0,
+    "industry": 39.3,
     "leading": 20.0
   },
   "leading": {
@@ -787,16 +787,17 @@
       161000.0,
       157860.0,
       154780.0,
-      149880.0
+      149880.0,
+      141940.0
     ],
     "momentum_metrics": {
-      "slope_pct": 7.06,
+      "slope_pct": -3.02,
       "momentum": "decelerating",
       "inflection_flag": "negative_reversal",
-      "latest_value": 149880.0,
+      "latest_value": 141940.0,
       "confidence": "high"
     },
-    "updated_at": "2026-09-04 15:59:24"
+    "updated_at": "2026-09-06 00:24:33"
   },
   "nale_network": {
     "sector_name": "光伏绿电",
@@ -809,10 +810,13 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -845,7 +849,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -861,7 +865,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
@@ -883,10 +888,10 @@
     "name": "光伏绿电",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": -0.13
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": -1.35
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -894,18 +899,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.0,
-      "median_return_pct": 0.09,
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.08,
+      "median_return_pct": -0.89,
       "best_return_pct": 7.69,
       "worst_return_pct": -7.0
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.17,
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.3,
       "median_return_pct": -0.45,
       "best_return_pct": 7.55,
-      "worst_return_pct": -8.79
+      "worst_return_pct": -8.77
     }
   },
   "fundamental": null,

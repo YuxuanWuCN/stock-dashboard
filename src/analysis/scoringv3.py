@@ -166,10 +166,14 @@ class GFCAScoringEngine:
         node_ages_days: Optional[Dict[str, float]] = None,
         node_source_types: Optional[Dict[str, str]] = None,
         ticker_categories: Optional[Dict[str, str]] = None,
-        alpha: Optional[float] = None
+        alpha: Optional[float] = None,
+        use_dynamic_alpha: bool = False
     ) -> Dict[str, TemporalNALEResult]:
         r"""计算考虑物理库存时滞与信息半衰期的 Temporal-NALE (T-NALE) 连续时空扩散得分。"""
-        engine = TemporalNALEEngine(alpha=alpha if alpha is not None else self.nale_alpha)
+        engine = TemporalNALEEngine(
+            alpha=alpha if alpha is not None else self.nale_alpha,
+            use_dynamic_alpha=use_dynamic_alpha
+        )
         # 归一化邻接矩阵行和 (若尚未归一化)
         row_sums = adjacency_matrix.sum(axis=1, keepdims=True)
         W_norm = np.divide(adjacency_matrix, row_sums, out=np.zeros_like(adjacency_matrix, dtype=float), where=row_sums != 0)
@@ -181,5 +185,6 @@ class GFCAScoringEngine:
             node_ages_days=node_ages_days,
             node_source_types=node_source_types,
             ticker_categories=ticker_categories,
-            alpha=alpha if alpha is not None else self.nale_alpha
+            alpha=alpha,
+            use_dynamic_alpha=use_dynamic_alpha
         )

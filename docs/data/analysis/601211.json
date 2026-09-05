@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "601211",
   "name": "国泰君安",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 39.7,
+    "risk_adjusted": 46.5,
     "risk": 16.0,
     "technical": 83.0,
-    "industry": 49.5,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:58:46"
+    "updated_at": "2026-09-06 00:08:55"
   },
   "nale_network": {
     "sector_name": "券商",
@@ -68,10 +68,13 @@
     ],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -104,7 +107,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -120,7 +123,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.26,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "range",
@@ -142,10 +146,10 @@
     "name": "券商",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 2.49
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 5.33
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -153,18 +157,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.43,
-      "median_return_pct": -0.27,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.17,
+      "median_return_pct": -0.07,
       "best_return_pct": 8.83,
-      "worst_return_pct": -5.25
+      "worst_return_pct": -5.14
     },
     "horizon_5d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.71,
-      "median_return_pct": -1.06,
-      "best_return_pct": 5.2,
-      "worst_return_pct": -4.91
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.21,
+      "median_return_pct": -1.16,
+      "best_return_pct": 11.1,
+      "worst_return_pct": -5.17
     }
   },
   "fundamental": null,

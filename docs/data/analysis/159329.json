@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "159329",
   "name": "沙特ETF",
@@ -9,7 +9,7 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 51.6,
+    "risk_adjusted": 54.2,
     "risk": 1.0,
     "technical": 80.0,
     "industry": 57.0,
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 16:02:41"
+    "updated_at": "2026-09-06 00:31:41"
   },
   "nale_network": {
     "sector_name": "跨境中东",
@@ -47,10 +47,13 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -83,7 +86,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -99,7 +102,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
@@ -121,10 +125,10 @@
     "name": "跨境中东",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 5.66
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 7.77
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -133,17 +137,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 30.0,
-      "average_return_pct": -0.1,
+      "average_return_pct": -0.13,
       "median_return_pct": 0.0,
       "best_return_pct": 3.23,
-      "worst_return_pct": -2.13
+      "worst_return_pct": -2.15
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.02,
+      "up_probability_pct": 40.0,
+      "average_return_pct": 0.12,
       "median_return_pct": 0.0,
       "best_return_pct": 5.38,
-      "worst_return_pct": -3.19
+      "worst_return_pct": -3.12
     }
   },
   "fundamental": null,

@@ -32,6 +32,7 @@ from src.graph.temporal_constants import (
     get_half_life,
     get_supply_chain_lag,
 )
+from src.graph.dynamic_temporal_alpha import DynamicTemporalAlpha
 
 
 @dataclass
@@ -69,12 +70,16 @@ class TemporalNALEEngine:
         alpha: float = 0.4,
         default_tau: float = 14.0,
         default_sigma: float = 5.0,
-        enable_clipping: bool = True
+        enable_clipping: bool = True,
+        use_dynamic_alpha: bool = False,
+        dynamic_alpha_engine: Optional[DynamicTemporalAlpha] = None
     ):
         self.alpha = alpha
         self.default_tau = default_tau
         self.default_sigma = default_sigma
         self.enable_clipping = enable_clipping
+        self.use_dynamic_alpha = use_dynamic_alpha
+        self.dynamic_alpha_engine = dynamic_alpha_engine or DynamicTemporalAlpha()
 
     @staticmethod
     def gaussian_impulse_kernel(
@@ -117,7 +122,8 @@ class TemporalNALEEngine:
         edge_sigma_matrix: Optional[np.ndarray] = None,
         edge_attenuation_matrix: Optional[np.ndarray] = None,
         ticker_categories: Optional[Dict[str, str]] = None,
-        alpha: Optional[float] = None
+        alpha: Optional[float] = None,
+        use_dynamic_alpha: Optional[bool] = None
     ) -> Dict[str, TemporalNALEResult]:
         r"""计算指定未来预测视界 h (horizon_days) 处的 T-NALE 连续时空扩散得分。
 
@@ -132,9 +138,10 @@ class TemporalNALEEngine:
         - edge_sigma_matrix: N x N 高斯脉冲带宽矩阵 \sigma_{ji}
         - edge_attenuation_matrix: N x N 能量损耗衰减矩阵 \eta_{ji}
         - ticker_categories: 各标的所属产业链板块 (用于若未指定矩阵时自动从先验库构建)
-        - alpha: 图扩散权重 (默认使用 self.alpha)
+        - alpha: 图扩散权重 (若显式传入则强制使用静态值，否则根据 use_dynamic_alpha 决定)
+        - use_dynamic_alpha: 是否启用方案 B 双波峰时效性动态 alpha(t) 动力学
         """
-        prop_weight = alpha if alpha is not None else self.alpha
+        enable_dyn_alpha = use_dynamic_alpha if use_dynamic_alpha is not None else self.use_dynamic_alpha
         N = len(ticker_list)
         if N == 0:
             return {}
@@ -205,8 +212,29 @@ class TemporalNALEEngine:
         effective_W = W * K_lag
         propagated_vec = effective_W @ past_decayed_source_vec
 
-        # 4. 融合自身衰减与时滞卷积传播
-        final_scores = (1.0 - prop_weight) * self_decay_vec + prop_weight * propagated_vec
+        # 4. 融合自身衰减与时滞卷积传播 (支持静态 alpha 与方案 B 时效性双峰动态 alpha)
+        if alpha is not None:
+            node_alphas = np.full(N, float(alpha))
+        elif enable_dyn_alpha:
+            node_alphas = np.zeros(N, dtype=float)
+            for i, ticker in enumerate(ticker_list):
+                tgt_cat = categories.get(ticker, "")
+                lag_cfg = get_supply_chain_lag(tgt_cat, tgt_cat)
+                tau_val = float(lag_cfg.tau_days)
+                sigma_val = float(lag_cfg.sigma_days)
+                age_val = float(node_ages.get(ticker, 0.0))
+                t_total = age_val + float(horizon_days)
+                has_event = bool(abs(past_decayed_source_vec[i]) > 1e-4 or (np.max(np.abs(propagated_vec)) > 1e-4))
+                node_alphas[i] = self.dynamic_alpha_engine.compute_alpha(
+                    t=t_total,
+                    tau=tau_val,
+                    sigma=sigma_val,
+                    has_limit_up_or_event=has_event
+                )
+        else:
+            node_alphas = np.full(N, float(self.alpha))
+
+        final_scores = (1.0 - node_alphas) * self_decay_vec + node_alphas * propagated_vec
 
         if self.enable_clipping:
             final_scores = np.clip(final_scores, -1.0, 1.0)
@@ -220,7 +248,7 @@ class TemporalNALEEngine:
                 self_decayed_score=float(self_decay_vec[i]),
                 propagated_impulse=float(propagated_vec[i]),
                 final_score=float(final_scores[i]),
-                alpha=prop_weight
+                alpha=float(node_alphas[i])
             )
 
         return results
@@ -234,7 +262,8 @@ class TemporalNALEEngine:
         node_ages_days: Optional[Dict[str, float]] = None,
         node_source_types: Optional[Dict[str, str]] = None,
         ticker_categories: Optional[Dict[str, str]] = None,
-        alpha: Optional[float] = None
+        alpha: Optional[float] = None,
+        use_dynamic_alpha: Optional[bool] = None
     ) -> Dict[str, TrajectoryResult]:
         r"""推演各标的在未来全景时域 [h_1, ..., h_m] 上的连续冲击扩散轨迹，标定峰值启动视界。"""
         if horizons is None:
@@ -250,7 +279,8 @@ class TemporalNALEEngine:
                 node_ages_days=node_ages_days,
                 node_source_types=node_source_types,
                 ticker_categories=ticker_categories,
-                alpha=alpha
+                alpha=alpha,
+                use_dynamic_alpha=use_dynamic_alpha
             )
             horizon_results[h] = res_h
 

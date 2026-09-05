@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "688525",
   "name": "佰维存储",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 42.8,
+    "risk_adjusted": 40.6,
     "risk": 68.6,
     "technical": 52.0,
-    "industry": 38.2,
+    "industry": 27.3,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:58:23"
+    "updated_at": "2026-09-06 00:06:30"
   },
   "nale_network": {
     "sector_name": "科技",
@@ -78,10 +78,13 @@
     ],
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 18,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.551,
+      "dynamic_alpha_physical_peak": 0.555
     }
   },
   "risk": {
@@ -114,7 +117,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -130,7 +133,8 @@
     "physical_lag_tau_days": 18.0,
     "peak_horizon_days": 18,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.555
   },
   "technical": {
     "trend": "downtrend",
@@ -152,10 +156,10 @@
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": -1.9
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": -7.35
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -163,141 +167,21 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 4.1,
-      "median_return_pct": 2.28,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 3.17,
+      "median_return_pct": 1.74,
       "best_return_pct": 28.65,
-      "worst_return_pct": -11.57
+      "worst_return_pct": -21.65
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 5.23,
-      "median_return_pct": 1.45,
-      "best_return_pct": 35.14,
-      "worst_return_pct": -15.68
+      "up_probability_pct": 60.0,
+      "average_return_pct": 4.49,
+      "median_return_pct": 0.94,
+      "best_return_pct": 45.92,
+      "worst_return_pct": -34.91
     }
   },
-  "fundamental": {
-    "schema_version": "2.0",
-    "report_date": "2026-03-31",
-    "score": 36.4,
-    "dimensions": {
-      "asset_quality": 20.0,
-      "liability_safety": 38.4,
-      "profit_quality": 80.0,
-      "cash_health": 3.8
-    },
-    "weights": {
-      "asset_quality": 0.3,
-      "liability_safety": 0.25,
-      "profit_quality": 0.25,
-      "cash_health": 0.2
-    },
-    "metrics": {
-      "total_assets": 24479647478.13,
-      "total_assets_yoy": 160.9845074455,
-      "inventory": 12069120650.39,
-      "prepayment": 2286652464.09,
-      "receivable": 2159702784.53,
-      "inventory_prepay_ratio": 0.5864370852278562,
-      "receivable_revenue": 0.6338781793019719,
-      "goodwill_equity": null,
-      "debt_ratio": 0.6495512732336397,
-      "short_debt_ratio": 0.42532153890344715,
-      "roe": 0.3405713494378471,
-      "gross_margin": 47.96305657935466,
-      "deduct_ratio": 0.9715402807510252,
-      "netprofit_yoy": 1499.9285648632,
-      "ocf_np_ratio": -0.9335688181779949,
-      "financing_debt": 0.3243207902851632,
-      "retained_profit_equity": 0.40016889342543055
-    },
-    "reasons": {
-      "asset_quality": [
-        {
-          "type": "warning",
-          "title": "资产扩张过快",
-          "detail": "总资产同比 +161.0%，尚未确认行业扩张时，需警惕激进扩张伴随的减值风险。",
-          "contribution": -15.0
-        },
-        {
-          "type": "warning",
-          "title": "周期数据不足",
-          "detail": "存货+预付占总资产 58.6%；未取得真实行业周期数据，不将其计为利好。",
-          "contribution": 0.0
-        },
-        {
-          "type": "negative",
-          "title": "应收占比偏高",
-          "detail": "应收账款/营收 63.4%，现金回收存在时滞。",
-          "contribution": -15.0
-        }
-      ],
-      "liability_safety": [
-        {
-          "type": "warning",
-          "title": "杠杆中等",
-          "detail": "资产负债率 65.0%，处于中间区间。",
-          "contribution": -14.6
-        },
-        {
-          "type": "positive",
-          "title": "债务期限合理",
-          "detail": "短期有息负债占总负债 42.5%，期限结构良好。",
-          "contribution": 3.0
-        }
-      ],
-      "profit_quality": [
-        {
-          "type": "positive",
-          "title": "ROE 优秀",
-          "detail": "净资产收益率 34.1%，股东回报突出。",
-          "contribution": 12.0
-        },
-        {
-          "type": "positive",
-          "title": "利润高增",
-          "detail": "净利润同比 +1499.9%，盈利动能强。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "利润含金量高",
-          "detail": "扣非净利润占归母净利润 97.2%，主业盈利扎实。",
-          "contribution": 3.0
-        },
-        {
-          "type": "positive",
-          "title": "利润留存形成资本垫",
-          "detail": "未分配利润/归母权益 40.0%，内生资本积累较充分。",
-          "contribution": 5.0
-        }
-      ],
-      "cash_health": [
-        {
-          "type": "negative",
-          "title": "经营现金流为负",
-          "detail": "经营现金流/净利润 -0.93，账面利润缺乏现金支撑，警惕应收与存货占款。",
-          "contribution": -45.0
-        },
-        {
-          "type": "warning",
-          "title": "依赖外部融资",
-          "detail": "筹资现金流占总负债 32.4%，依赖再融资支撑扩张。",
-          "contribution": -1.2
-        }
-      ]
-    },
-    "dual_view": {
-      "positive_view": "总资产同比 +161.0%，规模扩张有力；ROE 34.1%，股东回报出色；净利润同比 +1499.9%",
-      "negative_view": "存货+预付占总资产 58.6%，缺少行业周期数据，不能判断备货是否受益；资产负债率 65.0%，杠杆偏高；经营现金流/净利润 -0.93，利润兑现存疑；应收账款/营收 63.4%，现金回收存在时滞；筹资现金流占总负债 32.4%，依赖外部输血",
-      "cycle_phase": "unknown",
-      "industry_return_60d_pct": null,
-      "cycle_observation_days": 0,
-      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    },
-    "cached_at": "2026-08-09 09:33:47"
-  },
+  "fundamental": null,
   "reasons": [
     {
       "type": "negative",

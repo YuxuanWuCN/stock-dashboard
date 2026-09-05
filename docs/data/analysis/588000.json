@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "588000",
   "name": "科创50ETF",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 42.1,
+    "risk_adjusted": 41.1,
     "risk": 40.5,
     "technical": 50.0,
-    "industry": 38.8,
+    "industry": 34.6,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:59:23"
+    "updated_at": "2026-09-06 00:24:32"
   },
   "nale_network": {
     "sector_name": "硬科技宽基",
@@ -47,10 +47,13 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 18,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -83,7 +86,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -99,7 +102,8 @@
     "physical_lag_tau_days": 18.0,
     "peak_horizon_days": 18,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
@@ -121,10 +125,10 @@
     "name": "硬科技宽基",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": -1.59
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": -3.69
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -133,17 +137,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": -0.32,
+      "average_return_pct": 0.03,
       "median_return_pct": 0.0,
       "best_return_pct": 10.23,
-      "worst_return_pct": -12.57
+      "worst_return_pct": -10.84
     },
     "horizon_5d": {
       "up_probability_pct": 50.0,
-      "average_return_pct": 1.22,
+      "average_return_pct": 1.23,
       "median_return_pct": 0.32,
       "best_return_pct": 17.05,
-      "worst_return_pct": -14.14
+      "worst_return_pct": -10.58
     }
   },
   "fundamental": null,

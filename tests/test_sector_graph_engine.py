@@ -109,3 +109,9 @@ def test_sector_graph_engine_limit_up_spillover():
     assert t_dyn["peak_horizon_days"] == 20
     assert t_dyn["optimal_holding_days"] == 20
     assert t_dyn["peak_spillover_return_pct"] > 0.0
+    # 方案 B 动态 alpha 断言
+    assert "dynamic_alpha_sentiment_t0" in t_dyn
+    assert "dynamic_alpha_physical_peak" in t_dyn
+    assert t_dyn["dynamic_alpha_sentiment_t0"] >= 0.50
+    assert t_dyn["dynamic_alpha_physical_peak"] >= 0.50
+

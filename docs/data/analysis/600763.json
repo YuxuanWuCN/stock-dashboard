@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "600763",
   "name": "通策医疗",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 35.7,
+    "risk_adjusted": 36.2,
     "risk": 23.4,
     "technical": 71.0,
-    "industry": 45.1,
+    "industry": 49.6,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:59:22"
+    "updated_at": "2026-09-06 00:23:34"
   },
   "nale_network": {
     "sector_name": "口腔医疗",
@@ -47,10 +47,13 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -83,7 +86,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -99,7 +102,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.26,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "rebound",
@@ -121,10 +125,10 @@
     "name": "口腔医疗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 1.04
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 2.52
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -132,141 +136,21 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -0.93,
-      "median_return_pct": -1.98,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.15,
+      "median_return_pct": -2.0,
       "best_return_pct": 8.68,
       "worst_return_pct": -8.68
     },
     "horizon_5d": {
       "up_probability_pct": 40.0,
-      "average_return_pct": -0.79,
-      "median_return_pct": -1.05,
-      "best_return_pct": 6.41,
+      "average_return_pct": -0.84,
+      "median_return_pct": -0.92,
+      "best_return_pct": 8.09,
       "worst_return_pct": -9.91
     }
   },
-  "fundamental": {
-    "schema_version": "2.0",
-    "report_date": "2026-06-30",
-    "score": 58.7,
-    "dimensions": {
-      "asset_quality": 50.0,
-      "liability_safety": 63.0,
-      "profit_quality": 73.0,
-      "cash_health": 48.6
-    },
-    "weights": {
-      "asset_quality": 0.3,
-      "liability_safety": 0.25,
-      "profit_quality": 0.25,
-      "cash_health": 0.2
-    },
-    "metrics": {
-      "total_assets": 5989507693.12,
-      "total_assets_yoy": -2.801480076,
-      "inventory": 37808862.94,
-      "prepayment": 16127544.17,
-      "receivable": 143226778.54,
-      "inventory_prepay_ratio": 0.009005148648853966,
-      "receivable_revenue": 0.18060036740545327,
-      "goodwill_equity": 0.017660799540313327,
-      "debt_ratio": 0.24388807710656252,
-      "short_debt_ratio": 0.32135869281365476,
-      "roe": 0.11081871120342554,
-      "gross_margin": 29.584602618927786,
-      "deduct_ratio": 0.7098536223033378,
-      "netprofit_yoy": 28.7028293776,
-      "ocf_np_ratio": 0.873343724430306,
-      "financing_debt": -0.024251796261006403,
-      "retained_profit_equity": 0.9393297777746286
-    },
-    "reasons": {
-      "asset_quality": [
-        {
-          "type": "negative",
-          "title": "资产增长乏力",
-          "detail": "总资产同比 +-2.8%，规模停滞。",
-          "contribution": -8.0
-        },
-        {
-          "type": "positive",
-          "title": "存货结构健康",
-          "detail": "存货+预付占总资产 0.9%，风险可控。",
-          "contribution": 5.0
-        },
-        {
-          "type": "positive",
-          "title": "回款效率良好",
-          "detail": "应收账款/营收 18.1%，回款健康。",
-          "contribution": 3.0
-        }
-      ],
-      "liability_safety": [
-        {
-          "type": "positive",
-          "title": "杠杆适中",
-          "detail": "资产负债率 24.4%，财务结构稳健。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "债务期限合理",
-          "detail": "短期有息负债占总负债 32.1%，期限结构良好。",
-          "contribution": 3.0
-        }
-      ],
-      "profit_quality": [
-        {
-          "type": "positive",
-          "title": "ROE 良好",
-          "detail": "净资产收益率 11.1%，盈利水平正常。",
-          "contribution": 5.0
-        },
-        {
-          "type": "positive",
-          "title": "利润高增",
-          "detail": "净利润同比 +28.7%，盈利动能强。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "利润含金量高",
-          "detail": "扣非净利润占归母净利润 71.0%，主业盈利扎实。",
-          "contribution": 3.0
-        },
-        {
-          "type": "positive",
-          "title": "利润留存形成资本垫",
-          "detail": "未分配利润/归母权益 93.9%，内生资本积累较充分。",
-          "contribution": 5.0
-        }
-      ],
-      "cash_health": [
-        {
-          "type": "warning",
-          "title": "现金流偏弱",
-          "detail": "经营现金流/净利润 0.87，利润兑现能力一般。",
-          "contribution": -4.4
-        },
-        {
-          "type": "positive",
-          "title": "融资依赖度低",
-          "detail": "筹资现金流占总负债 -2.4%，扩张主要靠内生。",
-          "contribution": 3.0
-        }
-      ]
-    },
-    "dual_view": {
-      "positive_view": "净利润同比 +28.7%",
-      "negative_view": "经营现金流/净利润 0.87，利润兑现存疑",
-      "cycle_phase": "unknown",
-      "industry_return_60d_pct": null,
-      "cycle_observation_days": 0,
-      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    },
-    "cached_at": "2026-08-21 10:28:43"
-  },
+  "fundamental": null,
   "reasons": [
     {
       "type": "positive",

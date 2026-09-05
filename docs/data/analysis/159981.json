@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "159981",
   "name": "能源化工ETF",
@@ -9,7 +9,7 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 54.3,
+    "risk_adjusted": 52.1,
     "risk": 33.2,
     "technical": 100.0,
     "industry": 57.0,
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 16:02:42"
+    "updated_at": "2026-09-06 00:31:42"
   },
   "nale_network": {
     "sector_name": "能化商品",
@@ -47,10 +47,13 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -83,7 +86,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -99,7 +102,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.26,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
@@ -121,27 +125,27 @@
     "name": "能化商品",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 17.92
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 19.15
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.26,
-      "median_return_pct": 0.3,
-      "best_return_pct": 4.96,
-      "worst_return_pct": -8.98
+      "up_probability_pct": 41.4,
+      "average_return_pct": -0.78,
+      "median_return_pct": -0.84,
+      "best_return_pct": 9.2,
+      "worst_return_pct": -10.06
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.64,
-      "median_return_pct": 0.73,
+      "up_probability_pct": 51.7,
+      "average_return_pct": 0.45,
+      "median_return_pct": 0.6,
       "best_return_pct": 14.89,
       "worst_return_pct": -10.78
     }

@@ -86,6 +86,8 @@ def main():
             fc["peak_horizon_days"] = t_dyn.get("peak_horizon_days")
             fc["peak_spillover_return_pct"] = t_dyn.get("peak_spillover_return_pct")
             fc["optimal_holding_days"] = t_dyn.get("optimal_holding_days")
+            if "dynamic_alpha_physical_peak" in t_dyn:
+                fc["dynamic_alpha_peak"] = t_dyn.get("dynamic_alpha_physical_peak")
 
         if nale_payload.get("has_limit_up_resonance") and nale_payload.get("spillover_return_5d_pct", 0) > 0:
             spill_ret = nale_payload["spillover_return_5d_pct"]

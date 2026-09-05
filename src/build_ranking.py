@@ -899,6 +899,8 @@ def build_ranking(
                     final_forecast["peak_horizon_days"] = t_dyn.get("peak_horizon_days")
                     final_forecast["peak_spillover_return_pct"] = t_dyn.get("peak_spillover_return_pct")
                     final_forecast["optimal_holding_days"] = t_dyn.get("optimal_holding_days")
+                    if "dynamic_alpha_physical_peak" in t_dyn:
+                        final_forecast["dynamic_alpha_peak"] = t_dyn.get("dynamic_alpha_physical_peak")
 
                 if nale_payload.get("has_limit_up_resonance") and nale_payload.get("spillover_return_5d_pct", 0) > 0:
                     spill_ret = nale_payload["spillover_return_5d_pct"]

@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "159562",
   "name": "黄金股ETF",
@@ -9,11 +9,11 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 45.5,
+    "risk_adjusted": 44.4,
     "risk": 40.3,
     "technical": 80.0,
     "industry": 57.0,
-    "leading": 50.0
+    "leading": 20.0
   },
   "leading": {
     "category": "gold_resources",
@@ -2385,16 +2385,17 @@
       962.0,
       957.92,
       937.5,
-      957.5
+      957.5,
+      965.95
     ],
     "momentum_metrics": {
-      "slope_pct": 2.9,
+      "slope_pct": 2.25,
       "momentum": "flat",
-      "inflection_flag": "none",
-      "latest_value": 957.5,
+      "inflection_flag": "negative_reversal",
+      "latest_value": 965.95,
       "confidence": "high"
     },
-    "updated_at": "2026-09-04 16:02:42"
+    "updated_at": "2026-09-06 00:31:42"
   },
   "nale_network": {
     "sector_name": "贵金属弹性",
@@ -2407,10 +2408,13 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -2443,7 +2447,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -2459,7 +2463,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
@@ -2481,10 +2486,10 @@
     "name": "贵金属弹性",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 12.0
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 10.35
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -2492,22 +2497,28 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.25,
-      "median_return_pct": 0.96,
-      "best_return_pct": 14.53,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.06,
+      "median_return_pct": 0.48,
+      "best_return_pct": 12.81,
       "worst_return_pct": -14.84
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.19,
-      "median_return_pct": 0.2,
-      "best_return_pct": 11.73,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.41,
+      "median_return_pct": 1.23,
+      "best_return_pct": 18.92,
       "worst_return_pct": -13.37
     }
   },
   "fundamental": null,
   "reasons": [
+    {
+      "type": "negative",
+      "title": "领先指标",
+      "detail": "领先指标见顶回落，供需拐点向下",
+      "contribution": -60.0
+    },
     {
       "type": "positive",
       "title": "中短期趋势向上",

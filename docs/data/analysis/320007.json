@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-03",
   "code": "320007",
   "name": "诺安成长混合",
@@ -9,8 +9,8 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 50.4,
-    "risk": 21.7,
+    "risk_adjusted": 47.1,
+    "risk": 35.9,
     "technical": 50.0,
     "industry": 39.7,
     "leading": 50.0
@@ -37,7 +37,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 16:02:42"
+    "updated_at": "2026-09-06 00:31:42"
   },
   "nale_network": {
     "sector_name": "公募半导体",
@@ -50,15 +50,18 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
+    "level": "medium",
+    "label": "中等风险",
     "annualized_volatility_20d_pct": 24.16,
     "max_drawdown_60d_pct": -18.24,
     "atr14_pct": 1.46,
@@ -85,7 +88,7 @@
       },
       {
         "name": "行业波动",
-        "score": 0.6,
+        "score": 95.5,
         "value": 24.95
       }
     ]
@@ -102,7 +105,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",

@@ -288,3 +288,42 @@ def test_build_ranking_with_tnale_dynamics():
     assert r["reasons"][0]["title"] == "T-NALE·存储时空时滞共振"
     assert "时滞τ≈20天" in r["reasons"][0]["detail"]
 
+
+def test_temporal_nale_dynamic_alpha_execution():
+    """测试 TemporalNALEEngine 开启方案 B 双波峰动态 alpha(t) 的计算表现。"""
+    engine = TemporalNALEEngine(use_dynamic_alpha=True)
+    tickers = ["DRAM_SRC", "MODULE_TGT"]
+    scores = {"DRAM_SRC": 0.9, "MODULE_TGT": 0.2}
+    adj = np.array([
+        [0.0, 0.0],
+        [1.0, 0.0]
+    ])
+    cats = {"DRAM_SRC": "半导体存储", "MODULE_TGT": "半导体存储"}
+
+    # 1. 在物理时滞共振峰 h = 20d 处推演
+    res_peak = engine.calculate_temporal_nale(
+        node_scores=scores,
+        adjacency_matrix=adj,
+        ticker_list=tickers,
+        horizon_days=20.0,
+        ticker_categories=cats,
+        use_dynamic_alpha=True
+    )
+    alpha_tgt_peak = res_peak["MODULE_TGT"].alpha
+    # 此时应处于物理到货共振峰值附近 (~0.55)
+    assert alpha_tgt_peak > 0.45, f"h=20d 物理共振峰 alpha 应处于高位，实际为 {alpha_tgt_peak}"
+
+    # 2. 在中期间歇休整谷底 h = 9d 处推演
+    res_valley = engine.calculate_temporal_nale(
+        node_scores=scores,
+        adjacency_matrix=adj,
+        ticker_list=tickers,
+        horizon_days=9.0,
+        ticker_categories=cats,
+        use_dynamic_alpha=True
+    )
+    alpha_tgt_valley = res_valley["MODULE_TGT"].alpha
+    assert alpha_tgt_valley < 0.35, f"h=9d 谷底阶段 alpha 应显著回落，实际为 {alpha_tgt_valley}"
+    assert alpha_tgt_peak > alpha_tgt_valley, "共振峰权重必须显著大于谷底权重"
+
+

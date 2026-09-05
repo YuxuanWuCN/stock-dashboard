@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "300812",
   "name": "易天股份",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 44.5,
+    "risk_adjusted": 42.4,
     "risk": 52.9,
     "technical": 68.0,
-    "industry": 50.1,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:58:24"
+    "updated_at": "2026-09-06 00:06:42"
   },
   "nale_network": {
     "sector_name": "科技",
@@ -78,10 +78,13 @@
     ],
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 18,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.551,
+      "dynamic_alpha_physical_peak": 0.555
     }
   },
   "risk": {
@@ -114,7 +117,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -130,7 +133,8 @@
     "physical_lag_tau_days": 18.0,
     "peak_horizon_days": 18,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.555
   },
   "technical": {
     "trend": "downtrend",
@@ -152,10 +156,10 @@
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 2.71
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 0.53
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -163,141 +167,21 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.11,
-      "median_return_pct": -0.07,
-      "best_return_pct": 24.17,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.52,
+      "median_return_pct": -1.19,
+      "best_return_pct": 31.47,
       "worst_return_pct": -20.93
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.4,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.31,
       "median_return_pct": 1.27,
-      "best_return_pct": 30.86,
+      "best_return_pct": 36.01,
       "worst_return_pct": -15.67
     }
   },
-  "fundamental": {
-    "schema_version": "2.0",
-    "report_date": "2026-03-31",
-    "score": 35.0,
-    "dimensions": {
-      "asset_quality": 27.0,
-      "liability_safety": 52.5,
-      "profit_quality": 3.0,
-      "cash_health": 65.0
-    },
-    "weights": {
-      "asset_quality": 0.3,
-      "liability_safety": 0.25,
-      "profit_quality": 0.25,
-      "cash_health": 0.2
-    },
-    "metrics": {
-      "total_assets": 1343827231.81,
-      "total_assets_yoy": -7.3466601003,
-      "inventory": 500487958.32,
-      "prepayment": 1696009.96,
-      "receivable": 241681555.12,
-      "inventory_prepay_ratio": 0.37369682381239494,
-      "receivable_revenue": 3.753684920650551,
-      "goodwill_equity": null,
-      "debt_ratio": 0.408456751684287,
-      "short_debt_ratio": 0.018787793115715122,
-      "roe": 0.01139225172302225,
-      "gross_margin": 9.588636103024987,
-      "deduct_ratio": 0.9727578295110096,
-      "netprofit_yoy": -62.8637833013,
-      "ocf_np_ratio": 2.450517630613518,
-      "financing_debt": -0.038704739483979726,
-      "retained_profit_equity": 0.29382579029233785
-    },
-    "reasons": {
-      "asset_quality": [
-        {
-          "type": "negative",
-          "title": "资产增长乏力",
-          "detail": "总资产同比 +-7.3%，规模停滞。",
-          "contribution": -8.0
-        },
-        {
-          "type": "warning",
-          "title": "周期数据不足",
-          "detail": "存货+预付占总资产 37.4%；未取得真实行业周期数据，不将其计为利好。",
-          "contribution": 0.0
-        },
-        {
-          "type": "negative",
-          "title": "应收占比偏高",
-          "detail": "应收账款/营收 375.4%，现金回收存在时滞。",
-          "contribution": -15.0
-        }
-      ],
-      "liability_safety": [
-        {
-          "type": "warning",
-          "title": "杠杆中等",
-          "detail": "资产负债率 40.8%，处于中间区间。",
-          "contribution": -0.5
-        },
-        {
-          "type": "positive",
-          "title": "债务期限合理",
-          "detail": "短期有息负债占总负债 1.9%，期限结构良好。",
-          "contribution": 3.0
-        }
-      ],
-      "profit_quality": [
-        {
-          "type": "negative",
-          "title": "ROE 偏低",
-          "detail": "净资产收益率 1.1%，盈利能力弱。",
-          "contribution": -30.0
-        },
-        {
-          "type": "negative",
-          "title": "利润下滑",
-          "detail": "净利润同比 -62.9%，盈利收缩。",
-          "contribution": -12.0
-        },
-        {
-          "type": "positive",
-          "title": "利润含金量高",
-          "detail": "扣非净利润占归母净利润 97.3%，主业盈利扎实。",
-          "contribution": 3.0
-        },
-        {
-          "type": "negative",
-          "title": "毛利率偏低",
-          "detail": "毛利率 9.6%，产品竞争力或成本控制存疑。",
-          "contribution": -8.0
-        }
-      ],
-      "cash_health": [
-        {
-          "type": "positive",
-          "title": "现金流强劲",
-          "detail": "经营现金流/净利润 2.45，利润有真金白银支撑。",
-          "contribution": 12.0
-        },
-        {
-          "type": "positive",
-          "title": "融资依赖度低",
-          "detail": "筹资现金流占总负债 -3.9%，扩张主要靠内生。",
-          "contribution": 3.0
-        }
-      ]
-    },
-    "dual_view": {
-      "positive_view": "经营现金流/净利润 2.45，利润含金量高",
-      "negative_view": "存货+预付占总资产 37.4%，缺少行业周期数据，不能判断备货是否受益；应收账款/营收 375.4%，现金回收存在时滞",
-      "cycle_phase": "unknown",
-      "industry_return_60d_pct": null,
-      "cycle_observation_days": 0,
-      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    },
-    "cached_at": "2026-08-09 09:34:12"
-  },
+  "fundamental": null,
   "reasons": [
     {
       "type": "negative",

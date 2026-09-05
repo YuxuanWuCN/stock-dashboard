@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "159663",
   "name": "机床ETF",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 41.7,
+    "risk_adjusted": 41.1,
     "risk": 44.0,
     "technical": 42.0,
-    "industry": 42.0,
+    "industry": 33.9,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 16:02:42"
+    "updated_at": "2026-09-06 00:31:42"
   },
   "nale_network": {
     "sector_name": "工业母机",
@@ -47,10 +47,13 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -83,7 +86,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -99,7 +102,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
@@ -121,10 +125,10 @@
     "name": "工业母机",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": -0.52
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": -4.07
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -132,15 +136,15 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 1.64,
-      "median_return_pct": 2.99,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.48,
+      "median_return_pct": 2.98,
       "best_return_pct": 12.22,
       "worst_return_pct": -10.31
     },
     "horizon_5d": {
       "up_probability_pct": 50.0,
-      "average_return_pct": 1.77,
+      "average_return_pct": 1.75,
       "median_return_pct": 0.43,
       "best_return_pct": 17.09,
       "worst_return_pct": -12.3

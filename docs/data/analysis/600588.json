@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "600588",
   "name": "用友网络",
@@ -9,7 +9,7 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 29.3,
+    "risk_adjusted": 28.7,
     "risk": 32.3,
     "technical": 58.0,
     "industry": 27.0,
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:59:11"
+    "updated_at": "2026-09-06 00:16:54"
   },
   "nale_network": {
     "sector_name": "企业软件",
@@ -47,10 +47,13 @@
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -83,7 +86,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -99,7 +102,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.26,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "rebound",
@@ -121,10 +125,10 @@
     "name": "企业软件",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": -13.83
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": -7.51
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -132,153 +136,21 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.44,
-      "median_return_pct": -1.81,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.91,
+      "median_return_pct": -2.74,
       "best_return_pct": 18.14,
       "worst_return_pct": -8.23
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.59,
-      "median_return_pct": -2.26,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.52,
+      "median_return_pct": -1.88,
       "best_return_pct": 40.19,
       "worst_return_pct": -10.11
     }
   },
-  "fundamental": {
-    "schema_version": "2.0",
-    "report_date": "2026-03-31",
-    "score": 35.5,
-    "dimensions": {
-      "asset_quality": 26.2,
-      "liability_safety": 41.5,
-      "profit_quality": 17.0,
-      "cash_health": 65.0
-    },
-    "weights": {
-      "asset_quality": 0.3,
-      "liability_safety": 0.25,
-      "profit_quality": 0.25,
-      "cash_health": 0.2
-    },
-    "metrics": {
-      "total_assets": 21132505027.0,
-      "total_assets_yoy": -5.1708017469,
-      "inventory": 395129880.0,
-      "prepayment": 249130523.0,
-      "receivable": 2245438399.0,
-      "inventory_prepay_ratio": 0.030486702933554682,
-      "receivable_revenue": 3.1204987692976918,
-      "goodwill_equity": 0.21694405986646578,
-      "debt_ratio": 0.5974705621443503,
-      "short_debt_ratio": 0.3862916732558284,
-      "roe": -0.10479162806651839,
-      "gross_margin": -52.712516163048406,
-      "deduct_ratio": 1.0140701093390638,
-      "netprofit_yoy": 1.580640045,
-      "ocf_np_ratio": 1.3909229939491736,
-      "financing_debt": 0.07532975180383217,
-      "retained_profit_equity": -0.4785174058327605
-    },
-    "reasons": {
-      "asset_quality": [
-        {
-          "type": "negative",
-          "title": "资产增长乏力",
-          "detail": "总资产同比 +-5.2%，规模停滞。",
-          "contribution": -8.0
-        },
-        {
-          "type": "positive",
-          "title": "存货结构健康",
-          "detail": "存货+预付占总资产 3.0%，风险可控。",
-          "contribution": 5.0
-        },
-        {
-          "type": "negative",
-          "title": "应收占比偏高",
-          "detail": "应收账款/营收 312.0%，现金回收存在时滞。",
-          "contribution": -15.0
-        },
-        {
-          "type": "warning",
-          "title": "商誉占比偏高",
-          "detail": "商誉/净资产 21.7%，存在商誉减值隐患。",
-          "contribution": -5.8
-        }
-      ],
-      "liability_safety": [
-        {
-          "type": "warning",
-          "title": "杠杆中等",
-          "detail": "资产负债率 59.7%，处于中间区间。",
-          "contribution": -11.5
-        },
-        {
-          "type": "positive",
-          "title": "债务期限合理",
-          "detail": "短期有息负债占总负债 38.6%，期限结构良好。",
-          "contribution": 3.0
-        }
-      ],
-      "profit_quality": [
-        {
-          "type": "negative",
-          "title": "ROE 偏低",
-          "detail": "净资产收益率 -10.5%，盈利能力弱。",
-          "contribution": -30.0
-        },
-        {
-          "type": "positive",
-          "title": "利润高增",
-          "detail": "净利润同比 +1.6%，盈利动能强。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "利润含金量高",
-          "detail": "扣非净利润占归母净利润 101.4%，主业盈利扎实。",
-          "contribution": 3.0
-        },
-        {
-          "type": "negative",
-          "title": "毛利率偏低",
-          "detail": "毛利率 -52.7%，产品竞争力或成本控制存疑。",
-          "contribution": -8.0
-        },
-        {
-          "type": "negative",
-          "title": "累计未弥补亏损",
-          "detail": "未分配利润/归母权益 -47.9%，历史亏损削弱资本缓冲。",
-          "contribution": -8.0
-        }
-      ],
-      "cash_health": [
-        {
-          "type": "positive",
-          "title": "现金流强劲",
-          "detail": "经营现金流/净利润 1.39，利润有真金白银支撑。",
-          "contribution": 12.0
-        },
-        {
-          "type": "positive",
-          "title": "融资依赖度低",
-          "detail": "筹资现金流占总负债 7.5%，扩张主要靠内生。",
-          "contribution": 3.0
-        }
-      ]
-    },
-    "dual_view": {
-      "positive_view": "净利润同比 +1.6%；经营现金流/净利润 1.39，利润含金量高",
-      "negative_view": "应收账款/营收 312.0%，现金回收存在时滞",
-      "cycle_phase": "unknown",
-      "industry_return_60d_pct": null,
-      "cycle_observation_days": 0,
-      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    },
-    "cached_at": "2026-08-21 10:06:42"
-  },
+  "fundamental": null,
   "reasons": [
     {
       "type": "negative",

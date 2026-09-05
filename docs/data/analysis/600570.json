@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "600570",
   "name": "恒生电子",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 38.2,
+    "risk_adjusted": 42.7,
     "risk": 21.2,
     "technical": 91.0,
-    "industry": 34.5,
+    "industry": 48.9,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:58:49"
+    "updated_at": "2026-09-06 00:09:25"
   },
   "nale_network": {
     "sector_name": "科技",
@@ -78,10 +78,13 @@
     ],
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 18,
       "peak_spillover_return_pct": 1.06,
       "optimal_holding_days": 18,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.551,
+      "dynamic_alpha_physical_peak": 0.555
     }
   },
   "risk": {
@@ -114,15 +117,15 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
   "forecast": {
     "return_3d_pct": -1.16,
-    "return_5d_pct": -0.95,
+    "return_5d_pct": 0.13,
     "up_probability_3d_pct": 33.3,
-    "up_probability_5d_pct": 46.7,
+    "up_probability_5d_pct": 51.7,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
@@ -130,7 +133,8 @@
     "physical_lag_tau_days": 18.0,
     "peak_horizon_days": 18,
     "peak_spillover_return_pct": 1.06,
-    "optimal_holding_days": 18
+    "optimal_holding_days": 18,
+    "dynamic_alpha_peak": 0.555
   },
   "technical": {
     "trend": "uptrend",
@@ -152,10 +156,10 @@
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": -3.77
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 2.3
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -163,147 +167,21 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -1.16,
-      "median_return_pct": -1.54,
+      "up_probability_pct": 30.0,
+      "average_return_pct": -1.33,
+      "median_return_pct": -1.52,
       "best_return_pct": 6.55,
-      "worst_return_pct": -10.06
+      "worst_return_pct": -9.97
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.95,
-      "median_return_pct": -1.06,
+      "up_probability_pct": 50.0,
+      "average_return_pct": -0.65,
+      "median_return_pct": -0.27,
       "best_return_pct": 10.95,
       "worst_return_pct": -9.55
     }
   },
-  "fundamental": {
-    "schema_version": "2.0",
-    "report_date": "2026-03-31",
-    "score": 30.7,
-    "dimensions": {
-      "asset_quality": 32.0,
-      "liability_safety": 63.0,
-      "profit_quality": 15.0,
-      "cash_health": 8.0
-    },
-    "weights": {
-      "asset_quality": 0.3,
-      "liability_safety": 0.25,
-      "profit_quality": 0.25,
-      "cash_health": 0.2
-    },
-    "metrics": {
-      "total_assets": 15049031632.13,
-      "total_assets_yoy": 9.5824901324,
-      "inventory": 780715655.37,
-      "prepayment": 10631794.35,
-      "receivable": 904278026.44,
-      "inventory_prepay_ratio": 0.05258460936652273,
-      "receivable_revenue": 2.001915358027706,
-      "goodwill_equity": 0.062192908502646034,
-      "debt_ratio": 0.27691907051697534,
-      "short_debt_ratio": 0.04407022588701418,
-      "roe": 0.013914749948474464,
-      "gross_margin": -8.909810407554927,
-      "deduct_ratio": 0.5224675453730191,
-      "netprofit_yoy": 322.3877366648,
-      "ocf_np_ratio": -8.360392027596253,
-      "financing_debt": -0.007404345770538465,
-      "retained_profit_equity": 0.6933140580248767
-    },
-    "reasons": {
-      "asset_quality": [
-        {
-          "type": "negative",
-          "title": "资产增长乏力",
-          "detail": "总资产同比 +9.6%，规模停滞。",
-          "contribution": -8.0
-        },
-        {
-          "type": "positive",
-          "title": "存货结构健康",
-          "detail": "存货+预付占总资产 5.3%，风险可控。",
-          "contribution": 5.0
-        },
-        {
-          "type": "negative",
-          "title": "应收占比偏高",
-          "detail": "应收账款/营收 200.2%，现金回收存在时滞。",
-          "contribution": -15.0
-        }
-      ],
-      "liability_safety": [
-        {
-          "type": "positive",
-          "title": "杠杆适中",
-          "detail": "资产负债率 27.7%，财务结构稳健。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "债务期限合理",
-          "detail": "短期有息负债占总负债 4.4%，期限结构良好。",
-          "contribution": 3.0
-        }
-      ],
-      "profit_quality": [
-        {
-          "type": "negative",
-          "title": "ROE 偏低",
-          "detail": "净资产收益率 1.4%，盈利能力弱。",
-          "contribution": -30.0
-        },
-        {
-          "type": "positive",
-          "title": "利润高增",
-          "detail": "净利润同比 +322.4%，盈利动能强。",
-          "contribution": 10.0
-        },
-        {
-          "type": "warning",
-          "title": "依赖非经常损益",
-          "detail": "扣非净利润占归母净利润 52.2%，利润含金量低。",
-          "contribution": -12.0
-        },
-        {
-          "type": "negative",
-          "title": "毛利率偏低",
-          "detail": "毛利率 -8.9%，产品竞争力或成本控制存疑。",
-          "contribution": -8.0
-        },
-        {
-          "type": "positive",
-          "title": "利润留存形成资本垫",
-          "detail": "未分配利润/归母权益 69.3%，内生资本积累较充分。",
-          "contribution": 5.0
-        }
-      ],
-      "cash_health": [
-        {
-          "type": "negative",
-          "title": "经营现金流为负",
-          "detail": "经营现金流/净利润 -8.36，账面利润缺乏现金支撑，警惕应收与存货占款。",
-          "contribution": -45.0
-        },
-        {
-          "type": "positive",
-          "title": "融资依赖度低",
-          "detail": "筹资现金流占总负债 -0.7%，扩张主要靠内生。",
-          "contribution": 3.0
-        }
-      ]
-    },
-    "dual_view": {
-      "positive_view": "净利润同比 +322.4%",
-      "negative_view": "经营现金流/净利润 -8.36，利润兑现存疑；应收账款/营收 200.2%，现金回收存在时滞",
-      "cycle_phase": "unknown",
-      "industry_return_60d_pct": null,
-      "cycle_observation_days": 0,
-      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    },
-    "cached_at": "2026-08-09 22:17:13"
-  },
+  "fundamental": null,
   "reasons": [
     {
       "title": "T-NALE·科技时空时滞共振",

@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "002415",
   "name": "海康威视",
@@ -9,10 +9,10 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 52.9,
+    "risk_adjusted": 52.3,
     "risk": 21.8,
     "technical": 78.0,
-    "industry": 38.5,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:58:20"
+    "updated_at": "2026-09-06 00:05:36"
   },
   "nale_network": {
     "sector_name": "科技",
@@ -78,10 +78,13 @@
     ],
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 18,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.551,
+      "dynamic_alpha_physical_peak": 0.555
     }
   },
   "risk": {
@@ -114,7 +117,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -130,7 +133,8 @@
     "physical_lag_tau_days": 18.0,
     "peak_horizon_days": 18,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.555
   },
   "technical": {
     "trend": "rebound",
@@ -152,152 +156,32 @@
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": -1.77
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 0.59
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 62.1,
-      "average_return_pct": 1.36,
-      "median_return_pct": 1.41,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.99,
+      "median_return_pct": 1.16,
       "best_return_pct": 8.58,
-      "worst_return_pct": -4.13
+      "worst_return_pct": -5.61
     },
     "horizon_5d": {
-      "up_probability_pct": 55.2,
-      "average_return_pct": 1.22,
-      "median_return_pct": 1.48,
-      "best_return_pct": 9.04,
-      "worst_return_pct": -7.09
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.2,
+      "median_return_pct": 0.77,
+      "best_return_pct": 11.35,
+      "worst_return_pct": -6.97
     }
   },
-  "fundamental": {
-    "schema_version": "2.0",
-    "report_date": "2026-06-30",
-    "score": 55.5,
-    "dimensions": {
-      "asset_quality": 50.0,
-      "liability_safety": 63.0,
-      "profit_quality": 73.0,
-      "cash_health": 32.3
-    },
-    "weights": {
-      "asset_quality": 0.3,
-      "liability_safety": 0.25,
-      "profit_quality": 0.25,
-      "cash_health": 0.2
-    },
-    "metrics": {
-      "total_assets": 137690401796.0,
-      "total_assets_yoy": 10.6704670341,
-      "inventory": 29488147922.59,
-      "prepayment": 923362268.9,
-      "receivable": 27784134749.07,
-      "inventory_prepay_ratio": 0.22086877367492347,
-      "receivable_revenue": 1.2437570057218548,
-      "goodwill_equity": 0.0036530807553994127,
-      "debt_ratio": 0.3236030450148226,
-      "short_debt_ratio": 0.08594951406126315,
-      "roe": 0.0936100771356058,
-      "gross_margin": 19.506371757658876,
-      "deduct_ratio": 0.9767269985726937,
-      "netprofit_yoy": 45.2365596507,
-      "ocf_np_ratio": 0.4092618886302276,
-      "financing_debt": -0.2321048410021723,
-      "retained_profit_equity": 0.7834463002174289
-    },
-    "reasons": {
-      "asset_quality": [
-        {
-          "type": "positive",
-          "title": "资产稳步扩张",
-          "detail": "总资产同比 +10.7%，处于健康扩张区间。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "存货结构健康",
-          "detail": "存货+预付占总资产 22.1%，风险可控。",
-          "contribution": 5.0
-        },
-        {
-          "type": "negative",
-          "title": "应收占比偏高",
-          "detail": "应收账款/营收 124.4%，现金回收存在时滞。",
-          "contribution": -15.0
-        }
-      ],
-      "liability_safety": [
-        {
-          "type": "positive",
-          "title": "杠杆适中",
-          "detail": "资产负债率 32.4%，财务结构稳健。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "债务期限合理",
-          "detail": "短期有息负债占总负债 8.6%，期限结构良好。",
-          "contribution": 3.0
-        }
-      ],
-      "profit_quality": [
-        {
-          "type": "positive",
-          "title": "ROE 良好",
-          "detail": "净资产收益率 9.4%，盈利水平正常。",
-          "contribution": 5.0
-        },
-        {
-          "type": "positive",
-          "title": "利润高增",
-          "detail": "净利润同比 +45.2%，盈利动能强。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "利润含金量高",
-          "detail": "扣非净利润占归母净利润 97.7%，主业盈利扎实。",
-          "contribution": 3.0
-        },
-        {
-          "type": "positive",
-          "title": "利润留存形成资本垫",
-          "detail": "未分配利润/归母权益 78.3%，内生资本积累较充分。",
-          "contribution": 5.0
-        }
-      ],
-      "cash_health": [
-        {
-          "type": "warning",
-          "title": "现金流偏弱",
-          "detail": "经营现金流/净利润 0.41，利润兑现能力一般。",
-          "contribution": -20.7
-        },
-        {
-          "type": "positive",
-          "title": "融资依赖度低",
-          "detail": "筹资现金流占总负债 -23.2%，扩张主要靠内生。",
-          "contribution": 3.0
-        }
-      ]
-    },
-    "dual_view": {
-      "positive_view": "总资产同比 +10.7%，规模扩张有力；净利润同比 +45.2%",
-      "negative_view": "经营现金流/净利润 0.41，利润兑现存疑；应收账款/营收 124.4%，现金回收存在时滞",
-      "cycle_phase": "unknown",
-      "industry_return_60d_pct": null,
-      "cycle_observation_days": 0,
-      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    },
-    "cached_at": "2026-08-09 09:31:52"
-  },
+  "fundamental": null,
   "reasons": [
     {
       "type": "positive",

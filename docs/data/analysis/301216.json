@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-04 16:02:46+08:00",
+  "generated_at": "2026-09-06 00:31:45+08:00",
   "trade_date": "2026-09-04",
   "code": "301216",
   "name": "万凯新材",
@@ -9,7 +9,7 @@
   "stale": false,
   "alpha_gate": null,
   "scores": {
-    "risk_adjusted": 32.8,
+    "risk_adjusted": 30.9,
     "risk": 66.3,
     "technical": 85.0,
     "industry": 57.0,
@@ -34,7 +34,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-04 15:59:30"
+    "updated_at": "2026-09-06 00:29:09"
   },
   "nale_network": {
     "sector_name": "热点龙头",
@@ -78,10 +78,13 @@
     ],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
-      "is_temporal_enhanced": true
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
@@ -114,7 +117,7 @@
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 24.95
+        "value": 24.34
       }
     ]
   },
@@ -130,7 +133,8 @@
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0
+    "optimal_holding_days": 5.0,
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "range",
@@ -152,10 +156,10 @@
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 27.05
+    "return_5d_pct": -3.13,
+    "return_20d_pct": -5.55,
+    "return_60d_pct": -8.99,
+    "relative_strength_20d_pct": 23.6
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -163,141 +167,21 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.31,
-      "median_return_pct": -1.97,
-      "best_return_pct": 18.82,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.76,
+      "median_return_pct": -1.5,
+      "best_return_pct": 18.41,
       "worst_return_pct": -13.58
     },
     "horizon_5d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": -0.56,
+      "average_return_pct": -0.86,
       "median_return_pct": -1.19,
       "best_return_pct": 21.19,
       "worst_return_pct": -19.97
     }
   },
-  "fundamental": {
-    "schema_version": "2.0",
-    "report_date": "2026-06-30",
-    "score": 51.0,
-    "dimensions": {
-      "asset_quality": 68.0,
-      "liability_safety": 36.7,
-      "profit_quality": 45.0,
-      "cash_health": 51.1
-    },
-    "weights": {
-      "asset_quality": 0.3,
-      "liability_safety": 0.25,
-      "profit_quality": 0.25,
-      "cash_health": 0.2
-    },
-    "metrics": {
-      "total_assets": 20911537026.49,
-      "total_assets_yoy": 17.1954280448,
-      "inventory": 4040032133.08,
-      "prepayment": 344973421.59,
-      "receivable": 1143664174.51,
-      "inventory_prepay_ratio": 0.20969312533627868,
-      "receivable_revenue": 0.236975713120341,
-      "goodwill_equity": null,
-      "debt_ratio": 0.6793824953595309,
-      "short_debt_ratio": 0.4213836338199255,
-      "roe": 0.08536446179358431,
-      "gross_margin": 5.4007119322900445,
-      "deduct_ratio": 0.6154121467614957,
-      "netprofit_yoy": 953.7531902341,
-      "ocf_np_ratio": 0.9468830511708257,
-      "financing_debt": 0.061768592849782686,
-      "retained_profit_equity": 0.27827840365103823
-    },
-    "reasons": {
-      "asset_quality": [
-        {
-          "type": "positive",
-          "title": "资产稳步扩张",
-          "detail": "总资产同比 +17.2%，处于健康扩张区间。",
-          "contribution": 10.0
-        },
-        {
-          "type": "positive",
-          "title": "存货结构健康",
-          "detail": "存货+预付占总资产 21.0%，风险可控。",
-          "contribution": 5.0
-        },
-        {
-          "type": "positive",
-          "title": "回款效率良好",
-          "detail": "应收账款/营收 23.7%，回款健康。",
-          "contribution": 3.0
-        }
-      ],
-      "liability_safety": [
-        {
-          "type": "warning",
-          "title": "杠杆中等",
-          "detail": "资产负债率 67.9%，处于中间区间。",
-          "contribution": -16.3
-        },
-        {
-          "type": "positive",
-          "title": "债务期限合理",
-          "detail": "短期有息负债占总负债 42.1%，期限结构良好。",
-          "contribution": 3.0
-        }
-      ],
-      "profit_quality": [
-        {
-          "type": "positive",
-          "title": "ROE 良好",
-          "detail": "净资产收益率 8.5%，盈利水平正常。",
-          "contribution": 5.0
-        },
-        {
-          "type": "positive",
-          "title": "利润高增",
-          "detail": "净利润同比 +953.8%，盈利动能强。",
-          "contribution": 10.0
-        },
-        {
-          "type": "warning",
-          "title": "依赖非经常损益",
-          "detail": "扣非净利润占归母净利润 61.5%，利润含金量低。",
-          "contribution": -12.0
-        },
-        {
-          "type": "negative",
-          "title": "毛利率偏低",
-          "detail": "毛利率 5.4%，产品竞争力或成本控制存疑。",
-          "contribution": -8.0
-        }
-      ],
-      "cash_health": [
-        {
-          "type": "warning",
-          "title": "现金流偏弱",
-          "detail": "经营现金流/净利润 0.95，利润兑现能力一般。",
-          "contribution": -1.9
-        },
-        {
-          "type": "positive",
-          "title": "融资依赖度低",
-          "detail": "筹资现金流占总负债 6.2%，扩张主要靠内生。",
-          "contribution": 3.0
-        }
-      ]
-    },
-    "dual_view": {
-      "positive_view": "总资产同比 +17.2%，规模扩张有力；净利润同比 +953.8%",
-      "negative_view": "资产负债率 67.9%，杠杆偏高；经营现金流/净利润 0.95，利润兑现存疑",
-      "cycle_phase": "unknown",
-      "industry_return_60d_pct": null,
-      "cycle_observation_days": 0,
-      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
-    },
-    "cached_at": "2026-08-24 23:09:22"
-  },
+  "fundamental": null,
   "reasons": [
     {
       "type": "negative",

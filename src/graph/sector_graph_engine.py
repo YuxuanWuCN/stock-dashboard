@@ -18,9 +18,8 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-logger = logging.getLogger("sector_graph_engine")
-
 from src.graph.temporal_constants import get_supply_chain_lag
+from src.graph.dynamic_temporal_alpha import compute_temporal_alpha
 
 
 def is_limit_up(code: str, change_pct: Optional[float]) -> bool:
@@ -261,18 +260,26 @@ class SectorGraphEngine:
             else:
                 role = "neutral"
 
-        # 产业链物理流转时滞与波峰共振计算 (T-NALE 时空扩展)
+        # 产业链物理流转时滞与波峰共振计算 (T-NALE 时空扩展与方案 B 动态 alpha)
         lag_cfg = get_supply_chain_lag(category, category)
         tau_days = float(lag_cfg.tau_days)
+        sigma_days = float(lag_cfg.sigma_days)
         peak_horizon = round(tau_days)
         peak_impulse = round(float(spillover_ret * lag_cfg.attenuation_factor * 1.15), 2) if spillover_ret > 0 else 0.0
 
+        # 计算时效性双波峰动态 alpha 权重
+        alpha_t0 = compute_temporal_alpha(t=0.0, tau=tau_days, sigma=sigma_days, has_event=has_limit_up)
+        alpha_peak = compute_temporal_alpha(t=tau_days, tau=tau_days, sigma=sigma_days, has_event=has_limit_up)
+
         temporal_dynamics = {
             "physical_lag_tau_days": tau_days,
+            "physical_lag_sigma_days": sigma_days,
             "peak_horizon_days": peak_horizon,
             "peak_spillover_return_pct": peak_impulse,
             "optimal_holding_days": peak_horizon if role == "follower_catchup" else 5.0,
-            "is_temporal_enhanced": True
+            "is_temporal_enhanced": True,
+            "dynamic_alpha_sentiment_t0": round(alpha_t0, 3),
+            "dynamic_alpha_physical_peak": round(alpha_peak, 3),
         }
 
         return {
