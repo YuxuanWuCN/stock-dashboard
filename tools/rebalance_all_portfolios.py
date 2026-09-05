@@ -37,6 +37,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.config import DATA_DIR
 from src.utils import beijing_date_str, beijing_datetime_str
+from src.risk import calculate_inverse_volatility_weights
 
 RANKING_FILE = os.path.join(DATA_DIR, "analysis", "ranking.json")
 AGGRESSIVE_SCAN_FILE = os.path.join(DATA_DIR, "paper", "aggressive_scan.json")
@@ -234,19 +235,20 @@ def rebalance_aggressive(scan_results, dry_run=False, temperature=None, config=N
     for i, s in enumerate(selected, 1):
         print(f"   {i}. {s['code']} {s['name']} | 激进分 {s['aggressive_score']:.1f}")
 
-    # 等权配置（总仓位 = base_ratio × 温度系数）
+    # 波动率反比平价配置（总仓位 = base_ratio × 温度系数）
     position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
-    pct = position_pct / len(selected)
-    amount = int(1000000 * position_pct / 100.0) / len(selected)
+    weighted_selected = calculate_inverse_volatility_weights(
+        selected, target_position_pct=position_pct, risk_profile="aggressive"
+    )
 
     items = []
-    for s in selected:
+    for s in weighted_selected:
         items.append({
             "code": s['code'],
             "name": s['name'],
-            "amount": int(amount),
-            "pct": round(pct, 1),
-            "reason": f"激进分{s['aggressive_score']:.1f} | 5日↑{s['up5']:.0f}% | 20日{s['return_20d_pct']:+.1f}%"
+            "amount": s.get('amount', int(1000000 * s['pct'] / 100.0)),
+            "pct": s['pct'],
+            "reason": f"激进分{s.get('aggressive_score', s.get('score', 0)):.1f} | 5日↑{s.get('up5', 50):.0f}% | 波动平价{s['pct']:.1f}%"
         })
 
     cash_pct = round(100.0 - position_pct, 1)
@@ -329,19 +331,20 @@ def rebalance_robust(ranking, dry_run=False, temperature=None, config=None):
     for i, s in enumerate(selected, 1):
         print(f"   {i}. {s['code']} {s['name']} | 风险{s['risk']:.1f} | 3日↑{s['up3']:.0f}%")
 
-    # 仓位随温度缩放（基准 80% × 温度系数）
+    # 仓位随温度缩放与波动率反比平价（基准 80% × 温度系数）
     position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
-    pct = position_pct / len(selected)
-    amount = int(1000000 * position_pct / 100.0) / len(selected)
+    weighted_selected = calculate_inverse_volatility_weights(
+        selected, target_position_pct=position_pct, risk_profile="defensive"
+    )
 
     items = []
-    for s in selected:
+    for s in weighted_selected:
         items.append({
             "code": s['code'],
             "name": s['name'],
-            "amount": int(amount),
-            "pct": round(pct, 1),
-            "reason": f"综合分{s['score']:.1f} | 风险{s['risk']:.0f} | 3日↑{s['up3']:.0f}%"
+            "amount": s.get('amount', int(1000000 * s['pct'] / 100.0)),
+            "pct": s['pct'],
+            "reason": f"综合分{s['score']:.1f} | 风险{s['risk']:.0f} | 波动平价{s['pct']:.1f}%"
         })
 
     cash_pct = round(100.0 - position_pct, 1)
@@ -406,17 +409,18 @@ def rebalance_bluechip(ranking, dry_run=False, temperature=None, config=None):
         print(f"   {i}. {s['code']} {s['name']} | 分数{s['score']:.1f}")
 
     position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
-    pct = position_pct / len(selected)
-    amount = int(1000000 * position_pct / 100.0) / len(selected)
+    weighted_selected = calculate_inverse_volatility_weights(
+        selected, target_position_pct=position_pct, risk_profile="conservative"
+    )
 
     items = []
-    for s in selected:
+    for s in weighted_selected:
         items.append({
             "code": s['code'],
             "name": s['name'],
-            "amount": int(amount),
-            "pct": round(pct, 1),
-            "reason": f"蓝筹 | 分数{s['score']:.1f} | 风险{s['risk']:.0f}"
+            "amount": s.get('amount', int(1000000 * s['pct'] / 100.0)),
+            "pct": s['pct'],
+            "reason": f"蓝筹 | 分数{s['score']:.1f} | 风险{s['risk']:.0f} | 波动平价{s['pct']:.1f}%"
         })
 
     cash_pct = round(100.0 - position_pct, 1)
@@ -479,17 +483,18 @@ def rebalance_defensive(ranking, dry_run=False, temperature=None, config=None):
         print(f"   {i}. {s['code']} {s['name']}")
 
     position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
-    pct = position_pct / len(selected)
-    amount = int(1000000 * position_pct / 100.0) / len(selected)
+    weighted_selected = calculate_inverse_volatility_weights(
+        selected, target_position_pct=position_pct, risk_profile="defensive"
+    )
 
     items = []
-    for s in selected:
+    for s in weighted_selected:
         items.append({
             "code": s['code'],
             "name": s['name'],
-            "amount": int(amount),
-            "pct": round(pct, 1),
-            "reason": f"防御 | 分数{s['score']:.1f}"
+            "amount": s.get('amount', int(1000000 * s['pct'] / 100.0)),
+            "pct": s['pct'],
+            "reason": f"防御 | 分数{s['score']:.1f} | 波动平价{s['pct']:.1f}%"
         })
 
     cash_pct = round(100.0 - position_pct, 1)
@@ -576,17 +581,18 @@ def rebalance_global(ranking, dry_run=False, temperature=None, config=None):
         print(f"   {i}. {s['code']} {s['name']}")
 
     position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
-    pct = position_pct / len(selected)
-    amount = int(1000000 * position_pct / 100.0) / len(selected)
+    weighted_selected = calculate_inverse_volatility_weights(
+        selected, target_position_pct=position_pct, risk_profile="global"
+    )
 
     items = []
-    for s in selected:
+    for s in weighted_selected:
         items.append({
             "code": s['code'],
             "name": s['name'],
-            "amount": int(amount),
-            "pct": round(pct, 1),
-            "reason": f"全球配置 | 分数{s['score']:.1f}"
+            "amount": s.get('amount', int(1000000 * s['pct'] / 100.0)),
+            "pct": s['pct'],
+            "reason": f"全球配置 | 分数{s['score']:.1f} | 波动平价{s['pct']:.1f}%"
         })
 
     cash_pct = round(100.0 - position_pct, 1)
@@ -649,17 +655,18 @@ def rebalance_tech(ranking, dry_run=False, temperature=None, config=None):
         print(f"   {i}. {s['code']} {s['name']}")
 
     position_pct = base_ratio * 100.0 * position_ratio_for_temperature(temperature) if enabled else base_ratio * 100.0
-    pct = position_pct / len(selected)
-    amount = int(1000000 * position_pct / 100.0) / len(selected)
+    weighted_selected = calculate_inverse_volatility_weights(
+        selected, target_position_pct=position_pct, risk_profile="tech"
+    )
 
     items = []
-    for s in selected:
+    for s in weighted_selected:
         items.append({
             "code": s['code'],
             "name": s['name'],
-            "amount": int(amount),
-            "pct": round(pct, 1),
-            "reason": f"科技 | 分数{s['score']:.1f}"
+            "amount": s.get('amount', int(1000000 * s['pct'] / 100.0)),
+            "pct": s['pct'],
+            "reason": f"科技 | 分数{s['score']:.1f} | 波动平价{s['pct']:.1f}%"
         })
 
     cash_pct = round(100.0 - position_pct, 1)

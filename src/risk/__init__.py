@@ -29,4 +29,11 @@ __all__ = [
     "DEFAULT_POSITION_CONFIG",
     "AGGRESSIVE_POSITION_CONFIG",
     "CONSERVATIVE_POSITION_CONFIG",
+    "VolatilityParityOptimizer",
+    "calculate_inverse_volatility_weights",
 ]
+
+from src.risk.volatility_parity import (
+    VolatilityParityOptimizer,
+    calculate_inverse_volatility_weights,
+)
