@@ -215,7 +215,6 @@ python tools/paper_portfolio.py report
 ---
 
 **最后更新**: 2026-08-11 10:00  
-**作者**: Claude (Opus 5)  
-**审核**: 吴宇轩
+**作者**: 吴宇轩
 
 🎉 祝你的股票分析项目越来越好！
