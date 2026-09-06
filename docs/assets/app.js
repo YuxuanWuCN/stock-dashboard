@@ -196,7 +196,87 @@ document.addEventListener('DOMContentLoaded', () => {
         reportCitations: document.getElementById('report-citations'),
         reportCitationList: document.getElementById('report-citation-list'),
         reportDisclaimer: document.getElementById('report-disclaimer'),
+        themeToggleBtn: document.getElementById('theme-toggle-btn'),
     };
+
+    // ============================================================
+    // 双主题管理：深色终端 (Pro Dark) / 浅色明晰 (FinTech Light)
+    // ============================================================
+    function initTheme() {
+        const saved = localStorage.getItem('fintech-theme') || 
+            (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        applyTheme(saved);
+
+        if (el.themeToggleBtn) {
+            el.themeToggleBtn.addEventListener('click', function () {
+                const current = document.documentElement.getAttribute('data-theme') || 'dark';
+                const next = current === 'dark' ? 'light' : 'dark';
+                applyTheme(next);
+            });
+        }
+    }
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('fintech-theme', theme);
+        if (el.themeToggleBtn) {
+            const textSpan = el.themeToggleBtn.querySelector('.theme-text');
+            if (textSpan) textSpan.textContent = theme === 'dark' ? '深色' : '浅色';
+            el.themeToggleBtn.setAttribute('title', theme === 'dark' ? '切换为浅色主题' : '切换为深色主题');
+        }
+        refreshChartThemes();
+    }
+
+    function getChartThemeTokens() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        return {
+            isLight: isLight,
+            splitLineColor: isLight ? '#e2e8f0' : 'rgba(255, 255, 255, 0.08)',
+            axisLineColor: isLight ? '#cbd5e1' : '#475569',
+            axisLabelColor: isLight ? '#64748b' : '#94a3b8',
+            dataZoomText: isLight ? '#64748b' : '#94a3b8',
+            dataZoomBorder: isLight ? '#cbd5e1' : '#334155',
+            dataZoomFiller: isLight ? 'rgba(37, 99, 235, 0.15)' : 'rgba(37, 99, 235, 0.25)',
+            tooltipBg: isLight ? 'rgba(255, 255, 255, 0.98)' : 'rgba(15, 23, 42, 0.96)',
+            tooltipBorder: isLight ? '#cbd5e1' : '#334155',
+            tooltipText: isLight ? '#0f172a' : '#f8fafc',
+            tooltipDivider: isLight ? '#e2e8f0' : 'rgba(255, 255, 255, 0.12)'
+        };
+    }
+
+    function refreshChartThemes() {
+        const tokens = getChartThemeTokens();
+        const updateObj = {
+            xAxis: [
+                {
+                    axisLine: { lineStyle: { color: tokens.axisLineColor } },
+                    splitLine: { lineStyle: { color: tokens.splitLineColor } },
+                    axisLabel: { color: tokens.axisLabelColor }
+                },
+                {
+                    axisLine: { lineStyle: { color: tokens.axisLineColor } }
+                }
+            ],
+            yAxis: [
+                {
+                    axisLine: { lineStyle: { color: tokens.axisLineColor } },
+                    splitLine: { lineStyle: { color: tokens.splitLineColor } },
+                    axisLabel: { color: tokens.axisLabelColor }
+                },
+                {}
+            ],
+            dataZoom: [
+                {},
+                { textStyle: { color: tokens.dataZoomText }, borderColor: tokens.dataZoomBorder, fillerColor: tokens.dataZoomFiller }
+            ]
+        };
+        if (state.chart) {
+            state.chart.setOption(updateObj);
+        }
+        if (state.indexChart) {
+            state.indexChart.setOption(updateObj);
+        }
+    }
 
     // ============================================================
     // v2.6 页面导航：今日关注 / 自选股 / 排行榜 / 单股查询 / 个股研究
@@ -247,6 +327,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', function () {
         navigateTo(currentPageFromHash());
     });
+
+    // 初始化主题
+    initTheme();
 
     // 初始页面：默认今日关注（支持 #/watchlist 等直达链接）
     navigateTo(currentPageFromHash());
@@ -1161,7 +1244,9 @@ document.addEventListener('DOMContentLoaded', () => {
             state.chart = echarts.init(el.chartElement);
         }
 
-        // 配置参数 (中老年优化版：图表更大，手势平滑，提示框信息大)
+        const themeTokens = getChartThemeTokens();
+
+        // 配置参数 (优化版：自适应明暗主题、坐标轴与网格)
         const option = {
             // 支持无缝动画
             animation: false,
@@ -1175,12 +1260,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         fontSize: 13
                     }
                 },
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                borderColor: '#cbd5e1',
+                backgroundColor: themeTokens.tooltipBg,
+                borderColor: themeTokens.tooltipBorder,
                 borderWidth: 1,
                 padding: 12,
                 textStyle: {
-                    color: '#1f2937'
+                    color: themeTokens.tooltipText
                 },
                 position: function (pos, params, dom, rect, size) {
                     // 让提示框始终浮在上方，避免遮挡蜡烛图
@@ -1219,7 +1304,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     return `
                         <div style="font-family: var(--font-sans); min-width: 200px; font-size: 15px; line-height: 1.6;">
-                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 6px; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px;">
+                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 6px; border-bottom: 1px solid ${themeTokens.tooltipDivider}; padding-bottom: 4px;">
                                 日期：${date}
                             </div>
                             <div style="display: flex; justify-content: space-between;">
@@ -1238,7 +1323,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span>成交量:</span>
                                 <span>${(vol / 10000).toFixed(2)} 万手</span>
                             </div>
-                            <div style="border-top: 1px dashed #e5e7eb; padding-top: 4px; font-size: 14px;">
+                            <div style="border-top: 1px dashed ${themeTokens.tooltipDivider}; padding-top: 4px; font-size: 14px;">
                                 <span style="color:#eab308">●</span> MA5: ${toFixedStr(m5)}<br/>
                                 <span style="color:#ec4899">●</span> MA10: ${toFixedStr(m10)}<br/>
                                 <span style="color:#3b82f6">●</span> MA20: ${toFixedStr(m20)}<br/>
@@ -1269,9 +1354,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'category',
                     data: state.activeData.dates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563' },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor },
                     min: 'dataMin',
                     max: 'dataMax'
                 },
@@ -1280,7 +1365,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gridIndex: 1,
                     data: state.activeData.dates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
                     axisTick: { show: false },
                     splitLine: { show: false },
                     axisLabel: { show: false }
@@ -1289,10 +1374,10 @@ document.addEventListener('DOMContentLoaded', () => {
             yAxis: [
                 {
                     scale: true,
-                    axisLine: { lineStyle: { color: '#9ca3af' } },
+                    axisLine: { lineStyle: { color: themeTokens.axisLineColor } },
                     splitArea: { show: false },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563', formatter: '{value}' }
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor, formatter: '{value}' }
                 },
                 {
                     scale: true,
@@ -1320,8 +1405,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     height: '5%',
                     start: 60,
                     end: 100,
+                    borderColor: themeTokens.dataZoomBorder,
+                    fillerColor: themeTokens.dataZoomFiller,
                     textStyle: {
-                        color: '#6b7280'
+                        color: themeTokens.dataZoomText
                     }
                 }
             ],
@@ -2714,6 +2801,7 @@ document.addEventListener('DOMContentLoaded', () => {
             state.chart = echarts.init(el.chartElement);
         }
 
+        var themeTokens = getChartThemeTokens();
         var option = {
             animation: false,
             tooltip: buildTooltipConfig(),
@@ -2726,9 +2814,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'category',
                     data: state.activeData.dates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563' },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor },
                     min: 'dataMin',
                     max: 'dataMax'
                 },
@@ -2737,7 +2825,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gridIndex: 1,
                     data: state.activeData.dates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
                     axisTick: { show: false },
                     splitLine: { show: false },
                     axisLabel: { show: false }
@@ -2746,10 +2834,10 @@ document.addEventListener('DOMContentLoaded', () => {
             yAxis: [
                 {
                     scale: true,
-                    axisLine: { lineStyle: { color: '#9ca3af' } },
+                    axisLine: { lineStyle: { color: themeTokens.axisLineColor } },
                     splitArea: { show: false },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563', formatter: '{value}' }
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor, formatter: '{value}' }
                 },
                 {
                     scale: true,
@@ -2763,7 +2851,18 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             dataZoom: [
                 { type: 'inside', xAxisIndex: [0, 1], start: 60, end: 100 },
-                { show: true, xAxisIndex: [0, 1], type: 'slider', top: '91%', height: '5%', start: 60, end: 100, textStyle: { color: '#6b7280' } }
+                {
+                    show: true,
+                    xAxisIndex: [0, 1],
+                    type: 'slider',
+                    top: '91%',
+                    height: '5%',
+                    start: 60,
+                    end: 100,
+                    borderColor: themeTokens.dataZoomBorder,
+                    fillerColor: themeTokens.dataZoomFiller,
+                    textStyle: { color: themeTokens.dataZoomText }
+                }
             ],
             series: [
                 {
@@ -2784,14 +2883,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buildTooltipConfig() {
+        var themeTokens = getChartThemeTokens();
         return {
             trigger: 'axis',
             axisPointer: { type: 'cross', label: { backgroundColor: '#6b7280', fontSize: 13 } },
-            backgroundColor: 'rgba(255, 255, 255, 0.96)',
-            borderColor: '#cbd5e1',
+            backgroundColor: themeTokens.tooltipBg,
+            borderColor: themeTokens.tooltipBorder,
             borderWidth: 1,
             padding: 12,
-            textStyle: { color: '#1f2937' },
+            textStyle: { color: themeTokens.tooltipText },
             position: function (pos, params, dom, rect, size) {
                 var obj = { top: 30 };
                 obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
@@ -2814,12 +2914,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 var toS = function (v) { return (v !== null && v !== undefined) ? v.toFixed(2) : '--'; };
 
                 return '<div style="font-family: var(--font-sans); min-width: 200px; font-size: 15px; line-height: 1.6;">' +
-                    '<div style="font-weight: bold; font-size: 16px; margin-bottom: 6px; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px;">日期：' + date + '</div>' +
+                    '<div style="font-weight: bold; font-size: 16px; margin-bottom: 6px; border-bottom: 1px solid ' + themeTokens.tooltipDivider + '; padding-bottom: 4px;">日期：' + date + '</div>' +
                     '<div style="display: flex; justify-content: space-between;"><span>开盘/收盘:</span><strong>' + open.toFixed(2) + ' / ' + close.toFixed(2) + '</strong></div>' +
                     '<div style="display: flex; justify-content: space-between;"><span>单日涨跌:</span><strong class="' + changeClass + '">' + changeSign + changePct + '% ' + arrow + '</strong></div>' +
                     '<div style="display: flex; justify-content: space-between;"><span>最高/最低:</span><span>' + high.toFixed(2) + ' / ' + low.toFixed(2) + '</span></div>' +
                     '<div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>成交量:</span><span>' + (vol / 10000).toFixed(2) + ' 万手</span></div>' +
-                    '<div style="border-top: 1px dashed #e5e7eb; padding-top: 4px; font-size: 14px;">' +
+                    '<div style="border-top: 1px dashed ' + themeTokens.tooltipDivider + '; padding-top: 4px; font-size: 14px;">' +
                     '<span style="color:#eab308">●</span> MA5: ' + toS(m5) + '<br/>' +
                     '<span style="color:#ec4899">●</span> MA10: ' + toS(m10) + '<br/>' +
                     '<span style="color:#3b82f6">●</span> MA20: ' + toS(m20) + '<br/>' +
@@ -2868,16 +2968,17 @@ document.addEventListener('DOMContentLoaded', () => {
             state.indexChart = echarts.init(el.indexChartElement);
         }
 
+        var themeTokens = getChartThemeTokens();
         var option = {
             animation: false,
             tooltip: {
                 trigger: 'axis',
                 axisPointer: { type: 'cross' },
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                borderColor: '#cbd5e1',
+                backgroundColor: themeTokens.tooltipBg,
+                borderColor: themeTokens.tooltipBorder,
                 borderWidth: 1,
                 padding: 10,
-                textStyle: { color: '#1f2937' },
+                textStyle: { color: themeTokens.tooltipText },
                 formatter: function (params) {
                     if (!params || params.length === 0) return '';
                     var idx = params[0].dataIndex;
@@ -2888,7 +2989,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     var sign = chg >= 0 ? '+' : '';
                     var arrow = chg >= 0 ? '↑' : '↓';
                     return '<div style="font-size: 14px; line-height: 1.7;">' +
-                        '<div style="font-weight: bold; font-size: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; margin-bottom: 4px;">' + date + '</div>' +
+                        '<div style="font-weight: bold; font-size: 15px; border-bottom: 1px solid ' + themeTokens.tooltipDivider + '; padding-bottom: 4px; margin-bottom: 4px;">' + date + '</div>' +
                         '开盘: ' + k[0].toFixed(2) + ' ｜ 收盘: <strong>' + k[1].toFixed(2) + '</strong><br/>' +
                         '最高: ' + k[3].toFixed(2) + ' ｜ 最低: ' + k[2].toFixed(2) + '<br/>' +
                         '涨跌: <strong style="color:' + (chg >= 0 ? '#e63946' : '#10b981') + '">' + sign + chg.toFixed(2) + ' ' + arrow + '</strong><br/>' +
@@ -2905,9 +3006,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'category',
                     data: slicedDates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563' },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor },
                     min: 'dataMin', max: 'dataMax'
                 },
                 {
@@ -2915,7 +3016,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gridIndex: 1,
                     data: slicedDates,
                     boundaryGap: false,
-                    axisLine: { onZero: false },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
                     axisTick: { show: false },
                     splitLine: { show: false },
                     axisLabel: { show: false }
@@ -2924,9 +3025,9 @@ document.addEventListener('DOMContentLoaded', () => {
             yAxis: [
                 {
                     scale: true,
-                    axisLine: { lineStyle: { color: '#9ca3af' } },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563' }
+                    axisLine: { lineStyle: { color: themeTokens.axisLineColor } },
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor }
                 },
                 {
                     scale: true,
@@ -2940,7 +3041,18 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             dataZoom: [
                 { type: 'inside', xAxisIndex: [0, 1], start: 60, end: 100 },
-                { show: true, xAxisIndex: [0, 1], type: 'slider', top: '91%', height: '5%', start: 60, end: 100, textStyle: { color: '#6b7280' } }
+                {
+                    show: true,
+                    xAxisIndex: [0, 1],
+                    type: 'slider',
+                    top: '91%',
+                    height: '5%',
+                    start: 60,
+                    end: 100,
+                    borderColor: themeTokens.dataZoomBorder,
+                    fillerColor: themeTokens.dataZoomFiller,
+                    textStyle: { color: themeTokens.dataZoomText }
+                }
             ],
             series: [
                 {

@@ -22,7 +22,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 
+    function initTheme() {
+        const saved = localStorage.getItem('fintech-theme') || 
+            (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        applyTheme(saved);
+
+        const toggleBtn = document.getElementById('theme-toggle-btn');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                const current = document.documentElement.getAttribute('data-theme') || 'dark';
+                const next = current === 'dark' ? 'light' : 'dark';
+                applyTheme(next);
+            });
+        }
+    }
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('fintech-theme', theme);
+        const toggleBtn = document.getElementById('theme-toggle-btn');
+        if (toggleBtn) {
+            const textSpan = toggleBtn.querySelector('.theme-text');
+            if (textSpan) textSpan.textContent = theme === 'dark' ? '深色' : '浅色';
+            toggleBtn.setAttribute('title', theme === 'dark' ? '切换为浅色主题' : '切换为深色主题');
+        }
+        if (state.returnsChart) {
+            renderReturnsChart();
+        }
+    }
+
     async function init() {
+        initTheme();
         showLoading();
         await Promise.all([
             loadPortfolios(),
@@ -296,15 +326,26 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${d.getFullYear()}-${mm}-${dd}`;
         }
 
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const themeTokens = {
+            tooltipBg: isLight ? 'rgba(255, 255, 255, 0.98)' : 'rgba(15, 23, 42, 0.96)',
+            tooltipBorder: isLight ? '#e2e8f0' : '#334155',
+            tooltipText: isLight ? '#0f172a' : '#f8fafc',
+            legendText: isLight ? '#334155' : '#94a3b8',
+            axisLine: isLight ? '#cbd5e1' : '#475569',
+            axisLabel: isLight ? '#64748b' : '#94a3b8',
+            splitLine: isLight ? '#f1f5f9' : 'rgba(255, 255, 255, 0.06)'
+        };
+
         const option = {
             animation: false,
             tooltip: {
                 trigger: 'axis',
-                backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                borderColor: '#e2e8f0',
+                backgroundColor: themeTokens.tooltipBg,
+                borderColor: themeTokens.tooltipBorder,
                 borderWidth: 1,
                 padding: [14, 18],
-                textStyle: { color: '#0f172a', fontSize: 13 },
+                textStyle: { color: themeTokens.tooltipText, fontSize: 13 },
                 formatter: function(params) {
                     if (!params || !params.length) return '';
                     const first = params[0];
@@ -318,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         return vb - va;
                     });
 
-                    let html = `<div style="font-weight:800;margin-bottom:8px;border-bottom:1px solid #e2e8f0;padding-bottom:4px;font-size:14px;">📅 ${dateStr}</div>`;
+                    let html = `<div style="font-weight:800;margin-bottom:8px;border-bottom:1px solid ${themeTokens.tooltipBorder};padding-bottom:4px;font-size:14px;">📅 ${dateStr}</div>`;
                     sortedParams.forEach(param => {
                         const v = Array.isArray(param.value) ? param.value[1] : param.value;
                         const valStr = (v !== null && v !== undefined)
@@ -337,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
             legend: {
                 data: series.map(s => s.name),
                 bottom: 0,
-                textStyle: { fontSize: 13, fontWeight: 700, color: '#334155' }
+                textStyle: { fontSize: 13, fontWeight: 700, color: themeTokens.legendText }
             },
             grid: {
                 left: '2%',
@@ -349,9 +390,9 @@ document.addEventListener('DOMContentLoaded', () => {
             xAxis: {
                 type: 'time',
                 boundaryGap: false,
-                axisLine: { lineStyle: { color: '#cbd5e1' } },
+                axisLine: { lineStyle: { color: themeTokens.axisLine } },
                 axisLabel: {
-                    color: '#64748b',
+                    color: themeTokens.axisLabel,
                     fontSize: 12,
                     formatter: function(value) {
                         const d = new Date(value);
@@ -362,13 +403,13 @@ document.addEventListener('DOMContentLoaded', () => {
             yAxis: {
                 type: 'value',
                 name: '累计收益 (%)',
-                nameTextStyle: { color: '#64748b', fontSize: 12 },
+                nameTextStyle: { color: themeTokens.axisLabel, fontSize: 12 },
                 axisLabel: {
                     formatter: '{value}%',
-                    color: '#64748b',
+                    color: themeTokens.axisLabel,
                     fontSize: 12
                 },
-                splitLine: { lineStyle: { type: 'dashed', color: '#f1f5f9' } }
+                splitLine: { lineStyle: { type: 'dashed', color: themeTokens.splitLine } }
             },
             series: series
         };
@@ -394,20 +435,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const suggestions = evo.strategy_suggestions || [];
 
         content.innerHTML = `
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:16px;">
-                <div style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">
-                    🏆 阶段冠军策略：<span style="color:#2563eb;">${champion.name || '激进成长·温度联动'}</span>
+            <div class="evo-champion-box">
+                <div class="evo-champion-title">
+                    🏆 阶段冠军策略：<span style="color:var(--primary-color, #2563eb);">${champion.name || '激进成长·温度联动'}</span>
                 </div>
-                <div style="font-size:13px; color:#475569; line-height:1.6;">
+                <div class="evo-champion-desc">
                     ${champion.reason || '在 60 天弱市阴跌环境中，依托宏观大盘温度门控自动压降总仓位，并通过单股严格止损，回撤控制在 16.9% 并持续跑赢全池等权基准。'}
                 </div>
             </div>
-            <div style="font-size:14px; font-weight:700; color:#0f172a; margin-bottom:8px;">💡 量化模型进化建议</div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+            <div class="evo-section-subtitle">💡 量化模型进化建议</div>
+            <div class="evo-grid">
                 ${suggestions.map(s => `
-                    <div style="background:#ffffff; border:1px solid #e2e8f0; border-left:4px solid #3b82f6; border-radius:8px; padding:12px 14px;">
-                        <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:4px;">${s.title || '风控与仓位约束'}</div>
-                        <div style="font-size:12px; color:#64748b; line-height:1.5;">${s.detail || s}</div>
+                    <div class="evo-card">
+                        <div class="evo-card-title">${s.title || '风控与仓位约束'}</div>
+                        <div class="evo-card-detail">${s.detail || s}</div>
                     </div>
                 `).join('')}
             </div>

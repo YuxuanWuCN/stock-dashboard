@@ -5,6 +5,8 @@
 :root {
     --bg-page: #f8fafc;
     --card-bg: #ffffff;
+    --bg-card-subtle: #f8fafc;
+    --bg-hover: #f1f5f9;
     --text-primary: #0f172a;
     --text-secondary: #475569;
     --text-muted: #94a3b8;
@@ -25,6 +27,20 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 }
 
+[data-theme="dark"] {
+    --bg-page: #0b0f19;
+    --card-bg: #111827;
+    --bg-card-subtle: rgba(255, 255, 255, 0.03);
+    --bg-hover: rgba(255, 255, 255, 0.06);
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
 body {
     background-color: var(--bg-page);
     color: var(--text-primary);
@@ -43,7 +59,7 @@ body {
 
 /* 顶部导航 Header */
 .portfolio-header {
-    background: #ffffff;
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
     padding: 20px 28px;
     border-radius: 16px;
@@ -70,8 +86,17 @@ body {
     transition: all 0.15s ease;
     padding: 6px 14px;
     border-radius: 8px;
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
+    background: var(--bg-hover);
+    border: 1px solid var(--border-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.nav-back:hover {
+    background: var(--bg-card-subtle);
+    color: var(--text-primary);
+    border-color: var(--primary-color);
 }
 
 .nav-back:hover {
@@ -328,11 +353,11 @@ body {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    background: #f8fafc;
+    background: var(--bg-card-subtle);
     padding: 12px 14px;
     border-radius: 10px;
     margin-bottom: 14px;
-    border: 1px solid #f1f5f9;
+    border: 1px solid var(--border-color);
 }
 
 .portfolio-stat-label {
@@ -352,8 +377,8 @@ body {
     font-size: 12px;
     color: var(--text-secondary);
     line-height: 1.4;
-    background: #ffffff;
-    border-top: 1px solid #f1f5f9;
+    background: transparent;
+    border-top: 1px solid var(--border-color);
     padding-top: 10px;
 }
 
@@ -368,7 +393,7 @@ body {
 }
 
 .period-btn {
-    background: #ffffff;
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
     color: var(--text-secondary);
     font-size: 13px;
@@ -380,14 +405,14 @@ body {
 }
 
 .period-btn:hover {
-    background: #f8fafc;
+    background: var(--bg-hover);
     color: var(--text-primary);
 }
 
 .period-btn.active {
-    background: #0f172a;
+    background: var(--primary-color);
     color: #ffffff;
-    border-color: #0f172a;
+    border-color: var(--primary-color);
 }
 
 .chart-card {
@@ -409,6 +434,61 @@ body {
     border-radius: 16px;
     padding: 24px;
     box-shadow: var(--shadow-sm);
+}
+
+.evo-champion-box {
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 16px;
+}
+
+.evo-champion-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.evo-champion-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.evo-section-subtitle {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.evo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+}
+
+.evo-card {
+    background: var(--bg-card-subtle);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 12px 14px;
+}
+
+.evo-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.evo-card-detail {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
 }
 
 /* 页脚 Footer */

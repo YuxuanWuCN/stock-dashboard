@@ -15,11 +15,41 @@
         <!-- 顶部状态栏 -->
         <header class="header">
             <div class="header-main">
-                <h1><span class="header-icon">📊</span><span class="header-title-text">A股智能量化投研看板 v3.0</span></h1>
+                <h1>
+                    <span class="header-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="20" x2="12" y2="10"></line>
+                            <line x1="18" y1="20" x2="18" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="16"></line>
+                        </svg>
+                    </span>
+                    <span class="header-title-text">Rainbow-FinGPT 智能投研看板</span>
+                    <span class="badge-version">v3.0 Pro</span>
+                </h1>
                 <p class="subtitle">可插拔多因子定价 (Fama-MacBeth) · 存储超级周期战术执行 (Trend Gate) · 全市场两级动态初筛</p>
             </div>
             <div class="header-actions">
-                <a href="portfolio.html" class="portfolio-link">📈 量化组合</a>
+                <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="切换明暗主题" title="切换明暗主题">
+                    <svg class="theme-icon sun" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon moon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span id="theme-toggle-text" class="theme-toggle-text">主题</span>
+                </button>
+                <a href="portfolio.html" class="portfolio-link">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    <span>量化组合实盘</span>
+                </a>
                 <div id="status-bar" class="status-bar loading">
                     <span class="status-indicator"></span>
                     <span id="status-text">正在加载运行信息...</span>
@@ -29,13 +59,34 @@
 
         <!-- 顶部页面导航：统揽全功能的一体化流光导航栏 -->
         <nav class="app-nav" id="app-nav" aria-label="页面切换">
-            <button type="button" class="app-nav-btn active" data-page="today">🏠 今日关注</button>
-            <button type="button" class="app-nav-btn" data-page="watchlist">⭐ 自选股</button>
-            <button type="button" class="app-nav-btn" data-page="ranking">📊 排行榜</button>
-            <button type="button" class="app-nav-btn" data-page="query">🔍 单股查询</button>
-            <button type="button" class="app-nav-btn" data-page="detail">📈 个股研究</button>
-            <button type="button" class="app-nav-btn" data-page="paper">💼 模拟盘</button>
-            <button type="button" class="app-nav-btn" data-page="monster">🔥 妖股鉴定器</button>
+            <button type="button" class="app-nav-btn active" data-page="today">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>今日关注</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="watchlist">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>自选股</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="ranking">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span>排行榜</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="query">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span>单股查询</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="detail">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span>个股研究</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="paper">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                <span>模拟盘</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="monster">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span>性质分辨器</span>
+            </button>
         </nav>
 
         <!-- 主框架：全宽内容区 -->
@@ -412,65 +463,65 @@
                 <section class="page" data-page="paper" id="page-paper" hidden>
                     <div class="paper-page">
                         <!-- 2025Q2-2026Q7 存储市场学术量化回测专属模块 -->
-                        <div class="storage-backtest-card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div class="storage-backtest-card">
+                            <div class="storage-backtest-header">
                                 <div>
-                                    <span style="background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">Physical Isolation Backtest</span>
-                                    <h2 style="font-size: 22px; margin-top: 6px; color: #f8fafc;">⚡ 2025Q2–2026Q7 存储市场样本外量化回测 (拟真交易人)</h2>
-                                    <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">GFCA 几何因子空间对齐 · NALE 供应链网络传导 (α=0.4) · Nowcasting 二次减值惩罚 · Trend Gate™ C浪清仓</p>
+                                    <span class="storage-badge-pill">Physical Isolation Backtest</span>
+                                    <h2 class="storage-backtest-title">2025Q2–2026Q7 存储市场样本外量化回测 (拟真交易人)</h2>
+                                    <p class="storage-backtest-subtitle">GFCA 几何因子空间对齐 · NALE 供应链网络传导 (α=0.4) · Nowcasting 二次减值惩罚 · Trend Gate™ C浪清仓</p>
                                 </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;">夏普比率: 4.627</span>
-                                    <span style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #dc2626; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;">最大回撤: 6.51% (控盘)</span>
+                                <div class="storage-backtest-badges">
+                                    <span class="storage-metric-tag tag-sharpe">夏普比率: 4.627</span>
+                                    <span class="storage-metric-tag tag-drawdown">最大回撤: 6.51% (控盘)</span>
                                 </div>
                             </div>
 
                             <!-- 核心数据对比指标小格子 -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">策略累计总收益率</div>
-                                    <div style="color: #f87171; font-size: 24px; font-weight: 800; margin-top: 4px;">+159.01%</div>
-                                    <div style="color: #64748b; font-size: 11px;">年化 +105.65%</div>
+                            <div class="storage-metrics-grid">
+                                <div class="storage-metric-item">
+                                    <div class="storage-item-label">策略累计总收益率</div>
+                                    <div class="storage-item-value text-up">+159.01%</div>
+                                    <div class="storage-item-sub">年化 +105.65%</div>
                                 </div>
-                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">存储5巨头等权基准持有</div>
-                                    <div style="color: #fbbf24; font-size: 24px; font-weight: 800; margin-top: 4px;">+222.30%</div>
-                                    <div style="color: #f87171; font-size: 11px;">C浪最大回撤 -32.04% ⚠️</div>
+                                <div class="storage-metric-item">
+                                    <div class="storage-item-label">存储5巨头等权基准持有</div>
+                                    <div class="storage-item-value text-warning">+222.30%</div>
+                                    <div class="storage-item-sub text-danger">C浪最大回撤 -32.04% ⚠️</div>
                                 </div>
-                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">卡玛比率 (收益/回撤)</div>
-                                    <div style="color: #38bdf8; font-size: 24px; font-weight: 800; margin-top: 4px;">16.223</div>
-                                    <div style="color: #64748b; font-size: 11px;">等权基准仅 4.453</div>
+                                <div class="storage-metric-item">
+                                    <div class="storage-item-label">卡玛比率 (收益/回撤)</div>
+                                    <div class="storage-item-value text-accent">16.223</div>
+                                    <div class="storage-item-sub">等权基准仅 4.453</div>
                                 </div>
-                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">Harvey (2016) Alpha t值</div>
-                                    <div style="color: #a78bfa; font-size: 24px; font-weight: 800; margin-top: 4px;">t = 3.774</div>
-                                    <div style="color: #34d399; font-size: 11px;">通过 |t|≥3.0 伪因子门禁 ✅</div>
+                                <div class="storage-metric-item">
+                                    <div class="storage-item-label">Harvey (2016) Alpha t值</div>
+                                    <div class="storage-item-value text-purple">t = 3.774</div>
+                                    <div class="storage-item-sub text-success">通过 |t|≥3.0 伪因子门禁 ✅</div>
                                 </div>
                             </div>
 
                             <!-- 出版级图表展示网格 -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
-                                <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
-                                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">📈 累计净值走势实证对比 (全周期)</div>
-                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png" alt="累计净值走势图" style="width: 100%; border-radius: 6px;" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png'">
+                            <div class="storage-figures-grid">
+                                <div class="storage-figure-box">
+                                    <div class="storage-figure-title">累计净值走势实证对比 (全周期)</div>
+                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png" alt="累计净值走势图" class="storage-figure-img" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png'">
                                 </div>
-                                <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
-                                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">🛡️ 动态水下回撤对比 (Trend Gate 截断 C 浪主跌)</div>
-                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png" alt="水下回撤对比图" style="width: 100%; border-radius: 6px;" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png'">
+                                <div class="storage-figure-box">
+                                    <div class="storage-figure-title">动态水下回撤对比 (Trend Gate 截断 C 浪主跌)</div>
+                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png" alt="水下回撤对比图" class="storage-figure-img" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png'">
                                 </div>
                             </div>
                         </div>
 
                         <div class="paper-heading">
-                            <h2>💼 模拟盘对比（60天宏观温度与风控联动版）</h2>
+                            <h2>模拟盘对比（60天宏观温度与风控联动版）</h2>
                             <p id="paper-meta" class="paper-meta">正在读取数据...</p>
                         </div>
                         <div id="paper-cards" class="paper-cards"></div>
                         <section class="paper-section" aria-labelledby="paper-curve-title">
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                                <h3 id="paper-curve-title">📈 60天长跑累计净值曲线（起点 = 100）</h3>
-                                <span style="font-size:14px;color:#059669;font-weight:700;background:#d1fae5;padding:4px 10px;border-radius:6px;">🛡️ 已启用大盘温度仓位门控 & 单股-8%严格止损</span>
+                            <div class="paper-section-header">
+                                <h3 id="paper-curve-title">60天长跑累计净值曲线（起点 = 100）</h3>
+                                <span class="paper-badge-pill">🛡️ 已启用大盘温度仓位门控 & 单股-8%严格止损</span>
                             </div>
                             <div id="paper-curve" class="paper-curve" style="height:360px;"></div>
                         </section>
@@ -494,47 +545,47 @@
                     </div>
                 </section>
 
-                <!-- 页面：🔥 股票性质分辨器 · 妖股鉴定器 -->
+                <!-- 页面：股票性质分辨器 · 妖股鉴定器 -->
                 <section class="page" data-page="monster" id="page-monster" hidden>
                     <div class="monster-detector-page">
-                        <div class="monster-heading" style="margin-bottom:20px;">
-                            <h2 style="font-size:26px;color:#111827;display:flex;align-items:center;gap:10px;">
-                                <span>🔥 股票性质分辨器 · 妖股鉴定器</span>
+                        <div class="monster-heading">
+                            <h2 class="monster-heading-title">
+                                <span>股票性质分辨器 · 妖股鉴定器</span>
                             </h2>
-                            <p style="font-size:15px;color:#4b5563;margin-top:4px;">基于 SFM 因子流形（波动率、ATR日均振幅比、动量衰减半衰期）的大数据属性判定与操盘策略匹配</p>
+                            <p class="monster-heading-desc">基于 SFM 因子流形（波动率、ATR日均振幅比、动量衰减半衰期）的大数据属性判定与操盘策略匹配</p>
                         </div>
 
                         <!-- 统计概览卡片 -->
-                        <div class="monster-stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
-                            <div class="stat-card" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;">
-                                <div style="font-size:13px;color:#64748b;">📊 全池A股标的</div>
-                                <div id="monster-stat-total" style="font-size:28px;font-weight:800;color:#0f172a;margin-top:4px;">--</div>
+                        <div class="monster-stats-grid">
+                            <div class="monster-stat-card stat-total">
+                                <div class="monster-stat-label">全池A股标的</div>
+                                <div id="monster-stat-total" class="monster-stat-value">--</div>
                             </div>
-                            <div class="stat-card" style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px;">
-                                <div style="font-size:13px;color:#b91c1c;">🔥 妖股题材型 (高波动)</div>
-                                <div id="monster-stat-volatile" style="font-size:28px;font-weight:800;color:#dc2626;margin-top:4px;">--</div>
+                            <div class="monster-stat-card stat-volatile">
+                                <div class="monster-stat-label">妖股题材型 (高波动)</div>
+                                <div id="monster-stat-volatile" class="monster-stat-value">--</div>
                             </div>
-                            <div class="stat-card" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:16px;">
-                                <div style="font-size:13px;color:#1d4ed8;">🎯 趋势主升型 (长动量)</div>
-                                <div id="monster-stat-trend" style="font-size:28px;font-weight:800;color:#2563eb;margin-top:4px;">--</div>
+                            <div class="monster-stat-card stat-trend">
+                                <div class="monster-stat-label">趋势主升型 (长动量)</div>
+                                <div id="monster-stat-trend" class="monster-stat-value">--</div>
                             </div>
-                            <div class="stat-card" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:16px;">
-                                <div style="font-size:13px;color:#15803d;">🧱 震荡蓄势型 (低波动)</div>
-                                <div id="monster-stat-range" style="font-size:28px;font-weight:800;color:#16a34a;margin-top:4px;">--</div>
+                            <div class="monster-stat-card stat-range">
+                                <div class="monster-stat-label">震荡蓄势型 (低波动)</div>
+                                <div id="monster-stat-range" class="monster-stat-value">--</div>
                             </div>
                         </div>
 
                         <!-- 筛选器切换 Tab -->
-                        <div class="monster-filters-row" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+                        <div class="monster-filters-row">
                             <button type="button" class="ranking-tab active" data-monster-type="all">全部标的</button>
-                            <button type="button" class="ranking-tab" data-monster-type="volatile">🔥 妖股题材榜</button>
-                            <button type="button" class="ranking-tab" data-monster-type="trend">🎯 趋势主升榜</button>
-                            <button type="button" class="ranking-tab" data-monster-type="range_bound">🧱 震荡蓄势榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="volatile">妖股题材榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="trend">趋势主升榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="range_bound">震荡蓄势榜</button>
                         </div>
 
                         <!-- 股票卡片网格 -->
-                        <div id="monster-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;">
-                            <div style="color:#64748b;padding:30px;text-align:center;">正在分析股票性质...</div>
+                        <div id="monster-cards-grid" class="monster-cards-grid">
+                            <div style="color:var(--text-muted);padding:30px;text-align:center;">正在分析股票性质...</div>
                         </div>
                     </div>
                 </section>
