@@ -1,69 +1,3 @@
-# 🏆 R-FinGPTv2（中国国际大学生创新大赛 · 国创版本）
-
-本文件夹为 **2026 中国国际大学生创新大赛（达观数据产业命题）** 独立封闭参赛工作空间。
-
-## 📁 目录架构导览
-
-```
-D:\R-FinGPTv2（国创版本）\
-├── 参赛要求/                                                  # 📑 大赛官方 5 大红头附件规范
-│   ├── 附件1：中国国际大学生创新大赛（2026）产业赛道企业命题入选名单.pdf
-│   ├── 附件2：校内产业赛道项目遴选系统申报指引.pdf
-│   ├── 附件3：（产业赛道-企业命题组）参赛作品申报表.doc
-│   ├── 附件4：（产业赛道-成果转化组）参赛作品申报表.doc
-│   └── 附件5：中国国际大学生创新大赛（2026）评审规则.pdf
-├── 2026中国国际大学生创新大赛_产业命题申报书_Rainbow-FinGPT.md  # 🌟 官方申报书 (对标附件3填报)
-├── 达观数据产业命题答卷方案.md                                    # 📘 命题答卷白皮书
-├── 16页金牌路演PPT全景设计与逐页演讲文稿.md                        # 🎤 8分钟路演逐字稿与PPT设计
-├── 评委答辩专家攻防QA靶向演练手册.md                              # 🛡️ 评委答辩攻防通关必背
-├── research-outputs/                                          # 📑 参赛实证成果库
-│   └── reports/                                              # 三大出版级核心实证研报 PDF
-│       ├── 存储超级周期_物理隔绝真实交易实测研报.pdf           # 1. 存储高弹性科技周期
-│       ├── 黄金地缘避险_物理隔绝真实交易实测研报.pdf           # 2. 黄金宏观避险慢牛
-│       └── 绿电公用事业_物理隔绝真实交易实测研报.pdf           # 3. 绿电低估值高股息防御
-└── Rainbow_FinGPTv2/                                         # ⚡ 核心量化投研智能体系统
-    ├── src/                                                  # 四位一体核心源码 (RAG / 定价 / 图谱 / 风控)
-    ├── docs/                                                 # Web 交互看板 & 团队协作复现指南
-    ├── data/raw/                                             # 物理隔离数据集 (存储/黄金/绿电)
-    ├── tools/                                                # 自动化流水线 & PDF生成工具
-    └── tests/                                                # 完整 pytest 自动化测试套件
-```
-
-## 🚀 常用操作指引
-
-### 1. 启动本地全功能量化看板
-```bash
-cd Rainbow_FinGPTv2
-python -m http.server 8000 --directory docs
-```
-浏览器访问: `http://127.0.0.1:8000`
-
-### 2. 运行物理隔离样本外回测 (全量测试)
-```bash
-cd Rainbow_FinGPTv2
-python -m pytest tests/test_storage_backtest_runner.py tests/test_gold_backtest_runner.py tests/test_green_backtest_runner.py
-```
-
-### 3. 一键生成三大出版级实证 PDF 研报
-```bash
-cd Rainbow_FinGPTv2
-python tools/generate_isolated_storage_dossier_pdf.py
-python tools/generate_isolated_gold_dossier_pdf.py
-python tools/generate_isolated_green_dossier_pdf.py
-```
-
----
-
-## 🛡️ 研发质量铁律与版本迭代门禁 (Data & Code Evolution Mandate)
-
-> [!IMPORTANT]
-> **代码编写与数据覆盖铁律（必须严格执行）**：
-> 1. **代码修改后必须先跑全量数据端测试**：每次编写或修改完代码之后，**必须首先运行全量数据层回测与量化指标测试**（包括但不限于多因子定价检验、物理隔离实证回测、Sharpe 比率与最大回撤评估等）。
-> 2. **对比前一版本确认“质的提升”**：必须将新产出的量化数据与核心指标同上一个版本进行严格横向对比。**只有在明确确认新版本相比前一版本具有显著、实质性的“质的提升”（如夏普比率实质提升、回撤大幅收敛、因子统计显著性增强或系统吞吐大幅跃升），才允许覆盖并提交前一个版本的数据文件与产物！**
-> 3. **未见质变坚决禁止覆盖**：若新测试结果未见质的提升、或指标存在停滞衰退，坚决不覆盖原有稳定基准与实盘历史数据，保留前一版本并深入排查算法根因。
-
----
-
 <div align="center">
 
 # 🌈 Rainbow-FinGPT v2.0
@@ -85,6 +19,10 @@ Integrating **Fama-MacBeth 4-Factor Alpha Screening**, **Multi-Factor Trend Gate
 <img src="本人研究成果/figures/arch_framework.png" alt="Rainbow-FinGPT Architecture Framework" width="90%">
 
 </div>
+
+> [!TIP]
+> 🏆 **2026 China International College Students' Innovation Contest (Daguan Data Track)**:  
+> The specialized contest declaration files, 18-page roadshow PPT pitch scripts, defense QA playbook, and publication-grade isolated empirical research dossiers are archived on the [**contest-2026 branch**](https://github.com/YuxuanWuCN/stock-dashboard/tree/contest-2026).
 
 ---
 
@@ -109,26 +47,6 @@ Below is the verified out-of-sample backtest comparison across extreme market do
   <img src="本人研究成果/figures/001258_sealed_box.png" alt="Trend Gate Backtest 001258" width="48%">
   <img src="本人研究成果/figures/MU_sealed_box.png" alt="Trend Gate Backtest MU" width="48%">
   <p><em>Figure: Realized drawdown suppression and alpha preservation verified under strict T+1 sealed-box testing.</em></p>
-</div>
-
-### ⚔️ 2024–2026 全量 300 标的 A 股 100 万实战三强决战：静态 NALE vs 固定 T-NALE vs 方案 B 双波峰动态 Alpha T-NALE
-
-根据**研发质量铁律**，任何模型演进必须经过全量数据端实战回测，只有确认相比上一版本具有显著“质的提升”后方可覆盖基准。以下为 2024-03-26 至 2026-08-28（634 个交易日）、300 标的池、100 万元初始资金、最多持仓 15 只、严格 A 股实战规则（严格 T+1、主板 ±10%/创业板科创板 ±20% 涨跌停拦截、整手买入、印花税/佣金/滑点真实扣除）下的三强决战全真对比：
-
-| 量化评估指标 | 经典静态 NALE (基准) | T-NALE (固定 α=0.4) | Dynamic-Alpha T-NALE (方案B双峰时效版) | 相比基准质变幅度 (Delta) | 终极判定 |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **期末总资产 (万元)** | ¥257.32 万 | ¥247.83 万 | **¥269.16 万** | **+¥11.84 万元 (+11.84%)** | 🏆 **动态 Alpha 终极优胜** |
-| **累计收益率 (Total Return)** | +157.32% | +147.83% | **+169.16%** | **+11.84%** | 🏆 **动态 Alpha 终极优胜** |
-| **年化复合收益率 (CAGR)** | 45.68% | 43.52% | **48.32%** | **+2.64%** | 🏆 **动态 Alpha 终极优胜** |
-| **夏普比率 (Sharpe, Rf=2.5%)** | 1.905 | 1.788 | **1.999** | **+0.094 (逼近 2.0 巅峰)** | 🏆 **动态 Alpha 终极优胜** |
-| **最大动态回撤 (Max Drawdown)**| -15.18% | -19.32% | **-13.98%** | **-1.20% (回撤最浅/防御极稳)** | 🏆 **动态 Alpha 终极优胜** |
-| **卡玛比率 (Calmar Ratio)** | 3.01 | 2.25 | **3.46** | **+0.45 (+15.0%)** | 🏆 **动态 Alpha 终极优胜** |
-| **平仓交易胜率 (Win Rate)** | 47.6% | 47.9% | **49.4%** | **+1.8%** | 🏆 **动态 Alpha 终极优胜** |
-| **相对沪深 300 超额 Alpha** | +100.41% | +90.91% | **+112.24%** | **+11.83%** | 🏆 **动态 Alpha 终极优胜** |
-
-<div align="center">
-  <img src="reports/figures/backtest_2024_2026_dual_curves.png" alt="2024-2026 Dual Backtest Curves" width="92%">
-  <p><em>图：2024–2026 年 300 标的池 100 万元资金 A 股实战全拟真对决净值与回撤曲线（动态 Alpha T-NALE vs 固定 T-NALE vs 静态 NALE vs 沪深300）</em></p>
 </div>
 
 ---
