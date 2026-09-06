@@ -1,49 +1,61 @@
-<div align="center">
+# 🏆 R-FinGPTv2（中国国际大学生创新大赛 · 国创版本）
 
-# 🌈 Rainbow-FinGPT v2.0
-### *新一代全自动 A股 智能量化投研终端 & AI-Copilot*
+本文件夹为 **2026 中国国际大学生创新大赛（达观数据产业命题）** 独立封闭参赛工作空间。
+> [!NOTE]
+> **分支定位与物理隔离说明**：  
+> - 本分支（contest-2026）为 **2026 中国国际大学生创新大赛（达观数据产业命题）专项参赛空间**，收纳大赛官方附件规范、申报书、18页金牌路演 PPT 逐字稿、评委答辩 QA 手册及三大出版级独立实证研报。
+> - 若需查看面向公众与投资者的**通用开源量化投研终端**（在线 Demo、快速上手、Fama-MacBeth 定价、Trend Gate 趋势门禁、每日自动复盘计划任务），请切换至 [**main 主分支**](https://github.com/YuxuanWuCN/stock-dashboard/tree/main)。
 
-[![Python 3.12](https://img.shields.io/badge/Python-3.12%2B-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![LLM Backend](https://img.shields.io/badge/LLM-DeepSeek--V4--Flash-6366f1.svg?style=for-the-badge&logo=openai&logoColor=white)](https://deepseek.com/)
-[![Framework](https://img.shields.io/badge/Pipeline-FinGPT--RAG-8b5cf6.svg?style=for-the-badge)](https://github.com/AI4Finance-Foundation/FinGPT)
-[![Live Demo](https://img.shields.io/badge/在线看板-已上线-10b981.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://yuxuanwucn.github.io/stock-dashboard/)
-[![License](https://img.shields.io/badge/License-MIT-amber.svg?style=for-the-badge)](LICENSE)
 
-**全自动交易日日落投研平台。**  
-融合 **Fama-MacBeth 四因子 Alpha 截面回归**、**多因子 Trend Gate 趋势门禁（C浪排斥）**、**确定性 KNN 相似形态预测** 与 **DeepSeek 可溯源金融大模型研报系统**。
+## 📁 目录架构导览
 
-[🚀 在线体验 Web 看板](https://yuxuanwucn.github.io/stock-dashboard/) · [📖 English Documentation (README)](README.md) · [📄 完整学术论文](本人研究成果/Rainbow_FinGPT_v2_Paper.docx) · [⚡ 快速上手](#-快速上手)
+```
+D:\R-FinGPTv2（国创版本）\
+├── 参赛要求/                                                  # 📑 大赛官方 5 大红头附件规范
+│   ├── 附件1：中国国际大学生创新大赛（2026）产业赛道企业命题入选名单.pdf
+│   ├── 附件2：校内产业赛道项目遴选系统申报指引.pdf
+│   ├── 附件3：（产业赛道-企业命题组）参赛作品申报表.doc
+│   ├── 附件4：（产业赛道-成果转化组）参赛作品申报表.doc
+│   └── 附件5：中国国际大学生创新大赛（2026）评审规则.pdf
+├── 2026中国国际大学生创新大赛_产业命题申报书_Rainbow-FinGPT.md  # 🌟 官方申报书 (对标附件3填报)
+├── 达观数据产业命题答卷方案.md                                    # 📘 命题答卷白皮书
+├── 16页金牌路演PPT全景设计与逐页演讲文稿.md                        # 🎤 8分钟路演逐字稿与PPT设计
+├── 评委答辩专家攻防QA靶向演练手册.md                              # 🛡️ 评委答辩攻防通关必背
+├── research-outputs/                                          # 📑 参赛实证成果库
+│   └── reports/                                              # 三大出版级核心实证研报 PDF
+│       ├── 存储超级周期_物理隔绝真实交易实测研报.pdf           # 1. 存储高弹性科技周期
+│       ├── 黄金地缘避险_物理隔绝真实交易实测研报.pdf           # 2. 黄金宏观避险慢牛
+│       └── 绿电公用事业_物理隔绝真实交易实测研报.pdf           # 3. 绿电低估值高股息防御
+└── Rainbow_FinGPTv2/                                         # ⚡ 核心量化投研智能体系统
+    ├── src/                                                  # 四位一体核心源码 (RAG / 定价 / 图谱 / 风控)
+    ├── docs/                                                 # Web 交互看板 & 团队协作复现指南
+    ├── data/raw/                                             # 物理隔离数据集 (存储/黄金/绿电)
+    ├── tools/                                                # 自动化流水线 & PDF生成工具
+    └── tests/                                                # 完整 pytest 自动化测试套件
+```
 
----
+## 🚀 常用操作指引
 
-<img src="本人研究成果/figures/arch_framework.png" alt="Rainbow-FinGPT 系统架构" width="90%">
+### 1. 启动本地全功能量化看板
+```bash
+cd Rainbow_FinGPTv2
+python -m http.server 8000 --directory docs
+```
+浏览器访问: `http://127.0.0.1:8000`
 
-</div>
+### 2. 运行物理隔离样本外回测 (全量测试)
+```bash
+cd Rainbow_FinGPTv2
+python -m pytest tests/test_storage_backtest_runner.py tests/test_gold_backtest_runner.py tests/test_green_backtest_runner.py
+```
 
----
-
-## 🌟 核心亮点
-
-- 🤖 **FinGPT 范式 RAG 研报引擎**：交易日 18:00 自动抓取上市公司公告、新闻与财报，调用 DeepSeek 生成**带精确证据溯源（Citation-Grounded）**的机构级投研简报。
-- 🛡️ **数学级 Trend Gate™ 趋势门禁**：通过 **MA20 均线排列、MACD 动量多头、艾略特 C 浪下跌排斥** 三重逻辑硬门禁，有效阻断大盘杀跌与单边下行风险。
-- 📐 **经典资产定价模型**：实现 **Fama-MacBeth 两阶段截面回归**与 Newey-West HAC 异方差自相关稳健协方差估计，剥离市场（MKT）、市值（SMB）、价值（HML）与动量（MOM）因子，提取真正统计显著的个股 Alpha。
-- 📈 **标准化 KNN 历史相似形态回测**：基于 5 年滚动数据（1200+ 交易日），快速计算未来 3 日 / 5 日条件上涨概率与盈亏比期望。
-- 💼 **多策略模拟盘实盘对决**：实时追踪 6 大量化组合（*激进成长、妖股弹性、防御保守、科技主题、蓝筹价值、全球配置*），盘后自动调仓并计算累计净值。
-- 🎨 **年轻化 FinTech 极简设计看板**：纯静态 Web 架构，支持毛玻璃轻奢风、ECharts 高刷图表交互与移动端完美适配。
-
----
-
-## 📊 回测验证与抗风险实证
-
-### 🔬 封箱回测：极端行情的抗跌实证
-
-在严格的 T+1 封箱回测中，**Trend Gate 趋势门禁**成功将组合在极端单边阴跌行情中的最大回撤由 **-46.3% 大幅压降至 -16.9%**，同时完整保留了右侧主升浪的超额收益：
-
-<div align="center">
-  <img src="本人研究成果/figures/001258_sealed_box.png" alt="Trend Gate 回测 001258" width="48%">
-  <img src="本人研究成果/figures/MU_sealed_box.png" alt="Trend Gate 回测 MU" width="48%">
-  <p><em>图：趋势门禁前后最大回撤抑制与 Alpha 捕捉效果（严格遵循封箱交易者测试协议）</em></p>
-</div>
+### 3. 一键生成三大出版级实证 PDF 研报
+```bash
+cd Rainbow_FinGPTv2
+python tools/generate_isolated_storage_dossier_pdf.py
+python tools/generate_isolated_gold_dossier_pdf.py
+python tools/generate_isolated_green_dossier_pdf.py
+```
 
 ---
 
@@ -57,51 +69,150 @@
 
 ---
 
-## ⚡ 快速上手
+<div align="center">
 
-### 1. 克隆代码与虚拟环境
+# 🌈 Rainbow-FinGPT v2.0
+### *Next-Gen Autonomous Quantitative Research & AI-Copilot Terminal*
+
+[![Python 3.12](https://img.shields.io/badge/Python-3.12%2B-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![LLM Backend](https://img.shields.io/badge/LLM-DeepSeek--V4--Flash-6366f1.svg?style=for-the-badge&logo=openai&logoColor=white)](https://deepseek.com/)
+[![Framework](https://img.shields.io/badge/Pipeline-FinGPT--RAG-8b5cf6.svg?style=for-the-badge)](https://github.com/AI4Finance-Foundation/FinGPT)
+[![Live Demo](https://img.shields.io/badge/Live_Terminal-Online-10b981.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://yuxuanwucn.github.io/stock-dashboard/)
+[![License](https://img.shields.io/badge/License-MIT-amber.svg?style=for-the-badge)](LICENSE)
+
+**An end-to-end automated quantitative trading-day research platform.**  
+Integrating **Fama-MacBeth 4-Factor Alpha Screening**, **Multi-Factor Trend Gate (Wave C Exclusion)**, **Deterministic KNN Similarity Forecasting**, and **Citation-Grounded DeepSeek Financial LLM Pipelines**.
+
+[🚀 Live Web Demo](https://yuxuanwucn.github.io/stock-dashboard/) · [📖 中文说明文档 (README_CN)](README_CN.md) · [📄 Academic Paper](本人研究成果/Rainbow_FinGPT_v2_Paper.docx) · [⚡ Quick Start](#-quick-start)
+
+---
+
+<img src="本人研究成果/figures/arch_framework.png" alt="Rainbow-FinGPT Architecture Framework" width="90%">
+
+</div>
+
+---
+
+## 🌟 Key Highlights
+
+- 🤖 **FinGPT-Style RAG Agent**: Automatically digests financial news, announcements, and macro data daily at 18:00 CST. Synthesizes structured investment briefs with **verifiable citation audits**.
+- 🛡️ **Mathematical Trend Gate™**: Multi-layered defense incorporating **MA20 alignment, MACD momentum divergence, and Elliott Wave Phase C exclusion** to mathematically filter out catastrophic drawdowns.
+- 📐 **Rigorous Asset Pricing Engine**: Implements the **Fama-MacBeth Two-Stage Cross-Sectional Regression** with Newey-West HAC covariance estimators. Separates true idiosyncratic $\alpha$ from systematic factor risk premiums ($MKT, SMB, HML, MOM$).
+- 📈 **Standardized KNN Pattern Forecasting**: Matches real-time technical volume-price matrices against a 5-year rolling history (1200+ daily bars) to derive empirical 3-day and 5-day conditional upward probabilities.
+- 💼 **Multi-Strategy Paper Duel**: Tracks 6 diversified live simulated portfolios (*Aggressive Momentum, Volatility Hunter, Macro Defensive, Tech Growth, Bluechip Value, Global Multi-Asset*) with automated post-close rebalancing.
+- 🎨 **Modern FinTech Glassmorphism UI**: High-refresh-rate interactive web terminal built with responsive glassmorphism, ECharts visual engine, and full mobile adaptation.
+
+---
+
+## 📊 Empirical Performance & Backtesting
+
+### 🔬 Sealed-Box Regression: Realized Anti-Drawdown Proof
+
+Below is the verified out-of-sample backtest comparison across extreme market downturns. The **Trend Gate** successfully shielded the portfolio by cutting maximum drawdowns from **-46.3% down to -16.9%** while preserving upward alpha momentum:
+
+<div align="center">
+  <img src="本人研究成果/figures/001258_sealed_box.png" alt="Trend Gate Backtest 001258" width="48%">
+  <img src="本人研究成果/figures/MU_sealed_box.png" alt="Trend Gate Backtest MU" width="48%">
+  <p><em>Figure: Realized drawdown suppression and alpha preservation verified under strict T+1 sealed-box testing.</em></p>
+</div>
+
+### ⚔️ 2024–2026 全量 300 标的 A 股 100 万实战三强决战：静态 NALE vs 固定 T-NALE vs 方案 B 双波峰动态 Alpha T-NALE
+
+根据**研发质量铁律**，任何模型演进必须经过全量数据端实战回测，只有确认相比上一版本具有显著“质的提升”后方可覆盖基准。以下为 2024-03-26 至 2026-08-28（634 个交易日）、300 标的池、100 万元初始资金、最多持仓 15 只、严格 A 股实战规则（严格 T+1、主板 ±10%/创业板科创板 ±20% 涨跌停拦截、整手买入、印花税/佣金/滑点真实扣除）下的三强决战全真对比：
+
+| 量化评估指标 | 经典静态 NALE (基准) | T-NALE (固定 α=0.4) | Dynamic-Alpha T-NALE (方案B双峰时效版) | 相比基准质变幅度 (Delta) | 终极判定 |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **期末总资产 (万元)** | ¥257.32 万 | ¥247.83 万 | **¥269.16 万** | **+¥11.84 万元 (+11.84%)** | 🏆 **动态 Alpha 终极优胜** |
+| **累计收益率 (Total Return)** | +157.32% | +147.83% | **+169.16%** | **+11.84%** | 🏆 **动态 Alpha 终极优胜** |
+| **年化复合收益率 (CAGR)** | 45.68% | 43.52% | **48.32%** | **+2.64%** | 🏆 **动态 Alpha 终极优胜** |
+| **夏普比率 (Sharpe, Rf=2.5%)** | 1.905 | 1.788 | **1.999** | **+0.094 (逼近 2.0 巅峰)** | 🏆 **动态 Alpha 终极优胜** |
+| **最大动态回撤 (Max Drawdown)**| -15.18% | -19.32% | **-13.98%** | **-1.20% (回撤最浅/防御极稳)** | 🏆 **动态 Alpha 终极优胜** |
+| **卡玛比率 (Calmar Ratio)** | 3.01 | 2.25 | **3.46** | **+0.45 (+15.0%)** | 🏆 **动态 Alpha 终极优胜** |
+| **平仓交易胜率 (Win Rate)** | 47.6% | 47.9% | **49.4%** | **+1.8%** | 🏆 **动态 Alpha 终极优胜** |
+| **相对沪深 300 超额 Alpha** | +100.41% | +90.91% | **+112.24%** | **+11.83%** | 🏆 **动态 Alpha 终极优胜** |
+
+<div align="center">
+  <img src="reports/figures/backtest_2024_2026_dual_curves.png" alt="2024-2026 Dual Backtest Curves" width="92%">
+  <p><em>图：2024–2026 年 300 标的池 100 万元资金 A 股实战全拟真对决净值与回撤曲线（动态 Alpha T-NALE vs 固定 T-NALE vs 静态 NALE vs 沪深300）</em></p>
+</div>
+
+---
+
+## 🏛️ System Architecture
+
+Rainbow-FinGPT operates on a strict **three-tier decoupled pipeline**:
+
+```
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │ 1. Data Ingestion & Fallback Engine (Every Trading Day 18:00 CST)     │
+ │    - Multi-source fallback: Sina Finance -> Eastmoney -> Tencent Cloud │
+ │    - Auto-detects & flags stale/halted quotes (Stale Data Isolation)   │
+ └────────────────────────────────────┬───────────────────────────────────┘
+                                      ▼
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │ 2. Quantitative & AI Reasoning Core                                   │
+ │    - Fama-MacBeth 2-Stage Regression & Alpha Gate Filtering            │
+ │    - 4-Dimensional Balance Sheet Quality Scoring (Asset/Debt/ROE/OCF)  │
+ │    - DeepSeek-V4-Flash RAG Report Synthesizer & Citation Auditor       │
+ │    - Multi-Portfolio Clearing & Auto-Rebalancing Engine                │
+ └────────────────────────────────────┬───────────────────────────────────┘
+                                      ▼
+ ┌────────────────────────────────────────────────────────────────────────┐
+ │ 3. Contract-Driven Static UI Layer (GitHub Pages / Local Host)         │
+ │    - Zero-backend server overhead (Static JSON Schema 2.0 Contract)    │
+ │    - ECharts 5.5 High-Precision Interactive Canvas                     │
+ └────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚡ Quick Start
+
+### 1. Clone & Environment Setup
 
 ```bash
+# Clone the repository
 git clone https://github.com/YuxuanWuCN/stock-dashboard.git
 cd stock-dashboard/Rainbow_FinGPTv2
 
-# 创建并激活虚拟环境 (推荐 Python 3.12+)
+# Create virtual environment (Python 3.12+ recommended)
 python -m venv .venv
-.venv\Scripts\Activate.ps1
+source .venv/bin/activate  # On Windows: .venv\Scripts\Activate.ps1
 
-# 安装依赖
+# Install core dependencies
 pip install -r requirements.txt
 ```
 
-### 2. 配置 API Key
+### 2. Configure API Keys
 
-在项目根目录下创建 `.env` 文件：
+Create a `.env` file in the project root:
 
 ```env
-DEEPSEEK_API_KEY="你的DeepSeek-API-Key"
+DEEPSEEK_API_KEY="your-deepseek-api-key-here"
 STOCK_PROXY="direct"
 LLM_DAILY_CALL_LIMIT="800"
 ```
 
-### 3. 一键跑通全流程并启动 Web 看板
+### 3. Run Pipeline & Launch Local Terminal
 
 ```powershell
-# 1. 运行每日投研全流程（抓取行情 -> 打分 -> DeepSeek研报 -> 调仓结算）
+# 1. Execute full daily pipeline (Data fetch -> Scoring -> AI Reports -> Rebalance)
 powershell -ExecutionPolicy Bypass -File tools\daily_local.ps1
 
-# 2. 启动本地轻量化 Web 服务
+# 2. Launch local FinTech Web GUI
 python -m http.server 8080 --directory docs
 ```
 
-打开浏览器访问 **`http://127.0.0.1:8080/index.html`** 即可浏览完整看板 🎉。
+Open your browser and navigate to **`http://127.0.0.1:8080/index.html`** 🎉.
 
 ---
 
-## 🧬 Windows 自动化计划任务挂载
+## 🧬 Automated Daily Task Scheduler
 
-无需每天手动打开终端，一键注册 Windows 任务计划程序：
+To enable fully autonomous "after-hours homework" without touching the terminal, register the background scheduler:
 
 ```powershell
+# Auto-runs at 18:00 every trading day
 Register-ScheduledTask -TaskName "StockDashboard-DailyUpdate" `
   -Action (New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -File D:\股票分析项目\Rainbow_FinGPTv2\tools\daily_local.ps1" -WorkingDirectory "D:\股票分析项目\Rainbow_FinGPTv2") `
   -Trigger (New-ScheduledTaskTrigger -Weekly -DaysOfWeek Monday,Tuesday,Wednesday,Thursday,Friday -At 18:00) `
@@ -110,7 +221,43 @@ Register-ScheduledTask -TaskName "StockDashboard-DailyUpdate" `
 
 ---
 
-## 📄 开源许可与免责声明
+## 📑 Quantitative Formulation & Methodology
 
-- **开源协议**：本项目基于 [MIT License](LICENSE) 开源。
-- **免责声明**：*本项目产出的所有评分、量化信号与模拟盘持仓均仅供学术研究、量化模型探索与技术交流使用，不构成任何实质性投资建议。市场有风险，投资需谨慎。*
+<details>
+<summary><b>📐 Click to expand Mathematical Formulations</b></summary>
+
+### 1. Fama-MacBeth 4-Factor Model
+In Stage 1, time-series regressions estimate factor loadings for each asset $i$:
+$$R_{i,t} - R_{f,t} = \alpha_i + \beta_{i,MKT} MKT_t + \beta_{i,SMB} SMB_t + \beta_{i,HML} HML_t + \beta_{i,MOM} MOM_t + \epsilon_{i,t}$$
+
+In Stage 2, cross-sectional regressions at each $t$ estimate risk premia $\gamma$:
+$$R_{i,t} - R_{f,t} = \gamma_{0,t} + \gamma_{MKT,t}\hat{\beta}_{i,MKT} + \gamma_{SMB,t}\hat{\beta}_{i,SMB} + \gamma_{HML,t}\hat{\beta}_{i,HML} + \gamma_{MOM,t}\hat{\beta}_{i,MOM} + \eta_{i,t}$$
+
+### 2. Multi-Factor Trend Gate™ Boolean Logic
+A candidate asset passes the execution gate iff:
+$$\text{GatePass}_i = \mathbb{I}(P_t > \text{MA20}_t) \times \mathbb{I}(\text{MACD\_DIF}_t > \text{MACD\_DEA}_t) \times (1 - \mathbb{I}(\text{WavePhase}_t = \text{Phase C}))$$
+
+</details>
+
+---
+
+## 🤝 Citation & Research
+
+If you use this repository or its methodology in your quantitative research or academic projects, please cite:
+
+```bibtex
+@software{RainbowFinGPT2026,
+  author = {Wu, Yuxuan},
+  title = {Rainbow-FinGPT: An Automated Quantitative Research Platform Powered by Multi-Factor Trend Gate and Financial LLMs},
+  year = {2026},
+  publisher = {GitHub},
+  url = {https://github.com/YuxuanWuCN/stock-dashboard}
+}
+```
+
+---
+
+## 📄 License & Disclaimer
+
+- **License**: Released under the [MIT License](LICENSE).
+- **Disclaimer**: *All contents, signals, and simulated portfolio allocations produced by this project are strictly for academic research and educational purposes. Nothing herein constitutes financial or investment advice.*
