@@ -54,6 +54,14 @@ def _resolve(path: Path) -> Path:
     return path if path.is_absolute() else (PROJECT_ROOT / path).resolve()
 
 
+def _display_path(path: Path) -> str:
+    """在 manifest 中优先记录仓库相对路径，避免提交本机绝对路径。"""
+    try:
+        return str(path.resolve().relative_to(PROJECT_ROOT)).replace("\\", "/")
+    except ValueError:
+        return str(path)
+
+
 def main(argv=None) -> int:
     args = parse_args(argv)
     csmar_path = _resolve(args.csmar_panel)
@@ -102,8 +110,9 @@ def main(argv=None) -> int:
 
     manifest = {
         "source": "filtered from CSMAR panel to real trading days",
-        "csmar_panel": str(csmar_path),
-        "public_panel_calendar": str(public_path),
+        "csmar_panel": _display_path(csmar_path),
+        "public_panel_calendar": _display_path(public_path),
+        "public_panel_calendar_in_submission": False,
         "rows_before": len(csmar),
         "rows_after": len(filtered),
         "days_before": int(n_csmar_before),
