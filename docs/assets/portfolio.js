@@ -175,6 +175,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function getPortfolioMetrics(data) {
+        if (!data) return { history: [], totalReturn: 0, sharpe: 0, dailyReturn: 0 };
+        if (data.history && data.history.length > 0) {
+            const latest = data.history[data.history.length - 1];
+            return {
+                history: data.history,
+                totalReturn: latest.total_return || 0,
+                sharpe: latest.sharpe_ratio || 0,
+                dailyReturn: latest.daily_return || 0
+            };
+        }
+        if (data.records && data.records.length > 0) {
+            let nav = 1.0;
+            const history = [];
+            data.records.forEach(r => {
+                const dRet = (r.daily_return_pct !== undefined ? r.daily_return_pct : r.equal_weight_return_pct) || 0;
+                nav *= (1.0 + dRet / 100.0);
+                history.push({
+                    date: r.trade_date || r.date,
+                    total_return: +((nav - 1.0) * 100.0).toFixed(2),
+                    daily_return: dRet,
+                    sharpe_ratio: data.sharpe_ratio || 0
+                });
+            });
+            const latest = history[history.length - 1];
+            return {
+                history: history,
+                totalReturn: latest ? latest.total_return : 0,
+                sharpe: data.sharpe_ratio || 0,
+                dailyReturn: latest ? latest.daily_return : 0
+            };
+        }
+        return { history: [], totalReturn: 0, sharpe: 0, dailyReturn: 0 };
+    }
+
     function renderPortfolioCards() {
         const grid = document.getElementById('portfolios-grid');
         if (!grid) return;
@@ -185,13 +220,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = state.portfolios[id];
             const config = portfolioConfig[id];
 
-            if (!data || !data.history || data.history.length === 0) return;
+            if (!data) return;
+            const metrics = getPortfolioMetrics(data);
+            if (!metrics.history || metrics.history.length === 0) return;
 
-            const history = data.history;
-            const latest = history[history.length - 1];
-            const dailyReturn = latest.daily_return || 0;
-            const totalReturn = latest.total_return || 0;
-            const sharpe = latest.sharpe_ratio || 0;
+            const dailyReturn = metrics.dailyReturn;
+            const totalReturn = metrics.totalReturn;
+            const sharpe = metrics.sharpe;
 
             const card = document.createElement('div');
             card.className = `portfolio-card ${id}`;
@@ -239,12 +274,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // 收集所有组合与基准的有效日期（并集，升序）
         const allDates = new Set();
         Object.values(state.portfolios).forEach(p => {
-            if (p.history) p.history.forEach(pt => allDates.add(pt.date));
+            const m = getPortfolioMetrics(p);
+            if (m.history) m.history.forEach(pt => allDates.add(pt.date));
         });
-        if (state.benchmark && state.benchmark.records) {
-            state.benchmark.records.forEach(r => allDates.add(r.trade_date));
+        if (state.benchmark) {
+            const bm = getPortfolioMetrics(state.benchmark);
+            if (bm.history) bm.history.forEach(pt => allDates.add(pt.date));
+            if (state.benchmark.records) {
+                state.benchmark.records.forEach(r => allDates.add(r.trade_date || r.date));
+            }
         }
-        let dates = Array.from(allDates).sort();
+        let dates = Array.from(allDates).filter(Boolean).sort();
 
         // 周期窗口：取最近 N 个交易日
         if (state.currentPeriod !== 'all') {
@@ -252,28 +292,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dates.length > pDays) dates = dates.slice(-pDays);
         }
         const dateSet = new Set(dates);
-        const toTs = d => new Date(d + 'T00:00:00+08:00').getTime();
 
         const series = [];
 
         // 全池等权基准线
         if (state.benchmark) {
-            let bPoints = [];
-            if (state.benchmark.history && state.benchmark.history.length > 0) {
-                bPoints = state.benchmark.history
-                    .filter(h => dateSet.has(h.date) && h.total_return != null)
-                    .map(h => [toTs(h.date), +Number(h.total_return).toFixed(2)]);
-            } else if (state.benchmark.records) {
-                let nav = 1.0;
-                state.benchmark.records.forEach(r => {
-                    const dRet = (r.daily_return_pct !== undefined ? r.daily_return_pct : r.equal_weight_return_pct) || 0;
-                    nav *= (1.0 + dRet / 100.0);
-                    if (dateSet.has(r.trade_date)) {
-                        bPoints.push([toTs(r.trade_date), +((nav - 1.0) * 100.0).toFixed(2)]);
-                    }
-                });
-            }
-            if (bPoints.length > 0) {
+            const bm = getPortfolioMetrics(state.benchmark);
+            const bMap = new Map();
+            bm.history.forEach(h => {
+                if (h.date && h.total_return != null) {
+                    bMap.set(h.date, +Number(h.total_return).toFixed(2));
+                }
+            });
+            const bPoints = dates.map(d => bMap.has(d) ? bMap.get(d) : null);
+            if (bPoints.some(v => v !== null)) {
                 series.push({
                     name: '全池等权基准',
                     type: 'line',
@@ -288,18 +320,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // 六大组合曲线（各系列独立从自己的第一个有效数据点起笔）
+        // 六大组合曲线
         Object.keys(portfolioConfig).forEach(id => {
             if (id === 'benchmark') return;
             const data = state.portfolios[id];
             const config = portfolioConfig[id];
-            if (!data || !data.history) return;
+            if (!data) return;
 
-            const points = data.history
-                .filter(h => dateSet.has(h.date) && h.total_return != null)
-                .map(h => [toTs(h.date), +h.total_return]);
+            const m = getPortfolioMetrics(data);
+            const pMap = new Map();
+            m.history.forEach(h => {
+                if (h.date && h.total_return != null) {
+                    pMap.set(h.date, +Number(h.total_return).toFixed(2));
+                }
+            });
 
-            if (points.length === 0) return;
+            const points = dates.map(d => pMap.has(d) ? pMap.get(d) : null);
+            if (!points.some(v => v !== null)) return;
 
             const isKey = id === 'aggressive' || id === 'robust';
             series.push({
@@ -388,15 +425,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 containLabel: true
             },
             xAxis: {
-                type: 'time',
+                type: 'category',
+                data: dates,
                 boundaryGap: false,
                 axisLine: { lineStyle: { color: themeTokens.axisLine } },
                 axisLabel: {
                     color: themeTokens.axisLabel,
                     fontSize: 12,
                     formatter: function(value) {
-                        const d = new Date(value);
-                        return `${d.getMonth() + 1}-${d.getDate()}`;
+                        if (!value) return '';
+                        const parts = value.split('-');
+                        return parts.length >= 3 ? `${parts[1]}-${parts[2]}` : value;
                     }
                 }
             },
@@ -431,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('evolution-date').textContent = `分析日期: ${evo.analysis_date}`;
         }
 
-        const champion = evo.weekly_champion || {};
+        const champion = evo.champion || evo.weekly_champion || {};
         const suggestions = evo.strategy_suggestions || [];
 
         content.innerHTML = `
