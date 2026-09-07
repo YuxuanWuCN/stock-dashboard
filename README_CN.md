@@ -26,35 +26,45 @@ D:\R-FinGPTv2（国创版本）\
 │       ├── 存储超级周期_物理隔绝真实交易实测研报.pdf           # 1. 存储高弹性科技周期
 │       ├── 黄金地缘避险_物理隔绝真实交易实测研报.pdf           # 2. 黄金宏观避险慢牛
 │       └── 绿电公用事业_物理隔绝真实交易实测研报.pdf           # 3. 绿电低估值高股息防御
-└── Rainbow_FinGPTv2/                                         # ⚡ 核心量化投研智能体系统
-    ├── src/                                                  # 四位一体核心源码 (RAG / 定价 / 图谱 / 风控)
-    ├── docs/                                                 # Web 交互看板 & 团队协作复现指南
-    ├── data/raw/                                             # 物理隔离数据集 (存储/黄金/绿电)
-    ├── tools/                                                # 自动化流水线 & PDF生成工具
-    └── tests/                                                # 完整 pytest 自动化测试套件
+├── data/                                                     # 📊 统一主数据中心 (根目录标准)
+│   ├── raw/                                                  # 物理隔离原始回测数据 (存储/黄金/绿电/300支全池)
+│   ├── week1_pca/                                            # Week 1 PCA降维与PC5特征矩阵
+│   └── task_split/                                           # 团队成员标的池拆分任务 (A/B/C 三位成员)
+├── src/                                                      # ⚡ 核心量化投研智能体系统源码 (RAG / 定价 / 图谱 / 风控)
+├── scripts/                                                  # 🛠️ 日常运行与清洗脚本 (如 day1_prepare_factor_data.py)
+├── tests/                                                    # 🧪 自动化测试套件 (包含单元测试与集成测试)
+├── tools/                                                    # 🧰 质量门禁、自动化流水线与研报编译工具
+├── 工作规划/                                                  # 📅 冲刺周分工与成员任务卡
+└── Rainbow_FinGPTv2/                                         # 📦 历史版本/三大板块早期独立封箱基线 (备用归档)
 ```
 
 ## 🚀 常用操作指引
 
+> [!IMPORTANT]
+> **工作目录规范（重要必读）**：
+> - **统一根目录执行**：日常开发、测试、数据清洗与脚本运行**请直接在仓库根目录**下打开终端执行，**切勿 `cd Rainbow_FinGPTv2`**。所有相对路径（如 `data/raw/...`、`scripts/...`）均以仓库根目录为基准。
+> - **数据中心位置**：根目录下的 `data/` 为当前项目统一的主数据中心（包含最新的 300 标的池、Week 1 PCA 产物等）。
+> - **子文件夹定位**：`Rainbow_FinGPTv2/` 目录保留作为三大极端周期历史独立封箱成果存档，其内部代码与数据用于历史复核，日常开发与冲刺任务均以根目录为准。
+
 ### 1. 启动本地全功能量化看板
 ```bash
-cd Rainbow_FinGPTv2
 python -m http.server 8000 --directory docs
 ```
 浏览器访问: `http://127.0.0.1:8000`
 
-### 2. 运行物理隔离样本外回测 (全量测试)
+### 2. 运行因子数据准备与清洗流水线（以半导体存储为例）
 ```bash
-cd Rainbow_FinGPTv2
-python -m pytest tests/test_storage_backtest_runner.py tests/test_gold_backtest_runner.py tests/test_green_backtest_runner.py
+python scripts/day1_prepare_factor_data.py --dataset storage
 ```
 
-### 3. 一键生成三大出版级实证 PDF 研报
+### 3. 运行自动化测试套件
 ```bash
-cd Rainbow_FinGPTv2
-python tools/generate_isolated_storage_dossier_pdf.py
-python tools/generate_isolated_gold_dossier_pdf.py
-python tools/generate_isolated_green_dossier_pdf.py
+python -m pytest tests/
+```
+
+### 4. 一键重新生成全行业出版级实证 PDF 研报矩阵
+```bash
+python scripts/generate_all_reports_and_pdfs.py
 ```
 
 ---
