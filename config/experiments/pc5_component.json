@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source_repository": "YuxuanWuCN/stock-dashboard",
+  "source_commit": "7d63bb4f22821549efa20c23e9ffb28ee35cbcd4",
+  "selected_component": 5,
+  "purpose": "负责人指定选取第5主成分；交付提取结果和复现证据",
+  "datasets": [
+    {
+      "id": "snapshot_768d",
+      "input": "data/task_split/factors_768d_all.csv",
+      "input_git_blob": "9f5d0d47c91488803af671aefb5db6c8bbc2fbde",
+      "kind": "embedding_snapshot",
+      "n_components": 10,
+      "name_mapping": "data/task_split/universe_300_assigned.csv",
+      "name_mapping_git_blob": "f76a3ad489c197f7062d86efc5554a660f1264d2",
+      "previous_variance": "reports/tables/regression_768d/pca_768d_explained_variance.csv",
+      "previous_variance_git_blob": "800cf2255ec1200f97c94b7bcff7249080aad3e2",
+      "limitations": [
+        "300行全部标记为local_semantic；是仓库的本地语义特征，未证实为历史LLM embedding。",
+        "没有date、available_at或历史特征版本；只作当前截面PCA描述，不能复制为历史回测面板。",
+        "dim_000至dim_767没有独立经济标签；不能把PC5直接命名为情绪或机构博弈。"
+      ]
+    },
+    {
+      "id": "legacy_green",
+      "input": "data/week1_pca/factors_for_pca.csv",
+      "input_git_blob": "923831054dd0b055d4df7f348d17da279a38f854",
+      "kind": "dated_factors",
+      "n_components": 5,
+      "previous_pc5": "data/week1_pca/pc5_raw.csv",
+      "previous_pc5_git_blob": "cfd460d4781ba657fcc75e2b37ef4f4305821e0c",
+      "limitations": [
+        "8个传统/资金流因子，属于独立于768维股票截面的另一套PCA基底。",
+        "上游metadata记录forward_backward_fill；全样本提取只用于复核旧交付，不作样本外预测。"
+      ]
+    }
+  ]
+}

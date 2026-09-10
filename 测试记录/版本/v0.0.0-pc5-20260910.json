@@ -1,0 +1,153 @@
+{
+  "schema_version": 2,
+  "level": "heavy",
+  "passed": false,
+  "created_at": "2026-09-10T14:48:19+08:00",
+  "source_hash": "ce95dad625c7aa1f4e7a753893b5ea29981fe8a80d3b17a1041b2987660625bd",
+  "bug_hash_before_logging": "57ce5a0d99e5eb29533489a93516ce5d1ecd364790455fde72421550f03eb8b9",
+  "bug_archive_hash": "40546f208650b17f241be7ab625ad901785ca9f268a70fd8e811ae825b7efe89",
+  "metadata": {
+    "version": "v0.0.0-pc5-20260910"
+  },
+  "checks": [
+    {
+      "name": "Python 语法",
+      "passed": true,
+      "details": "检查 231 个 Python 文件。",
+      "category": "test"
+    },
+    {
+      "name": "Notebook 结构与语法",
+      "passed": true,
+      "details": "检查 0 个 Notebook。",
+      "category": "test"
+    },
+    {
+      "name": "项目 JSON 配置",
+      "passed": true,
+      "details": "检查 1 个配置文件。",
+      "category": "test"
+    },
+    {
+      "name": "Python 自动化测试",
+      "passed": true,
+      "details": "...........................2026-09-10 14:45:27 [INFO] ============================================================\n2026-09-10 14:45:27 [INFO] 自选股短线风险收益排行榜分析开始 —— 2026-09-10 14:45:27\n2026-09-10 14:45:27 [INFO] ============================================================\n2026-09-10 14:45:27 [INFO] 自选股数量: 1\n2026-09-10 14:45:27 [INFO] [1/1] 测试标的(000001) 分析中...\n2026-09-10 14:45:27 [INFO] 测试标的(000001) ✓ 分析完成\n2026-09-10 14:45:27 [INFO] Alpha 门控完成：通过 0 / 参与 1\n2026-09-10 14:45:27 [INFO] 生成排行榜...\n2026-09-10 14:45:27 [INFO] 排名 JSON 校验通过\n2026-09-10 14:45:27 [INFO] 生成个股详情文件...\n2026-09-10 14:45:27 [INFO]   000001.json ✓\n2026-09-10 14:45:27 [INFO] 写入排行榜文件...\n2026-09-10 14:45:27 [INFO] ============================================================\n2026-09-10 14:45:27 [INFO] 排行榜分析完成！总 1 / 成功 1 / 失败 0 / 耗时 0.0 秒\n2026-09-10 14:45:27 [INFO] 分析目录: D:\\stock-dashboard-pc5\\docs\\data\\analysis\n2026-09-10 14:45:27 [INFO] ============================================================\n.2026-09-10 14:45:27 [WARNING] LLM 报告生成异常已隔离，排行榜数据保持可用\n.2026-09-10 14:45:27 [INFO] LLM 报告调度已关闭，跳过本次生成\n.2026-09-10 14:45:27 [INFO] LLM 报告阶段完成：处理 3，新增 2，失败 0\n....................2026-09-10 14:45:27 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.2026-09-10 14:45:27 [WARNING] 去重后有效样本 2 < 最低 5\n.2026-09-10 14:45:27 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.2026-09-10 14:45:27 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.2026-09-10 14:45:27 [INFO] KNN 相似分析完成: 5 样本, 3d预测 1.80%, 5d预测 1.56%, 置信度 low\n................................................................................................2026-09-10 14:45:28 [INFO] 添加自选股: 佰维存储(688525) type=stock category=\n2026-09-10 14:45:28 [INFO] 自选股 688525 added: 佰维存储()\n.2026-09-10 14:45:28 [INFO] 添加自选股: 招商银行(600036) type=stock category=\n2026-09-10 14:45:28 [INFO] 自选股 600036 added: 招商银行()\n2026-09-10 14:45:28 [WARNING] GitHub 自选股同步失败: read_exception:RuntimeError\n.2026-09-10 14:45:28 [INFO] 添加自选股: 佰维存储(688525) type=stock category=\n2026-09-10 14:45:28 [INFO] 自选股 688525 added: 佰维存储()\n2026-09-10 14:45:28 [INFO] GitHub 自选股已同步，commit=def456commit\n.2026-09-10 14:45:28 [INFO] 添加自选股: 平安银行(000001) type=stock category=\n2026-09-10 14:45:28 [INFO] 自选股 000001 added: 平安银行()\n2026-09-10 14:45:28 [INFO] GitHub 自选股已同步，commit=newcommit\n...2026-09-10 14:45:28 [INFO] 添加自选股: 佰维存储(688525) type=stock category=科技\n2026-09-10 14:45:28 [INFO] 自选股 688525 added: 佰维存储(科技)\n...2026-09-10 14:45:28 [INFO] 查询请求: code=000021 start=20260101 end=20260910\n2026-09-10 14:45:28 [WARNING] 指数 深证成指(399001) 抓取失败\n2026-09-10 14:45:28 [INFO] 查询成功: 深科技(000021) + 深证成指 (已自动排期每晚自动化分析)\n.2026-09-10 14:45:28 [INFO] 解析股票名称: 000021 → 深科技\n..\n----------------------------------------------------------------------\nRan 162 tests in 1.557s\n\nOK",
+      "category": "test"
+    },
+    {
+      "name": "small 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 95 个业务代码文件；发现 79 个 small 级测试文件、92 个 unittest 可执行测试。要求：tests/test_*.py 中的业务单元测试，或 custom_commands.small。",
+      "category": "test"
+    },
+    {
+      "name": "其他语言专用检查",
+      "passed": true,
+      "details": "以下扩展名需要项目专用小测：.css, .html, .js；已配置自定义小测命令。",
+      "category": "environment"
+    },
+    {
+      "name": "medium 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 95 个业务代码文件；发现 1 个 medium 级测试文件、0 个 unittest 可执行测试。要求：tests/test_integration*.py，或 custom_commands.medium。",
+      "category": "test"
+    },
+    {
+      "name": "heavy 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 95 个业务代码文件；发现 1 个 heavy 级测试文件、0 个 unittest 可执行测试。要求：tests/test_reproducibility*.py，或 custom_commands.heavy。",
+      "category": "test"
+    },
+    {
+      "name": "秘密扫描",
+      "passed": true,
+      "details": "未发现高置信度硬编码秘密。",
+      "category": "security"
+    },
+    {
+      "name": "Python 依赖一致性",
+      "passed": true,
+      "details": "No broken requirements found.",
+      "category": "dependency"
+    },
+    {
+      "name": "弱断言扫描",
+      "passed": false,
+      "details": "D:\\stock-dashboard-pc5\\tests\\test_analysis.py:360 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\stock-dashboard-pc5\\tests\\test_analysis.py:370 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\stock-dashboard-pc5\\tests\\test_analysis.py:379 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\stock-dashboard-pc5\\tests\\test_dynamic_position_sizer.py:326 [error] no-assert: test 函数没有任何断言\nD:\\stock-dashboard-pc5\\tests\\test_mut_runner.py:35 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\stock-dashboard-pc5\\tests\\test_mut_runner.py:42 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\stock-dashboard-pc5\\tests\\test_mut_runner.py:53 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\stock-dashboard-pc5\\tests\\test_mut_runner.py:60 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\stock-dashboard-pc5\\tests\\test_mut_runner.py:67 [warn] assert-true-bare: assertTrue(ok)\nD:\\stock-dashboard-pc5\\tests\\test_mut_runner.py:96 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\stock-dashboard-pc5\\tests\\test_prediction_accuracy_harness.py:80 [warn] assert-true-bare: assertTrue(math.isclose(f1[name][70], f2[name][70], rel_tol=1e-09, abs_tol=1e-12) or (math.isnan(f1[name][70]) and math.isnan(f2[name][70])))\nD:\\stock-dashboard-pc5\\tests\\test_prediction_accuracy_harness.py:100 [warn] assert-is-not-none: assertIsNotNone(cell['accuracy'])\nD:\\stock-dashboard-pc5\\tests\\test_prediction_accuracy_harness.py:112 [warn] assert-is-not-none: assertIsNotNone(r['ret1_reversal__h1']['accuracy'])\nD:\\stock-dashboard-pc5\\tests\\test_prediction_accuracy_harness.py:169 [warn] assert-is-not-none: assertIsNotNone(cell['hit_rate'])\n弱断言占比 0.7%（上限 5%），error 级 1 条",
+      "category": "test"
+    },
+    {
+      "name": "股票业务单元测试",
+      "passed": true,
+      "details": "........................................................................ [100%]\n72 passed in 5.72s",
+      "category": "test"
+    },
+    {
+      "name": "LLM 模块单元测试",
+      "passed": true,
+      "details": "........................................................................ [ 66%]\n....................................                                     [100%]\n108 passed in 4.00s",
+      "category": "test"
+    },
+    {
+      "name": "v2.5 策略模块单元测试",
+      "passed": true,
+      "details": ".......................................                                  [100%]\n39 passed in 15.99s",
+      "category": "test"
+    },
+    {
+      "name": "Fama-MacBeth 多因子引擎单元测试",
+      "passed": true,
+      "details": "..........................................                               [100%]\n42 passed in 6.16s",
+      "category": "test"
+    },
+    {
+      "name": "情绪信号度量与数据口径修复单元测试",
+      "passed": true,
+      "details": "...................                                                      [100%]\n19 passed in 1.24s",
+      "category": "test"
+    },
+    {
+      "name": "校准系统建议与applier单元测试",
+      "passed": true,
+      "details": "...........                                                              [100%]\n11 passed in 0.35s",
+      "category": "test"
+    },
+    {
+      "name": "稳健组合选股字段修复测试",
+      "passed": true,
+      "details": "....                                                                     [100%]\n4 passed in 0.96s",
+      "category": "test"
+    },
+    {
+      "name": "股票离线综合流程测试",
+      "passed": true,
+      "details": ".                                                                        [100%]\n1 passed in 1.44s",
+      "category": "test"
+    },
+    {
+      "name": "Fama-MacBeth Alpha 门控集成测试",
+      "passed": true,
+      "details": "............                                                             [100%]\n12 passed in 6.52s",
+      "category": "test"
+    },
+    {
+      "name": "股票可复现性测试",
+      "passed": true,
+      "details": ".                                                                        [100%]\n1 passed in 2.41s",
+      "category": "test"
+    },
+    {
+      "name": "股票全量回归测试",
+      "passed": false,
+      "details": "........................................................................ [  8%]\n........................................................................ [ 17%]\n.........................................................F.............. [ 26%]\n........................................................................ [ 35%]\n...................F.................................................... [ 44%]\n........................................................................ [ 52%]\n........................................................................ [ 61%]\n........................................................................ [ 70%]\n........................................................................ [ 79%]\n........................................................................ [ 88%]\n.............................FF......................................... [ 97%]\n..............FF........                                                 [100%]\n================================== FAILURES ===================================\n__________ test_scnu_strict_mode_requires_explicit_trading_calendar ___________\n\ntmp_path = WindowsPath('C:/Users/Ruan/AppData/Local/Temp/pytest-of-Ruan/pytest-132/test_scnu_strict_mode_requires0')\n\n    def test_scnu_strict_mode_requires_explicit_trading_calendar(tmp_path):\n        frame = pd.DataFrame(_valid_csmar_rows())\n        frame.to_csv(tmp_path / \"factors.csv\", index=False)\n        provider = SCNUAcademicFactorProvider(data_dir=tmp_path, strict=True)\n>       with pytest.raises(CSMARDataError, match=\"expected_trading_dates\"):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE <class 'src.analysis.factor_providers.CSMARDataError'>\n\ntests\\test_factor_providers.py:358: Failed\n_______________ test_both_daily_jobs_use_the_shared_push_helper _______________\n\n    def test_both_daily_jobs_use_the_shared_push_helper():\n        \"\"\"Morning and evening automation share the tested fallback behaviour.\"\"\"\n    \n        project_root = Path(__file__).resolve().parents[1]\n        for script_name in (\"daily_local.ps1\", \"daily_morning.ps1\"):\n            script = (project_root / \"tools\" / script_name).read_text(encoding=\"utf-8\")\n>           assert \"tools\\\\git_push_with_fallback.py\" in script\nE           assert 'tools\\\\git_push_with_fallback.py' in '# daily_local.ps1 —— 每日本地全自动数据更新与量化流水线\\n#\\n# 功能：自动检测 Python 环境并启动统一量化自动化调度引擎（tools/daily_routine.py）\\n# 用法：powershell...\\n\\nWrite-Host \"🌟 使用 Python 解释器: $py\" -ForegroundColor Cyan\\n& $py tools\\\\daily_routine.py @args\\nexit $LASTEXITCODE\\n'\n\ntests\\test_git_push_with_fallback.py:91: AssertionError\n____________ test_table2_biwin_maxdd_suppression_and_micron_sharpe ____________\n\nself = <pandas.io.sql.SQLiteDatabase object at 0x00000202B9C4C7D0>\nsql = 'SELECT date, mkt AS MKT, smb AS SMB, hml AS HML, mom AS MOM, rf FROM factors WHERE date >= ? AND date <= ? ORDER BY date'\nparams = ('2021-01-01', '2026-12-31')\n\n    def execute(self, sql: str | Select | TextClause, params=None):\n        if not isinstance(sql, str):\n            raise TypeError(\"Query must be a string unless using sqlalchemy.\")\n        args = [] if params is None else [params]\n        cur = self.con.cursor()\n        try:\n>           cur.execute(sql, *args)\nE           sqlite3.OperationalError: no such table: factors\n\nC:\\ProgramData\\anaconda3\\Lib\\site-packages\\pandas\\io\\sql.py:2664: OperationalError\n\nThe above exception was the direct cause of the following exception:\n\n    def test_table2_biwin_maxdd_suppression_and_micron_sharpe():\n        # 读取真实 K 线与因子库\n        df_biwin = _load_stock_kline(\"688525\")\n        df_mu = _load_stock_kline(\"MU\")\n    \n        db_path = str(factor_db.default_db_path())\n>       factors_df = factor_db.query_range(db_path, \"2021-01-01\", \"2026-12-31\")\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_storage_supercycle_pipeline.py:191: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nsrc\\analysis\\factor_db.py:209: in query_range\n    df = pd.read_sql_query(\nC:\\ProgramData\\anaconda3\\Lib\\site-packages\\pandas\\io\\sql.py:528: in read_sql_query\n    return pandas_sql.read_query(\nC:\\ProgramData\\anaconda3\\Lib\\site-packages\\pandas\\io\\sql.py:2728: in read_query\n    cursor = self.execute(sql, params)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <pandas.io.sql.SQLiteDatabase object at 0x00000202B9C4C7D0>\nsql = 'SELECT date, mkt AS MKT, smb AS SMB, hml AS HML, mom AS MOM, rf FROM factors WHERE date >= ? AND date <= ? ORDER BY date'\nparams = ('2021-01-01', '2026-12-31')\n\n    def execute(self, sql: str | Select | TextClause, params=None):\n        if not isinstance(sql, str):\n            raise TypeError(\"Query must be a string unless using sqlalchemy.\")\n        args = [] if params is None else [params]\n        cur = self.con.cursor()\n        try:\n            cur.execute(sql, *args)\n            return cur\n        except Exception as exc:\n            try:\n                self.con.rollback()\n            except Exception as inner_exc:  # pragma: no cover\n                ex = DatabaseError(\n                    f\"Execution failed on sql: {sql}\\n{exc}\\nunable to rollback\"\n                )\n                raise ex from inner_exc\n    \n            ex = DatabaseError(f\"Execution failed on sql '{sql}': {exc}\")\n>           raise ex from exc\nE           pandas.errors.DatabaseError: Execution failed on sql 'SELECT date, mkt AS MKT, smb AS SMB, hml AS HML, mom AS MOM, rf FROM factors WHERE date >= ? AND date <= ? ORDER BY date': no such table: factors\n\nC:\\ProgramData\\anaconda3\\Lib\\site-packages\\pandas\\io\\sql.py:2676: DatabaseError\n_______________ test_full_storage_supercycle_backtest_pipeline ________________\n\nself = <pandas.io.sql.SQLiteDatabase object at 0x00000202BA24C590>\nsql = 'SELECT date, mkt AS MKT, smb AS SMB, hml AS HML, mom AS MOM, rf FROM factors WHERE date >= ? AND date <= ? ORDER BY date'\nparams = ('2021-01-01', '2026-12-31')\n\n    def execute(self, sql: str | Select | TextClause, params=None):\n        if not isinstance(sql, str):\n            raise TypeError(\"Query must be a string unless using sqlalchemy.\")\n        args = [] if params is None else [params]\n        cur = self.con.cursor()\n        try:\n>           cur.execute(sql, *args)\nE           sqlite3.OperationalError: no such table: factors\n\nC:\\ProgramData\\anaconda3\\Lib\\site-packages\\pandas\\io\\sql.py:2664: OperationalError\n\nThe above exception was the direct cause of the following exception:\n\n    def test_full_storage_supercycle_backtest_pipeline():\n        # 全池全周期端到端运行\n        df_biwin = _load_stock_kline(\"688525\")\n        df_mu = _load_stock_kline(\"MU\")\n        db_path = str(factor_db.default_db_path())\n>       factors_df = factor_db.query_range(db_path, \"2021-01-01\", \"2026-12-31\")\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_storage_supercycle_pipeline.py:225: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nsrc\\analysis\\factor_db.py:209: in query_range\n    df = pd.read_sql_query(\nC:\\ProgramData\\anaconda3\\Lib\\site-packages\\pandas\\io\\sql.py:528: in read_sql_query\n    return pandas_sql.read_query(\nC:\\ProgramData\\anaconda3\\Lib\\site-packages\\pandas\\io\\sql.py:2728: in read_query\n    cursor = self.execute(sql, params)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <pandas.io.sql.SQLiteDatabase object at 0x00000202BA24C590>\nsql = 'SELECT date, mkt AS MKT, smb AS SMB, hml AS HML, mom AS MOM, rf FROM factors WHERE date >= ? AND date <= ? ORDER BY date'\nparams = ('2021-01-01', '2026-12-31')\n\n    def execute(self, sql: str | Select | TextClause, params=None):\n        if not isinstance(sql, str):\n            raise TypeError(\"Query must be a string unless using sqlalchemy.\")\n        args = [] if params is None else [params]\n        cur = self.con.cursor()\n        try:\n            cur.execute(sql, *args)\n            return cur\n        except Exception as exc:\n            try:\n                self.con.rollback()\n            except Exception as inner_exc:  # pragma: no cover\n                ex = DatabaseError(\n                    f\"Execution failed on sql: {sql}\\n{exc}\\nunable to rollback\"\n                )\n                raise ex from inner_exc\n    \n            ex = DatabaseError(f\"Execution failed on sql '{sql}': {exc}\")\n>           raise ex from exc\nE           pandas.errors.DatabaseError: Execution failed on sql 'SELECT date, mkt AS MKT, smb AS SMB, hml AS HML, mom AS MOM, rf FROM factors WHERE date >= ? AND date <= ? ORDER BY date': no such table: factors\n\nC:\\ProgramData\\anaconda3\\Lib\\site-packages\\pandas\\io\\sql.py:2676: DatabaseError\n_________________________ test_three_actions_windows __________________________\n\n    def test_three_actions_windows():\n        df = vtf.load_kline(KLINE)\n        triggers = vtf.scan_double_triggers(df)\n        ar = vtf.run_three_actions(df, triggers[0])\n        assert ar[\"entry_date\"] == \"2026-07-27\"\n        assert ar[\"entry_price\"] == pytest.approx(13.02, abs=0.02)\n        for w in [5, 10, 20]:\n            assert w in ar[\"windows\"]\n            r = ar[\"windows\"][w]\n            # 清仓 0%：A 组触发次日全部卖出后持币\n            assert r[\"ret_a_pct\"] == 0.0\n            # 持有组最大回撤最大：对照组（不动）扛了连续跌停\n            assert r[\"mdd_c_pct\"] <= r[\"mdd_b_pct\"]\n        # 20 日窗口：持有组收益为正（回调后反弹），且减仓组收益介于 0 与持有之间\n        r20 = ar[\"windows\"][20]\n>       assert r20[\"ret_c_pct\"] > 0\nE       assert np.float64(-3.46) > 0\n\ntests\\test_validate_teacher_framework.py:100: AssertionError\n__________________________ test_limit_up_clustering ___________________________\n\n    def test_limit_up_clustering():\n        df = vtf.load_kline(KLINE)\n        events = vtf.list_limit_up_events(df)\n        # 14 次涨停聚簇为 6 簇\n>       assert len(events) == 6\nE       AssertionError: assert 7 == 6\nE        +  where 7 = len([{'change_pct': 10.080645161290303, 'close': 8.19, 'date': '2025-10-27', 'idx': 56, ...}, {'change_pct': 10.0235849056...-27', 'idx': 231, ...}, {'change_pct': 10.030395136778125, 'close': 15.93, 'date': '2026-08-11', 'idx': 248, ...}, ...])\n\ntests\\test_validate_teacher_framework.py:112: AssertionError\n=========================== short test summary info ===========================\nFAILED tests/test_factor_providers.py::test_scnu_strict_mode_requires_explicit_trading_calendar\nFAILED tests/test_git_push_with_fallback.py::test_both_daily_jobs_use_the_shared_push_helper\nFAILED tests/test_storage_supercycle_pipeline.py::test_table2_biwin_maxdd_suppression_and_micron_sharpe\nFAILED tests/test_storage_supercycle_pipeline.py::test_full_storage_supercycle_backtest_pipeline\nFAILED tests/test_validate_teacher_framework.py::test_three_actions_windows\nFAILED tests/test_validate_teacher_framework.py::test_limit_up_clustering - A...\n6 failed, 810 passed in 92.59s (0:01:32)",
+      "category": "test"
+    }
+  ],
+  "json_path": ".quality-state/reports/20260910144819-heavy-50cc58.json",
+  "markdown_path": ".quality-state/reports/20260910144819-heavy-50cc58.md",
+  "bug_hash_after_logging": "724bc8c9f251db01f34c3451b3facc6e847cae7814b8be994881a0ca7d13ca2e",
+  "bug_ids": [
+    "BUG-0003",
+    "BUG-0004"
+  ]
+}
