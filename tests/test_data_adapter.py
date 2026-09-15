@@ -246,6 +246,32 @@ def test_strict_school_provider_rejects_missing_or_duplicate_local_data(tmp_path
         provider.get_daily_factors("2024-01-01", "2024-01-02")
 
 
+def test_strict_school_provider_still_requires_a_calendar_when_local_data_exists(tmp_path):
+    """反向守卫：本地确有数据但缺交易日历时，strict 仍必须要求显式日历（不得被诊断改写绕过）。"""
+    from src.analysis.factor_providers import CSMARDataError, SCNUAcademicFactorProvider
+
+    school_dir = tmp_path / "partial_school_factors"
+    school_dir.mkdir()
+    partial = _official_factor_frame()
+    partial.loc[1, "date"] = "2024-01-05"  # 本地有数据，但区间内缺 01-03/01-04
+    partial.to_csv(school_dir / "factors.csv", index=False)
+    provider = SCNUAcademicFactorProvider(data_dir=school_dir, strict=True)
+
+    with pytest.raises(CSMARDataError, match="expected_trading_dates"):
+        provider.get_daily_factors("2024-01-01", "2024-01-05")
+
+    # 一旦给出显式日历，缺失日期就必须作为硬契约报错，而不是静默返回子集
+    with pytest.raises(CSMARDataError):
+        provider.get_daily_factors("2024-01-01", "2024-01-05")
+    provider_with_calendar = SCNUAcademicFactorProvider(
+        data_dir=school_dir,
+        strict=True,
+        expected_trading_dates=["2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05"],
+    )
+    with pytest.raises(CSMARDataError):
+        provider_with_calendar.get_daily_factors("2024-01-01", "2024-01-05")
+
+
 def test_official_adapter_applies_explicit_trading_calendar_to_injected_provider(tmp_path):
     partial = _InjectedFactorProvider(_official_factor_frame().iloc[:1])
     adapter = UnifiedDataAdapter(

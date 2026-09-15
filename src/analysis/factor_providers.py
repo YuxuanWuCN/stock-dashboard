@@ -1031,9 +1031,9 @@ class SCNUAcademicFactorProvider(BaseFactorProvider):
                 else:
                     sub.attrs["coverage_verified"] = True
                     return sub.reset_index(drop=True)
-            elif not sub.empty and (
-                not self.strict or (dates.min() <= start and dates.max() >= end)
-            ):
+            elif not sub.empty and not self.strict:
+                # Strict mode cannot infer a complete trading calendar from
+                # endpoint coverage alone; require an explicit date list.
                 return sub
 
         api_result = self._load_api_factors(start_text, end_text)
@@ -1058,9 +1058,17 @@ class SCNUAcademicFactorProvider(BaseFactorProvider):
             f"校内因子文件未在 {self.data_dir} 覆盖 {start_text} 至 {end_text}；"
             "请导出完整 CSMAR/Wind 因子文件，或配置可用的 api_provider。"
         )
+        # 诊断口径（实测修正）：本地**根本没有数据**时，真正的问题是"未覆盖该区间"，
+        # 若改报"缺交易日历"会把调用方引向错误的修复方向；只有本地确有数据、
+        # 但因缺日历而无法证明覆盖完整时，才要求显式 expected_trading_dates。
+        # 两条路径都 fail-closed，绝不返回不完整表。
+        local_rows_found = self._cached_factors is not None and not self._cached_factors.empty
+        if self.strict and expected is None and local_rows_found:
+            raise CSMARDataError(
+                "strict=True requires expected_trading_dates; "
+                "cannot verify trading-day coverage without an explicit calendar"
+            )
         if self.strict or expected is not None:
             raise CSMARDataError(message)
         logger.warning(message)
         return pd.DataFrame(columns=CSMARFactorProvider.STANDARD_COLUMNS)
-
-

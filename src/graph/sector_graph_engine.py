@@ -198,7 +198,10 @@ class SectorGraphEngine:
                 "spillover_return_5d_pct": 0.0,
                 "spillover_prob_5d_pct": 0.0,
                 "has_limit_up_resonance": False,
-                "co_movement_peers": []
+                "co_movement_peers": [],
+                "corr_missing_evidence_count": 0,
+                "leader_corr_with_stock": None,
+                "leader_corr_missing": True,
             }
 
         # 提取同板块盟友及相关系数
@@ -206,18 +209,36 @@ class SectorGraphEngine:
         group = self.category_groups.get(category, [])
         leader = sector_state.leader
 
-        stock_corr_with_leader = 0.5
+        # M1 修复（规则 §8-V）：缺失相关性证据不得被默认值 0.5 伪造。
+        # 旧实现把缺失/不可算的相关系数一律填成 0.5，导致 0.5 >= corr_threshold(0.40)
+        # 恒成立——无任何相关性证据的板块也会产出 co_movement_peers，且龙头相关性
+        # 永远 ≥ 阈值、必然触发 follower_catchup 与溢出收益。现改为：缺证据即拒绝
+        # 该 peer，并显式计数透出，不做静默兜底。
+        stock_corr_with_leader: Optional[float] = None
+        leader_corr_missing = False
+        missing_corr_count = 0
+
         for s in group:
             peer_code = s.get("code")
             if peer_code == stock_code:
                 continue
-            
-            corr = 0.5
-            if self.corr_matrix is not None and stock_code in self.corr_matrix.columns and peer_code in self.corr_matrix.columns:
+
+            corr = None
+            if (
+                self.corr_matrix is not None
+                and stock_code in self.corr_matrix.columns
+                and peer_code in self.corr_matrix.columns
+            ):
                 val = self.corr_matrix.loc[stock_code, peer_code]
                 if np.isfinite(val):
                     corr = round(float(val), 2)
-            
+
+            if corr is None:
+                missing_corr_count += 1
+                if leader and peer_code == leader["code"]:
+                    leader_corr_missing = True
+                continue
+
             if corr >= self.corr_threshold:
                 peers.append({
                     "code": peer_code,
@@ -241,8 +262,8 @@ class SectorGraphEngine:
             spillover_ret = 0.0  # 龙头自身是溢出源
             spillover_prob = 0.0
         elif has_limit_up and leader:
-            # 龙头涨停触发强力扩散机制
-            if stock_corr_with_leader >= self.corr_threshold:
+            # 龙头涨停触发强力扩散机制；无龙头相关性证据时不得推断追随（M1 修复）
+            if stock_corr_with_leader is not None and stock_corr_with_leader >= self.corr_threshold:
                 role = "follower_catchup"
                 leader_ret = leader.get("change_pct", 10.0)
                 # ΔR = clamp(LeaderRet * corr * 0.25, +0.5%, +3.0%)
@@ -291,5 +312,8 @@ class SectorGraphEngine:
             "spillover_prob_5d_pct": spillover_prob,
             "has_limit_up_resonance": has_limit_up,
             "co_movement_peers": sorted(peers, key=lambda x: x["corr"], reverse=True)[:5],
+            "corr_missing_evidence_count": missing_corr_count,
+            "leader_corr_with_stock": stock_corr_with_leader,
+            "leader_corr_missing": leader_corr_missing,
             "temporal_dynamics": temporal_dynamics
         }

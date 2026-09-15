@@ -326,6 +326,7 @@ class TestConfigValidation:
         """默认配置应通过验证。"""
         cfg = PositionSizerConfig()
         cfg.validate()  # 不应抛出异常
+        assert cfg.base_position == 1.0
 
     def test_invalid_base_position(self):
         """base_position 超出范围应抛出异常。"""

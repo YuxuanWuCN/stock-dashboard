@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import sys
 from pathlib import Path
 from typing import Optional
@@ -35,6 +36,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 KLINE_PATH = REPO_ROOT / "docs/data/kline/001258.json"
 TEMP_PATH = REPO_ROOT / "docs/data/strategy/market_temperature.json"
 OUT_REPORT = REPO_ROOT / "reports/teacher_framework_validation.md"
+
+logger = logging.getLogger(__name__)
 
 LIMIT_UP_PCT = 9.8          # 涨停阈值
 ROLLING_LOW_WINDOW = 60     # 滚动低点窗口（行情起点定义）
@@ -63,6 +66,46 @@ def load_kline(path: Path) -> pd.DataFrame:
     df["date"] = pd.to_datetime(df["date"])
     df = df.sort_values("date").reset_index(drop=True)
     return df
+
+
+def clamp_to_last_date(df: pd.DataFrame, *, source: str = "kline") -> pd.DataFrame:
+    """把行情夹断到模块自身声明的数据截止日 ``LAST_DATE``（严禁未来数据泄漏）。
+
+    背景（实测）：`docs/data/kline/001258.json` 由每日流水线持续追加，实测已达
+    **268 根（末日 2026-09-04）**，而本模块文档与报表声明的截止日是 ``LAST_DATE = 2026-08-13``
+    （252 根）。未夹断时统计口径会随文件增长而漂移：涨停聚簇 6 → 7 簇、
+    触发后"20 日窗口"实际跨到 2026-08-24 之后的行情，收益由 +17.28% 变成 −3.46%。
+    因此所有统计函数统一在入口夹断，使输出**可复现且不含截止日之后的行情**。
+
+    Raises
+    ------
+    ValueError
+        数据未覆盖 ``LAST_DATE``（无法在声明截止日上定稿），或传入空表。
+    """
+    if df is None or df.empty:
+        raise ValueError(f"{source} 为空，无法夹断到数据截止日 {LAST_DATE}")
+    dates = df["date"].dt.strftime("%Y-%m-%d")
+    if not (dates == LAST_DATE).any():
+        raise ValueError(f"{source} 未覆盖数据截止日 {LAST_DATE}，拒绝在漂移数据上出统计")
+    clamped = df.loc[dates <= LAST_DATE].reset_index(drop=True)
+    if len(clamped) == 0:
+        raise ValueError(f"{source} 在 {LAST_DATE} 及之前没有任何行")
+    return clamped
+
+
+def report_lookahead_drift(df: pd.DataFrame, *, source: str = "kline") -> int:
+    """报告输入中超过数据截止日的行数（>0 表示文件已被追加，口径必须夹断）。"""
+    if df is None or df.empty:
+        return 0
+    dates = df["date"].dt.strftime("%Y-%m-%d")
+    extra = int((dates > LAST_DATE).sum())
+    if extra:
+        logger.warning(
+            "%s 含 %d 根超过数据截止日 %s 的行情（末日 %s）：统计一律夹断到截止日，"
+            "如需前移截止日请显式更新 LAST_DATE 并重跑全部报表",
+            source, extra, LAST_DATE, dates.max(),
+        )
+    return extra
 
 
 def load_market_temperature(path: Path) -> dict:
@@ -126,7 +169,14 @@ def scan_double_triggers(df: pd.DataFrame) -> list[dict]:
     - 行情起点 = 滚动窗口内最低收盘价，**且基准点必须晚于上一次触发**（触发后旧低点作废）
     - 收盘价首次达到当前起点 DOUBLE_RATIO 倍 → 触发
     - 触发后起点作废，重新从触发点之后寻找新低
+
+    输入一律先夹断到 :data:`LAST_DATE`（见 :func:`clamp_to_last_date`）；
+    空表是合法边界输入，直接返回空结果（既有测试锁定该行为）。
     """
+    if df is None or df.empty:
+        return []
+    report_lookahead_drift(df)
+    df = clamp_to_last_date(df)
     triggers = []
     dates = df["date"].dt.strftime("%Y-%m-%d").tolist()
     closes = df["close"].to_numpy()
@@ -166,7 +216,13 @@ def scan_double_triggers(df: pd.DataFrame) -> list[dict]:
 
 
 def run_three_actions(df: pd.DataFrame, trigger: dict) -> dict:
-    """三组操作对照：触发次日开盘成交，5/10/20 日窗口收益与最大回撤。"""
+    """三组操作对照：触发次日开盘成交，5/10/20 日窗口收益与最大回撤。
+
+    输入一律先夹断到 :data:`LAST_DATE`：否则"20 日窗口"会随着行情文件每日追加而
+    跨过声明的数据截止日（实测使 20 日收益由 +17.28% 漂移为 −3.46%）。
+    """
+    report_lookahead_drift(df)
+    df = clamp_to_last_date(df)
     dates = df["date"].dt.strftime("%Y-%m-%d").tolist()
     next_date = trigger["next_date"]
     if next_date is None:
@@ -218,7 +274,13 @@ def list_limit_up_events(df: pd.DataFrame) -> list[dict]:
 
     聚簇规则：相邻涨停日（间隔 <= CLUSTER_GAP 个交易日）合并为一簇；
     一簇只统计一次（取簇首日），避免连板行情被重复计数。
+    输入一律先夹断到 :data:`LAST_DATE`（否则行情文件每日追加会凭空多出新簇：
+    实测未夹断时 6 → 7 簇）；空表是合法边界输入，直接返回空列表。
     """
+    if df is None or df.empty:
+        return []
+    report_lookahead_drift(df)
+    df = clamp_to_last_date(df)
     CLUSTER_GAP = 5  # 两个涨停日之间相隔超过 5 个交易日视为新簇
     raw = []
     chg = df["close"].pct_change() * 100
@@ -241,7 +303,21 @@ def list_limit_up_events(df: pd.DataFrame) -> list[dict]:
 
 
 def pullback_stats(df: pd.DataFrame, events: list[dict]) -> dict:
-    """统计涨停后 PULLBACK_WINDOW 日内回调（自高点回落 >= PULLBACK_PCT）分布。"""
+    """统计涨停后 PULLBACK_WINDOW 日内回调（自高点回落 >= PULLBACK_PCT）分布。
+
+    输入一律先夹断到 :data:`LAST_DATE`，使回调窗口不会跨过声明的数据截止日。
+    """
+    report_lookahead_drift(df)
+    df = clamp_to_last_date(df)
+    # 事件索引必须落在夹断后的范围内：夹断会裁掉尾部行情，越界索引一律丢弃并报警，
+    # 绝不静默把它当成行号继续用（那是静默错位）。
+    usable_events = [ev for ev in events if 0 <= int(ev.get("idx", -1)) < len(df)]
+    if len(usable_events) != len(events):
+        logger.warning(
+            "回调统计丢弃 %d 个落在数据截止日 %s 之后的事件（夹断所致）",
+            len(events) - len(usable_events), LAST_DATE,
+        )
+    events = usable_events
     stats = []
     dates = df["date"].dt.strftime("%Y-%m-%d").tolist()
     closes = df["close"].to_numpy()

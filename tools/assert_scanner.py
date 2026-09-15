@@ -138,13 +138,23 @@ _ALL_ASSERT_METHODS = _COMPARE_ASSERT_METHODS | set(_WEAK_ASSERT_METHODS) | {
 
 # 模块级断言前缀（np.testing.assert_* / pd.testing.assert_*）
 _MODULE_ASSERT_PREFIXES = ("testing.assert",)
-# 模块级断言方法（属于 np.testing 家族）
+# 模块级断言方法（numpy/pandas 的 testing 家族，都是合法强断言）
+# 注意：pandas 的 assert_frame_equal / assert_series_equal / assert_index_equal
+# 曾被漏列，导致"只用它们断言"的测试被误报 no-assert（error 级），
+# 同时 count_total_asserts 少计、拉低占比分母。
 _MODULE_ASSERT_METHODS = {
     "assert_array_equal",
     "assert_array_almost_equal",
     "assert_allclose",
     "assert_almost_equal",
     "assert_raises",
+    "assert_frame_equal",
+    "assert_series_equal",
+    "assert_index_equal",
+    "assert_extension_array_equal",
+    "assert_categorical_equal",
+    "assert_interval_array_equal",
+    "assert_sp_series_equal",
 }
 
 # 强比较检查：参数中有 Compare/Constant/List/Dict/Set/Tuple/Call 等"有内容"节点
@@ -241,18 +251,22 @@ def scan_file(path: Path) -> list[dict]:
         )
         return findings
 
-    # 收集测试函数体（unittest 类方法 + 顶层 test_ 函数）
+    # 收集测试函数体：只认模块级 test_* 函数与 unittest 类的 test_* 方法。
+    # 测试内部再定义的 `def test_*` 辅助函数不会被 pytest/unittest 收集为用例，
+    # 因此不得单独判定 no-assert（历史假阳性来源：test_nale_alpha_selection.py:34）。
     test_bodies: list[list[ast.stmt]] = []
 
-    def _collect(node: ast.AST, is_test: bool) -> None:
-        if isinstance(node, ast.FunctionDef) and is_test:
-            test_bodies.append(node.body)
+    def _collect(node: ast.AST) -> None:
         for child in ast.iter_child_nodes(node):
-            _collect(child, is_test or (isinstance(node, ast.FunctionDef) and node.name.startswith("test")))
+            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                if child.name.startswith("test"):
+                    test_bodies.append(child.body)
+                # 不递归进函数体：嵌套定义不是用例（其内部断言仍会被外层用例的
+                # ast.walk 统计到，因此不会漏判弱断言）
+            elif isinstance(child, ast.ClassDef):
+                _collect(child)
 
-    for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name.startswith("test"):
-            test_bodies.append(node.body)
+    _collect(tree)
 
     for body in test_bodies:
         assert_count = 0
@@ -267,8 +281,8 @@ def scan_file(path: Path) -> list[dict]:
                     method = None
                     if isinstance(fn, ast.Attribute):
                         method = fn.attr
-                        # 模块级断言前缀（np.testing.assert_array_equal → testing.assert 前缀）
-                        if method in ("assert_array_equal", "assert_array_almost_equal", "assert_allclose", "assert_almost_equal", "assert_raises"):
+                        # 模块级断言前缀（np.testing.assert_array_equal / pd.testing.assert_frame_equal 等）
+                        if method in _MODULE_ASSERT_METHODS:
                             chain = []
                             node = fn
                             while isinstance(node, ast.Attribute):

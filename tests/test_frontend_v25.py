@@ -66,3 +66,22 @@ def test_elderly_friendly_css_exists():
     assert ".market-temp-value" in css
     assert "font-size: 28px" in css  # 温度大字号
     assert ".buy-today-zone-hot" in css  # 买入区间高对比红底
+
+
+def test_portfolio_legend_and_adapter_contract():
+    """验证量化看板图例与 JS 配置完全一致，且包含类目轴与双模数据适配。"""
+    html = _read_project_file("docs/portfolio.html")
+    js = _read_project_file("docs/assets/portfolio.js")
+
+    assert "妖股弹性" in html
+    assert "稳健防守" in html
+    assert "均衡稳健" not in html
+    assert "防御保守" not in html
+
+    assert "robust:     { name: '妖股弹性'" in js
+    assert "defensive:  { name: '稳健防守'" in js
+    assert "function getPortfolioMetrics" in js
+    assert "type: 'category'" in js
+    assert "data: dates" in js
+    assert "evo.champion || evo.weekly_champion" in js
+
