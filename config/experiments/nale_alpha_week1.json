@@ -1,0 +1,97 @@
+{
+  "experiment_id": "nale_alpha_week1",
+  "spec_source": "specs/contest-2026/week1-nale-alpha-handoff.md",
+  "config_status": "engineering_defaults_unfrozen",
+  "empirical_status": "blocked_unverified_historical_data",
+  "run_enabled": false,
+  "source_audit_id": null,
+  "source_kind_required": "observed_point_in_time",
+  "allow_synthetic_market_results": false,
+  "seed": 42,
+  "numeric_precision": "float64",
+  "universe": {
+    "mvp_min_stocks": 30,
+    "mvp_max_stocks": 50,
+    "full_target_stocks": 300,
+    "selection_rule": "freeze_before_return_labels",
+    "neighbor_policy": "retain_required_neighbors_or_disclose_induced_subgraph"
+  },
+  "pca": {
+    "input_dimensions": 768,
+    "components": 10,
+    "standardize_on_initial_train_only": true,
+    "svd_solver": "full",
+    "freeze_initial_basis": true,
+    "reject_centered_rank_below_components": true
+  },
+  "propagation": {
+    "b0_alpha_nale": 0.4,
+    "alpha_min": 0.05,
+    "alpha_max": 0.75,
+    "isolated_node_policy": "self_loop_all_versions",
+    "base_score_and_network_shared": true
+  },
+  "labels": {
+    "signal_cutoff": "after_close",
+    "entry": "next_trading_day_close_research_proxy",
+    "primary_horizon_trading_days": 5,
+    "secondary_horizon_trading_days": 20,
+    "primary_maturity_buffer_trading_days": 6,
+    "secondary_maturity_buffer_trading_days": 21,
+    "target": "equity_holding_return_minus_same_period_benchmark_return",
+    "require_label_available_before_refit": true,
+    "trading_costs_required_for_net_performance": true
+  },
+  "walkforward": {
+    "train_mature_signal_days": 126,
+    "validation_signal_days": 42,
+    "test_signal_days": 42,
+    "fit_schedule": "first_trading_day_of_month_before_open",
+    "fit_data_cutoff": "previous_trading_day_close",
+    "partition_by_signal_date": true,
+    "test_hyperparameters_frozen_after_validation": true
+  },
+  "gate": {
+    "versions": ["B0", "B1", "V1", "V2", "V3", "V4", "V5"],
+    "b1_if_event_history_available": true,
+    "ridge_candidates": [0.001, 0.01, 0.1],
+    "v3_half_life_candidates_trading_days": [20, 60],
+    "candidate_selection_metric": "validation_mean_daily_spearman_rank_ic",
+    "daily_equal_weight_then_time_half_life": true,
+    "calibration": "shared_a_plus_c_times_score_c_nonnegative",
+    "optimizer": "scipy_bounded_nonlinear_gate_zero_initialization",
+    "fallback": "B0_on_unidentifiable_or_failed_fit",
+    "v4_market_state": "benchmark_ma20_div_ma60_minus_one_train_scaled_clip_3",
+    "v5_reliability": "mature_frozen_oos_solo_mse_minus_network_mse_last60_min20_train_scaled_clip_3"
+  },
+  "evaluation": {
+    "minimum_valid_stocks_per_daily_ic": 20,
+    "icir_annualized": false,
+    "paired_bootstrap_iterations": 2000,
+    "paired_bootstrap_block_trading_days_h5": 10,
+    "paired_bootstrap_block_trading_days_h20": 40,
+    "multiple_testing_adjustment": "Holm",
+    "planned_paired_comparisons": ["V1-B0", "V2-V1", "V3-V2", "V4-V3", "V5-V4"],
+    "report_majority_direction_baseline": true,
+    "report_coverage_and_abstentions": true,
+    "withhold_net_sharpe_without_executable_strategy": true
+  },
+  "output": {
+    "processed_root": "data/processed/nale_alpha_week1/<run_id>",
+    "tables_root": "reports/tables/nale_alpha_week1/<run_id>",
+    "figures_root": "reports/figures/nale_alpha_week1/<run_id>",
+    "figure_dpi_min": 200,
+    "required_artifacts": [
+      "data_audit.md",
+      "split_manifest.json",
+      "run_manifest.json",
+      "monthly_weights.csv",
+      "predictions.parquet",
+      "version_comparison.csv",
+      "paired_differences.csv",
+      "requirements_traceability.csv",
+      "literature_difference.md",
+      "validation_report.md"
+    ]
+  }
+}

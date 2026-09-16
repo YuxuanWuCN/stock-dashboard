@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "panel": "data/task_split/csmar_master/csmar_factor_panel_master.csv",
+  "watermark": "declared_from_provenance_not_from_returns",
+  "note": "口径按抓取链路的来源证据声明，绝不由收益序列反推（反推会把全样本信息灌进历史行，构成前视）。复核判据见 src/data/return_basis.py:verify_caliber。",
+  "cohorts": {
+    "student_A": {
+      "close_basis": "unadjusted",
+      "source_table": "CSMAR 中国交易数据库 日频行情（Trd_IndexCnEqDay 风格字段）",
+      "adjustment": "none_price_is_Clsprc_unadjusted",
+      "total_return_available": true,
+      "total_return_column": "ret",
+      "total_return_field": "Dretwd（考虑红利再投资的日收益率）",
+      "provenance": "data/task_split/student_a_delivery/02_脚本/build_csmar_daily_panel_factors.py:167-168 (ret=Dretwd, close=Clsprc)",
+      "corroborating_evidence": "12 行日收益越过板块涨跌停（纯送转除权跳空）；159 行 |Dretwd-close涨幅|>1%；均值差 1.24bp/日=年化 3.13%"
+    },
+    "student_B": {
+      "close_basis": "forward_adjusted",
+      "source_table": "CSMAR TRD_FwardQuotation（复权行情表）",
+      "adjustment": "forward_adjusted_close_price",
+      "total_return_available": false,
+      "total_return_column": null,
+      "total_return_field": null,
+      "provenance": "scripts/fetch_student_b_csmar_data.py:77-81 (table=TRD_FwardQuotation, filename=trd_fward_quotation.csv)；**原始导出已就地核验**：data/raw/pr_sources/pr4-dd94761/trd_fward_quotation.csv（sha256 b818d4cf7301ac42b8d25694132b79e371c6a6152b5cb62eab0e03f26590f05b，69,400 行，Symbol 全为 student_B 的 100 支）与主面板 B 组 close 在 64,400/64,400 行**逐行完全相等（max|Δ|=0.0）**",
+      "corroborating_evidence": "0/64300 行越限（若不复权按 A 组发生率期望约 12.2 行，P(0)≈5e-6）；恒等式中位漂移 6.21%，首/末 1.0623→1.0000；ClosePrice 带 3 位小数（复权重算指纹），A 组 Clsprc 为 1~2 位"
+    },
+    "student_C": {
+      "close_basis": "forward_adjusted",
+      "source_table": "CSMAR TRD_FwardQuotation（复权行情表）",
+      "adjustment": "forward_adjusted_close_price",
+      "total_return_available": false,
+      "total_return_column": null,
+      "total_return_field": null,
+      "provenance": "scripts/fetch_student_c_csmar_data.py:77-81；data/task_split/student_c/csmar/student_c_csmar_factor_panel_filtered_manifest.json:2-5 (trade_calendar_source=CSMAR TRD_FwardQuotation.Filling=0)。注意：**C 组原始导出不在库内**（data/task_split/student_c/sources/ 不存在），其口径仅由表名 + 统计恒等式支撑，证据等级低于 B 组",
+      "corroborating_evidence": "0/64300 行越限；恒等式中位漂移 8.10%，首/末 1.0795→1.0000；高分红样本（如 000001）比值 1.1912→1.0002 与股息率量级一致"
+    }
+  },
+  "open_items": [
+    "B 组口径已从'推断'升级为'原始导出逐行核验'（trd_fward_quotation.csv ↔ 主面板 B close 完全相等）；但 CSMAR 官方字段字典仍不在库内，'FwardQuotation = 前复权'的语义解释仍属表名+恒等式双证，未获文档级确认。",
+    "C 组原始导出缺失（data/task_split/student_c/sources/ 不存在），其前复权判定证据等级低于 B 组；重抓或取得字段字典前须按'未经文档确认'披露。",
+    "前复权基准日未知：日收益率对 uniform 重基不变（MA20/MA60 之类比率型状态变量同样不变），但任何使用 close **绝对水平**的特征（如 price_pos、涨停价推算）仍依赖基准日，须单独核验。",
+    "600317 在 768 维因子表中存在但不在 CSMAR 主面板，逐支调查未完成。",
+    "板块涨跌停规则未建模 ST(±5%) 与北交所(±30%)；纳入前必须扩展 board_price_limit。",
+    "面板缺 357 整行（非 NaN 单元格）：601989 中国重工 264 行（2025-08-12 被 600150 吸并退市）+ 12 支共 93 个停牌日，全部落在 student_A；前瞻标签必须按交易日历计数并对缺行占位，禁止 groupby.shift(-h) 按可用行偏移。"
+  ]
+}

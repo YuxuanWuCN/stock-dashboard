@@ -29,7 +29,12 @@
       "max_size": 20,
       "min_size": 5,
       "base_ratio": 1.0,
-      "regions": {"stock": 0.3, "hk": 0.2, "us": 0.3, "kr": 0.2}
+      "regions": {
+        "stock": 0.3,
+        "hk": 0.2,
+        "us": 0.3,
+        "kr": 0.2
+      }
     },
     "tech": {
       "enabled": true,
@@ -79,5 +84,13 @@
         "decline_threshold": -10.0
       }
     }
+  },
+  "optimal_hyperparameters": {
+    "sentiment_half_life_tau": 3.0,
+    "lookback_window_W": 30,
+    "pc5_weight_omega": 0.3,
+    "calibrated_sharpe": 2.044,
+    "calibrated_max_drawdown": -0.1219,
+    "last_calibrated_at": "2026-09-08T09:35:40.180456"
   }
 }

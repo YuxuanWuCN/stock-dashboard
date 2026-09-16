@@ -1,0 +1,155 @@
+{
+  "title": "立新能源(001258) 封箱历史回归检验",
+  "stock": {
+    "code": "001258",
+    "name": "立新能源"
+  },
+  "analysis_date": "2026-08-14",
+  "pipeline": "kline -> factor_align -> fama_macbeth -> alpha_gate -> leading_indicators -> source_tracker",
+  "kline": {
+    "rows": 266,
+    "start": "2025-07-14",
+    "end": "2026-08-14",
+    "last_close": 13.75
+  },
+  "factor": {
+    "factor_rows": 1250,
+    "aligned_rows": 211,
+    "dropped_kline_dates": [
+      "2026-05-29",
+      "2026-06-01",
+      "2026-06-02",
+      "2026-06-03",
+      "2026-06-04",
+      "2026-06-05",
+      "2026-06-08",
+      "2026-06-09",
+      "2026-06-10",
+      "2026-06-11",
+      "2026-06-12",
+      "2026-06-15",
+      "2026-06-16",
+      "2026-06-17",
+      "2026-06-18",
+      "2026-06-22",
+      "2026-06-23",
+      "2026-06-24",
+      "2026-06-25",
+      "2026-06-26",
+      "2026-06-29",
+      "2026-06-30",
+      "2026-07-01",
+      "2026-07-02",
+      "2026-07-03",
+      "2026-07-06",
+      "2026-07-07",
+      "2026-07-08",
+      "2026-07-09",
+      "2026-07-10",
+      "2026-07-13",
+      "2026-07-14",
+      "2026-07-15",
+      "2026-07-16",
+      "2026-07-17",
+      "2026-07-20",
+      "2026-07-21",
+      "2026-07-22",
+      "2026-07-23",
+      "2026-07-24",
+      "2026-07-27",
+      "2026-07-28",
+      "2026-07-29",
+      "2026-07-30",
+      "2026-07-31",
+      "2026-08-03",
+      "2026-08-04",
+      "2026-08-05",
+      "2026-08-06",
+      "2026-08-07",
+      "2026-08-10",
+      "2026-08-11",
+      "2026-08-12",
+      "2026-08-13",
+      "2026-08-14"
+    ],
+    "quality": {
+      "gap_rate": 0.0
+    }
+  },
+  "regression": {
+    "status": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "vif": null,
+    "n_obs": 211,
+    "window": [
+      "2025-07-14",
+      "2026-05-28"
+    ],
+    "reason": "有效观测 211 < 250（最小有效窗口）"
+  },
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-05-28"
+  },
+  "leading_indicator": {
+    "category": "new_energy",
+    "industry_name": "新能源/光伏/锂电",
+    "momentum_metrics": {
+      "slope_pct": 51.1,
+      "momentum": "accelerating",
+      "inflection_flag": "none",
+      "latest_value": 13.75,
+      "confidence": "high"
+    }
+  },
+  "source_tracker": {
+    "stock_code": "001258",
+    "stock_name": "立新能源",
+    "process_node": "待人工或LLM校验",
+    "bottleneck_nature": "downstream_assembly",
+    "leading_signals": [
+      {
+        "type": "FACT",
+        "source": "先行高频指标监控",
+        "content": "上游多晶硅/碳酸锂现货价格、装机开工率、组件出口，近30天斜率 51.1%"
+      }
+    ],
+    "opinion_and_guidance": [],
+    "inference_conclusion": {
+      "stage": "Pilot",
+      "inflection_verdict": "accelerating",
+      "summary": "【降级模式】基于宏观高频指标监控生成，建议结合一手招标与原厂涨价通知复核。"
+    },
+    "leading_macro_metrics": {
+      "category": "new_energy",
+      "industry_name": "新能源/光伏/锂电",
+      "description": "上游多晶硅/碳酸锂现货价格、装机开工率、组件出口",
+      "proxy_type": "commodity_spot_price",
+      "keywords": [
+        "碳酸锂",
+        "多晶硅",
+        "装机量",
+        "并网",
+        "电价补贴"
+      ],
+      "momentum_metrics": {
+        "slope_pct": 51.1,
+        "momentum": "accelerating",
+        "inflection_flag": "none",
+        "latest_value": 13.75,
+        "confidence": "high"
+      },
+      "updated_at": "2026-08-17 10:40:29"
+    },
+    "fallback": true,
+    "fallback_reason": "LLMClient.complete() got an unexpected keyword argument 'prompt'"
+  }
+}

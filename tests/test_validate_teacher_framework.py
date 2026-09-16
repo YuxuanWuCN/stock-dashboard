@@ -95,9 +95,9 @@ def test_three_actions_windows():
         assert r["ret_a_pct"] == 0.0
         # 持有组最大回撤最大：对照组（不动）扛了连续跌停
         assert r["mdd_c_pct"] <= r["mdd_b_pct"]
-    # 20 日窗口：减仓组收益优于持有不动组，显著防御下行风险
+    # 20 日窗口（未走满 20 天时截断至截止日）：冲高反弹，持有组收益高于减仓组
     r20 = ar["windows"][20]
-    assert r20["ret_b_pct"] >= r20["ret_c_pct"]
+    assert 0 < r20["ret_b_pct"] < r20["ret_c_pct"]
     assert r20["mdd_c_pct"] <= r20["mdd_b_pct"]
 
 
@@ -132,6 +132,43 @@ def test_pullback_stats():
     # 08-11 后窗口未走完的簇不算回调（进行中，未验证）
     aug = [e for e in stats["events"] if e["date"].startswith("2026-08")]
     assert all(not e["pullback_occurred"] for e in aug)
+
+
+# ------------------------------------------------------------
+# Story 3.5: 数据截止日夹断（防未来数据泄漏 / 防口径漂移）
+# ------------------------------------------------------------
+
+def test_stats_are_clamped_to_last_date_even_if_file_grows():
+    """行情文件每日追加新K线时，统计口径必须固定在 LAST_DATE，不得随之漂移。
+
+    实测背景：`docs/data/kline/001258.json` 已由 252 根（2026-08-13）长到 268 根（2026-09-04）。
+    未夹断时涨停聚簇 6 → 7、触发后 20 日收益 +17.28% → −3.46%；夹断后两者都回到文档化数值。
+    """
+    df = vtf.load_kline(KLINE)
+    dates = df["date"].dt.strftime("%Y-%m-%d")
+    assert (dates > vtf.LAST_DATE).any(), "夹具前提：文件已含截止日之后的行情"
+    clamped = vtf.clamp_to_last_date(df)
+
+    assert clamped["date"].max().strftime("%Y-%m-%d") == vtf.LAST_DATE
+    assert len(clamped) < len(df)
+    # 统计函数的输出必须与"只看夹断后数据"完全一致
+    assert len(vtf.list_limit_up_events(df)) == len(vtf.list_limit_up_events(clamped))
+    trigger = vtf.scan_double_triggers(df)[0]
+    assert vtf.run_three_actions(df, trigger)["windows"][20]["ret_c_pct"] == pytest.approx(
+        vtf.run_three_actions(clamped, trigger)["windows"][20]["ret_c_pct"], abs=1e-12
+    )
+    assert vtf.report_lookahead_drift(df) > 0
+
+
+def test_clamp_rejects_data_without_the_declared_cutoff():
+    """反向守卫：数据未覆盖 LAST_DATE 时必须报错，而不是悄悄用漂移数据出统计。"""
+    df = vtf.load_kline(KLINE)
+    truncated = df[df["date"].dt.strftime("%Y-%m-%d") < vtf.LAST_DATE].reset_index(drop=True)
+
+    with pytest.raises(ValueError, match="数据截止日"):
+        vtf.clamp_to_last_date(truncated)
+    with pytest.raises(ValueError, match="为空"):
+        vtf.clamp_to_last_date(df.iloc[0:0])
 
 
 # ------------------------------------------------------------
