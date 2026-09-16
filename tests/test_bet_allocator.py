@@ -66,3 +66,58 @@ def test_dynamic_bet_allocator_staged_sizing():
     )
     assert order_liquidate.target_weight_pct == 0.0
     assert order_liquidate.action_directive == "LIQUIDATE_ALL"
+
+
+def test_dynamic_bet_allocator_macro_regime_elasticity():
+    """测试宏观产业体制驱动的仓位上限解锁与收紧。"""
+    from src.execution.portfolio_allocator import MacroRegime
+
+    allocator = DynamicBetAllocator(total_portfolio_capital=1_000_000.0)
+
+    open_gate = TrendGateDecision(
+        ticker="688525",
+        gate_open=True,
+        ma20_val=50.0,
+        current_price=55.0,
+        macd_hist=0.8,
+        is_c_wave_downtrend=False,
+        recommended_action="PERMIT_LONG",
+        reason="Super Bull Momentum"
+    )
+
+    # 1. 常规体制 (Normal): 上限为 30%
+    order_normal = allocator.allocate_position(
+        ticker="688525",
+        gfca_composite_score=0.95,
+        trend_gate_decision=open_gate,
+        bet_type=BetType.SUPER_BETA,
+        macro_regime=MacroRegime.NORMAL
+    )
+    assert order_normal.target_weight_pct <= 0.30
+    assert order_normal.macro_regime == MacroRegime.NORMAL
+
+    # 2. 超级主升爆发期 (Super Boom): 仓位上限突破 30%，解锁至 40% 以上
+    order_boom = allocator.allocate_position(
+        ticker="688525",
+        gfca_composite_score=0.95,
+        trend_gate_decision=open_gate,
+        bet_type=BetType.SUPER_BETA,
+        macro_regime=MacroRegime.SUPER_BOOM
+    )
+    assert order_boom.target_weight_pct > 0.30
+    assert order_boom.target_weight_pct <= 0.45
+    assert order_boom.macro_regime == MacroRegime.SUPER_BOOM
+    assert "Super Boom" in order_boom.rationale
+
+    # 3. 衰退去库存期 (Recession): 仓位主动收紧，上限 <= 15%
+    order_recession = allocator.allocate_position(
+        ticker="688525",
+        gfca_composite_score=0.95,
+        trend_gate_decision=open_gate,
+        bet_type=BetType.SUPER_BETA,
+        macro_regime=MacroRegime.RECESSION
+    )
+    assert order_recession.target_weight_pct <= 0.15
+    assert order_recession.target_weight_pct < order_normal.target_weight_pct
+    assert order_recession.macro_regime == MacroRegime.RECESSION
+

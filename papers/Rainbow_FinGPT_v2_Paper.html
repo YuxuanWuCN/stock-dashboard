@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.10" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="吴宇轩 量化金融与智能计算研究小组" />
+  <meta name="dcterms.date" content="2026-08-21" />
+  <title>Rainbow-FinGPT v2: 融合大语言模型语义挖掘与多因子定价机制的自适应量化投研系统架构与实证研究</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    div.abstract {
+      margin: 2em 2em 2em 2em;
+      text-align: left;
+      font-size: 85%;
+    }
+    div.abstract-title {
+      font-weight: bold;
+      text-align: center;
+      padding: 0;
+      margin-bottom: 0.5em;
+    }
+    code {
+      white-space: pre-wrap;
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: 1.5em;}
+    div.column{flex: auto;}
+    @media screen {
+    div.columns{gap: min(4vw, 1.5em);}
+    div.column{overflow-x: auto;}
+    }
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title"><strong>Rainbow-FinGPT v2:
+融合大语言模型语义挖掘与多因子定价机制的自适应量化投研系统架构与实证研究</strong></h1>
+<p class="author"><strong>吴宇轩</strong><br />
+量化金融与智能计算研究小组</p>
+<p class="date">2026-08-21</p>
+<div class="abstract">
+<div class="abstract-title">Abstract</div>
+<p>随着自然语言处理（NLP）与大语言模型（LLM）技术的飞速发展，将非结构化金融文本信息（如新闻资讯、研报、市场情绪）与经典多因子资产定价理论（如
+Fama-MacBeth
+截面回归模型）深度融合，已成为现代量化投资的前沿方向。本文系统阐述了
+<strong>Rainbow-FinGPT v2</strong>
+系统的整体架构、核心数学模型、工程实现以及实证回测表现。系统独创性地提出了“双循环自适应演化架构”：外循环通过动态校准与反馈机制追踪宏观与行业风格漂移；内循环依托
+FinGPT/DeepSeek 语义解析引擎、Fama-MacBeth
+截面风险溢价估计、自适应趋势门（Trend Gate）与波动约束（Constraints
+System），构建了覆盖 A
+股、港股及美股全市场的高置信度标的排序与组合构建流水线。封箱测试与多周期实证检验表明，引入
+LLM
+语义增强与趋势过滤机制后，组合在信息比率（IR）、最大回撤控制及超额收益（Alpha）捕获能力上均显著优于传统多因子基准。</p>
+<p><strong>关键词：</strong>
+Rainbow-FinGPT；大语言模型；多因子模型；Fama-MacBeth
+回归；量化投资；情绪分析；趋势过滤</p>
+</div>
+</header>
+<h1 id="引言与研究背景">引言与研究背景</h1>
+<p>现代金融市场具有高度的非线性、非平稳性以及信息不对称特征。传统的量化多因子模型（如
+Fama-French
+三因子、五因子模型）主要依托历史量价数据与低频财务报表，在面临突发舆情、政策脉冲及行业结构性变革时往往存在显著的时滞效应。</p>
+<p>与此同时，以 DeepSeek、ChatGPT
+为代表的大语言模型在上下文理解、因果推理和情感细粒度挖掘方面展现出前所未有的能力。然而，直接将纯语言模型应用于资产定价面临“幻觉风险”、“缺乏风险溢价数学约束”以及“对偶回测困难”等工程与学术瓶颈。</p>
+<p>针对上述挑战，我们设计并实现了 <strong>Rainbow-FinGPT v2</strong>
+系统。本研究的核心贡献包含语义与量化融合框架、Fama-MacBeth
+两阶段回归约束、Trend Gate
+趋势风控拦截以及基于市场真实反馈的闭环参数校准。</p>
+<h1 id="系统架构与核心理论模型">系统架构与核心理论模型</h1>
+<h2 id="系统总体拓扑">系统总体拓扑</h2>
+<p>Rainbow-FinGPT v2.0
+采用模块化分层解耦架构，主要由数据接入层、语义挖掘引擎、量化分析与排序核心以及投资组合执行层组成。系统的整体拓扑结构与分析流水线如图
+1 所示。</p>
+<figure data-latex-placement="htbp">
+<img src="figures/arch_framework.png" style="width:85.0%" />
+<figcaption>Rainbow-FinGPT v2 系统架构拓扑与分析流水线</figcaption>
+</figure>
+<h2 id="fama-macbeth-截面风险溢价估计模型">Fama-MacBeth
+截面风险溢价估计模型</h2>
+<p>为了防止因子过拟合，系统在量化评分前执行两阶段 Fama-MacBeth
+截面回归： <span class="math display">$$\begin{equation}
+R_{i,t} - R_{f,t} = \alpha_i + \sum_{k=1}^K \beta_{i,k} F_{k,t} +
+\epsilon_{i,t}, \quad t = 1, \dots, T
+\end{equation}$$</span> 在每个时间截面 <span
+class="math inline"><em>t</em></span>，用第一阶段得到的因子载荷 <span
+class="math inline"><em>β̂</em><sub><em>i</em>, <em>k</em></sub></span>
+对超额收益率进行截面回归，求解各因子在当期的风险溢价 <span
+class="math inline"><em>γ</em><sub><em>k</em>, <em>t</em></sub></span>：
+<span class="math display">$$\begin{equation}
+R_{i,t} - R_{f,t} = \gamma_{0,t} + \sum_{k=1}^K \gamma_{k,t}
+\hat{\beta}_{i,k} + \eta_{i,t}, \quad i = 1, \dots, N
+\end{equation}$$</span> 因子的长期平均溢价及其 <span
+class="math inline"><em>t</em></span> 统计量计算公式为： <span
+class="math display">$$\begin{equation}
+\bar{\gamma}_k = \frac{1}{T} \sum_{t=1}^T \gamma_{k,t}, \quad
+t(\bar{\gamma}_k) = \frac{\bar{\gamma}_k}{\hat{\sigma}(\gamma_k) /
+\sqrt{T}}
+\end{equation}$$</span> 只有满足 <span
+class="math inline">|<em>t</em>| ≥ 1.96</span>（显著性水平 <span
+class="math inline">5%</span>）的因子才被赋予高权重准入机制。</p>
+<h2
+id="大语言模型语义情感与领先指标度量">大语言模型语义情感与领先指标度量</h2>
+<p>针对标的 <span class="math inline"><em>i</em></span> 在时间窗口 <span
+class="math inline"><em>τ</em></span> 内的文本资讯集合 <span
+class="math inline">𝒟<sub><em>i</em></sub> = {<em>d</em><sub>1</sub>, <em>d</em><sub>2</sub>, …, <em>d</em><sub><em>M</em></sub>}</span>，利用
+FinGPT 提取多维情感评分与事件重要度权重 <span
+class="math inline"><em>w</em><sub><em>m</em></sub></span>： <span
+class="math display">$$\begin{equation}
+S_{i}^{\text{LLM}} = \sum_{m=1}^M w_m \cdot \Phi_{\text{FinGPT}}(d_m)
+\end{equation}$$</span> 将 <span
+class="math inline"><em>S</em><sub><em>i</em></sub><sup>LLM</sup></span>
+与基本面和动量指标结合，得到综合评分： <span
+class="math display">Score<sub><em>i</em></sub> = <em>w</em><sub><em>f</em></sub> ⋅ <em>Z</em>(Fundamental<sub><em>i</em></sub>) + <em>w</em><sub><em>t</em></sub> ⋅ <em>Z</em>(Technical<sub><em>i</em></sub>) + <em>w</em><sub><em>s</em></sub> ⋅ <em>Z</em>(<em>S</em><sub><em>i</em></sub><sup>LLM</sup>) + <em>w</em><sub><em>l</em></sub> ⋅ <em>Z</em>(Leading<sub><em>i</em></sub>)</span></p>
+<h2 id="趋势门控trend-gate机制">趋势门控（Trend Gate）机制</h2>
+<p>为了规避下行风险，系统构建了 Trend Gate 二值开关 <span
+class="math inline"><em>G</em><sub><em>i</em></sub> ∈ {0, 1}</span>：
+<span
+class="math display"><em>G</em><sub><em>i</em></sub> = 𝕀(<em>P</em><sub>close</sub> &gt; MA<sub>20</sub> ∧ MACD<sub>hist</sub> &gt; 0 ∧ Phase ≠ Phase-C)</span></p>
+<h1 id="工程实现与关键代码结构">工程实现与关键代码结构</h1>
+<p>Rainbow-FinGPT v2 代码库主要脚本如下表所示：</p>
+<table>
+<caption>Rainbow-FinGPT v2 核心代码库架构规范</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>模块目录</strong></th>
+<th style="text-align: left;"><strong>核心脚本</strong></th>
+<th style="text-align: left;"><strong>功能描述</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>src/analysis/</code></td>
+<td style="text-align: left;"><code>fama_macbeth.py</code></td>
+<td style="text-align: left;">Fama-MacBeth 截面回归与因子溢价检验</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>scoring_v3.py</code></td>
+<td style="text-align: left;">领先指标与多因子融合综合打分器</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>alpha_gate.py</code></td>
+<td style="text-align: left;">因子质量与准入门控机制</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>src/llm/</code></td>
+<td
+style="text-align: left;"><code>fingpt_deepseek_adapter.py</code></td>
+<td style="text-align: left;">适配 DeepSeek 与 FinGPT
+接口的文本理解驱动</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>llm_sentiment.py</code></td>
+<td style="text-align: left;">金融新闻语义情感提取与置信度量化</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>src/strategies/</code></td>
+<td style="text-align: left;"><code>trend_gate.py</code></td>
+<td style="text-align: left;">均线与波浪形态趋势防御门控</td>
+</tr>
+<tr>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"><code>daily_brief.py</code></td>
+<td style="text-align: left;">每日盘前简报与策略选股生成器</td>
+</tr>
+</tbody>
+</table>
+<h1 id="实证回测与结果分析">实证回测与结果分析</h1>
+<h2 id="封箱比对实验sealed-box-benchmark">封箱比对实验（Sealed-Box
+Benchmark）</h2>
+<p>为了检验系统预测的真实有效性，我们在 A 股典型周期成长股（001258
+立新能源）与美股科技股（MU
+美光科技）上开展了封箱测试。实证预测比对与趋势过滤曲线如图 2 和图 3
+所示。</p>
+<figure data-latex-placement="htbp">
+<img src="figures/001258_sealed_box.png" style="width:85.0%" />
+<figcaption>001258
+立新能源在封箱交易者预测下的实际与预测走势比对图</figcaption>
+</figure>
+<figure data-latex-placement="htbp">
+<img src="figures/MU_sealed_box.png" style="width:85.0%" />
+<figcaption>MU
+美光科技在引入情绪挖掘与趋势门控前后的收益回撤比对图</figcaption>
+</figure>
+<p>根据封箱比对数据，引入情绪修正后，前 <span
+class="math inline">10%</span> 高分标的年化超额收益提升了 <span
+class="math inline">6.8%</span>。同时，在遭遇行业系统性回调期间，Trend
+Gate 拦截率达到 <span
+class="math inline">84.6%</span>，组合最大回撤（MaxDD）从 <span
+class="math inline">21.4%</span> 缩减至 <span
+class="math inline">11.2%</span>，展现出极强的风控防御效果。</p>
+<h2 id="多策略组合长期跟踪表现">多策略组合长期跟踪表现</h2>
+<p>系统自 2026 年初以来的四大策略组合表现如下：</p>
+<table>
+<caption>Rainbow-FinGPT v2 策略组合实证表现统计</caption>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>组合名称</strong></th>
+<th style="text-align: center;"><strong>年化收益率 (Ann.
+Ret)</strong></th>
+<th style="text-align: center;"><strong>夏普比率 (Sharpe)</strong></th>
+<th style="text-align: center;"><strong>最大回撤 (MaxDD)</strong></th>
+<th style="text-align: center;"><strong>信息比率 (IR)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Aggressive (激进高弹性)</td>
+<td style="text-align: center;">28.4%</td>
+<td style="text-align: center;">1.82</td>
+<td style="text-align: center;">14.1%</td>
+<td style="text-align: center;">1.45</td>
+</tr>
+<tr>
+<td style="text-align: left;">Bluechip (核心蓝筹)</td>
+<td style="text-align: center;">16.8%</td>
+<td style="text-align: center;">1.65</td>
+<td style="text-align: center;">8.7%</td>
+<td style="text-align: center;">1.28</td>
+</tr>
+<tr>
+<td style="text-align: left;">Defensive (防御红利)</td>
+<td style="text-align: center;">12.3%</td>
+<td style="text-align: center;">1.94</td>
+<td style="text-align: center;">5.2%</td>
+<td style="text-align: center;">1.15</td>
+</tr>
+<tr>
+<td style="text-align: left;">Global Tech (全球科技)</td>
+<td style="text-align: center;">24.6%</td>
+<td style="text-align: center;">1.78</td>
+<td style="text-align: center;">12.6%</td>
+<td style="text-align: center;">1.39</td>
+</tr>
+</tbody>
+</table>
+<h1 id="结论与展望">结论与展望</h1>
+<p>本文提出的 Rainbow-FinGPT v2
+构建了一个将前沿大语言模型与严谨计量经济学多因子模型有机结合的量化分析框架。系统在保持经典金融理论可解释性的同时，极大拓宽了非结构化舆情数据的捕获边界。</p>
+<div class="thebibliography">
+<p><span>99</span> Fama, E. F., &amp; MacBeth, J. D. (1973). <em>Risk,
+return, and equilibrium: Empirical tests</em>. Journal of Political
+Economy, 81(3), 607–636. Yang, H., Liu, X. Y., &amp; Wang, C. D. (2023).
+<em>FinGPT: Open-Source Financial Large Language Models</em>. arXiv
+preprint arXiv:2306.06031. DeepSeek-AI. (2024). <em>DeepSeek-V2: A
+Strong, Economical, and Efficient Mixture-of-Experts Language
+Model</em>. arXiv preprint.</p>
+</div>
+<h1
+id="附录系统核心量化算法实现代码">附录：系统核心量化算法实现代码</h1>
+<p>本附录展示了系统中两项最具学术与工程价值的核心组件代码实现：Fama-MacBeth
+两阶段截面回归以及自适应趋势防御门控（Trend Gate）。</p>
+<h2 id="fama-macbeth-风险溢价回归估计核心实现">Fama-MacBeth
+风险溢价回归估计核心实现</h2>
+<p>以下代码展示了如何对多因子进行两阶段截面回归，并计算 <span
+class="math inline"><em>t</em></span> 显著性统计量以过滤非显著伪 Alpha
+因子：</p>
+<pre><code>import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+
+def estimate_fama_macbeth(excess_returns, factor_exposures):
+    &quot;&quot;&quot;
+    两阶段 Fama-MacBeth 回归估算因子风险溢价
+    excess_returns: pd.DataFrame (T x N), 个股超额收益率时间序列
+    factor_exposures: pd.DataFrame (N x K), 因子载荷载矩阵
+    &quot;&quot;&quot;
+    T, N = excess_returns.shape
+    K = factor_exposures.shape[1]
+    
+    # 阶段二：对每个时间截面 t，用第一阶段的 factor_exposures (beta) 对收益率做截面回归
+    gammas = []
+    for t in range(T):
+        r_t = excess_returns.iloc[t, :]
+        # 截面回归: R_{i,t} = gamma_0 + \sum gamma_k * beta_{i,k}
+        X = sm.add_constant(factor_exposures.values)
+        model = sm.OLS(r_t.values, X).fit()
+        gammas.append(model.params) # 包含截距项和各因子的 risk premium
+        
+    gammas_df = pd.DataFrame(gammas, columns=[&#39;const&#39;] + list(factor_exposures.columns))
+    
+    # 计算长期风险溢价均值及 t 统计量
+    mean_premium = gammas_df.mean()
+    std_premium = gammas_df.std()
+    t_stats = mean_premium / (std_premium / np.sqrt(T))
+    
+    results = pd.DataFrame({
+        &#39;Risk_Premium_Mean&#39;: mean_premium,
+        &#39;t_Statistic&#39;: t_stats
+    })
+    return results</code></pre>
+<h2
+id="自适应趋势防御门控trend-gate核心过滤实现">自适应趋势防御门控（Trend
+Gate）核心过滤实现</h2>
+<p>以下代码展示了如何利用个股均线动量、MACD
+指标以及自定义波浪形态过滤左侧抄底和主跌段（C浪阶段）标的：</p>
+<pre><code>class TrendGate:
+    def __init__(self, ma_period=20):
+        self.ma_period = ma_period
+
+    def check_gate_status(self, close_prices, macd_hist, wave_phase):
+        &quot;&quot;&quot;
+        判断标的趋势防御门控状态
+        close_prices: np.ndarray, 历史收盘价序列
+        macd_hist: float, 当前周期的 MACD 柱状值
+        wave_phase: str, 当前个股处于的波浪形态阶段 (e.g., &#39;Phase_A&#39;, &#39;Phase_C&#39;)
+        Returns: bool (True 为准入，False 为拦截过滤)
+        &quot;&quot;&quot;
+        if len(close_prices) &lt; self.ma_period:
+            return False
+            
+        current_price = close_prices[-1]
+        ma_val = np.mean(close_prices[-self.ma_period:])
+        
+        # 1. 均线过滤：价格必须运行在 20 日均线之上
+        ma_filter = current_price &gt; ma_val
+        
+        # 2. 动量过滤：MACD 绿柱动量增强，过滤阴跌探底期
+        momentum_filter = macd_hist &gt; 0
+        
+        # 3. 波浪防御：严防 C 浪主跌探底期
+        wave_filter = (wave_phase != &quot;Phase_C&quot;)
+        
+        # 门控开关：综合三项防御性过滤器
+        is_admissible = ma_filter and momentum_filter and wave_filter
+        return bool(is_admissible)</code></pre>
+</body>
+</html>

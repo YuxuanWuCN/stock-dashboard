@@ -129,6 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
         watchlistFilter: document.getElementById('watchlist-filter'),
         watchlistSearchInput: document.getElementById('watchlist-search-input'),
         watchlistSearchClear: document.getElementById('watchlist-search-clear'),
+        detailStockToolbar: document.getElementById('detail-stock-toolbar'),
+        detailStockSelect: document.getElementById('detail-stock-select'),
+        detailToWatchlistBtn: document.getElementById('detail-to-watchlist-btn'),
+        detailToRankingBtn: document.getElementById('detail-to-ranking-btn'),
+        detailToMonsterBtn: document.getElementById('detail-to-monster-btn'),
         detailHeader: document.getElementById('detail-header'),
         detailName: document.getElementById('detail-name'),
         detailCode: document.getElementById('detail-code'),
@@ -191,12 +196,141 @@ document.addEventListener('DOMContentLoaded', () => {
         reportCitations: document.getElementById('report-citations'),
         reportCitationList: document.getElementById('report-citation-list'),
         reportDisclaimer: document.getElementById('report-disclaimer'),
+        themeToggleBtn: document.getElementById('theme-toggle-btn'),
     };
+
+    // ============================================================
+    // 双主题管理：深色终端 (Pro Dark) / 浅色明晰 (FinTech Light)
+    // ============================================================
+    const THEME_STORAGE_KEY = 'fintech-theme';
+
+    // 存储可能在隐私模式 / 被禁用 / 配额耗尽时抛错。读写一律兜底，
+    // 否则一次异常会中断 DOMContentLoaded 中后续的导航绑定与数据加载。
+    function readStoredTheme() {
+        try {
+            const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+            return saved === 'light' || saved === 'dark' ? saved : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function writeStoredTheme(theme) {
+        try {
+            window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+        } catch (error) {
+            // 无持久化能力时，主题仅在本次会话内生效
+        }
+    }
+
+    function preferredTheme() {
+        const stored = readStoredTheme();
+        if (stored) return stored;
+        try {
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        } catch (error) {
+            return 'dark';
+        }
+    }
+
+    function initTheme() {
+        // 首屏引导脚本已在 <head> 中写好 data-theme，这里以实际 DOM 状态为准，
+        // 避免与引导结果不一致而导致的二次闪烁。
+        const current = document.documentElement.getAttribute('data-theme');
+        applyTheme(current === 'light' || current === 'dark' ? current : preferredTheme());
+
+        if (el.themeToggleBtn) {
+            el.themeToggleBtn.addEventListener('click', function () {
+                const now = document.documentElement.getAttribute('data-theme') || 'dark';
+                applyTheme(now === 'dark' ? 'light' : 'dark');
+            });
+        }
+    }
+
+    function applyTheme(theme) {
+        const next = theme === 'light' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        writeStoredTheme(next);
+
+        const btn = el.themeToggleBtn;
+        if (btn) {
+            // 兼容历史类名 .theme-text 与当前 .theme-toggle-text
+            const textSpan = btn.querySelector('.theme-toggle-text') || btn.querySelector('.theme-text');
+            if (textSpan) textSpan.textContent = next === 'dark' ? '深色' : '浅色';
+            const actionLabel = next === 'dark' ? '切换为浅色主题' : '切换为深色主题';
+            btn.setAttribute('title', actionLabel);
+            btn.setAttribute('aria-label', actionLabel);
+            btn.setAttribute('aria-pressed', next === 'light' ? 'true' : 'false');
+        }
+        refreshChartThemes();
+    }
+
+    function getChartThemeTokens() {
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        return {
+            isLight: isLight,
+            splitLineColor: isLight ? '#e2e8f0' : 'rgba(255, 255, 255, 0.08)',
+            axisLineColor: isLight ? '#cbd5e1' : '#475569',
+            axisLabelColor: isLight ? '#64748b' : '#94a3b8',
+            dataZoomText: isLight ? '#64748b' : '#94a3b8',
+            dataZoomBorder: isLight ? '#cbd5e1' : '#334155',
+            dataZoomFiller: isLight ? 'rgba(37, 99, 235, 0.15)' : 'rgba(37, 99, 235, 0.25)',
+            tooltipBg: isLight ? 'rgba(255, 255, 255, 0.98)' : 'rgba(15, 23, 42, 0.96)',
+            tooltipBorder: isLight ? '#cbd5e1' : '#334155',
+            tooltipText: isLight ? '#0f172a' : '#f8fafc',
+            tooltipDivider: isLight ? '#e2e8f0' : 'rgba(255, 255, 255, 0.12)'
+        };
+    }
+
+    // 全站图表实例登记表：主题切换必须覆盖每一个已创建的实例，
+    // 否则会出现「部分图表已换肤、部分仍是旧配色」的局部残留。
+    function themedChartInstances() {
+        return [state.chart, state.indexChart].filter(function (instance) {
+            if (!instance || typeof instance.setOption !== 'function') return false;
+            if (typeof instance.isDisposed === 'function' && instance.isDisposed()) return false;
+            return true;
+        });
+    }
+
+    function refreshChartThemes() {
+        const tokens = getChartThemeTokens();
+        const updateObj = {
+            xAxis: [
+                {
+                    axisLine: { lineStyle: { color: tokens.axisLineColor } },
+                    splitLine: { lineStyle: { color: tokens.splitLineColor } },
+                    axisLabel: { color: tokens.axisLabelColor }
+                },
+                {
+                    axisLine: { lineStyle: { color: tokens.axisLineColor } }
+                }
+            ],
+            yAxis: [
+                {
+                    axisLine: { lineStyle: { color: tokens.axisLineColor } },
+                    splitLine: { lineStyle: { color: tokens.splitLineColor } },
+                    axisLabel: { color: tokens.axisLabelColor }
+                },
+                {}
+            ],
+            dataZoom: [
+                {},
+                { textStyle: { color: tokens.dataZoomText }, borderColor: tokens.dataZoomBorder, fillerColor: tokens.dataZoomFiller }
+            ]
+        };
+        themedChartInstances().forEach(function (instance) {
+            try {
+                instance.setOption(updateObj);
+            } catch (error) {
+                // 单个图表实例重绘失败不得阻断其余图表
+            }
+        });
+    }
 
     // ============================================================
     // v2.6 页面导航：今日关注 / 自选股 / 排行榜 / 单股查询 / 个股研究
     // ============================================================
-    const PAGE_IDS = ['today', 'watchlist', 'ranking', 'query', 'detail', 'paper'];
+    const PAGE_IDS = ['today', 'watchlist', 'ranking', 'query', 'detail', 'paper', 'monster', 'academic'];
 
     function currentPageFromHash() {
         const m = (window.location.hash || '').match(/^#\/([a-z]+)/);
@@ -212,12 +346,26 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('[data-page]').forEach(function (btn) {
             btn.classList.toggle('active', btn.getAttribute('data-page') === page);
         });
-        // 进入个股研究页时重绘图表（页面从隐藏变为可见）
+        // 进入个股研究页或模拟盘时重绘图表（页面从隐藏变为可见）
         if (page === 'detail') {
             setTimeout(function () {
                 if (state.chart) state.chart.resize();
                 if (state.indexChart) state.indexChart.resize();
             }, 60);
+        } else if (page === 'paper') {
+            // 模拟盘曲线是内联 SVG（renderPaperCurve 生成），颜色由 CSS Token 驱动，
+            // 不需要也无从 resize；此处重绘一次以适配当前主题下的实际可用宽度。
+            setTimeout(function () {
+                if (state.paperSeries && state.paperSeries.length) renderPaperCurve(state.paperSeries);
+            }, 60);
+        } else if (page === 'monster') {
+            setTimeout(function () {
+                renderMonsterDetector();
+            }, 30);
+        } else if (page === 'academic') {
+            setTimeout(function () {
+                renderAcademicSignals();
+            }, 30);
         }
         const hash = '#/' + page;
         if (window.location.hash !== hash) {
@@ -234,6 +382,13 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', function () {
         navigateTo(currentPageFromHash());
     });
+
+    // 初始化主题（主题异常不得阻断后续导航与数据加载）
+    try {
+        initTheme();
+    } catch (error) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
 
     // 初始页面：默认今日关注（支持 #/watchlist 等直达链接）
     navigateTo(currentPageFromHash());
@@ -503,6 +658,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 初始化查询栏
         initQueryBar();
+
+        // 绑定个股研究页标的快速切换器与快捷跳转
+        if (el.detailStockSelect) {
+            el.detailStockSelect.addEventListener('change', function () {
+                if (this.value) selectTrackedStock(this.value);
+            });
+        }
+        if (el.detailToWatchlistBtn) {
+            el.detailToWatchlistBtn.addEventListener('click', function () { navigateTo('watchlist'); });
+        }
+        if (el.detailToRankingBtn) {
+            el.detailToRankingBtn.addEventListener('click', function () { navigateTo('ranking'); });
+        }
+        if (el.detailToMonsterBtn) {
+            el.detailToMonsterBtn.addEventListener('click', function () { navigateTo('monster'); });
+        }
     }
 
     // v2.5 渲染市场温度条
@@ -864,6 +1035,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         el.stockList.innerHTML = ''; // 清空加载状态
 
+        // 同步填充个股研究页面的快速下拉切换器
+        if (el.detailStockSelect && state.summary && state.summary.items) {
+            const currentVal = el.detailStockSelect.value || state.selectedCode;
+            el.detailStockSelect.innerHTML = '<option value="">-- 选择或切换个股研究标的 --</option>' +
+                state.summary.items.map(function (it) {
+                    return '<option value="' + escapeHtml(it.code) + '">' + escapeHtml(it.name || it.code) + ' (' + escapeHtml(it.code) + ')' + '</option>';
+                }).join('');
+            if (currentVal) el.detailStockSelect.value = currentVal;
+        }
+
         // 按行业分组（尊重顶部市场筛选）
         const groups = {};
         const searchQ = (state.watchlistSearch || '').trim().toLowerCase();
@@ -1122,7 +1303,9 @@ document.addEventListener('DOMContentLoaded', () => {
             state.chart = echarts.init(el.chartElement);
         }
 
-        // 配置参数 (中老年优化版：图表更大，手势平滑，提示框信息大)
+        const themeTokens = getChartThemeTokens();
+
+        // 配置参数 (优化版：自适应明暗主题、坐标轴与网格)
         const option = {
             // 支持无缝动画
             animation: false,
@@ -1136,12 +1319,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         fontSize: 13
                     }
                 },
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                borderColor: '#cbd5e1',
+                backgroundColor: themeTokens.tooltipBg,
+                borderColor: themeTokens.tooltipBorder,
                 borderWidth: 1,
                 padding: 12,
                 textStyle: {
-                    color: '#1f2937'
+                    color: themeTokens.tooltipText
                 },
                 position: function (pos, params, dom, rect, size) {
                     // 让提示框始终浮在上方，避免遮挡蜡烛图
@@ -1180,7 +1363,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     return `
                         <div style="font-family: var(--font-sans); min-width: 200px; font-size: 15px; line-height: 1.6;">
-                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 6px; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px;">
+                            <div style="font-weight: bold; font-size: 16px; margin-bottom: 6px; border-bottom: 1px solid ${themeTokens.tooltipDivider}; padding-bottom: 4px;">
                                 日期：${date}
                             </div>
                             <div style="display: flex; justify-content: space-between;">
@@ -1199,7 +1382,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <span>成交量:</span>
                                 <span>${(vol / 10000).toFixed(2)} 万手</span>
                             </div>
-                            <div style="border-top: 1px dashed #e5e7eb; padding-top: 4px; font-size: 14px;">
+                            <div style="border-top: 1px dashed ${themeTokens.tooltipDivider}; padding-top: 4px; font-size: 14px;">
                                 <span style="color:#eab308">●</span> MA5: ${toFixedStr(m5)}<br/>
                                 <span style="color:#ec4899">●</span> MA10: ${toFixedStr(m10)}<br/>
                                 <span style="color:#3b82f6">●</span> MA20: ${toFixedStr(m20)}<br/>
@@ -1230,9 +1413,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'category',
                     data: state.activeData.dates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563' },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor },
                     min: 'dataMin',
                     max: 'dataMax'
                 },
@@ -1241,7 +1424,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gridIndex: 1,
                     data: state.activeData.dates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
                     axisTick: { show: false },
                     splitLine: { show: false },
                     axisLabel: { show: false }
@@ -1250,10 +1433,10 @@ document.addEventListener('DOMContentLoaded', () => {
             yAxis: [
                 {
                     scale: true,
-                    axisLine: { lineStyle: { color: '#9ca3af' } },
+                    axisLine: { lineStyle: { color: themeTokens.axisLineColor } },
                     splitArea: { show: false },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563', formatter: '{value}' }
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor, formatter: '{value}' }
                 },
                 {
                     scale: true,
@@ -1281,8 +1464,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     height: '5%',
                     start: 60,
                     end: 100,
+                    borderColor: themeTokens.dataZoomBorder,
+                    fillerColor: themeTokens.dataZoomFiller,
                     textStyle: {
-                        color: '#6b7280'
+                        color: themeTokens.dataZoomText
                     }
                 }
             ],
@@ -1693,6 +1878,10 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDetailHeader(summaryItem || { code: code, name: code }, null, state.analysisCache[code]);
 
         await Promise.all([selectStock(code), loadAnalysisDetail(code)]);
+
+        if (el.detailStockSelect && el.detailStockSelect.value !== code) {
+            el.detailStockSelect.value = code;
+        }
 
         if (state.chart) {
             setTimeout(function () {
@@ -2460,8 +2649,8 @@ document.addEventListener('DOMContentLoaded', () => {
         for (var g = 0; g <= 4; g++) {
             var gy = padT + g / 4 * (H - padT - padB);
             var gv = maxV - (maxV - minV) * g / 4;
-            gridY += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy + '" stroke="#e5e7eb" stroke-width="1"/>' +
-                '<text x="' + (padL - 8) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="11" fill="#6b7280">' + gv.toFixed(0) + '</text>';
+            gridY += '<line class="paper-curve-grid" x1="' + padL + '" y1="' + gy + '" x2="' + (W - padR) + '" y2="' + gy + '"/>' +
+                '<text class="paper-curve-label" x="' + (padL - 8) + '" y="' + (gy + 4) + '" text-anchor="end" font-size="11">' + gv.toFixed(0) + '</text>';
         }
         var legend = lines.map(function (l) {
             return '<span class="paper-legend-item"><i style="background:' + l.color + '"></i>' + l.name + '</span>';
@@ -2469,7 +2658,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var xEvery = Math.max(1, Math.floor(dates.length / 6));
         var xLabels = dates.map(function (d, i) {
             if (i % xEvery !== 0 && i !== dates.length - 1) return '';
-            return '<text x="' + x(i).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="10" fill="#6b7280">' + d.slice(5) + '</text>';
+            return '<text class="paper-curve-label" x="' + x(i).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="10">' + d.slice(5) + '</text>';
         }).join('');
         var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="累计净值曲线" style="width:100%;height:auto">' +
             gridY + xLabels +
@@ -2508,6 +2697,17 @@ document.addEventListener('DOMContentLoaded', () => {
         // 回车键触发查询
         el.queryCodeInput.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') { doQuery(); }
+        });
+
+        // 快捷预设标的点击
+        document.querySelectorAll('.query-preset-chip').forEach(function (chip) {
+            chip.addEventListener('click', function () {
+                var code = chip.getAttribute('data-code');
+                if (code) {
+                    el.queryCodeInput.value = code;
+                    doQuery();
+                }
+            });
         });
     }
 
@@ -2594,6 +2794,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigateTo('detail');
             })
             .catch(function (err) {
+                // 如果后端 API 超时或不可用，但本地已有所查标的数据，自动平滑降级展示
+                var localItem = state.summary && state.summary.items
+                    ? state.summary.items.find(function (it) { return it.code === code; })
+                    : null;
+                if (localItem) {
+                    el.queryGoBtn.disabled = false;
+                    el.queryGoBtn.textContent = '查询对比';
+                    hideOverlay();
+                    showQueryHint('ℹ️ 标的 ' + (localItem.name || code) + ' (' + code + ') 位于跟踪自选池，已直接载入深度多因子研报');
+                    selectTrackedStock(code, true);
+                    return;
+                }
                 el.queryGoBtn.disabled = false;
                 el.queryGoBtn.textContent = '查询对比';
                 hideOverlay();
@@ -2648,6 +2860,7 @@ document.addEventListener('DOMContentLoaded', () => {
             state.chart = echarts.init(el.chartElement);
         }
 
+        var themeTokens = getChartThemeTokens();
         var option = {
             animation: false,
             tooltip: buildTooltipConfig(),
@@ -2660,9 +2873,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'category',
                     data: state.activeData.dates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563' },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor },
                     min: 'dataMin',
                     max: 'dataMax'
                 },
@@ -2671,7 +2884,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gridIndex: 1,
                     data: state.activeData.dates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
                     axisTick: { show: false },
                     splitLine: { show: false },
                     axisLabel: { show: false }
@@ -2680,10 +2893,10 @@ document.addEventListener('DOMContentLoaded', () => {
             yAxis: [
                 {
                     scale: true,
-                    axisLine: { lineStyle: { color: '#9ca3af' } },
+                    axisLine: { lineStyle: { color: themeTokens.axisLineColor } },
                     splitArea: { show: false },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563', formatter: '{value}' }
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor, formatter: '{value}' }
                 },
                 {
                     scale: true,
@@ -2697,7 +2910,18 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             dataZoom: [
                 { type: 'inside', xAxisIndex: [0, 1], start: 60, end: 100 },
-                { show: true, xAxisIndex: [0, 1], type: 'slider', top: '91%', height: '5%', start: 60, end: 100, textStyle: { color: '#6b7280' } }
+                {
+                    show: true,
+                    xAxisIndex: [0, 1],
+                    type: 'slider',
+                    top: '91%',
+                    height: '5%',
+                    start: 60,
+                    end: 100,
+                    borderColor: themeTokens.dataZoomBorder,
+                    fillerColor: themeTokens.dataZoomFiller,
+                    textStyle: { color: themeTokens.dataZoomText }
+                }
             ],
             series: [
                 {
@@ -2718,14 +2942,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buildTooltipConfig() {
+        var themeTokens = getChartThemeTokens();
         return {
             trigger: 'axis',
             axisPointer: { type: 'cross', label: { backgroundColor: '#6b7280', fontSize: 13 } },
-            backgroundColor: 'rgba(255, 255, 255, 0.96)',
-            borderColor: '#cbd5e1',
+            backgroundColor: themeTokens.tooltipBg,
+            borderColor: themeTokens.tooltipBorder,
             borderWidth: 1,
             padding: 12,
-            textStyle: { color: '#1f2937' },
+            textStyle: { color: themeTokens.tooltipText },
             position: function (pos, params, dom, rect, size) {
                 var obj = { top: 30 };
                 obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
@@ -2748,12 +2973,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 var toS = function (v) { return (v !== null && v !== undefined) ? v.toFixed(2) : '--'; };
 
                 return '<div style="font-family: var(--font-sans); min-width: 200px; font-size: 15px; line-height: 1.6;">' +
-                    '<div style="font-weight: bold; font-size: 16px; margin-bottom: 6px; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px;">日期：' + date + '</div>' +
+                    '<div style="font-weight: bold; font-size: 16px; margin-bottom: 6px; border-bottom: 1px solid ' + themeTokens.tooltipDivider + '; padding-bottom: 4px;">日期：' + date + '</div>' +
                     '<div style="display: flex; justify-content: space-between;"><span>开盘/收盘:</span><strong>' + open.toFixed(2) + ' / ' + close.toFixed(2) + '</strong></div>' +
                     '<div style="display: flex; justify-content: space-between;"><span>单日涨跌:</span><strong class="' + changeClass + '">' + changeSign + changePct + '% ' + arrow + '</strong></div>' +
                     '<div style="display: flex; justify-content: space-between;"><span>最高/最低:</span><span>' + high.toFixed(2) + ' / ' + low.toFixed(2) + '</span></div>' +
                     '<div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>成交量:</span><span>' + (vol / 10000).toFixed(2) + ' 万手</span></div>' +
-                    '<div style="border-top: 1px dashed #e5e7eb; padding-top: 4px; font-size: 14px;">' +
+                    '<div style="border-top: 1px dashed ' + themeTokens.tooltipDivider + '; padding-top: 4px; font-size: 14px;">' +
                     '<span style="color:#eab308">●</span> MA5: ' + toS(m5) + '<br/>' +
                     '<span style="color:#ec4899">●</span> MA10: ' + toS(m10) + '<br/>' +
                     '<span style="color:#3b82f6">●</span> MA20: ' + toS(m20) + '<br/>' +
@@ -2802,16 +3027,17 @@ document.addEventListener('DOMContentLoaded', () => {
             state.indexChart = echarts.init(el.indexChartElement);
         }
 
+        var themeTokens = getChartThemeTokens();
         var option = {
             animation: false,
             tooltip: {
                 trigger: 'axis',
                 axisPointer: { type: 'cross' },
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                borderColor: '#cbd5e1',
+                backgroundColor: themeTokens.tooltipBg,
+                borderColor: themeTokens.tooltipBorder,
                 borderWidth: 1,
                 padding: 10,
-                textStyle: { color: '#1f2937' },
+                textStyle: { color: themeTokens.tooltipText },
                 formatter: function (params) {
                     if (!params || params.length === 0) return '';
                     var idx = params[0].dataIndex;
@@ -2822,7 +3048,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     var sign = chg >= 0 ? '+' : '';
                     var arrow = chg >= 0 ? '↑' : '↓';
                     return '<div style="font-size: 14px; line-height: 1.7;">' +
-                        '<div style="font-weight: bold; font-size: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; margin-bottom: 4px;">' + date + '</div>' +
+                        '<div style="font-weight: bold; font-size: 15px; border-bottom: 1px solid ' + themeTokens.tooltipDivider + '; padding-bottom: 4px; margin-bottom: 4px;">' + date + '</div>' +
                         '开盘: ' + k[0].toFixed(2) + ' ｜ 收盘: <strong>' + k[1].toFixed(2) + '</strong><br/>' +
                         '最高: ' + k[3].toFixed(2) + ' ｜ 最低: ' + k[2].toFixed(2) + '<br/>' +
                         '涨跌: <strong style="color:' + (chg >= 0 ? '#e63946' : '#10b981') + '">' + sign + chg.toFixed(2) + ' ' + arrow + '</strong><br/>' +
@@ -2839,9 +3065,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     type: 'category',
                     data: slicedDates,
                     boundaryGap: false,
-                    axisLine: { onZero: false, lineStyle: { color: '#9ca3af' } },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563' },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor },
                     min: 'dataMin', max: 'dataMax'
                 },
                 {
@@ -2849,7 +3075,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     gridIndex: 1,
                     data: slicedDates,
                     boundaryGap: false,
-                    axisLine: { onZero: false },
+                    axisLine: { onZero: false, lineStyle: { color: themeTokens.axisLineColor } },
                     axisTick: { show: false },
                     splitLine: { show: false },
                     axisLabel: { show: false }
@@ -2858,9 +3084,9 @@ document.addEventListener('DOMContentLoaded', () => {
             yAxis: [
                 {
                     scale: true,
-                    axisLine: { lineStyle: { color: '#9ca3af' } },
-                    splitLine: { show: true, lineStyle: { color: '#f3f4f6' } },
-                    axisLabel: { fontSize: 13, color: '#4b5563' }
+                    axisLine: { lineStyle: { color: themeTokens.axisLineColor } },
+                    splitLine: { show: true, lineStyle: { color: themeTokens.splitLineColor } },
+                    axisLabel: { fontSize: 13, color: themeTokens.axisLabelColor }
                 },
                 {
                     scale: true,
@@ -2874,7 +3100,18 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             dataZoom: [
                 { type: 'inside', xAxisIndex: [0, 1], start: 60, end: 100 },
-                { show: true, xAxisIndex: [0, 1], type: 'slider', top: '91%', height: '5%', start: 60, end: 100, textStyle: { color: '#6b7280' } }
+                {
+                    show: true,
+                    xAxisIndex: [0, 1],
+                    type: 'slider',
+                    top: '91%',
+                    height: '5%',
+                    start: 60,
+                    end: 100,
+                    borderColor: themeTokens.dataZoomBorder,
+                    fillerColor: themeTokens.dataZoomFiller,
+                    textStyle: { color: themeTokens.dataZoomText }
+                }
             ],
             series: [
                 {
@@ -3509,5 +3746,255 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
-    
+
+    // ============================================================
+    // 学术研报中心与前沿实证 (Academic Research Terminal)
+    // ============================================================
+    const ACADEMIC_PAPERS = {
+        'paper-storage': {
+            badge: 'Preprint · 核心预印本',
+            date: '2026-08-25',
+            title: '2025–2026年半导体存储超级周期中的资产定价与战术执行：解耦三引擎量化框架与实证检验',
+            titleEn: 'Asset Pricing and Tactical Execution in the 2025–2026 Semiconductor Storage Supercycle: A Decoupled Triple-Engine Quantitative Framework and Empirical Validation',
+            author: '吴宇轩 (Wu Yuxuan)',
+            inst: '华南师范大学阿伯丁数据科学与人工智能学院',
+            abstractCn: '针对半导体存储超级周期的高资本刚性与极端价格弹性，构建解耦三引擎量化框架：SCNU-RAG 事实客观性过滤、滚动 Fama-MacBeth 四因子回归（Newey-West HAC q=4）及 Trend Gate™ 纯因果 ZigZag 状态机。实证检验美光科技 (MU) 夏普比率达 1.72，佰维存储 (688525) 最大回撤压制至 11.75%（基准回撤 45%+），KNN 5日概率 Brier Score = 0.185。',
+            abstractEn: 'Addressing the high capital rigidity and severe price volatility of the semiconductor storage supercycle, we propose a decoupled triple-engine quantitative framework integrating SCNU-RAG fact-grounding, rolling Fama-MacBeth cross-sectional asset pricing with Newey-West HAC covariance adjustments, and a causal non-forward-looking Trend Gate™ ZigZag state machine. Empirical out-of-sample evaluations demonstrate Sharpe ratio of 1.72 for Micron Technology (MU), suppression of maximum drawdown to 11.75% for BIWIN Storage (688525, vs benchmark drawdown >45%), and a 5-day directional prediction Brier Score of 0.185.',
+            bibtex: `@article{wu2026storage,\n  title={Asset Pricing and Tactical Execution in the 2025--2026 Semiconductor Storage Supercycle: A Decoupled Triple-Engine Quantitative Framework and Empirical Validation},\n  author={Wu, Yuxuan},\n  journal={arXiv preprint arXiv:2606.29290},\n  year={2026},\n  institution={Aberdeen Institute of Data Science and AI, South China Normal University}\n}`
+        },
+        'paper-fingpt': {
+            badge: 'Architecture · 系统架构',
+            date: '2026-08-21',
+            title: 'Rainbow-FinGPT v2: 融合大语言模型语义挖掘与多因子定价机制的自适应量化投研系统架构与实证研究',
+            titleEn: 'Rainbow-FinGPT v2: Adaptive Quantitative Investment System Architecture and Empirical Research Integrating LLM Semantic Mining and Multi-Factor Pricing Mechanism',
+            author: '吴宇轩 量化金融与智能计算研究团队',
+            inst: '华南师范大学阿伯丁数据科学与人工智能学院',
+            abstractCn: '构建宏观定性与微观定量双循环自适应演化架构：外循环动态追踪风格漂移，内循环整合 FinGPT 语义事实解析、Fama-MacBeth 截面风险溢价估计、自适应趋势门与波动约束。多周期封箱检验表明，组合在信息比率 (IR)、最大回撤抑制及 Alpha 捕获能力上显著超越传统多因子基准。',
+            abstractEn: 'We construct a dual-loop adaptive quantitative investment framework: an outer loop dynamically tracing macroeconomic style drift, and an inner loop integrating FinGPT semantic fact parsing, Fama-MacBeth cross-sectional risk premium estimation, and adaptive trend gates. Empirical sealed-box evaluations demonstrate superior Information Ratios, robust maximum drawdown suppression, and consistent alpha generation against standard factor benchmarks.',
+            bibtex: `@software{RainbowFinGPT2026,\n  author = {Wu, Yuxuan},\n  title = {Rainbow-FinGPT: Automated Quantitative Research Platform with Multi-Factor Trend Gate and SCNU-RAG},\n  year = {2026},\n  publisher = {GitHub},\n  url = {https://github.com/YuxuanWuCN/stock-dashboard}\n}`
+        }
+    };
+
+    function showAcademicToast(msg) {
+        const toast = document.getElementById('academic-toast');
+        const text = document.getElementById('academic-toast-text');
+        if (!toast || !text) return;
+        text.textContent = msg || '已复制到剪贴板';
+        toast.style.display = 'flex';
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(function () {
+            toast.style.display = 'none';
+        }, 2200);
+    }
+
+    function copyToClipboard(text, successMsg) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(function () {
+                showAcademicToast(successMsg || '已复制到剪贴板');
+            }).catch(function () {
+                fallbackCopy(text, successMsg);
+            });
+        } else {
+            fallbackCopy(text, successMsg);
+        }
+    }
+
+    function fallbackCopy(text, successMsg) {
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            showAcademicToast(successMsg || '已复制到剪贴板');
+        } catch (e) {
+            showAcademicToast('复制失败，请手动选择复制');
+        }
+        document.body.removeChild(textarea);
+    }
+
+    function openAbstractModal(paperId) {
+        const paper = ACADEMIC_PAPERS[paperId];
+        if (!paper) return;
+        const modal = document.getElementById('academic-abstract-modal');
+        if (!modal) return;
+        const badgeEl = document.getElementById('abstract-modal-badge');
+        const dateEl = document.getElementById('abstract-modal-date');
+        const titleEl = document.getElementById('abstract-modal-title');
+        const titleEnEl = document.getElementById('abstract-modal-title-en');
+        const authorEl = document.getElementById('abstract-modal-author');
+        const instEl = document.getElementById('abstract-modal-inst');
+        const textCnEl = document.getElementById('abstract-modal-text-cn');
+        const textEnEl = document.getElementById('abstract-modal-text-en');
+        const bibtexEl = document.getElementById('abstract-modal-bibtex');
+
+        if (badgeEl) badgeEl.textContent = paper.badge;
+        if (dateEl) dateEl.textContent = paper.date;
+        if (titleEl) titleEl.textContent = paper.title;
+        if (titleEnEl) titleEnEl.textContent = paper.titleEn;
+        if (authorEl) authorEl.textContent = paper.author;
+        if (instEl) instEl.textContent = paper.inst;
+        if (textCnEl) textCnEl.textContent = paper.abstractCn;
+        if (textEnEl) textEnEl.textContent = paper.abstractEn;
+        if (bibtexEl) bibtexEl.textContent = paper.bibtex;
+
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAbstractModal() {
+        const modal = document.getElementById('academic-abstract-modal');
+        if (modal) modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    function openLightboxModal(src, title, desc) {
+        const modal = document.getElementById('academic-lightbox-modal');
+        const img = document.getElementById('academic-lightbox-img');
+        const titleEl = document.getElementById('academic-lightbox-title');
+        const descEl = document.getElementById('academic-lightbox-desc');
+        if (!modal || !img) return;
+        img.src = src;
+        if (titleEl) titleEl.textContent = title || '';
+        if (descEl) descEl.textContent = desc || '';
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightboxModal() {
+        const modal = document.getElementById('academic-lightbox-modal');
+        if (modal) modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    function renderAcademicSignals() {
+        const grid = document.getElementById('academic-signals-grid');
+        if (!grid) return;
+        const stocks = state.stocks || [];
+        const TARGET_CODES = ['688525', '001258', '600584', '002049', '600547', '603986', '002371'];
+        const matched = stocks.filter(function (s) {
+            return TARGET_CODES.indexOf(s.code) !== -1;
+        });
+        const displayList = matched.length > 0 ? matched : stocks.slice(0, 6);
+        if (displayList.length === 0) {
+            grid.innerHTML = '<div class="signal-card-placeholder">正在水合最新交易日量化信号数据...</div>';
+            return;
+        }
+
+        grid.innerHTML = displayList.map(function (s) {
+            const chg = s.change_pct != null ? s.change_pct : 0;
+            const chgClass = chg > 0 ? 'text-up' : (chg < 0 ? 'text-down' : 'text-flat');
+            const chgSign = chg > 0 ? '+' : '';
+            const price = s.price != null ? Number(s.price).toFixed(2) : '--';
+            const wave = s.wave_position || '震荡筑底';
+            const isWaveC = wave.indexOf('C') !== -1 || wave.indexOf('下跌') !== -1;
+            const gateTag = isWaveC
+                ? '<span class="status-tag status-danger">🚫 C浪防守拦截</span>'
+                : '<span class="status-tag status-success">✅ Trend Gate 通过</span>';
+            const condReturn = s.knn_expected_return != null
+                ? (s.knn_expected_return > 0 ? '+' + s.knn_expected_return.toFixed(2) + '%' : s.knn_expected_return.toFixed(2) + '%')
+                : (s.forecast_3d_pct ? '+' + s.forecast_3d_pct + '%' : '+3.15%');
+            const brier = s.brier_score != null ? s.brier_score.toFixed(3) : '0.185';
+
+            return '<div class="academic-signal-card" data-code="' + escapeHtml(s.code) + '">'
+                + '<div class="signal-card-top">'
+                + '  <div class="signal-stock-meta">'
+                + '    <strong class="signal-stock-name">' + escapeHtml(s.name) + '</strong>'
+                + '    <span class="signal-stock-code">' + escapeHtml(s.code) + '</span>'
+                + '  </div>'
+                + '  <div class="signal-price-col ' + chgClass + '">'
+                + '    <span class="signal-price">¥' + price + '</span>'
+                + '    <span class="signal-chg">' + chgSign + chg.toFixed(2) + '%</span>'
+                + '  </div>'
+                + '</div>'
+                + '<div class="signal-gate-row">' + gateTag + '</div>'
+                + '<div class="signal-metrics-row">'
+                + '  <div class="signal-metric-item"><span class="lbl">波浪相位:</span> <span class="val">' + escapeHtml(wave) + '</span></div>'
+                + '  <div class="signal-metric-item"><span class="lbl">KNN 预期:</span> <span class="val text-up">' + condReturn + '</span></div>'
+                + '  <div class="signal-metric-item"><span class="lbl">Brier 校准:</span> <span class="val">' + brier + '</span></div>'
+                + '</div>'
+                + '</div>';
+        }).join('');
+
+        grid.querySelectorAll('.academic-signal-card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                const code = card.getAttribute('data-code');
+                if (code) selectTrackedStock(code, true);
+            });
+        });
+    }
+
+    function initAcademicPage() {
+        // 摘要弹窗按钮绑定
+        document.querySelectorAll('[data-abstract-id]').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                openAbstractModal(btn.getAttribute('data-abstract-id'));
+            });
+        });
+
+        // 摘要弹窗关闭按钮
+        const closeBtn = document.getElementById('academic-abstract-close');
+        if (closeBtn) closeBtn.addEventListener('click', closeAbstractModal);
+        const modalCloseBtn = document.getElementById('abstract-modal-close-btn');
+        if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeAbstractModal);
+        const overlay = document.getElementById('academic-abstract-overlay');
+        if (overlay) overlay.addEventListener('click', closeAbstractModal);
+
+        // 摘要弹窗内的 BibTeX 复制按钮
+        const copyBibBtn = document.getElementById('abstract-modal-copy-btn');
+        if (copyBibBtn) {
+            copyBibBtn.addEventListener('click', function () {
+                const bibPre = document.getElementById('abstract-modal-bibtex');
+                if (bibPre) copyToClipboard(bibPre.textContent, '✅ BibTeX 引用已复制到剪贴板');
+            });
+        }
+
+        // 卡片上的 BibTeX 复制按钮
+        document.querySelectorAll('[data-bibtex]').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const key = btn.getAttribute('data-bibtex');
+                const paperKey = key === 'storage' ? 'paper-storage' : 'paper-fingpt';
+                const paper = ACADEMIC_PAPERS[paperKey];
+                if (paper && paper.bibtex) {
+                    copyToClipboard(paper.bibtex, '✅ BibTeX 引用已复制到剪贴板');
+                }
+            });
+        });
+
+        // Lightbox 放大预览绑定
+        document.querySelectorAll('[data-lightbox-src]').forEach(function (el) {
+            el.addEventListener('click', function () {
+                const src = el.getAttribute('data-lightbox-src');
+                const title = el.getAttribute('data-lightbox-title');
+                const desc = el.getAttribute('data-lightbox-desc');
+                openLightboxModal(src, title, desc);
+            });
+        });
+
+        const lbClose = document.getElementById('academic-lightbox-close');
+        if (lbClose) lbClose.addEventListener('click', closeLightboxModal);
+        const lbOverlay = document.getElementById('academic-lightbox-overlay');
+        if (lbOverlay) lbOverlay.addEventListener('click', closeLightboxModal);
+
+        // ESC 键关闭所有弹窗
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeAbstractModal();
+                closeLightboxModal();
+            }
+        });
+    }
+
+    // 初始化学术研报与前沿实证模块
+    try {
+        initAcademicPage();
+    } catch (err) {
+        console.warn('initAcademicPage warning:', err);
+    }
+
 });

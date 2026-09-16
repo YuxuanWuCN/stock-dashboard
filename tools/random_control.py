@@ -109,18 +109,33 @@ def _percentile(value, dist):
     return sum(1 for v in dist if v <= value) / len(dist) * 100.0
 
 
-def _t_test_pvalue(diffs):
-    """单侧 t 检验：diffs 均值 > 0 的 p 值（无 scipy 依赖，用 t 分布近似）。"""
+DEFAULT_PORTFOLIO_SIZES = {
+    "aggressive": 16,
+    "robust": 5,
+    "bluechip": 2,
+    "defensive": 2,
+    "global": 5,
+    "tech": 4,
+}
+
+
+def _t_test_stats(diffs):
+    """计算 t 统计量与右尾单侧 p 值（Harvey, Liu, Zhu 2016 RFS 规范）。"""
     n = len(diffs)
     if n < 2:
-        return None
+        return None, None
     mean = sum(diffs) / n
     var = sum((d - mean) ** 2 for d in diffs) / (n - 1)
     if var <= 0:
-        return None
+        return None, None
     t_stat = mean / math.sqrt(var / n)
-    # 用标准正态近似 t 分布（n>=20 时足够；n 小时给出保守近似）
-    return _normal_tail(t_stat)
+    return t_stat, _normal_tail(t_stat)
+
+
+def _t_test_pvalue(diffs):
+    """单侧 t 检验：diffs 均值 > 0 的 p 值（保留向后兼容）。"""
+    _, p = _t_test_stats(diffs)
+    return p
 
 
 def _normal_tail(t):
@@ -141,7 +156,7 @@ def _erfc(x):
 
 
 def analyze_portfolio(key, perf, by_date, trials, seed_base):
-    """分析单个组合：每日分位 + 全样本 t 检验。"""
+    """分析单个组合：每日分位 + 全样本 t 检验 + Harvey-Liu (2016 RFS) 显著性。"""
     records = perf.get("records", [])
     daily = []
     for rec in records:
@@ -152,6 +167,10 @@ def analyze_portfolio(key, perf, by_date, trials, seed_base):
         items = rec.get("items") or []
         n = len([i for i in items if i.get("change_pct") is not None])
         if n == 0:
+            # 兼容：从组合全局 holdings 或基准规格获取有效持仓只数
+            holdings = perf.get("holdings", [])
+            n = len(holdings) if holdings else DEFAULT_PORTFOLIO_SIZES.get(key, 5)
+        if n == 0 or len(pool) < n:
             continue
         dist = _random_sample_daily(pool, n, trials, seed_base + len(daily))
         if dist is None:
@@ -174,16 +193,30 @@ def analyze_portfolio(key, perf, by_date, trials, seed_base):
     if len(daily) >= 2:
         diffs = [x["excess"] for x in daily]
         mean_excess = sum(diffs) / len(diffs)
+        t_stat, p_val = _t_test_stats(diffs)
         result["mean_excess"] = round(mean_excess, 4)
-        result["p_value"] = _t_test_pvalue(diffs)
+        result["t_stat"] = round(t_stat, 3) if t_stat is not None else None
+        result["p_value"] = round(p_val, 6) if p_val is not None else None
         result["significant"] = bool(
-            result["p_value"] is not None and result["p_value"] < 0.05 and mean_excess > 0)
+            p_val is not None and p_val < 0.05 and mean_excess > 0)
+        # Harvey, Liu, and Zhu (2016 RFS) 顶刊标准：t > 3.0
+        result["harvey_liu_significant"] = bool(
+            t_stat is not None and t_stat >= 3.0 and mean_excess > 0)
+        if t_stat is not None and t_stat >= 3.0 and mean_excess > 0:
+            result["significance_tier"] = "highly_significant (Harvey-Liu t>=3.0)"
+        elif p_val is not None and p_val < 0.05 and mean_excess > 0:
+            result["significance_tier"] = "marginal (t<3.0, p<0.05)"
+        else:
+            result["significance_tier"] = "not_significant"
         result["win_days"] = sum(1 for x in daily if x["excess"] > 0)
         result["n_days"] = len(daily)
     else:
         result["mean_excess"] = None
+        result["t_stat"] = None
         result["p_value"] = None
         result["significant"] = None
+        result["harvey_liu_significant"] = None
+        result["significance_tier"] = "insufficient_sample"
         result["win_days"] = None
         result["n_days"] = len(daily)
     return result

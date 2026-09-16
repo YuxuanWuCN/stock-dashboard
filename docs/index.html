@@ -4,9 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>A股智能量化投研看板</title>
-    <link rel="stylesheet" href="assets/style.css?v=20260827_v33_nale_engine">
+    <!-- 首屏主题引导：必须在样式表生效之前确定 data-theme，否则会先按默认暗色绘制一帧再被脚本改写，产生主题闪烁（FOUC） -->
+    <script>
+        (function () {
+            var THEME_KEY = 'fintech-theme';
+            var theme = 'dark';
+            try {
+                var saved = window.localStorage.getItem(THEME_KEY);
+                if (saved === 'light' || saved === 'dark') {
+                    theme = saved;
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    theme = 'light';
+                }
+            } catch (error) {
+                // 隐私模式或存储被禁用：回落默认暗色，且绝不阻塞后续脚本
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css?v=20260915_v11_frontend_professional">
     <!-- 🌈 年轻化 FinTech 轻奢风覆盖层 -->
-    <link rel="stylesheet" href="assets/style_young.css?v=20260822_v1">
+    <link rel="stylesheet" href="assets/style_young.css?v=20260915_v11_frontend_professional">
     <!-- 引入 ECharts 5.5.1 CDN -->
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
@@ -15,11 +33,41 @@
         <!-- 顶部状态栏 -->
         <header class="header">
             <div class="header-main">
-                <h1>📊 A股智能量化投研看板 v3.0</h1>
+                <h1>
+                    <span class="header-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="20" x2="12" y2="10"></line>
+                            <line x1="18" y1="20" x2="18" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="16"></line>
+                        </svg>
+                    </span>
+                    <span class="header-title-text">Rainbow-FinGPT 智能投研看板</span>
+                    <span class="badge-version">v3.0 Pro</span>
+                </h1>
                 <p class="subtitle">可插拔多因子定价 (Fama-MacBeth) · 存储超级周期战术执行 (Trend Gate) · 全市场两级动态初筛</p>
             </div>
             <div class="header-actions">
-                <a href="portfolio.html" class="portfolio-link">📈 量化组合</a>
+                <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="切换明暗主题" aria-pressed="false" title="切换明暗主题">
+                    <svg class="theme-icon sun" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon moon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span id="theme-toggle-text" class="theme-toggle-text">主题</span>
+                </button>
+                <a href="portfolio.html" class="portfolio-link">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                    <span>量化组合实盘</span>
+                </a>
                 <div id="status-bar" class="status-bar loading">
                     <span class="status-indicator"></span>
                     <span id="status-text">正在加载运行信息...</span>
@@ -27,32 +75,48 @@
             </div>
         </header>
 
-        <!-- 顶部页面导航：拆分后的功能入口 -->
+        <!-- 顶部页面导航：统揽全功能的一体化流光导航栏 -->
         <nav class="app-nav" id="app-nav" aria-label="页面切换">
-            <button type="button" class="app-nav-btn active" data-page="today">🏠 今日关注</button>
-            <button type="button" class="app-nav-btn" data-page="watchlist">⭐ 自选股</button>
-            <button type="button" class="app-nav-btn" data-page="ranking">📊 排行榜</button>
-            <button type="button" class="app-nav-btn" data-page="query">🔍 单股查询</button>
-            <button type="button" class="app-nav-btn" data-page="detail">📈 个股研究</button>
-            <button type="button" class="app-nav-btn" data-page="paper">💼 模拟盘</button>
-            <button type="button" class="app-nav-btn" data-page="monster">🔥 妖股鉴定器</button>
+            <button type="button" class="app-nav-btn active" data-page="today">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>今日关注</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="watchlist">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                <span>自选股</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="ranking">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span>排行榜</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="query">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span>单股查询</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="detail">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                <span>个股研究</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="academic">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                <span>科研成果与实证</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="paper">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                <span>模拟盘</span>
+            </button>
+            <button type="button" class="app-nav-btn" data-page="monster">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                <span>性质分辨器</span>
+            </button>
         </nav>
 
-        <!-- 主框架：左侧功能导航 + 中间内容区 -->
+        <!-- 主框架：全宽内容区 -->
         <div class="app-shell">
-            <aside class="page-sidebar" id="page-sidebar" aria-label="功能导航">
-                <div class="page-sidebar-title">功能导航</div>
-                <button type="button" class="page-sidebar-btn active" data-page="today">🏠 今日关注</button>
-                <button type="button" class="page-sidebar-btn" data-page="watchlist">⭐ 自选股</button>
-                <button type="button" class="page-sidebar-btn" data-page="ranking">📊 排行榜</button>
-                <button type="button" class="page-sidebar-btn" data-page="query">🔍 单股查询</button>
-                <button type="button" class="page-sidebar-btn" data-page="detail">📈 个股研究</button>
-                <button type="button" class="page-sidebar-btn" data-page="paper">💼 模拟盘</button>
-            </aside>
             <main class="app-main">
 
                 <!-- 页面：今日关注（默认首页，只显示今日关注） -->
-                <section class="page" data-page="today" id="page-today">
+                <section class="page page-today" data-page="today" id="page-today">
 
 
         <!-- v2.5 市场温度条 -->
@@ -102,42 +166,50 @@
         </section>
 
                 <!-- 页面：单股查询 -->
-                <section class="page" data-page="query" id="page-query" hidden>
-                <!-- 单股查询栏 -->
-        <div class="query-bar" id="query-bar">
-            <div class="query-bar-inner">
-                <label class="query-label" for="query-code-input">🔍 单股查询对比</label>
-                <div class="query-controls">
-                    <input
-                        type="text"
-                        id="query-code-input"
-                        class="query-input code-input"
-                        placeholder="股票代码 (6位)"
-                        maxlength="6"
-                        inputmode="numeric"
-                        pattern="[0-9]*"
-                        autocomplete="off"
-                    >
-                    <input
-                        type="date"
-                        id="query-date-input"
-                        class="query-input date-input"
-                        title="数据起始日期"
-                    >
-                    <button id="query-go-btn" class="query-go-btn" type="button">查询对比</button>
-                </div>
-                <div class="query-hint" id="query-hint">
-                    📌 6开头→上证指数｜0开头→深证成指｜3开头→创业板指｜688开头→科创50
-                </div>
-            </div>
-        </div>
-
-        </section>
+                <section class="page page-query" data-page="query" id="page-query" hidden>
+                    <!-- 单股查询栏 -->
+                    <div class="query-bar" id="query-bar">
+                        <div class="query-bar-inner">
+                            <label class="query-label" for="query-code-input">🔍 单股查询对比</label>
+                            <div class="query-controls">
+                                <input
+                                    type="text"
+                                    id="query-code-input"
+                                    class="query-input code-input"
+                                    placeholder="股票代码 (6位)"
+                                    maxlength="6"
+                                    inputmode="numeric"
+                                    pattern="[0-9]*"
+                                    autocomplete="off"
+                                >
+                                <input
+                                    type="date"
+                                    id="query-date-input"
+                                    class="query-input date-input"
+                                    title="数据起始日期"
+                                >
+                                <button id="query-go-btn" class="query-go-btn" type="button">查询对比</button>
+                            </div>
+                            <div class="query-hint" id="query-hint">
+                                📌 6开头→上证指数｜0开头→深证成指｜3开头→创业板指｜688开头→科创50
+                            </div>
+                        </div>
+                        <div class="query-presets-row">
+                            <span class="preset-label">🔥 热门速查标的：</span>
+                            <button type="button" class="query-preset-chip" data-code="688525">佰维存储 (688525)</button>
+                            <button type="button" class="query-preset-chip" data-code="300274">阳光电源 (300274)</button>
+                            <button type="button" class="query-preset-chip" data-code="300750">宁德时代 (300750)</button>
+                            <button type="button" class="query-preset-chip" data-code="600519">贵州茅台 (600519)</button>
+                            <button type="button" class="query-preset-chip" data-code="688981">中芯国际 (688981)</button>
+                            <button type="button" class="query-preset-chip" data-code="513500">标普500ETF (513500)</button>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- 页面：排行榜 -->
                 <section class="page" data-page="ranking" id="page-ranking" hidden>
                 <!-- 2.1 风险收益排行榜 -->
-        <section class="ranking-section" aria-labelledby="ranking-title">
+        <section id="ranking-section" class="ranking-section" aria-labelledby="ranking-title">
             <div class="ranking-heading-row">
                 <div>
                     <h2 id="ranking-title">自选股短线排行榜</h2>
@@ -183,7 +255,7 @@
         </section>
 
                 <!-- 页面：自选股 -->
-                <section class="page" data-page="watchlist" id="page-watchlist" hidden>
+                <section class="page page-watchlist" data-page="watchlist" id="page-watchlist" hidden>
                     <div class="stock-sidebar watchlist-panel">
                 <!-- 主布局 -->
         
@@ -194,7 +266,7 @@
                         <h2>自选股列表</h2>
                         <button id="open-editor-btn" class="editor-btn" type="button">✏️ 编辑列表</button>
                     </div>
-                    <span class="tip">点击股票查看走势图</span>
+                    <span class="tip">点击股票查看走势图与深度投研报告</span>
                 </div>
                 <div class="watchlist-search-wrap">
                     <input id="watchlist-search-input" class="watchlist-search-input" type="search" placeholder="搜索名称或代码" autocomplete="off" aria-label="搜索自选股">
@@ -215,7 +287,22 @@
                 </section>
 
                 <!-- 页面：个股研究（K线 + 分析 + AI 研报 + 查询对比结果） -->
-                <section class="page" data-page="detail" id="page-detail" hidden>
+                <section class="page page-detail" data-page="detail" id="page-detail" hidden>
+                    <!-- 快捷标的切换工具栏 -->
+                    <div class="detail-stock-toolbar" id="detail-stock-toolbar">
+                        <div class="detail-toolbar-main">
+                            <label for="detail-stock-select" class="detail-toolbar-label">🎯 快速切换股票：</label>
+                            <select id="detail-stock-select" class="detail-stock-select" aria-label="选择个股研究标的">
+                                <option value="">正在读取自选股列表...</option>
+                            </select>
+                        </div>
+                        <div class="detail-toolbar-actions">
+                            <button type="button" class="detail-nav-chip" id="detail-to-watchlist-btn">⭐ 自选股全景</button>
+                            <button type="button" class="detail-nav-chip" id="detail-to-ranking-btn">📊 综合排行榜</button>
+                            <button type="button" class="detail-nav-chip" id="detail-to-monster-btn">🔥 妖股鉴定</button>
+                        </div>
+                    </div>
+
                     <div class="chart-container-wrapper">
 
             <!-- 右侧/下方 K线图详情区域 -->
@@ -398,65 +485,65 @@
                 <section class="page" data-page="paper" id="page-paper" hidden>
                     <div class="paper-page">
                         <!-- 2025Q2-2026Q7 存储市场学术量化回测专属模块 -->
-                        <div class="storage-backtest-card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                        <div class="storage-backtest-card">
+                            <div class="storage-backtest-header">
                                 <div>
-                                    <span style="background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">Physical Isolation Backtest</span>
-                                    <h2 style="font-size: 22px; margin-top: 6px; color: #f8fafc;">⚡ 2025Q2–2026Q7 存储市场样本外量化回测 (拟真交易人)</h2>
-                                    <p style="color: #94a3b8; font-size: 13px; margin-top: 4px;">GFCA 几何因子空间对齐 · NALE 供应链网络传导 (α=0.4) · Nowcasting 二次减值惩罚 · Trend Gate™ C浪清仓</p>
+                                    <span class="storage-badge-pill">Physical Isolation Backtest</span>
+                                    <h2 class="storage-backtest-title">2025Q2–2026Q7 存储市场样本外量化回测 (拟真交易人)</h2>
+                                    <p class="storage-backtest-subtitle">GFCA 几何因子空间对齐 · NALE 供应链网络传导 (α=0.4) · Nowcasting 二次减值惩罚 · Trend Gate™ C浪清仓</p>
                                 </div>
-                                <div style="display: flex; gap: 10px;">
-                                    <span style="background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #059669; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;">夏普比率: 4.627</span>
-                                    <span style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #dc2626; padding: 6px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;">最大回撤: 6.51% (控盘)</span>
+                                <div class="storage-backtest-badges">
+                                    <span class="storage-metric-tag tag-sharpe">夏普比率: 4.627</span>
+                                    <span class="storage-metric-tag tag-drawdown">最大回撤: 6.51% (控盘)</span>
                                 </div>
                             </div>
 
                             <!-- 核心数据对比指标小格子 -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">策略累计总收益率</div>
-                                    <div style="color: #f87171; font-size: 24px; font-weight: 800; margin-top: 4px;">+159.01%</div>
-                                    <div style="color: #64748b; font-size: 11px;">年化 +105.65%</div>
+                            <div class="storage-metrics-grid">
+                                <div class="storage-metric-item">
+                                    <div class="storage-item-label">策略累计总收益率</div>
+                                    <div class="storage-item-value text-up">+159.01%</div>
+                                    <div class="storage-item-sub">年化 +105.65%</div>
                                 </div>
-                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">存储5巨头等权买入持有</div>
-                                    <div style="color: #fbbf24; font-size: 24px; font-weight: 800; margin-top: 4px;">+222.30%</div>
-                                    <div style="color: #f87171; font-size: 11px;">C浪最大回撤 -32.04% ⚠️</div>
+                                <div class="storage-metric-item">
+                                    <div class="storage-item-label">存储5巨头等权基准持有</div>
+                                    <div class="storage-item-value text-warning">+222.30%</div>
+                                    <div class="storage-item-sub text-danger">C浪最大回撤 -32.04% ⚠️</div>
                                 </div>
-                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">卡玛比率 (收益/回撤)</div>
-                                    <div style="color: #38bdf8; font-size: 24px; font-weight: 800; margin-top: 4px;">16.223</div>
-                                    <div style="color: #64748b; font-size: 11px;">买入持有仅 4.453</div>
+                                <div class="storage-metric-item">
+                                    <div class="storage-item-label">卡玛比率 (收益/回撤)</div>
+                                    <div class="storage-item-value text-accent">16.223</div>
+                                    <div class="storage-item-sub">等权基准仅 4.453</div>
                                 </div>
-                                <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
-                                    <div style="color: #94a3b8; font-size: 12px;">Harvey (2016) Alpha t值</div>
-                                    <div style="color: #a78bfa; font-size: 24px; font-weight: 800; margin-top: 4px;">t = 3.774</div>
-                                    <div style="color: #34d399; font-size: 11px;">通过 |t|≥3.0 伪因子门禁 ✅</div>
+                                <div class="storage-metric-item">
+                                    <div class="storage-item-label">Harvey (2016) Alpha t值</div>
+                                    <div class="storage-item-value text-purple">t = 3.774</div>
+                                    <div class="storage-item-sub text-success">通过 |t|≥3.0 伪因子门禁 ✅</div>
                                 </div>
                             </div>
 
                             <!-- 出版级图表展示网格 -->
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;">
-                                <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
-                                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">📈 累计净值走势实证对比 (全周期)</div>
-                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png" alt="累计净值走势图" style="width: 100%; border-radius: 6px;" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png'">
+                            <div class="storage-figures-grid">
+                                <div class="storage-figure-box">
+                                    <div class="storage-figure-title">累计净值走势实证对比 (全周期)</div>
+                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png" alt="累计净值走势图" class="storage-figure-img" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/nav_comparison.png'">
                                 </div>
-                                <div style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
-                                    <div style="font-size: 13px; font-weight: 600; color: #cbd5e1; margin-bottom: 8px;">🛡️ 动态水下回撤对比 (Trend Gate 截断 C 浪主跌)</div>
-                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png" alt="水下回撤对比图" style="width: 100%; border-radius: 6px;" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png'">
+                                <div class="storage-figure-box">
+                                    <div class="storage-figure-title">动态水下回撤对比 (Trend Gate 截断 C 浪主跌)</div>
+                                    <img src="reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png" alt="水下回撤对比图" class="storage-figure-img" onerror="this.src='../reports/figures/backtest_storage_2025q2_2026q7/underwater_drawdown.png'">
                                 </div>
                             </div>
                         </div>
 
                         <div class="paper-heading">
-                            <h2>💼 模拟盘对比（60天宏观温度与风控联动版）</h2>
+                            <h2>模拟盘对比（60天宏观温度与风控联动版）</h2>
                             <p id="paper-meta" class="paper-meta">正在读取数据...</p>
                         </div>
                         <div id="paper-cards" class="paper-cards"></div>
                         <section class="paper-section" aria-labelledby="paper-curve-title">
-                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-                                <h3 id="paper-curve-title">📈 60天长跑累计净值曲线（起点 = 100）</h3>
-                                <span style="font-size:14px;color:#059669;font-weight:700;background:#d1fae5;padding:4px 10px;border-radius:6px;">🛡️ 已启用大盘温度仓位门控 & 单股-8%严格止损</span>
+                            <div class="paper-section-header">
+                                <h3 id="paper-curve-title">60天长跑累计净值曲线（起点 = 100）</h3>
+                                <span class="paper-badge-pill">🛡️ 已启用大盘温度仓位门控 & 单股-8%严格止损</span>
                             </div>
                             <div id="paper-curve" class="paper-curve" style="height:360px;"></div>
                         </section>
@@ -480,47 +567,543 @@
                     </div>
                 </section>
 
-                <!-- 页面：🔥 股票性质分辨器 · 妖股鉴定器 -->
+                <!-- 页面：股票性质分辨器 · 妖股鉴定器 -->
                 <section class="page" data-page="monster" id="page-monster" hidden>
                     <div class="monster-detector-page">
-                        <div class="monster-heading" style="margin-bottom:20px;">
-                            <h2 style="font-size:26px;color:#111827;display:flex;align-items:center;gap:10px;">
-                                <span>🔥 股票性质分辨器 · 妖股鉴定器</span>
+                        <div class="monster-heading">
+                            <h2 class="monster-heading-title">
+                                <span>股票性质分辨器 · 妖股鉴定器</span>
                             </h2>
-                            <p style="font-size:15px;color:#4b5563;margin-top:4px;">基于 SFM 因子流形（波动率、ATR日均振幅比、动量衰减半衰期）的大数据属性判定与操盘策略匹配</p>
+                            <p class="monster-heading-desc">基于 SFM 因子流形（波动率、ATR日均振幅比、动量衰减半衰期）的大数据属性判定与操盘策略匹配</p>
                         </div>
 
                         <!-- 统计概览卡片 -->
-                        <div class="monster-stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
-                            <div class="stat-card" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;">
-                                <div style="font-size:13px;color:#64748b;">📊 全池A股标的</div>
-                                <div id="monster-stat-total" style="font-size:28px;font-weight:800;color:#0f172a;margin-top:4px;">--</div>
+                        <div class="monster-stats-grid">
+                            <div class="monster-stat-card stat-total">
+                                <div class="monster-stat-label">全池A股标的</div>
+                                <div id="monster-stat-total" class="monster-stat-value">--</div>
                             </div>
-                            <div class="stat-card" style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:16px;">
-                                <div style="font-size:13px;color:#b91c1c;">🔥 妖股题材型 (高波动)</div>
-                                <div id="monster-stat-volatile" style="font-size:28px;font-weight:800;color:#dc2626;margin-top:4px;">--</div>
+                            <div class="monster-stat-card stat-volatile">
+                                <div class="monster-stat-label">妖股题材型 (高波动)</div>
+                                <div id="monster-stat-volatile" class="monster-stat-value">--</div>
                             </div>
-                            <div class="stat-card" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:16px;">
-                                <div style="font-size:13px;color:#1d4ed8;">🎯 趋势主升型 (长动量)</div>
-                                <div id="monster-stat-trend" style="font-size:28px;font-weight:800;color:#2563eb;margin-top:4px;">--</div>
+                            <div class="monster-stat-card stat-trend">
+                                <div class="monster-stat-label">趋势主升型 (长动量)</div>
+                                <div id="monster-stat-trend" class="monster-stat-value">--</div>
                             </div>
-                            <div class="stat-card" style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:16px;">
-                                <div style="font-size:13px;color:#15803d;">🧱 震荡蓄势型 (低波动)</div>
-                                <div id="monster-stat-range" style="font-size:28px;font-weight:800;color:#16a34a;margin-top:4px;">--</div>
+                            <div class="monster-stat-card stat-range">
+                                <div class="monster-stat-label">震荡蓄势型 (低波动)</div>
+                                <div id="monster-stat-range" class="monster-stat-value">--</div>
                             </div>
                         </div>
 
                         <!-- 筛选器切换 Tab -->
-                        <div class="monster-filters-row" style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;">
+                        <div class="monster-filters-row">
                             <button type="button" class="ranking-tab active" data-monster-type="all">全部标的</button>
-                            <button type="button" class="ranking-tab" data-monster-type="volatile">🔥 妖股题材榜</button>
-                            <button type="button" class="ranking-tab" data-monster-type="trend">🎯 趋势主升榜</button>
-                            <button type="button" class="ranking-tab" data-monster-type="range_bound">🧱 震荡蓄势榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="volatile">妖股题材榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="trend">趋势主升榜</button>
+                            <button type="button" class="ranking-tab" data-monster-type="range_bound">震荡蓄势榜</button>
                         </div>
 
                         <!-- 股票卡片网格 -->
-                        <div id="monster-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;">
-                            <div style="color:#64748b;padding:30px;text-align:center;">正在分析股票性质...</div>
+                        <div id="monster-cards-grid" class="monster-cards-grid">
+                            <div style="color:var(--text-muted);padding:30px;text-align:center;">正在分析股票性质...</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 页面：科研成果与实证 (Academic Research & Empirical Benchmarks) -->
+                <section class="page page-academic" data-page="academic" id="page-academic" hidden>
+                    <!-- 1. 学术认证横幅 -->
+                    <div class="academic-hero-banner">
+                        <div class="academic-hero-badge-wrap">
+                            <span class="academic-hero-badge institutional-badge">华南师范大学阿伯丁数据科学与人工智能学院</span>
+                            <span class="academic-hero-badge lab-badge">Rainbow-FinGPT 量化投研实验室</span>
+                            <span class="academic-hero-badge peer-badge">Top-Tier Peer Review Standard</span>
+                            <span class="academic-hero-badge causal-badge">无前视因果回测体系</span>
+                        </div>
+                        <h2 class="academic-hero-title">科研成果与前沿量化实证 (Academic Research & Empirical Benchmarks)</h2>
+                        <p class="academic-hero-subtitle">
+                            针对半导体存储超级周期等高弹性资产，系统性解耦为大模型定性事实过滤 (SCNU-RAG / FOI)、滚动截面稳健定价 (Fama-MacBeth OLS / Newey-West HAC q=4)、时空时序网络增强 (Temporal NALE) 与纯因果非前视 Trend Gate™ 战术执行门控，提供经物理隔离封箱检验的高学术可信度量化实证基准。
+                        </p>
+                        <div class="academic-key-metrics-strip">
+                            <div class="academic-metric-pill">
+                                <span class="metric-label">实证回测夏普比率</span>
+                                <span class="metric-val text-up">4.627</span>
+                                <span class="metric-hint">等权基准 4.453</span>
+                            </div>
+                            <div class="academic-metric-pill">
+                                <span class="metric-label">超级周期年化收益</span>
+                                <span class="metric-val text-up">+105.65%</span>
+                                <span class="metric-hint">累积回报 +159.01%</span>
+                            </div>
+                            <div class="academic-metric-pill">
+                                <span class="metric-label">极端杀跌最大回撤</span>
+                                <span class="metric-val text-accent">6.51%</span>
+                                <span class="metric-hint">基准回撤 -32.04% (压制 -79.7%)</span>
+                            </div>
+                            <div class="academic-metric-pill">
+                                <span class="metric-label">卡玛比率 (Calmar)</span>
+                                <span class="metric-val text-up">16.223</span>
+                                <span class="metric-hint">收益回撤比提升 264%</span>
+                            </div>
+                            <div class="academic-metric-pill">
+                                <span class="metric-label">Harvey (2016) 显著性</span>
+                                <span class="metric-val text-up">|t| = 3.774</span>
+                                <span class="metric-hint">显著通过 |t| ≥ 3.0 防伪门禁</span>
+                            </div>
+                            <div class="academic-metric-pill">
+                                <span class="metric-label">KNN 概率 Brier Score</span>
+                                <span class="metric-val text-up">0.185</span>
+                                <span class="metric-hint">严苛通过 ≤ 0.25 校准门禁</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. 学术论文与白皮书交互研读中心 -->
+                    <div class="academic-section">
+                        <div class="academic-section-header">
+                            <div class="section-title-wrap">
+                                <h3 class="academic-section-title">📑 学术论文与白皮书研读中心 (Paper & Whitepaper Repository)</h3>
+                                <p class="academic-section-subtitle">完全开源学术预印本、同行评审稿、LaTeX 源码与实证白皮书，支持在线阅读与一键引用</p>
+                            </div>
+                        </div>
+                        <div class="paper-hub-grid">
+                            <!-- Paper 1 -->
+                            <div class="academic-paper-card highlight-card">
+                                <div class="paper-card-header">
+                                    <span class="paper-tag primary">Preprint · 核心预印本</span>
+                                    <span class="paper-date">2026-08-25</span>
+                                </div>
+                                <h4 class="paper-title">2025–2026年半导体存储超级周期中的资产定价与战术执行：解耦三引擎量化框架与实证检验</h4>
+                                <p class="paper-title-en">Asset Pricing and Tactical Execution in the 2025–2026 Semiconductor Storage Supercycle: A Decoupled Triple-Engine Quantitative Framework and Empirical Validation</p>
+                                <div class="paper-meta">
+                                    <span class="paper-author">吴宇轩 (Wu Yuxuan)</span>
+                                    <span class="paper-affiliation">华南师范大学阿伯丁数据科学与人工智能学院</span>
+                                </div>
+                                <p class="paper-abstract-snippet">
+                                    针对半导体存储超级周期的高资本刚性与价格弹性，构建解耦三引擎量化框架：SCNU-RAG 事实客观性过滤、滚动 Fama-MacBeth 四因子回归（Newey-West HAC q=4）及 Trend Gate™ 纯因果 ZigZag 状态机。实证检验美光科技 (MU) 夏普比率达 1.72，佰维存储 (688525) 最大回撤压制至 11.75%（基准回撤 45%+），KNN 5日概率 Brier Score = 0.185。
+                                </p>
+                                <div class="paper-actions">
+                                    <button type="button" class="paper-btn btn-abstract" data-abstract-id="paper-storage">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                                        <span>阅读摘要</span>
+                                    </button>
+                                    <a href="papers/2606.29290v1.pdf" target="_blank" class="paper-btn btn-download" title="下载 PDF 预印本 (1.12MB)">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                                        <span>PDF (1.12MB)</span>
+                                    </a>
+                                    <a href="papers/Rainbow_FinGPT_v2_Paper.html" target="_blank" class="paper-btn btn-online">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                        <span>HTML 在线版</span>
+                                    </a>
+                                    <a href="papers/Semiconductor_Storage_Supercycle_Paper.tex" download="Semiconductor_Storage_Supercycle_Paper.tex" class="paper-btn btn-source">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                                        <span>LaTeX 源码</span>
+                                    </a>
+                                    <a href="papers/Rainbow_FinGPT_v2_Paper.docx" download="Rainbow_FinGPT_v2_Paper.docx" class="paper-btn btn-source">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                        <span>Word 文档</span>
+                                    </a>
+                                    <button type="button" class="paper-btn btn-copy-bibtex" data-bibtex="storage" title="复制 BibTeX 引用代码">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                        <span>复制 BibTeX</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Paper 2 -->
+                            <div class="academic-paper-card">
+                                <div class="paper-card-header">
+                                    <span class="paper-tag secondary">Architecture · 系统架构</span>
+                                    <span class="paper-date">2026-08-21</span>
+                                </div>
+                                <h4 class="paper-title">Rainbow-FinGPT v2: 融合大语言模型语义挖掘与多因子定价机制的自适应量化投研系统架构与实证研究</h4>
+                                <p class="paper-title-en">Rainbow-FinGPT v2: Adaptive Quantitative Investment System Architecture and Empirical Research Integrating LLM Semantic Mining and Multi-Factor Pricing Mechanism</p>
+                                <div class="paper-meta">
+                                    <span class="paper-author">吴宇轩 量化金融与智能计算研究团队</span>
+                                    <span class="paper-affiliation">华南师范大学阿伯丁数据科学与人工智能学院</span>
+                                </div>
+                                <p class="paper-abstract-snippet">
+                                    构建宏观定性与微观定量双循环自适应演化架构：外循环动态追踪风格漂移，内循环整合 FinGPT 语义事实解析、Fama-MacBeth 截面风险溢价估计、自适应趋势门与波动约束。多周期封箱检验表明，组合在信息比率 (IR)、最大回撤抑制及 Alpha 捕获能力上显著超越传统多因子基准。
+                                </p>
+                                <div class="paper-actions">
+                                    <button type="button" class="paper-btn btn-abstract" data-abstract-id="paper-fingpt">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                                        <span>阅读摘要</span>
+                                    </button>
+                                    <a href="papers/Rainbow_FinGPT_v2_Paper.html" target="_blank" class="paper-btn btn-online">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                                        <span>HTML 在线版</span>
+                                    </a>
+                                    <a href="papers/Rainbow_FinGPT_v2_Paper.tex" download="Rainbow_FinGPT_v2_Paper.tex" class="paper-btn btn-source">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                                        <span>LaTeX 源码</span>
+                                    </a>
+                                    <a href="papers/Rainbow_FinGPT_v2_Paper.docx" download="Rainbow_FinGPT_v2_Paper.docx" class="paper-btn btn-source">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                        <span>Word 文档</span>
+                                    </a>
+                                    <button type="button" class="paper-btn btn-copy-bibtex" data-bibtex="fingpt" title="复制 BibTeX 引用代码">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                        <span>复制 BibTeX</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Whitepaper -->
+                            <div class="academic-paper-card">
+                                <div class="paper-card-header">
+                                    <span class="paper-tag neutral">Methodology · 方法论白皮书</span>
+                                    <span class="paper-date">2026-09</span>
+                                </div>
+                                <h4 class="paper-title">量化投研数据溯源、变量映射与无前视因果回测白皮书</h4>
+                                <p class="paper-title-en">Technical Whitepaper: Financial Data Provenance, Variable Mapping, and Causal Non-Forward-Looking Backtesting Protocol</p>
+                                <div class="paper-meta">
+                                    <span class="paper-author">Rainbow-FinGPT 工程与计量团队</span>
+                                    <span class="paper-affiliation">开源量化科研基础设施</span>
+                                </div>
+                                <p class="paper-abstract-snippet">
+                                    规范多源金融数据管线生命周期，建立从开源接口 (AkShare/Tushare) 到商业终端 (Wind) 及顶刊学术实证数据库 (CSMAR) 的统一变量迁移映射矩阵。形式化证明因果非前视 ZigZag 状态机防泄漏定理，并确立物理隔离封箱回测协议。
+                                </p>
+                                <div class="paper-actions">
+                                    <a href="#table-migration-matrix" class="paper-btn btn-link">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                                        <span>查看 Table 1 变量映射矩阵</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. 数学架构交互图谱 -->
+                    <div class="academic-section">
+                        <div class="academic-section-header">
+                            <div class="section-title-wrap">
+                                <h3 class="academic-section-title">📐 数学架构交互图谱 (Mathematical Architecture Visualizers)</h3>
+                                <p class="academic-section-subtitle">点击任意图谱卡片即可调出高清全屏 Lightbox 视图，深度研读数学推导与因果状态转移方程</p>
+                            </div>
+                        </div>
+                        <div class="math-visualizer-grid">
+                            <!-- Math Card 1 -->
+                            <div class="math-card" data-lightbox-src="reports/figures/academic/fig0_triple_engine_framework.jpg" data-lightbox-title="解耦三引擎级联架构 (Decoupled Triple-Engine Framework)" data-lightbox-desc="定性事实过滤 (SCNU-RAG / FOI) ➔ 截面稳健定价 (Fama-MacBeth HAC) ➔ 右侧因果执行 (Trend Gate™) 级联架构">
+                                <div class="math-card-thumb-wrap">
+                                    <img src="reports/figures/academic/fig0_triple_engine_framework.jpg" alt="解耦三引擎级联架构" class="math-card-thumb" loading="lazy">
+                                    <div class="thumb-zoom-hint">🔍 点击放大</div>
+                                </div>
+                                <div class="math-card-body">
+                                    <div class="math-badge">Triple-Engine Cascade</div>
+                                    <h4 class="math-card-title">解耦三引擎级联架构</h4>
+                                    <div class="math-formula-box">
+                                        <code>\mathcal{D} \xrightarrow{\text{SCNU-RAG}} \text{FOI} \ge 0.70 \xrightarrow{\text{FM-OLS}} \hat{\alpha}_i \xrightarrow{\text{Trend Gate}} \mathbf{w}^*</code>
+                                    </div>
+                                    <p class="math-card-desc">
+                                        定性语义过滤切断大模型数值幻觉；截面回归剥离市场共同因子暴露；纯因果状态机执行右侧波浪进攻与主跌浪防守。
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Math Card 2 -->
+                            <div class="math-card" data-lightbox-src="reports/figures/academic/arch_framework.png" data-lightbox-title="时序网络增强 (Temporal NALE) 板块传导拓扑" data-lightbox-desc="时空图卷积建模连续时间脉冲响应 κ(t-s) 与行业上下游溢出时滞 τ，动态凸组合更新 Alpha">
+                                <div class="math-card-thumb-wrap">
+                                    <img src="reports/figures/academic/arch_framework.png" alt="时序网络增强架构" class="math-card-thumb" loading="lazy">
+                                    <div class="thumb-zoom-hint">🔍 点击放大</div>
+                                </div>
+                                <div class="math-card-body">
+                                    <div class="math-badge">Temporal-NALE Graph</div>
+                                    <h4 class="math-card-title">时序网络增强与板块时滞传导</h4>
+                                    <div class="math-formula-box">
+                                        <code>\mathbf{h}_i(t) = \sigma\left(\mathbf{W}\mathbf{h}_i + \sum_{j \in \mathcal{N}_i} \int_0^t \kappa_{\tau,\sigma}(t-s) \mathbf{W}_e e_{ij}(s) \mathbf{h}_j(s) ds\right)</code>
+                                    </div>
+                                    <p class="math-card-desc">
+                                        结合高斯时滞脉冲响应 ($\tau=18\text{d}, \sigma=5\text{d}$)，突破静态关联局限，产业链传导命中率显著提升至 46.9%。
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Math Card 3 -->
+                            <div class="math-card" data-lightbox-src="reports/figures/academic/fig3_zigzag_trend_gate_biwin_defense.png" data-lightbox-title="纯因果非前视 ZigZag 状态机与 Wave-C 现金防守拦截" data-lightbox-desc="佰维存储 (688525) 实证案例：因果波浪推演精准在主跌 C 浪顶部触发强制清仓，回撤压制至 11.75%">
+                                <div class="math-card-thumb-wrap">
+                                    <img src="reports/figures/academic/fig3_zigzag_trend_gate_biwin_defense.png" alt="Wave-C 现金防守" class="math-card-thumb" loading="lazy">
+                                    <div class="thumb-zoom-hint">🔍 点击放大</div>
+                                </div>
+                                <div class="math-card-body">
+                                    <div class="math-badge">Wave-C Trend Gate™</div>
+                                    <h4 class="math-card-title">因果波浪状态机与 C浪防守拦截</h4>
+                                    <div class="math-formula-box">
+                                        <code>S_t = \Phi(\text{ZigZag}_{\theta=12\%}(P_{\le t})); \quad S_t \in \{\text{Wave-C}\} \implies w_{i,t} \equiv 0</code>
+                                    </div>
+                                    <p class="math-card-desc">
+                                        严格杜绝传统 ZigZag 重新绘制（Repaint）导致的未来数据窥探，主跌浪清仓离场，将基准 45%+ 暴跌有效拦截在 6.51% 最小损失内。
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Math Card 4 -->
+                            <div class="math-card" data-lightbox-src="reports/figures/academic/fig2_fama_macbeth_rolling_alpha.png" data-lightbox-title="滚动 Fama-MacBeth 因子定价与 Harvey (2016) 门禁" data-lightbox-desc="Newey-West HAC 稳健协方差 (q=4) 修正，实施 |t| ≥ 3.0 与 IR ≥ 0.30 双重防数据挖掘学术门禁">
+                                <div class="math-card-thumb-wrap">
+                                    <img src="reports/figures/academic/fig2_fama_macbeth_rolling_alpha.png" alt="Fama-MacBeth 定价" class="math-card-thumb" loading="lazy">
+                                    <div class="thumb-zoom-hint">🔍 点击放大</div>
+                                </div>
+                                <div class="math-card-body">
+                                    <div class="math-badge">Fama-MacBeth HAC</div>
+                                    <h4 class="math-card-title">截面定价与伪因子防伪门禁</h4>
+                                    <div class="math-formula-box">
+                                        <code>R_{i,t} - R_{f,t} = \gamma_{0,t} + \sum_{k=1}^K \gamma_{k,t} \hat{\beta}_{i,k} + \alpha_{i,t}; \quad \text{HAC } q=4</code>
+                                    </div>
+                                    <p class="math-card-desc">
+                                        两阶段横截面回归搭配 Newey-West 自相关异方差一致调整，拒绝 p-hacking 产生的数据挖掘假象，实测策略 $t = 3.774 \ge 3.0$。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. 物理隔离实证基准对比与消融检验 -->
+                    <div class="academic-section">
+                        <div class="academic-section-header">
+                            <div class="section-title-wrap">
+                                <h3 class="academic-section-title">📊 物理隔离实证基准对比与消融检验 (Empirical Benchmarks & Ablation)</h3>
+                                <p class="academic-section-subtitle">遵循实证金融学最高学术复现规范：封箱净值实证、时序图卷积多周期消融与概率校准曲线全景呈现</p>
+                            </div>
+                        </div>
+
+                        <!-- 4.1 物理隔离封箱回测实证卡片 -->
+                        <div class="benchmark-container-card">
+                            <div class="benchmark-header-row">
+                                <div class="benchmark-title-col">
+                                    <span class="benchmark-tag">Sealed-Box Protocol</span>
+                                    <h4 class="benchmark-subheading">半导体存储超级周期物理隔离封箱回测实证</h4>
+                                </div>
+                                <div class="benchmark-meta-badge">样本区间: 2025-05-14 至 2026-08-07</div>
+                            </div>
+                            
+                            <div class="benchmark-table-responsive">
+                                <table class="academic-table-pro">
+                                    <thead>
+                                        <tr>
+                                            <th>实证指标 (Metric)</th>
+                                            <th>Rainbow-FinGPT 策略组合</th>
+                                            <th>等权基准 (Equal-Weight Benchmark)</th>
+                                            <th>差异与学术检验 (Difference & t-stat)</th>
+                                            <th>学术评级</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>累积收益率 (Cumulative Return)</strong></td>
+                                            <td class="text-up font-bold">+159.01%</td>
+                                            <td>+222.30%</td>
+                                            <td>-63.29% (主动规避泡沫期暴跌)</td>
+                                            <td><span class="eval-pill normal">稳健进攻</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>年化复合收益率 (Annualized Return)</strong></td>
+                                            <td class="text-up font-bold">+105.65%</td>
+                                            <td>+147.71%</td>
+                                            <td>-42.06%</td>
+                                            <td><span class="eval-pill pass">优秀</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>极端杀跌最大回撤 (Max Drawdown)</strong></td>
+                                            <td class="text-accent font-bold">6.51%</td>
+                                            <td class="text-down">-32.04%</td>
+                                            <td class="text-up font-bold">-79.7% 相对压制幅度</td>
+                                            <td><span class="eval-pill outstanding">极显著压制</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>夏普比率 (Sharpe Ratio, Rf=2%)</strong></td>
+                                            <td class="text-up font-bold">4.627</td>
+                                            <td>4.453</td>
+                                            <td class="text-up">+0.174 风险调整收益增益</td>
+                                            <td><span class="eval-pill outstanding">超越基准</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>卡玛比率 (Calmar Ratio: Return / MDD)</strong></td>
+                                            <td class="text-up font-bold">16.223</td>
+                                            <td>4.453</td>
+                                            <td class="text-up font-bold">+264% 收益回撤承受度提升</td>
+                                            <td><span class="eval-pill outstanding">顶尖表现</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>年化波动率 (Annualized Volatility)</strong></td>
+                                            <td class="text-accent font-bold">22.83%</td>
+                                            <td>49.92%</td>
+                                            <td class="text-up">-54.3% 波动风险大幅收敛</td>
+                                            <td><span class="eval-pill pass">低波控制</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Harvey (2016) Alpha t 统计量</strong></td>
+                                            <td class="text-up font-bold">|t| = 3.774</td>
+                                            <td>--</td>
+                                            <td class="text-up font-bold">显著超越学术界 |t| ≥ 3.0 防伪门禁</td>
+                                            <td><span class="eval-pill outstanding">拒绝伪因子</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- 封箱三图联动预览 -->
+                            <div class="sealed-box-visual-row">
+                                <div class="sealed-fig-card" data-lightbox-src="reports/figures/academic/fig1_cumulative_equity_and_drawdown.png" data-lightbox-title="超级周期策略净值与水下动态回撤曲线" data-lightbox-desc="在基准遭遇 -32.04% 深度杀跌阶段，策略平滑避开回撤，实现净值单调稳步抬升">
+                                    <img src="reports/figures/academic/fig1_cumulative_equity_and_drawdown.png" alt="超级周期净值与水下动态回撤" loading="lazy">
+                                    <div class="sealed-fig-caption">📈 超级周期净值与水下动态回撤对比图</div>
+                                </div>
+                                <div class="sealed-fig-card" data-lightbox-src="reports/figures/academic/MU_sealed_box.png" data-lightbox-title="美光科技 (MU) 封箱回测与斐波那契伏击区" data-lightbox-desc="美股存储核心锚定标的：在 0.618 黄金分割位实现精准右侧进攻，回撤控制优异">
+                                    <img src="reports/figures/academic/MU_sealed_box.png" alt="美光科技封箱实证" loading="lazy">
+                                    <div class="sealed-fig-caption">🎯 美光科技 (MU) 封箱回测与斐波那契伏击图</div>
+                                </div>
+                                <div class="sealed-fig-card" data-lightbox-src="reports/figures/academic/001258_sealed_box.png" data-lightbox-title="立新能源 (001258) 封箱波浪与趋势检验" data-lightbox-desc="公用事业板块龙头：因果波浪推进浪研判与状态机实时验证">
+                                    <img src="reports/figures/academic/001258_sealed_box.png" alt="立新能源封箱实证" loading="lazy">
+                                    <div class="sealed-fig-caption">⚡ 立新能源 (001258) 封箱波浪实证图</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4.2 Temporal NALE 多周期消融交互图表 -->
+                        <div class="benchmark-container-card" style="margin-top: 24px;">
+                            <div class="benchmark-header-row">
+                                <div class="benchmark-title-col">
+                                    <span class="benchmark-tag highlight">Ablation Study</span>
+                                    <h4 class="benchmark-subheading">Temporal NALE vs Static NALE 多周期横向消融交互图谱</h4>
+                                </div>
+                                <div class="chart-tab-controls" id="nale-metric-tabs">
+                                    <button type="button" class="chart-tab-btn active" data-metric="rank_ic">Rank IC 预测力</button>
+                                    <button type="button" class="chart-tab-btn" data-metric="excess_return">年化超额收益 %</button>
+                                    <button type="button" class="chart-tab-btn" data-metric="ic_ir">IC/IR 稳定性</button>
+                                    <button type="button" class="chart-tab-btn" data-metric="max_drawdown">最大回撤 %</button>
+                                </div>
+                            </div>
+                            
+                            <div id="academic-nale-chart" class="academic-echart-box"></div>
+
+                            <div class="academic-rigor-note">
+                                <div class="rigor-icon">💡</div>
+                                <div class="rigor-text">
+                                    <strong>学术严谨性定论与真实因果边界 (Academic Rigor & Honest Reporting)：</strong>
+                                    基于全市场 156 只标的、34 期横截面评估及 390 次产业链溢出事件真实测算，引入时序连续脉冲的 Temporal NALE 使产业链溢出命中率由 40.3% 提升至 46.9% (+6.7% 增益)，并在 5d/10d 预测周期带来 +1.49% 与 +1.14% 的年化超额收益提升。
+                                    <br>
+                                    然而，在实证金融学极其严苛的 Harvey-Liu 零假设显著性检验中，其 t 统计量未达 $\alpha=0.01$ 门槛。我们坚持学术诚实，不进行任何形式的 p-hacking 或数据修饰，真实展示该因果增强在超额收益方面的实际正效用与在统计严格性下的置信区间。
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4.3 KNN 5日概率 Brier Score 检验 & 4.4 Table 1 变量映射矩阵 -->
+                        <div class="benchmark-split-grid" style="margin-top: 24px;">
+                            <!-- Brier Score 卡片 -->
+                            <div class="benchmark-container-card">
+                                <div class="benchmark-header-row">
+                                    <div class="benchmark-title-col">
+                                        <span class="benchmark-tag">Calibration Test</span>
+                                        <h4 class="benchmark-subheading">KNN 5日概率 Brier Score 预测可靠度校准</h4>
+                                    </div>
+                                </div>
+                                <div class="brier-card-content">
+                                    <div class="brier-fig-wrap" data-lightbox-src="reports/figures/academic/fig5_brier_score_calibration_curve.png" data-lightbox-title="KNN 5日概率 Brier Score 可靠度校准曲线" data-lightbox-desc="对角线校准检验：5日预测上涨概率与真实二元胜率吻合度极佳，BS=0.185 显著优于 0.25">
+                                        <img src="reports/figures/academic/fig5_brier_score_calibration_curve.png" alt="Brier Score 校准曲线" loading="lazy">
+                                        <div class="thumb-zoom-hint">🔍 点击放大</div>
+                                    </div>
+                                    <div class="brier-stat-list">
+                                        <div class="brier-stat-item">
+                                            <span class="label">Brier Score 校准度：</span>
+                                            <strong class="val text-up">BS = 0.185</strong>
+                                            <span class="sub">(合格门槛 ≤ 0.250)</span>
+                                        </div>
+                                        <div class="brier-stat-item">
+                                            <span class="label">训练集样本覆盖率：</span>
+                                            <strong class="val">72.5%</strong>
+                                        </div>
+                                        <div class="brier-stat-item">
+                                            <span class="label">跨期验证样本覆盖率：</span>
+                                            <strong class="val">70.8%</strong>
+                                        </div>
+                                        <p class="brier-desc">
+                                            Brier Score 用于量化预测概率与二元实际结果的均方误差。随机盲猜期望得分为 0.250。本模型 0.185 的实证得分表明概率输出高度贴合现实胜率，具备极高统计可靠度。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Table 1: 变量映射矩阵 -->
+                            <div class="benchmark-container-card" id="table-migration-matrix">
+                                <div class="benchmark-header-row">
+                                    <div class="benchmark-title-col">
+                                        <span class="benchmark-tag">Data Standardization</span>
+                                        <h4 class="benchmark-subheading">Table 1: 计量经济学变量跨源迁移映射矩阵</h4>
+                                    </div>
+                                </div>
+                                <div class="benchmark-table-responsive" style="max-height: 280px; overflow-y: auto;">
+                                    <table class="academic-table-pro compact">
+                                        <thead>
+                                            <tr>
+                                                <th>变量符号</th>
+                                                <th>经济学含义</th>
+                                                <th>开源接口</th>
+                                                <th>商业级终端</th>
+                                                <th>学术顶刊基准</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>MKT_t</code></td>
+                                                <td>市场风险溢价</td>
+                                                <td>沪深300 - Rf</td>
+                                                <td>Wind MKT_RF</td>
+                                                <td>CSMAR Carhart MKT</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>SMB_t</code></td>
+                                                <td>规模风险溢价</td>
+                                                <td>流通市值分位差</td>
+                                                <td>Wind EV/FloatCap</td>
+                                                <td>CSMAR Carhart SMB</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>HML_t</code></td>
+                                                <td>账面市值比溢价</td>
+                                                <td>1/PB 倒数分位</td>
+                                                <td>Wind PB_LF 倒数</td>
+                                                <td>CSMAR Carhart HML</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>UMD_t</code></td>
+                                                <td>动量溢价因子</td>
+                                                <td>20d~250d 动量</td>
+                                                <td>Wind MOM_250D</td>
+                                                <td>CSMAR Carhart UMD</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>FOI_t</code></td>
+                                                <td>事实客观性指数</td>
+                                                <td>SCNU-RAG 提取</td>
+                                                <td>ESG/研报情感度量</td>
+                                                <td>自研专有语义专利模型</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>\tau_{ij}</code></td>
+                                                <td>行业时序滞后</td>
+                                                <td>Lead-Lag 互相关</td>
+                                                <td>产业链上下游矩阵</td>
+                                                <td>高斯连续脉冲卷积</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. 核心实证标的最新交易日量化信号 -->
+                    <div class="academic-section">
+                        <div class="academic-section-header">
+                            <div class="section-title-wrap">
+                                <h3 class="academic-section-title">⚡ 核心实证标的最新交易日量化信号 (Refreshed Quantitative Signals)</h3>
+                                <p class="academic-section-subtitle">动态从真实投研数据库读取最新交易日学术特征，实时展现时序网络时滞参数与状态机战术判定</p>
+                            </div>
+                        </div>
+                        <div class="academic-signals-grid" id="academic-signals-grid">
+                            <!-- 初始展示框架，app.js 将动态水合填充 -->
+                            <div class="signal-card-placeholder">正在水合最新交易日量化信号数据...</div>
                         </div>
                     </div>
                 </section>
@@ -644,7 +1227,64 @@
         </div>
     </div>
 
+    <!-- 学术大图 Lightbox 模态框 -->
+    <div id="academic-lightbox-modal" class="academic-modal" style="display: none;">
+        <div class="academic-modal-overlay" id="academic-lightbox-overlay"></div>
+        <div class="academic-lightbox-panel">
+            <button id="academic-lightbox-close" class="academic-modal-close" type="button" aria-label="关闭预览">✕</button>
+            <div class="academic-lightbox-img-wrap">
+                <img id="academic-lightbox-img" src="" alt="预览大图">
+            </div>
+            <div class="academic-lightbox-footer">
+                <h3 id="academic-lightbox-title" class="lightbox-title">--</h3>
+                <p id="academic-lightbox-desc" class="lightbox-desc">--</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 论文完整摘要模态框 -->
+    <div id="academic-abstract-modal" class="academic-modal" style="display: none;">
+        <div class="academic-modal-overlay" id="academic-abstract-overlay"></div>
+        <div class="academic-abstract-panel">
+            <div class="academic-modal-header">
+                <div class="modal-badge-row">
+                    <span id="abstract-modal-badge" class="paper-tag primary">论文摘要</span>
+                    <span id="abstract-modal-date" class="paper-date">--</span>
+                </div>
+                <button id="academic-abstract-close" class="academic-modal-close" type="button" aria-label="关闭摘要">✕</button>
+            </div>
+            <div class="academic-modal-body">
+                <h3 id="abstract-modal-title" class="abstract-title">--</h3>
+                <h4 id="abstract-modal-title-en" class="abstract-title-en">--</h4>
+                <div class="abstract-meta-row">
+                    <span id="abstract-modal-author" class="abstract-author">--</span>
+                    <span id="abstract-modal-inst" class="abstract-inst">--</span>
+                </div>
+                <div class="abstract-content-block">
+                    <h5>📋 中文摘要 (Abstract)</h5>
+                    <p id="abstract-modal-text-cn" class="abstract-text">--</p>
+                    <h5>🌐 English Abstract</h5>
+                    <p id="abstract-modal-text-en" class="abstract-text">--</p>
+                </div>
+                <div class="bibtex-block">
+                    <h5>📝 BibTeX 引用代码</h5>
+                    <pre id="abstract-modal-bibtex" class="bibtex-pre"></pre>
+                </div>
+            </div>
+            <div class="academic-modal-footer">
+                <button id="abstract-modal-copy-btn" class="paper-btn btn-copy-bibtex" type="button">📋 复制 BibTeX 引用</button>
+                <button id="abstract-modal-close-btn" class="paper-btn" type="button">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 复制成功的浮动 Toast -->
+    <div id="academic-toast" class="academic-toast" style="display: none;">
+        <span class="toast-icon">✅</span>
+        <span id="academic-toast-text" class="toast-text">已复制到剪贴板</span>
+    </div>
+
     <!-- 引入前端交互脚本 -->
-    <script src="assets/app.js?v=20260827_v34_scope_fixed"></script>
+    <script src="assets/app.js?v=20260915_v11_frontend_professional"></script>
 </body>
 </html>

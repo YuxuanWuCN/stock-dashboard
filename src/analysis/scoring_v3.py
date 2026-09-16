@@ -22,28 +22,33 @@ OPPORTUNITY_WEIGHTS_V3 = {
     "technical_score": 0.25,   # 技术形态与支撑确认（择时）
 }
 
-# 3.0 领先指标分档
+# 3.0 领先指标分档（遵循 Gu, Kelly, Xiu 2020 截面不确定性收缩与贝叶斯折价原理）
 LEADING_SCORE_CONFIG_V3 = {
-    "positive_reversal": 90.0,   # 领先指标触底反转（供需强烈向上）
-    "accelerating":      75.0,   # 领先指标动能加速（订单与现货走强）
-    "neutral":           50.0,   # 中性（无明显信号 / 合成降级 / 缺失）
-    "decelerating":      30.0,   # 领先指标动能减速
-    "negative_reversal": 10.0,   # 领先指标见顶回落（供需拐头向下）
+    "positive_reversal":  90.0,   # 领先指标触底反转（供需强烈向上）
+    "accelerating":       75.0,   # 领先指标动能加速（订单与现货走强）
+    "neutral":            50.0,   # 真实高频数据中性（无明显趋势信号）
+    "synthetic_fallback": 20.0,   # 贝叶斯不确定性折价（缺失高频前沿数据惩罚，彻底阻断中性套利）
+    "decelerating":       30.0,   # 领先指标动能减速
+    "negative_reversal":  10.0,   # 领先指标见顶回落（供需向下拐点，风险提示）
 }
 
 
 def compute_leading_score_v3(leading_signal: Optional[dict] = None) -> dict:
-    """计算 3.0 领先指标分 (0-100)，50 为中性。
+    """计算 3.0 领先指标分 (0-100)。
 
-    合成降级 / 缺失 / 未知来源的数据严格判为 50 中性，绝不给假数据加分（不伪造原则）。
+    根据 Harvey-Liu (2016) 与 Gu-Kelly-Xiu (2020) 截面严谨性规范：
+    - 拥有真实高频订单/现货数据且中性的标的赋 50.0 分；
+    - 合成降级 / 缺失 / 未知来源的数据严格执行贝叶斯不确定性惩罚，折价至 20.0 分，
+      彻底根除缺失数据标的（如恒生银行）凭借中性分虚假冲入全市场 Top 2 的数值倒错漏洞。
     """
     if not leading_signal:
         return {
-            "score": LEADING_SCORE_CONFIG_V3["neutral"],
+            "score": LEADING_SCORE_CONFIG_V3["synthetic_fallback"],
             "inflection_flag": "none",
             "momentum": "flat",
             "data_source": "none",
-            "reason": None,
+            "reason": "缺失高频前沿数据（贝叶斯不确定性折价惩罚）",
+            "uncertainty_discounted": True,
         }
 
     mm = leading_signal.get("momentum_metrics", {}) or {}
@@ -51,14 +56,15 @@ def compute_leading_score_v3(leading_signal: Optional[dict] = None) -> dict:
     momentum = mm.get("momentum", "flat")
     data_source = leading_signal.get("data_source", "unknown")
 
-    # 合成降级数据不参与打分，保持 50 中性
+    # 合成降级 / 缺失数据执行贝叶斯不确定性惩罚（Option A 规范）
     if data_source in ("synthetic_fallback", "none", "unknown", None, ""):
         return {
-            "score": LEADING_SCORE_CONFIG_V3["neutral"],
+            "score": LEADING_SCORE_CONFIG_V3["synthetic_fallback"],
             "inflection_flag": inflection,
             "momentum": momentum,
             "data_source": data_source,
-            "reason": None,
+            "reason": "高频前沿数据缺失或降级（贝叶斯不确定性折价惩罚）",
+            "uncertainty_discounted": True,
         }
 
     if inflection == "positive_reversal":

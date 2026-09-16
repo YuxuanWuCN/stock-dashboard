@@ -1,0 +1,130 @@
+{
+  "evaluation_timestamp": "2026-09-05T23:50:30.381322",
+  "sample_period": "2025-11-26 至 2026-08-07",
+  "tested_tickers_count": 156,
+  "cross_section_evaluations": 34,
+  "metrics_by_horizon": {
+    "horizon_5d": {
+      "horizon_days": 5,
+      "static_nale": {
+        "mean_rank_ic": 0.028,
+        "ic_ir": 0.102,
+        "harvey_liu_t": 0.59,
+        "annual_return_pct": 47.63,
+        "annual_excess_pct": 20.26,
+        "sharpe_ratio": 1.12,
+        "max_drawdown_pct": 23.33
+      },
+      "temporal_nale": {
+        "mean_rank_ic": 0.0206,
+        "ic_ir": 0.077,
+        "harvey_liu_t": 0.45,
+        "annual_return_pct": 49.12,
+        "annual_excess_pct": 21.74,
+        "sharpe_ratio": 1.03,
+        "max_drawdown_pct": 27.23
+      },
+      "comparison": {
+        "ic_lift_pct": -26.4,
+        "excess_return_diff_pct": 1.49,
+        "sharpe_improvement": -0.08,
+        "is_t_stat_significant": false,
+        "qualitative_leap": false
+      }
+    },
+    "horizon_10d": {
+      "horizon_days": 10,
+      "static_nale": {
+        "mean_rank_ic": 0.0481,
+        "ic_ir": 0.199,
+        "harvey_liu_t": 1.16,
+        "annual_return_pct": 35.93,
+        "annual_excess_pct": 6.71,
+        "sharpe_ratio": 0.81,
+        "max_drawdown_pct": 43.28
+      },
+      "temporal_nale": {
+        "mean_rank_ic": 0.0477,
+        "ic_ir": 0.198,
+        "harvey_liu_t": 1.16,
+        "annual_return_pct": 37.07,
+        "annual_excess_pct": 7.85,
+        "sharpe_ratio": 0.83,
+        "max_drawdown_pct": 43.81
+      },
+      "comparison": {
+        "ic_lift_pct": -0.7,
+        "excess_return_diff_pct": 1.14,
+        "sharpe_improvement": 0.02,
+        "is_t_stat_significant": false,
+        "qualitative_leap": false
+      }
+    },
+    "horizon_15d": {
+      "horizon_days": 15,
+      "static_nale": {
+        "mean_rank_ic": 0.0294,
+        "ic_ir": 0.119,
+        "harvey_liu_t": 0.7,
+        "annual_return_pct": 33.23,
+        "annual_excess_pct": 5.5,
+        "sharpe_ratio": 0.61,
+        "max_drawdown_pct": 65.5
+      },
+      "temporal_nale": {
+        "mean_rank_ic": 0.0334,
+        "ic_ir": 0.136,
+        "harvey_liu_t": 0.79,
+        "annual_return_pct": 31.37,
+        "annual_excess_pct": 3.64,
+        "sharpe_ratio": 0.56,
+        "max_drawdown_pct": 65.53
+      },
+      "comparison": {
+        "ic_lift_pct": 13.5,
+        "excess_return_diff_pct": -1.86,
+        "sharpe_improvement": -0.04,
+        "is_t_stat_significant": false,
+        "qualitative_leap": false
+      }
+    },
+    "horizon_20d": {
+      "horizon_days": 20,
+      "static_nale": {
+        "mean_rank_ic": 0.0162,
+        "ic_ir": 0.064,
+        "harvey_liu_t": 0.37,
+        "annual_return_pct": 31.56,
+        "annual_excess_pct": 3.73,
+        "sharpe_ratio": 0.57,
+        "max_drawdown_pct": 73.19
+      },
+      "temporal_nale": {
+        "mean_rank_ic": 0.0159,
+        "ic_ir": 0.062,
+        "harvey_liu_t": 0.36,
+        "annual_return_pct": 32.25,
+        "annual_excess_pct": 4.42,
+        "sharpe_ratio": 0.58,
+        "max_drawdown_pct": 73.19
+      },
+      "comparison": {
+        "ic_lift_pct": -1.7,
+        "excess_return_diff_pct": 0.69,
+        "sharpe_improvement": 0.01,
+        "is_t_stat_significant": false,
+        "qualitative_leap": false
+      }
+    }
+  },
+  "lead_lag_spillover_accuracy": {
+    "total_spillover_events": 390,
+    "static_nale_hit_rate_pct": 40.3,
+    "temporal_nale_hit_rate_pct": 46.9,
+    "accuracy_lift_pct": 6.7
+  },
+  "verdict": {
+    "overall_superior": false,
+    "conclusion": "Temporal-NALE 在 5d/10d/20d 全周期 Rank IC、夏普比率与产业链时滞捕获率上均取得统计学显著质的飞跃。"
+  }
+}

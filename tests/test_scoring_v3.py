@@ -29,29 +29,38 @@ def test_leading_v3_positive_reversal_huge_boost():
         "momentum_metrics": {"inflection_flag": "positive_reversal"},
         "data_source": "akshare",
     }
-    sig_neutral = {
+    sig_real_neutral = {
+        "momentum_metrics": {"inflection_flag": "none", "momentum": "flat"},
+        "data_source": "akshare",
+    }
+    sig_synthetic = {
         "momentum_metrics": {"inflection_flag": "none"},
         "data_source": "synthetic_fallback",
     }
     r_pos = compute_composite_score_v3(risk, tech, ind, sim, [3.0, 1.0], [65.0, 50.0], leading_signal=sig_pos)
-    r_neu = compute_composite_score_v3(risk, tech, ind, sim, [3.0, 1.0], [65.0, 50.0], leading_signal=sig_neutral)
+    r_neu = compute_composite_score_v3(risk, tech, ind, sim, [3.0, 1.0], [65.0, 50.0], leading_signal=sig_real_neutral)
+    r_syn = compute_composite_score_v3(risk, tech, ind, sim, [3.0, 1.0], [65.0, 50.0], leading_signal=sig_synthetic)
 
     assert r_pos["leading"] == 90.0
     assert r_neu["leading"] == 50.0
-    # 差 40 分的前沿分在 45% 权重下带来 18 分机会分差
+    assert r_syn["leading"] == 20.0
+    # 真实触底反转 90 分比真实中性 50 分高 40 分，在 45% 权重下带来 18 分机会分差
     assert r_pos["opportunity"] - r_neu["opportunity"] == pytest.approx(18.0, abs=0.5)
-    assert r_pos["risk_adjusted"] > r_neu["risk_adjusted"]
+    # 合成降级受到贝叶斯不确定性折价至 20 分，机会分显著低于真实中性标的
+    assert r_neu["opportunity"] - r_syn["opportunity"] == pytest.approx(13.5, abs=0.5)
+    assert r_pos["risk_adjusted"] > r_neu["risk_adjusted"] > r_syn["risk_adjusted"]
 
 
-def test_leading_v3_synthetic_fallback_is_strict_neutral():
-    """合成降级数据严格判为 50 中性，绝不给假数据打高分。"""
+def test_leading_v3_synthetic_fallback_receives_uncertainty_penalty():
+    """合成降级数据严格判为 20.0 贝叶斯不确定性惩罚，杜绝中性套利虚假登顶。"""
     sig_synthetic = {
         "momentum_metrics": {"inflection_flag": "positive_reversal"},
         "data_source": "synthetic_fallback",
     }
     res = compute_leading_score_v3(sig_synthetic)
-    assert res["score"] == 50.0
-    assert res["reason"] is None
+    assert res["score"] == 20.0
+    assert res["uncertainty_discounted"] is True
+    assert "贝叶斯不确定性折价惩罚" in res["reason"]
 
 
 def test_fundamental_safety_gate_rejects_distress():

@@ -86,7 +86,7 @@ def test_both_daily_jobs_use_the_shared_push_helper():
     """Morning and evening automation share the tested fallback behaviour."""
 
     project_root = Path(__file__).resolve().parents[1]
-    for script_name in ("daily_local.ps1", "daily_morning.ps1"):
+    for script_name in ("daily_routine.py", "daily_morning.ps1"):
         script = (project_root / "tools" / script_name).read_text(encoding="utf-8")
-        assert "tools\\git_push_with_fallback.py" in script
+        assert "git_push_with_fallback.py" in script
         assert "git push origin main *>> $logFile" not in script

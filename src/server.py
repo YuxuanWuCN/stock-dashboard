@@ -6,6 +6,7 @@ Flask API 后端：实时查询个股 K 线 + 大盘指数 K 线对比数据
 API: GET /api/query?code=<6位代码>&start_date=<YYYY-MM-DD>
 """
 
+import json
 import os
 import sys
 import traceback
@@ -30,11 +31,11 @@ import pandas as pd
 import requests as _requests
 
 try:
-    from .config import ADJUST, PERIOD, MA_WINDOWS, LOOKBACK_DAYS
+    from .config import ADJUST, PERIOD, MA_WINDOWS, LOOKBACK_DAYS, OFFLINE_MODE, KLINE_DIR
     from .utils import setup_logging, validate_ohlcv, calc_ma, beijing_today
     from .fetch_data import fetch_one, compute_derived, build_kline_json
 except ImportError:  # Support direct execution from src/.
-    from config import ADJUST, PERIOD, MA_WINDOWS, LOOKBACK_DAYS
+    from config import ADJUST, PERIOD, MA_WINDOWS, LOOKBACK_DAYS, OFFLINE_MODE, KLINE_DIR
     from utils import setup_logging, validate_ohlcv, calc_ma, beijing_today
     from fetch_data import fetch_one, compute_derived, build_kline_json
 
@@ -91,6 +92,50 @@ def get_index_for_code(stock_code: str) -> dict:
         return CODE_TO_INDEX[first]
     # 兜底：默认返回上证指数
     return CODE_TO_INDEX["6"]
+
+
+# ============================================================
+# 本地离线高保真缓存数据源 (166 只标的零依赖兜底)
+# ============================================================
+
+INDEX_OFFLINE_MAP: dict[str, str] = {
+    "000688": "588000",  # 科创50 -> 科创50 ETF
+    "000001": "510050",  # 上证指数 -> 上证50 ETF
+    "399006": "159915",  # 创业板指 -> 创业板 ETF
+    "399001": "159919",  # 深证成指 -> 深证300 ETF
+}
+
+
+def _get_offline_kline(code: str) -> Optional[dict]:
+    """安全读取 docs/data/kline/{code}.json 离线缓存数据。"""
+    cached_path = os.path.join(KLINE_DIR, f"{code}.json")
+    if os.path.exists(cached_path):
+        try:
+            with open(cached_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, dict) and data.get("dates"):
+                    return data
+        except Exception as e:
+            logger.warning("读取离线缓存失败 %s: %s", code, e)
+    return None
+
+
+def _get_offline_index(index_code: str, index_name: str) -> Optional[dict]:
+    """安全读取大盘指数离线数据；若无直接指数文件则使用核心基准 ETF 映射。"""
+    direct = _get_offline_kline(index_code)
+    if direct is not None:
+        return direct
+
+    mapped_code = INDEX_OFFLINE_MAP.get(index_code)
+    if mapped_code:
+        mapped_data = _get_offline_kline(mapped_code)
+        if mapped_data is not None:
+            idx_copy = dict(mapped_data)
+            idx_copy["name"] = index_name
+            idx_copy["code"] = index_code
+            idx_copy["is_fallback_benchmark"] = True
+            return idx_copy
+    return None
 
 
 # ============================================================
@@ -375,70 +420,104 @@ def api_query():
         "查询请求: code=%s start=%s end=%s", code, start_yyyymmdd, end_yyyymmdd
     )
 
-    # ---- 1. 抓取个股 ----
+    # ---- 1. 抓取个股（在线 + 离线高弹性容灾） ----
     # 自动识别 ETF（代码以5/1开头），并自动解析真实名称
     if code.startswith(("5", "1")):
         stock_item = {"code": code, "name": resolve_stock_name(code), "type": "etf"}
     else:
         stock_item = {"code": code, "name": resolve_stock_name(code), "type": "stock"}
 
-    try:
-        df_stock = fetch_one(stock_item, start_yyyymmdd, end_yyyymmdd)
-    except Exception:
-        logger.error("个股抓取异常:\n%s", traceback.format_exc())
-        return jsonify({"error": f"个股 {code} 数据抓取时发生内部错误，请稍后重试"}), 500
+    stock_json = None
+    offline_fallback_active = False
 
-    if df_stock is None:
+    # 若全局开启离线演示模式，直接优先读取离线预置数据
+    if OFFLINE_MODE:
+        offline_data = _get_offline_kline(code)
+        if offline_data is not None:
+            stock_json = offline_data
+            offline_fallback_active = True
+            logger.info("离线演示模式已激活: 标的 %s 直接读取本地离线数据", code)
+
+    # 在线模式下，若尚未获取数据，尝试在线拉取
+    if stock_json is None and not OFFLINE_MODE:
+        try:
+            df_stock = fetch_one(stock_item, start_yyyymmdd, end_yyyymmdd)
+            if df_stock is not None and not df_stock.empty:
+                df_stock = compute_derived(df_stock)
+                stock_name = stock_item["name"]
+                if "name" in df_stock.columns and not df_stock.empty:
+                    candidate_name = str(df_stock.iloc[-1].get("name") or "").strip()
+                    if candidate_name and candidate_name != code and not candidate_name.isdigit():
+                        stock_name = candidate_name
+                stock_item = {**stock_item, "name": stock_name}
+                stock_json = build_kline_json(stock_item, df_stock)
+                # 自动入库到自选池（供每晚 60日/5年 深度自动化分析）
+                _auto_add_to_watchlist(code, stock_name, stock_item["type"])
+        except Exception:
+            logger.error("个股在线抓取异常:\n%s", traceback.format_exc())
+
+    # 若在线抓取失败（无网络/API故障/返回 None），自动无缝降级回退至本地离线预置数据
+    if stock_json is None:
+        offline_data = _get_offline_kline(code)
+        if offline_data is not None:
+            stock_json = offline_data
+            offline_fallback_active = True
+            logger.info("在线抓取不可用，已自动优雅降级为离线预置数据: %s(%s)", stock_json.get("name"), code)
+
+    # 若离线与在线均未找到数据，返回友好提示
+    if stock_json is None:
         return jsonify({
-            "error": f"未找到股票代码 {code} 的数据。请检查：\n"
-                     f"1. 代码是否为6位数字\n"
-                     f"2. 该代码是否有效（非退市/非新三板股票）\n"
-                     f"3. 网络是否正常"
+            "error": f"未找到股票代码 {code} 的数据（离线缓存未覆盖该代码，且实时行情接口不可用）。\n"
+                     f"本地离线演示模式支持 166 只核心标的（如 688525 佰维存储、600519 贵州茅台、300750 宁德时代、510300 沪深300ETF 等）。"
         }), 404
 
-    df_stock = compute_derived(df_stock)
+    stock_name = stock_json.get("name") or stock_item["name"]
 
-    # 尝试从数据中获取更多信息；无效的名称不能覆盖已解析的名称。
-    stock_name = stock_item["name"]
-    if "name" in df_stock.columns and not df_stock.empty:
-        candidate_name = str(df_stock.iloc[-1].get("name") or "").strip()
-        if candidate_name and candidate_name != code and not candidate_name.isdigit():
-            stock_name = candidate_name
-    stock_item = {**stock_item, "name": stock_name}
-    stock_json = build_kline_json(stock_item, df_stock)
-
-    # ---- 自动入库到自选池（供每晚 60日/5年 深度自动化分析） ----
-    _auto_add_to_watchlist(code, stock_name, stock_item["type"])
-
-    # ---- 2. 抓取对应大盘指数 ----
+    # ---- 2. 抓取对应大盘指数 (具备离线弹性容灾) ----
     index_info = get_index_for_code(code)
-    index_json = fetch_index(
-        index_info["code"], index_info["name"],
-        start_yyyymmdd, end_yyyymmdd,
-    )
+    index_json = None
+
+    if not OFFLINE_MODE and not offline_fallback_active:
+        try:
+            index_json = fetch_index(
+                index_info["code"], index_info["name"],
+                start_yyyymmdd, end_yyyymmdd,
+            )
+        except Exception as e:
+            logger.warning("指数在线抓取异常: %s", e)
 
     if index_json is None:
-        logger.warning(
-            "指数 %s(%s) 抓取失败", index_info["name"], index_info["code"]
-        )
+        index_json = _get_offline_index(index_info["code"], index_info["name"])
 
     # ---- 3. 组装返回 ----
+    dates = stock_json.get("dates", [])
+    s_date = dates[0] if (dates and offline_fallback_active) else start_dt.isoformat()
+    e_date = dates[-1] if (dates and offline_fallback_active) else today.isoformat()
+
     result = {
         "stock": stock_json,
         "index": index_json,
         "meta": {
-            "start_date": start_dt.isoformat(),
-            "end_date": today.isoformat(),
+            "start_date": s_date,
+            "end_date": e_date,
             "stock_name": stock_name,
             "stock_code": code,
             "index_name": index_info["name"],
             "index_code": index_info["code"],
-            "auto_enqueued_nightly": True,
+            "auto_enqueued_nightly": not offline_fallback_active,
+            "offline_demo": offline_fallback_active,
+            "message": (
+                f"已启用离线演示模式，展示本地预置历史行情（共 {len(dates)} 个交易日）。"
+                if offline_fallback_active
+                else "实时行情已成功拉取，并已排期每晚自动化分析。"
+            ),
         },
     }
 
-    logger.info("查询成功: %s(%s) + %s (已自动排期每晚自动化分析)", stock_name, code, index_info["name"])
-    return jsonify(result)
+    logger.info("查询成功 [%s]: %s(%s) + %s",
+                "离线演示" if offline_fallback_active else "在线实时",
+                stock_name, code, index_info["name"])
+    return jsonify(result), 200
 
 
 @app.route("/")
@@ -622,7 +701,7 @@ def _sync_watchlist_to_github(rows: list[dict]) -> dict:
 # ============================================================
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", "5000"))
+    port = int(os.environ.get("API_PORT") or os.environ.get("PORT", "5000"))
     debug = os.environ.get("FLASK_DEBUG", "false").lower() in (
         "1", "true", "yes"
     )

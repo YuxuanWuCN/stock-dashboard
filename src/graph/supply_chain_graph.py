@@ -114,11 +114,31 @@ class SupplyChainGraph:
         alpha: float = 0.4,
         quarter_label: str = "2024Q1"
     ) -> Dict[str, Any]:
-        """Placebo 蒙特卡洛边洗牌拓扑检验 (100 次边重排)。
-        
-        检验零假设 H0: NALE 得分的预测增强纯属随机网络连通性噪音。
-        若真实网络得分与洗牌随机均值的 Z-Score > 2.0 (p < 0.05)，则拒绝 H0，确认真实拓扑有效性。
+        """Placebo 蒙特卡洛边洗牌拓扑检验。
+
+        H0：给定节点得分、边位置和权重，供应商列索引可以随机交换。
+        真实网络与 n_shuffles 个洗牌网络共同估计逐节点均值和标准差，
+        对所有网络对称地计算平均绝对标准化偏差 T，保留节点间相关性。
+        mean_z_score 返回真实网络的 T，仅作描述，不服从标准正态分布。
+        p = (1 + count(T_shuffle >= T_real)) / (n_shuffles + 1)，
+        并列值计入尾部；绝对偏差已包含两个方向，不再把尾部概率乘二。
+        is_topologically_valid 表示 p < 0.05 下拒绝此洗牌零假设，
+        不代表预测能力、因果关系或投资收益得到验证。
+
+        n_shuffles 必须是正整数；非有限输入或传播结果抛出 ValueError。
+        缺失节点得分沿用传播接口的 0.0 默认值。
         """
+        if (
+            isinstance(n_shuffles, (bool, np.bool_))
+            or not isinstance(n_shuffles, (int, np.integer))
+            or n_shuffles < 1
+        ):
+            raise ValueError("n_shuffles must be a positive integer")
+        n_shuffles = int(n_shuffles)
+        s0 = np.array([node_scores.get(t, 0.0) for t in self.node_tickers], dtype=float)
+        if not np.isfinite(alpha) or not np.all(np.isfinite(s0)):
+            raise ValueError("alpha and node scores must be finite")
+
         real_scores = self.run_nale_propagation(node_scores, alpha, quarter_label)
         N = len(self.node_tickers)
 
@@ -126,23 +146,29 @@ class SupplyChainGraph:
         if W_real is None:
             W_real = self.build_adjacency_matrix(quarter_label)
 
-        s0 = np.array([node_scores.get(t, 0.0) for t in self.node_tickers])
         real_vec = np.array([real_scores[t] for t in self.node_tickers])
+        if not np.all(np.isfinite(real_vec)):
+            raise ValueError("NALE propagation results must be finite")
 
         # 边洗牌 Monte Carlo
-        placebo_matrix = np.zeros((n_shuffles, N))
         non_zeros = W_real.nnz
 
         if non_zeros == 0:
-            return {"is_topologically_valid": False, "mean_z_score": 0.0, "p_value": 1.0}
+            return {
+                "n_shuffles": n_shuffles,
+                "mean_z_score": 0.0,
+                "p_value": 1.0,
+                "is_topologically_valid": False,
+            }
 
+        placebo_matrix = np.zeros((n_shuffles, N))
         row_idx, col_idx = W_real.nonzero()
         data_vals = W_real.data
 
-        np.random.seed(42)
+        rng = np.random.default_rng(42)
         for s in range(n_shuffles):
-            # 随机打乱列索引 (保持出度结构，破坏真实经济关联)
-            shuffled_cols = np.random.permutation(col_idx)
+            # 保持边槽的行位置、权重及供应商索引多重集，随机交换供应商。
+            shuffled_cols = rng.permutation(col_idx)
             W_shuffled = sp.csr_matrix((data_vals, (row_idx, shuffled_cols)), shape=(N, N))
             # 重新行归一化
             r_sums = np.array(W_shuffled.sum(axis=1)).flatten()
@@ -153,22 +179,31 @@ class SupplyChainGraph:
             p_nale = (1.0 - alpha) * s0 + alpha * p_prop
             placebo_matrix[s, :] = p_nale
 
-        placebo_mean = np.mean(placebo_matrix, axis=0)
-        placebo_std = np.std(placebo_matrix, axis=0) + 1e-8
+        if not np.all(np.isfinite(placebo_matrix)):
+            raise ValueError("Placebo propagation results must be finite")
 
-        z_scores = (real_vec - placebo_mean) / placebo_std
-        mean_z = float(np.mean(np.abs(z_scores)))
-        p_val = float(2.0 * (1.0 - stats_norm_cdf(mean_z)))
+        # 共享的标准化参数必须对真实样本和洗牌样本一视同仁；仅用洗牌
+        # 样本拟合会让它们成为样本内残差，而真实网络成为样本外残差。
+        # 先减去同一参考向量，避免恒定列的均值舍入误差产生虚假的 Z 值。
+        pooled = np.vstack((real_vec, placebo_matrix)) - real_vec
+        centered = pooled - np.mean(pooled, axis=0)
+        pooled_std = np.std(pooled, axis=0)
+        if not np.all(np.isfinite(centered)) or not np.all(np.isfinite(pooled_std)):
+            raise ValueError("Placebo standardization must be finite")
+        z_scores = np.divide(
+            centered, pooled_std, out=np.zeros_like(centered), where=pooled_std > 0
+        )
+        test_statistics = np.mean(np.abs(z_scores), axis=1)
+        mean_z = float(test_statistics[0])
+
+        # Monte Carlo 加一修正；把浮点舍入范围内的近似并列也计入尾部。
+        tolerance = 100 * np.finfo(float).eps * max(1.0, mean_z)
+        n_extreme = np.count_nonzero(test_statistics[1:] >= mean_z - tolerance)
+        p_val = float((n_extreme + 1) / (n_shuffles + 1))
 
         return {
             "n_shuffles": n_shuffles,
             "mean_z_score": mean_z,
             "p_value": p_val,
-            "is_topologically_valid": bool(mean_z >= 1.96)
+            "is_topologically_valid": bool(p_val < 0.05)
         }
-
-
-def stats_norm_cdf(x: float) -> float:
-    """高斯累积分布函数近似。"""
-    import math
-    return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))

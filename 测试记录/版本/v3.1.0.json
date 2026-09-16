@@ -1,0 +1,153 @@
+{
+  "schema_version": 2,
+  "level": "heavy",
+  "passed": false,
+  "created_at": "2026-09-15T10:47:50+08:00",
+  "source_hash": "71663036077505790d4d2b2b79cb450215d0fa808e62b4710c8c0d9f02dc5682",
+  "bug_hash_before_logging": "9530199a7162a9056c44407b25187d56de13fef0b698e6613c363e9d131e26f8",
+  "bug_archive_hash": "5ac436052389b07172d3c47a7192541697ed606a06a7c37aa22b367acbfe073a",
+  "metadata": {
+    "version": "v3.1.0"
+  },
+  "checks": [
+    {
+      "name": "Python 语法",
+      "passed": true,
+      "details": "检查 225 个 Python 文件。",
+      "category": "test"
+    },
+    {
+      "name": "Notebook 结构与语法",
+      "passed": true,
+      "details": "检查 0 个 Notebook。",
+      "category": "test"
+    },
+    {
+      "name": "项目 JSON 配置",
+      "passed": true,
+      "details": "检查 1 个配置文件。",
+      "category": "test"
+    },
+    {
+      "name": "Python 自动化测试",
+      "passed": true,
+      "details": "...........................2026-09-15 10:46:18 [INFO] ============================================================\n2026-09-15 10:46:18 [INFO] 自选股短线风险收益排行榜分析开始 —— 2026-09-15 10:46:18\n2026-09-15 10:46:18 [INFO] ============================================================\n2026-09-15 10:46:18 [INFO] 自选股数量: 1\n2026-09-15 10:46:18 [INFO] [1/1] 测试标的(000001) 分析中...\n2026-09-15 10:46:18 [INFO] 测试标的(000001) ✓ 分析完成\n2026-09-15 10:46:18 [WARNING] Alpha 门控异常已隔离，排行榜保持可用: Traceback (most recent call last):\n  File \"D:\\股票分析项目\\Rainbow_FinGPTv2\\src\\build_ranking.py\", line 1373, in main\n    gates = run_alpha_gate(klines)\n            ^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\股票分析项目\\Rainbow_FinGPTv2\\src\\analysis\\alpha_gate.py\", line 120, in run_alpha_gate\n    results = fama_macbeth.run_all(\n              ^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\股票分析项目\\Rainbow_FinGPTv2\\src\\analysis\\fama_macbeth.py\", line 304, in run_all\n    ret_series = _returns_from_kline(kline)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\股票分析项目\\Rainbow_FinGPTv2\\src\\analysis\\fama_macbeth.py\", line 284, in _returns_from_kline\n    dates = factor_db._date_str(kline[\"date\"])\n                                ~~~~~^^^^^^^^\nTypeError: 'object' object is not subscriptable\n\n2026-09-15 10:46:18 [INFO] 生成排行榜...\n2026-09-15 10:46:18 [INFO] 排名 JSON 校验通过\n2026-09-15 10:46:18 [INFO] 生成个股详情文件...\n2026-09-15 10:46:18 [INFO]   000001.json ✓\n2026-09-15 10:46:18 [INFO] 写入排行榜文件...\n2026-09-15 10:46:18 [INFO] ============================================================\n2026-09-15 10:46:18 [INFO] 排行榜分析完成！总 1 / 成功 1 / 失败 0 / 耗时 0.0 秒\n2026-09-15 10:46:18 [INFO] 分析目录: D:\\股票分析项目\\Rainbow_FinGPTv2\\docs\\data\\analysis\n2026-09-15 10:46:18 [INFO] ============================================================\n.2026-09-15 10:46:18 [WARNING] LLM 报告生成异常已隔离，排行榜数据保持可用\n.2026-09-15 10:46:18 [INFO] LLM 报告调度已关闭，跳过本次生成\n.2026-09-15 10:46:18 [INFO] LLM 报告阶段完成：处理 3，新增 2，失败 0\n....................2026-09-15 10:46:18 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.2026-09-15 10:46:18 [WARNING] 去重后有效样本 2 < 最低 5\n.2026-09-15 10:46:18 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.2026-09-15 10:46:18 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.2026-09-15 10:46:18 [INFO] KNN 相似分析完成: 5 样本, 3d预测 1.80%, 5d预测 1.56%, 置信度 low\n................................................................................................2026-09-15 10:46:19 [INFO] 添加自选股: 佰维存储(688525) type=stock category=\n2026-09-15 10:46:19 [INFO] 自选股 688525 added: 佰维存储()\n.2026-09-15 10:46:19 [INFO] 添加自选股: 招商银行(600036) type=stock category=\n2026-09-15 10:46:19 [INFO] 自选股 600036 added: 招商银行()\n2026-09-15 10:46:19 [WARNING] GitHub 自选股同步失败: read_exception:RuntimeError\n.2026-09-15 10:46:19 [INFO] 添加自选股: 佰维存储(688525) type=stock category=\n2026-09-15 10:46:19 [INFO] 自选股 688525 added: 佰维存储()\n2026-09-15 10:46:19 [INFO] GitHub 自选股已同步，commit=def456commit\n.2026-09-15 10:46:19 [INFO] 添加自选股: 平安银行(000001) type=stock category=\n2026-09-15 10:46:19 [INFO] 自选股 000001 added: 平安银行()\n2026-09-15 10:46:19 [INFO] GitHub 自选股已同步，commit=newcommit\n...2026-09-15 10:46:19 [INFO] 添加自选股: 佰维存储(688525) type=stock category=科技\n2026-09-15 10:46:19 [INFO] 自选股 688525 added: 佰维存储(科技)\n...2026-09-15 10:46:19 [INFO] 查询请求: code=000021 start=20260101 end=20260915\n2026-09-15 10:46:19 [WARNING] 指数 深证成指(399001) 抓取失败\n2026-09-15 10:46:19 [INFO] 查询成功: 深科技(000021) + 深证成指 (已自动排期每晚自动化分析)\n.2026-09-15 10:46:19 [INFO] 解析股票名称: 000021 → 深科技\n..\n----------------------------------------------------------------------\nRan 162 tests in 1.335s\n\nOK",
+      "category": "test"
+    },
+    {
+      "name": "small 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 90 个业务代码文件；发现 79 个 small 级测试文件、92 个 unittest 可执行测试。要求：tests/test_*.py 中的业务单元测试，或 custom_commands.small。",
+      "category": "test"
+    },
+    {
+      "name": "其他语言专用检查",
+      "passed": true,
+      "details": "以下扩展名需要项目专用小测：.css, .html, .js；已配置自定义小测命令。",
+      "category": "environment"
+    },
+    {
+      "name": "medium 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 90 个业务代码文件；发现 1 个 medium 级测试文件、0 个 unittest 可执行测试。要求：tests/test_integration*.py，或 custom_commands.medium。",
+      "category": "test"
+    },
+    {
+      "name": "heavy 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 90 个业务代码文件；发现 1 个 heavy 级测试文件、0 个 unittest 可执行测试。要求：tests/test_reproducibility*.py，或 custom_commands.heavy。",
+      "category": "test"
+    },
+    {
+      "name": "秘密扫描",
+      "passed": true,
+      "details": "未发现高置信度硬编码秘密。",
+      "category": "security"
+    },
+    {
+      "name": "Python 依赖一致性",
+      "passed": true,
+      "details": "No broken requirements found.",
+      "category": "dependency"
+    },
+    {
+      "name": "弱断言扫描",
+      "passed": false,
+      "details": "D:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_analysis.py:360 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_analysis.py:370 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_analysis.py:379 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_dynamic_position_sizer.py:326 [error] no-assert: test 函数没有任何断言\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:35 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:42 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:53 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:60 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:67 [warn] assert-true-bare: assertTrue(ok)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:96 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_prediction_accuracy_harness.py:80 [warn] assert-true-bare: assertTrue(math.isclose(f1[name][70], f2[name][70], rel_tol=1e-09, abs_tol=1e-12) or (math.isnan(f1[name][70]) and math.isnan(f2[name][70])))\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_prediction_accuracy_harness.py:100 [warn] assert-is-not-none: assertIsNotNone(cell['accuracy'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_prediction_accuracy_harness.py:112 [warn] assert-is-not-none: assertIsNotNone(r['ret1_reversal__h1']['accuracy'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_prediction_accuracy_harness.py:169 [warn] assert-is-not-none: assertIsNotNone(cell['hit_rate'])\n弱断言占比 0.7%（上限 5%），error 级 1 条",
+      "category": "test"
+    },
+    {
+      "name": "股票业务单元测试",
+      "passed": true,
+      "details": "........................................................................ [100%]\n72 passed in 4.10s",
+      "category": "test"
+    },
+    {
+      "name": "LLM 模块单元测试",
+      "passed": true,
+      "details": "........................................................................ [ 66%]\n....................................                                     [100%]\n108 passed in 2.26s",
+      "category": "test"
+    },
+    {
+      "name": "v2.5 策略模块单元测试",
+      "passed": true,
+      "details": ".......................................                                  [100%]\n39 passed in 11.97s",
+      "category": "test"
+    },
+    {
+      "name": "Fama-MacBeth 多因子引擎单元测试",
+      "passed": true,
+      "details": "..........................................                               [100%]\n42 passed in 4.25s",
+      "category": "test"
+    },
+    {
+      "name": "情绪信号度量与数据口径修复单元测试",
+      "passed": true,
+      "details": "...................                                                      [100%]\n19 passed in 0.56s",
+      "category": "test"
+    },
+    {
+      "name": "校准系统建议与applier单元测试",
+      "passed": true,
+      "details": "...........                                                              [100%]\n11 passed in 0.18s",
+      "category": "test"
+    },
+    {
+      "name": "稳健组合选股字段修复测试",
+      "passed": true,
+      "details": "....                                                                     [100%]\n4 passed in 0.46s",
+      "category": "test"
+    },
+    {
+      "name": "股票离线综合流程测试",
+      "passed": true,
+      "details": ".                                                                        [100%]\n1 passed in 0.53s",
+      "category": "test"
+    },
+    {
+      "name": "Fama-MacBeth Alpha 门控集成测试",
+      "passed": true,
+      "details": "............                                                             [100%]\n12 passed in 3.74s",
+      "category": "test"
+    },
+    {
+      "name": "股票可复现性测试",
+      "passed": true,
+      "details": ".                                                                        [100%]\n1 passed in 0.88s",
+      "category": "test"
+    },
+    {
+      "name": "股票全量回归测试",
+      "passed": false,
+      "details": "........................................................................ [  8%]\n...F...............................................FFFFFFF.............. [ 17%]\n.........................................................F.............. [ 26%]\n........................................................................ [ 35%]\n..........................................F.F........................... [ 44%]\n........................................................................ [ 53%]\n........................................................................ [ 62%]\n........................................................................ [ 71%]\n......................................................... [ 78%]\n........................................................................ [ 87%]\n..........................F............................................. [ 96%]\n....................FF........                                           [100%]\n================================== FAILURES ===================================\n______________________ test_forward_validation_stability ______________________\n\n    def test_forward_validation_stability():\n        \"\"\"前向留出验证：严格时序因果分割与稳定性检验。\"\"\"\n        raw_dir = Path(\"data/raw/backtest_green_2025q3_2026q3\")\n        if not raw_dir.exists():\n            raw_dir = Path(\"Rainbow_FinGPTv2/data/raw/backtest_green_2025q3_2026q3\")\n>       assert raw_dir.exists(), \"数据目录必须存在\"\nE       AssertionError: 数据目录必须存在\nE       assert False\nE        +  where False = exists()\nE        +    where exists = WindowsPath('Rainbow_FinGPTv2/data/raw/backtest_green_2025q3_2026q3').exists\n\ntests\\test_calibration_stability.py:29: AssertionError\n____ test_download_script_writes_validated_standard_csv_from_task_template ____\n\ntmp_path = WindowsPath('C:/Users/45607/AppData/Local/Temp/pytest-of-ASUS/pytest-997/test_download_script_writes_va0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A54275D7C0>\n\n    def test_download_script_writes_validated_standard_csv_from_task_template(tmp_path, monkeypatch):\n        seen = {}\n    \n        class FakeService:\n            def query(self, **kwargs):\n                seen.update(kwargs)\n                return pd.DataFrame(\n                    {\n                        \"TradingDate\": [20240101, 20240102],\n                        \"RiskPremium1\": [0.001, 0.002],\n                        \"SMB1\": [0.0005, 0.001],\n                        \"HML1\": [-0.0005, -0.001],\n                        \"UMD1\": [0.002, 0.003],\n                        \"RiskFreeRate\": [0.0001, 0.0001],\n                    }\n                )\n    \n        package = types.ModuleType(\"csmarapi\")\n        service_module = types.ModuleType(\"csmarapi.CsmarService\")\n        service_module.CsmarService = FakeService\n        monkeypatch.setitem(sys.modules, \"csmarapi\", package)\n        monkeypatch.setitem(sys.modules, \"csmarapi.CsmarService\", service_module)\n>       module = _load_script_module()\n                 ^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_download_csmar_carhart_factors.py:49: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntests\\test_download_csmar_carhart_factors.py:23: in _load_script_module\n    spec.loader.exec_module(module)\n<frozen importlib._bootstrap_external>:995: in exec_module\n    ???\n<frozen importlib._bootstrap_external>:1132: in get_code\n    ???\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <_frozen_importlib_external.SourceFileLoader object at 0x000001A54275DDF0>\npath = 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n>   ???\nE   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n<frozen importlib._bootstrap_external>:1190: FileNotFoundError\n_____ test_download_script_returns_failure_without_sdk_and_does_not_write _____\n\ntmp_path = WindowsPath('C:/Users/45607/AppData/Local/Temp/pytest-of-ASUS/pytest-997/test_download_script_returns_f0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A5427DD0D0>\n\n    def test_download_script_returns_failure_without_sdk_and_does_not_write(tmp_path, monkeypatch):\n        package = types.ModuleType(\"csmarapi\")\n        monkeypatch.setitem(sys.modules, \"csmarapi\", package)\n        monkeypatch.delitem(sys.modules, \"csmarapi.CsmarService\", raising=False)\n>       module = _load_script_module()\n                 ^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_download_csmar_carhart_factors.py:74: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntests\\test_download_csmar_carhart_factors.py:23: in _load_script_module\n    spec.loader.exec_module(module)\n<frozen importlib._bootstrap_external>:995: in exec_module\n    ???\n<frozen importlib._bootstrap_external>:1132: in get_code\n    ???\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <_frozen_importlib_external.SourceFileLoader object at 0x000001A54275E510>\npath = 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n>   ???\nE   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n<frozen importlib._bootstrap_external>:1190: FileNotFoundError\n____________ test_download_script_checks_supplied_trading_calendar ____________\n\ntmp_path = WindowsPath('C:/Users/45607/AppData/Local/Temp/pytest-of-ASUS/pytest-997/test_download_script_checks_su0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A54275E720>\n\n    def test_download_script_checks_supplied_trading_calendar(tmp_path, monkeypatch):\n        class FakeService:\n            def query(self, **kwargs):\n                return pd.DataFrame(\n                    {\n                        \"TradingDate\": [20240101, 20240102],\n                        \"RiskPremium1\": [0.001, 0.002],\n                        \"SMB1\": [0.0005, 0.001],\n                        \"HML1\": [-0.0005, -0.001],\n                        \"UMD1\": [0.002, 0.003],\n                        \"RiskFreeRate\": [0.0001, 0.0001],\n                    }\n                )\n    \n        package = types.ModuleType(\"csmarapi\")\n        service_module = types.ModuleType(\"csmarapi.CsmarService\")\n        service_module.CsmarService = FakeService\n        monkeypatch.setitem(sys.modules, \"csmarapi\", package)\n        monkeypatch.setitem(sys.modules, \"csmarapi.CsmarService\", service_module)\n>       module = _load_script_module()\n                 ^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_download_csmar_carhart_factors.py:102: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntests\\test_download_csmar_carhart_factors.py:23: in _load_script_module\n    spec.loader.exec_module(module)\n<frozen importlib._bootstrap_external>:995: in exec_module\n    ???\n<frozen importlib._bootstrap_external>:1132: in get_code\n    ???\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <_frozen_importlib_external.SourceFileLoader object at 0x000001A54275C1D0>\npath = 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n>   ???\nE   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n<frozen importlib._bootstrap_external>:1190: FileNotFoundError\n_______ test_download_script_rejects_partial_response_against_calendar ________\n\ntmp_path = WindowsPath('C:/Users/45607/AppData/Local/Temp/pytest-of-ASUS/pytest-997/test_download_script_rejects_p0')\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001A5428444D0>\n\n    def test_download_script_rejects_partial_response_against_calendar(tmp_path, monkeypatch):\n        class FakeService:\n            def query(self, **kwargs):\n                return pd.DataFrame(\n                    {\n                        \"TradingDate\": [20240101],\n                        \"RiskPremium1\": [0.001],\n                        \"SMB1\": [0.0005],\n                        \"HML1\": [-0.0005],\n                        \"UMD1\": [0.002],\n                        \"RiskFreeRate\": [0.0001],\n                    }\n                )\n    \n        package = types.ModuleType(\"csmarapi\")\n        service_module = types.ModuleType(\"csmarapi.CsmarService\")\n        service_module.CsmarService = FakeService\n        monkeypatch.setitem(sys.modules, \"csmarapi\", package)\n        monkeypatch.setitem(sys.modules, \"csmarapi.CsmarService\", service_module)\n>       module = _load_script_module()\n                 ^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_download_csmar_carhart_factors.py:139: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntests\\test_download_csmar_carhart_factors.py:23: in _load_script_module\n    spec.loader.exec_module(module)\n<frozen importlib._bootstrap_external>:995: in exec_module\n    ???\n<frozen importlib._bootstrap_external>:1132: in get_code\n    ???\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <_frozen_importlib_external.SourceFileLoader object at 0x000001A542844290>\npath = 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n>   ???\nE   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n<frozen importlib._bootstrap_external>:1190: FileNotFoundError\n_____________ test_download_script_rejects_missing_calendar_dates _____________\n\ntmp_path = WindowsPath('C:/Users/45607/AppData/Local/Temp/pytest-of-ASUS/pytest-997/test_download_script_rejects_m0')\n\n    def test_download_script_rejects_missing_calendar_dates(tmp_path):\n>       module = _load_script_module()\n                 ^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_download_csmar_carhart_factors.py:159: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntests\\test_download_csmar_carhart_factors.py:23: in _load_script_module\n    spec.loader.exec_module(module)\n<frozen importlib._bootstrap_external>:995: in exec_module\n    ???\n<frozen importlib._bootstrap_external>:1132: in get_code\n    ???\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <_frozen_importlib_external.SourceFileLoader object at 0x000001A542847AA0>\npath = 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n>   ???\nE   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n<frozen importlib._bootstrap_external>:1190: FileNotFoundError\n_______ test_download_script_returns_failure_for_missing_calendar_file ________\n\ntmp_path = WindowsPath('C:/Users/45607/AppData/Local/Temp/pytest-of-ASUS/pytest-997/test_download_script_returns_f1')\n\n    def test_download_script_returns_failure_for_missing_calendar_file(tmp_path):\n>       module = _load_script_module()\n                 ^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_download_csmar_carhart_factors.py:167: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntests\\test_download_csmar_carhart_factors.py:23: in _load_script_module\n    spec.loader.exec_module(module)\n<frozen importlib._bootstrap_external>:995: in exec_module\n    ???\n<frozen importlib._bootstrap_external>:1132: in get_code\n    ???\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <_frozen_importlib_external.SourceFileLoader object at 0x000001A5428460C0>\npath = 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n>   ???\nE   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n<frozen importlib._bootstrap_external>:1190: FileNotFoundError\n_________ test_download_script_can_require_calendar_before_connecting _________\n\ntmp_path = WindowsPath('C:/Users/45607/AppData/Local/Temp/pytest-of-ASUS/pytest-997/test_download_script_can_requi0')\n\n    def test_download_script_can_require_calendar_before_connecting(tmp_path):\n>       module = _load_script_module()\n                 ^^^^^^^^^^^^^^^^^^^^^\n\ntests\\test_download_csmar_carhart_factors.py:183: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntests\\test_download_csmar_carhart_factors.py:23: in _load_script_module\n    spec.loader.exec_module(module)\n<frozen importlib._bootstrap_external>:995: in exec_module\n    ???\n<frozen importlib._bootstrap_external>:1132: in get_code\n    ???\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <_frozen_importlib_external.SourceFileLoader object at 0x000001A542846600>\npath = 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n>   ???\nE   FileNotFoundError: [Errno 2] No such file or directory: 'D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\scripts\\\\download_csmar_carhart_factors.py'\n\n<frozen importlib._bootstrap_external>:1190: FileNotFoundError\n__________ test_scnu_strict_mode_requires_explicit_trading_calendar ___________\n\ntmp_path = WindowsPath('C:/Users/45607/AppData/Local/Temp/pytest-of-ASUS/pytest-997/test_scnu_strict_mode_requires0')\n\n    def test_scnu_strict_mode_requires_explicit_trading_calendar(tmp_path):\n        frame = pd.DataFrame(_valid_csmar_rows())\n        frame.to_csv(tmp_path / \"factors.csv\", index=False)\n        provider = SCNUAcademicFactorProvider(data_dir=tmp_path, strict=True)\n>       with pytest.raises(CSMARDataError, match=\"expected_trading_dates\"):\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE       Failed: DID NOT RAISE CSMARDataError\n\ntests\\test_factor_providers.py:358: Failed\n_______________ test_both_daily_jobs_use_the_shared_push_helper _______________\n\n    def test_both_daily_jobs_use_the_shared_push_helper():\n        \"\"\"Morning and evening automation share the tested fallback behaviour.\"\"\"\n    \n        project_root = Path(__file__).resolve().parents[1]\n        for script_name in (\"daily_local.ps1\", \"daily_morning.ps1\"):\n            script = (project_root / \"tools\" / script_name).read_text(encoding=\"utf-8\")\n>           assert \"tools\\\\git_push_with_fallback.py\" in script\nE           assert 'tools\\\\git_push_with_fallback.py' in '# daily_local.ps1 —— 每日本地全自动数据更新与量化流水线\\n#\\n# 功能：自动检测 Python 环境并启动统一量化自动化调度引擎（tools/daily_routine.py）\\n# 用法：powershell...\\n\\nWrite-Host \"🌟 使用 Python 解释器: $py\" -ForegroundColor Cyan\\n& $py tools\\\\daily_routine.py @args\\nexit $LASTEXITCODE\\n'\n\ntests\\test_git_push_with_fallback.py:91: AssertionError\n___________________ test_green_backtest_runner_walk_forward ___________________\n\n    def test_green_backtest_runner_walk_forward():\n        raw_dir = Path(\"data/raw/backtest_green_2025q3_2026q3\")\n        if not raw_dir.exists():\n            raw_dir = Path(\"Rainbow_FinGPTv2/data/raw/backtest_green_2025q3_2026q3\")\n>       assert raw_dir.exists(), \"绿电物理隔离数据目录必须存在\"\nE       AssertionError: 绿电物理隔离数据目录必须存在\nE       assert False\nE        +  where False = exists()\nE        +    where exists = WindowsPath('Rainbow_FinGPTv2/data/raw/backtest_green_2025q3_2026q3').exists\n\ntests\\test_green_backtest_runner.py:13: AssertionError\n_________________ test_storage_gold_joint_backtest_execution __________________\n\n    def test_storage_gold_joint_backtest_execution():\n        engine = StorageGoldJointEngine()\n        res = engine.run_backtest()\n    \n        assert \"strategies\" in res\n        assert \"pure_storage\" in res[\"strategies\"]\n        assert \"pure_gold\" in res[\"strategies\"]\n        assert \"static_barbell_50_50\" in res[\"strategies\"]\n        assert \"dynamic_regime_barbell\" in res[\"strategies\"]\n    \n        # 验证动态杠铃策略夏普比率与收益\n        dyn_stat = res[\"strategies\"][\"dynamic_regime_barbell\"]\n>       assert dyn_stat[\"total_return\"] > 0\nE       assert -0.006752534122477005 > 0\n\ntests\\test_storage_gold_joint_runner.py:35: AssertionError\n_________________________ test_three_actions_windows __________________________\n\n    def test_three_actions_windows():\n        df = vtf.load_kline(KLINE)\n        triggers = vtf.scan_double_triggers(df)\n        ar = vtf.run_three_actions(df, triggers[0])\n        assert ar[\"entry_date\"] == \"2026-07-27\"\n        assert ar[\"entry_price\"] == pytest.approx(13.02, abs=0.02)\n        for w in [5, 10, 20]:\n            assert w in ar[\"windows\"]\n            r = ar[\"windows\"][w]\n            # 清仓 0%：A 组触发次日全部卖出后持币\n            assert r[\"ret_a_pct\"] == 0.0\n            # 持有组最大回撤最大：对照组（不动）扛了连续跌停\n            assert r[\"mdd_c_pct\"] <= r[\"mdd_b_pct\"]\n        # 20 日窗口：持有组收益为正（回调后反弹），且减仓组收益介于 0 与持有之间\n        r20 = ar[\"windows\"][20]\n>       assert r20[\"ret_c_pct\"] > 0\nE       assert np.float64(-3.46) > 0\n\ntests\\test_validate_teacher_framework.py:100: AssertionError\n__________________________ test_limit_up_clustering ___________________________\n\n    def test_limit_up_clustering():\n        df = vtf.load_kline(KLINE)\n        events = vtf.list_limit_up_events(df)\n        # 14 次涨停聚簇为 6 簇\n>       assert len(events) == 6\nE       AssertionError: assert 7 == 6\nE        +  where 7 = len([{'idx': 56, 'last_idx': 56, 'date': '2025-10-27', 'close': 8.19, ...}, {'idx': 143, 'last_idx': 143, 'date': '2026-03...te': '2026-07-27', 'close': 14.33, ...}, {'idx': 248, 'last_idx': 249, 'date': '2026-08-11', 'close': 15.93, ...}, ...])\n\ntests\\test_validate_teacher_framework.py:112: AssertionError\n=========================== short test summary info ===========================\nFAILED tests/test_calibration_stability.py::test_forward_validation_stability\nFAILED tests/test_download_csmar_carhart_factors.py::test_download_script_writes_validated_standard_csv_from_task_template\nFAILED tests/test_download_csmar_carhart_factors.py::test_download_script_returns_failure_without_sdk_and_does_not_write\nFAILED tests/test_download_csmar_carhart_factors.py::test_download_script_checks_supplied_trading_calendar\nFAILED tests/test_download_csmar_carhart_factors.py::test_download_script_rejects_partial_response_against_calendar\nFAILED tests/test_download_csmar_carhart_factors.py::test_download_script_rejects_missing_calendar_dates\nFAILED tests/test_download_csmar_carhart_factors.py::test_download_script_returns_failure_for_missing_calendar_file\nFAILED tests/test_download_csmar_carhart_factors.py::test_download_script_can_require_calendar_before_connecting\nFAILED tests/test_factor_providers.py::test_scnu_strict_mode_requires_explicit_trading_calendar\nFAILED tests/test_git_push_with_fallback.py::test_both_daily_jobs_use_the_shared_push_helper\nFAILED tests/test_green_backtest_runner.py::test_green_backtest_runner_walk_forward\nFAILED tests/test_storage_gold_joint_runner.py::test_storage_gold_joint_backtest_execution\nFAILED tests/test_validate_teacher_framework.py::test_three_actions_windows\nFAILED tests/test_validate_teacher_framework.py::test_limit_up_clustering - A...\n14 failed, 793 passed, 15 subtests passed in 44.05s",
+      "category": "test"
+    }
+  ],
+  "json_path": ".quality-state/reports/20260915104750-heavy-a60de3.json",
+  "markdown_path": ".quality-state/reports/20260915104750-heavy-a60de3.md",
+  "bug_hash_after_logging": "9314ced63f19c2d0920f666bda02004adf77bcd69b86d38bbd20d8efce3cd4d9",
+  "bug_ids": [
+    "BUG-0003",
+    "BUG-0004"
+  ]
+}

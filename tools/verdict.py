@@ -288,7 +288,8 @@ def command_verdict(args: argparse.Namespace) -> int:
     except (AttributeError, ValueError):
         pass
 
-    verdict = build_verdict()
+    include_scans = not getattr(args, "no_scans", False)
+    verdict = build_verdict(include_scans=include_scans)
     json_path, md_path = _write_outputs(verdict)
     verdict["json_path"] = str(json_path)
     verdict["markdown_path"] = str(md_path)

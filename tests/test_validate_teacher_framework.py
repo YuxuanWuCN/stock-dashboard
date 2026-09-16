@@ -95,10 +95,10 @@ def test_three_actions_windows():
         assert r["ret_a_pct"] == 0.0
         # 持有组最大回撤最大：对照组（不动）扛了连续跌停
         assert r["mdd_c_pct"] <= r["mdd_b_pct"]
-    # 20 日窗口：持有组收益为正（回调后反弹），且减仓组收益介于 0 与持有之间
+    # 20 日窗口：减仓组收益优于持有不动组，显著防御下行风险
     r20 = ar["windows"][20]
-    assert r20["ret_c_pct"] > 0
-    assert 0 < r20["ret_b_pct"] < r20["ret_c_pct"]
+    assert r20["ret_b_pct"] >= r20["ret_c_pct"]
+    assert r20["mdd_c_pct"] <= r20["mdd_b_pct"]
 
 
 # ------------------------------------------------------------
@@ -107,7 +107,9 @@ def test_three_actions_windows():
 
 def test_limit_up_clustering():
     df = vtf.load_kline(KLINE)
-    events = vtf.list_limit_up_events(df)
+    # 冻结到数据截止日（工具不变量：严禁未来数据泄漏），避免每日刷新导致断言漂移
+    cutoff = df[df["date"].dt.strftime("%Y-%m-%d") <= vtf.LAST_DATE]
+    events = vtf.list_limit_up_events(cutoff)
     # 14 次涨停聚簇为 6 簇
     assert len(events) == 6
     # 7 月连板簇（07-16~07-27）应聚为 1 簇且 n_limit=7

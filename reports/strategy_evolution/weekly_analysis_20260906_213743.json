@@ -1,0 +1,251 @@
+{
+  "generated_at": "20260906_213743",
+  "analysis_period": "past_7_days",
+  "champion": {
+    "name": "aggressive_v2",
+    "stats": {
+      "cumulative_return": 6.52,
+      "avg_daily_return": 0.931,
+      "volatility": 1.687,
+      "win_rate": 57.1,
+      "max_drawdown": 1.25,
+      "sharpe": 0.552,
+      "score": 10.61,
+      "trading_days": 7
+    },
+    "analysis": {
+      "core_holdings": [
+        {
+          "code": "301591",
+          "name": "肯特股份",
+          "appearances": 3,
+          "avg_return": 9.56
+        },
+        {
+          "code": "600547",
+          "name": "山东黄金",
+          "appearances": 4,
+          "avg_return": 4.46
+        },
+        {
+          "code": "300864",
+          "name": "南大环境",
+          "appearances": 3,
+          "avg_return": 3.03
+        },
+        {
+          "code": "688185",
+          "name": "康希诺",
+          "appearances": 3,
+          "avg_return": 2.7
+        },
+        {
+          "code": "688137",
+          "name": "近岸蛋白",
+          "appearances": 3,
+          "avg_return": 2.08
+        }
+      ],
+      "prediction_accuracy": 41.935483870967744,
+      "llm_analysis": {
+        "success_factors": [
+          "不对称盈亏比：总体预测准确率仅41.9%，但近7日累计收益+6.52%，说明“做错时小赔、做对时大赚”的盈亏比有效覆盖了较低胜率。",
+          "聚焦高波动标的：核心持仓中4/5来自创业板(301/300)和科创板(688)，相较主板有更大的日内波动空间，为激进策略提供了厚尾收益来源。",
+          "动态板块轮动：既有山东黄金在4次交易中平均赚4.46%，又包含成长股高频出现，显示策略可能在避险与进攻之间切换，以应对不同行情阶段。"
+        ],
+        "holdings_characteristics": {
+          "industry": "混合型：包含黄金资源、疫苗/生物科技、环保等成长与避险行业，但统一的可辨识特征是“非传统周期”的题材活跃板块",
+          "market_cap": "整体偏小盘/中盘，除山东黄金是大盘股外，其余个股多为创业板或科创板中小市值股票，存在高弹性与高成长性",
+          "volatility": "高波动：创业板/科创板涨跌幅限制为20%，且个股多为高换手题材股，价格容易放大收益与回撤"
+        },
+        "sustainability": {
+          "score": 6.5,
+          "reasoning": "优势主要来自对高波动股票的盈亏比设计而非预测胜率。在题材股活跃、市场分化期较容易创造超额收益；然而样本窗口短（约一周），且持仓集中度高，一旦市场进入普跌或风格切向大盘蓝筹，错失止损将导致回撤，因此可持续性中等。",
+          "risk_factors": [
+            "市场风格切换至低波动价值股，高波动题材股整体走弱",
+            "依赖少数高收益标的，若个别股票失败会拉低整体",
+            "小市值股票流动性不足，极端情况下可能无法按预期价格止损"
+          ]
+        },
+        "improvement_directions": [
+          {
+            "direction": "引入行情状态过滤器（如大盘趋势、行业轮动强度）",
+            "reason": "当前策略在高波动市场上占优，需要在不利行情中减少仓位或空仓",
+            "expected_impact": "降低系统性回撤，增强收益稳定性"
+          },
+          {
+            "direction": "优化动态止损止盈规则",
+            "reason": "近7日有单日跌超1.25%，若提前锁定盈利可避免回吐，同时可提高胜率与风险调整后收益",
+            "expected_impact": "在保住已有利润的同时减少错误交易带来的损失，提升策略风险收益比"
+          },
+          {
+            "direction": "对高频强势股（如山东黄金）建立更精细的入场信号",
+            "reason": "该标的出现4次且平均收益4.46%，是策略确定性最高的标的，强化其出入场逻辑有望扩大优势",
+            "expected_impact": "提高资金在优势标的上的配置效率，扩大整体盈利空间"
+          }
+        ]
+      }
+    }
+  },
+  "all_strategies": {
+    "aggressive": {
+      "cumulative_return": 2.73,
+      "avg_daily_return": 0.39,
+      "volatility": 0.573,
+      "win_rate": 57.1,
+      "max_drawdown": 0.7,
+      "sharpe": 0.68,
+      "score": 8.64,
+      "trading_days": 7
+    },
+    "robust": {
+      "cumulative_return": 2.81,
+      "avg_daily_return": 0.401,
+      "volatility": 0.566,
+      "win_rate": 71.4,
+      "max_drawdown": 0.7,
+      "sharpe": 0.709,
+      "score": 10.18,
+      "trading_days": 7
+    },
+    "bluechip": {
+      "cumulative_return": 3.54,
+      "avg_daily_return": 0.506,
+      "volatility": 0.625,
+      "win_rate": 57.1,
+      "max_drawdown": 0.53,
+      "sharpe": 0.809,
+      "score": 9.4,
+      "trading_days": 7
+    },
+    "defensive": {
+      "cumulative_return": 2.91,
+      "avg_daily_return": 0.416,
+      "volatility": 0.578,
+      "win_rate": 57.1,
+      "max_drawdown": 0.68,
+      "sharpe": 0.72,
+      "score": 8.83,
+      "trading_days": 7
+    },
+    "global": {
+      "cumulative_return": 3.87,
+      "avg_daily_return": 0.553,
+      "volatility": 0.77,
+      "win_rate": 57.1,
+      "max_drawdown": 0.91,
+      "sharpe": 0.718,
+      "score": 9.38,
+      "trading_days": 7
+    },
+    "tech": {
+      "cumulative_return": 4.23,
+      "avg_daily_return": 0.604,
+      "volatility": 0.752,
+      "win_rate": 57.1,
+      "max_drawdown": 0.65,
+      "sharpe": 0.803,
+      "score": 9.79,
+      "trading_days": 7
+    },
+    "aggressive_v1": {
+      "cumulative_return": -1.32,
+      "avg_daily_return": -0.189,
+      "volatility": 0.608,
+      "win_rate": 42.9,
+      "max_drawdown": 1.82,
+      "sharpe": -0.31,
+      "score": 2.69,
+      "trading_days": 7
+    },
+    "aggressive_v2": {
+      "cumulative_return": 6.52,
+      "avg_daily_return": 0.931,
+      "volatility": 1.687,
+      "win_rate": 57.1,
+      "max_drawdown": 1.25,
+      "sharpe": 0.552,
+      "score": 10.61,
+      "trading_days": 7
+    },
+    "aggressive_v3": {
+      "cumulative_return": 5.24,
+      "avg_daily_return": 0.749,
+      "volatility": 1.489,
+      "win_rate": 57.1,
+      "max_drawdown": 1.26,
+      "sharpe": 0.503,
+      "score": 9.74,
+      "trading_days": 7
+    },
+    "defensive_momentum": {
+      "cumulative_return": 0.15,
+      "avg_daily_return": 0.037,
+      "volatility": 0.773,
+      "win_rate": 75.0,
+      "max_drawdown": 1.1,
+      "sharpe": 0.049,
+      "score": 7.58,
+      "trading_days": 4
+    },
+    "defensive_top5": {
+      "cumulative_return": 0.76,
+      "avg_daily_return": 0.19,
+      "volatility": 0.632,
+      "win_rate": 75.0,
+      "max_drawdown": 0.6,
+      "sharpe": 0.301,
+      "score": 8.5,
+      "trading_days": 4
+    },
+    "defensive_weighted": {
+      "cumulative_return": 0.15,
+      "avg_daily_return": 0.037,
+      "volatility": 0.773,
+      "win_rate": 75.0,
+      "max_drawdown": 1.1,
+      "sharpe": 0.049,
+      "score": 7.58,
+      "trading_days": 4
+    },
+    "global_v1": {
+      "cumulative_return": 1.07,
+      "avg_daily_return": 0.153,
+      "volatility": 0.472,
+      "win_rate": 71.4,
+      "max_drawdown": 0.8,
+      "sharpe": 0.324,
+      "score": 8.35,
+      "trading_days": 7
+    },
+    "global_v2": {
+      "cumulative_return": 1.07,
+      "avg_daily_return": 0.153,
+      "volatility": 0.472,
+      "win_rate": 71.4,
+      "max_drawdown": 0.8,
+      "sharpe": 0.324,
+      "score": 8.35,
+      "trading_days": 7
+    },
+    "global_v3": {
+      "cumulative_return": 1.07,
+      "avg_daily_return": 0.153,
+      "volatility": 0.472,
+      "win_rate": 71.4,
+      "max_drawdown": 0.8,
+      "sharpe": 0.324,
+      "score": 8.35,
+      "trading_days": 7
+    }
+  },
+  "variants": [],
+  "next_week_strategies": [
+    "aggressive",
+    "robust",
+    "bluechip",
+    "defensive",
+    "global",
+    "tech"
+  ]
+}

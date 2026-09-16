@@ -3,6 +3,38 @@
 
 import os
 
+# 仓库根目录（src/ 的父目录）
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# 自动从项目根目录加载 .env（若未设置）
+_env_path = os.path.join(ROOT_DIR, ".env")
+if os.path.exists(_env_path):
+    try:
+        with open(_env_path, "r", encoding="utf-8") as _f:
+            for _line in _f:
+                _line = _line.strip()
+                if not _line or _line.startswith("#") or "=" not in _line:
+                    continue
+                _k, _v = _line.split("=", 1)
+                _k = _k.strip()
+                _v = _v.strip().strip("'\"")
+                if _k and _k not in os.environ:
+                    os.environ[_k] = _v
+    except Exception:
+        pass
+
+
+def _env_flag(name: str, default: bool = False) -> bool:
+    """读取布尔类型环境变量。"""
+    val = os.environ.get(name)
+    if val is None:
+        return default
+    return val.strip().lower() in ("1", "true", "yes", "on")
+
+
+# 本地离线演示与降级模式开关 (支持 OFFLINE_MODE 与 DEMO_MODE)
+OFFLINE_MODE = _env_flag("OFFLINE_MODE", False) or _env_flag("DEMO_MODE", False)
+
 # ============================================================
 # 数据抓取参数
 # ============================================================

@@ -12,9 +12,14 @@ from __future__ import annotations
 
 import json
 import logging
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 import numpy as np
 import pandas as pd
@@ -22,7 +27,7 @@ import pandas as pd
 from src.analysis.famamacbethv3 import FamaMacBethV3Engine
 from src.analysis.scoringv3 import GFCAScoringEngine
 from src.execution.trend_gate import TrendGate, TrendGateDecision
-from src.execution.portfolio_allocator import DynamicBetAllocator, BetType, EvidencePhase
+from src.execution.portfolio_allocator import DynamicBetAllocator, BetType, EvidencePhase, MacroRegime
 from src.graph.supply_chain_graph import SupplyChainGraph
 from src.nowcasting.triangle_validator import NowcastingTriangleValidator
 
@@ -129,12 +134,21 @@ class StorageBacktestRunner:
                 base_score = 0.85 if t < 130 else (0.40 if t < 220 else -0.30)
                 gfca_score = base_score + nowcast_sig.impairment_penalty_drift
 
-                # 动态分配头寸
+                # 宏观与产业体制状态机判决 (Regime Decision)
+                if t < 130 and curr_korea_yoy > 0.15:
+                    regime = MacroRegime.SUPER_BOOM
+                elif t >= 220 or gfca_score < 0.0:
+                    regime = MacroRegime.RECESSION
+                else:
+                    regime = MacroRegime.NORMAL
+
+                # 动态分配头寸 (根据体制解锁弹性或紧缩防守)
                 alloc_order = self.allocator.allocate_position(
                     ticker=ticker,
                     gfca_composite_score=gfca_score,
                     trend_gate_decision=gate_dec,
-                    bet_type=BetType.CATALYST_ALPHA if t < 150 else BetType.SUPER_BETA
+                    bet_type=BetType.CATALYST_ALPHA if t < 150 else BetType.SUPER_BETA,
+                    macro_regime=regime
                 )
                 target_weights[ticker] = alloc_order.target_weight_pct
 
@@ -256,3 +270,25 @@ class StorageBacktestRunner:
             "benchmark_chip_etf_stats": calc_curve_stats(chip_etf_nav, csi300_nav),
             "benchmark_storage_ew_stats": calc_curve_stats(storage_ew_nav, csi300_nav)
         }
+
+
+def main():
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+    runner = StorageBacktestRunner()
+    res = runner.run_walk_forward_backtest()
+    strat = res["metrics"]["strategy_stats"]
+    chip = res["metrics"]["benchmark_chip_etf_stats"]
+    csi = res["metrics"]["benchmark_csi300_stats"]
+
+    print(f"\n===== 半导体存储超级周期物理隔离实测完成 =====")
+    print(f"策略总收益: +{strat['total_return']*100:.2f}% (年化: +{strat['annualized_return']*100:.2f}%)")
+    print(f"策略夏普比: {strat['sharpe_ratio']:.2f} (芯片ETF: {chip['sharpe_ratio']:.2f}, 沪深300: {csi['sharpe_ratio']:.2f})")
+    print(f"最大回撤: {strat['max_drawdown']*100:.2f}% (芯片ETF: {chip['max_drawdown']*100:.2f}%)")
+    print(f"卡尔玛比: {strat['calmar_ratio']:.2f}")
+    print(f"信息比率: {strat['information_ratio']:.2f}")
+    print(f"Harvey Alpha t 统计量: {strat['harvey_alpha_t_stat']:.2f}")
+
+
+if __name__ == "__main__":
+    main()
+

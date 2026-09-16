@@ -22,7 +22,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 
+    const THEME_STORAGE_KEY = 'fintech-theme';
+
+    // 存储可能在隐私模式 / 被禁用时抛错，读写一律兜底，
+    // 否则一次异常会中断 init() 中后续的加载与渲染。
+    function readStoredTheme() {
+        try {
+            const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+            return saved === 'light' || saved === 'dark' ? saved : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function writeStoredTheme(theme) {
+        try {
+            window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+        } catch (error) {
+            // 无持久化能力时，主题仅在本次会话内生效
+        }
+    }
+
+    function preferredTheme() {
+        const stored = readStoredTheme();
+        if (stored) return stored;
+        try {
+            return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        } catch (error) {
+            return 'dark';
+        }
+    }
+
+    function initTheme() {
+        // 首屏引导脚本已在 <head> 中写好 data-theme，以实际 DOM 状态为准避免二次闪烁
+        const current = document.documentElement.getAttribute('data-theme');
+        applyTheme(current === 'light' || current === 'dark' ? current : preferredTheme());
+
+        const toggleBtn = document.getElementById('theme-toggle-btn');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                const now = document.documentElement.getAttribute('data-theme') || 'dark';
+                applyTheme(now === 'dark' ? 'light' : 'dark');
+            });
+        }
+    }
+
+    function applyTheme(theme) {
+        const next = theme === 'light' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        writeStoredTheme(next);
+        const toggleBtn = document.getElementById('theme-toggle-btn');
+        if (toggleBtn) {
+            // 兼容历史类名 .theme-text 与当前 .theme-toggle-text
+            const textSpan = toggleBtn.querySelector('.theme-toggle-text') || toggleBtn.querySelector('.theme-text');
+            if (textSpan) textSpan.textContent = next === 'dark' ? '深色' : '浅色';
+            const actionLabel = next === 'dark' ? '切换为浅色主题' : '切换为深色主题';
+            toggleBtn.setAttribute('title', actionLabel);
+            toggleBtn.setAttribute('aria-label', actionLabel);
+            toggleBtn.setAttribute('aria-pressed', next === 'light' ? 'true' : 'false');
+        }
+        if (state.returnsChart) {
+            renderReturnsChart();
+        }
+    }
+
     async function init() {
+        initTheme();
         showLoading();
         await Promise.all([
             loadPortfolios(),
@@ -98,7 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (el) {
             if (dates.length > 0) {
                 const latestDate = dates.sort().reverse()[0];
-                el.textContent = `数据更新至: ${latestDate} (60天周期)`;
+                const totalDays = state.portfolios.tech?.history?.length || dates.length;
+                el.textContent = `数据更新至: ${latestDate} (${totalDays}个交易日)`;
             } else {
                 el.textContent = '暂无数据';
             }
@@ -174,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="portfolio-return ${returnClass}">
                     ${returnSign}${totalReturn.toFixed(2)}%
-                    <span style="font-size:13px;font-weight:600;color:#64748b;margin-left:4px;">(60天累计)</span>
+                    <span style="font-size:13px;font-weight:600;color:#64748b;margin-left:4px;">(累计收益)</span>
                 </div>
                 <div class="portfolio-stats">
                     <div class="portfolio-stat">
@@ -226,15 +292,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const series = [];
 
         // 全池等权基准线
-        if (state.benchmark && state.benchmark.records) {
-            let cum = 0;
-            const bPoints = [];
-            state.benchmark.records.forEach(r => {
-                cum = (1 + cum / 100) * (1 + (r.daily_return_pct || 0) / 100) - 1;
-                if (dateSet.has(r.trade_date)) {
-                    bPoints.push([toTs(r.trade_date), +(cum * 100).toFixed(2)]);
-                }
-            });
+        if (state.benchmark) {
+            let bPoints = [];
+            if (state.benchmark.history && state.benchmark.history.length > 0) {
+                bPoints = state.benchmark.history
+                    .filter(h => dateSet.has(h.date) && h.total_return != null)
+                    .map(h => [toTs(h.date), +Number(h.total_return).toFixed(2)]);
+            } else if (state.benchmark.records) {
+                let nav = 1.0;
+                state.benchmark.records.forEach(r => {
+                    const dRet = (r.daily_return_pct !== undefined ? r.daily_return_pct : r.equal_weight_return_pct) || 0;
+                    nav *= (1.0 + dRet / 100.0);
+                    if (dateSet.has(r.trade_date)) {
+                        bPoints.push([toTs(r.trade_date), +((nav - 1.0) * 100.0).toFixed(2)]);
+                    }
+                });
+            }
             if (bPoints.length > 0) {
                 series.push({
                     name: '全池等权基准',
@@ -288,29 +361,50 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${d.getFullYear()}-${mm}-${dd}`;
         }
 
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const themeTokens = {
+            tooltipBg: isLight ? 'rgba(255, 255, 255, 0.98)' : 'rgba(15, 23, 42, 0.96)',
+            tooltipBorder: isLight ? '#e2e8f0' : '#334155',
+            tooltipText: isLight ? '#0f172a' : '#f8fafc',
+            legendText: isLight ? '#334155' : '#94a3b8',
+            axisLine: isLight ? '#cbd5e1' : '#475569',
+            axisLabel: isLight ? '#64748b' : '#94a3b8',
+            splitLine: isLight ? '#f1f5f9' : 'rgba(255, 255, 255, 0.06)'
+        };
+
         const option = {
+            animation: false,
             tooltip: {
                 trigger: 'axis',
-                backgroundColor: 'rgba(255, 255, 255, 0.96)',
-                borderColor: '#e2e8f0',
+                backgroundColor: themeTokens.tooltipBg,
+                borderColor: themeTokens.tooltipBorder,
                 borderWidth: 1,
-                padding: [12, 16],
-                textStyle: { color: '#0f172a', fontSize: 13 },
+                padding: [14, 18],
+                textStyle: { color: themeTokens.tooltipText, fontSize: 13 },
                 formatter: function(params) {
                     if (!params || !params.length) return '';
                     const first = params[0];
                     const tsVal = Array.isArray(first.value) ? first.value[0] : first.axisValue;
                     const dateStr = fmtDate(tsVal);
-                    let html = `<div style="font-weight:800;margin-bottom:6px;border-bottom:1px solid #f1f5f9;padding-bottom:4px;">📅 ${dateStr}</div>`;
-                    params.forEach(param => {
+                    
+                    // 按累计收益从高到低排序对比
+                    const sortedParams = [...params].sort((a, b) => {
+                        const va = Array.isArray(a.value) ? a.value[1] : (typeof a.value === 'number' ? a.value : -999);
+                        const vb = Array.isArray(b.value) ? b.value[1] : (typeof b.value === 'number' ? b.value : -999);
+                        return vb - va;
+                    });
+
+                    let html = `<div style="font-weight:800;margin-bottom:8px;border-bottom:1px solid ${themeTokens.tooltipBorder};padding-bottom:4px;font-size:14px;">📅 ${dateStr}</div>`;
+                    sortedParams.forEach(param => {
                         const v = Array.isArray(param.value) ? param.value[1] : param.value;
                         const valStr = (v !== null && v !== undefined)
                             ? ((v > 0 ? '+' : '') + Number(v).toFixed(2) + '%')
                             : '--';
-                        const isMain = param.seriesName.includes('激进') || param.seriesName.includes('妖股');
-                        html += `<div style="display:flex;justify-content:space-between;gap:15px;line-height:1.6;${isMain ? 'font-weight:700;' : ''}">
+                        const isMain = param.seriesName.includes('科技') || param.seriesName.includes('全球') || param.seriesName.includes('激进');
+                        const retColor = (v >= 0) ? '#dc2626' : '#16a34a';
+                        html += `<div style="display:flex;justify-content:space-between;align-items:center;gap:18px;line-height:1.7;${isMain ? 'font-weight:700;' : ''}">
                             <span>${param.marker} ${param.seriesName}</span>
-                            <span style="font-family:monospace;font-weight:800;">${valStr}</span>
+                            <span style="font-family:monospace;font-weight:800;color:${retColor};">${valStr}</span>
                         </div>`;
                     });
                     return html;
@@ -319,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
             legend: {
                 data: series.map(s => s.name),
                 bottom: 0,
-                textStyle: { fontSize: 13, fontWeight: 700, color: '#334155' }
+                textStyle: { fontSize: 13, fontWeight: 700, color: themeTokens.legendText }
             },
             grid: {
                 left: '2%',
@@ -331,9 +425,9 @@ document.addEventListener('DOMContentLoaded', () => {
             xAxis: {
                 type: 'time',
                 boundaryGap: false,
-                axisLine: { lineStyle: { color: '#cbd5e1' } },
+                axisLine: { lineStyle: { color: themeTokens.axisLine } },
                 axisLabel: {
-                    color: '#64748b',
+                    color: themeTokens.axisLabel,
                     fontSize: 12,
                     formatter: function(value) {
                         const d = new Date(value);
@@ -344,13 +438,13 @@ document.addEventListener('DOMContentLoaded', () => {
             yAxis: {
                 type: 'value',
                 name: '累计收益 (%)',
-                nameTextStyle: { color: '#64748b', fontSize: 12 },
+                nameTextStyle: { color: themeTokens.axisLabel, fontSize: 12 },
                 axisLabel: {
                     formatter: '{value}%',
-                    color: '#64748b',
+                    color: themeTokens.axisLabel,
                     fontSize: 12
                 },
-                splitLine: { lineStyle: { type: 'dashed', color: '#f1f5f9' } }
+                splitLine: { lineStyle: { type: 'dashed', color: themeTokens.splitLine } }
             },
             series: series
         };
@@ -376,20 +470,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const suggestions = evo.strategy_suggestions || [];
 
         content.innerHTML = `
-            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin-bottom:16px;">
-                <div style="font-size:16px; font-weight:800; color:#0f172a; margin-bottom:8px;">
-                    🏆 阶段冠军策略：<span style="color:#2563eb;">${champion.name || '激进成长·温度联动'}</span>
+            <div class="evo-champion-box">
+                <div class="evo-champion-title">
+                    🏆 阶段冠军策略：<span style="color:var(--primary-color, #2563eb);">${champion.name || '激进成长·温度联动'}</span>
                 </div>
-                <div style="font-size:13px; color:#475569; line-height:1.6;">
+                <div class="evo-champion-desc">
                     ${champion.reason || '在 60 天弱市阴跌环境中，依托宏观大盘温度门控自动压降总仓位，并通过单股严格止损，回撤控制在 16.9% 并持续跑赢全池等权基准。'}
                 </div>
             </div>
-            <div style="font-size:14px; font-weight:700; color:#0f172a; margin-bottom:8px;">💡 量化模型进化建议</div>
-            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:12px;">
+            <div class="evo-section-subtitle">💡 量化模型进化建议</div>
+            <div class="evo-grid">
                 ${suggestions.map(s => `
-                    <div style="background:#ffffff; border:1px solid #e2e8f0; border-left:4px solid #3b82f6; border-radius:8px; padding:12px 14px;">
-                        <div style="font-size:13px; font-weight:700; color:#1e293b; margin-bottom:4px;">${s.title || '风控与仓位约束'}</div>
-                        <div style="font-size:12px; color:#64748b; line-height:1.5;">${s.detail || s}</div>
+                    <div class="evo-card">
+                        <div class="evo-card-title">${s.title || '风控与仓位约束'}</div>
+                        <div class="evo-card-detail">${s.detail || s}</div>
                     </div>
                 `).join('')}
             </div>

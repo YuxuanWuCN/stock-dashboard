@@ -4,10 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>量化组合实盘看板</title>
-    <link rel="stylesheet" href="assets/style.css?v=20260821_v34_font_fixed">
-    <link rel="stylesheet" href="assets/portfolio.css?v=20260821_v32_clear_tables">
+    <!-- 首屏主题引导：必须在样式表生效之前确定 data-theme，避免与 index.html 之间出现主题闪烁 -->
+    <script>
+        (function () {
+            var THEME_KEY = 'fintech-theme';
+            var theme = 'dark';
+            try {
+                var saved = window.localStorage.getItem(THEME_KEY);
+                if (saved === 'light' || saved === 'dark') {
+                    theme = saved;
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+                    theme = 'light';
+                }
+            } catch (error) {
+                // 隐私模式或存储被禁用：回落默认暗色，且绝不阻塞后续脚本
+            }
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <link rel="stylesheet" href="assets/style.css?v=20260915_v11_frontend_professional">
+    <link rel="stylesheet" href="assets/portfolio.css?v=20260915_v11_frontend_professional">
     <!-- 🌈 年轻化 FinTech 轻奢风覆盖层 -->
-    <link rel="stylesheet" href="assets/style_young.css?v=20260822_v1">
+    <link rel="stylesheet" href="assets/style_young.css?v=20260915_v11_frontend_professional">
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
 <body>
@@ -15,16 +33,48 @@
         <!-- 顶部导航 -->
         <header class="portfolio-header">
             <div class="header-nav">
-                <a href="index.html" class="nav-back">← 返回自选股</a>
-                <h1>📈 量化组合实盘</h1>
+                <a href="index.html" class="nav-back">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>返回智能看板</span>
+                </a>
+                <h1>
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    <span>量化组合实盘</span>
+                </h1>
             </div>
-            <div id="update-time" class="update-time">数据加载中...</div>
+            <div class="header-actions">
+                <a href="index.html#/academic" class="portfolio-link academic-nav-link" title="跳转至学术研究成果与前沿实证">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                    </svg>
+                    <span>科研成果与实证</span>
+                </a>
+                <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="切换明暗主题" aria-pressed="false" title="切换明暗主题">
+                    <svg class="theme-icon sun" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="theme-icon moon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span id="theme-toggle-text" class="theme-toggle-text">主题</span>
+                </button>
+                <div id="update-time" class="update-time">数据加载中...</div>
+            </div>
         </header>
 
         <!-- 今日市场情绪卡片 -->
         <section class="sentiment-section" id="sentiment-section">
             <div class="section-header">
-                <h2>🌡️ 今日市场情绪</h2>
+                <h2>今日市场情绪</h2>
                 <span id="sentiment-date" class="sentiment-date">--</span>
             </div>
             <div class="sentiment-grid">
@@ -37,15 +87,15 @@
                     <div id="sentiment-score-text" class="sentiment-score-text">0/10</div>
                 </div>
                 <div class="sentiment-card">
-                    <div class="sentiment-label">💰 资金流向</div>
+                    <div class="sentiment-label">资金流向</div>
                     <div id="capital-flow" class="sentiment-value">--</div>
                 </div>
                 <div class="sentiment-card">
-                    <div class="sentiment-label">🔥 热点板块</div>
+                    <div class="sentiment-label">热点板块</div>
                     <div id="hot-sectors" class="sentiment-value sectors">--</div>
                 </div>
                 <div class="sentiment-card recommend">
-                    <div class="sentiment-label">✨ 推荐组合</div>
+                    <div class="sentiment-label">推荐组合</div>
                     <div id="recommend-portfolio" class="recommend-name">--</div>
                     <div id="recommend-reason" class="recommend-reason">--</div>
                     <div id="recommend-position" class="recommend-position">建议仓位: --</div>
@@ -56,7 +106,7 @@
         <!-- 6组合今日表现 -->
         <section class="portfolios-section">
             <div class="section-header">
-                <h2>📊 六大组合今日表现</h2>
+                <h2>六大组合今日表现</h2>
                 <div class="portfolio-legend">
                     <span class="legend-item"><span class="legend-dot aggressive"></span>激进成长</span>
                     <span class="legend-item"><span class="legend-dot robust"></span>均衡稳健</span>
@@ -74,11 +124,11 @@
         <!-- 累计收益曲线 -->
         <section class="chart-section">
             <div class="section-header">
-                <h2>📈 累计收益曲线对比</h2>
+                <h2>累计收益曲线对比</h2>
                 <div class="chart-controls">
-                    <button class="period-btn active" data-period="7">近7天</button>
+                    <button class="period-btn" data-period="7">近7天</button>
                     <button class="period-btn" data-period="30">近30天</button>
-                    <button class="period-btn" data-period="all">全部</button>
+                    <button class="period-btn active" data-period="all">全部</button>
                 </div>
             </div>
             <div class="chart-card">
@@ -89,7 +139,7 @@
         <!-- 策略进化 -->
         <section class="evolution-section" id="evolution-section">
             <div class="section-header">
-                <h2>🧬 策略进化追踪</h2>
+                <h2>策略进化追踪</h2>
                 <span id="evolution-date" class="evolution-date">--</span>
             </div>
             <div id="evolution-content" class="evolution-content">
@@ -99,7 +149,7 @@
 
         <!-- 页脚 -->
         <footer class="portfolio-footer">
-            <p>⚠️ 本页面展示模拟盘数据，仅供研究学习，不构成投资建议</p>
+            <p>本页面展示模拟盘数据，仅供研究学习，不构成投资建议</p>
         </footer>
     </div>
 
