@@ -18,6 +18,22 @@ class ServerTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json()["status"], "ok")
 
+    def test_serve_index_and_portfolio_static_pages(self):
+        """验证前端看板 index.html 与 portfolio.html 能够被静态正常托管。"""
+        resp_index = self.client.get("/")
+        self.assertEqual(resp_index.status_code, 200)
+        self.assertIn(b"html", resp_index.data.lower())
+
+        resp_portfolio = self.client.get("/portfolio.html")
+        self.assertEqual(resp_portfolio.status_code, 200)
+        self.assertIn(b"portfolio", resp_portfolio.data.lower())
+
+        resp_asset = self.client.get("/assets/portfolio.css")
+        self.assertEqual(resp_asset.status_code, 200)
+
+        resp_404 = self.client.get("/non_existent_page_12345.html")
+        self.assertEqual(resp_404.status_code, 404)
+
     def test_query_rejects_invalid_code(self):
         response = self.client.get("/api/query?code=abc")
 

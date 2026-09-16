@@ -139,7 +139,7 @@
                 </div>
             </div>
             <div class="chart-card">
-                <div id="returns-chart" class="chart-element" style="height: 500px;"></div>
+                <div id="returns-chart" class="chart-element"></div>
             </div>
         </section>
 
@@ -162,14 +162,23 @@
 
     <script>
         if (typeof echarts === 'undefined') {
-            console.warn('Primary ECharts CDN failed, switching to backup...');
-            var backupScript = document.createElement('script');
-            backupScript.src = 'https://cdn.bootcdn.net/ajax/libs/echarts/5.5.1/echarts.min.js';
-            document.head.appendChild(backupScript);
+            console.warn('Primary ECharts CDN loading failed or slow, switching to backup CDN...');
+            var backupCdns = [
+                'https://cdn.bootcdn.net/ajax/libs/echarts/5.5.1/echarts.min.js',
+                'https://unpkg.com/echarts@5.5.1/dist/echarts.min.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.1/echarts.min.js'
+            ];
+            var bIdx = 0;
+            function loadBackup() {
+                if (bIdx >= backupCdns.length) return;
+                var s = document.createElement('script');
+                s.src = backupCdns[bIdx++];
+                s.onerror = loadBackup;
+                document.head.appendChild(s);
+            }
+            loadBackup();
         }
     </script>
-    <script>
-        document.write('<script src="assets/portfolio.js?t=' + Date.now() + '"><\/script>');
-    </script>
+    <script src="assets/portfolio.js?v=20260916_v12_responsive"></script>
 </body>
 </html>

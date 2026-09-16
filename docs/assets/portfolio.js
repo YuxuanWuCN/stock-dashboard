@@ -239,7 +239,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const totalDays = state.portfolios.tech?.history?.length || dates.length;
                 el.textContent = `数据更新至: ${latestDate} (${totalDays}个交易日)`;
             } else {
-                el.textContent = '暂无数据';
+                if (window.location.protocol === 'file:') {
+                    el.innerHTML = '<span style="color:#f59e0b;font-weight:700;">⚠️ file:// 需本地服务运行</span>';
+                } else {
+                    el.textContent = '暂无数据';
+                }
             }
         }
     }
@@ -287,6 +291,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const grid = document.getElementById('portfolios-grid');
         if (!grid) return;
         grid.innerHTML = '';
+
+        const activeKeys = Object.keys(state.portfolios).filter(k => k !== 'benchmark' && state.portfolios[k]);
+        if (activeKeys.length === 0) {
+            if (window.location.protocol === 'file:') {
+                grid.innerHTML = `
+                    <div class="portfolio-file-protocol-tip" style="grid-column: 1 / -1; background: var(--bg-card-subtle); border: 1px dashed var(--primary-color); border-radius: 12px; padding: 24px; text-align: center;">
+                        <h3 style="margin-top:0; color:var(--primary-color);">💡 本地直接打开提示</h3>
+                        <p style="color:var(--text-secondary); margin: 8px 0 16px;">
+                            检测到您正在直接双击本地 html 文件（<code>file://</code> 协议）打开。受现代浏览器同源安全限制，无法读取本地量化回测 JSON 文件。
+                        </p>
+                        <div style="background:var(--card-bg); display:inline-block; padding:12px 20px; border-radius:8px; border:1px solid var(--border-color); font-family:monospace; font-size:14px; text-align:left;">
+                            1. 打开终端进入项目根目录<br>
+                            2. 运行后端服务：<strong style="color:var(--primary-color);">python src/server.py</strong><br>
+                            3. 在浏览器打开：<strong style="color:var(--primary-color);">http://127.0.0.1:5000/portfolio.html</strong>
+                        </div>
+                    </div>
+                `;
+            } else {
+                grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 32px;">数据加载中或暂无组合数据...</div>';
+            }
+            return;
+        }
 
         Object.keys(portfolioConfig).forEach(id => {
             if (id === 'benchmark') return;
@@ -336,10 +362,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const chartDom = document.getElementById('returns-chart');
         if (!chartDom) return;
 
-        if (!state.returnsChart) {
-            state.returnsChart = echarts.init(chartDom);
-            window.addEventListener('resize', () => state.returnsChart.resize());
+        if (typeof echarts === 'undefined') {
+            console.warn('ECharts 尚未加载就绪，稍后自动重试...');
+            setTimeout(renderReturnsChart, 300);
+            return;
         }
+
+        try {
+            if (!state.returnsChart) {
+                state.returnsChart = echarts.init(chartDom);
+                window.addEventListener('resize', () => {
+                    if (state.returnsChart) {
+                        try { state.returnsChart.resize(); } catch (_) {}
+                    }
+                });
+            }
 
         // 收集所有组合与基准的有效日期（并集，升序）
         const allDates = new Set();
@@ -393,24 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     z: 2
                 });
             }
-
-            const baseNav = state.currentPeriod === 'all' ? 1.0 : (bMap[dates[0]] || 1.0);
-            const bPoints = dates.map(d => {
-                const nav = bMap[d];
-                return nav !== undefined ? +(((nav / baseNav) - 1.0) * 100.0).toFixed(2) : null;
-            });
-
-            series.push({
-                name: '全池等权基准',
-                type: 'line',
-                data: bPoints,
-                smooth: true,
-                showSymbol: false,
-                connectNulls: true,
-                lineStyle: { width: 2, type: 'dashed', color: '#94a3b8' },
-                itemStyle: { color: '#94a3b8' },
-                z: 2
-            });
         }
 
         // 六大组合曲线
@@ -471,17 +490,6 @@ document.addEventListener('DOMContentLoaded', () => {
             splitLine: isLight ? '#f1f5f9' : 'rgba(255, 255, 255, 0.06)'
         };
 
-        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-        const themeTokens = {
-            tooltipBg: isLight ? 'rgba(255, 255, 255, 0.98)' : 'rgba(15, 23, 42, 0.96)',
-            tooltipBorder: isLight ? '#e2e8f0' : '#334155',
-            tooltipText: isLight ? '#0f172a' : '#f8fafc',
-            legendText: isLight ? '#334155' : '#94a3b8',
-            axisLine: isLight ? '#cbd5e1' : '#475569',
-            axisLabel: isLight ? '#64748b' : '#94a3b8',
-            splitLine: isLight ? '#f1f5f9' : 'rgba(255, 255, 255, 0.06)'
-        };
-
         const option = {
             animation: false,
             tooltip: {
@@ -523,13 +531,14 @@ document.addEventListener('DOMContentLoaded', () => {
             legend: {
                 data: series.map(s => s.name),
                 bottom: 0,
-                textStyle: { fontSize: 13, fontWeight: 700, color: themeTokens.legendText }
+                type: 'scroll',
+                textStyle: { fontSize: 12, fontWeight: 600, color: themeTokens.legendText }
             },
             grid: {
                 left: '2%',
                 right: '3%',
-                top: '6%',
-                bottom: '10%',
+                top: 45,
+                bottom: 40,
                 containLabel: true
             },
             xAxis: {
@@ -559,7 +568,10 @@ document.addEventListener('DOMContentLoaded', () => {
             series: series
         };
 
-        state.returnsChart.setOption(option, true);
+            state.returnsChart.setOption(option, true);
+        } catch (e) {
+            console.error('渲染收益曲线图表异常:', e);
+        }
     }
 
     function renderEvolution() {

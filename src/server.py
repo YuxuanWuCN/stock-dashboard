@@ -24,7 +24,7 @@ except ImportError:  # Support direct execution from src/.
 
 configure_proxy_from_system()
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 import akshare as ak
 import pandas as pd
@@ -42,8 +42,12 @@ except ImportError:  # Support direct execution from src/.
 logger = setup_logging()
 app = Flask(__name__)
 
+DOCS_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "docs"))
+
 DEFAULT_CORS_ORIGINS = (
     "https://yuxuanwucn.github.io",
+    "http://127.0.0.1:5000",
+    "http://localhost:5000",
     "http://127.0.0.1:8000",
     "http://localhost:8000",
     "http://127.0.0.1:8001",
@@ -522,6 +526,18 @@ def api_query():
 
 @app.route("/")
 def index():
+    if request.args.get("format") == "json" or (
+        request.headers.get("Accept") == "application/json"
+        and not request.accept_mimetypes.accept_html
+    ):
+        return jsonify({
+            "message": "🏠 股票看板 API 已就绪",
+            "usage": "GET /api/query?code=<6位代码>&start_date=<YYYY-MM-DD>",
+            "example": "/api/query?code=600519&start_date=2025-07-01",
+        })
+    index_file = os.path.join(DOCS_DIR, "index.html")
+    if os.path.isfile(index_file):
+        return send_from_directory(DOCS_DIR, "index.html")
     return jsonify({
         "message": "🏠 股票看板 API 已就绪",
         "usage": "GET /api/query?code=<6位代码>&start_date=<YYYY-MM-DD>",
@@ -1278,6 +1294,27 @@ def api_trigger_update():
     return jsonify({"status": "error", "success": False, "error": "启动更新任务失败"}), 500
 
 
+# ============================================================
+# 前端静态看板托管路由
+# ============================================================
+
+@app.route("/portfolio.html")
+def serve_portfolio():
+    """托管量化组合实盘看板页面。"""
+    return send_from_directory(DOCS_DIR, "portfolio.html")
+
+
+@app.route("/<path:filename>")
+def serve_static(filename):
+    """托管 docs 目录下的前端静态资源（JS/CSS/JSON等）。"""
+    if filename.startswith("api/"):
+        return jsonify({"status": "error", "error": "API route not found"}), 404
+    file_path = os.path.join(DOCS_DIR, filename)
+    if os.path.isfile(file_path):
+        return send_from_directory(DOCS_DIR, filename)
+    return jsonify({"status": "error", "error": "Not Found"}), 404
+
+
 # 启动后台调度守护线程
 try:
     scheduler.start()
@@ -1296,8 +1333,9 @@ if __name__ == "__main__":
         "1", "true", "yes"
     )
     logger.info("=" * 50)
-    logger.info("🏠 股票看板 API 服务启动中...")
+    logger.info("🏠 股票看板 API 与前端服务启动中...")
+    logger.info("智能看板主页: http://127.0.0.1:%d/", port)
+    logger.info("量化组合实盘: http://127.0.0.1:%d/portfolio.html", port)
     logger.info("访问 http://127.0.0.1:%d/api/health 确认服务状态", port)
-    logger.info("查询示例: http://127.0.0.1:%d/api/query?code=600519&start_date=2025-07-01", port)
     logger.info("=" * 50)
     app.run(host="0.0.0.0", port=port, debug=debug)

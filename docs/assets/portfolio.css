@@ -424,6 +424,12 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+.chart-element {
+    width: 100%;
+    height: 480px;
+    min-height: 280px;
+}
+
 /* 策略进化 Evolution */
 .evolution-section {
     margin-bottom: 32px;
@@ -500,8 +506,107 @@ body {
     font-size: 13px;
 }
 
+/* 响应式多端适配 */
+@media (max-width: 992px) {
+    .sentiment-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .portfolios-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
-    .container { padding: 16px 12px; }
-    .portfolio-header { padding: 16px; }
-    .portfolios-grid { grid-template-columns: 1fr; }
+    .container {
+        padding: 14px 12px 36px;
+    }
+    .portfolio-header {
+        padding: 14px 16px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .header-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+    .header-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+    }
+    .header-actions .portfolio-link,
+    .header-actions .theme-toggle-btn {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    .update-time {
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+        margin-top: 4px;
+    }
+    .sentiment-grid {
+        grid-template-columns: 1fr;
+    }
+    .portfolios-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .portfolio-card {
+        padding: 18px 16px;
+    }
+    .chart-card {
+        padding: 16px 12px;
+    }
+    .chart-element {
+        height: 360px;
+    }
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .portfolio-legend {
+        gap: 8px;
+    }
+    .legend-item {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px 8px 32px;
+    }
+    .portfolio-header {
+        padding: 12px 14px;
+        border-radius: 12px;
+    }
+    .header-nav {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .header-nav h1 {
+        font-size: 18px;
+    }
+    .nav-back {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+    .chart-element {
+        height: 300px;
+    }
+    .portfolio-return {
+        font-size: 22px;
+    }
+    .period-btn {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
 }
