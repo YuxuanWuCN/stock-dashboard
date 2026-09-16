@@ -3990,6 +3990,456 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ============================================================
+    // ⚙️ 大模型 API 配置中心与每日自动更新调度系统 (Settings & Scheduler)
+    // ============================================================
+    function initSettingsAndAutoUpdateModule() {
+        // 模态框与触发按钮引用
+        const settingsBtn = document.getElementById('settings-btn');
+        const settingsModal = document.getElementById('settings-modal');
+        const settingsOverlay = document.getElementById('settings-modal-overlay');
+        const settingsClose = document.getElementById('settings-modal-close');
+        const settingsCancel = document.getElementById('settings-modal-cancel');
+
+        const updateBtn = document.getElementById('daily-update-btn');
+        const updateModal = document.getElementById('update-modal');
+        const updateOverlay = document.getElementById('update-modal-overlay');
+        const updateClose = document.getElementById('update-modal-close');
+        const updateCancel = document.getElementById('update-modal-cancel');
+
+        const guideModal = document.getElementById('welcome-guide-modal');
+        const guideOverlay = document.getElementById('welcome-guide-overlay');
+        const guideClose = document.getElementById('welcome-guide-close');
+        const guideEnterBtn = document.getElementById('welcome-guide-enter-btn');
+        const guideOptConfig = document.getElementById('guide-opt-config');
+        const guideOptOffline = document.getElementById('guide-opt-offline');
+        const guideDontShowAgain = document.getElementById('guide-dont-show-again');
+
+        // 表单字段
+        const providerSelect = document.getElementById('cfg-provider-select');
+        const modelNameInput = document.getElementById('cfg-model-name');
+        const apiKeyInput = document.getElementById('cfg-api-key');
+        const toggleKeyVisBtn = document.getElementById('btn-toggle-key-visibility');
+        const baseUrlInput = document.getElementById('cfg-base-url');
+        const tushareTokenInput = document.getElementById('cfg-tushare-token');
+        const offlineModeToggle = document.getElementById('cfg-offline-mode');
+        const schedulerToggle = document.getElementById('cfg-scheduler-enabled');
+        const testResultBox = document.getElementById('cfg-test-result');
+        const btnTestApi = document.getElementById('btn-test-api');
+        const btnSaveConfig = document.getElementById('btn-save-config');
+
+        // 调度面板字段
+        const updateStatBadge = document.getElementById('update-stat-badge');
+        const updateStatLastTime = document.getElementById('update-stat-last-time');
+        const updateStatNextTime = document.getElementById('update-stat-next-time');
+        const updateStatAutoFlag = document.getElementById('update-stat-auto-flag');
+        const updateProgressStage = document.getElementById('update-progress-stage');
+        const updateProgressPct = document.getElementById('update-progress-pct');
+        const updateProgressBar = document.getElementById('update-progress-bar');
+        const updateLogsBox = document.getElementById('update-logs-box');
+        const btnRunUpdateNow = document.getElementById('btn-run-update-now');
+        const updateIndicatorDot = document.getElementById('update-indicator-dot');
+        const dailyUpdateBtnText = document.getElementById('daily-update-btn-text');
+
+        let updatePollTimer = null;
+        let wasRunning = false;
+
+        // 服务商预设配置映射
+        const PROVIDER_PRESETS = {
+            deepseek: {
+                model: 'deepseek-chat',
+                baseUrl: 'https://api.deepseek.com/v1'
+            },
+            dashscope: {
+                model: 'qwen-plus',
+                baseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+            },
+            gemini: {
+                model: 'gemini-1.5-flash',
+                baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai/'
+            },
+            openai: {
+                model: 'gpt-4o-mini',
+                baseUrl: 'https://api.openai.com/v1'
+            },
+            custom: {
+                model: '',
+                baseUrl: ''
+            }
+        };
+
+        // 弹窗控制函数
+        function openSettingsModal() {
+            if (settingsModal) settingsModal.style.display = 'flex';
+            if (testResultBox) testResultBox.style.display = 'none';
+            fetchServerConfig();
+        }
+
+        function closeSettingsModal() {
+            if (settingsModal) settingsModal.style.display = 'none';
+        }
+
+        function openUpdateModal() {
+            if (updateModal) updateModal.style.display = 'flex';
+            fetchUpdateStatus();
+        }
+
+        function closeUpdateModal() {
+            if (updateModal) updateModal.style.display = 'none';
+        }
+
+        function openGuideModal() {
+            if (guideModal) guideModal.style.display = 'flex';
+        }
+
+        function closeGuideModal() {
+            if (guideModal) guideModal.style.display = 'none';
+            if (guideDontShowAgain && guideDontShowAgain.checked) {
+                try {
+                    localStorage.setItem('hide_welcome_guide', 'true');
+                } catch (e) {}
+            }
+        }
+
+        // 事件监听：打开/关闭
+        if (settingsBtn) settingsBtn.addEventListener('click', openSettingsModal);
+        if (settingsClose) settingsClose.addEventListener('click', closeSettingsModal);
+        if (settingsCancel) settingsCancel.addEventListener('click', closeSettingsModal);
+        if (settingsOverlay) settingsOverlay.addEventListener('click', closeSettingsModal);
+
+        if (updateBtn) updateBtn.addEventListener('click', openUpdateModal);
+        if (updateClose) updateClose.addEventListener('click', closeUpdateModal);
+        if (updateCancel) updateCancel.addEventListener('click', closeUpdateModal);
+        if (updateOverlay) updateOverlay.addEventListener('click', closeUpdateModal);
+
+        if (guideClose) guideClose.addEventListener('click', closeGuideModal);
+        if (guideEnterBtn) guideEnterBtn.addEventListener('click', closeGuideModal);
+        if (guideOverlay) guideOverlay.addEventListener('click', closeGuideModal);
+
+        if (guideOptConfig) {
+            guideOptConfig.addEventListener('click', () => {
+                closeGuideModal();
+                openSettingsModal();
+            });
+        }
+
+        if (guideOptOffline) {
+            guideOptOffline.addEventListener('click', () => {
+                closeGuideModal();
+                if (offlineModeToggle) offlineModeToggle.checked = true;
+                saveConfigToServer({ offline_mode: true }, true);
+                if (window.showToast) window.showToast('已无门槛切换至离线演示模式，尽情探索量化实盘！', 'success');
+            });
+        }
+
+        // 密钥明暗切换
+        if (toggleKeyVisBtn && apiKeyInput) {
+            toggleKeyVisBtn.addEventListener('click', () => {
+                if (apiKeyInput.type === 'password') {
+                    apiKeyInput.type = 'text';
+                    toggleKeyVisBtn.textContent = '🙈';
+                } else {
+                    apiKeyInput.type = 'password';
+                    toggleKeyVisBtn.textContent = '👁️';
+                }
+            });
+        }
+
+        // 预设服务商联动
+        if (providerSelect) {
+            providerSelect.addEventListener('change', (e) => {
+                const p = e.target.value;
+                const preset = PROVIDER_PRESETS[p];
+                if (preset) {
+                    if (preset.model && modelNameInput) modelNameInput.value = preset.model;
+                    if (preset.baseUrl && baseUrlInput) baseUrlInput.value = preset.baseUrl;
+                }
+            });
+        }
+
+        // 读取后端配置
+        async function fetchServerConfig() {
+            try {
+                const res = await fetch('/api/config');
+                if (!res.ok) return;
+                const data = await res.json();
+
+                if (modelNameInput && data.model) modelNameInput.value = data.model;
+                if (apiKeyInput && data.api_key) apiKeyInput.value = data.api_key;
+                if (baseUrlInput && data.base_url) baseUrlInput.value = data.base_url;
+                if (tushareTokenInput && data.tushare_token) tushareTokenInput.value = data.tushare_token;
+                if (offlineModeToggle) offlineModeToggle.checked = !!data.offline_mode;
+                if (schedulerToggle) schedulerToggle.checked = !!data.scheduler_enabled;
+
+                if (providerSelect && data.provider) {
+                    providerSelect.value = data.provider;
+                }
+
+                // 检查是否需要弹出欢迎向导（未配置真实 Key 且未主动忽略）
+                let isGuideHidden = false;
+                try {
+                    isGuideHidden = localStorage.getItem('hide_welcome_guide') === 'true';
+                } catch (e) {}
+
+                if (!data.has_api_key && !isGuideHidden && !data.offline_mode) {
+                    openGuideModal();
+                }
+            } catch (err) {
+                // 静态环境（例如直接通过 GitHub Pages 访问），静默忽略
+                console.info('[Config] Running in static/offline environment, server API inactive.');
+            }
+        }
+
+        // 在线连通性测试
+        if (btnTestApi) {
+            btnTestApi.addEventListener('click', async () => {
+                const payload = {
+                    provider: providerSelect ? providerSelect.value : 'deepseek',
+                    model: modelNameInput ? modelNameInput.value.trim() : '',
+                    api_key: apiKeyInput ? apiKeyInput.value.trim() : '',
+                    base_url: baseUrlInput ? baseUrlInput.value.trim() : ''
+                };
+
+                btnTestApi.disabled = true;
+                const origText = btnTestApi.innerHTML;
+                btnTestApi.innerHTML = '<span>⏳ 正在连通测试...</span>';
+                if (testResultBox) {
+                    testResultBox.style.display = 'flex';
+                    testResultBox.className = 'test-result-box';
+                    testResultBox.innerHTML = '<span class="test-result-icon">🔄</span><span>正在请求大模型端点并进行握手验证...</span>';
+                }
+
+                try {
+                    const res = await fetch('/api/config/test', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await res.json();
+
+                    if (data.status === 'ok') {
+                        if (testResultBox) {
+                            testResultBox.className = 'test-result-box success';
+                            testResultBox.innerHTML = `<span class="test-result-icon">✅</span><span><strong>连接测试成功！</strong> (耗时: ${data.latency_ms}ms) - 模型响应正常。</span>`;
+                        }
+                        if (window.showToast) window.showToast(`大模型 API 连通成功 (${data.latency_ms}ms)`, 'success');
+                    } else {
+                        if (testResultBox) {
+                            testResultBox.className = 'test-result-box error';
+                            testResultBox.innerHTML = `<span class="test-result-icon">❌</span><span><strong>连接测试失败：</strong> ${data.error || '未知错误'}</span>`;
+                        }
+                        if (window.showToast) window.showToast('API 连接测试失败，请检查密钥与端点', 'error');
+                    }
+                } catch (err) {
+                    if (testResultBox) {
+                        testResultBox.className = 'test-result-box error';
+                        testResultBox.innerHTML = `<span class="test-result-icon">❌</span><span><strong>网络请求失败：</strong> 无法连接本地后台服务 (${err.message})</span>`;
+                    }
+                } finally {
+                    btnTestApi.disabled = false;
+                    btnTestApi.innerHTML = origText;
+                }
+            });
+        }
+
+        // 保存配置
+        async function saveConfigToServer(customPayload = null, silent = false) {
+            const payload = customPayload || {
+                provider: providerSelect ? providerSelect.value : 'deepseek',
+                model: modelNameInput ? modelNameInput.value.trim() : '',
+                api_key: apiKeyInput ? apiKeyInput.value.trim() : '',
+                base_url: baseUrlInput ? baseUrlInput.value.trim() : '',
+                tushare_token: tushareTokenInput ? tushareTokenInput.value.trim() : '',
+                offline_mode: offlineModeToggle ? offlineModeToggle.checked : false,
+                scheduler_enabled: schedulerToggle ? schedulerToggle.checked : true
+            };
+
+            if (btnSaveConfig && !customPayload) {
+                btnSaveConfig.disabled = true;
+                btnSaveConfig.innerHTML = '<span>💾 正在保存...</span>';
+            }
+
+            try {
+                const res = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (data.status === 'ok') {
+                    if (!silent && window.showToast) {
+                        window.showToast('✅ 配置已安全持久化并热重载生效！', 'success');
+                    }
+                    closeSettingsModal();
+                    // 重新拉取以更新脱敏显示
+                    fetchServerConfig();
+                } else {
+                    if (!silent && window.showToast) {
+                        window.showToast(`❌ 保存配置失败: ${data.error || '未知错误'}`, 'error');
+                    }
+                }
+            } catch (err) {
+                if (!silent && window.showToast) {
+                    window.showToast(`❌ 无法连接后台服务: ${err.message}`, 'error');
+                }
+            } finally {
+                if (btnSaveConfig && !customPayload) {
+                    btnSaveConfig.disabled = false;
+                    btnSaveConfig.innerHTML = '<span>💾 保存并生效</span>';
+                }
+            }
+        }
+
+        if (btnSaveConfig) {
+            btnSaveConfig.addEventListener('click', () => saveConfigToServer());
+        }
+
+        // 定时更新调度器状态拉取与监控
+        async function fetchUpdateStatus() {
+            try {
+                const res = await fetch('/api/system/update-status');
+                if (!res.ok) return;
+                const status = await res.json();
+
+                // 状态 Pill
+                if (updateStatBadge) {
+                    if (status.is_running) {
+                        updateStatBadge.className = 'status-pill running';
+                        updateStatBadge.textContent = '🔄 运行更新中';
+                    } else if (status.last_status === 'error') {
+                        updateStatBadge.className = 'status-pill error';
+                        updateStatBadge.textContent = '❌ 异常重试';
+                    } else {
+                        updateStatBadge.className = 'status-pill idle';
+                        updateStatBadge.textContent = '● 空闲就绪';
+                    }
+                }
+
+                // 顶部小圆点与文字
+                if (updateIndicatorDot) {
+                    if (status.is_running) {
+                        updateIndicatorDot.className = 'update-indicator-dot running';
+                    } else if (status.last_status === 'error') {
+                        updateIndicatorDot.className = 'update-indicator-dot error';
+                    } else {
+                        updateIndicatorDot.className = 'update-indicator-dot';
+                    }
+                }
+                if (dailyUpdateBtnText) {
+                    dailyUpdateBtnText.textContent = status.is_running ? '更新中...' : '每日自更';
+                }
+
+                // 上次更新时间与下次计划时间
+                if (updateStatLastTime) {
+                    updateStatLastTime.textContent = status.last_update_time ? status.last_update_time.replace('T', ' ') : '尚未执行';
+                }
+                if (updateStatNextTime) {
+                    updateStatNextTime.textContent = status.next_scheduled_time ? status.next_scheduled_time.replace('T', ' ') : '工作日 17:30 (盘后)';
+                }
+
+                // 进度条与阶段描述
+                if (updateProgressStage) {
+                    updateProgressStage.textContent = status.current_stage || (status.is_running ? '正在同步...' : '就绪待命');
+                }
+                if (updateProgressPct) {
+                    updateProgressPct.textContent = `${status.progress_pct || 0}%`;
+                }
+                if (updateProgressBar) {
+                    updateProgressBar.style.width = `${status.progress_pct || 0}%`;
+                }
+
+                // 立即更新按钮状态
+                if (btnRunUpdateNow) {
+                    if (status.is_running) {
+                        btnRunUpdateNow.disabled = true;
+                        btnRunUpdateNow.innerHTML = '<span>🔄 任务后台执行中...</span>';
+                    } else {
+                        btnRunUpdateNow.disabled = false;
+                        btnRunUpdateNow.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg><span>立即更新今日数据</span>';
+                    }
+                }
+
+                // 运行日志输出
+                if (updateLogsBox && status.recent_logs && status.recent_logs.length > 0) {
+                    updateLogsBox.textContent = status.recent_logs.join('\n');
+                    updateLogsBox.scrollTop = updateLogsBox.scrollHeight;
+                }
+
+                // 判断是否刚完成任务
+                if (wasRunning && !status.is_running && status.last_status === 'success') {
+                    if (window.showToast) window.showToast('🎉 今日行情与量化投研数据全量更新完成！', 'success');
+                }
+                wasRunning = !!status.is_running;
+
+                // 动态调整轮询速率
+                if (status.is_running) {
+                    scheduleNextPoll(1500);
+                } else {
+                    scheduleNextPoll(30000);
+                }
+            } catch (err) {
+                scheduleNextPoll(60000);
+            }
+        }
+
+        function scheduleNextPoll(delayMs) {
+            if (updatePollTimer) clearTimeout(updatePollTimer);
+            updatePollTimer = setTimeout(fetchUpdateStatus, delayMs);
+        }
+
+        // 手动触发立即更新
+        if (btnRunUpdateNow) {
+            btnRunUpdateNow.addEventListener('click', async () => {
+                try {
+                    btnRunUpdateNow.disabled = true;
+                    btnRunUpdateNow.innerHTML = '<span>⏳ 正在启动任务...</span>';
+
+                    const res = await fetch('/api/system/run-update', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ force: true })
+                    });
+                    const data = await res.json();
+
+                    if (data.status === 'ok') {
+                        if (window.showToast) window.showToast('🚀 已成功启动今日行情更新流水线！', 'info');
+                        fetchUpdateStatus();
+                    } else {
+                        if (window.showToast) window.showToast(`⚠️ ${data.message || '已有任务运行中'}`, 'warning');
+                    }
+                } catch (err) {
+                    if (window.showToast) window.showToast(`❌ 触发更新失败: ${err.message}`, 'error');
+                }
+            });
+        }
+
+        // 监测 URL Hash
+        function handleHash() {
+            const hash = window.location.hash;
+            if (hash === '#settings') {
+                openSettingsModal();
+            } else if (hash === '#daily-update' || hash === '#update') {
+                openUpdateModal();
+            }
+        }
+        window.addEventListener('hashchange', handleHash);
+
+        // ESC 关闭弹窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeSettingsModal();
+                closeUpdateModal();
+                closeGuideModal();
+            }
+        });
+
+        // 启动时初始化
+        fetchServerConfig();
+        fetchUpdateStatus();
+        handleHash();
+    }
+
     // 初始化学术研报与前沿实证模块
     try {
         initAcademicPage();
@@ -3997,4 +4447,12 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('initAcademicPage warning:', err);
     }
 
+    // 初始化大模型 API 配置中心与每日自动更新系统
+    try {
+        initSettingsAndAutoUpdateModule();
+    } catch (err) {
+        console.warn('initSettingsAndAutoUpdateModule warning:', err);
+    }
+
 });
+

@@ -11,7 +11,7 @@ import os
 import sys
 import traceback
 from datetime import date, datetime, timedelta
-from typing import Optional
+from typing import Any, Optional, Union
 
 # 确保 src/ 在 path 中，方便 import 同目录模块
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -694,6 +694,596 @@ def _sync_watchlist_to_github(rows: list[dict]) -> dict:
         return {"success": False, "error": f"write_failed:{put_resp.status_code}"}
     except Exception as exc:
         return {"success": False, "error": f"write_exception:{exc.__class__.__name__}"}
+
+
+# ============================================================
+# 系统可视化配置中心与 API 密钥管理 (C 端开箱即用)
+# ============================================================
+
+import tempfile
+import threading
+import time
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ENV_FILE_PATH = os.path.join(BASE_DIR, ".env")
+ENV_EXAMPLE_FILE_PATH = os.path.join(BASE_DIR, ".env.example")
+_ENV_PATH = ENV_FILE_PATH
+
+MANAGED_CONFIG_KEYS = [
+    "OFFLINE_MODE", "DEMO_MODE", "LLM_ENABLED", "LLM_BACKEND",
+    "DEEPSEEK_API_KEY", "DEEPSEEK_BASE_URL", "DEEPSEEK_MODEL",
+    "DASHSCOPE_API_KEY", "DASHSCOPE_BASE_URL", "DASHSCOPE_MODEL",
+    "GEMINI_API_KEY", "GOOGLE_GEMINI_BASE_URL", "GEMINI_MODEL",
+    "OPENAI_API_KEY", "OPENAI_BASE_URL", "OPENAI_MODEL",
+    "TUSHARE_TOKEN", "DAILY_UPDATE_ENABLED", "DAILY_UPDATE_TIME",
+]
+
+
+def _mask_secret(secret: Optional[str]) -> str:
+    """脱敏敏感密钥，保留前 3 位和后 4 位，如 sk-••••••••cdef。"""
+    if not secret:
+        return ""
+    secret = str(secret).strip()
+    if len(secret) <= 8:
+        return "••••••••"
+    prefix = secret[:3]
+    suffix = secret[-4:]
+    return f"{prefix}••••••••{suffix}"
+
+
+def _read_env_dict(path: Optional[Any] = None) -> dict[str, str]:
+    """读取 .env 文件中的键值字典。"""
+    res = {}
+    target = str(path or _ENV_PATH or ENV_FILE_PATH)
+    path_to_read = target if os.path.exists(target) else ENV_EXAMPLE_FILE_PATH
+    if os.path.exists(path_to_read):
+        try:
+            with open(path_to_read, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    k, v = line.split("=", 1)
+                    res[k.strip()] = v.strip().strip("'\"")
+        except Exception as e:
+            logger.warning("读取环境配置文件异常: %s", e)
+    return res
+
+
+def _save_env_dict(updates: dict[str, str], path: Optional[Any] = None) -> bool:
+    """安全原子写入 .env 文件，并同步热更新当前进程环境变量。"""
+    target = str(path or _ENV_PATH or ENV_FILE_PATH)
+    # 忽略包含掩码 •••• 的值，避免把真实密钥覆写成掩码
+    filtered_updates = {
+        k: str(v) for k, v in updates.items()
+        if "••••" not in str(v)
+    }
+
+    lines = []
+    seen_keys = set()
+    source_path = target if os.path.exists(target) else ENV_EXAMPLE_FILE_PATH
+
+    if os.path.exists(source_path):
+        with open(source_path, "r", encoding="utf-8") as f:
+            for raw_line in f:
+                stripped = raw_line.strip()
+                if stripped and not stripped.startswith("#") and "=" in stripped:
+                    k, _ = stripped.split("=", 1)
+                    k = k.strip()
+                    if k in filtered_updates:
+                        new_val = filtered_updates[k]
+                        lines.append(f"{k}={new_val}\n")
+                        seen_keys.add(k)
+                        continue
+                lines.append(raw_line)
+
+    for k, v in filtered_updates.items():
+        if k not in seen_keys:
+            lines.append(f"{k}={v}\n")
+
+    # 原子写入
+    dir_name = os.path.dirname(target) or "."
+    fd, tmp_file = tempfile.mkstemp(suffix=".env.tmp", dir=dir_name, text=True)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
+            f.writelines(lines)
+        if os.path.exists(target):
+            os.replace(tmp_file, target)
+        else:
+            os.rename(tmp_file, target)
+    except Exception as exc:
+        if os.path.exists(tmp_file):
+            os.remove(tmp_file)
+        logger.error("写入 .env 异常: %s", exc)
+        return False
+
+    # 热重载当前环境变量
+    global OFFLINE_MODE
+    for k, v in filtered_updates.items():
+        os.environ[k] = str(v)
+    if "OFFLINE_MODE" in filtered_updates:
+        OFFLINE_MODE = filtered_updates["OFFLINE_MODE"].lower() in ("1", "true", "yes")
+
+    logger.info("系统环境变量与 .env 配置已热重载生效")
+    return True
+
+
+@app.route("/api/config", methods=["GET"])
+def api_get_config():
+    """获取当前系统 API 与运行配置状态 (敏感 Key 自动脱敏)。"""
+    env_dict = _read_env_dict()
+    merged = {**env_dict, **{k: os.environ[k] for k in MANAGED_CONFIG_KEYS if k in os.environ}}
+
+    deepseek_key = merged.get("DEEPSEEK_API_KEY", "").strip()
+    dashscope_key = merged.get("DASHSCOPE_API_KEY", "").strip()
+    gemini_key = merged.get("GEMINI_API_KEY", "").strip()
+    openai_key = merged.get("OPENAI_API_KEY", "").strip()
+    tushare_token = merged.get("TUSHARE_TOKEN", "").strip()
+
+    active_provider = (merged.get("LLM_BACKEND") or "deepseek").strip().lower()
+    provider_map = {
+        "deepseek": (deepseek_key, merged.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"), merged.get("DEEPSEEK_MODEL", "deepseek-chat")),
+        "dashscope": (dashscope_key, merged.get("DASHSCOPE_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"), merged.get("DASHSCOPE_MODEL", "qwen-plus")),
+        "gemini": (gemini_key, merged.get("GOOGLE_GEMINI_BASE_URL", "https://uuapi.shop/v1"), merged.get("GEMINI_MODEL", "gemini-1.5-flash")),
+        "openai": (openai_key, merged.get("OPENAI_BASE_URL", "https://api.openai.com/v1"), merged.get("OPENAI_MODEL", "gpt-4o-mini")),
+    }
+    cur_info = provider_map.get(active_provider, (deepseek_key, "https://api.deepseek.com/v1", "deepseek-chat"))
+
+    data = {
+        "status": "ok",
+        "success": True,
+        "provider": active_provider,
+        "api_key": _mask_secret(cur_info[0]),
+        "has_api_key": bool(cur_info[0]),
+        "base_url": cur_info[1],
+        "model": cur_info[2],
+        "offline_mode": OFFLINE_MODE or merged.get("OFFLINE_MODE", "false").lower() in ("1", "true", "yes"),
+        "scheduler_enabled": merged.get("DAILY_UPDATE_ENABLED", "true").lower() in ("1", "true", "yes"),
+        "llm_enabled": merged.get("LLM_ENABLED", "true").lower() in ("1", "true", "yes"),
+        "llm_backend": active_provider,
+        # DeepSeek
+        "has_deepseek_key": bool(deepseek_key),
+        "deepseek_key_masked": _mask_secret(deepseek_key),
+        "deepseek_base_url": merged.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"),
+        "deepseek_model": merged.get("DEEPSEEK_MODEL", "deepseek-chat"),
+        # DashScope / 通义千问
+        "has_dashscope_key": bool(dashscope_key),
+        "dashscope_key_masked": _mask_secret(dashscope_key),
+        "dashscope_base_url": merged.get("DASHSCOPE_BASE_URL", "https://dashscope.aliyuncs.com/compatible-mode/v1"),
+        "dashscope_model": merged.get("DASHSCOPE_MODEL", "qwen-plus"),
+        # Gemini
+        "has_gemini_key": bool(gemini_key),
+        "gemini_key_masked": _mask_secret(gemini_key),
+        "gemini_base_url": merged.get("GOOGLE_GEMINI_BASE_URL", "https://uuapi.shop/v1"),
+        "gemini_model": merged.get("GEMINI_MODEL", "gemini-1.5-flash"),
+        # OpenAI
+        "has_openai_key": bool(openai_key),
+        "openai_key_masked": _mask_secret(openai_key),
+        "openai_base_url": merged.get("OPENAI_BASE_URL", "https://api.openai.com/v1"),
+        "openai_model": merged.get("OPENAI_MODEL", "gpt-4o-mini"),
+        # Tushare
+        "has_tushare_token": bool(tushare_token),
+        "tushare_token_masked": _mask_secret(tushare_token),
+        # 每日更新
+        "daily_update_enabled": merged.get("DAILY_UPDATE_ENABLED", "true").lower() in ("1", "true", "yes"),
+        "daily_update_time": merged.get("DAILY_UPDATE_TIME", "17:30"),
+        "env_file_exists": os.path.exists(_ENV_PATH or ENV_FILE_PATH),
+    }
+    return jsonify({**data, "config": data})
+
+
+@app.route("/api/config", methods=["POST"])
+def api_save_config():
+    """保存用户在前端修改的 API 密钥及系统配置。"""
+    payload = request.get_json(silent=True) or {}
+    updates = {}
+
+    provider = (payload.get("provider") or payload.get("llm_backend") or "deepseek").strip().lower()
+    if "provider" in payload or "llm_backend" in payload:
+        updates["LLM_BACKEND"] = provider
+
+    def _resolve_val(field_key: str, env_key: str):
+        if field_key in payload:
+            raw_v = str(payload[field_key]).strip()
+            if "••••" in raw_v:
+                return
+            updates[env_key] = raw_v
+
+    # 通用 api_key / model / base_url 对应选定的 provider
+    if "api_key" in payload:
+        key_env_map = {
+            "deepseek": "DEEPSEEK_API_KEY",
+            "dashscope": "DASHSCOPE_API_KEY",
+            "gemini": "GEMINI_API_KEY",
+            "openai": "OPENAI_API_KEY",
+        }
+        target_key_env = key_env_map.get(provider, "DEEPSEEK_API_KEY")
+        raw_key = str(payload["api_key"]).strip()
+        if "••••" not in raw_key and raw_key:
+            updates[target_key_env] = raw_key
+
+    if "model" in payload:
+        model_env_map = {
+            "deepseek": "DEEPSEEK_MODEL",
+            "dashscope": "DASHSCOPE_MODEL",
+            "gemini": "GEMINI_MODEL",
+            "openai": "OPENAI_MODEL",
+        }
+        target_model_env = model_env_map.get(provider, "DEEPSEEK_MODEL")
+        raw_model = str(payload["model"]).strip()
+        if raw_model:
+            updates[target_model_env] = raw_model
+            updates["LLM_MODEL"] = raw_model
+
+    if "base_url" in payload:
+        url_env_map = {
+            "deepseek": "DEEPSEEK_BASE_URL",
+            "dashscope": "DASHSCOPE_BASE_URL",
+            "gemini": "GOOGLE_GEMINI_BASE_URL",
+            "openai": "OPENAI_BASE_URL",
+        }
+        target_url_env = url_env_map.get(provider, "DEEPSEEK_BASE_URL")
+        raw_url = str(payload["base_url"]).strip()
+        if raw_url:
+            updates[target_url_env] = raw_url
+
+    if "offline_mode" in payload:
+        updates["OFFLINE_MODE"] = "true" if payload["offline_mode"] else "false"
+        updates["DEMO_MODE"] = updates["OFFLINE_MODE"]
+    if "llm_enabled" in payload:
+        updates["LLM_ENABLED"] = "true" if payload["llm_enabled"] else "false"
+    if "scheduler_enabled" in payload or "daily_update_enabled" in payload:
+        flag = payload.get("scheduler_enabled", payload.get("daily_update_enabled"))
+        updates["DAILY_UPDATE_ENABLED"] = "true" if flag else "false"
+    if "daily_update_time" in payload:
+        updates["DAILY_UPDATE_TIME"] = str(payload["daily_update_time"]).strip()
+
+    # 兼容特定字段名称
+    _resolve_val("deepseek_api_key", "DEEPSEEK_API_KEY")
+    _resolve_val("deepseek_base_url", "DEEPSEEK_BASE_URL")
+    _resolve_val("deepseek_model", "DEEPSEEK_MODEL")
+    _resolve_val("dashscope_api_key", "DASHSCOPE_API_KEY")
+    _resolve_val("dashscope_base_url", "DASHSCOPE_BASE_URL")
+    _resolve_val("dashscope_model", "DASHSCOPE_MODEL")
+    _resolve_val("gemini_api_key", "GEMINI_API_KEY")
+    _resolve_val("gemini_base_url", "GOOGLE_GEMINI_BASE_URL")
+    _resolve_val("gemini_model", "GEMINI_MODEL")
+    _resolve_val("openai_api_key", "OPENAI_API_KEY")
+    _resolve_val("openai_base_url", "OPENAI_BASE_URL")
+    _resolve_val("openai_model", "OPENAI_MODEL")
+    _resolve_val("tushare_token", "TUSHARE_TOKEN")
+
+    ok = _save_env_dict(updates)
+    if ok:
+        return jsonify({
+            "status": "ok",
+            "success": True,
+            "message": "配置已成功保存并立即热生效！",
+            "updated_keys": list(updates.keys()),
+        }), 200
+    return jsonify({"status": "error", "success": False, "error": "保存配置文件失败"}), 500
+
+
+@app.route("/api/config/test", methods=["POST"])
+def api_test_connectivity():
+    """实时测试指定大模型供应商/API密钥的网络连通性。"""
+    payload = request.get_json(silent=True) or {}
+    provider = (payload.get("provider") or "deepseek").strip().lower()
+    api_key = (payload.get("api_key") or "").strip()
+    base_url = (payload.get("base_url") or "").strip()
+    model = (payload.get("model") or "").strip()
+
+    # 若输入包含掩码，读取实际环境已配置的 key
+    if "••••" in api_key or not api_key:
+        env_key_map = {
+            "deepseek": "DEEPSEEK_API_KEY",
+            "dashscope": "DASHSCOPE_API_KEY",
+            "gemini": "GEMINI_API_KEY",
+            "openai": "OPENAI_API_KEY",
+        }
+        target_env = env_key_map.get(provider, "DEEPSEEK_API_KEY")
+        api_key = os.environ.get(target_env) or _read_env_dict().get(target_env, "")
+
+    if not api_key:
+        return jsonify({
+            "status": "error",
+            "success": False,
+            "error": f"请先输入 {provider.upper()} 的 API 密钥后再测试连通性",
+        }), 200
+
+    # 默认 URL 回退
+    default_urls = {
+        "deepseek": "https://api.deepseek.com/v1",
+        "dashscope": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "gemini": "https://uuapi.shop/v1",
+        "openai": "https://api.openai.com/v1",
+    }
+    if not base_url:
+        base_url = default_urls.get(provider, "https://api.deepseek.com/v1")
+
+    base_url = base_url.rstrip("/")
+    test_endpoint = f"{base_url}/chat/completions"
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+
+    test_model = model or ("deepseek-chat" if provider == "deepseek" else ("qwen-turbo" if provider == "dashscope" else "gpt-4o-mini"))
+    test_body = {
+        "model": test_model,
+        "messages": [{"role": "user", "content": "ping"}],
+        "max_tokens": 5,
+    }
+
+    start_t = time.monotonic()
+    try:
+        resp = _requests.post(test_endpoint, json=test_body, headers=headers, timeout=10.0)
+        elapsed_ms = int((time.monotonic() - start_t) * 1000)
+
+        if resp.status_code == 200:
+            return jsonify({
+                "status": "ok",
+                "success": True,
+                "message": f"✓ 连通成功！{provider.upper()} API 响应正常",
+                "latency_ms": elapsed_ms,
+                "model": test_model,
+            }), 200
+        elif resp.status_code in (401, 403):
+            return jsonify({
+                "status": "error",
+                "success": False,
+                "error": f"认证失败 (HTTP {resp.status_code})：API Key 无效或未开通相应权限",
+                "latency_ms": elapsed_ms,
+            }), 200
+        elif resp.status_code == 404:
+            return jsonify({
+                "status": "error",
+                "success": False,
+                "error": f"模型或端点未找到 (404)：请检查 Base URL 与 Model 名称是否正确",
+                "latency_ms": elapsed_ms,
+            }), 200
+        else:
+            return jsonify({
+                "status": "error",
+                "success": False,
+                "error": f"服务返回异常状态码 {resp.status_code}: {resp.text[:120]}",
+                "latency_ms": elapsed_ms,
+            }), 200
+    except _requests.exceptions.Timeout:
+        return jsonify({
+            "status": "error",
+            "success": False,
+            "error": "连接超时 (10秒)：请检查网络代理设置或该供应商服务可用性",
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "success": False,
+            "error": f"网络请求失败: {str(e)}",
+        }), 200
+
+
+# ============================================================
+# 每日自主更新调度引擎 (DailyAutoScheduler)
+# ============================================================
+
+class DailyAutoScheduler:
+    """全自动每日行情数据与策略自主更新调度器。"""
+
+    def __init__(self):
+        self.is_updating = False
+        self.last_update_time = None
+        self.last_update_date = None
+        self.last_status = "idle"
+        self.progress_pct = 0
+        self.current_step = "待命"
+        self.logs = []
+        self._lock = threading.Lock()
+        self._thread = None
+        self._stop_event = threading.Event()
+        self._load_cached_meta()
+
+    def _load_cached_meta(self):
+        summary_file = os.path.join(BASE_DIR, "docs", "data", "summary.json")
+        if os.path.exists(summary_file):
+            try:
+                with open(summary_file, "r", encoding="utf-8") as f:
+                    sdata = json.load(f)
+                    items = sdata.get("items", [])
+                    if items:
+                        self.last_update_date = items[0].get("last_date")
+                        self.last_update_time = f"{self.last_update_date} (已入库)"
+                        self.last_status = "success"
+            except Exception:
+                pass
+
+    def add_log(self, msg: str):
+        stamp = datetime.now().strftime("%H:%M:%S")
+        line = f"[{stamp}] {msg}"
+        self.logs.append(line)
+        if len(self.logs) > 100:
+            self.logs = self.logs[-100:]
+        logger.info(f"[AutoScheduler] {msg}")
+
+    def trigger_update_now(self, trigger_reason: str = "manual") -> bool:
+        """公有触发方法，供 API 或外部调用。"""
+        return self.run_update_job(trigger_reason)
+
+    def run_update_job(self, trigger_reason: str = "manual") -> bool:
+        with self._lock:
+            if self.is_updating:
+                return False
+            self.is_updating = True
+            self.last_status = "running"
+            self.progress_pct = 5
+            self.current_step = f"正在启动更新流程 ({trigger_reason})..."
+            self.logs.clear()
+
+        def _worker():
+            try:
+                self.add_log(f"开始执行每日自主更新流水线 (触发原因: {trigger_reason})")
+                self.progress_pct = 20
+                self.current_step = "正在拉取全市场自选股最新行情与K线数据..."
+
+                # 异步调用 fetch_data
+                try:
+                    from .fetch_data import main as fetch_main
+                except ImportError:
+                    from fetch_data import main as fetch_main
+
+                self.add_log("调用 fetch_data 模块刷新 166 支标的行情...")
+                code = fetch_main()
+
+                if code == 0:
+                    self.progress_pct = 80
+                    self.current_step = "正在刷新行情摘要与市场指标缓存..."
+                    self._load_cached_meta()
+                    self.last_update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    self.last_status = "success"
+                    self.progress_pct = 100
+                    self.current_step = "✓ 今日数据已全部成功更新并入库"
+                    self.add_log("每日自主更新任务圆满完成，看板数据已刷新！")
+                else:
+                    self.last_status = "failed"
+                    self.current_step = f"更新流程异常退出 (退出码: {code})"
+                    self.add_log(f"警告：fetch_data 返回异常码 {code}")
+            except Exception as exc:
+                self.last_status = "failed"
+                self.current_step = f"更新失败: {str(exc)}"
+                self.add_log(f"异常: {traceback.format_exc()}")
+            finally:
+                with self._lock:
+                    self.is_updating = False
+
+        t = threading.Thread(target=_worker, daemon=True, name="daily-update-worker")
+        t.start()
+        return True
+
+    def _compute_next_run_time(self) -> datetime:
+        target_time_str = os.environ.get("DAILY_UPDATE_TIME", "17:30").strip()
+        try:
+            th, tm = [int(x) for x in target_time_str.split(":")]
+        except Exception:
+            th, tm = 17, 30
+
+        now = datetime.now()
+        target = now.replace(hour=th, minute=tm, second=0, microsecond=0)
+        if now >= target or now.weekday() >= 5:
+            days_ahead = 1
+            cand = now + timedelta(days=days_ahead)
+            while cand.weekday() >= 5:  # 跳过周末
+                days_ahead += 1
+                cand = now + timedelta(days=days_ahead)
+            target = cand.replace(hour=th, minute=tm, second=0, microsecond=0)
+        return target
+
+    def calculate_next_scheduled_time(self) -> str:
+        return self._compute_next_run_time().strftime("%Y-%m-%d %H:%M:%S")
+
+    def _loop(self):
+        logger.info("DailyAutoScheduler 后台守护调度线程已启动")
+        time.sleep(8)
+        try:
+            self._check_stale_data_on_startup()
+        except Exception as e:
+            logger.warning("开机自检陈旧数据异常: %s", e)
+
+        while not self._stop_event.is_set():
+            time.sleep(30)
+            enabled = os.environ.get("DAILY_UPDATE_ENABLED", "true").lower() in ("1", "true", "yes")
+            if not enabled or self.is_updating:
+                continue
+
+            now = datetime.now()
+            if now.weekday() >= 5:
+                continue
+
+            target_time_str = os.environ.get("DAILY_UPDATE_TIME", "17:30").strip()
+            try:
+                th, tm = [int(x) for x in target_time_str.split(":")]
+            except Exception:
+                th, tm = 17, 30
+
+            if now.hour == th and now.minute == tm:
+                today_str = now.strftime("%Y-%m-%d")
+                if self.last_update_date != today_str:
+                    logger.info(f"到达每日自动更新时间 {target_time_str}，正在触发自动更新...")
+                    self.run_update_job("daily_auto_cron")
+                    time.sleep(65)
+
+    def _check_stale_data_on_startup(self):
+        """开机自检：若当前已是工作日收盘后(16:00以后)，但数据仍为过去日期，自动静默补漏。"""
+        now = datetime.now()
+        if now.weekday() < 5 and now.hour >= 16:
+            today_str = now.strftime("%Y-%m-%d")
+            if self.last_update_date and self.last_update_date < today_str:
+                logger.info(f"开机检测发现当前已收盘但数据仍为 {self.last_update_date}，正在自动拉取补漏...")
+                self.run_update_job("startup_catchup")
+
+    def start(self):
+        if self._thread is None or not self._thread.is_alive():
+            self._stop_event.clear()
+            self._thread = threading.Thread(target=self._loop, daemon=True, name="daily-scheduler-daemon")
+            self._thread.start()
+
+    def stop(self):
+        self._stop_event.set()
+
+
+# 全局单例调度器与别名
+scheduler = DailyAutoScheduler()
+daily_scheduler = scheduler
+
+
+@app.route("/api/system/update-status", methods=["GET"])
+def api_update_status():
+    """获取每日自主更新与调度状态。"""
+    enabled = os.environ.get("DAILY_UPDATE_ENABLED", "true").lower() in ("1", "true", "yes")
+    return jsonify({
+        "status": "ok",
+        "success": True,
+        "is_running": scheduler.is_updating,
+        "is_updating": scheduler.is_updating,
+        "last_update_time": scheduler.last_update_time,
+        "last_update_date": scheduler.last_update_date,
+        "last_status": scheduler.last_status,
+        "progress_pct": scheduler.progress_pct,
+        "current_stage": scheduler.current_step,
+        "current_step": scheduler.current_step,
+        "recent_logs": scheduler.logs,
+        "logs": scheduler.logs,
+        "daily_update_enabled": enabled,
+        "next_scheduled_time": scheduler.calculate_next_scheduled_time(),
+    })
+
+
+@app.route("/api/system/run-update", methods=["POST"])
+def api_trigger_update():
+    """手动立即触发每日行情数据更新。"""
+    if scheduler.is_updating:
+        return jsonify({
+            "status": "busy",
+            "success": False,
+            "error": "更新任务正在后台运行中，请勿重复触发",
+        }), 409
+
+    ok = scheduler.trigger_update_now("manual_web_click")
+    if ok:
+        return jsonify({
+            "status": "ok",
+            "success": True,
+            "message": "已在后台启动每日行情更新流水线，请关注控制台进度",
+        }), 200
+    return jsonify({"status": "error", "success": False, "error": "启动更新任务失败"}), 500
+
+
+# 启动后台调度守护线程
+try:
+    scheduler.start()
+except Exception as _sch_e:
+    logger.warning("启动后台自动更新调度器异常: %s", _sch_e)
+
 
 
 # ============================================================

@@ -64,6 +64,22 @@
                     </svg>
                     <span id="theme-toggle-text" class="theme-toggle-text">主题</span>
                 </button>
+                <button id="daily-update-btn" class="header-action-btn" type="button" aria-label="每日更新状态与调度" title="每日自动更新监控与执行">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    <span id="update-indicator-dot" class="update-indicator-dot"></span>
+                    <span id="daily-update-btn-text">每日自更</span>
+                </button>
+                <button id="settings-btn" class="header-action-btn" type="button" aria-label="系统与 API 配置" title="大模型 API 密钥与系统设置">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>⚙️ 设置</span>
+                </button>
                 <a href="portfolio.html" class="portfolio-link">
                     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                     <span>量化组合实盘</span>
@@ -1282,6 +1298,249 @@
     <div id="academic-toast" class="academic-toast" style="display: none;">
         <span class="toast-icon">✅</span>
         <span id="academic-toast-text" class="toast-text">已复制到剪贴板</span>
+    </div>
+
+    <!-- ⚙️ 系统与 API 配置中心模态框 -->
+    <div id="settings-modal" class="system-modal" style="display: none;">
+        <div class="system-modal-overlay" id="settings-modal-overlay"></div>
+        <div class="system-modal-panel settings-panel">
+            <div class="system-modal-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge-tag">⚙️ 配置中心</span>
+                    <h3 class="modal-title">大模型 API 与系统更新设置</h3>
+                </div>
+                <button id="settings-modal-close" class="system-modal-close" type="button" aria-label="关闭">✕</button>
+            </div>
+            <div class="system-modal-body">
+                <div class="config-notice-card">
+                    <span class="notice-icon">💡</span>
+                    <div class="notice-content">
+                        <strong>无门槛一键配置</strong>：直接填入 API Key 即可保存并热生效（无需重启服务）。密钥加密脱敏显示，保障安全。若暂无 API 密钥，可直接开启下方<strong>离线演示模式</strong>体验全部量化与实证功能！
+                    </div>
+                </div>
+
+                <!-- 预设 Provider 快捷选择 -->
+                <div class="form-group">
+                    <label for="cfg-provider-select" class="form-label">
+                        <span>大模型服务商预设 (Provider)</span>
+                        <span class="label-tip">选择后自动填入推荐模型与端点</span>
+                    </label>
+                    <select id="cfg-provider-select" class="form-select">
+                        <option value="deepseek">DeepSeek 官方 (推荐 / deepseek-chat)</option>
+                        <option value="dashscope">阿里百炼通义千问 (DashScope / qwen-plus)</option>
+                        <option value="gemini">Google Gemini (gemini-1.5-flash)</option>
+                        <option value="openai">OpenAI 官方 (gpt-4o-mini)</option>
+                        <option value="custom">自定义 OpenAI 兼容接口 (Custom Endpoint)</option>
+                    </select>
+                </div>
+
+                <!-- 模型型号 -->
+                <div class="form-group">
+                    <label for="cfg-model-name" class="form-label">
+                        <span>模型型号 (Model Name)</span>
+                    </label>
+                    <input type="text" id="cfg-model-name" class="form-input" placeholder="例如: deepseek-chat 或 qwen-plus" autocomplete="off">
+                </div>
+
+                <!-- API Key -->
+                <div class="form-group">
+                    <label for="cfg-api-key" class="form-label">
+                        <span>API 密钥 (API Key)</span>
+                        <span class="label-tip">已保存密钥会自动掩码保护</span>
+                    </label>
+                    <div class="input-with-action">
+                        <input type="password" id="cfg-api-key" class="form-input" placeholder="sk-..." autocomplete="new-password">
+                        <button type="button" id="btn-toggle-key-visibility" class="btn-input-action" title="显示/隐藏密钥">👁️</button>
+                    </div>
+                </div>
+
+                <!-- API Base URL -->
+                <div class="form-group">
+                    <label for="cfg-base-url" class="form-label">
+                        <span>API 端点地址 (Base URL)</span>
+                    </label>
+                    <input type="text" id="cfg-base-url" class="form-input" placeholder="https://api.deepseek.com/v1" autocomplete="off">
+                </div>
+
+                <!-- Tushare Token (可选) -->
+                <div class="form-group">
+                    <label for="cfg-tushare-token" class="form-label">
+                        <span>Tushare Pro Token <small>(可选，若需增强 A 股财报与资金流分析)</small></span>
+                    </label>
+                    <input type="password" id="cfg-tushare-token" class="form-input" placeholder="可选，留空使用 AkShare 公共行情通道" autocomplete="off">
+                </div>
+
+                <!-- 模式切换与定时更新总开关 -->
+                <div class="config-toggles-grid">
+                    <div class="toggle-card">
+                        <div class="toggle-text">
+                            <span class="toggle-title">离线演示模式 (Offline Mode)</span>
+                            <span class="toggle-desc">无需 API 密钥，直接使用内置 166 支核心标的最新量化评分</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="cfg-offline-mode">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-card">
+                        <div class="toggle-text">
+                            <span class="toggle-title">后台每日自动更新</span>
+                            <span class="toggle-desc">工作日 17:30 自动静默拉取当天行情；若开机晚于收盘自动自检补漏</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="cfg-scheduler-enabled" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 连通性测试结果提示区域 -->
+                <div id="cfg-test-result" class="test-result-box" style="display: none;">
+                    <div class="test-result-icon"></div>
+                    <div class="test-result-text"></div>
+                </div>
+            </div>
+            <div class="system-modal-footer">
+                <button id="btn-test-api" class="modal-btn secondary-btn" type="button">
+                    <span>⚡ 测试连通性</span>
+                </button>
+                <div class="footer-actions-right">
+                    <button id="settings-modal-cancel" class="modal-btn cancel-btn" type="button">取消</button>
+                    <button id="btn-save-config" class="modal-btn primary-btn" type="button">
+                        <span>💾 保存并生效</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔄 每日更新监控面板模态框 -->
+    <div id="update-modal" class="system-modal" style="display: none;">
+        <div class="system-modal-overlay" id="update-modal-overlay"></div>
+        <div class="system-modal-panel update-panel">
+            <div class="system-modal-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge-tag">🔄 调度中心</span>
+                    <h3 class="modal-title">每日自动更新监控与执行</h3>
+                </div>
+                <button id="update-modal-close" class="system-modal-close" type="button" aria-label="关闭">✕</button>
+            </div>
+            <div class="system-modal-body">
+                <div class="update-meta-grid">
+                    <div class="meta-stat-card">
+                        <span class="stat-label">调度器运行状态</span>
+                        <div class="stat-value-row">
+                            <span id="update-stat-badge" class="status-pill idle">空闲 (就绪)</span>
+                            <span id="update-scheduler-state" class="state-sub">已常驻守护</span>
+                        </div>
+                    </div>
+                    <div class="meta-stat-card">
+                        <span class="stat-label">上次更新完成时间</span>
+                        <div id="update-stat-last-time" class="stat-value">--</div>
+                    </div>
+                    <div class="meta-stat-card">
+                        <span class="stat-label">下次计划自动更新</span>
+                        <div id="update-stat-next-time" class="stat-value">--</div>
+                    </div>
+                    <div class="meta-stat-card">
+                        <span class="stat-label">每日自动更新</span>
+                        <div class="stat-value">
+                            <span id="update-stat-auto-flag" class="badge-success">已启用 (工作日 17:30)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 实时进度条与状态条 -->
+                <div class="update-progress-section">
+                    <div class="progress-info-row">
+                        <span id="update-progress-stage" class="stage-text">等待触发...</span>
+                        <span id="update-progress-pct" class="pct-text">0%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="update-progress-bar" class="progress-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- 运行状态输出与说明 -->
+                <div class="update-logs-card">
+                    <div class="logs-header">
+                        <span>📋 调度运行监控与提示</span>
+                        <span id="update-log-time" class="logs-sub"></span>
+                    </div>
+                    <div id="update-logs-box" class="logs-content">
+[系统就绪] 调度引擎后台守护已启动。
+• 工作日 17:30 (A股收盘后) 会自动拉取今日最新行情并生成深度投研与市场总结。
+• 若您白天未开机，开机启动看板时会自动执行自检补漏，保证本地行情数据连续完整。
+                    </div>
+                </div>
+            </div>
+            <div class="system-modal-footer">
+                <div class="footer-note">
+                    <span>💡 也可点击“立即更新”手动静默触发一次全量行情与投研同步。</span>
+                </div>
+                <div class="footer-actions-right">
+                    <button id="update-modal-cancel" class="modal-btn cancel-btn" type="button">关闭</button>
+                    <button id="btn-run-update-now" class="modal-btn primary-btn" type="button">
+                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        <span>立即更新今日数据</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🚀 首次使用开箱引导弹窗 (Welcome Guide) -->
+    <div id="welcome-guide-modal" class="system-modal" style="display: none;">
+        <div class="system-modal-overlay" id="welcome-guide-overlay"></div>
+        <div class="system-modal-panel guide-panel">
+            <div class="system-modal-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-badge-tag welcome-tag">🎉 欢迎体验</span>
+                    <h3 class="modal-title">Rainbow FinGPT 智能量化投研系统</h3>
+                </div>
+                <button id="welcome-guide-close" class="system-modal-close" type="button" aria-label="关闭">✕</button>
+            </div>
+            <div class="system-modal-body guide-body">
+                <p class="guide-lead">
+                    系统已自动就绪！本系统集成了 <strong>166 支核心资产量化评分</strong>、<strong>每日自动行情同步</strong> 与 <strong>大模型深度投研推理</strong>。请选择您的启动模式：
+                </p>
+
+                <div class="guide-options-grid">
+                    <div class="guide-option-card recommended" id="guide-opt-config">
+                        <div class="option-badge">推荐</div>
+                        <div class="option-icon">⚙️</div>
+                        <div class="option-content">
+                            <h4>配置大模型 API Key</h4>
+                            <p>输入 DeepSeek / 阿里百炼 / Gemini 等密钥，享受全功能 AI 深度投研、妖股性质推断与每日市场复盘总结。</p>
+                            <button type="button" class="option-action-btn">立即配置 API 密钥 →</button>
+                        </div>
+                    </div>
+
+                    <div class="guide-option-card" id="guide-opt-offline">
+                        <div class="option-icon">⚡</div>
+                        <div class="option-content">
+                            <h4>直接使用离线演示模式</h4>
+                            <p>无需配置任何密钥！立即查看已收录的 166 支标的评分、六大组合实盘与学术论文实证图表。</p>
+                            <button type="button" class="option-action-btn outline">直接进入系统 →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-auto-update-tip">
+                    <span class="tip-icon">🕒</span>
+                    <span>系统内置 <strong>每日工作日 17:30 自动更新引擎</strong>，盘后自动拉取当日收盘行情，无需人工干预。</span>
+                </div>
+            </div>
+            <div class="system-modal-footer guide-footer">
+                <label class="guide-checkbox-label">
+                    <input type="checkbox" id="guide-dont-show-again">
+                    <span>不再自动弹出此向导</span>
+                </label>
+                <button id="welcome-guide-enter-btn" class="modal-btn primary-btn" type="button">进入系统</button>
+            </div>
+        </div>
     </div>
 
     <!-- 引入前端交互脚本 -->
