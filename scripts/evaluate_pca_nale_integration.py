@@ -88,6 +88,20 @@ from src.pricing.nale_alpha_models import TrainingPanel, fit_gate  # noqa: E402
 #: 评测产物版本。
 EVAL_VERSION = "pca_nale_integration_eval_v1"
 
+# 主实验范围的冻结裁定。C 组静态 768 维向量的输入语料无法与其 provenance
+# 对齐，不能作为 PCA/NALE 主结论输入；见 C_PROVENANCE_INVALIDATION.md。
+PRIMARY_EXPERIMENT_POLICY: dict[str, Any] = {
+    "primary_domain": "A",
+    "student_A": "可复现主实验：真实 CSMAR 日频面板与已核验输入。",
+    "student_B": "不纳入本 PCA/NALE 主实验；不得与 A 组技术特征拼接为统一截面。",
+    "student_C_static_768d": "INVALIDATED：原始语料与 provenance 不完整，禁止用于主结论、IC、回测或夏普。",
+    "student_C_retained": [
+        "CSMAR 日频行情面板（收益/网络类研究可用）",
+        "带 publish_time 的逐条文本（仅可作为新的 text_flow_v1 探索，不能称为静态 768 维向量复现）",
+    ],
+    "invalidation_notice": "reports/tables/pca_nale_integration/C_PROVENANCE_INVALIDATION.md",
+}
+
 #: 三类产物的根目录（都必须在 run_id 之下一层）。
 OUTPUT_ROOTS: dict[str, str] = {
     "processed": "data/processed/pca_nale_integration",
@@ -432,8 +446,8 @@ class EvaluationConfig:
 
     def __post_init__(self) -> None:
         validate_run_id(self.run_id)
-        if self.domain not in ("A", "AC"):
-            raise EvaluationError("domain 只支持 A 或 AC")
+        if self.domain != "A":
+            raise EvaluationError("当前主实验仅支持 A；C 组静态 768 维向量已溯源作废")
         if self.feature_family not in ("price_technical_v1", "text_flow_v1"):
             raise EvaluationError("feature_family 只支持 price_technical_v1 / text_flow_v1")
         unknown = [name for name in self.networks if name not in DEFAULT_NETWORK_CONFIGS]
@@ -491,8 +505,7 @@ def load_inputs(paths: Mapping[str, Path], config: EvaluationConfig) -> Evaluati
     universe = pd.read_csv(paths["universe"], dtype=str)
     declarations = build_declarations(paths["caliber"], paths["factors"])
     cohort_of = dict(zip(factors["code"], factors["cohort_key"]))
-    wanted = ("student_A",) if config.domain == "A" else ("student_A", "student_C")
-    codes = tuple(sorted({code for code, group in cohort_of.items() if group in wanted} & set(panel["stock_code"])))
+    codes = tuple(sorted({code for code, group in cohort_of.items() if group == "student_A"} & set(panel["stock_code"])))
     if len(codes) < 2 * MIN_LEG:
         raise EvaluationError(f"研究域只有 {len(codes)} 支，不足以构造 2×{MIN_LEG} 的组合")
     calendar = trading_calendar_from_panel(panel)
@@ -785,6 +798,53 @@ def build_variant_scores(
     return scores_long, variant_index
 
 
+def build_gate_prediction_audit(
+    states: Mapping[str, NetworkState],
+    applications: Sequence[str],
+    config: EvaluationConfig,
+) -> pd.DataFrame:
+    """写出动态门控的逐行可复核输入、贡献和回退状态。
+
+    ``variant_scores`` 是所有模型共用的评分长表；本表只服务动态门控审计，
+    使回退到 B0 不会被误读为成功的动态拟合。
+    """
+    pc_columns = [f"PC{index:02d}_z" for index in range(1, config.n_components + 1)]
+    rows: list[pd.DataFrame] = []
+    for network, state in states.items():
+        for version, fit in state.gates.items():
+            for signal_date in applications:
+                if signal_date not in state.rows:
+                    continue
+                source = state.rows[signal_date]
+                z = source.loc[:, pc_columns].to_numpy(dtype=float)
+                _, neighbor, difference = propagate_nale_vectorized(
+                    source["S0"].to_numpy(dtype=float), state.normalized[signal_date], 0.0
+                )
+                # GateFit.alpha() deliberately returns B0 alpha for any explicit fallback.
+                alpha = fit.alpha(z)
+                linear = np.zeros(len(source), dtype=float) if fit.fallback_reason else fit.intercept + z @ fit.weights
+                audit = source.loc[:, ["stock_code", "signal_date", "S0", *pc_columns]].copy()
+                audit.insert(2, "network", network)
+                audit.insert(3, "version", version)
+                audit["neighbor_score"] = neighbor
+                audit["difference"] = difference
+                for index, column in enumerate(pc_columns):
+                    audit[f"PC{index + 1:02d}_contribution"] = z[:, index] * fit.weights[index]
+                audit["gate_linear_u"] = linear
+                audit["alpha_nale"] = alpha
+                audit["propagated_score"] = _propagate(state, signal_date, alpha)
+                audit["fit_cutoff"] = fit.fit_cutoff
+                audit["fallback_reason"] = fit.fallback_reason or ""
+                rows.append(audit)
+    if not rows:
+        return pd.DataFrame()
+    result = pd.concat(rows, ignore_index=True)
+    if result.duplicated(["stock_code", "signal_date", "network", "version"]).any():
+        raise EvaluationError("动态门控审计表出现重复预测键")
+    guard_field_names(list(result.columns))
+    return result
+
+
 # ---------------------------------------------------------------------------
 # 统计表
 # ---------------------------------------------------------------------------
@@ -958,6 +1018,7 @@ def write_manifest(
         "generated_at_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "run_id": config.run_id,
         "config": config.to_manifest(),
+        "primary_experiment_policy": PRIMARY_EXPERIMENT_POLICY,
         "caliber_watermark": CALIBER_WATERMARK,
         "verification_frozen_at": frozen_at,
         "verification_window_rule": "only trade_date <= verification_frozen_at（PIT；全样本复核禁止进入产物）",
@@ -1011,6 +1072,7 @@ def write_report(
         f"- 动态门控：`gate_min_train_dates={config.gate_min_train_dates}`"
         "（**降级设置**，Week1 默认 126 在本样本上不可达）"
     )
+    lines.append("- **主实验范围：仅 A 组。**C 组静态 768 维向量已溯源作废，绝不进入本报告的 IC、回测或主结论。")
     lines.append("")
     lines.append("## 1. IC 汇总（同一数据 / 同一切分 / 同一标签）")
     lines.append("")
@@ -1082,7 +1144,13 @@ def write_report(
     for name, reason in NOT_EVALUABLE_NETWORKS.items():
         lines.append(f"- `{name}`：{reason}")
     lines.append("")
-    lines.append("## 5. 纪律声明与局限")
+    lines.append("## 5. C 组保留与限制")
+    lines.append("")
+    lines.append("- **禁止使用**：C 组静态 768 维向量及其任何派生 IC、回测、夏普或主结论。")
+    lines.append("- **仍可保留**：C 组 CSMAR 日频行情面板；以及带 `publish_time` 的逐条文本，仅限新的 `text_flow_v1` 探索。")
+    lines.append("- 这些保留项不等同于复现旧静态向量，且不纳入当前 A 组主实验。")
+    lines.append("")
+    lines.append("## 6. 纪律声明与局限")
     lines.append("")
     lines.append("- 本报告不含任何年化字段（写出前有字段名守卫，含 annual 字样即抛错）。")
     lines.append("- W-ind 与截面中性化所用行业哑变量同源，其传播项可能被正交化吸收；解释其增益前必须结合")
@@ -1200,11 +1268,17 @@ def run_evaluation(
                 "n_signal_dates": int(fit.n_signal_dates),
                 "fit_cutoff": fit.fit_cutoff,
                 "ridge_lambda": float(fit.ridge_lambda),
+                "calibration_intercept": float(fit.calibration.intercept),
+                "calibration_slope": float(fit.calibration.slope),
+                "objective": float(fit.objective),
+                "gradient_norm": float(fit.gradient_norm),
+                "optimizer_message": fit.optimizer_message,
             }
             for version, fit in state.gates.items()
         }
 
     scores_long, variant_index = build_variant_scores(states, applications, asof, config)
+    gate_prediction_audit = build_gate_prediction_audit(states, applications, config)
     ic_series, summary_table, bootstrap_table = compute_ic_tables(scores_long, asof, config)
     portfolio_table = compute_portfolio_tables(scores_long, asof, config)
     diagnostics_table = pd.DataFrame([row for state in states.values() for row in state.diagnostics])
@@ -1212,6 +1286,9 @@ def run_evaluation(
 
     asof.to_csv(directories["processed"] / "asof_panel.csv.gz", index=False, compression="gzip")
     scores_long.to_csv(directories["processed"] / "variant_scores.csv.gz", index=False, compression="gzip")
+    gate_prediction_audit.to_csv(
+        directories["processed"] / "gate_predictions.csv.gz", index=False, compression="gzip"
+    )
     if evidence_frames:
         pd.concat(evidence_frames, ignore_index=True).to_csv(
             directories["processed"] / "edge_evidence.csv.gz", index=False, compression="gzip"
@@ -1292,7 +1369,7 @@ def build_parser() -> argparse.ArgumentParser:
     """命令行接口。"""
     parser = argparse.ArgumentParser(description="PCA→NALE 集成走步评测（M4）")
     parser.add_argument("--run-id", required=True, help="产物目录名（必填；已存在则拒绝运行）")
-    parser.add_argument("--domain", default="A", choices=["A", "AC"])
+    parser.add_argument("--domain", default="A", choices=["A"])
     parser.add_argument("--feature-family", default="price_technical_v1",
                         choices=["price_technical_v1", "text_flow_v1"])
     parser.add_argument("--networks", default="W-ind,W-corr,W-attn")

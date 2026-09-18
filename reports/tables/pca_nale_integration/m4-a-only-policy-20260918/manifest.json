@@ -1,0 +1,469 @@
+{
+  "eval_version": "pca_nale_integration_eval_v1",
+  "generated_at_utc": "2026-09-18T11:47:36Z",
+  "run_id": "m4-a-only-policy-20260918",
+  "config": {
+    "run_id": "m4-a-only-policy-20260918",
+    "domain": "A",
+    "feature_family": "price_technical_v1",
+    "networks": [
+      "W-ind",
+      "W-corr",
+      "W-attn"
+    ],
+    "labels": [
+      5,
+      20
+    ],
+    "alpha_grid": [
+      0.05,
+      0.2,
+      0.4,
+      0.6,
+      0.75
+    ],
+    "signal_step": 5,
+    "train_window_days": 120,
+    "min_train_rows": 2000,
+    "min_cross_section": 30,
+    "n_components": 10,
+    "start_index": 180,
+    "first_apply_index": 300,
+    "max_signal_dates": null,
+    "cost_bps": 15.0,
+    "quantile": 0.2,
+    "bootstrap_reps": 2000,
+    "block_trading_days": [
+      10,
+      40
+    ],
+    "gate_versions": [
+      "V1",
+      "V2",
+      "V3"
+    ],
+    "gate_min_train_dates": 20,
+    "gate_ridge_lambda": 1.0,
+    "gate_half_life_days": 20.0,
+    "seed": 42,
+    "placebo_networks": [
+      "W-ind"
+    ]
+  },
+  "primary_experiment_policy": {
+    "primary_domain": "A",
+    "student_A": "可复现主实验：真实 CSMAR 日频面板与已核验输入。",
+    "student_B": "不纳入本 PCA/NALE 主实验；不得与 A 组技术特征拼接为统一截面。",
+    "student_C_static_768d": "INVALIDATED：原始语料与 provenance 不完整，禁止用于主结论、IC、回测或夏普。",
+    "student_C_retained": [
+      "CSMAR 日频行情面板（收益/网络类研究可用）",
+      "带 publish_time 的逐条文本（仅可作为新的 text_flow_v1 探索，不能称为静态 768 维向量复现）"
+    ],
+    "invalidation_notice": "reports/tables/pca_nale_integration/C_PROVENANCE_INVALIDATION.md"
+  },
+  "caliber_watermark": "unified_total_return_basis_v1_declared_caliber",
+  "verification_frozen_at": "2025-04-01",
+  "verification_window_rule": "only trade_date <= verification_frozen_at（PIT；全样本复核禁止进入产物）",
+  "signal_dates": [
+    "2025-04-02",
+    "2025-04-10",
+    "2025-04-17",
+    "2025-04-24",
+    "2025-05-06",
+    "2025-05-13",
+    "2025-05-20",
+    "2025-05-27",
+    "2025-06-04",
+    "2025-06-11",
+    "2025-06-18",
+    "2025-06-25",
+    "2025-07-02",
+    "2025-07-09",
+    "2025-07-16",
+    "2025-07-23",
+    "2025-07-30",
+    "2025-08-06",
+    "2025-08-13",
+    "2025-08-20",
+    "2025-08-27",
+    "2025-09-03",
+    "2025-09-10",
+    "2025-09-17",
+    "2025-09-24",
+    "2025-10-09",
+    "2025-10-16",
+    "2025-10-23",
+    "2025-10-30",
+    "2025-11-06",
+    "2025-11-13",
+    "2025-11-20",
+    "2025-11-27",
+    "2025-12-04",
+    "2025-12-11",
+    "2025-12-18",
+    "2025-12-25",
+    "2026-01-05",
+    "2026-01-12",
+    "2026-01-19",
+    "2026-01-26",
+    "2026-02-02",
+    "2026-02-09",
+    "2026-02-24",
+    "2026-03-03",
+    "2026-03-10",
+    "2026-03-17",
+    "2026-03-24",
+    "2026-03-31",
+    "2026-04-08",
+    "2026-04-15",
+    "2026-04-22",
+    "2026-04-29",
+    "2026-05-11",
+    "2026-05-18",
+    "2026-05-25",
+    "2026-06-01",
+    "2026-06-08",
+    "2026-06-15",
+    "2026-06-23",
+    "2026-06-30",
+    "2026-07-07",
+    "2026-07-14",
+    "2026-07-21",
+    "2026-07-28",
+    "2026-08-04",
+    "2026-08-11",
+    "2026-08-18",
+    "2026-08-25"
+  ],
+  "n_signal_dates": 69,
+  "universe_size": 99,
+  "input_sha256": {
+    "panel": "506a44f57ac9d12cf64948b9b911f6d07d969decf34960cc61673cc418bf26fc",
+    "factors": "b1d4acf7cd55e8e933dd0764b72517f97ef252fec59590a11d70789a0315cfeb",
+    "universe": "d752ee333205bf9116934dea1f1ab25c6ddf75e59db5c5a49f0eb309cecb6a98",
+    "caliber": "cb37cf817e04588081d32f68997981b1d6c231048ef0b639aa09fa2558cf7b34"
+  },
+  "corpus_inventory_sha256": "f660cd592e13ec31c63963a8e04db431c058d4b3605cd38f6983a740fef27d41",
+  "versions": {
+    "asof_panel": "pca_nale_asof_panel_v1",
+    "s0": "pca10_equal_signaligned_v1",
+    "s0_pc5_prior": "pc5_fixed_prior_v1_lookahead_derived",
+    "pca": "trainfit_full_svd_pca10_v1",
+    "neutralization": "industry_dummies_plus_log_float_mv_ols_v1",
+    "network": "pca_nale_network_v1",
+    "eval": "pca_nale_integration_eval_v1"
+  },
+  "not_evaluable_networks": {
+    "text_embedding_similarity": "NOT_ASOF：768 维嵌入的 retrieved_at_utc 全部晚于 2026-09-07，且本机无嵌入模型缓存，无法离线重建历史向量 ⇒ 对任何早于该日的信号使用它都构成前视。替代物为 attention_correlation（逐条 publish_time，真 as-of）。",
+    "supply_chain_edges": "NOT_EVALUABLE：仓库内不存在带 source_published_at/available_at 的供应链边账本，SupplyChainGraph() 实例化为零边 ⇒ 只能做消融，不得作为主结论。"
+  },
+  "relation_specs": {
+    "industry_cooccurrence": {
+      "construction": "同 sub_industry 共现（静态分类）",
+      "pit_basis": "静态结构假设（无版本演化证据）",
+      "interpretation": "同行信息外溢",
+      "limitation": "与截面中性化所用行业哑变量同源，传播项可能被正交化吸收；须做去共线消融",
+      "weight_rule": "同行业 = 1，否则 = 0（无权重刻度，故不做阈值筛选）"
+    },
+    "return_correlation": {
+      "construction": "截至 t 的过去 window 个交易日 basis_return 的 Pearson 相关",
+      "pit_basis": "只用 t 及以前已实现收益",
+      "interpretation": "收益联动 / 共同暴露",
+      "limitation": "与供应链经济叙事不符，报告口径必须写「相关网络传播」，不得包装成供应链证据",
+      "weight_rule": "ρ >= 阈值 时权重 = ρ（截断负相关为 0），否则无边"
+    },
+    "attention_correlation": {
+      "construction": "截至 t 的过去 window 个交易日文本对数计数的 Pearson 相关",
+      "pit_basis": "逐条 publish_time + 可用性滞后（默认次日）",
+      "interpretation": "关注度 / 信息扩散联动",
+      "limitation": "语料只覆盖 A∪C 200 支（B 组零语料）；稀疏月份须报覆盖率",
+      "weight_rule": "ρ >= 阈值 时权重 = ρ（截断负相关为 0），否则无边"
+    }
+  },
+  "network_coverage": {
+    "W-attn": {
+      "n_signal_dates": 69,
+      "mean_node_coverage": 0.8924022837066317,
+      "min_node_coverage": 0.7575757575757576,
+      "max_isolated_nodes": 24,
+      "mean_edges": 353.2463768115942
+    },
+    "W-corr": {
+      "n_signal_dates": 69,
+      "mean_node_coverage": 0.9792124139950227,
+      "min_node_coverage": 0.9494949494949495,
+      "max_isolated_nodes": 5,
+      "mean_edges": 1353.5942028985507
+    },
+    "W-ind": {
+      "n_signal_dates": 69,
+      "mean_node_coverage": 1.0,
+      "min_node_coverage": 1.0,
+      "max_isolated_nodes": 0,
+      "mean_edges": 2401.0
+    }
+  },
+  "gate_fits": {
+    "W-ind": {
+      "V1": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003949661517621545,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      },
+      "V2": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003949661517621545,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      },
+      "V3": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003117222298370867,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      }
+    },
+    "W-corr": {
+      "V1": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003949661517621545,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      },
+      "V2": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003949661517621545,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      },
+      "V3": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003117222298370867,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      }
+    },
+    "W-attn": {
+      "V1": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003949661517621545,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      },
+      "V2": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003949661517621545,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      },
+      "V3": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0,
+        "calibration_intercept": 0.004472566322905714,
+        "calibration_slope": 0.0,
+        "objective": 0.003117222298370867,
+        "gradient_norm": 0.0,
+        "optimizer_message": "B0 calibration has no positive slope"
+      }
+    }
+  },
+  "summary": {
+    "n_signal_dates_planned": 93,
+    "n_signal_dates_applied": 69,
+    "n_variants": 28,
+    "n_ic_rows": 3864,
+    "excluded_days_total": 140,
+    "mean_ic_by_network_horizon": {
+      "W-attn|5": 0.010655491816670798,
+      "W-attn|20": 0.02776638709142788,
+      "W-corr|5": 0.013473543768230527,
+      "W-corr|20": 0.03323633642898625,
+      "W-ind|5": 0.008228571204472976,
+      "W-ind|20": 0.025187913473304457
+    },
+    "skipped_empty_edge_days": {
+      "W-ind": 0,
+      "W-corr": 0,
+      "W-attn": 0
+    },
+    "corpus_records": 79225
+  }
+}

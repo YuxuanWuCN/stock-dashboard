@@ -20,6 +20,7 @@ from scripts.evaluate_pca_nale_integration import (
     EVAL_VERSION,
     EvaluationConfig,
     EvaluationError,
+    PRIMARY_EXPERIMENT_POLICY,
     block_bootstrap_interval,
     build_parser,
     config_from_args,
@@ -458,7 +459,8 @@ def test_permuted_network_rejects_self_loops() -> None:
 @pytest.mark.parametrize(
     "overrides,fragment",
     [
-        ({"domain": "B"}, "domain"),
+        ({"domain": "B"}, "主实验仅支持 A"),
+        ({"domain": "AC"}, "主实验仅支持 A"),
         ({"feature_family": "static_embedding_768_jina_v2"}, "feature_family"),
         ({"networks": ("W-supply",)}, "未知或不存在的网络"),
         ({"networks": ()}, "未知或不存在的网络"),
@@ -513,7 +515,7 @@ def test_end_to_end_run_writes_isolated_artifacts(tmp_path: Path) -> None:
         "bootstrap.csv", "portfolio.csv", "variant_index.csv", "network_diagnostics.csv",
     ):
         assert (tables / name).is_file(), name
-    for name in ("asof_panel.csv.gz", "variant_scores.csv.gz"):
+    for name in ("asof_panel.csv.gz", "variant_scores.csv.gz", "gate_predictions.csv.gz"):
         assert (processed / name).is_file(), name
     assert (tmp_path / "reports/figures/pca_nale_integration/m4-e2e").is_dir()
 
@@ -524,6 +526,8 @@ def test_end_to_end_run_writes_isolated_artifacts(tmp_path: Path) -> None:
     assert manifest["versions"]["asof_panel"].startswith("pca_nale_asof_panel")
     assert set(manifest["not_evaluable_networks"]) == set(NOT_EVALUABLE_NETWORKS)
     assert manifest["run_id"] == "m4-e2e"
+    assert manifest["primary_experiment_policy"] == PRIMARY_EXPERIMENT_POLICY
+    assert manifest["primary_experiment_policy"]["primary_domain"] == "A"
     assert summary["n_signal_dates_applied"] == 2
 
 
@@ -576,6 +580,9 @@ def test_end_to_end_report_lists_not_evaluable_networks_and_placebo(tmp_path: Pa
     assert "冻结" in report
     assert "年化" in report  # 明确声明不做年化
     assert "gate_V1" in variants["variant"].tolist()
+    assert "主实验范围：仅 A 组" in report
+    assert "C 组保留与限制" in report
+    assert "C 组静态 768 维向量" in report
 
 
 def test_end_to_end_gate_fallback_is_recorded_not_hidden(tmp_path: Path) -> None:
@@ -595,6 +602,44 @@ def test_end_to_end_gate_fallback_is_recorded_not_hidden(tmp_path: Path) -> None
     if fits["fallback_reason"] is not None:
         assert gate["alpha_min"] == pytest.approx(0.4)
         assert gate["alpha_max"] == pytest.approx(0.4)
+
+
+def test_gate_prediction_audit_records_the_full_dynamic_formula(tmp_path: Path) -> None:
+    """动态门控产物必须可独立按行重建，回退也必须明确暴露。"""
+    paths = _synthetic_inputs(tmp_path)
+    run_evaluation(_smoke_config("m4-gate-audit"), paths=paths, root=tmp_path, verbose=False)
+    processed = tmp_path / "data/processed/pca_nale_integration/m4-gate-audit"
+    audit = pd.read_csv(processed / "gate_predictions.csv.gz", dtype={"stock_code": str})
+    manifest = json.loads(
+        (tmp_path / "reports/tables/pca_nale_integration/m4-gate-audit/manifest.json").read_text(encoding="utf-8")
+    )
+
+    assert not audit.empty
+    required = {
+        "stock_code", "signal_date", "network", "version", "S0", "neighbor_score", "difference",
+        "gate_linear_u", "alpha_nale", "propagated_score", "fit_cutoff", "fallback_reason",
+        *{f"PC{index:02d}_z" for index in range(1, 11)},
+        *{f"PC{index:02d}_contribution" for index in range(1, 11)},
+    }
+    assert required <= set(audit.columns)
+    assert not audit.duplicated(["stock_code", "signal_date", "network", "version"]).any()
+    assert np.allclose(audit["neighbor_score"], audit["S0"] + audit["difference"], rtol=0, atol=1e-12)
+    assert np.allclose(
+        audit["propagated_score"], audit["S0"] + audit["alpha_nale"] * audit["difference"],
+        rtol=0, atol=1e-12,
+    )
+    assert audit["alpha_nale"].between(0.05, 0.75).all()
+    contribution_columns = [f"PC{index:02d}_contribution" for index in range(1, 11)]
+    for (network, version), group in audit.groupby(["network", "version"]):
+        fit = manifest["gate_fits"][network][version]
+        if fit["fallback_reason"]:
+            assert (group["fallback_reason"] == fit["fallback_reason"]).all()
+            assert np.allclose(group["gate_linear_u"], 0.0)
+            assert np.allclose(group[contribution_columns], 0.0)
+            assert np.allclose(group["alpha_nale"], 0.4)
+        else:
+            reconstructed = fit["intercept"] + group[contribution_columns].sum(axis=1)
+            assert np.allclose(group["gate_linear_u"], reconstructed, rtol=0, atol=1e-12)
 
 
 def test_end_to_end_attention_network_requires_corpus(tmp_path: Path) -> None:
