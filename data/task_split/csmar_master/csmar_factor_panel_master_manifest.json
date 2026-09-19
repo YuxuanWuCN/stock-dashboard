@@ -52,5 +52,39 @@
   "fabrication_check": {
     "synthetic": false,
     "random": false
+  },
+  "bc_technical_enrichment": {
+    "generated_at_utc": "2026-09-18T18:17:37Z",
+    "script": "scripts/enrich_master_panel_bc_technical.py",
+    "note": "B/C 组 12 个技术列来自 CSMAR TRD_Dalyr 真实导出（build_csmar_daily_panel_factors.py），A 组与标准 9 列、ret 口径一概未动；停牌缺行保持 NaN。",
+    "source_sha256": {
+      "student_B": "2d3a33e61a0182af6e9ef353b15deb5c170f4190d2553f61dc35c05f65f418ae"
+    },
+    "fabrication_check": {
+      "synthetic": false,
+      "random": false
+    },
+    "cohorts": {
+      "student_B": {
+        "n_stocks": 100,
+        "n_rows": 64400,
+        "overall_coverage": 0.975311,
+        "per_column_coverage": {
+          "mom_5d": 0.992391,
+          "mom_20d": 0.969099,
+          "mom_60d": 0.906988,
+          "vol_20d": 0.969099,
+          "vol_60d": 0.906988,
+          "turnover_20d": 0.969099,
+          "amihud": 0.998602,
+          "price_pos": 0.998602,
+          "amplitude": 0.998602,
+          "gap": 0.99705,
+          "hit_limit": 0.998602,
+          "abnormal_trd": 0.998602
+        }
+      }
+    },
+    "touched_rows": 64400
   }
 }

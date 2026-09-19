@@ -97,11 +97,12 @@ def build_client():
             f"或把 SDK 放进 {ROOT_DIR.parent / 'csmar' / 'sdk' / 'csmarapi'}。\n原始错误: {e}"
         )
 
-    user = os.environ.get("CSMAR_USERNAME", "").strip()
+    # CSMAR_ACCOUNT 为 CSMAR_USERNAME 的兼容别名（实测有同学按此键名配置）
+    user = (os.environ.get("CSMAR_USERNAME") or os.environ.get("CSMAR_ACCOUNT", "")).strip()
     pwd = os.environ.get("CSMAR_PASSWORD", "").strip()
     lang = os.environ.get("CSMAR_LANG", "0").strip()
     if not user or not pwd:
-        raise SystemExit("缺少 CSMAR 账号：请设置 CSMAR_USERNAME / CSMAR_PASSWORD 环境变量。")
+        raise SystemExit("缺少 CSMAR 账号：请设置 CSMAR_USERNAME（或别名 CSMAR_ACCOUNT）/ CSMAR_PASSWORD 环境变量。")
 
     svc = CsmarService()
     svc.login(user, pwd, lang)

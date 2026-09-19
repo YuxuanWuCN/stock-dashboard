@@ -458,7 +458,7 @@ def test_permuted_network_rejects_self_loops() -> None:
 @pytest.mark.parametrize(
     "overrides,fragment",
     [
-        ({"domain": "B"}, "domain"),
+        ({"domain": "D"}, "domain"),
         ({"feature_family": "static_embedding_768_jina_v2"}, "feature_family"),
         ({"networks": ("W-supply",)}, "未知或不存在的网络"),
         ({"networks": ()}, "未知或不存在的网络"),
