@@ -1,3 +1,15 @@
+> **2026-09-19 PR #10 (Matt9x/week2-m4-fullrun-B) 吸收与合并完成**：
+> 1. **代码与数据合并**：通过本地 `--no-ff` 将 PR #10（Commit `93916e5`）合入 `contest-2026`。
+> 2. **交付物内容**：
+>    - B 组（新能源与周期 100 支）真实技术因子入库（100 支 × 644 交易日，64,310 行，覆盖率 97.53%），经 `scripts/enrich_master_panel_bc_technical.py --only student_B` 幂等并入 master 面板；
+>    - 附带 TRD_Dalyr 真实性独立验证 C1–C7（跨两独立管道相关 0.999997、行情指纹与外部公开源 29 点逐分一致、涨跌停 0 越限）；
+>    - 两大走步评测真实产物集：`m4-full-run-B-20260919`（可比 69 信号日）与 `m4-full-run-B-long126-20260919`（全日历 644 交易日长样本大推演）；
+>    - 学术级 Bootstrap 显著性图集（森林图、分布图、时序图、组合净收益 CI、Holm 热图，PNG 300dpi + PDF 矢量图）；
+> 3. **科学结论与学术防假**：
+>    - 彻底证实：在训练池扩至 216 信号日（远超 126 门限）时，动态门控依然 100% 回落至 B0（`calibration_slope_zero`），证实非样本量问题；全变体 Holm 校正后无显著项，干净披露负结果；
+>    - 因 B 组盘上无语料，评测器直接 fail-closed 拒评 W-attn（并在报告第 4 节并列登记 `NO_CORPUS`），严守防造假底线；
+> 4. **质量验证**：专属测试 `tests/test_enrich_master_bc.py`、`tests/test_m4_domain_extension.py`、`tests/test_plot_m4_bootstrap.py` 共 31 项测试 100% 绿灯通过（38.2s）。
+>
 > **2026-09-16 PR #8 (kkkk0517-pixel/feat(data-A+nale)) 吸收与合并完成**：
 > 1. **代码与数据合并**：通过本地 `--no-ff` 将 PR #8（Commit `0379860`）合入 `contest-2026`（Merge Commit `52749a7`）。
 > 2. **交付物内容**：
