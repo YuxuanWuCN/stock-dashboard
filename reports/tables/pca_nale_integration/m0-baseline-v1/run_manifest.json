@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "run_id": "m0-baseline-v1",
+  "created_at_utc": "2026-09-14T05:57:43.782186+00:00",
+  "caliber_watermark": "unified_total_return_basis_v1_declared_caliber",
+  "config": {
+    "limit_epsilon": 0.005,
+    "drift_threshold": 0.01,
+    "min_rows_for_verdict": 120,
+    "total_return_column": "ret"
+  },
+  "inputs": {
+    "panel": {
+      "path": "data\\task_split\\csmar_master\\csmar_factor_panel_master.csv",
+      "sha256": "0a2daa7134e3defe5d70d11dcfbb09fea4a137212d085d7543e286f41404761f"
+    },
+    "factors": {
+      "path": "data\\task_split\\factors_768d_all.csv",
+      "sha256": "e589cc631d60b7aa13b2ed4c6101c636b6d9c5abea2c275ca7a5b345887cb99e"
+    },
+    "declarations": {
+      "path": "config\\data_caliber\\csmar_master_close_basis.json",
+      "sha256": "80616e375c2075b584d26b31bb8417bf268f1eee813241fedfbab0ddcaf74a36"
+    }
+  },
+  "summary": {
+    "stocks": 299,
+    "rows": 192199,
+    "date_min": "2024-01-02",
+    "date_max": "2026-08-28",
+    "coverage": 0.998959411859583,
+    "verdict_counts": {
+      "confirmed": 254,
+      "inconclusive": 45
+    },
+    "basis_source_counts": {
+      "forward_adjusted_close_return": 128600,
+      "declared_total_return": 63399,
+      "unavailable": 200
+    },
+    "mixing": {
+      "n_compared": 63300.0,
+      "mean_daily_gap": 0.00012343871930412813,
+      "annualized_gap": 0.03110655726464029,
+      "max_abs_daily_gap": 0.6730378545994066,
+      "share_gap_gt_1pct": 0.0025118483412322275,
+      "coverage": 0.998959411859583,
+      "rows_basis_unavailable": 200.0
+    }
+  },
+  "environment": {
+    "python": "3.13.14",
+    "pandas": "3.0.3",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "immutability": "本 run 目录一旦生成不得修改；重跑须使用新 run_id"
+}

@@ -19,6 +19,8 @@ venv/
 .quality-state/
 .agents/
 bug合集/
+data/task_split/*checkpoint*
+*.checkpoint*
 
 # Coverage tooling
 .coverage
@@ -52,3 +54,15 @@ data/school_factors/*
 !reports/figures/**
 本人研究成果/
 
+
+# CSMAR SDK 会在仓库根目录写入凭据与日志 —— 严禁入库
+token.txt
+csmar-log.log
+*.log
+
+# 原始行情缓存与临时产物（可重建、体积大）
+data/_raw_cache/
+.pytest_tmp_win11/
+
+# 本地草稿目录（不入库）
+work/

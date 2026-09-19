@@ -1,0 +1,39 @@
+{
+  "source": "student A delivery v3 -> standard schema (plan 1)",
+  "rows": 63399,
+  "stocks": 99,
+  "days": 644,
+  "window": {
+    "start": "2024-01-02",
+    "end": "2026-08-28"
+  },
+  "derived_columns": [
+    "volume(exp(log_amount)/vwap)",
+    "market_value(exp(log_mktcap))"
+  ],
+  "missing_by_design": [
+    "pe_ttm",
+    "pb",
+    "roe",
+    "(A无估值/财报源)"
+  ],
+  "tech_extra_columns": [
+    "ret",
+    "mom_5d",
+    "mom_20d",
+    "mom_60d",
+    "vol_20d",
+    "vol_60d",
+    "turnover_20d",
+    "amihud",
+    "price_pos",
+    "amplitude",
+    "gap",
+    "hit_limit",
+    "abnormal_trd"
+  ],
+  "fabrication_check": {
+    "synthetic_values_generated": false,
+    "random_data_used": false
+  }
+}
