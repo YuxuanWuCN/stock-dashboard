@@ -1,0 +1,29 @@
+network,variant,family,alpha_mean,alpha_min,alpha_max,relation_type,note
+W-ind,alpha_0.00,fixed,0.0,0.0,0.0,industry_cooccurrence,α=0 即不传播，S ≡ S0（跨网络应逐位相同）
+W-ind,b0_alpha_0.40,fixed,0.39999999999999986,0.4,0.4,industry_cooccurrence,B0 固定 α=0.40
+W-ind,alpha_0.05,grid,0.04999999999999998,0.05,0.05,industry_cooccurrence,α 网格
+W-ind,alpha_0.20,grid,0.19999999999999993,0.2,0.2,industry_cooccurrence,α 网格
+W-ind,alpha_0.60,grid,0.6000000000000001,0.6,0.6,industry_cooccurrence,α 网格
+W-ind,alpha_0.75,grid,0.75,0.75,0.75,industry_cooccurrence,α 网格
+W-ind,placebo_node_permutation,placebo,0.39999999999999986,0.4,0.4,industry_cooccurrence,节点标签置换（权重多重集与度分布不变，破坏网络-身份对应）
+W-ind,gate_V1,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,industry_cooccurrence,动态门控 V1（按网络拟合，训练段仅用标签已成熟的信号日）
+W-ind,gate_V2,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,industry_cooccurrence,动态门控 V2（按网络拟合，训练段仅用标签已成熟的信号日）
+W-ind,gate_V3,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,industry_cooccurrence,动态门控 V3（按网络拟合，训练段仅用标签已成熟的信号日）
+W-corr,alpha_0.00,fixed,0.0,0.0,0.0,return_correlation,α=0 即不传播，S ≡ S0（跨网络应逐位相同）
+W-corr,b0_alpha_0.40,fixed,0.39999999999999986,0.4,0.4,return_correlation,B0 固定 α=0.40
+W-corr,alpha_0.05,grid,0.04999999999999998,0.05,0.05,return_correlation,α 网格
+W-corr,alpha_0.20,grid,0.19999999999999993,0.2,0.2,return_correlation,α 网格
+W-corr,alpha_0.60,grid,0.6000000000000001,0.6,0.6,return_correlation,α 网格
+W-corr,alpha_0.75,grid,0.75,0.75,0.75,return_correlation,α 网格
+W-corr,gate_V1,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,return_correlation,动态门控 V1（按网络拟合，训练段仅用标签已成熟的信号日）
+W-corr,gate_V2,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,return_correlation,动态门控 V2（按网络拟合，训练段仅用标签已成熟的信号日）
+W-corr,gate_V3,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,return_correlation,动态门控 V3（按网络拟合，训练段仅用标签已成熟的信号日）
+W-attn,alpha_0.00,fixed,0.0,0.0,0.0,attention_correlation,α=0 即不传播，S ≡ S0（跨网络应逐位相同）
+W-attn,b0_alpha_0.40,fixed,0.39999999999999986,0.4,0.4,attention_correlation,B0 固定 α=0.40
+W-attn,alpha_0.05,grid,0.04999999999999998,0.05,0.05,attention_correlation,α 网格
+W-attn,alpha_0.20,grid,0.19999999999999993,0.2,0.2,attention_correlation,α 网格
+W-attn,alpha_0.60,grid,0.6000000000000001,0.6,0.6,attention_correlation,α 网格
+W-attn,alpha_0.75,grid,0.75,0.75,0.75,attention_correlation,α 网格
+W-attn,gate_V1,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,attention_correlation,动态门控 V1（按网络拟合，训练段仅用标签已成熟的信号日）
+W-attn,gate_V2,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,attention_correlation,动态门控 V2（按网络拟合，训练段仅用标签已成熟的信号日）
+W-attn,gate_V3,dynamic,0.39999999999999986,0.39999999999999997,0.39999999999999997,attention_correlation,动态门控 V3（按网络拟合，训练段仅用标签已成熟的信号日）

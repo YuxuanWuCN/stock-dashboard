@@ -1,0 +1,35 @@
+{
+  "schema_version": "nale-alpha-input-v1",
+  "experiment_id": "nale_alpha_week1",
+  "created_at": "2026-09-15T09:11:22+00:00",
+  "sources": {
+    "prices": {
+      "path": "prices.csv",
+      "sha256": "346a05e568951e003232d0234c3c3a9ef286978872dbc9f8a8cf8522deeb0f61",
+      "source_name": "CSMAR TRD_Dalyr (via factors_daily_panel_student_A.csv)",
+      "source_uri": "https://data.csmar.com/",
+      "acquired_at": "2026-09-15T09:11:22+00:00",
+      "available_at_column": "date",
+      "coverage_start": "2024-01-02",
+      "coverage_end": "2026-08-28",
+      "adjustment": "unadjusted_close_csmar_trd_dalyr",
+      "trade_status_column": "trade_status"
+    },
+    "benchmark": {
+      "path": "benchmark.csv",
+      "sha256": "5140e6cf54943e22f97e337ecb77b4c02650d184aee6fc4cb0ce715de3ead3ae",
+      "source_name": "Sina CN_MarketDataService (000300.SH)",
+      "source_uri": "https://quotes.sina.cn/cn/api/jsonp_v2.php/var/CN_MarketDataService.getKLineData",
+      "acquired_at": "2026-09-15T09:11:22+00:00",
+      "available_at_column": "date",
+      "coverage_start": "2024-01-02",
+      "coverage_end": "2026-08-28",
+      "benchmark_code": "000300.SH",
+      "adjustment": "index_level_unadjusted"
+    }
+  },
+  "notes": [
+    "features/s0/edges 未声明，因为本地不存在可核查的逐日来源；审计将如实返回 BLOCKED。",
+    "价格与基准均为真实数据：价格经 CSMAR 服务器重取与独立信源双重比对（偏差 0.0000%）。"
+  ]
+}

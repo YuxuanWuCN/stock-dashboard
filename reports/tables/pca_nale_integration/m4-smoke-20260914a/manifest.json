@@ -1,0 +1,350 @@
+{
+  "eval_version": "pca_nale_integration_eval_v1",
+  "generated_at_utc": "2026-09-14T09:59:35Z",
+  "run_id": "m4-smoke-20260914a",
+  "config": {
+    "run_id": "m4-smoke-20260914a",
+    "domain": "A",
+    "feature_family": "price_technical_v1",
+    "networks": [
+      "W-ind",
+      "W-corr",
+      "W-attn"
+    ],
+    "labels": [
+      5,
+      20
+    ],
+    "alpha_grid": [
+      0.05,
+      0.2,
+      0.4,
+      0.6,
+      0.75
+    ],
+    "signal_step": 5,
+    "train_window_days": 120,
+    "min_train_rows": 2000,
+    "min_cross_section": 30,
+    "n_components": 10,
+    "start_index": 180,
+    "first_apply_index": 300,
+    "max_signal_dates": 6,
+    "cost_bps": 15.0,
+    "quantile": 0.2,
+    "bootstrap_reps": 200,
+    "block_trading_days": [
+      10,
+      40
+    ],
+    "gate_versions": [
+      "V1",
+      "V2",
+      "V3"
+    ],
+    "gate_min_train_dates": 20,
+    "gate_ridge_lambda": 1.0,
+    "gate_half_life_days": 20.0,
+    "seed": 42,
+    "placebo_networks": [
+      "W-ind"
+    ]
+  },
+  "caliber_watermark": "unified_total_return_basis_v1_declared_caliber",
+  "verification_frozen_at": "2025-04-01",
+  "verification_window_rule": "only trade_date <= verification_frozen_at（PIT；全样本复核禁止进入产物）",
+  "signal_dates": [
+    "2025-04-02",
+    "2025-04-10",
+    "2025-04-17",
+    "2025-04-24",
+    "2025-05-06",
+    "2025-05-13"
+  ],
+  "n_signal_dates": 6,
+  "universe_size": 99,
+  "input_sha256": {
+    "panel": "0a2daa7134e3defe5d70d11dcfbb09fea4a137212d085d7543e286f41404761f",
+    "factors": "e589cc631d60b7aa13b2ed4c6101c636b6d9c5abea2c275ca7a5b345887cb99e",
+    "universe": "0517efa27a8926446063950e3207974c739276f037caaaa08b1555c2975342dc",
+    "caliber": "cb37cf817e04588081d32f68997981b1d6c231048ef0b639aa09fa2558cf7b34"
+  },
+  "corpus_inventory_sha256": "03e21f087aa81e1f2b87707ac3d9f6207cc0192d268df063142d56de8534e24a",
+  "versions": {
+    "asof_panel": "pca_nale_asof_panel_v1",
+    "s0": "pca10_equal_signaligned_v1",
+    "s0_pc5_prior": "pc5_fixed_prior_v1_lookahead_derived",
+    "pca": "trainfit_full_svd_pca10_v1",
+    "neutralization": "industry_dummies_plus_log_float_mv_ols_v1",
+    "network": "pca_nale_network_v1",
+    "eval": "pca_nale_integration_eval_v1"
+  },
+  "not_evaluable_networks": {
+    "text_embedding_similarity": "NOT_ASOF：768 维嵌入的 retrieved_at_utc 全部晚于 2026-09-07，且本机无嵌入模型缓存，无法离线重建历史向量 ⇒ 对任何早于该日的信号使用它都构成前视。替代物为 attention_correlation（逐条 publish_time，真 as-of）。",
+    "supply_chain_edges": "NOT_EVALUABLE：仓库内不存在带 source_published_at/available_at 的供应链边账本，SupplyChainGraph() 实例化为零边 ⇒ 只能做消融，不得作为主结论。"
+  },
+  "relation_specs": {
+    "industry_cooccurrence": {
+      "construction": "同 sub_industry 共现（静态分类）",
+      "pit_basis": "静态结构假设（无版本演化证据）",
+      "interpretation": "同行信息外溢",
+      "limitation": "与截面中性化所用行业哑变量同源，传播项可能被正交化吸收；须做去共线消融",
+      "weight_rule": "同行业 = 1，否则 = 0（无权重刻度，故不做阈值筛选）"
+    },
+    "return_correlation": {
+      "construction": "截至 t 的过去 window 个交易日 basis_return 的 Pearson 相关",
+      "pit_basis": "只用 t 及以前已实现收益",
+      "interpretation": "收益联动 / 共同暴露",
+      "limitation": "与供应链经济叙事不符，报告口径必须写「相关网络传播」，不得包装成供应链证据",
+      "weight_rule": "ρ >= 阈值 时权重 = ρ（截断负相关为 0），否则无边"
+    },
+    "attention_correlation": {
+      "construction": "截至 t 的过去 window 个交易日文本对数计数的 Pearson 相关",
+      "pit_basis": "逐条 publish_time + 可用性滞后（默认次日）",
+      "interpretation": "关注度 / 信息扩散联动",
+      "limitation": "语料只覆盖 A∪C 200 支（B 组零语料）；稀疏月份须报覆盖率",
+      "weight_rule": "ρ >= 阈值 时权重 = ρ（截断负相关为 0），否则无边"
+    }
+  },
+  "network_coverage": {
+    "W-attn": {
+      "n_signal_dates": 6,
+      "mean_node_coverage": 0.9107744107744108,
+      "min_node_coverage": 0.8484848484848485,
+      "max_isolated_nodes": 15,
+      "mean_edges": 436.5
+    },
+    "W-corr": {
+      "n_signal_dates": 6,
+      "mean_node_coverage": 1.0,
+      "min_node_coverage": 1.0,
+      "max_isolated_nodes": 0,
+      "mean_edges": 2531.5
+    },
+    "W-ind": {
+      "n_signal_dates": 6,
+      "mean_node_coverage": 1.0,
+      "min_node_coverage": 1.0,
+      "max_isolated_nodes": 0,
+      "mean_edges": 2401.0
+    }
+  },
+  "gate_fits": {
+    "W-ind": {
+      "V1": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      },
+      "V2": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      },
+      "V3": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      }
+    },
+    "W-corr": {
+      "V1": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      },
+      "V2": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      },
+      "V3": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      }
+    },
+    "W-attn": {
+      "V1": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      },
+      "V2": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      },
+      "V3": {
+        "intercept": 0.0,
+        "weights": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "fallback_reason": "calibration_slope_zero",
+        "converged": false,
+        "n_rows": 2274,
+        "n_signal_dates": 23,
+        "fit_cutoff": "2025-04-01T23:59:00+08:00",
+        "ridge_lambda": 1.0
+      }
+    }
+  },
+  "summary": {
+    "n_signal_dates_planned": 93,
+    "n_signal_dates_applied": 6,
+    "n_variants": 28,
+    "n_ic_rows": 336,
+    "excluded_days_total": 0,
+    "mean_ic_by_network_horizon": {
+      "W-attn|5": 0.07914539669404023,
+      "W-attn|20": -0.09052472743122447,
+      "W-corr|5": 0.05575946739375924,
+      "W-corr|20": -0.14106013568121442,
+      "W-ind|5": 0.061027854933459504,
+      "W-ind|20": -0.11944851177126112
+    },
+    "skipped_empty_edge_days": {
+      "W-ind": 0,
+      "W-corr": 0,
+      "W-attn": 0
+    },
+    "corpus_records": 79225
+  }
+}

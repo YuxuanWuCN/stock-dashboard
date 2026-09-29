@@ -29,6 +29,11 @@
 用法示例
 --------
 ``python scripts/evaluate_pca_nale_integration.py --run-id m4-smoke-20260914 --domain A --max-signal-dates 6``
+``python scripts/evaluate_pca_nale_integration.py --run-id m4-full-run-C-20260919 --domain C``
+``python scripts/evaluate_pca_nale_integration.py --run-id m4-full-run-B-long126-20260919 --domain B --networks W-ind,W-corr --signal-step 1 --start-index 0 --first-apply-index 300 --gate-min-train-dates 126``
+
+研究域说明：``A``/``AC``/``B``/``C``；B 组无逐条 publish_time 语料，
+``W-attn`` 对 B 域 fail-closed（配置即拒绝，报告第 4 节并列登记）。
 """
 
 from __future__ import annotations
@@ -131,6 +136,18 @@ DEFAULT_HALF_LIFE_DAYS = 20.0
 
 #: 禁止出现在产物字段名里的字眼（重叠持有期不得逐年化，修 F3）。
 FORBIDDEN_FIELD_TOKENS: tuple[str, ...] = ("annual", "annualized")
+
+#: 研究域 -> factors_768d_all.csv 中参与评测的 cohort_key 集合。
+#: 扩域依据：B/C 组各 100 支（data/task_split/student_{B,C}_*.csv），口径声明已含两组。
+DOMAIN_COHORTS: dict[str, tuple[str, ...]] = {
+    "A": ("student_A",),
+    "AC": ("student_A", "student_C"),
+    "B": ("student_B",),
+    "C": ("student_C",),
+}
+
+#: 有逐条 publish_time 语料的 cohort（data/raw/student_ac_crawled，实测 A/C 各 100 支）。
+DOMAINS_WITH_CORPUS: tuple[str, ...] = ("A", "AC", "C")
 
 RUN_ID_PATTERN = re.compile(r"[A-Za-z0-9._-]+")
 
@@ -432,10 +449,17 @@ class EvaluationConfig:
 
     def __post_init__(self) -> None:
         validate_run_id(self.run_id)
-        if self.domain not in ("A", "AC"):
-            raise EvaluationError("domain 只支持 A 或 AC")
+        if self.domain not in DOMAIN_COHORTS:
+            raise EvaluationError(f"domain 只支持 {'/'.join(DOMAIN_COHORTS)}")
         if self.feature_family not in ("price_technical_v1", "text_flow_v1"):
             raise EvaluationError("feature_family 只支持 price_technical_v1 / text_flow_v1")
+        if "W-attn" in self.networks and self.domain not in DOMAINS_WITH_CORPUS:
+            # fail-closed：B 组 100 支在 data/raw/student_ac_crawled 中零语料（实测 0/100），
+            # W-attn 会退化为零边网络（N≡S0）且无从修复，必须显式排除而不是静默评测。
+            raise EvaluationError(
+                f"domain {self.domain} 没有逐条 publish_time 语料，W-attn 不可评；"
+                "请用 --networks W-ind,W-corr（该限制与替代方案会写入报告第 4 节）"
+            )
         unknown = [name for name in self.networks if name not in DEFAULT_NETWORK_CONFIGS]
         if unknown or not self.networks:
             raise EvaluationError(
@@ -491,7 +515,7 @@ def load_inputs(paths: Mapping[str, Path], config: EvaluationConfig) -> Evaluati
     universe = pd.read_csv(paths["universe"], dtype=str)
     declarations = build_declarations(paths["caliber"], paths["factors"])
     cohort_of = dict(zip(factors["code"], factors["cohort_key"]))
-    wanted = ("student_A",) if config.domain == "A" else ("student_A", "student_C")
+    wanted = DOMAIN_COHORTS[config.domain]
     codes = tuple(sorted({code for code, group in cohort_of.items() if group in wanted} & set(panel["stock_code"])))
     if len(codes) < 2 * MIN_LEG:
         raise EvaluationError(f"研究域只有 {len(codes)} 支，不足以构造 2×{MIN_LEG} 的组合")
@@ -985,6 +1009,35 @@ def write_manifest(
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
 
 
+def gate_min_train_dates_note(value: int) -> str:
+    """报告头部的门控训练下限声明（纯函数，便于独立断言）。"""
+    return (
+        f"- 动态门控：`gate_min_train_dates={int(value)}`"
+        + (
+            "（**降级设置**，Week1 默认 126 在本样本上不可达）"
+            if int(value) < 126
+            else "（Week1 默认值；门控激活状态以 manifest `gate_fits` 的 fallback 记录为准）"
+        )
+    )
+
+
+def domain_not_evaluable_networks(config: "EvaluationConfig") -> dict[str, str]:
+    """按研究域登记"因数据不存在而不可评"的网络（与全局 NOT_EVALUABLE 并列出报告）。
+
+    依据是实测事实：`data/raw/student_ac_crawled` 恰好覆盖 A/C 两组各 100 支
+    （100+100 个 jsonl），B 组 100 支逐条 publish_time 语料为零。
+    """
+    if config.domain == "B":
+        return {
+            "W-attn": (
+                "NO_CORPUS：B 组 100 支在 data/raw/student_ac_crawled 中 0/100 有语料，"
+                "注意流不存在 ⇒ 零边网络（N≡S0）等价于不传播；替代方案是用 --networks W-ind,W-corr，"
+                "补语料前不得对 B 域引用任何 attention 结论。"
+            )
+        }
+    return {}
+
+
 def write_report(
     path: Path,
     *,
@@ -1007,10 +1060,7 @@ def write_report(
         f"- 计费：0 成本对照 + 主结论双边 {config.cost_bps:.1f} bp；区块 bootstrap seed {config.seed}、"
         f"{config.bootstrap_reps} 次"
     )
-    lines.append(
-        f"- 动态门控：`gate_min_train_dates={config.gate_min_train_dates}`"
-        "（**降级设置**，Week1 默认 126 在本样本上不可达）"
-    )
+    lines.append(gate_min_train_dates_note(config.gate_min_train_dates))
     lines.append("")
     lines.append("## 1. IC 汇总（同一数据 / 同一切分 / 同一标签）")
     lines.append("")
@@ -1081,6 +1131,9 @@ def write_report(
     lines.append("")
     for name, reason in NOT_EVALUABLE_NETWORKS.items():
         lines.append(f"- `{name}`：{reason}")
+    for name, reason in domain_not_evaluable_networks(config).items():
+        if name not in config.networks:
+            lines.append(f"- `{name}`（{config.domain} 域）：{reason}")
     lines.append("")
     lines.append("## 5. 纪律声明与局限")
     lines.append("")
@@ -1140,12 +1193,21 @@ def run_evaluation(
     }
     if paths:
         resolved.update({name: Path(path) for name, path in paths.items()})
+    inputs = load_inputs(resolved, config)
+    planner, applications = signal_date_plan(inputs.calendar, config)
+    # 门控训练池预检：必须在创建任何产物目录之前 fail-closed（fit_gate 对训练池不足是硬错误，
+    # 绝不允许跑到一半崩溃留下半套产物）。
+    mature = mature_training_dates(planner, inputs.calendar, config.first_apply_index, min(config.labels))
+    if len(mature) < int(config.gate_min_train_dates):
+        raise EvaluationError(
+            f"动态门控训练池只有 {len(mature)} 个标签已成熟的信号日，低于 "
+            f"gate_min_train_dates={config.gate_min_train_dates}；"
+            "请降低 --gate-min-train-dates 或扩大训练样本（本次未写任何产物）"
+        )
     directories = resolve_output_dirs(config.run_id, root=root)
     for directory in directories.values():
         directory.mkdir(parents=True, exist_ok=False)
 
-    inputs = load_inputs(resolved, config)
-    planner, applications = signal_date_plan(inputs.calendar, config)
     first_apply = applications[0]
     frozen_at = inputs.calendar[inputs.calendar.index(first_apply) - 1]
 
@@ -1292,7 +1354,7 @@ def build_parser() -> argparse.ArgumentParser:
     """命令行接口。"""
     parser = argparse.ArgumentParser(description="PCA→NALE 集成走步评测（M4）")
     parser.add_argument("--run-id", required=True, help="产物目录名（必填；已存在则拒绝运行）")
-    parser.add_argument("--domain", default="A", choices=["A", "AC"])
+    parser.add_argument("--domain", default="A", choices=list(DOMAIN_COHORTS))
     parser.add_argument("--feature-family", default="price_technical_v1",
                         choices=["price_technical_v1", "text_flow_v1"])
     parser.add_argument("--networks", default="W-ind,W-corr,W-attn")
