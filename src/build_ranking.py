@@ -105,9 +105,9 @@ from src.analysis.alpha_gate import gate_summary, run_alpha_gate
 from src.analysis.schema import validate_ranking, validate_stock_detail
 
 logger = setup_logging()
-# 基本面抓取（东方财富三张表）实测较慢（约 15-60 秒），8 秒超时会导致结果为空。
-# 可通过 FUNDAMENTAL_TIMEOUT_SECONDS 环境变量覆盖。
-FUNDAMENTAL_TIMEOUT_SECONDS = int(os.environ.get("FUNDAMENTAL_TIMEOUT_SECONDS", "90"))
+# 财报（季报/中报/年报）按季度发布，缓存默认 120 天有效，避免重复拉取东财三张表导致全量流水线卡死
+FUNDAMENTAL_CACHE_DAYS = int(os.environ.get("FUNDAMENTAL_CACHE_DAYS", "120"))
+FUNDAMENTAL_TIMEOUT_SECONDS = int(os.environ.get("FUNDAMENTAL_TIMEOUT_SECONDS", "12"))
 
 # 输出路径
 ANALYSIS_DIR = os.path.join(DATA_DIR, ANALYSIS_DIR_NAME)
@@ -117,7 +117,7 @@ FUNDAMENTAL_CACHE_DIR = os.path.join(DATA_DIR, "fundamental")
 from src.data.cache_manager import KlineCacheManager, FundamentalCacheManager
 
 _kline_cache_mgr = KlineCacheManager(KLINE_DIR)
-_fundamental_cache_mgr = FundamentalCacheManager(FUNDAMENTAL_CACHE_DIR, max_age_days=STALE_DATA_DAYS)
+_fundamental_cache_mgr = FundamentalCacheManager(FUNDAMENTAL_CACHE_DIR, max_age_days=FUNDAMENTAL_CACHE_DAYS)
 
 
 # ============================================================

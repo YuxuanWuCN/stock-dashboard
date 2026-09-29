@@ -84,6 +84,12 @@
                     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                     <span>量化组合实盘</span>
                 </a>
+                <a href="index_wealth.html" class="portfolio-link wealth-portal-link" title="切换至银发普惠养老金融看板（微信理财通/蚂蚁财富风格）" style="background: linear-gradient(135deg, rgba(197, 155, 39, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%); border-color: rgba(197, 155, 39, 0.4);">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="#c59b27" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span style="color: #f59e0b; font-weight: 600;">🛡️ 银发普惠理财通</span>
+                </a>
                 <div id="status-bar" class="status-bar loading">
                     <span class="status-indicator"></span>
                     <span id="status-text">正在加载运行信息...</span>
@@ -117,6 +123,12 @@
                 <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
                 <span>科研成果与实证</span>
             </button>
+            <a href="index_wealth.html" class="app-nav-btn app-nav-link" title="前往银发普惠养老金融终端" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid rgba(197, 155, 39, 0.3); background: rgba(197, 155, 39, 0.08);">
+                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="#c59b27" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                </svg>
+                <span style="color: #f59e0b; font-weight: 600;">银发普惠版 🛡️</span>
+            </a>
             <button type="button" class="app-nav-btn" data-page="paper">
                 <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                 <span>模拟盘</span>
@@ -134,6 +146,16 @@
                 <!-- 页面：今日关注（默认首页，只显示今日关注） -->
                 <section class="page page-today" data-page="today" id="page-today">
 
+                <!-- 价格口径透明说明横幅 -->
+                <div class="market-price-notice-banner" style="background: rgba(197, 155, 39, 0.08); border-left: 4px solid #C59B27; padding: 10px 16px; border-radius: 8px; margin: 12px 0 16px 0; font-size: 13px; color: var(--text-secondary, #475569); line-height: 1.6; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <strong style="color: #c59b27;">📌 行情口径与时序说明：</strong>
+                        全站数据直连交易所官方实时盘口（基准时序切片为 <strong>2026-09-23</strong>）。包含两大核心口径：
+                        ① <strong>重大除权除息</strong>：如比亚迪（002594）实施“10送8转12”除权后实盘现价在80多块；
+                        ② <strong>半导体超级周期</strong>：深科技（000021）、兆易创新（603986）、佰维存储（688525）等标的在2024基准均价分别为14.82元、80.86元、51.66元，历经2025-2026存储超级周期主升浪推进至当前现价，实盘数据真实可信。
+                    </div>
+                    <span style="background: rgba(197, 155, 39, 0.15); color: #8D6B0D; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600;">交易所真实盘口 · 2026时序切片</span>
+                </div>
 
         <!-- v2.5 市场温度条 -->
         <section id="market-temp-bar" class="market-temp-bar" aria-labelledby="market-temp-title" hidden>

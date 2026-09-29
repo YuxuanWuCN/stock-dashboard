@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+  body {
+    @apply bg-page text-ink-900 font-sans;
+  }
+  /* 金融数字统一等宽，避免刷新时宽度跳动 */
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  /* 密集数据区（因子表 / IC 值 / 色标刻度）用真正的等宽字体，便于逐位对齐 */
+  .num-mono {
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand/60 ring-offset-2 ring-offset-white;
+  }
+}
+
+@layer components {
+  /* 全站唯一的卡片语言：白底 + 1px 描边 + 统一阴影 + 16px 圆角 */
+  .card-surface {
+    @apply rounded-card border border-line bg-white shadow-card;
+  }
+  /* ---------------------------------------------------------------
+     排版阶梯
+     设计稿画布是 1214px，desk(≥1214) 严格等于设计稿字号；
+     1024–1213(lg) 与 <1024 各降一档，避免卡片变窄后文字显大、换行、被截断。
+     --------------------------------------------------------------- */
+  .t-card-title {            /* 卡片主标题：安心增长 / 稳健资产配置比例 */
+    @apply text-[17px] font-extrabold leading-6 text-ink-900 lg:text-[19px] lg:leading-7 desk:text-[20px];
+  }
+  .t-card-sub {              /* 卡片副标题：绝对收益曲线 */
+    @apply text-[17px] font-normal leading-6 text-ink-600 lg:text-[19px] lg:leading-7 desk:text-[20px];
+  }
+  .t-section-title {         /* 区块标题：产业链避险小卫士 */
+    @apply text-[18px] font-extrabold leading-6 text-ink-900 lg:text-[19px] lg:leading-7 desk:text-[20px];
+  }
+  .t-section-sub {           /* 区块副标题：基于 NALE 图算法… */
+    @apply text-[12.5px] text-ink-500 lg:text-[13px] desk:text-[13.5px];
+  }
+  .t-item-title {            /* 小卡标题：无需盯盘 / 产业链避险成功 */
+    @apply text-[14px] font-bold lg:text-[15px] desk:text-[16px];
+  }
+  .t-item-desc {             /* 小卡副标：专业团队与AI双重守护 */
+    @apply text-[12px] leading-[1.5] text-ink-500 lg:text-[12.5px] desk:text-[13px];
+  }
+  .t-body {                  /* 正文：事件卡描述 / 现金说明 */
+    @apply text-[12.5px] leading-[1.7] text-ink-600 lg:text-[13px] desk:text-[13.5px];
+  }
+  .t-label {                 /* 图例 / 标签 */
+    @apply text-[12px] lg:text-[12px] desk:text-[12.5px];
+  }
+  .t-metric {                /* Hero 大数值：AAA / +5.82% */
+    @apply text-[32px] font-extrabold leading-none lg:text-[36px] desk:text-[40px];
+  }
+  /* 单行/多行截断的工具类语义（Tailwind 自带 truncate / line-clamp-n） */
+  .clip-1 {
+    @apply truncate;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Hero 照片层
+   ≥desk(1214)：照片贴右下、高度锁死 293（与设计稿一致，人物全身可见）
+   <desk：照片改为顶部通栏，正文下移让位（避免照片被卡片压住只露一角）
+   ---------------------------------------------------------------- */
+/* 两个照片层共用：用 mask 把左缘羽化掉，照片自己溶解进暖白底。
+   不用「白色渐变盖住」的做法 —— 白色和底色的色值会随宽度错位，出现可见接缝。 */
+.hero-photo-band > img,
+.hero-photo-desk > img {
+  -webkit-mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 24%, #000 58%);
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 24%, #000 58%);
+}
+
+/* ≥desk：贴右下，高度锁死 293（= 设计稿照片高度），人物全身按原比例呈现 */
+.hero-photo-desk {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 560px;
+  max-width: 92%;
+  height: 293px;
+  overflow: hidden;
+}
+.hero-photo-desk > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+.hero-photo-desk-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(250, 248, 241, 0.8) 0%, rgba(250, 248, 241, 0.34) 34%, rgba(250, 248, 241, 0) 70%);
+}
+
+/* <desk：贴右上，宽高按素材比例（960:502）等比缩放，两位老人完整可见、无留白 */
+.hero-photo-band {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(100%, 560px);
+  aspect-ratio: 960 / 502;
+  overflow: hidden;
+}
+.hero-photo-band > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% 45%;
+}
+.hero-photo-band-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(250, 248, 241, 0) 58%, rgba(250, 248, 241, 0.9) 92%, #faf8f1 100%),
+    linear-gradient(90deg, rgba(250, 248, 241, 0.55) 0%, rgba(250, 248, 241, 0) 42%);
+}
+.hero-content {
+  /* 让出照片带的高度：band 高 = min(容器宽, 560) / 1.912 */
+  padding-top: calc(min(100%, 560px) / 1.912 + 16px);
+}
+@media (min-width: 1214px) {
+  .hero-photo-band {
+    display: none;
+  }
+  .hero-content {
+    padding-top: 26px;
+    padding-bottom: 5px;
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Rainbow-FinGPT Homepage & Academic Econometrics API",
+    "version": "1.1.0",
+    "description": "面向银发安心养老理财与业内级学术量化投研双核融合终端的聚合接口契约"
+  },
+  "paths": {
+    "/api/v1/homepage": {
+      "get": {
+        "summary": "获取首页视图模型（含银发理财全景与学术计量实证资产）",
+        "operationId": "getHomepage",
+        "parameters": [
+          {
+            "name": "points",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 21,
+              "minimum": 8,
+              "maximum": 120
+            },
+            "description": "绝对收益曲线采样点数"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功返回完整聚合视图模型",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomepageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FamaMacBethFactor": {
+        "type": "object",
+        "required": ["name", "beta", "t_stat", "p_value", "meaning"],
+        "properties": {
+          "name": { "type": "string" },
+          "beta": { "type": "number" },
+          "t_stat": { "type": "number" },
+          "p_value": { "type": "string" },
+          "meaning": { "type": "string" }
+        }
+      },
+      "CsmarFieldMapping": {
+        "type": "object",
+        "required": ["variable", "open_source", "wind_field", "csmar_field"],
+        "properties": {
+          "variable": { "type": "string" },
+          "open_source": { "type": "string" },
+          "wind_field": { "type": "string" },
+          "csmar_field": { "type": "string" }
+        }
+      },
+      "AcademicEconometricsData": {
+        "type": "object",
+        "required": ["methodology", "factors", "csmarMappings"],
+        "properties": {
+          "methodology": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "hacRobustLag": { "type": "integer" }
+            }
+          },
+          "factors": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/FamaMacBethFactor" }
+          },
+          "csmarMappings": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CsmarFieldMapping" }
+          }
+        }
+      },
+      "HomepageResponse": {
+        "type": "object",
+        "required": ["generated_at", "hero", "equityCurve", "allocation", "cashNote", "riskEvents", "expert"],
+        "properties": {
+          "generated_at": { "type": "string" },
+          "hero": { "type": "object" },
+          "equityCurve": { "type": "object" },
+          "allocation": { "type": "array", "items": { "type": "object" } },
+          "cashNote": { "type": "object" },
+          "riskEvents": { "type": "array", "items": { "type": "object" } },
+          "expert": { "type": "object" },
+          "academic": { "$ref": "#/components/schemas/AcademicEconometricsData" }
+        }
+      }
+    }
+  }
+}

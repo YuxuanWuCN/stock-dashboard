@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "600030",
   "name": "中信证券",
   "type": "stock",
   "category": "券商",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 48.2,
-    "risk": 8.2,
-    "technical": 100.0,
-    "industry": 57.0,
+    "risk_adjusted": 41.5,
+    "risk": 16.6,
+    "technical": 42.0,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,43 +42,43 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:08:47"
+    "updated_at": "2026-09-28 22:31:14"
   },
   "nale_network": {
     "sector_name": "券商",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
         "code": "300059",
         "name": "东方财富",
-        "corr": 0.92
+        "corr": 0.88
       },
       {
         "code": "601688",
         "name": "华泰证券",
-        "corr": 0.91
-      },
-      {
-        "code": "601211",
-        "name": "国泰君安",
-        "corr": 0.74
+        "corr": 0.85
       },
       {
         "code": "601066",
         "name": "中信建投",
-        "corr": 0.69
+        "corr": 0.77
+      },
+      {
+        "code": "601211",
+        "name": "国泰君安",
+        "corr": 0.66
       }
     ],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -80,34 +88,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.74,
-    "max_drawdown_60d_pct": -8.25,
-    "atr14_pct": 1.72,
+    "annualized_volatility_20d_pct": 18.23,
+    "max_drawdown_60d_pct": -11.26,
+    "atr14_pct": 1.73,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 5.1,
-        "value": 15.74
+        "score": 9.0,
+        "value": 18.23
       },
       {
         "name": "60日最大回撤",
-        "score": 9.6,
-        "value": -8.25
+        "score": 15.6,
+        "value": -11.26
       },
       {
         "name": "ATR百分比",
-        "score": 9.0,
-        "value": 1.72
+        "score": 12.6,
+        "value": 1.73
       },
       {
         "name": "量价异常",
-        "score": 23.7,
-        "value": 1.1
+        "score": 73.1,
+        "value": 0.76
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -122,57 +130,64 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 27.827999999999996,
-    "ma10": 27.719,
-    "ma20": 27.5985,
-    "ma60": 27.981499999999997,
-    "rsi14": 53.8,
-    "macd_dif": -0.008606143203586214,
-    "macd_dea": -0.07344402062303104,
-    "macd_hist": 0.12967575483888966,
-    "atr14_pct": 1.7247006252718953,
-    "boll_position": 0.8021167914779577,
-    "return_5d_pct": 0.21482277121374072,
-    "return_20d_pct": 0.14311270125222375,
-    "volume_ratio_5d": 1.1
+    "trend": "downtrend",
+    "ma5": 26.53,
+    "ma10": 26.476,
+    "ma20": 27.038,
+    "ma60": 27.672500000000003,
+    "rsi14": 34.7,
+    "macd_dif": -0.3571532359268943,
+    "macd_dea": -0.2909338183756792,
+    "macd_hist": -0.13243883510243015,
+    "atr14_pct": 1.7318765134258614,
+    "boll_position": 0.07071943357709388,
+    "return_5d_pct": -2.260738507912574,
+    "return_20d_pct": -7.124955245255993,
+    "volume_ratio_5d": 0.76
   },
   "industry": {
     "name": "券商",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": 5.69
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 0.72
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 48.3,
-      "average_return_pct": 0.19,
-      "median_return_pct": -0.04,
-      "best_return_pct": 8.42,
-      "worst_return_pct": -6.57
+      "up_probability_pct": 70.0,
+      "average_return_pct": 1.1,
+      "median_return_pct": 0.66,
+      "best_return_pct": 8.59,
+      "worst_return_pct": -2.57
     },
     "horizon_5d": {
-      "up_probability_pct": 31.0,
-      "average_return_pct": -0.32,
-      "median_return_pct": -0.97,
-      "best_return_pct": 9.66,
-      "worst_return_pct": -5.85
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.63,
+      "median_return_pct": 0.16,
+      "best_return_pct": 9.1,
+      "worst_return_pct": -4.18
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    }
+  ],
   "kline_file": "../kline/600030.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

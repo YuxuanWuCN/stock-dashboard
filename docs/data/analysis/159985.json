@@ -1,17 +1,25 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "159985",
   "name": "豆粕ETF",
   "type": "etf",
   "category": "农产品大宗",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 53.7,
-    "risk": 19.0,
-    "technical": 100.0,
+    "risk_adjusted": 46.7,
+    "risk": 27.2,
+    "technical": 50.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -34,22 +42,22 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:31:41"
+    "updated_at": "2026-09-28 22:32:21"
   },
   "nale_network": {
     "sector_name": "农产品大宗",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -59,34 +67,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 20.98,
+    "annualized_volatility_20d_pct": 30.84,
     "max_drawdown_60d_pct": -8.73,
-    "atr14_pct": 1.97,
+    "atr14_pct": 2.23,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 12.8,
-        "value": 20.98
+        "score": 40.7,
+        "value": 30.84
       },
       {
         "name": "60日最大回撤",
-        "score": 10.9,
+        "score": 6.6,
         "value": -8.73
       },
       {
         "name": "ATR百分比",
-        "score": 12.8,
-        "value": 1.97
+        "score": 22.8,
+        "value": 2.23
       },
       {
         "name": "量价异常",
-        "score": 97.4,
-        "value": 1.92
+        "score": 85.6,
+        "value": 0.65
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -101,34 +109,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 2.3659999999999997,
-    "ma10": 2.297,
-    "ma20": 2.2275,
-    "ma60": 2.1458333333333335,
-    "rsi14": 74.2,
-    "macd_dif": 0.06332299842968503,
-    "macd_dea": 0.04149529737388216,
-    "macd_hist": 0.043655402111605734,
-    "atr14_pct": 1.9663175724122646,
-    "boll_position": 1.0189829391955592,
-    "return_5d_pct": 7.079646017699126,
-    "return_20d_pct": 14.1509433962264,
-    "volume_ratio_5d": 1.92
+    "trend": "rebound",
+    "ma5": 2.2979999999999996,
+    "ma10": 2.314,
+    "ma20": 2.343,
+    "ma60": 2.2261666666666664,
+    "rsi14": 46.1,
+    "macd_dif": 0.015813322517544748,
+    "macd_dea": 0.031130906965741417,
+    "macd_hist": -0.03063516889639334,
+    "atr14_pct": 2.2266789359026258,
+    "boll_position": 0.09313725490190444,
+    "return_5d_pct": -1.7391304347826098,
+    "return_20d_pct": 0.0,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "农产品大宗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": 19.7
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 7.84
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -136,39 +144,27 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -0.32,
-      "median_return_pct": -0.51,
-      "best_return_pct": 5.83,
-      "worst_return_pct": -5.36
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.71,
+      "median_return_pct": 0.73,
+      "best_return_pct": 4.41,
+      "worst_return_pct": -4.9
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.11,
-      "median_return_pct": 0.0,
-      "best_return_pct": 8.25,
-      "worst_return_pct": -7.59
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.98,
+      "median_return_pct": 0.71,
+      "best_return_pct": 8.04,
+      "worst_return_pct": -5.71
     }
   },
   "fundamental": null,
   "reasons": [
     {
       "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
-    },
-    {
-      "type": "positive",
-      "title": "成交活跃",
-      "detail": "近5日量能为前期1.92倍。",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
       "contribution": 5.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=74.2，短期超买。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/159985.json",

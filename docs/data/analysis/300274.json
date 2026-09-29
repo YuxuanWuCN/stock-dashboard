@@ -1,19 +1,27 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "300274",
   "name": "阳光电源",
   "type": "stock",
   "category": "新能源",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 28.3,
-    "risk": 59.4,
-    "technical": 50.0,
+    "risk_adjusted": 25.2,
+    "risk": 50.5,
+    "technical": 52.0,
     "industry": 27.0,
-    "leading": 20.0
+    "leading": 35.0
   },
   "leading": {
     "category": "new_energy",
@@ -788,30 +796,50 @@
       157860.0,
       154780.0,
       149880.0,
-      141940.0
+      141940.0,
+      142200.0,
+      143480.0,
+      142000.0,
+      141300.0,
+      134820.0,
+      132340.0,
+      129120.0,
+      125820.0,
+      131180.0,
+      127160.0,
+      132500.0,
+      134400.0,
+      128900.0,
+      124420.0,
+      119040.0
     ],
     "momentum_metrics": {
-      "slope_pct": -3.02,
+      "slope_pct": -26.06,
       "momentum": "decelerating",
-      "inflection_flag": "negative_reversal",
-      "latest_value": 141940.0,
+      "inflection_flag": "none",
+      "latest_value": 119040.0,
       "confidence": "high"
     },
-    "updated_at": "2026-09-06 00:11:50"
+    "updated_at": "2026-09-28 22:31:26"
   },
   "nale_network": {
     "sector_name": "新能源",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
-        "code": "300750",
-        "name": "宁德时代",
-        "corr": 0.48
+        "code": "600438",
+        "name": "通威股份",
+        "corr": 0.45
+      },
+      {
+        "code": "002459",
+        "name": "晶澳科技",
+        "corr": 0.44
       },
       {
         "code": "601012",
@@ -823,7 +851,7 @@
       "physical_lag_tau_days": 35.0,
       "physical_lag_sigma_days": 8.0,
       "peak_horizon_days": 35,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -833,34 +861,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 58.71,
-    "max_drawdown_60d_pct": -47.14,
-    "atr14_pct": 6.24,
+    "annualized_volatility_20d_pct": 35.07,
+    "max_drawdown_60d_pct": -36.45,
+    "atr14_pct": 4.38,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 66.7,
-        "value": 58.71
+        "score": 51.5,
+        "value": 35.07
       },
       {
         "name": "60日最大回撤",
-        "score": 86.5,
-        "value": -47.14
+        "score": 79.6,
+        "value": -36.45
       },
       {
         "name": "ATR百分比",
-        "score": 73.7,
-        "value": 6.24
+        "score": 59.9,
+        "value": 4.38
       },
       {
         "name": "量价异常",
-        "score": 29.5,
-        "value": 1.14
+        "score": 29.9,
+        "value": 0.93
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -875,34 +903,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 35.0,
     "peak_horizon_days": 35,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 88.548,
-    "ma10": 97.298,
-    "ma20": 106.572,
-    "ma60": 118.95466666666668,
+    "ma5": 85.75399999999999,
+    "ma10": 85.26899999999999,
+    "ma20": 86.1505,
+    "ma60": 102.76849999999999,
     "rsi14": 29.7,
-    "macd_dif": -7.462421815175674,
-    "macd_dea": -5.248220360888534,
-    "macd_hist": -4.428402908574279,
-    "atr14_pct": 6.241430566212778,
-    "boll_position": 0.11702864147805084,
-    "return_5d_pct": -9.478964070017392,
-    "return_20d_pct": -22.538542396636295,
-    "volume_ratio_5d": 1.14
+    "macd_dif": -5.158748342944861,
+    "macd_dea": -5.879506732832965,
+    "macd_hist": 1.441516779776208,
+    "atr14_pct": 4.382596859814055,
+    "boll_position": -0.06906778565862841,
+    "return_5d_pct": -7.094555873925501,
+    "return_20d_pct": -16.484648670925207,
+    "volume_ratio_5d": 0.93
   },
   "industry": {
     "name": "新能源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": -16.99
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": -8.64
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -910,27 +938,147 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.21,
-      "median_return_pct": 0.1,
-      "best_return_pct": 16.55,
-      "worst_return_pct": -18.28
+      "up_probability_pct": 56.7,
+      "average_return_pct": -0.56,
+      "median_return_pct": 0.44,
+      "best_return_pct": 16.63,
+      "worst_return_pct": -19.16
     },
     "horizon_5d": {
       "up_probability_pct": 56.7,
-      "average_return_pct": -0.03,
-      "median_return_pct": 1.36,
-      "best_return_pct": 22.48,
-      "worst_return_pct": -16.48
+      "average_return_pct": -0.63,
+      "median_return_pct": 0.33,
+      "best_return_pct": 22.58,
+      "worst_return_pct": -22.35
     }
   },
-  "fundamental": null,
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-03-31",
+    "score": 31.6,
+    "dimensions": {
+      "asset_quality": 32.0,
+      "liability_safety": 42.8,
+      "profit_quality": 16.0,
+      "cash_health": 36.5
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 121864175876.94,
+      "total_assets_yoy": -0.7398535089,
+      "inventory": 27758417454.98,
+      "prepayment": 4039476158.58,
+      "receivable": 22425525530.5,
+      "inventory_prepay_ratio": 0.2609289677195201,
+      "receivable_revenue": 3.043858192515989,
+      "goodwill_equity": 0.006103037626475939,
+      "debt_ratio": 0.57514830892327,
+      "short_debt_ratio": 0.05218847715434415,
+      "roe": 0.04708664557467449,
+      "gross_margin": 15.852360455524444,
+      "deduct_ratio": 0.8870050944418807,
+      "netprofit_yoy": -40.7923158869,
+      "ocf_np_ratio": 0.5273950327280295,
+      "financing_debt": 0.005252531705748047,
+      "retained_profit_equity": 0.8206158163019049
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "negative",
+          "title": "资产增长乏力",
+          "detail": "总资产同比 +-0.7%，规模停滞。",
+          "contribution": -8.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 26.1%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 304.4%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "warning",
+          "title": "杠杆中等",
+          "detail": "资产负债率 57.5%，处于中间区间。",
+          "contribution": -10.2
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 5.2%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "negative",
+          "title": "ROE 偏低",
+          "detail": "净资产收益率 4.7%，盈利能力弱。",
+          "contribution": -30.0
+        },
+        {
+          "type": "negative",
+          "title": "利润下滑",
+          "detail": "净利润同比 -40.8%，盈利收缩。",
+          "contribution": -12.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 88.7%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 82.1%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "warning",
+          "title": "现金流偏弱",
+          "detail": "经营现金流/净利润 0.53，利润兑现能力一般。",
+          "contribution": -16.5
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 0.5%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "未发现明显扩张逻辑",
+      "negative_view": "经营现金流/净利润 0.53，利润兑现存疑；应收账款/营收 304.4%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-09 22:21:06"
+  },
   "reasons": [
     {
       "type": "negative",
       "title": "领先指标",
-      "detail": "领先指标见顶回落，供需拐点向下",
-      "contribution": -60.0
+      "detail": "领先指标动能减速",
+      "contribution": -30.0
     },
     {
       "type": "negative",
@@ -941,13 +1089,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 47.1%，风险偏高。",
+      "detail": "近60日最大回撤 36.4%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 47.1%，风险扣分。",
+      "detail": "近60日最大回撤 36.5%，风险扣分。",
       "contribution": -7.0
     },
     {

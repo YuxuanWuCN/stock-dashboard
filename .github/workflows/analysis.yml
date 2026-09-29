@@ -1,15 +1,15 @@
-# analysis.yml —— 每个交易日北京时间 17:30 生成短线风险收益排行榜
+# analysis.yml —— 每个交易日北京时间 18:00 生成短线风险收益排行榜
 #
 # 触发方式：
-#   1. 定时：周一至周五 UTC 9:30（= 北京时间 17:30）
+#   1. 定时：周一至周五 UTC 10:00（= 北京时间 18:00）
 #   2. 手动：在 GitHub Actions 页面点击 "Run workflow"
 
 name: Daily Stock Analysis
 
 on:
   schedule:
-    # 北京时间 17:30 = UTC 9:30，周一至周五
-    - cron: "30 9 * * 1-5"
+    # 北京时间 18:00 = UTC 10:00，周一至周五
+    - cron: "0 10 * * 1-5"
   workflow_dispatch:   # 允许手动触发
 
 # 需要写权限以自动提交数据

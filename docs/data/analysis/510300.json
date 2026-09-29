@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "510300",
   "name": "沪深300ETF",
   "type": "etf",
   "category": "通用",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 48.5,
-    "risk": 7.5,
-    "technical": 58.0,
-    "industry": 50.4,
+    "risk_adjusted": 50.5,
+    "risk": 5.5,
+    "technical": 42.0,
+    "industry": 48.9,
     "leading": 50.0
   },
   "leading": {
@@ -34,11 +42,11 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:13:49"
+    "updated_at": "2026-09-28 22:31:28"
   },
   "nale_network": {
     "sector_name": "通用",
-    "sector_breadth_pct": 57.1,
+    "sector_breadth_pct": 0.0,
     "tier_role": "neutral",
     "leader_stock": null,
     "spillover_return_5d_pct": 0.0,
@@ -48,7 +56,7 @@
       {
         "code": "159919",
         "name": "沪深300ETF易方达",
-        "corr": 1.0
+        "corr": 0.99
       },
       {
         "code": "159915",
@@ -63,12 +71,12 @@
       {
         "code": "510050",
         "name": "上证50ETF",
-        "corr": 0.87
+        "corr": 0.85
       },
       {
-        "code": "513520",
-        "name": "日经ETF",
-        "corr": 0.79
+        "code": "026487",
+        "name": "大成竞先成长混合C",
+        "corr": 0.83
       }
     ],
     "temporal_dynamics": {
@@ -85,34 +93,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 14.13,
-    "max_drawdown_60d_pct": -9.82,
-    "atr14_pct": 1.51,
+    "annualized_volatility_20d_pct": 12.16,
+    "max_drawdown_60d_pct": -10.16,
+    "atr14_pct": 1.42,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 3.2,
-        "value": 14.13
+        "score": 1.8,
+        "value": 12.16
       },
       {
         "name": "60日最大回撤",
-        "score": 12.8,
-        "value": -9.82
+        "score": 10.8,
+        "value": -10.16
       },
       {
         "name": "ATR百分比",
-        "score": 5.8,
-        "value": 1.51
+        "score": 6.6,
+        "value": 1.42
       },
       {
         "name": "量价异常",
-        "score": 20.5,
-        "value": 0.91
+        "score": 7.2,
+        "value": 1.01
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -133,47 +141,47 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 4.644,
-    "ma10": 4.649,
-    "ma20": 4.688000000000001,
-    "ma60": 4.774166666666667,
-    "rsi14": 41.7,
-    "macd_dif": -0.028488905186798696,
-    "macd_dea": -0.02531424964427484,
-    "macd_hist": -0.006349311085047715,
-    "atr14_pct": 1.5079433759469312,
-    "boll_position": 0.19882006470996036,
-    "return_5d_pct": -1.2820512820512775,
-    "return_20d_pct": -2.7368421052631597,
-    "volume_ratio_5d": 0.91
+    "ma5": 4.548,
+    "ma10": 4.547,
+    "ma20": 4.5889999999999995,
+    "ma60": 4.679166666666666,
+    "rsi14": 30.0,
+    "macd_dif": -0.04410995858178968,
+    "macd_dea": -0.036245021079137685,
+    "macd_hist": -0.015729875005303984,
+    "atr14_pct": 1.4235795410127572,
+    "boll_position": -0.20038314407373908,
+    "return_5d_pct": -3.493449781659397,
+    "return_20d_pct": -5.5555555555555465,
+    "volume_ratio_5d": 1.01
   },
   "industry": {
     "name": "通用",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": 2.81
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 2.29
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 28,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.4,
-      "median_return_pct": 0.32,
-      "best_return_pct": 4.27,
-      "worst_return_pct": -4.94
+      "up_probability_pct": 75.0,
+      "average_return_pct": 0.94,
+      "median_return_pct": 1.28,
+      "best_return_pct": 3.67,
+      "worst_return_pct": -2.61
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.07,
-      "median_return_pct": 0.32,
-      "best_return_pct": 5.84,
-      "worst_return_pct": -4.0
+      "up_probability_pct": 67.9,
+      "average_return_pct": 0.86,
+      "median_return_pct": 0.96,
+      "best_return_pct": 3.94,
+      "worst_return_pct": -2.67
     }
   },
   "fundamental": null,

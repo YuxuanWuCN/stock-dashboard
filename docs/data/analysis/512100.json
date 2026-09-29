@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "512100",
   "name": "中证1000ETF",
   "type": "etf",
   "category": "小盘成长",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 42.7,
-    "risk": 25.5,
-    "technical": 58.0,
-    "industry": 51.9,
+    "risk_adjusted": 43.8,
+    "risk": 24.8,
+    "technical": 42.0,
+    "industry": 50.2,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:24:33"
+    "updated_at": "2026-09-28 22:31:46"
   },
   "nale_network": {
     "sector_name": "小盘成长",
@@ -59,34 +67,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 25.24,
-    "max_drawdown_60d_pct": -21.79,
-    "atr14_pct": 2.56,
+    "annualized_volatility_20d_pct": 22.75,
+    "max_drawdown_60d_pct": -18.6,
+    "atr14_pct": 2.37,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 25.0,
-        "value": 25.24
+        "score": 24.6,
+        "value": 22.75
       },
       {
         "name": "60日最大回撤",
-        "score": 43.6,
-        "value": -21.79
+        "score": 38.9,
+        "value": -18.6
       },
       {
         "name": "ATR百分比",
-        "score": 25.6,
-        "value": 2.56
+        "score": 26.9,
+        "value": 2.37
       },
       {
         "name": "量价异常",
-        "score": 18.6,
-        "value": 0.92
+        "score": 21.6,
+        "value": 0.95
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -106,46 +114,46 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 3.096,
-    "ma10": 3.09,
-    "ma20": 3.1115000000000004,
-    "ma60": 3.180833333333333,
-    "rsi14": 44.9,
-    "macd_dif": -0.0024226395684094904,
-    "macd_dea": -0.0011216080817778875,
-    "macd_hist": -0.0026020629732632057,
-    "atr14_pct": 2.5631007115713955,
-    "boll_position": 0.1611488571272475,
-    "return_5d_pct": -2.875399361022357,
-    "return_20d_pct": -2.2508038585209,
-    "volume_ratio_5d": 0.92
+    "trend": "range",
+    "ma5": 3.1,
+    "ma10": 3.0829999999999997,
+    "ma20": 3.0855,
+    "ma60": 3.0745,
+    "rsi14": 38.6,
+    "macd_dif": -0.004076584741622202,
+    "macd_dea": -0.00013102353586783835,
+    "macd_hist": -0.007891122411508729,
+    "atr14_pct": 2.3691223523643217,
+    "boll_position": -0.07926947447300699,
+    "return_5d_pct": -5.111821086261969,
+    "return_20d_pct": -5.111821086261969,
+    "volume_ratio_5d": 0.95
   },
   "industry": {
     "name": "小盘成长",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": 3.3
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 2.73
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.14,
-      "median_return_pct": -0.29,
-      "best_return_pct": 6.34,
+      "up_probability_pct": 72.4,
+      "average_return_pct": 1.26,
+      "median_return_pct": 1.77,
+      "best_return_pct": 6.27,
       "worst_return_pct": -9.35
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.08,
-      "median_return_pct": -0.92,
+      "up_probability_pct": 55.2,
+      "average_return_pct": 0.88,
+      "median_return_pct": 1.17,
       "best_return_pct": 9.06,
       "worst_return_pct": -8.72
     }
@@ -154,20 +162,14 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 21.8%，风险偏高。",
+      "detail": "近60日最大回撤 18.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 21.8%，风险扣分。",
+      "detail": "近60日最大回撤 18.6%，风险扣分。",
       "contribution": -7.0
     }
   ],

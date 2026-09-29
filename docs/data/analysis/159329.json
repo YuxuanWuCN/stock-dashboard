@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "159329",
   "name": "沙特ETF",
   "type": "etf",
   "category": "跨境中东",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 54.2,
-    "risk": 1.0,
-    "technical": 80.0,
-    "industry": 57.0,
+    "risk_adjusted": 37.8,
+    "risk": 9.1,
+    "technical": 50.0,
+    "industry": 52.6,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:31:41"
+    "updated_at": "2026-09-28 22:32:21"
   },
   "nale_network": {
     "sector_name": "跨境中东",
@@ -59,34 +67,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 12.21,
-    "max_drawdown_60d_pct": -4.35,
-    "atr14_pct": 0.58,
+    "annualized_volatility_20d_pct": 6.98,
+    "max_drawdown_60d_pct": -5.32,
+    "atr14_pct": 0.4,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 0.6,
-        "value": 12.21
+        "score": 0.0,
+        "value": 6.98
       },
       {
         "name": "60日最大回撤",
-        "score": 0.0,
-        "value": -4.35
+        "score": 1.2,
+        "value": -5.32
       },
       {
         "name": "ATR百分比",
         "score": 0.0,
-        "value": 0.58
+        "value": 0.4
       },
       {
         "name": "量价异常",
-        "score": 7.7,
-        "value": 1.03
+        "score": 86.2,
+        "value": 1.36
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -106,29 +114,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 0.92,
-    "ma10": 0.925,
-    "ma20": 0.915,
-    "ma60": 0.9043333333333334,
-    "rsi14": 56.5,
-    "macd_dif": 0.00633690067756687,
-    "macd_dea": 0.006596310603234876,
-    "macd_hist": -0.0005188198513360123,
-    "atr14_pct": 0.5845848013051731,
-    "boll_position": 0.607582870727983,
-    "return_5d_pct": -1.0752688172043001,
-    "return_20d_pct": 2.2222222222222143,
-    "volume_ratio_5d": 1.03
+    "trend": "range",
+    "ma5": 0.89,
+    "ma10": 0.892,
+    "ma20": 0.9039999999999999,
+    "ma60": 0.9013333333333333,
+    "rsi14": 31.7,
+    "macd_dif": -0.0058816284318634615,
+    "macd_dea": -0.003770378399104005,
+    "macd_hist": -0.004222500065518913,
+    "atr14_pct": 0.3986754367755059,
+    "boll_position": 0.2266959166949312,
+    "return_5d_pct": 0.0,
+    "return_20d_pct": -4.301075268817211,
+    "volume_ratio_5d": 1.36
   },
   "industry": {
     "name": "跨境中东",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": 7.77
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 3.54
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -137,28 +145,21 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 30.0,
-      "average_return_pct": -0.13,
+      "average_return_pct": 0.04,
       "median_return_pct": 0.0,
-      "best_return_pct": 3.23,
+      "best_return_pct": 2.27,
       "worst_return_pct": -2.15
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
+      "up_probability_pct": 30.0,
       "average_return_pct": 0.12,
       "median_return_pct": 0.0,
-      "best_return_pct": 5.38,
-      "worst_return_pct": -3.12
+      "best_return_pct": 3.33,
+      "worst_return_pct": -2.13
     }
   },
   "fundamental": null,
-  "reasons": [
-    {
-      "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/159329.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-03",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "001938",
   "name": "中欧时代先锋股票A",
   "type": "etf",
   "category": "公募科技",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 48.9,
-    "risk": 30.9,
-    "technical": 73.0,
-    "industry": 49.5,
+    "risk_adjusted": 53.6,
+    "risk": 12.0,
+    "technical": 42.0,
+    "industry": 48.5,
     "leading": 50.0
   },
   "leading": {
@@ -34,22 +42,22 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:31:43"
+    "updated_at": "2026-09-28 22:32:23"
   },
   "nale_network": {
     "sector_name": "公募科技",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 18,
-      "peak_spillover_return_pct": 0.29,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -59,24 +67,24 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 23.55,
-    "max_drawdown_60d_pct": -11.45,
-    "atr14_pct": 1.35,
+    "annualized_volatility_20d_pct": 21.02,
+    "max_drawdown_60d_pct": -8.26,
+    "atr14_pct": 1.27,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 19.9,
-        "value": 23.55
+        "score": 15.6,
+        "value": 21.02
       },
       {
         "name": "60日最大回撤",
-        "score": 19.9,
-        "value": -11.45
+        "score": 5.4,
+        "value": -8.26
       },
       {
         "name": "ATR百分比",
-        "score": 3.2,
-        "value": 1.35
+        "score": 4.2,
+        "value": 1.27
       },
       {
         "name": "量价异常",
@@ -85,8 +93,8 @@
       },
       {
         "name": "行业波动",
-        "score": 95.5,
-        "value": 24.95
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -101,53 +109,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 18.0,
     "peak_horizon_days": 18,
-    "peak_spillover_return_pct": 0.29,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 2.112,
-    "ma10": 2.101,
-    "ma20": 2.1125,
-    "ma60": 2.1326666666666667,
-    "rsi14": 48.8,
-    "macd_dif": -0.003061938541447873,
-    "macd_dea": -0.003699071126252551,
-    "macd_hist": 0.0012742651696093562,
-    "atr14_pct": 1.3475930204558892,
-    "boll_position": 0.3887294241680614,
-    "return_5d_pct": -0.9433962264150941,
-    "return_20d_pct": -0.9433962264150941,
+    "ma5": 2.0759999999999996,
+    "ma10": 2.066,
+    "ma20": 2.0845,
+    "ma60": 2.1005,
+    "rsi14": 37.2,
+    "macd_dif": -0.01274712823913493,
+    "macd_dea": -0.008554370316484502,
+    "macd_hist": -0.008385515845300857,
+    "atr14_pct": 1.2658777210805934,
+    "boll_position": -0.10862284544850566,
+    "return_5d_pct": -4.306220095693769,
+    "return_20d_pct": -5.660377358490576,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "公募科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 2.49
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 2.18
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.27,
-      "median_return_pct": 0.0,
-      "best_return_pct": 5.58,
-      "worst_return_pct": -4.72
+      "up_probability_pct": 79.3,
+      "average_return_pct": 1.47,
+      "median_return_pct": 1.46,
+      "best_return_pct": 5.47,
+      "worst_return_pct": -2.9
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.51,
-      "median_return_pct": 0.51,
-      "best_return_pct": 6.57,
-      "worst_return_pct": -6.7
+      "up_probability_pct": 69.0,
+      "average_return_pct": 1.4,
+      "median_return_pct": 1.55,
+      "best_return_pct": 6.22,
+      "worst_return_pct": -6.28
     }
   },
   "fundamental": null,

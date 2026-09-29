@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-03",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "600660",
   "name": "福耀玻璃",
   "type": "stock",
   "category": "汽车玻璃",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 46.7,
-    "risk": 33.6,
-    "technical": 100.0,
-    "industry": 57.0,
+    "risk_adjusted": 44.5,
+    "risk": 22.6,
+    "technical": 71.0,
+    "industry": 47.2,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:20:36"
+    "updated_at": "2026-09-28 22:31:43"
   },
   "nale_network": {
     "sector_name": "汽车玻璃",
@@ -59,34 +67,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 25.73,
-    "max_drawdown_60d_pct": -8.4,
-    "atr14_pct": 2.67,
+    "annualized_volatility_20d_pct": 24.18,
+    "max_drawdown_60d_pct": -10.77,
+    "atr14_pct": 2.37,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 26.3,
-        "value": 25.73
+        "score": 28.1,
+        "value": 24.18
       },
       {
         "name": "60日最大回撤",
-        "score": 10.3,
-        "value": -8.4
+        "score": 15.0,
+        "value": -10.77
       },
       {
         "name": "ATR百分比",
-        "score": 27.6,
-        "value": 2.67
+        "score": 27.5,
+        "value": 2.37
       },
       {
         "name": "量价异常",
-        "score": 32.7,
-        "value": 0.85
+        "score": 47.3,
+        "value": 0.87
       },
       {
         "name": "行业波动",
-        "score": 95.5,
-        "value": 24.95
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -106,57 +114,177 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 57.036,
-    "ma10": 57.010000000000005,
-    "ma20": 56.5995,
-    "ma60": 54.2725,
-    "rsi14": 52.7,
-    "macd_dif": 0.4490903640172377,
-    "macd_dea": 0.5594660075273995,
-    "macd_hist": -0.22075128702032365,
-    "atr14_pct": 2.6670239033653313,
-    "boll_position": 0.6194352155606677,
-    "return_5d_pct": 0.3697183098591461,
-    "return_20d_pct": 1.71275646743978,
-    "volume_ratio_5d": 0.85
+    "trend": "downtrend",
+    "ma5": 52.818,
+    "ma10": 52.997,
+    "ma20": 53.9245,
+    "ma60": 54.32266666666667,
+    "rsi14": 43.9,
+    "macd_dif": -0.6432971438220392,
+    "macd_dea": -0.5267622257067659,
+    "macd_hist": -0.23306983623054656,
+    "atr14_pct": 2.3704781143447176,
+    "boll_position": 0.31177633350226563,
+    "return_5d_pct": 0.4365983295368192,
+    "return_20d_pct": -6.1213626685592715,
+    "volume_ratio_5d": 0.87
   },
   "industry": {
     "name": "汽车玻璃",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": 5.15
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 1.72
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 28,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.09,
-      "median_return_pct": -0.23,
-      "best_return_pct": 8.18,
-      "worst_return_pct": -4.69
+      "up_probability_pct": 60.7,
+      "average_return_pct": 0.61,
+      "median_return_pct": 0.6,
+      "best_return_pct": 8.33,
+      "worst_return_pct": -4.79
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.17,
-      "median_return_pct": -0.15,
-      "best_return_pct": 8.09,
-      "worst_return_pct": -6.41
+      "up_probability_pct": 57.1,
+      "average_return_pct": 0.24,
+      "median_return_pct": 0.79,
+      "best_return_pct": 8.25,
+      "worst_return_pct": -6.66
     }
   },
-  "fundamental": null,
+  "fundamental": {
+    "schema_version": "2.0",
+    "report_date": "2026-06-30",
+    "score": 52.8,
+    "dimensions": {
+      "asset_quality": 50.0,
+      "liability_safety": 48.1,
+      "profit_quality": 51.0,
+      "cash_health": 65.0
+    },
+    "weights": {
+      "asset_quality": 0.3,
+      "liability_safety": 0.25,
+      "profit_quality": 0.25,
+      "cash_health": 0.2
+    },
+    "metrics": {
+      "total_assets": 73951081904.0,
+      "total_assets_yoy": 12.5389376364,
+      "inventory": 7039887980.0,
+      "prepayment": 433930325.0,
+      "receivable": 7730312168.0,
+      "inventory_prepay_ratio": 0.1010643537940686,
+      "receivable_revenue": 0.7357669086046223,
+      "goodwill_equity": 0.004026443566134907,
+      "debt_ratio": 0.4838233365192282,
+      "short_debt_ratio": 0.37143346741511263,
+      "roe": 0.10400417424141187,
+      "gross_margin": 20.583670916254068,
+      "deduct_ratio": 0.9770464162032205,
+      "netprofit_yoy": -17.3825775164,
+      "ocf_np_ratio": 1.1462474818015664,
+      "financing_debt": 0.04110507820618799,
+      "retained_profit_equity": 0.5534631366662642
+    },
+    "reasons": {
+      "asset_quality": [
+        {
+          "type": "positive",
+          "title": "资产稳步扩张",
+          "detail": "总资产同比 +12.5%，处于健康扩张区间。",
+          "contribution": 10.0
+        },
+        {
+          "type": "positive",
+          "title": "存货结构健康",
+          "detail": "存货+预付占总资产 10.1%，风险可控。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "应收占比偏高",
+          "detail": "应收账款/营收 73.6%，现金回收存在时滞。",
+          "contribution": -15.0
+        }
+      ],
+      "liability_safety": [
+        {
+          "type": "warning",
+          "title": "杠杆中等",
+          "detail": "资产负债率 48.4%，处于中间区间。",
+          "contribution": -4.9
+        },
+        {
+          "type": "positive",
+          "title": "债务期限合理",
+          "detail": "短期有息负债占总负债 37.1%，期限结构良好。",
+          "contribution": 3.0
+        }
+      ],
+      "profit_quality": [
+        {
+          "type": "positive",
+          "title": "ROE 良好",
+          "detail": "净资产收益率 10.4%，盈利水平正常。",
+          "contribution": 5.0
+        },
+        {
+          "type": "negative",
+          "title": "利润下滑",
+          "detail": "净利润同比 -17.4%，盈利收缩。",
+          "contribution": -12.0
+        },
+        {
+          "type": "positive",
+          "title": "利润含金量高",
+          "detail": "扣非净利润占归母净利润 97.7%，主业盈利扎实。",
+          "contribution": 3.0
+        },
+        {
+          "type": "positive",
+          "title": "利润留存形成资本垫",
+          "detail": "未分配利润/归母权益 55.3%，内生资本积累较充分。",
+          "contribution": 5.0
+        }
+      ],
+      "cash_health": [
+        {
+          "type": "positive",
+          "title": "现金流强劲",
+          "detail": "经营现金流/净利润 1.15，利润有真金白银支撑。",
+          "contribution": 12.0
+        },
+        {
+          "type": "positive",
+          "title": "融资依赖度低",
+          "detail": "筹资现金流占总负债 4.1%，扩张主要靠内生。",
+          "contribution": 3.0
+        }
+      ]
+    },
+    "dual_view": {
+      "positive_view": "总资产同比 +12.5%，规模扩张有力；经营现金流/净利润 1.15，利润含金量高",
+      "negative_view": "应收账款/营收 73.6%，现金回收存在时滞",
+      "cycle_phase": "unknown",
+      "industry_return_60d_pct": null,
+      "cycle_observation_days": 0,
+      "cycle_note": "（未取得足够的真实行业周期数据，高库存不计为利好）"
+    },
+    "cached_at": "2026-08-21 10:16:26"
+  },
   "reasons": [
     {
-      "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
     }
   ],
   "kline_file": "../kline/600660.json",

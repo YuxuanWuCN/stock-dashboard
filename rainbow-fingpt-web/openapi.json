@@ -1,0 +1,3021 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Rainbow-FinGPT API v1",
+    "version": "1.0.0",
+    "description": "Rainbow-FinGPT 看板的面向前端接口，共三类：\n\n- `GET /api/v1/homepage`：首页视图模型（BFF），一次请求返回 Hero、收益曲线、资产配置、风险事件与策略表现五个区块。\n- `GET /api/v1/dataset`：数据集过滤 → 排序 → 分页，返回扁平化的干净 JSON。\n- `POST /api/v1/process`：在服务端完成选股（screen）、组合权重分配（allocate）与聚合统计（stats）。\n\n错误响应统一为 `{\"error\": \"...\", \"detail\": \"...\"}`；成功响应统一带 `Cache-Control: no-store`。\nCORS 由 Flask-CORS 统一配置，白名单通过环境变量 `CORS_ORIGINS` 覆盖。\n\n本文件由 `src/openapi_spec.py` 单一来源生成，`GET /api/v1/openapi.json` 返回的内容与它逐字节一致，可直接落盘提交。",
+    "contact": {
+      "name": "Rainbow-FinGPT 后端团队",
+      "email": "dev@example.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5000",
+      "description": "本地开发（python src/server.py）"
+    },
+    {
+      "url": "http://127.0.0.1:5001",
+      "description": "本地双进程模式（python start_local.py）"
+    },
+    {
+      "url": "https://yuxuanwucn-stock-dashboard-api.onrender.com",
+      "description": "在线演示环境"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Homepage",
+      "description": "首页视图模型（BFF）"
+    },
+    {
+      "name": "Dataset",
+      "description": "数据集的分页查询"
+    },
+    {
+      "name": "Process",
+      "description": "前端提交的处理请求"
+    },
+    {
+      "name": "Meta",
+      "description": "接口元信息"
+    }
+  ],
+  "paths": {
+    "/api/v1/dataset": {
+      "get": {
+        "tags": [
+          "Dataset"
+        ],
+        "summary": "分页查询数据集",
+        "operationId": "listDataset",
+        "description": "主表为 `docs/data/analysis/ranking_v3.json`（缺失时回退 v2），并与 `summary.json` 的行情快照按 `code` 关联。\n\n分页语义：先过滤，再排序，最后分页；`meta.total` 始终是过滤后的命中总数，响应头同时带 `X-Total-Count`。页码超出范围时自动收敛到最后一页。",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "description": "关键词模糊匹配：同时匹配股票代码、名称与分类（不区分大小写）。例如 `600519`、`茅台`、`存储`。",
+            "schema": {
+              "type": "string",
+              "example": "存储"
+            }
+          },
+          {
+            "name": "codes",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "description": "按标的代码精确过滤。多个代码用英文逗号分隔，如 `codes=600519,300750`。",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "600519"
+              },
+              "example": [
+                "600519",
+                "300750"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "description": "按标的类型过滤。多个类型用英文逗号分隔，如 `type=stock,etf`。",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "stock",
+                  "etf"
+                ]
+              },
+              "example": [
+                "stock"
+              ]
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "description": "按分类 / 行业过滤（精确匹配）。多个分类用英文逗号分隔；取值可先用 `with_facets=1` 拉取。",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "存储"
+              },
+              "example": [
+                "存储"
+              ]
+            }
+          },
+          {
+            "name": "risk_level",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "description": "按风险等级过滤。多个等级用英文逗号分隔，如 `risk_level=low,medium`。",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "low",
+                  "medium",
+                  "high"
+                ]
+              },
+              "example": [
+                "low",
+                "medium"
+              ]
+            }
+          },
+          {
+            "name": "trend",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "description": "按技术面趋势过滤。多个取值用英文逗号分隔。取值来自数据集自身的技术面判断：`uptrend` 上行、`downtrend` 下行、`range` 区间震荡、`rebound` 反弹；流水线新增取值时本参数同样接受。可用 `with_facets=1` 获取当前真实分布。",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "uptrend",
+                  "downtrend",
+                  "range",
+                  "rebound"
+                ]
+              },
+              "example": [
+                "uptrend"
+              ]
+            }
+          },
+          {
+            "name": "stale",
+            "in": "query",
+            "required": false,
+            "description": "是否只看数据过期（`true`）或未过期（`false`）的标的；不传则不过滤。",
+            "schema": {
+              "type": "boolean",
+              "example": false
+            }
+          },
+          {
+            "name": "min_score",
+            "in": "query",
+            "required": false,
+            "description": "总分（`scores.total`）下限，闭区间。",
+            "schema": {
+              "type": "number",
+              "format": "double",
+              "example": 30
+            }
+          },
+          {
+            "name": "max_score",
+            "in": "query",
+            "required": false,
+            "description": "总分（`scores.total`）上限，闭区间。",
+            "schema": {
+              "type": "number",
+              "format": "double",
+              "example": 60
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "排序字段，默认 `rank` 升序。降序支持 `-total_score` 或 `total_score:desc` 两种写法。可排序字段：rank, code, name, trade_date, total_score, risk_adjusted_score, fundamental_score, technical_score, industry_score, leading_score, last_close, change_pct, volatility_20d_pct, max_drawdown_60d_pct, return_5d_pct, up_probability_5d_pct, rsi14。空值一律排在最后。",
+            "schema": {
+              "type": "string",
+              "default": "rank",
+              "example": "-total_score"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "页码，从 1 开始；超出总页数时自动返回最后一页。",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "example": 1
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "description": "每页条数，1–200，默认 20。",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200,
+              "default": 20,
+              "example": 20
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "description": "字段裁剪：只返回指定顶层字段，逗号分隔，用于减小响应体积。可选：rank, code, name, type, category, trade_date, stale, scores, market, risk, forecast, technical, industry, sector, signal, fundamental, reasons。\n\n⚠️ 使用本参数后，`items` 是**稀疏对象**：只有被选中的字段存在，不再满足 `DatasetRow` 的全部必填约束。前端应把返回项按 `Partial<DatasetRow>` 处理（本项目 `fetchDataset` 已为重载，传 `fields` 时自动返回 `Partial<DatasetRow>[]`），不要直接访问未选中的字段。",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "example": "code"
+              },
+              "example": [
+                "code",
+                "name",
+                "scores"
+              ]
+            }
+          },
+          {
+            "name": "include_fundamental",
+            "in": "query",
+            "required": false,
+            "description": "是否附带基本面明细（逐行读取 `docs/data/fundamental/<code>.json`，只读当前页）。默认关闭。",
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "example": true
+            }
+          },
+          {
+            "name": "with_facets",
+            "in": "query",
+            "required": false,
+            "description": "是否在 `meta.facets` 中返回各筛选维度的取值分布（基于过滤后的全量结果，不受分页影响），便于前端渲染筛选器。",
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "example": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查询成功。",
+            "headers": {
+              "X-Total-Count": {
+                "description": "过滤后的命中总条数，便于前端做分页器。",
+                "schema": {
+                  "type": "integer",
+                  "example": 156
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatasetResponse"
+                },
+                "examples": {
+                  "defaultPage": {
+                    "summary": "默认查询（按排名升序，每页 20 条）",
+                    "value": {
+                      "meta": {
+                        "source": "analysis/ranking_v3.json",
+                        "trade_date": "2026-09-04",
+                        "generated_at": "2026-09-06 00:17:35+08:00",
+                        "engine": "v3.0-leading-first",
+                        "sort": "rank:asc",
+                        "total": 156,
+                        "page": 1,
+                        "page_size": 20,
+                        "total_pages": 8,
+                        "has_next": true,
+                        "has_prev": false,
+                        "returned": 20
+                      },
+                      "items": [
+                        {
+                          "rank": 1,
+                          "code": "159562",
+                          "name": "黄金股ETF",
+                          "type": "etf",
+                          "category": "贵金属弹性",
+                          "trade_date": "2026-09-04",
+                          "stale": false,
+                          "scores": {
+                            "total": 45.7,
+                            "risk_adjusted": 45.7,
+                            "fundamental": null,
+                            "technical": 100.0,
+                            "industry": 57.0,
+                            "leading": 20.0
+                          },
+                          "market": {
+                            "last_close": 1.372,
+                            "change_pct": 1.25,
+                            "change_amt": 0.017,
+                            "last_date": "2026-09-04",
+                            "status": "ok"
+                          },
+                          "risk": {
+                            "level": "low",
+                            "label": "低风险",
+                            "score": 19.0,
+                            "annualized_volatility_20d_pct": 20.98,
+                            "max_drawdown_60d_pct": -8.73,
+                            "atr14_pct": 1.97
+                          },
+                          "technical": {
+                            "trend": "uptrend",
+                            "rsi14": 74.2,
+                            "volume_ratio_5d": 1.92,
+                            "return_5d_pct": 2.51,
+                            "return_20d_pct": 1.59
+                          },
+                          "signal": {
+                            "bet_type": "range_bound",
+                            "fundamental_gate_passed": true,
+                            "holding_period": 20,
+                            "trade_frequency": "medium",
+                            "recommendation": "震荡股：均值回归或观望，避免追涨杀跌"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "filteredWithFacets": {
+                    "summary": "按关键词与风险等级过滤，并返回筛选器取值分布",
+                    "value": {
+                      "meta": {
+                        "sort": "total_score:desc",
+                        "total": 9,
+                        "page": 1,
+                        "page_size": 20,
+                        "total_pages": 1,
+                        "has_next": false,
+                        "has_prev": false,
+                        "returned": 9,
+                        "facets": {
+                          "type": [
+                            {
+                              "value": "stock",
+                              "count": 9
+                            }
+                          ],
+                          "category": [
+                            {
+                              "value": "存储",
+                              "count": 9
+                            }
+                          ],
+                          "risk_level": [
+                            {
+                              "value": "medium",
+                              "count": 6
+                            },
+                            {
+                              "value": "high",
+                              "count": 3
+                            }
+                          ],
+                          "trend": [
+                            {
+                              "value": "uptrend",
+                              "count": 5
+                            },
+                            {
+                              "value": "sideways",
+                              "count": 4
+                            }
+                          ]
+                        }
+                      },
+                      "items": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数不合法（取值越界、字段未知、JSON 格式错误等）。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "invalidPageSize": {
+                    "summary": "分页参数越界",
+                    "value": {
+                      "error": "参数 page_size 超出取值范围",
+                      "detail": "应在 [1, 200] 之间，收到 500"
+                    }
+                  },
+                  "unknownSort": {
+                    "summary": "排序字段不可用",
+                    "value": {
+                      "error": "参数 sort 指定的字段不可排序",
+                      "detail": "'roi' 不在可排序字段内：change_pct, code, ..."
+                    }
+                  },
+                  "unknownOperation": {
+                    "summary": "operation 取值不支持",
+                    "value": {
+                      "error": "不支持的 operation: backtest",
+                      "detail": "可选 screen / allocate / stats"
+                    }
+                  },
+                  "serverError": {
+                    "summary": "数据集文件缺失或损坏",
+                    "value": {
+                      "error": "服务器内部错误，请稍后重试"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务端内部错误（如数据集文件缺失 / 损坏）。错误信息已脱敏。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "serverError": {
+                    "summary": "数据集文件缺失或损坏",
+                    "value": {
+                      "error": "服务器内部错误，请稍后重试"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/process": {
+      "post": {
+        "tags": [
+          "Process"
+        ],
+        "summary": "处理前端请求（选股 / 组合权重 / 统计）",
+        "operationId": "processDataset",
+        "description": "接收前端提交的处理规格，在服务端调用与 `GET /api/v1/dataset` 完全相同的数据集逻辑，返回筛选结果、聚合统计，以及（可选）组合权重。\n\n- `screen`：只返回按规则选出的标的。\n- `allocate`：在 screen 基础上给出权重（等权 / 按分数 / 按波动率倒数），并支持单标的上限约束。\n- `stats`：只返回聚合统计，适合概览面板。\n\n请求体中出现未知字段会直接返回 400，避免前端拼错字段后静默失效。",
+        "requestBody": {
+          "required": true,
+          "description": "处理规格。至少要提供 `operation` 或一个过滤条件；空对象 `{}` 等价于对全量数据集做 screen。",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProcessRequest"
+              },
+              "examples": {
+                "allocate": {
+                  "summary": "在低/中风险标的中选 10 只做风险平价组合",
+                  "value": {
+                    "operation": "allocate",
+                    "filters": {
+                      "risk_level": [
+                        "low",
+                        "medium"
+                      ],
+                      "min_score": 30
+                    },
+                    "top_n": 10,
+                    "weighting": "risk_inverse",
+                    "max_weight": 0.25
+                  }
+                },
+                "screen": {
+                  "summary": "只做选股，按总分降序取前 5",
+                  "value": {
+                    "operation": "screen",
+                    "filters": {
+                      "q": "存储",
+                      "type": [
+                        "stock"
+                      ]
+                    },
+                    "sort": "-total_score",
+                    "top_n": 5
+                  }
+                },
+                "stats": {
+                  "summary": "只看全量数据集的聚合统计",
+                  "value": {
+                    "operation": "stats",
+                    "filters": {}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "处理成功。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessResponse"
+                },
+                "examples": {
+                  "allocated": {
+                    "summary": "组合权重分配结果",
+                    "value": {
+                      "operation": "allocate",
+                      "generated_at": "2026-09-27T12:00:00+08:00",
+                      "matched": 42,
+                      "selected_count": 3,
+                      "meta": {
+                        "source": "analysis/ranking_v3.json",
+                        "trade_date": "2026-09-04",
+                        "total": 42,
+                        "page": 1,
+                        "page_size": 3,
+                        "total_pages": 14
+                      },
+                      "stats": {
+                        "count": 3,
+                        "score": {
+                          "avg": 38.5,
+                          "median": 37.2,
+                          "min": 33.1,
+                          "max": 45.7
+                        },
+                        "risk_level_distribution": [
+                          {
+                            "value": "low",
+                            "count": 2
+                          },
+                          {
+                            "value": "medium",
+                            "count": 1
+                          }
+                        ],
+                        "category_top": [
+                          {
+                            "category": "贵金属弹性",
+                            "count": 1,
+                            "avg_score": 45.7
+                          },
+                          {
+                            "category": "农产品大宗",
+                            "count": 1,
+                            "avg_score": 43.5
+                          }
+                        ],
+                        "stale_count": 0
+                      },
+                      "allocation": {
+                        "method": "risk_inverse",
+                        "max_weight": 0.25,
+                        "invested_weight": 1.0,
+                        "cash_weight": 0.0,
+                        "positions": [
+                          {
+                            "code": "159562",
+                            "name": "黄金股ETF",
+                            "category": "贵金属弹性",
+                            "weight": 0.35,
+                            "amount_pct": 35.0,
+                            "score": 45.7,
+                            "risk_level": "low",
+                            "volatility_20d_pct": 20.98
+                          },
+                          {
+                            "code": "159985",
+                            "name": "豆粕ETF",
+                            "category": "农产品大宗",
+                            "weight": 0.33,
+                            "amount_pct": 33.0,
+                            "score": 43.5,
+                            "risk_level": "low",
+                            "volatility_20d_pct": 21.4
+                          }
+                        ],
+                        "notes": []
+                      },
+                      "items": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数不合法（取值越界、字段未知、JSON 格式错误等）。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "invalidPageSize": {
+                    "summary": "分页参数越界",
+                    "value": {
+                      "error": "参数 page_size 超出取值范围",
+                      "detail": "应在 [1, 200] 之间，收到 500"
+                    }
+                  },
+                  "unknownSort": {
+                    "summary": "排序字段不可用",
+                    "value": {
+                      "error": "参数 sort 指定的字段不可排序",
+                      "detail": "'roi' 不在可排序字段内：change_pct, code, ..."
+                    }
+                  },
+                  "unknownOperation": {
+                    "summary": "operation 取值不支持",
+                    "value": {
+                      "error": "不支持的 operation: backtest",
+                      "detail": "可选 screen / allocate / stats"
+                    }
+                  },
+                  "serverError": {
+                    "summary": "数据集文件缺失或损坏",
+                    "value": {
+                      "error": "服务器内部错误，请稍后重试"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务端内部错误（如数据集文件缺失 / 损坏）。错误信息已脱敏。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "serverError": {
+                    "summary": "数据集文件缺失或损坏",
+                    "value": {
+                      "error": "服务器内部错误，请稍后重试"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/homepage": {
+      "get": {
+        "tags": [
+          "Homepage"
+        ],
+        "summary": "获取首页视图模型",
+        "operationId": "getHomepage",
+        "description": "把散落在 `docs/data/**` 的组合净值、基准、资产配置、风险事件与策略表现，组装成整页视图模型（BFF），前端一次请求即可渲染首页 02–06 全部区块。\n\n口径说明：累计收益沿用项目既有约定 —— 对日收益率做**累加**（`benchmark.json` 的 `cumulative_return_pct` 即 Σ `daily_return_pct`，实测 −6.18% ≈ 累加值 −6.20%）；策略净值序列以 1.0 为初始本金，收益率 = (nav − 1) × 100，与 `metrics_version_*.total_return_pct` 一致。\n\n注意：`performance.json` 里的 `history[].total_return` 是**基准**的累计曲线，不是组合曲线；本接口取 `records[].portfolio_return_pct` 作为组合。",
+        "parameters": [
+          {
+            "name": "points",
+            "in": "query",
+            "required": false,
+            "description": "收益曲线的采样点数，8–120，默认 21（与设计稿的 7 个 X 轴刻度对齐）。",
+            "schema": {
+              "type": "integer",
+              "minimum": 8,
+              "maximum": 120,
+              "default": 21,
+              "example": 21
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "首页视图模型。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomepageResponse"
+                },
+                "examples": {
+                  "default": {
+                    "summary": "真实数据（2026-09-04 收盘口径）",
+                    "value": {
+                      "generated_at": "2026-09-27T14:05:00+08:00",
+                      "hero": {
+                        "title": "您好！让财富为您的晚年生活保驾护航",
+                        "subtitle": "专业的养老金融解决方案，稳健增值，安心相伴",
+                        "metrics": [
+                          {
+                            "id": "safety",
+                            "icon": "shield",
+                            "label": "资产安全评级",
+                            "value": "AAA",
+                            "tone": "green",
+                            "caption": "极高防御"
+                          },
+                          {
+                            "id": "drawdown-resist",
+                            "icon": "rise",
+                            "label": "震荡市抗跌实绩",
+                            "value": "+18.83%",
+                            "tone": "red",
+                            "caption": "组合相对同期基准的超额收益"
+                          },
+                          {
+                            "id": "max-drawdown",
+                            "icon": "shield",
+                            "label": "历史最大回撤控制",
+                            "value": "4.22%",
+                            "tone": "blue",
+                            "caption": "净值自区间高点的最大跌幅"
+                          }
+                        ],
+                        "gauge": {
+                          "title": "资产健康晴雨表",
+                          "level": "市场温度 70.2",
+                          "desc": "正常 ｜ 建议仓位 75.3%",
+                          "percent": 0.753
+                        }
+                      },
+                      "equityCurve": {
+                        "dates": [
+                          "06-01",
+                          "06-04",
+                          "06-10"
+                        ],
+                        "portfolio": {
+                          "name": "稳健组合-防守型",
+                          "returnLabel": "+12.63%",
+                          "returnPct": 12.63,
+                          "series": [
+                            0.0,
+                            5.37,
+                            7.42
+                          ]
+                        },
+                        "benchmark": {
+                          "name": "全池等权基准",
+                          "note": "同期",
+                          "returnLabel": "-6.20%",
+                          "returnPct": -6.2,
+                          "series": [
+                            0.0,
+                            1.8,
+                            3.4
+                          ]
+                        },
+                        "stats": {
+                          "maxDrawdownPct": -4.22,
+                          "volatilityPct": 14.38,
+                          "excessPct": 18.83,
+                          "samples": 21,
+                          "convention": "running_sum_of_daily_returns"
+                        }
+                      },
+                      "allocation": [
+                        {
+                          "key": "300750",
+                          "name": "宁德时代",
+                          "weight": 18.1,
+                          "color": "#F08634"
+                        },
+                        {
+                          "key": "cash",
+                          "name": "高流动性现金管理",
+                          "weight": 36.1,
+                          "color": "#F08634"
+                        }
+                      ],
+                      "cashNote": {
+                        "title": "为什么留 36% 现金？",
+                        "body": "当前现金 360,000 元，占总资产 36.0%。",
+                        "details": [
+                          "应急储备：突发医疗或家庭支出时无需被动赎回。"
+                        ]
+                      },
+                      "riskEvents": [
+                        {
+                          "id": "sentiment-watch",
+                          "tone": "green",
+                          "icon": "shield",
+                          "title": "情绪面监测",
+                          "timeAgo": "1个月前",
+                          "content": "已跟踪 144 个事件样本：正向超预期 26 次、负向意外 10 次。"
+                        }
+                      ],
+                      "expert": {
+                        "strategies": [
+                          {
+                            "key": "aggressive_v2",
+                            "name": "动态止盈止损优化版",
+                            "cumulativeReturnPct": 6.52,
+                            "sharpe": 0.55,
+                            "maxDrawdownPct": 1.25,
+                            "winRatePct": 57.1,
+                            "score": 10.61,
+                            "tradingDays": 7,
+                            "isChampion": true,
+                            "rank": 1,
+                            "rankText": "1/15"
+                          }
+                        ],
+                        "strategyTotal": 15,
+                        "nav": {
+                          "dates": [
+                            "03-26",
+                            "05-06"
+                          ],
+                          "series": [
+                            {
+                              "key": "nav_dynamic_alpha_tnale",
+                              "label": "动态 Alpha",
+                              "color": "#E9A93B",
+                              "returnPct": 169.16,
+                              "series": [
+                                -0.07,
+                                5.7
+                              ]
+                            }
+                          ]
+                        },
+                        "correlation": {
+                          "labels": [
+                            "静态 NALE",
+                            "时序 NALE",
+                            "动态 Alpha",
+                            "沪深300"
+                          ],
+                          "matrix": [
+                            [
+                              1.0,
+                              0.9758,
+                              0.9387,
+                              0.9263
+                            ],
+                            [
+                              0.9758,
+                              1.0,
+                              0.9423,
+                              0.933
+                            ],
+                            [
+                              0.9387,
+                              0.9423,
+                              1.0,
+                              0.9291
+                            ],
+                            [
+                              0.9263,
+                              0.933,
+                              0.9291,
+                              1.0
+                            ]
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数不合法（取值越界、字段未知、JSON 格式错误等）。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "invalidPageSize": {
+                    "summary": "分页参数越界",
+                    "value": {
+                      "error": "参数 page_size 超出取值范围",
+                      "detail": "应在 [1, 200] 之间，收到 500"
+                    }
+                  },
+                  "unknownSort": {
+                    "summary": "排序字段不可用",
+                    "value": {
+                      "error": "参数 sort 指定的字段不可排序",
+                      "detail": "'roi' 不在可排序字段内：change_pct, code, ..."
+                    }
+                  },
+                  "unknownOperation": {
+                    "summary": "operation 取值不支持",
+                    "value": {
+                      "error": "不支持的 operation: backtest",
+                      "detail": "可选 screen / allocate / stats"
+                    }
+                  },
+                  "serverError": {
+                    "summary": "数据集文件缺失或损坏",
+                    "value": {
+                      "error": "服务器内部错误，请稍后重试"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "服务端内部错误（如数据集文件缺失 / 损坏）。错误信息已脱敏。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "examples": {
+                  "serverError": {
+                    "summary": "数据集文件缺失或损坏",
+                    "value": {
+                      "error": "服务器内部错误，请稍后重试"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/openapi.json": {
+      "get": {
+        "tags": [
+          "Meta"
+        ],
+        "summary": "获取本接口的 OpenAPI 规格",
+        "operationId": "getOpenApiSpec",
+        "description": "返回本文件（由 `src/openapi_spec.py` 在运行时生成，永远与路由保持一致）。",
+        "responses": {
+          "200": {
+            "description": "OpenAPI 3.0.3 规格。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "description": "统一错误响应体，沿用本项目的既有风格。",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "错误描述，可直接展示给用户或用于日志检索。",
+            "example": "参数 page_size 超出取值范围"
+          },
+          "detail": {
+            "type": "string",
+            "description": "可选的补充说明，包含具体取值 / 允许范围等排障信息。",
+            "example": "应在 [1, 200] 之间，收到 500"
+          }
+        },
+        "example": {
+          "error": "参数 page_size 超出取值范围",
+          "detail": "应在 [1, 200] 之间，收到 500"
+        }
+      },
+      "Scores": {
+        "type": "object",
+        "description": "各维度评分。总分 `total` 是前端列表默认的排序依据；缺失维度为 null。",
+        "required": [
+          "total",
+          "risk_adjusted",
+          "fundamental",
+          "technical",
+          "industry",
+          "leading"
+        ],
+        "properties": {
+          "total": {
+            "type": "number",
+            "description": "综合总分（v3 引擎为风险调整后总分），列表默认按它排序。",
+            "format": "double",
+            "example": 45.7,
+            "nullable": true
+          },
+          "risk_adjusted": {
+            "type": "number",
+            "description": "风险调整后得分，与总分同源。",
+            "format": "double",
+            "example": 45.7,
+            "nullable": true
+          },
+          "fundamental": {
+            "type": "number",
+            "description": "基本面评分（基本面作为门禁，未覆盖时为 null）。",
+            "format": "double",
+            "example": 59.5,
+            "nullable": true
+          },
+          "technical": {
+            "type": "number",
+            "description": "技术面评分，0–100。",
+            "format": "double",
+            "example": 100.0,
+            "nullable": true
+          },
+          "industry": {
+            "type": "number",
+            "description": "行业轮动评分，0–100。",
+            "format": "double",
+            "example": 57.0,
+            "nullable": true
+          },
+          "leading": {
+            "type": "number",
+            "description": "领先指标评分，0–100。",
+            "format": "double",
+            "example": 20.0,
+            "nullable": true
+          }
+        }
+      },
+      "Market": {
+        "type": "object",
+        "nullable": true,
+        "description": "行情快照，来自 `docs/data/summary.json`；该标的没有行情记录时为 null。",
+        "required": [
+          "last_close",
+          "change_pct",
+          "change_amt",
+          "last_date",
+          "status"
+        ],
+        "properties": {
+          "last_close": {
+            "type": "number",
+            "description": "最新收盘价（元）。",
+            "format": "double",
+            "example": 351.0,
+            "nullable": true
+          },
+          "change_pct": {
+            "type": "number",
+            "description": "最新交易日涨跌幅（%），正数为上涨。",
+            "format": "double",
+            "example": 0.43,
+            "nullable": true
+          },
+          "change_amt": {
+            "type": "number",
+            "description": "最新交易日涨跌额（元）。",
+            "format": "double",
+            "example": 1.5,
+            "nullable": true
+          },
+          "last_date": {
+            "type": "string",
+            "description": "行情对应交易日（YYYY-MM-DD）。",
+            "example": "2026-09-04",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "description": "行情抓取状态，`ok` 表示正常。",
+            "example": "ok",
+            "nullable": true
+          }
+        }
+      },
+      "Risk": {
+        "type": "object",
+        "description": "风险画像。",
+        "required": [
+          "level",
+          "label",
+          "score",
+          "annualized_volatility_20d_pct",
+          "max_drawdown_60d_pct",
+          "atr14_pct"
+        ],
+        "properties": {
+          "level": {
+            "type": "string",
+            "description": "风险等级；数据缺失时为 `unknown`。",
+            "example": "low",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "unknown"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "风险等级的中文标签。",
+            "example": "低风险"
+          },
+          "score": {
+            "type": "number",
+            "description": "风险得分，数值越高代表风险越大。",
+            "format": "double",
+            "example": 19.0,
+            "nullable": true
+          },
+          "annualized_volatility_20d_pct": {
+            "type": "number",
+            "description": "20 日年化波动率（%）。",
+            "format": "double",
+            "example": 20.98,
+            "nullable": true
+          },
+          "max_drawdown_60d_pct": {
+            "type": "number",
+            "description": "60 日最大回撤（%），通常为负值。",
+            "format": "double",
+            "example": -8.73,
+            "nullable": true
+          },
+          "atr14_pct": {
+            "type": "number",
+            "description": "ATR(14) 占价格百分比（%），衡量短期波动。",
+            "format": "double",
+            "example": 1.97,
+            "nullable": true
+          }
+        }
+      },
+      "Forecast": {
+        "type": "object",
+        "description": "短周期收益预测（KNN / 领先指标模型）。",
+        "required": [
+          "return_3d_pct",
+          "return_5d_pct",
+          "up_probability_3d_pct",
+          "up_probability_5d_pct",
+          "confidence",
+          "optimal_holding_days"
+        ],
+        "properties": {
+          "return_3d_pct": {
+            "type": "number",
+            "description": "未来 3 日预测收益率（%）。",
+            "format": "double",
+            "example": -0.37,
+            "nullable": true
+          },
+          "return_5d_pct": {
+            "type": "number",
+            "description": "未来 5 日预测收益率（%）。",
+            "format": "double",
+            "example": 0.12,
+            "nullable": true
+          },
+          "up_probability_3d_pct": {
+            "type": "number",
+            "description": "未来 3 日上涨概率（%）。",
+            "format": "double",
+            "example": 26.7,
+            "nullable": true
+          },
+          "up_probability_5d_pct": {
+            "type": "number",
+            "description": "未来 5 日上涨概率（%）。",
+            "format": "double",
+            "example": 46.7,
+            "nullable": true
+          },
+          "confidence": {
+            "type": "string",
+            "description": "预测置信度，`low` / `medium` / `high`。",
+            "example": "medium",
+            "nullable": true
+          },
+          "optimal_holding_days": {
+            "type": "number",
+            "description": "模型给出的建议持有天数。",
+            "format": "double",
+            "example": 5.0,
+            "nullable": true
+          }
+        }
+      },
+      "Technical": {
+        "type": "object",
+        "description": "技术面指标。",
+        "required": [
+          "trend",
+          "rsi14",
+          "volume_ratio_5d",
+          "return_5d_pct",
+          "return_20d_pct"
+        ],
+        "properties": {
+          "trend": {
+            "type": "string",
+            "description": "趋势方向。",
+            "example": "uptrend",
+            "nullable": true,
+            "enum": [
+              "uptrend",
+              "downtrend",
+              "range",
+              "rebound",
+              "unknown"
+            ]
+          },
+          "rsi14": {
+            "type": "number",
+            "description": "14 日相对强弱指标，0–100，大于 70 通常视为超买。",
+            "format": "double",
+            "example": 74.2,
+            "nullable": true
+          },
+          "volume_ratio_5d": {
+            "type": "number",
+            "description": "5 日量比，大于 1 表示放量。",
+            "format": "double",
+            "example": 1.92,
+            "nullable": true
+          },
+          "return_5d_pct": {
+            "type": "number",
+            "description": "近 5 日收益率（%）。",
+            "format": "double",
+            "example": 2.51,
+            "nullable": true
+          },
+          "return_20d_pct": {
+            "type": "number",
+            "description": "近 20 日收益率（%）。",
+            "format": "double",
+            "example": 1.59,
+            "nullable": true
+          }
+        }
+      },
+      "Industry": {
+        "type": "object",
+        "description": "所属行业 / 板块的相对表现。",
+        "required": [
+          "name",
+          "return_5d_pct",
+          "return_20d_pct",
+          "relative_strength_20d_pct"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "行业或板块名称。",
+            "example": "农产品大宗",
+            "nullable": true
+          },
+          "return_5d_pct": {
+            "type": "number",
+            "description": "行业近 5 日收益率（%）。",
+            "format": "double",
+            "example": -3.02,
+            "nullable": true
+          },
+          "return_20d_pct": {
+            "type": "number",
+            "description": "行业近 20 日收益率（%）。",
+            "format": "double",
+            "example": -3.44,
+            "nullable": true
+          },
+          "relative_strength_20d_pct": {
+            "type": "number",
+            "description": "相对基准指数的 20 日超额收益（%）。",
+            "format": "double",
+            "example": 16.17,
+            "nullable": true
+          }
+        }
+      },
+      "Sector": {
+        "type": "object",
+        "description": "板块网络（NALE）位置，用于判断标的在产业链中的角色与共振强度。",
+        "required": [
+          "name",
+          "tier_role",
+          "breadth_pct",
+          "has_limit_up_resonance",
+          "co_movement_peers"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "板块名称。",
+            "example": "贵金属弹性",
+            "nullable": true
+          },
+          "tier_role": {
+            "type": "string",
+            "description": "产业链层级角色，如 `core_mid` / `neutral`。",
+            "example": "core_mid",
+            "nullable": true
+          },
+          "breadth_pct": {
+            "type": "number",
+            "description": "板块内上涨标的占比（%）。",
+            "format": "double",
+            "example": 100.0,
+            "nullable": true
+          },
+          "has_limit_up_resonance": {
+            "type": "boolean",
+            "description": "板块内是否存在涨停共振。",
+            "example": false,
+            "nullable": true
+          },
+          "co_movement_peers": {
+            "type": "integer",
+            "format": "int32",
+            "description": "同涨同跌的关联标的数量。",
+            "example": 3,
+            "nullable": true
+          }
+        }
+      },
+      "Signal": {
+        "type": "object",
+        "description": "交易信号与操作建议，前端可直接映射成标签或提示语。",
+        "required": [
+          "bet_type",
+          "fundamental_gate_passed",
+          "fundamental_gate_reason",
+          "holding_period",
+          "trade_frequency",
+          "recommendation",
+          "monster_score",
+          "volatility_annual"
+        ],
+        "properties": {
+          "bet_type": {
+            "type": "string",
+            "description": "赔率类型，如 `range_bound`（震荡）/ `trend_up`（趋势上行）。",
+            "example": "range_bound",
+            "nullable": true
+          },
+          "fundamental_gate_passed": {
+            "type": "boolean",
+            "description": "是否通过基本面门禁；未通过通常不建议纳入组合。",
+            "example": true,
+            "nullable": true
+          },
+          "fundamental_gate_reason": {
+            "type": "string",
+            "description": "未通过门禁时的原因。",
+            "nullable": true
+          },
+          "holding_period": {
+            "type": "integer",
+            "format": "int32",
+            "description": "建议持有天数。",
+            "example": 20,
+            "nullable": true
+          },
+          "trade_frequency": {
+            "type": "string",
+            "description": "建议交易频率，`low` / `medium` / `high`。",
+            "example": "medium",
+            "nullable": true
+          },
+          "recommendation": {
+            "type": "string",
+            "description": "一句话操作建议。",
+            "example": "震荡股：均值回归或观望，避免追涨杀跌",
+            "nullable": true
+          },
+          "monster_score": {
+            "type": "number",
+            "description": "异动强度得分。",
+            "format": "double",
+            "example": 18.8,
+            "nullable": true
+          },
+          "volatility_annual": {
+            "type": "number",
+            "description": "年化波动率（小数形式，0.4344 即 43.44%）。",
+            "format": "double",
+            "example": 0.4344,
+            "nullable": true
+          }
+        }
+      },
+      "Fundamental": {
+        "type": "object",
+        "nullable": true,
+        "description": "基本面明细，仅当 `include_fundamental=true` 时返回；无数据时为 null。",
+        "required": [
+          "score",
+          "report_date",
+          "dimensions",
+          "positive_view",
+          "negative_view"
+        ],
+        "properties": {
+          "score": {
+            "type": "number",
+            "description": "基本面总分。",
+            "format": "double",
+            "example": 59.5,
+            "nullable": true
+          },
+          "report_date": {
+            "type": "string",
+            "description": "财报报告期（YYYY-MM-DD）。",
+            "example": "2026-03-31",
+            "nullable": true
+          },
+          "dimensions": {
+            "type": "object",
+            "description": "四个基本面维度的得分（0–100）。",
+            "required": [
+              "asset_quality",
+              "liability_safety",
+              "profit_quality",
+              "cash_health"
+            ],
+            "properties": {
+              "asset_quality": {
+                "type": "number",
+                "description": "资产质量得分。",
+                "format": "double",
+                "example": 50.0,
+                "nullable": true
+              },
+              "liability_safety": {
+                "type": "number",
+                "description": "负债安全性得分。",
+                "format": "double",
+                "example": 63.0,
+                "nullable": true
+              },
+              "profit_quality": {
+                "type": "number",
+                "description": "盈利质量得分。",
+                "format": "double",
+                "example": 73.0,
+                "nullable": true
+              },
+              "cash_health": {
+                "type": "number",
+                "description": "现金流健康度得分。",
+                "format": "double",
+                "example": 52.6,
+                "nullable": true
+              }
+            }
+          },
+          "positive_view": {
+            "type": "string",
+            "description": "正面解读。",
+            "example": "净利润同比 +1.4%",
+            "nullable": true
+          },
+          "negative_view": {
+            "type": "string",
+            "description": "反面解读 / 风险提示。",
+            "example": "经营现金流/净利润 0.99，利润兑现存疑",
+            "nullable": true
+          }
+        }
+      },
+      "Reason": {
+        "type": "object",
+        "description": "评分归因明细，解释分数是怎么来的。",
+        "required": [
+          "type",
+          "title",
+          "detail",
+          "contribution"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "归因方向。当前数据集出现 positive / negative / warning，可能为 null；流水线新增取值时同样返回。",
+            "example": "positive",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "description": "归因标题。",
+            "example": "中短期趋势向上"
+          },
+          "detail": {
+            "type": "string",
+            "description": "归因说明。",
+            "example": "收盘价位于20日和60日均线上方。"
+          },
+          "contribution": {
+            "type": "number",
+            "description": "对总分的贡献值，负数为扣分。",
+            "format": "double",
+            "example": 8.0,
+            "nullable": true
+          }
+        }
+      },
+      "DatasetRow": {
+        "type": "object",
+        "description": "数据集中的一行（一只标的）。由排行榜主表、行情快照与基本面按 code 关联后扁平化得到；所有缺失值统一为 null，浮点数已定点到两位小数。",
+        "required": [
+          "rank",
+          "code",
+          "name",
+          "type",
+          "category",
+          "trade_date",
+          "stale",
+          "scores",
+          "market",
+          "risk",
+          "forecast",
+          "technical",
+          "industry",
+          "sector",
+          "signal",
+          "fundamental",
+          "reasons"
+        ],
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "format": "int32",
+            "description": "榜单排名，从 1 开始。",
+            "example": 1
+          },
+          "code": {
+            "type": "string",
+            "description": "标的代码，如 600519 / 510300 / MU。",
+            "example": "159562"
+          },
+          "name": {
+            "type": "string",
+            "description": "标的名称。",
+            "example": "黄金股ETF"
+          },
+          "type": {
+            "type": "string",
+            "description": "标的类型。",
+            "example": "etf",
+            "enum": [
+              "stock",
+              "etf"
+            ]
+          },
+          "category": {
+            "type": "string",
+            "description": "分类 / 行业标签。",
+            "example": "贵金属弹性"
+          },
+          "trade_date": {
+            "type": "string",
+            "description": "评分对应的交易日（YYYY-MM-DD）。",
+            "example": "2026-09-04"
+          },
+          "stale": {
+            "type": "boolean",
+            "description": "该行数据是否已过期（当日流水线未更新则为 true）。",
+            "example": false
+          },
+          "scores": {
+            "$ref": "#/components/schemas/Scores"
+          },
+          "market": {
+            "$ref": "#/components/schemas/Market"
+          },
+          "risk": {
+            "$ref": "#/components/schemas/Risk"
+          },
+          "forecast": {
+            "$ref": "#/components/schemas/Forecast"
+          },
+          "technical": {
+            "$ref": "#/components/schemas/Technical"
+          },
+          "industry": {
+            "$ref": "#/components/schemas/Industry"
+          },
+          "sector": {
+            "$ref": "#/components/schemas/Sector"
+          },
+          "signal": {
+            "$ref": "#/components/schemas/Signal"
+          },
+          "fundamental": {
+            "$ref": "#/components/schemas/Fundamental"
+          },
+          "reasons": {
+            "type": "array",
+            "description": "评分归因列表。",
+            "items": {
+              "$ref": "#/components/schemas/Reason"
+            }
+          }
+        }
+      },
+      "FacetValue": {
+        "type": "object",
+        "description": "筛选维度的一个取值及其命中数量。",
+        "required": [
+          "value",
+          "count"
+        ],
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "取值。",
+            "example": "存储"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "命中的标的数量。",
+            "example": 9
+          }
+        }
+      },
+      "Facets": {
+        "type": "object",
+        "description": "筛选器取值分布，基于过滤后的全量结果（不受分页影响），按数量降序。",
+        "required": [
+          "type",
+          "category",
+          "risk_level",
+          "trend"
+        ],
+        "properties": {
+          "type": {
+            "type": "array",
+            "description": "标的类型分布。",
+            "items": {
+              "$ref": "#/components/schemas/FacetValue"
+            }
+          },
+          "category": {
+            "type": "array",
+            "description": "分类分布。",
+            "items": {
+              "$ref": "#/components/schemas/FacetValue"
+            }
+          },
+          "risk_level": {
+            "type": "array",
+            "description": "风险等级分布。",
+            "items": {
+              "$ref": "#/components/schemas/FacetValue"
+            }
+          },
+          "trend": {
+            "type": "array",
+            "description": "趋势分布。",
+            "items": {
+              "$ref": "#/components/schemas/FacetValue"
+            }
+          }
+        }
+      },
+      "DatasetFilter": {
+        "type": "object",
+        "description": "过滤条件，字段与 `GET /api/v1/dataset` 的查询参数一一对应。",
+        "properties": {
+          "q": {
+            "type": "string",
+            "description": "关键词，匹配代码、名称或分类。",
+            "example": "存储"
+          },
+          "codes": {
+            "type": "array",
+            "description": "标的代码白名单。",
+            "items": {
+              "type": "string",
+              "example": "600519"
+            },
+            "example": [
+              "600519",
+              "300750"
+            ]
+          },
+          "type": {
+            "type": "array",
+            "description": "标的类型白名单。",
+            "items": {
+              "type": "string",
+              "enum": [
+                "stock",
+                "etf"
+              ]
+            },
+            "example": [
+              "stock"
+            ]
+          },
+          "category": {
+            "type": "array",
+            "description": "分类白名单（精确匹配）。",
+            "items": {
+              "type": "string",
+              "example": "存储"
+            },
+            "example": [
+              "存储",
+              "科技"
+            ]
+          },
+          "risk_level": {
+            "type": "array",
+            "description": "风险等级白名单。",
+            "items": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            },
+            "example": [
+              "low"
+            ]
+          },
+          "trend": {
+            "type": "array",
+            "description": "趋势白名单。",
+            "items": {
+              "type": "string",
+              "enum": [
+                "uptrend",
+                "downtrend",
+                "range",
+                "rebound"
+              ]
+            },
+            "example": [
+              "uptrend"
+            ]
+          },
+          "stale": {
+            "type": "boolean",
+            "description": "只保留已过期 / 未过期的数据。",
+            "example": false
+          },
+          "min_score": {
+            "type": "number",
+            "description": "总分下限。",
+            "format": "double",
+            "example": 30
+          },
+          "max_score": {
+            "type": "number",
+            "description": "总分上限。",
+            "format": "double",
+            "example": 60
+          }
+        }
+      },
+      "DatasetMeta": {
+        "type": "object",
+        "description": "分页与数据源元信息。",
+        "required": [
+          "source",
+          "trade_date",
+          "generated_at",
+          "sort",
+          "filters",
+          "total",
+          "page",
+          "page_size",
+          "total_pages",
+          "has_next",
+          "has_prev",
+          "returned"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "description": "主表相对路径。",
+            "example": "analysis/ranking_v3.json"
+          },
+          "trade_date": {
+            "type": "string",
+            "description": "数据集对应的交易日。",
+            "example": "2026-09-04"
+          },
+          "generated_at": {
+            "type": "string",
+            "description": "流水线生成该数据集的时间。",
+            "example": "2026-09-06 00:17:35+08:00"
+          },
+          "engine": {
+            "type": "string",
+            "description": "生成该数据集的引擎版本。",
+            "example": "v3.0-leading-first"
+          },
+          "formula": {
+            "type": "string",
+            "description": "总分计算公式说明。",
+            "example": "Opportunity = 0.45*Leading + 0.30*KNN + 0.25*Tech, Fundamental=Gatekeeper"
+          },
+          "sort": {
+            "type": "string",
+            "description": "实际生效的排序，格式为 `字段:方向`。",
+            "example": "rank:asc"
+          },
+          "filters": {
+            "type": "object",
+            "description": "回显本次生效的过滤条件，便于前端对齐状态。",
+            "additionalProperties": true
+          },
+          "total": {
+            "type": "integer",
+            "format": "int32",
+            "description": "过滤后的命中总条数（不受分页影响）。",
+            "example": 156
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32",
+            "description": "当前页码（超出总页数时已被收敛到最后一页）。",
+            "example": 1
+          },
+          "page_size": {
+            "type": "integer",
+            "format": "int32",
+            "description": "每页条数。",
+            "example": 20
+          },
+          "total_pages": {
+            "type": "integer",
+            "format": "int32",
+            "description": "总页数。",
+            "example": 8
+          },
+          "has_next": {
+            "type": "boolean",
+            "description": "是否存在下一页。",
+            "example": true
+          },
+          "has_prev": {
+            "type": "boolean",
+            "description": "是否存在上一页。",
+            "example": false
+          },
+          "returned": {
+            "type": "integer",
+            "format": "int32",
+            "description": "本页实际返回的条数。",
+            "example": 20
+          },
+          "facets": {
+            "$ref": "#/components/schemas/Facets"
+          }
+        }
+      },
+      "DatasetResponse": {
+        "type": "object",
+        "description": "分页数据集响应。",
+        "required": [
+          "meta",
+          "items"
+        ],
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/DatasetMeta"
+          },
+          "items": {
+            "type": "array",
+            "description": "当前页的数据行。",
+            "items": {
+              "$ref": "#/components/schemas/DatasetRow"
+            }
+          }
+        }
+      },
+      "Describe": {
+        "type": "object",
+        "nullable": true,
+        "description": "一组数值的分布摘要；无有效数值时为 null。",
+        "required": [
+          "avg",
+          "median",
+          "min",
+          "max"
+        ],
+        "properties": {
+          "avg": {
+            "type": "number",
+            "description": "平均值。",
+            "format": "double",
+            "example": 27.34
+          },
+          "median": {
+            "type": "number",
+            "description": "中位数。",
+            "format": "double",
+            "example": 25.9
+          },
+          "min": {
+            "type": "number",
+            "description": "最小值。",
+            "format": "double",
+            "example": 3.2
+          },
+          "max": {
+            "type": "number",
+            "description": "最大值。",
+            "format": "double",
+            "example": 45.7
+          }
+        }
+      },
+      "CategoryStat": {
+        "type": "object",
+        "description": "分类维度的统计结果。",
+        "required": [
+          "category",
+          "count",
+          "avg_score"
+        ],
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "分类名称。",
+            "example": "存储"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "该分类下命中的标的数量。",
+            "example": 9
+          },
+          "avg_score": {
+            "type": "number",
+            "description": "该分类下的平均总分。",
+            "format": "double",
+            "example": 23.4,
+            "nullable": true
+          }
+        }
+      },
+      "Stats": {
+        "type": "object",
+        "description": "对选中标的的聚合统计，用于面板顶部的总览卡片。",
+        "required": [
+          "count",
+          "risk_level_distribution",
+          "type_distribution",
+          "trend_distribution",
+          "category_top",
+          "stale_count"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "参与统计的标的数量。",
+            "example": 10
+          },
+          "score": {
+            "$ref": "#/components/schemas/Describe"
+          },
+          "risk_score": {
+            "$ref": "#/components/schemas/Describe"
+          },
+          "volatility_20d_pct": {
+            "$ref": "#/components/schemas/Describe"
+          },
+          "max_drawdown_60d_pct": {
+            "$ref": "#/components/schemas/Describe"
+          },
+          "forecast": {
+            "type": "object",
+            "description": "预测维度的统计摘要。",
+            "properties": {
+              "return_5d_pct": {
+                "$ref": "#/components/schemas/Describe"
+              },
+              "up_probability_5d_pct": {
+                "$ref": "#/components/schemas/Describe"
+              }
+            }
+          },
+          "risk_level_distribution": {
+            "type": "array",
+            "description": "风险等级分布。",
+            "items": {
+              "$ref": "#/components/schemas/FacetValue"
+            }
+          },
+          "type_distribution": {
+            "type": "array",
+            "description": "标的类型分布。",
+            "items": {
+              "$ref": "#/components/schemas/FacetValue"
+            }
+          },
+          "trend_distribution": {
+            "type": "array",
+            "description": "趋势分布。",
+            "items": {
+              "$ref": "#/components/schemas/FacetValue"
+            }
+          },
+          "category_top": {
+            "type": "array",
+            "description": "分类统计，按数量降序取前 10。",
+            "items": {
+              "$ref": "#/components/schemas/CategoryStat"
+            }
+          },
+          "stale_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "其中数据已过期的标的数量。",
+            "example": 0
+          }
+        }
+      },
+      "Position": {
+        "type": "object",
+        "description": "组合中的一个持仓建议。",
+        "required": [
+          "code",
+          "name",
+          "category",
+          "weight",
+          "amount_pct",
+          "score",
+          "risk_level",
+          "volatility_20d_pct"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "标的代码。",
+            "example": "159562"
+          },
+          "name": {
+            "type": "string",
+            "description": "标的名称。",
+            "example": "黄金股ETF"
+          },
+          "category": {
+            "type": "string",
+            "description": "分类 / 行业。",
+            "example": "贵金属弹性"
+          },
+          "weight": {
+            "type": "number",
+            "description": "目标权重（0–1 的小数）。",
+            "format": "double",
+            "example": 0.125
+          },
+          "amount_pct": {
+            "type": "number",
+            "description": "目标权重（百分比形式，便于直接展示）。",
+            "format": "double",
+            "example": 12.5
+          },
+          "score": {
+            "type": "number",
+            "description": "该标的的总分。",
+            "format": "double",
+            "example": 45.7,
+            "nullable": true
+          },
+          "risk_level": {
+            "type": "string",
+            "description": "风险等级。",
+            "example": "low"
+          },
+          "volatility_20d_pct": {
+            "type": "number",
+            "description": "20 日年化波动率（%）。",
+            "format": "double",
+            "example": 20.98,
+            "nullable": true
+          }
+        }
+      },
+      "Allocation": {
+        "type": "object",
+        "description": "组合权重分配结果（仅 `operation=allocate` 返回）。",
+        "required": [
+          "method",
+          "max_weight",
+          "invested_weight",
+          "cash_weight",
+          "positions",
+          "notes"
+        ],
+        "properties": {
+          "method": {
+            "type": "string",
+            "description": "权重方法。",
+            "example": "score",
+            "enum": [
+              "equal",
+              "score",
+              "risk_inverse"
+            ]
+          },
+          "max_weight": {
+            "type": "number",
+            "description": "单标的上限。",
+            "format": "double",
+            "example": 0.25
+          },
+          "invested_weight": {
+            "type": "number",
+            "description": "已分配的总权重，正常情况下为 1。",
+            "format": "double",
+            "example": 1.0
+          },
+          "cash_weight": {
+            "type": "number",
+            "description": "剩余现金权重；因上限约束无法满仓时大于 0。",
+            "format": "double",
+            "example": 0.0
+          },
+          "positions": {
+            "type": "array",
+            "description": "持仓建议，按权重降序。",
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            }
+          },
+          "notes": {
+            "type": "array",
+            "description": "分配过程中的提示，例如上限约束不可行时的说明。",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "标的数量不足，无法在 max_weight=0.05 下用满仓位，剩余记为现金"
+            ]
+          }
+        }
+      },
+      "ProcessRequest": {
+        "type": "object",
+        "description": "处理请求。`operation=screen` 只做筛选排序；`allocate` 额外给出组合权重；`stats` 只看聚合统计。三者共用同一套数据集逻辑，结果口径完全一致。",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "description": "处理类型，默认 `screen`。",
+            "example": "allocate",
+            "enum": [
+              "screen",
+              "allocate",
+              "stats"
+            ]
+          },
+          "filters": {
+            "$ref": "#/components/schemas/DatasetFilter"
+          },
+          "top_n": {
+            "type": "integer",
+            "format": "int32",
+            "description": "取前 N 只标的，1–200，默认 20。",
+            "example": 10
+          },
+          "weighting": {
+            "type": "string",
+            "description": "权重方法，仅 `allocate` 有效：`equal` 等权、`score` 按总分比例、`risk_inverse` 按波动率倒数（风险平价）。",
+            "example": "risk_inverse",
+            "enum": [
+              "equal",
+              "score",
+              "risk_inverse"
+            ]
+          },
+          "max_weight": {
+            "type": "number",
+            "description": "单标的上限（0–1]，默认 0.25；超出部分按比例回填给未触顶的标的。",
+            "format": "double",
+            "example": 0.25
+          },
+          "sort": {
+            "type": "string",
+            "description": "排序字段，写法同 GET 接口的 `sort`。",
+            "example": "-total_score"
+          },
+          "fields": {
+            "type": "array",
+            "description": "字段裁剪，只返回指定顶层字段。",
+            "items": {
+              "type": "string",
+              "example": "code"
+            },
+            "example": [
+              "code",
+              "name",
+              "scores",
+              "risk"
+            ]
+          },
+          "include_fundamental": {
+            "type": "boolean",
+            "description": "是否附带基本面明细。",
+            "example": false
+          },
+          "with_facets": {
+            "type": "boolean",
+            "description": "是否在 meta 中返回筛选器取值分布。",
+            "example": false
+          }
+        },
+        "example": {
+          "operation": "allocate",
+          "filters": {
+            "type": [
+              "stock"
+            ],
+            "risk_level": [
+              "low",
+              "medium"
+            ],
+            "min_score": 30
+          },
+          "top_n": 10,
+          "weighting": "risk_inverse",
+          "max_weight": 0.25
+        }
+      },
+      "ProcessResponse": {
+        "type": "object",
+        "description": "处理结果。",
+        "required": [
+          "operation",
+          "generated_at",
+          "matched",
+          "selected_count",
+          "meta",
+          "stats",
+          "items"
+        ],
+        "properties": {
+          "operation": {
+            "type": "string",
+            "description": "本次实际执行的 operation（已回显）。",
+            "example": "allocate"
+          },
+          "generated_at": {
+            "type": "string",
+            "description": "服务端处理时间（ISO 8601，带时区）。",
+            "example": "2026-09-27T12:00:00+08:00"
+          },
+          "matched": {
+            "type": "integer",
+            "format": "int32",
+            "description": "过滤后命中的总条数。",
+            "example": 42
+          },
+          "selected_count": {
+            "type": "integer",
+            "format": "int32",
+            "description": "本次实际送入处理的条数（≤ top_n）。",
+            "example": 10
+          },
+          "meta": {
+            "$ref": "#/components/schemas/DatasetMeta"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/Stats"
+          },
+          "allocation": {
+            "$ref": "#/components/schemas/Allocation"
+          },
+          "items": {
+            "type": "array",
+            "description": "选中的标的行，结构与 GET 接口一致。",
+            "items": {
+              "$ref": "#/components/schemas/DatasetRow"
+            }
+          }
+        }
+      },
+      "HeroMetric": {
+        "type": "object",
+        "description": "Hero 区的一项核心指标。数值已由后端格式化，前端直接渲染。",
+        "required": [
+          "id",
+          "icon",
+          "label",
+          "value",
+          "tone",
+          "caption"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "指标标识，用于 React key 与埋点。",
+            "example": "safety"
+          },
+          "icon": {
+            "type": "string",
+            "description": "图标类型。",
+            "example": "shield",
+            "enum": [
+              "shield",
+              "rise"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "description": "指标名称。",
+            "example": "资产安全评级"
+          },
+          "value": {
+            "type": "string",
+            "description": "指标展示值（字符串，含符号与单位）。",
+            "example": "AAA"
+          },
+          "tone": {
+            "type": "string",
+            "description": "语义色，对应前端五色系统。",
+            "example": "green",
+            "enum": [
+              "green",
+              "red",
+              "blue",
+              "gold",
+              "orange"
+            ]
+          },
+          "caption": {
+            "type": "string",
+            "description": "指标补充说明。",
+            "example": "极高防御"
+          },
+          "tip": {
+            "type": "string",
+            "description": "悬浮提示：该指标的计算口径。",
+            "example": "按组合年化波动率与历史最大回撤映射：回撤 ≤5% 且波动 ≤15% 为 AAA"
+          }
+        }
+      },
+      "HealthGauge": {
+        "type": "object",
+        "description": "资产健康晴雨表：由市场温度模型推导的建议仓位。",
+        "required": [
+          "title",
+          "level",
+          "desc",
+          "percent"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "卡片标题。",
+            "example": "资产健康晴雨表"
+          },
+          "level": {
+            "type": "string",
+            "description": "仪表主结论。",
+            "example": "市场温度 70.2"
+          },
+          "desc": {
+            "type": "string",
+            "description": "补充说明。",
+            "example": "正常 ｜ 建议仓位 75.3%"
+          },
+          "percent": {
+            "type": "number",
+            "description": "防御充分度 0–1，决定仪表绿色弧线长度。",
+            "format": "double",
+            "example": 0.753
+          },
+          "tip": {
+            "type": "string",
+            "description": "悬浮提示。",
+            "example": "由市场温度模型给出的建议仓位比例，越高代表防御系统越有加仓空间"
+          }
+        }
+      },
+      "HeroBlock": {
+        "type": "object",
+        "description": "02 Hero 区块。",
+        "required": [
+          "title",
+          "subtitle",
+          "metrics",
+          "gauge"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "主标题。",
+            "example": "您好！让财富为您的晚年生活保驾护航"
+          },
+          "subtitle": {
+            "type": "string",
+            "description": "副标题。",
+            "example": "专业的养老金融解决方案，稳健增值，安心相伴"
+          },
+          "metrics": {
+            "type": "array",
+            "description": "三项核心指标。",
+            "items": {
+              "$ref": "#/components/schemas/HeroMetric"
+            }
+          },
+          "gauge": {
+            "$ref": "#/components/schemas/HealthGauge"
+          }
+        }
+      },
+      "CurveSeries": {
+        "type": "object",
+        "description": "一条收益曲线。",
+        "required": [
+          "name",
+          "returnLabel",
+          "series"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "曲线名称（组合名 / 基准名）。",
+            "example": "稳健组合-防守型"
+          },
+          "returnLabel": {
+            "type": "string",
+            "description": "区间收益的展示文案。",
+            "example": "+12.63%"
+          },
+          "returnPct": {
+            "type": "number",
+            "description": "区间累计收益率（%）。",
+            "format": "double",
+            "example": 12.63,
+            "nullable": true
+          },
+          "series": {
+            "type": "array",
+            "description": "与 equityCurve.dates 等长的累计收益率（%）。",
+            "items": {
+              "type": "number",
+              "format": "double",
+              "example": 5.37
+            }
+          }
+        }
+      },
+      "BenchmarkSeries": {
+        "type": "object",
+        "description": "基准收益曲线。相比 CurveSeries 多一个必填的 note 标注。",
+        "required": [
+          "name",
+          "note",
+          "returnLabel",
+          "series"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "基准名称。",
+            "example": "全池等权基准"
+          },
+          "note": {
+            "type": "string",
+            "description": "基准的补充标注。",
+            "example": "同期"
+          },
+          "returnLabel": {
+            "type": "string",
+            "description": "区间收益的展示文案。",
+            "example": "-6.20%"
+          },
+          "returnPct": {
+            "type": "number",
+            "description": "区间累计收益率（%）。",
+            "format": "double",
+            "example": -6.2,
+            "nullable": true
+          },
+          "series": {
+            "type": "array",
+            "description": "与 equityCurve.dates 等长的累计收益率（%）。",
+            "items": {
+              "type": "number",
+              "format": "double",
+              "example": 1.8
+            }
+          }
+        }
+      },
+      "CurveStats": {
+        "type": "object",
+        "description": "组合风险指标，用于填充 Hero 的三项指标。",
+        "required": [
+          "maxDrawdownPct",
+          "volatilityPct",
+          "excessPct",
+          "samples",
+          "convention"
+        ],
+        "properties": {
+          "maxDrawdownPct": {
+            "type": "number",
+            "description": "区间最大回撤（%，非正数）。",
+            "format": "double",
+            "example": -4.22,
+            "nullable": true
+          },
+          "volatilityPct": {
+            "type": "number",
+            "description": "年化波动率（%），按 252 个交易日。",
+            "format": "double",
+            "example": 14.38,
+            "nullable": true
+          },
+          "excessPct": {
+            "type": "number",
+            "description": "相对同期基准的超额收益（%）。",
+            "format": "double",
+            "example": 18.83,
+            "nullable": true
+          },
+          "samples": {
+            "type": "integer",
+            "format": "int32",
+            "description": "返回的采样点数。",
+            "example": 21
+          },
+          "convention": {
+            "type": "string",
+            "description": "累计收益口径。",
+            "example": "running_sum_of_daily_returns"
+          }
+        }
+      },
+      "EquityCurveBlock": {
+        "type": "object",
+        "description": "03 绝对收益曲线区块。累计收益沿用项目既有口径：对日收益率做累加。",
+        "required": [
+          "dates",
+          "portfolio",
+          "benchmark"
+        ],
+        "properties": {
+          "dates": {
+            "type": "array",
+            "description": "X 轴日期标签（MM-DD）。",
+            "items": {
+              "type": "string",
+              "example": "06-01"
+            }
+          },
+          "portfolio": {
+            "$ref": "#/components/schemas/CurveSeries"
+          },
+          "benchmark": {
+            "$ref": "#/components/schemas/BenchmarkSeries"
+          },
+          "stats": {
+            "$ref": "#/components/schemas/CurveStats"
+          }
+        }
+      },
+      "AllocationSegment": {
+        "type": "object",
+        "description": "资产配置环图的一段（一只持仓或现金）。",
+        "required": [
+          "key",
+          "name",
+          "weight",
+          "color"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "分段标识，持仓为标的代码，现金为 `cash`。",
+            "example": "300750"
+          },
+          "name": {
+            "type": "string",
+            "description": "分段名称。",
+            "example": "宁德时代"
+          },
+          "weight": {
+            "type": "number",
+            "description": "权重（%），所有分段合计精确等于 100。",
+            "format": "double",
+            "example": 18.1
+          },
+          "color": {
+            "type": "string",
+            "description": "分段颜色（十六进制）。",
+            "example": "#F08634"
+          },
+          "reason": {
+            "type": "string",
+            "description": "入选理由（来自分片数据）。",
+            "example": "综合分54.3 | 风险33 | 波动平价11.4%",
+            "nullable": true
+          }
+        }
+      },
+      "CashNote": {
+        "type": "object",
+        "description": "现金策略说明面板。",
+        "required": [
+          "title",
+          "body",
+          "details"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "面板标题。",
+            "example": "为什么留 36% 现金？"
+          },
+          "body": {
+            "type": "string",
+            "description": "正文。",
+            "example": "当前现金 360,000 元，占总资产 36.0%。因为要确保您随时有应急资金，且在市场风险期不上杠杆。"
+          },
+          "details": {
+            "type": "array",
+            "description": "展开后的补充说明。",
+            "items": {
+              "type": "string",
+              "example": "应急储备：突发医疗或家庭支出时无需被动赎回。"
+            }
+          }
+        }
+      },
+      "RiskEvent": {
+        "type": "object",
+        "description": "05 产业链避险的一张事件卡。",
+        "required": [
+          "id",
+          "tone",
+          "icon",
+          "title",
+          "timeAgo",
+          "content"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "事件标识。",
+            "example": "sentiment-watch"
+          },
+          "tone": {
+            "type": "string",
+            "description": "语义色。",
+            "example": "green",
+            "enum": [
+              "green",
+              "red",
+              "blue",
+              "gold",
+              "orange"
+            ]
+          },
+          "icon": {
+            "type": "string",
+            "description": "图标类型。",
+            "example": "shield",
+            "enum": [
+              "shield",
+              "arrowUp"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "description": "事件标题。",
+            "example": "情绪面监测"
+          },
+          "timeAgo": {
+            "type": "string",
+            "description": "相对时间文案。",
+            "example": "1个月前"
+          },
+          "content": {
+            "type": "string",
+            "description": "事件正文。",
+            "example": "已跟踪 144 个事件样本：正向超预期 26 次、负向意外 10 次，整体情绪偏中性。"
+          }
+        }
+      },
+      "StrategyRow": {
+        "type": "object",
+        "description": "单个策略的表现（来自 quantitative/latest_evolution.json）。",
+        "required": [
+          "key",
+          "name",
+          "cumulativeReturnPct",
+          "sharpe",
+          "maxDrawdownPct",
+          "winRatePct",
+          "score",
+          "tradingDays",
+          "isChampion",
+          "rank",
+          "rankText"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "策略标识。",
+            "example": "aggressive_v2"
+          },
+          "name": {
+            "type": "string",
+            "description": "策略显示名。",
+            "example": "动态止盈止损优化版"
+          },
+          "cumulativeReturnPct": {
+            "type": "number",
+            "description": "累计收益率（%）。",
+            "format": "double",
+            "example": 6.52,
+            "nullable": true
+          },
+          "sharpe": {
+            "type": "number",
+            "description": "夏普比率。",
+            "format": "double",
+            "example": 0.55,
+            "nullable": true
+          },
+          "maxDrawdownPct": {
+            "type": "number",
+            "description": "最大回撤（%）。",
+            "format": "double",
+            "example": 1.25,
+            "nullable": true
+          },
+          "winRatePct": {
+            "type": "number",
+            "description": "胜率（%）。",
+            "format": "double",
+            "example": 57.1,
+            "nullable": true
+          },
+          "score": {
+            "type": "number",
+            "description": "综合评分，策略排名的依据。",
+            "format": "double",
+            "example": 10.61,
+            "nullable": true
+          },
+          "tradingDays": {
+            "type": "integer",
+            "format": "int32",
+            "description": "回测交易日数。",
+            "example": 7,
+            "nullable": true
+          },
+          "isChampion": {
+            "type": "boolean",
+            "description": "是否为当周冠军策略。",
+            "example": true
+          },
+          "rank": {
+            "type": "integer",
+            "format": "int32",
+            "description": "排名（从 1 开始）。",
+            "example": 1
+          },
+          "rankText": {
+            "type": "string",
+            "description": "排名的展示文案。",
+            "example": "1/15"
+          }
+        }
+      },
+      "StrategyNavSeries": {
+        "type": "object",
+        "description": "策略净值曲线的一条序列。",
+        "required": [
+          "key",
+          "label",
+          "color",
+          "series",
+          "returnPct"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "序列标识。",
+            "example": "nav_dynamic_alpha_tnale"
+          },
+          "label": {
+            "type": "string",
+            "description": "序列显示名。",
+            "example": "动态 Alpha"
+          },
+          "color": {
+            "type": "string",
+            "description": "线色（十六进制）。",
+            "example": "#E9A93B"
+          },
+          "series": {
+            "type": "array",
+            "description": "与 expert.nav.dates 等长的累计收益率（%）。",
+            "items": {
+              "type": "number",
+              "format": "double",
+              "example": 148.68
+            }
+          },
+          "returnPct": {
+            "type": "number",
+            "description": "区间累计收益率（%）。",
+            "format": "double",
+            "example": 169.16,
+            "nullable": true
+          }
+        }
+      },
+      "CorrelationMatrix": {
+        "type": "object",
+        "description": "相关性矩阵：由策略日收益现算，N×N 对称，主对角线为 1。",
+        "required": [
+          "labels",
+          "matrix"
+        ],
+        "properties": {
+          "labels": {
+            "type": "array",
+            "description": "行列标签。",
+            "items": {
+              "type": "string",
+              "example": "动态 Alpha"
+            }
+          },
+          "matrix": {
+            "type": "array",
+            "description": "相关系数矩阵，取值 -1 ~ 1。",
+            "items": {
+              "type": "array",
+              "description": "一行。",
+              "items": {
+                "type": "number",
+                "format": "double",
+                "example": 0.9387
+              }
+            }
+          }
+        }
+      },
+      "ExpertBlock": {
+        "type": "object",
+        "description": "06 机构量化研报模式（策略表现）区块。",
+        "required": [
+          "strategies",
+          "strategyTotal",
+          "nav",
+          "correlation"
+        ],
+        "properties": {
+          "strategies": {
+            "type": "array",
+            "description": "策略对比表（按综合评分降序，取前 4）。",
+            "items": {
+              "$ref": "#/components/schemas/StrategyRow"
+            }
+          },
+          "strategyTotal": {
+            "type": "integer",
+            "format": "int32",
+            "description": "参与排名的策略总数。",
+            "example": 15
+          },
+          "nav": {
+            "type": "object",
+            "description": "策略净值走势。",
+            "required": [
+              "dates",
+              "series"
+            ],
+            "properties": {
+              "dates": {
+                "type": "array",
+                "description": "X 轴日期标签（MM-DD）。",
+                "items": {
+                  "type": "string",
+                  "example": "03-26"
+                }
+              },
+              "series": {
+                "type": "array",
+                "description": "策略与基准的净值序列。",
+                "items": {
+                  "$ref": "#/components/schemas/StrategyNavSeries"
+                }
+              }
+            }
+          },
+          "correlation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CorrelationMatrix"
+              }
+            ],
+            "nullable": true
+          }
+        }
+      },
+      "HomepageResponse": {
+        "type": "object",
+        "description": "首页视图模型：一次请求返回 02–06 五个区块的全部动态数据。\n\n字段与前端各组件的 props 一一对应，前端取到后可直接下传，不必在浏览器里再做聚合。任一数据源缺失时对应区块退化为空/兜底值，而不是整页 500。",
+        "required": [
+          "generated_at",
+          "hero",
+          "equityCurve",
+          "allocation",
+          "cashNote",
+          "riskEvents",
+          "expert"
+        ],
+        "properties": {
+          "generated_at": {
+            "type": "string",
+            "description": "服务端组装时间（ISO 8601，带时区）。",
+            "example": "2026-09-27T14:05:00+08:00"
+          },
+          "hero": {
+            "$ref": "#/components/schemas/HeroBlock"
+          },
+          "equityCurve": {
+            "$ref": "#/components/schemas/EquityCurveBlock"
+          },
+          "allocation": {
+            "type": "array",
+            "description": "资产配置分段（持仓 + 现金），权重合计 100。",
+            "items": {
+              "$ref": "#/components/schemas/AllocationSegment"
+            }
+          },
+          "cashNote": {
+            "$ref": "#/components/schemas/CashNote"
+          },
+          "riskEvents": {
+            "type": "array",
+            "description": "产业链避险事件卡（最多 3 张）。",
+            "items": {
+              "$ref": "#/components/schemas/RiskEvent"
+            }
+          },
+          "expert": {
+            "$ref": "#/components/schemas/ExpertBlock"
+          },
+          "meta": {
+            "type": "object",
+            "description": "采样参数与数据来源，便于排查数字出处。",
+            "properties": {
+              "points": {
+                "type": "integer",
+                "format": "int32",
+                "description": "收益曲线采样点数。",
+                "example": 21
+              },
+              "sources": {
+                "type": "object",
+                "description": "各区块的数据来源文件（区块名 → 文件路径）。",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

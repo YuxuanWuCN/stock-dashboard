@@ -13,6 +13,14 @@ services:
         value: https://yuxuanwucn.github.io
       - key: ALLOW_WATCHLIST_WRITE
         value: "true"
-      # v2.5 新自选股自动入库：配置后在 Render 控制台填写
-      # GITHUB_TOKEN（PAT，contents 读写）、GITHUB_REPO（owner/repo）
-      # 未配置时同步自动关闭，网页加自选股仅保存在浏览器。
+      - key: LLM_BACKEND
+        value: deepseek
+      - key: DEEPSEEK_MODEL
+        value: deepseek-chat
+      - key: DAILY_UPDATE_ENABLED
+        value: "true"
+      - key: DAILY_UPDATE_TIME
+        value: "17:30"
+      # v2.5 新自选股自动入库与大模型配置：在 Render 控制台填写：
+      # DEEPSEEK_API_KEY / GEMINI_API_KEY / GITHUB_TOKEN
+      # 未配置 GITHUB_TOKEN 时同步自动关闭，网页加自选股仅保存在浏览器。

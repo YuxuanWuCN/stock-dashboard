@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "161005",
   "name": "富国天惠成长混合A",
   "type": "etf",
   "category": "公募成长",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 48.0,
-    "risk": 9.9,
+    "risk_adjusted": 49.1,
+    "risk": 11.3,
     "technical": 42.0,
-    "industry": 50.0,
+    "industry": 47.2,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:31:43"
+    "updated_at": "2026-09-28 22:32:23"
   },
   "nale_network": {
     "sector_name": "公募成长",
@@ -59,34 +67,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 16.59,
-    "max_drawdown_60d_pct": -7.34,
-    "atr14_pct": 1.38,
+    "annualized_volatility_20d_pct": 13.03,
+    "max_drawdown_60d_pct": -10.7,
+    "atr14_pct": 1.33,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 5.8,
-        "value": 16.59
+        "score": 3.6,
+        "value": 13.03
       },
       {
         "name": "60日最大回撤",
-        "score": 4.5,
-        "value": -7.34
+        "score": 14.4,
+        "value": -10.7
       },
       {
         "name": "ATR百分比",
-        "score": 3.8,
-        "value": 1.38
+        "score": 5.4,
+        "value": 1.33
       },
       {
         "name": "量价异常",
-        "score": 62.2,
-        "value": 0.72
+        "score": 53.9,
+        "value": 1.16
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -107,28 +115,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 3.06,
-    "ma10": 3.0919999999999996,
-    "ma20": 3.131,
-    "ma60": 3.1475,
-    "rsi14": 37.9,
-    "macd_dif": -0.022879296547457795,
-    "macd_dea": -0.009738457721802218,
-    "macd_hist": -0.026281677651311154,
-    "atr14_pct": 1.378107827923154,
-    "boll_position": 0.0781971203249883,
-    "return_5d_pct": -2.2508038585209,
-    "return_20d_pct": -2.875399361022357,
-    "volume_ratio_5d": 0.72
+    "ma5": 3.006,
+    "ma10": 3.001,
+    "ma20": 3.0265,
+    "ma60": 3.103666666666667,
+    "rsi14": 30.6,
+    "macd_dif": -0.03368450351518959,
+    "macd_dea": -0.029987446379164208,
+    "macd_hist": -0.007394114272050764,
+    "atr14_pct": 1.3254550592429672,
+    "boll_position": -0.1713666585940921,
+    "return_5d_pct": -3.311258278145701,
+    "return_20d_pct": -6.109324758842439,
+    "volume_ratio_5d": 1.16
   },
   "industry": {
     "name": "公募成长",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": 2.67
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 1.73
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -136,16 +144,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.71,
-      "median_return_pct": 0.48,
+      "up_probability_pct": 70.0,
+      "average_return_pct": 1.03,
+      "median_return_pct": 1.02,
       "best_return_pct": 4.55,
-      "worst_return_pct": -2.28
+      "worst_return_pct": -2.4
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.62,
-      "median_return_pct": 0.15,
+      "up_probability_pct": 66.7,
+      "average_return_pct": 0.89,
+      "median_return_pct": 1.28,
       "best_return_pct": 5.24,
       "worst_return_pct": -4.89
     }

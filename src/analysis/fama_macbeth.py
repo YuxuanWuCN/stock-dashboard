@@ -281,6 +281,8 @@ def fama_macbeth_stage2(factors_df: pd.DataFrame,
 
 def _returns_from_kline(kline: pd.DataFrame) -> pd.Series:
     """K 线 → 日简单收益率，索引为 YYYY-MM-DD 日期字符串。"""
+    if not isinstance(kline, pd.DataFrame) or "date" not in kline or "close" not in kline:
+        return pd.Series(dtype=float)
     dates = factor_db._date_str(kline["date"])
     rets = pd.Series(kline["close"].to_numpy(dtype=float)).pct_change(fill_method=None)
     rets.index = dates.to_numpy()
@@ -297,6 +299,10 @@ def run_all(factors_df: pd.DataFrame,
     """
     results = {}
     for code, kline in klines.items():
+        if not isinstance(kline, pd.DataFrame) or kline.empty or "date" not in kline or "close" not in kline:
+            results[code] = _empty_result("insufficient_data", "K线数据缺失或无效", 0)
+            continue
+
         if returns_by_code and code in returns_by_code:
             dates = factor_db._date_str(pd.Series(kline["date"].to_numpy()))
             ret_series = pd.Series(list(returns_by_code[code]), index=dates.to_numpy())

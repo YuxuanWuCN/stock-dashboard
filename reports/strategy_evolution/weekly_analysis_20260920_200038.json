@@ -1,0 +1,266 @@
+{
+  "generated_at": "20260920_200038",
+  "analysis_period": "past_7_days",
+  "champion": {
+    "name": "global_v1",
+    "stats": {
+      "cumulative_return": 2.04,
+      "avg_daily_return": 0.291,
+      "volatility": 0.455,
+      "win_rate": 85.7,
+      "max_drawdown": 0.48,
+      "sharpe": 0.641,
+      "score": 11.03,
+      "trading_days": 7
+    },
+    "analysis": {
+      "core_holdings": [
+        {
+          "code": "513520",
+          "name": "日经ETF",
+          "appearances": 3,
+          "avg_return": 0.91
+        },
+        {
+          "code": "513030",
+          "name": "德国ETF",
+          "appearances": 4,
+          "avg_return": 0.52
+        },
+        {
+          "code": "518880",
+          "name": "黄金ETF",
+          "appearances": 7,
+          "avg_return": 0.36
+        },
+        {
+          "code": "513100",
+          "name": "纳指ETF",
+          "appearances": 4,
+          "avg_return": 0.36
+        },
+        {
+          "code": "512100",
+          "name": "中证1000ETF",
+          "appearances": 3,
+          "avg_return": 0.35
+        }
+      ],
+      "prediction_accuracy": 40.0,
+      "llm_analysis": {
+        "success_factors": [
+          "跨市场、多资产配置：持仓覆盖日经、德国、纳指、黄金和中证1000，资产相关性较低，单一市场下跌时组合仍有支撑。",
+          "动量/趋势捕捉有效：日经ETF平均收益0.91%、德国ETF平均收益0.52%，说明策略偏向选择阶段强势的海外市场。",
+          "黄金ETF高频持有提供稳定性：出现7次，平均收益0.36%，在组合中扮演避险和抗波动角色。",
+          "盈亏比优于胜率：预测准确率仅40%，但最近7天6天正收益，正收益合计约2.52%，负收益合计约-0.48%，盈亏比约5.25，盈利交易幅度覆盖亏损。",
+          "小盘A股补充弹性：中证1000ETF出现3次，平均收益0.35%，在A股风格有利时提供额外收益。",
+          "组合回撤控制尚可：最近7天仅1天负收益且幅度-0.48%，最大单日正收益1.08%，收益分布右偏。"
+        ],
+        "holdings_characteristics": {
+          "industry": "跨境指数ETF与黄金ETF为主，辅以小盘A股ETF；主要覆盖日经、德国、纳斯达克、黄金和中证1000。",
+          "market_cap": "底层以海外大盘/中盘指数为主，黄金无股票市值属性，中证1000代表A股小盘。",
+          "volatility": "整体中高波动：黄金中低，海外宽基中高，中证1000高。"
+        },
+        "sustainability": {
+          "score": 6.5,
+          "reasoning": "核心持仓平均收益均为正，且最近7天6正1负、累计约+2.04%，说明当前宏观与趋势环境对该策略有利。但预测准确率仅40%，收益更多来自少数大盈利和资产beta，而非高胜率alpha；样本仅20次，统计显著性有限。海外ETF和黄金受美元、汇率、地缘政治和货币政策影响较大，趋势反转时可能同步回撤，因此可持续性中等，需要动态风控和信号过滤。",
+          "risk_factors": [
+            "预测准确率仅40%，信号稳定性不足",
+            "样本量小（20次预测），历史结果代表性有限",
+            "跨境ETF存在QDII溢价、汇率波动和限购风险",
+            "日经、德国、纳指、黄金同受全球流动性与美元影响，可能同步回撤",
+            "中证1000小盘风格波动高，风格切换可能拖累收益"
+          ]
+        },
+        "improvement_directions": [
+          {
+            "direction": "增加信号确认与过滤",
+            "reason": "预测准确率仅40%，说明原始信号假信号较多，需用趋势、成交量或宏观事件确认。",
+            "expected_impact": "提高胜率和交易质量，减少无效交易与回撤。"
+          },
+          {
+            "direction": "引入波动率目标与风险平价仓位",
+            "reason": "组合中黄金波动较低，中证1000和海外宽基波动较高，等权或固定仓位会放大风险。",
+            "expected_impact": "降低组合波动，改善夏普比率和回撤控制。"
+          },
+          {
+            "direction": "设置移动止盈与硬止损",
+            "reason": "最近7天出现单日-0.48%亏损，趋势反转时跨境和黄金ETF可能快速回撤。",
+            "expected_impact": "限制尾部风险，保护已实现收益。"
+          },
+          {
+            "direction": "监控并规避QDII高溢价",
+            "reason": "日经、德国、纳指等跨境ETF常出现溢价，溢价回归会侵蚀收益。",
+            "expected_impact": "减少非市场因素损失，提高实际成交收益。"
+          },
+          {
+            "direction": "扩展低相关资产或对冲工具",
+            "reason": "当前核心持仓集中于海外权益和黄金，宏观冲击下相关性可能上升。",
+            "expected_impact": "进一步分散风险，平滑收益曲线。"
+          }
+        ]
+      }
+    }
+  },
+  "all_strategies": {
+    "aggressive": {
+      "cumulative_return": -0.48,
+      "avg_daily_return": -0.069,
+      "volatility": 2.523,
+      "win_rate": 28.6,
+      "max_drawdown": 5.7,
+      "sharpe": -0.027,
+      "score": 1.94,
+      "trading_days": 7
+    },
+    "robust": {
+      "cumulative_return": 2.54,
+      "avg_daily_return": 0.363,
+      "volatility": 1.346,
+      "win_rate": 42.9,
+      "max_drawdown": 1.56,
+      "sharpe": 0.27,
+      "score": 6.19,
+      "trading_days": 7
+    },
+    "bluechip": {
+      "cumulative_return": -1.92,
+      "avg_daily_return": -0.274,
+      "volatility": 0.926,
+      "win_rate": 57.1,
+      "max_drawdown": 3.45,
+      "sharpe": -0.296,
+      "score": 3.63,
+      "trading_days": 7
+    },
+    "defensive": {
+      "cumulative_return": -1.31,
+      "avg_daily_return": -0.187,
+      "volatility": 0.866,
+      "win_rate": 57.1,
+      "max_drawdown": 2.98,
+      "sharpe": -0.216,
+      "score": 4.2,
+      "trading_days": 7
+    },
+    "global": {
+      "cumulative_return": -2.47,
+      "avg_daily_return": -0.353,
+      "volatility": 0.989,
+      "win_rate": 57.1,
+      "max_drawdown": 3.31,
+      "sharpe": -0.357,
+      "score": 3.19,
+      "trading_days": 7
+    },
+    "tech": {
+      "cumulative_return": -6.38,
+      "avg_daily_return": -0.911,
+      "volatility": 1.455,
+      "win_rate": 14.3,
+      "max_drawdown": 7.91,
+      "sharpe": -0.626,
+      "score": -4.44,
+      "trading_days": 7
+    },
+    "aggressive_v1": {
+      "cumulative_return": -1.81,
+      "avg_daily_return": -0.259,
+      "volatility": 0.551,
+      "win_rate": 28.6,
+      "max_drawdown": 1.82,
+      "sharpe": -0.469,
+      "score": 0.65,
+      "trading_days": 7
+    },
+    "aggressive_v2": {
+      "cumulative_return": 6.38,
+      "avg_daily_return": 0.911,
+      "volatility": 1.697,
+      "win_rate": 42.9,
+      "max_drawdown": 1.25,
+      "sharpe": 0.537,
+      "score": 9.06,
+      "trading_days": 7
+    },
+    "aggressive_v3": {
+      "cumulative_return": 4.07,
+      "avg_daily_return": 0.581,
+      "volatility": 1.498,
+      "win_rate": 42.9,
+      "max_drawdown": 1.26,
+      "sharpe": 0.388,
+      "score": 7.38,
+      "trading_days": 7
+    },
+    "defensive_momentum": {
+      "cumulative_return": 0.8,
+      "avg_daily_return": 0.16,
+      "volatility": 0.733,
+      "win_rate": 80.0,
+      "max_drawdown": 1.1,
+      "sharpe": 0.218,
+      "score": 8.81,
+      "trading_days": 5
+    },
+    "defensive_top5": {
+      "cumulative_return": 2.05,
+      "avg_daily_return": 0.41,
+      "volatility": 0.716,
+      "win_rate": 80.0,
+      "max_drawdown": 0.6,
+      "sharpe": 0.572,
+      "score": 10.31,
+      "trading_days": 5
+    },
+    "defensive_weighted": {
+      "cumulative_return": 0.8,
+      "avg_daily_return": 0.16,
+      "volatility": 0.733,
+      "win_rate": 80.0,
+      "max_drawdown": 1.1,
+      "sharpe": 0.218,
+      "score": 8.81,
+      "trading_days": 5
+    },
+    "global_v1": {
+      "cumulative_return": 2.04,
+      "avg_daily_return": 0.291,
+      "volatility": 0.455,
+      "win_rate": 85.7,
+      "max_drawdown": 0.48,
+      "sharpe": 0.641,
+      "score": 11.03,
+      "trading_days": 7
+    },
+    "global_v2": {
+      "cumulative_return": 2.04,
+      "avg_daily_return": 0.291,
+      "volatility": 0.455,
+      "win_rate": 85.7,
+      "max_drawdown": 0.48,
+      "sharpe": 0.641,
+      "score": 11.03,
+      "trading_days": 7
+    },
+    "global_v3": {
+      "cumulative_return": 2.04,
+      "avg_daily_return": 0.291,
+      "volatility": 0.455,
+      "win_rate": 85.7,
+      "max_drawdown": 0.48,
+      "sharpe": 0.641,
+      "score": 11.03,
+      "trading_days": 7
+    }
+  },
+  "variants": [],
+  "next_week_strategies": [
+    "aggressive",
+    "robust",
+    "bluechip",
+    "defensive",
+    "global",
+    "tech"
+  ]
+}

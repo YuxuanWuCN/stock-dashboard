@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-03",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "320007",
   "name": "诺安成长混合",
   "type": "etf",
   "category": "公募半导体",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 47.1,
-    "risk": 35.9,
-    "technical": 50.0,
-    "industry": 39.7,
+    "risk_adjusted": 56.0,
+    "risk": 19.7,
+    "technical": 73.0,
+    "industry": 48.1,
     "leading": 50.0
   },
   "leading": {
@@ -37,7 +45,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:31:42"
+    "updated_at": "2026-09-28 22:32:22"
   },
   "nale_network": {
     "sector_name": "公募半导体",
@@ -60,26 +68,26 @@
     }
   },
   "risk": {
-    "level": "medium",
-    "label": "中等风险",
-    "annualized_volatility_20d_pct": 24.16,
-    "max_drawdown_60d_pct": -18.24,
-    "atr14_pct": 1.46,
+    "level": "low",
+    "label": "低风险",
+    "annualized_volatility_20d_pct": 18.37,
+    "max_drawdown_60d_pct": -22.48,
+    "atr14_pct": 1.16,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 21.8,
-        "value": 24.16
+        "score": 10.2,
+        "value": 18.37
       },
       {
         "name": "60日最大回撤",
-        "score": 36.5,
-        "value": -18.24
+        "score": 44.9,
+        "value": -22.48
       },
       {
         "name": "ATR百分比",
-        "score": 4.5,
-        "value": 1.46
+        "score": 1.2,
+        "value": 1.16
       },
       {
         "name": "量价异常",
@@ -88,8 +96,8 @@
       },
       {
         "name": "行业波动",
-        "score": 95.5,
-        "value": 24.95
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -110,45 +118,45 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 2.554,
-    "ma10": 2.561,
-    "ma20": 2.6005,
-    "ma60": 2.6596666666666664,
-    "rsi14": 40.8,
-    "macd_dif": -0.02838920834847425,
-    "macd_dea": -0.02140710123763612,
-    "macd_hist": -0.013964214221676256,
-    "atr14_pct": 1.460633944784755,
-    "boll_position": 0.06576615818619325,
-    "return_5d_pct": -3.4615384615384714,
-    "return_20d_pct": -4.562737642585557,
+    "ma5": 2.488,
+    "ma10": 2.463,
+    "ma20": 2.4739999999999998,
+    "ma60": 2.605,
+    "rsi14": 40.0,
+    "macd_dif": -0.02709855139531081,
+    "macd_dea": -0.03468546331539742,
+    "macd_hist": 0.015173823840173226,
+    "atr14_pct": 1.1571682189856851,
+    "boll_position": 0.3016004176553371,
+    "return_5d_pct": -3.1872509960159223,
+    "return_20d_pct": -5.813953488372093,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "公募半导体",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.02,
-    "return_20d_pct": -3.44,
-    "return_60d_pct": -8.89,
-    "relative_strength_20d_pct": -1.13
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 2.03
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 58.6,
-      "average_return_pct": 0.88,
-      "median_return_pct": 0.99,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.96,
+      "median_return_pct": 0.52,
       "best_return_pct": 10.53,
       "worst_return_pct": -10.18
     },
     "horizon_5d": {
-      "up_probability_pct": 55.2,
-      "average_return_pct": 1.95,
-      "median_return_pct": 1.1,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.81,
+      "median_return_pct": 0.67,
       "best_return_pct": 16.86,
       "worst_return_pct": -6.57
     }
@@ -164,13 +172,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 18.2%，风险偏高。",
+      "detail": "近60日最大回撤 22.5%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 18.2%，风险扣分。",
+      "detail": "近60日最大回撤 22.5%，风险扣分。",
       "contribution": -7.0
     }
   ],

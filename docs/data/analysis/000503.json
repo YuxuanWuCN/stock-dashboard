@@ -1,0 +1,215 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
+  "code": "000503",
+  "name": "国新健康",
+  "type": "stock",
+  "category": "热点龙头",
+  "stale": false,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
+  "scores": {
+    "risk_adjusted": 31.5,
+    "risk": 45.3,
+    "technical": 93.0,
+    "industry": 57.0,
+    "leading": 50.0
+  },
+  "leading": {
+    "category": "general",
+    "industry_name": "通用行业",
+    "description": "宏观景气度与综合工业品价格",
+    "proxy_type": "macro_general",
+    "keywords": [
+      "PMI",
+      "工业增加值",
+      "大宗商品"
+    ],
+    "data_source": "synthetic_fallback",
+    "source_name": "合成降级",
+    "momentum_metrics": {
+      "slope_pct": 0.0,
+      "momentum": "flat",
+      "inflection_flag": "none",
+      "latest_value": 100.0,
+      "confidence": "low"
+    },
+    "updated_at": "2026-09-28 22:33:42"
+  },
+  "nale_network": {
+    "sector_name": "热点龙头",
+    "sector_breadth_pct": 32.4,
+    "tier_role": "follower_catchup",
+    "leader_stock": {
+      "code": "301190",
+      "name": "善水科技",
+      "change_pct": 20.00962000962001,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 2.4,
+    "spillover_prob_5d_pct": 5.0,
+    "has_limit_up_resonance": true,
+    "co_movement_peers": [
+      {
+        "code": "301004",
+        "name": "嘉益股份",
+        "corr": 0.58
+      },
+      {
+        "code": "301190",
+        "name": "善水科技",
+        "corr": 0.48
+      },
+      {
+        "code": "300501",
+        "name": "海顺新材",
+        "corr": 0.44
+      },
+      {
+        "code": "688244",
+        "name": "永信至诚",
+        "corr": 0.42
+      },
+      {
+        "code": "600032",
+        "name": "浙江新能",
+        "corr": 0.4
+      }
+    ],
+    "temporal_dynamics": {
+      "physical_lag_tau_days": 14.0,
+      "physical_lag_sigma_days": 5.0,
+      "peak_horizon_days": 14,
+      "peak_spillover_return_pct": 2.07,
+      "optimal_holding_days": 14,
+      "is_temporal_enhanced": true,
+      "dynamic_alpha_sentiment_t0": 0.557,
+      "dynamic_alpha_physical_peak": 0.564
+    }
+  },
+  "risk": {
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 47.72,
+    "max_drawdown_60d_pct": -13.86,
+    "atr14_pct": 3.45,
+    "factors": [
+      {
+        "name": "20日波动率",
+        "score": 73.7,
+        "value": 47.72
+      },
+      {
+        "name": "60日最大回撤",
+        "score": 23.4,
+        "value": -13.86
+      },
+      {
+        "name": "ATR百分比",
+        "score": 41.3,
+        "value": 3.45
+      },
+      {
+        "name": "量价异常",
+        "score": 89.2,
+        "value": 1.39
+      },
+      {
+        "name": "行业波动",
+        "score": 1.2,
+        "value": 20.07
+      }
+    ]
+  },
+  "forecast": {
+    "return_3d_pct": -2.56,
+    "return_5d_pct": 0.67,
+    "up_probability_3d_pct": 23.3,
+    "up_probability_5d_pct": 28.3,
+    "confidence": "medium",
+    "sample_size": 30,
+    "source": "knn_fallback",
+    "model": "knn_v1",
+    "physical_lag_tau_days": 14.0,
+    "peak_horizon_days": 14,
+    "peak_spillover_return_pct": 2.07,
+    "optimal_holding_days": 14,
+    "dynamic_alpha_peak": 0.564
+  },
+  "technical": {
+    "trend": "uptrend",
+    "ma5": 6.997999999999999,
+    "ma10": 6.8549999999999995,
+    "ma20": 6.9465,
+    "ma60": 6.921166666666666,
+    "rsi14": 61.7,
+    "macd_dif": -0.007707391461141633,
+    "macd_dea": -0.04760210208342562,
+    "macd_hist": 0.07978942124456798,
+    "atr14_pct": 3.447371984355696,
+    "boll_position": 1.0826791475957744,
+    "return_5d_pct": 11.044776119402977,
+    "return_20d_pct": 6.4377682403433445,
+    "volume_ratio_5d": 1.39
+  },
+  "industry": {
+    "name": "热点龙头",
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 14.28
+  },
+  "similarity": {
+    "method": "standardized_knn_v1",
+    "sample_size": 30,
+    "minimum_sample_size": 15,
+    "confidence": "medium",
+    "horizon_3d": {
+      "up_probability_pct": 23.3,
+      "average_return_pct": -2.56,
+      "median_return_pct": -3.16,
+      "best_return_pct": 9.82,
+      "worst_return_pct": -10.45
+    },
+    "horizon_5d": {
+      "up_probability_pct": 23.3,
+      "average_return_pct": -1.73,
+      "median_return_pct": -3.58,
+      "best_return_pct": 26.47,
+      "worst_return_pct": -10.44
+    }
+  },
+  "fundamental": null,
+  "reasons": [
+    {
+      "title": "T-NALE·热点龙头时空时滞共振",
+      "detail": "同板块龙头【善水科技】封板催化，经产业链物理传导（时滞τ≈14天），注入 +2.4% 溢出预期及 +5.0% 看涨胜率（波峰前瞻+2.07%）",
+      "impact": "positive",
+      "score_delta": 4.5
+    },
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 47.7%，波动偏高。",
+      "contribution": -5.0
+    }
+  ],
+  "kline_file": "../kline/000503.json",
+  "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
+}

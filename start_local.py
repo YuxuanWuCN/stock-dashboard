@@ -70,28 +70,37 @@ def main() -> int:
         action="store_true",
         help="Do not open the dashboard in the default browser",
     )
+    parser.add_argument(
+        "--frontend-only",
+        action="store_true",
+        help="Only start the frontend static web server (port 8001)",
+    )
     args = parser.parse_args()
 
     project_dir = Path(__file__).resolve().parent
-    missing = check_dependencies()
-    if missing:
-        print("Missing Python dependencies: " + ", ".join(missing))
-        print(f'Run: "{sys.executable}" -m pip install -r requirements.txt')
-        return 1
+    if not args.frontend_only:
+        missing = check_dependencies()
+        if missing:
+            print("Missing Python dependencies: " + ", ".join(missing))
+            print(f'Run: "{sys.executable}" -m pip install -r requirements.txt')
+            return 1
 
-    occupied = [port for port in (API_PORT, WEB_PORT) if port_is_in_use(port)]
+    ports_to_check = [WEB_PORT] if args.frontend_only else [API_PORT, WEB_PORT]
+    occupied = [port for port in ports_to_check if port_is_in_use(port)]
     if occupied:
         print("Cannot start because these ports are already in use: " + ", ".join(map(str, occupied)))
         print("Close the old dashboard window/process and run this launcher again.")
         return 1
 
     processes: list[subprocess.Popen] = []
+    backend: subprocess.Popen | None = None
     try:
-        backend = subprocess.Popen(
-            [sys.executable, "-m", "src.server"],
-            cwd=project_dir,
-        )
-        processes.append(backend)
+        if not args.frontend_only:
+            backend = subprocess.Popen(
+                [sys.executable, "-m", "src.server"],
+                cwd=project_dir,
+            )
+            processes.append(backend)
 
         frontend = subprocess.Popen(
             [
@@ -108,7 +117,7 @@ def main() -> int:
         )
         processes.append(frontend)
 
-        if not wait_for_url(API_HEALTH_URL, backend):
+        if backend is not None and not wait_for_url(API_HEALTH_URL, backend):
             print("The API failed to start. Review the error shown above.")
             return 1
         if not wait_for_url(WEB_URL, frontend):
@@ -118,19 +127,25 @@ def main() -> int:
         print()
         print("Stock Dashboard 2.1 is running:")
         print(f"  Dashboard: {WEB_URL}")
-        print(f"  API health: {API_HEALTH_URL}")
-        print("Press Ctrl+C to stop both services.")
+        print(f"  Wealth Terminal: {WEB_URL}index_wealth.html")
+        if backend is not None:
+            print(f"  API health: {API_HEALTH_URL}")
+        print("Press Ctrl+C to stop services.")
 
         if not args.no_browser:
-            webbrowser.open(WEB_URL)
+            webbrowser.open(f"{WEB_URL}index_wealth.html")
 
-        while all(process.poll() is None for process in processes):
+        backend_warned = False
+        while frontend.poll() is None:
+            if backend is not None and backend.poll() is not None and not backend_warned:
+                print(f"\n[Notice] Backend API process exited (code {backend.poll()}).")
+                print(f"[Notice] Static dashboard remains active at {WEB_URL}index_wealth.html")
+                backend_warned = True
             time.sleep(0.5)
 
-        failed = next((process for process in processes if process.poll() is not None), None)
-        if failed is not None:
-            print(f"A dashboard service stopped unexpectedly (exit code {failed.returncode}).")
-            return failed.returncode or 1
+        if frontend.poll() is not None:
+            print(f"Frontend server stopped (exit code {frontend.returncode}).")
+            return frontend.returncode or 1
         return 0
     except KeyboardInterrupt:
         print("\nStopping Stock Dashboard 2.1...")

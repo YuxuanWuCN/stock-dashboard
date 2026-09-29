@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "159663",
   "name": "机床ETF",
   "type": "etf",
   "category": "工业母机",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 41.1,
-    "risk": 44.0,
+    "risk_adjusted": 43.5,
+    "risk": 50.2,
     "technical": 42.0,
-    "industry": 33.9,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:31:42"
+    "updated_at": "2026-09-28 22:32:22"
   },
   "nale_network": {
     "sector_name": "工业母机",
@@ -59,34 +67,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 40.65,
-    "max_drawdown_60d_pct": -36.5,
-    "atr14_pct": 4.42,
+    "annualized_volatility_20d_pct": 35.95,
+    "max_drawdown_60d_pct": -31.5,
+    "atr14_pct": 3.59,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 48.7,
-        "value": 40.65
+        "score": 55.1,
+        "value": 35.95
       },
       {
         "name": "60日最大回撤",
-        "score": 68.6,
-        "value": -36.5
+        "score": 67.7,
+        "value": -31.5
       },
       {
         "name": "ATR百分比",
-        "score": 50.0,
-        "value": 4.42
+        "score": 44.3,
+        "value": 3.59
       },
       {
         "name": "量价异常",
-        "score": 21.8,
-        "value": 0.9
+        "score": 77.2,
+        "value": 0.74
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -107,28 +115,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 0.974,
-    "ma10": 0.9780000000000001,
-    "ma20": 1.0045,
-    "ma60": 1.0936666666666668,
-    "rsi14": 39.0,
-    "macd_dif": -0.01948332705236233,
-    "macd_dea": -0.017658175509300777,
-    "macd_hist": -0.0036503030861231092,
-    "atr14_pct": 4.417074575249125,
-    "boll_position": 0.058633101926312124,
-    "return_5d_pct": -5.05050505050505,
-    "return_20d_pct": -9.615384615384626,
-    "volume_ratio_5d": 0.9
+    "ma5": 0.966,
+    "ma10": 0.9700000000000001,
+    "ma20": 0.9715,
+    "ma60": 1.0078333333333334,
+    "rsi14": 36.3,
+    "macd_dif": -0.012215869682594915,
+    "macd_dea": -0.010586162142859346,
+    "macd_hist": -0.0032594150794711396,
+    "atr14_pct": 3.5889500060304167,
+    "boll_position": -0.21472983414625607,
+    "return_5d_pct": -8.999999999999996,
+    "return_20d_pct": -8.080808080808078,
+    "volume_ratio_5d": 0.74
   },
   "industry": {
     "name": "工业母机",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": -4.07
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": -0.24
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -136,16 +144,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.48,
-      "median_return_pct": 2.98,
+      "up_probability_pct": 63.3,
+      "average_return_pct": 1.36,
+      "median_return_pct": 2.57,
       "best_return_pct": 12.22,
       "worst_return_pct": -10.31
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.75,
-      "median_return_pct": 0.43,
+      "up_probability_pct": 63.3,
+      "average_return_pct": 2.08,
+      "median_return_pct": 2.75,
       "best_return_pct": 17.09,
       "worst_return_pct": -12.3
     }
@@ -161,20 +169,14 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 36.5%，风险偏高。",
+      "detail": "近60日最大回撤 31.5%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 36.5%，风险扣分。",
+      "detail": "近60日最大回撤 31.5%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "波动较大",
-      "detail": "20日年化波动率 40.6%，波动偏高。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/159663.json",

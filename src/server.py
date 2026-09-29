@@ -75,6 +75,18 @@ GITHUB_SYNC_ENABLED = bool(GITHUB_TOKEN and GITHUB_REPO)
 
 CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
 
+# ---- 养老金融首页 BFF & 数据集 API 蓝图 ----
+try:
+    from homepage_api import bp as homepage_api_v1_bp
+    from dataset_api import bp as dataset_api_v1_bp
+    app.register_blueprint(homepage_api_v1_bp)
+    app.register_blueprint(dataset_api_v1_bp)
+    logger.info("已注册 homepage_api / dataset_api 蓝图")
+except Exception as _bp_err:
+    logger.warning("跳过 homepage/dataset 蓝图注册: %s", _bp_err)
+
+HOME_DIR = os.path.abspath(os.path.join(DOCS_DIR, "home"))
+
 # ============================================================
 # 股票代码 → 大盘指数映射
 # ============================================================
@@ -545,6 +557,17 @@ def index():
     })
 
 
+@app.route("/home")
+@app.route("/home/<path:filename>")
+def serve_home(filename: str = "index.html"):
+    """银发安心理财助手 React SPA 入口"""
+    filepath = os.path.join(HOME_DIR, filename)
+    if os.path.isfile(filepath):
+        return send_from_directory(HOME_DIR, filename)
+    # SPA fallback: 非文件路径回退到 index.html
+    return send_from_directory(HOME_DIR, "index.html")
+
+
 @app.route("/api/health")
 def api_health():
     return jsonify({
@@ -798,18 +821,31 @@ def _save_env_dict(updates: dict[str, str], path: Optional[Any] = None) -> bool:
             lines.append(f"{k}={v}\n")
 
     # 原子写入
-    dir_name = os.path.dirname(target) or "."
-    fd, tmp_file = tempfile.mkstemp(suffix=".env.tmp", dir=dir_name, text=True)
+    write_ok = False
+    tmp_file = None
     try:
+        dir_name = os.path.dirname(target) or "."
+        fd, tmp_file = tempfile.mkstemp(suffix=".env.tmp", dir=dir_name, text=True)
         with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as f:
             f.writelines(lines)
         if os.path.exists(target):
             os.replace(tmp_file, target)
         else:
             os.rename(tmp_file, target)
+        write_ok = True
+    except (OSError, IOError) as exc:
+        if tmp_file and os.path.exists(tmp_file):
+            try:
+                os.remove(tmp_file)
+            except Exception:
+                pass
+        logger.warning("无法持久化写入 .env 文件 (只读容器或权限受限: %s)，已降级为仅内存环境变量热重载", exc)
     except Exception as exc:
-        if os.path.exists(tmp_file):
-            os.remove(tmp_file)
+        if tmp_file and os.path.exists(tmp_file):
+            try:
+                os.remove(tmp_file)
+            except Exception:
+                pass
         logger.error("写入 .env 异常: %s", exc)
         return False
 
@@ -820,7 +856,7 @@ def _save_env_dict(updates: dict[str, str], path: Optional[Any] = None) -> bool:
     if "OFFLINE_MODE" in filtered_updates:
         OFFLINE_MODE = filtered_updates["OFFLINE_MODE"].lower() in ("1", "true", "yes")
 
-    logger.info("系统环境变量与 .env 配置已热重载生效")
+    logger.info("系统环境变量已热重载生效 (持久化状态: %s)", "已落盘" if write_ok else "仅内存生效")
     return True
 
 
@@ -1152,14 +1188,29 @@ class DailyAutoScheduler:
                 code = fetch_main()
 
                 if code == 0:
-                    self.progress_pct = 80
-                    self.current_step = "正在刷新行情摘要与市场指标缓存..."
-                    self._load_cached_meta()
-                    self.last_update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    self.last_status = "success"
-                    self.progress_pct = 100
-                    self.current_step = "✓ 今日数据已全部成功更新并入库"
-                    self.add_log("每日自主更新任务圆满完成，看板数据已刷新！")
+                    self.progress_pct = 50
+                    self.current_step = "行情K线更新完毕，正在执行多因子风险收益分析与排行榜构建..."
+                    self.add_log("行情抓取成功，正在调用 build_ranking 流水线...")
+
+                    try:
+                        from .build_ranking import main as ranking_main
+                    except ImportError:
+                        from build_ranking import main as ranking_main
+
+                    rank_code = ranking_main()
+                    if rank_code == 0:
+                        self.progress_pct = 85
+                        self.current_step = "正在刷新行情摘要与市场指标缓存..."
+                        self._load_cached_meta()
+                        self.last_update_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        self.last_status = "success"
+                        self.progress_pct = 100
+                        self.current_step = "✓ 今日行情与多因子排行榜已全部成功更新并入库"
+                        self.add_log("每日自主更新任务圆满完成，看板与多因子分析已全量刷新！")
+                    else:
+                        self.last_status = "failed"
+                        self.current_step = f"排行榜构建异常退出 (退出码: {rank_code})"
+                        self.add_log(f"警告：build_ranking 返回异常码 {rank_code}")
                 else:
                     self.last_status = "failed"
                     self.current_step = f"更新流程异常退出 (退出码: {code})"

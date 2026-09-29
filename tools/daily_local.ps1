@@ -1,4 +1,4 @@
-# daily_local.ps1 —— 每日本地全自动数据更新与量化流水线
+﻿# daily_local.ps1 —— 每日本地全自动数据更新与量化流水线
 #
 # 功能：自动检测 Python 环境并启动统一量化自动化调度引擎（tools/daily_routine.py）
 # 用法：powershell -NoProfile -ExecutionPolicy Bypass -File tools\daily_local.ps1

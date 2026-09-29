@@ -1,18 +1,26 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-06 00:31:45+08:00",
-  "trade_date": "2026-09-04",
+  "generated_at": "2026-09-28 22:33:57+08:00",
+  "trade_date": "2026-09-28",
   "code": "588000",
   "name": "科创50ETF",
   "type": "etf",
   "category": "硬科技宽基",
   "stale": false,
-  "alpha_gate": null,
+  "alpha_gate": {
+    "verdict": "reject",
+    "reject_reason": "insufficient_data",
+    "alpha": null,
+    "alpha_p_value": null,
+    "information_ratio": null,
+    "betas": null,
+    "window_end": "2026-08-28"
+  },
   "scores": {
-    "risk_adjusted": 41.1,
-    "risk": 40.5,
-    "technical": 50.0,
-    "industry": 34.6,
+    "risk_adjusted": 46.3,
+    "risk": 38.3,
+    "technical": 68.0,
+    "industry": 45.1,
     "leading": 50.0
   },
   "leading": {
@@ -34,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-06 00:24:32"
+    "updated_at": "2026-09-28 22:31:46"
   },
   "nale_network": {
     "sector_name": "硬科技宽基",
@@ -59,34 +67,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 38.32,
-    "max_drawdown_60d_pct": -29.91,
-    "atr14_pct": 4.34,
+    "annualized_volatility_20d_pct": 30.99,
+    "max_drawdown_60d_pct": -30.9,
+    "atr14_pct": 3.39,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 46.2,
-        "value": 38.32
+        "score": 41.3,
+        "value": 30.99
       },
       {
         "name": "60日最大回撤",
-        "score": 58.3,
-        "value": -29.91
+        "score": 65.9,
+        "value": -30.9
       },
       {
         "name": "ATR百分比",
-        "score": 48.1,
-        "value": 4.34
+        "score": 40.1,
+        "value": 3.39
       },
       {
         "name": "量价异常",
-        "score": 23.1,
-        "value": 0.9
+        "score": 12.6,
+        "value": 1.03
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 24.34
+        "score": 1.2,
+        "value": 20.07
       }
     ]
   },
@@ -107,28 +115,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 1.72,
-    "ma10": 1.725,
-    "ma20": 1.7685,
-    "ma60": 1.9088333333333334,
-    "rsi14": 39.3,
-    "macd_dif": -0.04129551040452317,
-    "macd_dea": -0.039127199991875014,
-    "macd_hist": -0.004336620825296317,
-    "atr14_pct": 4.3389709107262995,
-    "boll_position": 0.1042995830682382,
-    "return_5d_pct": -5.113636363636365,
-    "return_20d_pct": -9.239130434782616,
-    "volume_ratio_5d": 0.9
+    "ma5": 1.722,
+    "ma10": 1.7009999999999998,
+    "ma20": 1.6985,
+    "ma60": 1.8150000000000002,
+    "rsi14": 40.3,
+    "macd_dif": -0.017802582451064808,
+    "macd_dea": -0.024324391022279485,
+    "macd_hist": 0.013043617142429353,
+    "atr14_pct": 3.3931311433555202,
+    "boll_position": 0.17798761401140156,
+    "return_5d_pct": -5.747126436781613,
+    "return_20d_pct": -6.818181818181824,
+    "volume_ratio_5d": 1.03
   },
   "industry": {
     "name": "硬科技宽基",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.13,
-    "return_20d_pct": -5.55,
-    "return_60d_pct": -8.99,
-    "relative_strength_20d_pct": -3.69
+    "return_5d_pct": -5.73,
+    "return_20d_pct": -7.84,
+    "return_60d_pct": -17.56,
+    "relative_strength_20d_pct": 1.02
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -137,15 +145,15 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": 0.03,
+      "average_return_pct": -0.33,
       "median_return_pct": 0.0,
       "best_return_pct": 10.23,
       "worst_return_pct": -10.84
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.23,
-      "median_return_pct": 0.32,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.21,
+      "median_return_pct": 0.68,
       "best_return_pct": 17.05,
       "worst_return_pct": -10.58
     }
@@ -161,13 +169,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 29.9%，风险偏高。",
+      "detail": "近60日最大回撤 30.9%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 29.9%，风险扣分。",
+      "detail": "近60日最大回撤 30.9%，风险扣分。",
       "contribution": -7.0
     }
   ],
