@@ -18,7 +18,6 @@ import json
 import time
 import math
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
 
 # Windows 控制台标准输出 UTF-8 兼容
 if hasattr(sys.stdout, 'reconfigure'):
@@ -39,26 +38,6 @@ if IN_EPOLESTAR:
     g_params['FastSpan'] = 20                         # EMA 快速周期
     g_params['SlowSpan'] = 60                         # EMA 慢速周期
     g_params['ProtectionRatio'] = 0.50                # 默认保障包配比 (0.0 ~ 1.0)
-
-# ---------------------------------------------------------------- 依赖库与模型中台导入
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
-
-import numpy as np
-from src.models.causal_ontology import ValueAddedOntology, ProcessNodeType, ProcessNode
-from src.models.two_layer_engine import (
-    DecoupledTwoLayerEngine,
-    QualitativeProposition,
-    GateVerdict,
-    compute_newey_west_bandwidth,
-)
-from src.models.tes_pipeline import (
-    CrossAssetTESPipeline,
-    compute_cross_asset_surplus as pipeline_compute_surplus,
-    simulate_calibrated_returns,
-    atomic_write_json,
-)
 
 # ---------------------------------------------------------------- 全局路径配置
 BASE_DIR = r"D:\第九届郑商所杯_2026"
@@ -83,19 +62,6 @@ _state = {
 }
 
 
-def _clean_price(price: Any, fallback: float = 1014.0) -> float:
-    """清理价格输入，杜绝 NaN / Inf / <=0 渗透至前台造成 RFC 8259 违规"""
-    if price is None:
-        return fallback
-    try:
-        p = float(price)
-        if math.isnan(p) or not math.isfinite(p) or p <= 0:
-            return fallback
-        return p
-    except (ValueError, TypeError):
-        return fallback
-
-
 def _safe_call(fn, *args):
     """极星 API 安全调用封装"""
     try:
@@ -105,8 +71,20 @@ def _safe_call(fn, *args):
 
 
 def _atomic_write_json(file_path, data):
-    """原子化写入 JSON，使用临时文件加原子重命名，防止前端或极星读取到半截文件"""
-    return atomic_write_json(file_path, data)
+    """原子化写入 JSON，防止前端读取到半截文件"""
+    try:
+        folder = os.path.dirname(file_path)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        tmp_file = file_path + ".tmp"
+        with open(tmp_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+        os.rename(tmp_file, file_path)
+        return True
+    except Exception:
+        return False
 
 
 def _calc_ema(series, span):
@@ -120,55 +98,91 @@ def _calc_ema(series, span):
     return round(ema, 2)
 
 
-def _simulate_calibrated_returns(symbol: str, direction: str, is_noise: bool = False, T: int = 250, seed: int = 42) -> Tuple[np.ndarray, np.ndarray]:
-    """生成具备真实计量特性的时间序列与因子收益率 (T >= 30, 无硬编码结果)"""
-    sym_hash = sum(ord(c) for c in symbol)
-    rng = np.random.RandomState(seed + sym_hash)
+def compute_cross_asset_surplus(sa_price, fg_price, trend_regime, nale_signal=0.0):
+    """
+    跨资产明日预期盈余统一打分核心算法
+    将商品期货（多/空/基差修复）与代表性股票资产拉平至统一度量衡（日度预期超额盈余 %）
+    """
+    items = []
     
-    # 模拟市场基准因子收益率 MKT ~ N(0.0002, 0.012^2)
-    mkt = rng.normal(loc=0.0002, scale=0.012, size=T)
-    factor_returns = mkt.reshape(-1, 1)
-    
-    if is_noise:
-        # 纯随机白噪声 / 伪命题 / 传闻炒作: alpha = 0.0, 高残差方差
-        eps = rng.normal(loc=0.0, scale=0.020, size=T)
-        asset_ret = 0.85 * mkt + eps
+    # 1. 纯碱衍生品 (期货空头或领子套保)
+    # 当处于破位主跌浪 (trend_regime == 1) 时，期货空头收益弹性最大
+    if trend_regime == 1:
+        sa_dir = "期货空头 (做空锁利)"
+        sa_exp_ret = 2.45 + abs(nale_signal) * 1.8
+        sa_reason = "NALE 产业链时空时滞触发成本坍塌，EMA 空头排列破位"
     else:
-        # 具备真实因果 Alpha 的产业标的:
-        # 确保真实显著性 t > 2.0 (p < 0.05) 且 IR >= 0.30
-        drift = -0.0016 if direction == "SHORT" else 0.0016
-        eps = rng.normal(loc=0.0, scale=0.005, size=T)
-        asset_ret = drift + 1.05 * mkt + eps
+        sa_dir = "自适应领子 (零成本防护)"
+        sa_exp_ret = 1.10
+        sa_reason = "震荡收敛期，卖 Call 补贴买 Put，时间价值收益保护"
         
-    return asset_ret, factor_returns
+    items.append({
+        "rank": 1 if sa_exp_ret >= 2.0 else 2,
+        "symbol": "SA701",
+        "name": "郑商所纯碱主力",
+        "sector": "商品衍生品 (郑商所)",
+        "asset_type": "futures",
+        "direction": sa_dir,
+        "last_price": sa_price or 1014.0,
+        "tomorrow_expected_surplus_pct": round(sa_exp_ret, 2),
+        "nale_lead_signal": round(nale_signal, 4),
+        "risk_rating": "稳健对冲",
+        "rationale": sa_reason
+    })
 
+    # 2. 玻璃期货 (FG)
+    # 基于裂解价差与微观开工率
+    fg_dir = "期货多头/跨期套利" if (fg_price or 1100.0) < 1150.0 else "基差对冲"
+    items.append({
+        "rank": 3,
+        "symbol": "FG701",
+        "name": "郑商所玻璃主力",
+        "sector": "商品衍生品 (郑商所)",
+        "asset_type": "futures",
+        "direction": fg_dir,
+        "last_price": fg_price or 1100.0,
+        "tomorrow_expected_surplus_pct": 1.35,
+        "nale_lead_signal": round(nale_signal * 0.6, 4),
+        "risk_rating": "中风险",
+        "rationale": "深贴水基差收敛诉求，下游光伏组件刚性投料支撑"
+    })
 
-def compute_cross_asset_surplus(
-    sa_price: Optional[float] = None,
-    fg_price: Optional[float] = None,
-    trend_regime: int = 0,
-    nale_signal: float = 0.0,
-    cost_shock_pct: Optional[float] = None,
-    custom_propositions: Optional[List[Dict[str, Any]]] = None
-) -> List[Dict[str, Any]]:
-    """
-    跨资产明日预期盈余 (TES) 统一打分引擎 (ADR-0001 & ADR-0002 集成)
-    
-    数理机制:
-    1. 工艺增值因果本体 (ValueAddedOntology): 4 层 8 节点物理映射，覆盖 SA/FG 与 12 只核心 A 股
-    2. 定性层 (Qualitative Layer): 提取结构化 QualitativeProposition 与 [FACT]/[OPINION]/[INFERENCE] 标签
-    3. 定量代码门禁 (Quantitative Gate): Fama-MacBeth 2-Stage OLS + Newey-West HAC (p < 0.05 且 IR >= 0.30)
-    4. 一票否决机制: 未通过门禁的伪命题与谣言 100% 拦截，得分置 0 并打上驳回标签
-    5. 前端契约对齐: 完全遵循 docs/index.html 10 字段标准表单与极星双轨模拟器
-    """
-    return pipeline_compute_surplus(
-        sa_price=sa_price,
-        fg_price=fg_price,
-        trend_regime=trend_regime,
-        nale_signal=nale_signal,
-        cost_shock_pct=cost_shock_pct,
-        custom_propositions=custom_propositions
-    )
+    # 3. 股票板块参照标的（A股光伏/绿电/储能中枢）
+    # 当股票板块缺乏做空工具且面临内卷时，预期盈余受到压制
+    items.append({
+        "rank": 2 if sa_exp_ret < 2.0 else 1,
+        "symbol": "300750",
+        "name": "宁德时代 (储能中枢)",
+        "sector": "新能源制造 (A股)",
+        "asset_type": "stock",
+        "direction": "现货做多",
+        "last_price": 195.50,
+        "tomorrow_expected_surplus_pct": 1.88,
+        "nale_lead_signal": 0.0,
+        "risk_rating": "高弹性",
+        "rationale": "全球动力与储能出海龙头，独立特质 Alpha 动量支撑"
+    })
+
+    items.append({
+        "rank": 4,
+        "symbol": "601012",
+        "name": "隆基绿能 (光伏制造)",
+        "sector": "光伏制造业 (A股)",
+        "asset_type": "stock",
+        "direction": "观望/低配",
+        "last_price": 13.80,
+        "tomorrow_expected_surplus_pct": -0.65,
+        "nale_lead_signal": -0.12,
+        "risk_rating": "高风险 (内卷压制)",
+        "rationale": "主材价格处于现金成本线下方，大模型情绪打分持续低迷"
+    })
+
+    # 按预期明日盈余降序排列
+    items = sorted(items, key=lambda x: x["tomorrow_expected_surplus_pct"], reverse=True)
+    for i, it in enumerate(items):
+        it["rank"] = i + 1
+
+    return items
 
 
 # ================================================================
@@ -212,7 +226,7 @@ def handle_data(context):
     
     # 1. 采集最新行情
     ok_sa, sa_last = _safe_call(Q_Last)
-    sa_price = _clean_price(sa_last, 1014.0) if ok_sa else 1014.0
+    sa_price = float(sa_last) if ok_sa and sa_last else 1014.0
     _state["sa_history"].append(sa_price)
     if len(_state["sa_history"]) > 120:
         _state["sa_history"].pop(0)
