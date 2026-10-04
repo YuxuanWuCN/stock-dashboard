@@ -172,7 +172,7 @@ class LLMForecaster:
 
     def __init__(self, client: Optional[LLMClient] = None) -> None:
         self.client = client or LLMClient()
-        self.model_name = getattr(self.client, "model", "gemini-3.7-flash")
+        self.model_name = getattr(self.client, "model", "gemini-3.8-flash")
 
     def forecast_single(
         self,

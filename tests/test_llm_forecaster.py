@@ -41,14 +41,14 @@ def test_clean_and_clamp_forecast_normal():
         "risk_factors": ["均线乖离较大", "板块分化"],
         "risk_warning": "冲高回落风险"
     }
-    cleaned = _clean_and_clamp_forecast(raw, "gemini-3.7-flash")
+    cleaned = _clean_and_clamp_forecast(raw, "gemini-3.8-flash")
     assert cleaned["return_3d_pct"] == 2.5
     assert cleaned["return_5d_pct"] == 4.8
     assert cleaned["up_probability_3d_pct"] == 70.0
     assert cleaned["confidence"] == "high"
     assert cleaned["risk_factors"] == ["均线乖离较大", "板块分化"]
     assert cleaned["source"] == "v3_llm_direct"
-    assert cleaned["model"] == "gemini-3.7-flash"
+    assert cleaned["model"] == "gemini-3.8-flash"
 
 def test_clean_and_clamp_forecast_clamps_extremes():
     # 测试极端防爆限幅
@@ -59,7 +59,7 @@ def test_clean_and_clamp_forecast_clamps_extremes():
         "up_probability_5d_pct": 1.0,  # 应截断至 5.0
         "confidence": "invalid_conf"
     }
-    cleaned = _clean_and_clamp_forecast(raw, "gemini-3.7-flash")
+    cleaned = _clean_and_clamp_forecast(raw, "gemini-3.8-flash")
     assert cleaned["return_3d_pct"] == 15.0
     assert cleaned["return_5d_pct"] == -20.0
     assert cleaned["up_probability_3d_pct"] == 95.0

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """src/llm/llm_forecaster.py —— v3 版本直接 LLM 量化预测引擎
 
-基于 Google Gemini 3.7 Flash（OpenAI 兼容接口），综合多因子打分、K线量价特征、
+基于 Google Gemini 3.8 Flash（OpenAI 兼容接口），综合多因子打分、K线量价特征、
 题材动量与领先指标，直接输出 3日/5日 预期收益率、看涨置信胜率与研判依据。
 """
 
@@ -172,7 +172,7 @@ class LLMForecaster:
 
     def __init__(self, client: Optional[LLMClient] = None) -> None:
         self.client = client or LLMClient()
-        self.model_name = getattr(self.client, "model", "gemini-3.7-flash")
+        self.model_name = getattr(self.client, "model", "gemini-3.8-flash")
 
     def forecast_single(
         self,
