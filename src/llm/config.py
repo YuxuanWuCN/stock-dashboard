@@ -100,7 +100,7 @@ LLM_CONFIG = {
             ROOT_PATH / "api-key.txt",
         ),
         "base_url": _gemini_base_url,
-        "model": os.environ.get("GEMINI_MODEL", "gemini-3.7-flash"),
+        "model": os.environ.get("GEMINI_MODEL", "gemini-3.8-flash"),
         "default_api_key": os.environ.get("GEMINI_API_KEY", ""),
     },
     "deepseek": {
