@@ -10,7 +10,7 @@ tools/daily_routine.py —— 统一每日全自动量化投研与行情流水�
    [4/9] 策略选股、狩猎场与市场温度联动 (src.strategies.main)
    [5/9] 明日决策简报与 AI 研报增量生成 (src.strategies.daily_brief)
    [6/9] 市场情绪诊断与逆向反转检测 (tools.daily_market_sentiment)
-   [7/9] 模拟盘 6 大组合温度联动调仓与对照组同步 (paper_portfolio / rebalance / benchmark)
+   [7/9] 模拟盘 6 大组合温度联动调仓、对照组与存储全产业链回测 (paper_portfolio / benchmark / storage_backtest)
    [8/9] 策略进化与量化成果同步 (weekly_champion_analysis -> docs/data/quantitative)
    [9/9] Git 数据自动提交与推送 (git_push_with_fallback)
 2. 跨平台兼容（Windows / Linux / GitHub Actions / macOS）
@@ -151,6 +151,9 @@ def sync_dashboard_data() -> None:
             if src.exists():
                 shutil.copy2(src, dst_dir / name)
 
+        for f in paper_dir.glob("backtest_storage_*.json"):
+            shutil.copy2(f, dst_dir / f.name)
+
     # 复制最新市场情绪
     sentiment_dir = ROOT_DIR / "reports" / "market_sentiment"
     if sentiment_dir.exists():
@@ -173,6 +176,7 @@ def main() -> None:
     parser.add_argument("--skip-fetch", action="store_true", help="跳过行情抓取步骤")
     parser.add_argument("--skip-ranking", action="store_true", help="跳过排行榜与定价分析")
     parser.add_argument("--skip-paper", action="store_true", help="跳过模拟盘调仓与回测")
+    parser.add_argument("--skip-storage", action="store_true", help="跳过存储回测步骤")
     parser.add_argument("--skip-push", action="store_true", help="跳过 Git 自动推送")
     parser.add_argument("--dry-run", action="store_true", help="演练模式，不落库不推送")
     args = parser.parse_args()
@@ -233,6 +237,8 @@ def main() -> None:
         paper_ok &= run_step("7f/9 随机对照组(100次抽样)统计", [py_exec, "tools/random_control.py"], allow_fail=True)
         paper_ok &= run_step("7g/9 宽基指数市场级对照统计", [py_exec, "tools/market_benchmark.py"], allow_fail=True)
         paper_ok &= run_step("7h/9 模拟盘清单导出", [py_exec, "tools/paper_portfolio.py", "manifest"], allow_fail=True)
+        if not args.skip_storage:
+            paper_ok &= run_step("7i/9 存储全产业链量化回测与多标的重跑", [py_exec, "-m", "src.analysis.storage_backtest_runner"], allow_fail=True)
         if paper_ok:
             steps_passed += 1
 

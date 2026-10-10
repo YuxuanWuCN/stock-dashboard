@@ -599,6 +599,42 @@ body {
     color: white !important;
 }
 
+.stock-item-action-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.stock-item-jump-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-primary, #3b82f6);
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.stock-item-jump-btn:hover {
+    background: var(--color-primary, #3b82f6);
+    color: #ffffff;
+    border-color: var(--color-primary, #3b82f6);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
+}
+
+.stock-item:focus-visible {
+    outline: 2px solid var(--color-primary, #3b82f6);
+    outline-offset: 2px;
+}
+
 /* 涨跌颜色状态，主要用于文字 */
 .text-up {
     color: var(--color-up) !important;

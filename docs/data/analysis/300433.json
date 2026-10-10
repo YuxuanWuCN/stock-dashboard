@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-28 22:33:57+08:00",
-  "trade_date": "2026-09-28",
+  "generated_at": "2026-10-09 18:14:13+08:00",
+  "trade_date": "2026-10-09",
   "code": "300433",
   "name": "蓝思科技",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 37.6,
-    "risk": 56.1,
+    "risk_adjusted": 46.6,
+    "risk": 59.0,
     "technical": 42.0,
     "industry": 27.0,
     "leading": 50.0
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-28 22:31:39"
+    "updated_at": "2026-10-09 18:09:06"
   },
   "nale_network": {
     "sector_name": "玻璃外观件",
@@ -67,34 +67,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 35.53,
-    "max_drawdown_60d_pct": -40.54,
-    "atr14_pct": 5.11,
+    "annualized_volatility_20d_pct": 43.32,
+    "max_drawdown_60d_pct": -34.9,
+    "atr14_pct": 5.65,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 53.9,
-        "value": 35.53
+        "score": 64.3,
+        "value": 43.32
       },
       {
         "name": "60日最大回撤",
-        "score": 85.6,
-        "value": -40.54
+        "score": 80.7,
+        "value": -34.9
       },
       {
         "name": "ATR百分比",
-        "score": 73.1,
-        "value": 5.11
+        "score": 75.4,
+        "value": 5.65
       },
       {
         "name": "量价异常",
-        "score": 37.7,
-        "value": 1.1
+        "score": 36.3,
+        "value": 0.92
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 20.07
+        "score": 5.3,
+        "value": 20.08
       }
     ]
   },
@@ -115,28 +115,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 33.556,
-    "ma10": 33.414,
-    "ma20": 34.543499999999995,
-    "ma60": 36.60316666666667,
-    "rsi14": 34.7,
-    "macd_dif": -1.0389841872899481,
-    "macd_dea": -0.9259707194071887,
-    "macd_hist": -0.2260269357655189,
-    "atr14_pct": 5.105610513674885,
-    "boll_position": 0.07052596343006437,
-    "return_5d_pct": -5.615292712066888,
-    "return_20d_pct": -17.34240125555845,
-    "volume_ratio_5d": 1.1
+    "ma5": 30.764,
+    "ma10": 32.348,
+    "ma20": 33.204,
+    "ma60": 35.3745,
+    "rsi14": 28.1,
+    "macd_dif": -1.553530277071708,
+    "macd_dea": -1.161892139067685,
+    "macd_hist": -0.7832762760080461,
+    "atr14_pct": 5.650820530282022,
+    "boll_position": -0.18608996398202782,
+    "return_5d_pct": -13.568603589899597,
+    "return_20d_pct": -20.79732366880401,
+    "volume_ratio_5d": 0.92
   },
   "industry": {
     "name": "玻璃外观件",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.73,
-    "return_20d_pct": -7.84,
-    "return_60d_pct": -17.56,
-    "relative_strength_20d_pct": -9.5
+    "return_5d_pct": -7.44,
+    "return_20d_pct": -7.28,
+    "return_60d_pct": -15.52,
+    "relative_strength_20d_pct": -13.43
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,15 +144,15 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.71,
-      "median_return_pct": 0.05,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 2.39,
+      "median_return_pct": 1.85,
       "best_return_pct": 24.75,
-      "worst_return_pct": -15.83
+      "worst_return_pct": -13.72
     },
     "horizon_5d": {
       "up_probability_pct": 53.3,
-      "average_return_pct": 1.91,
+      "average_return_pct": 2.16,
       "median_return_pct": 0.55,
       "best_return_pct": 31.14,
       "worst_return_pct": -18.04
@@ -295,14 +295,26 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 40.5%，风险偏高。",
+      "detail": "近60日最大回撤 34.9%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 40.5%，风险扣分。",
+      "detail": "近60日最大回撤 34.9%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=28.1，短期超卖。",
+      "contribution": -5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 43.3%，波动偏高。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300433.json",

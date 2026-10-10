@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-28 22:33:57+08:00",
-  "trade_date": "2026-09-28",
+  "generated_at": "2026-10-09 18:14:13+08:00",
+  "trade_date": "2026-10-09",
   "code": "161005",
   "name": "富国天惠成长混合A",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 49.1,
-    "risk": 11.3,
+    "risk_adjusted": 60.0,
+    "risk": 13.7,
     "technical": 42.0,
-    "industry": 47.2,
+    "industry": 46.4,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-28 22:32:23"
+    "updated_at": "2026-10-09 18:10:31"
   },
   "nale_network": {
     "sector_name": "公募成长",
@@ -67,34 +67,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 13.03,
-    "max_drawdown_60d_pct": -10.7,
-    "atr14_pct": 1.33,
+    "annualized_volatility_20d_pct": 14.35,
+    "max_drawdown_60d_pct": -11.73,
+    "atr14_pct": 1.43,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 3.6,
-        "value": 13.03
+        "score": 5.8,
+        "value": 14.35
       },
       {
         "name": "60日最大回撤",
-        "score": 14.4,
-        "value": -10.7
+        "score": 14.6,
+        "value": -11.73
       },
       {
         "name": "ATR百分比",
-        "score": 5.4,
-        "value": 1.33
+        "score": 5.8,
+        "value": 1.43
       },
       {
         "name": "量价异常",
-        "score": 53.9,
-        "value": 1.16
+        "score": 63.2,
+        "value": 1.19
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 20.07
+        "score": 5.3,
+        "value": 20.08
       }
     ]
   },
@@ -115,45 +115,45 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 3.006,
-    "ma10": 3.001,
-    "ma20": 3.0265,
-    "ma60": 3.103666666666667,
-    "rsi14": 30.6,
-    "macd_dif": -0.03368450351518959,
-    "macd_dea": -0.029987446379164208,
-    "macd_hist": -0.007394114272050764,
-    "atr14_pct": 1.3254550592429672,
-    "boll_position": -0.1713666585940921,
-    "return_5d_pct": -3.311258278145701,
-    "return_20d_pct": -6.109324758842439,
-    "volume_ratio_5d": 1.16
+    "ma5": 2.898,
+    "ma10": 2.9619999999999997,
+    "ma20": 2.992,
+    "ma60": 3.080333333333334,
+    "rsi14": 27.6,
+    "macd_dif": -0.052177248485794525,
+    "macd_dea": -0.03954398971457893,
+    "macd_hist": -0.025266517542431186,
+    "atr14_pct": 1.426329324485986,
+    "boll_position": -0.04207731400142606,
+    "return_5d_pct": -4.34782608695653,
+    "return_20d_pct": -5.921052631578949,
+    "volume_ratio_5d": 1.19
   },
   "industry": {
     "name": "公募成长",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.73,
-    "return_20d_pct": -7.84,
-    "return_60d_pct": -17.56,
-    "relative_strength_20d_pct": 1.73
+    "return_5d_pct": -7.44,
+    "return_20d_pct": -7.28,
+    "return_60d_pct": -15.52,
+    "relative_strength_20d_pct": 1.45
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 70.0,
-      "average_return_pct": 1.03,
-      "median_return_pct": 1.02,
+      "up_probability_pct": 62.1,
+      "average_return_pct": 0.68,
+      "median_return_pct": 0.63,
       "best_return_pct": 4.55,
-      "worst_return_pct": -2.4
+      "worst_return_pct": -2.28
     },
     "horizon_5d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 0.89,
-      "median_return_pct": 1.28,
+      "up_probability_pct": 58.6,
+      "average_return_pct": 0.3,
+      "median_return_pct": 0.35,
       "best_return_pct": 5.24,
       "worst_return_pct": -4.89
     }
@@ -165,6 +165,12 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=27.6，短期超卖。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/161005.json",

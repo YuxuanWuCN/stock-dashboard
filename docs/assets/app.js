@@ -1131,22 +1131,70 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="stock-item-right">
                         <span class="stock-item-price ${changeClass}">${closeText}</span>
-                        <span class="stock-item-pct bg-${changeBg}">${changeText}</span>
+                        <div class="stock-item-action-row">
+                            <span class="stock-item-pct bg-${changeBg}">${changeText}</span>
+                            <button type="button" class="stock-item-jump-btn" title="立即跳转至「个股分析」" aria-label="跳转个股分析">分析 ➔</button>
+                        </div>
                     </div>
                 `;
 
-                // 点击事件
-                card.addEventListener('click', () => {
+                card.tabIndex = 0;
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', `${displayName} (${item.code})，双击跳转个股分析`);
+                card.title = '双击跳转至「个股分析」 (按 Enter 亦可跳转)';
+
+                // 统一的跳转至个股深度分析逻辑
+                const jumpToDetail = () => {
                     if (item.dynamic_only) {
                         el.queryCodeInput.value = item.code;
+                        navigateTo('query');
                         doQuery();
                     } else {
-                        selectTrackedStock(item.code);
+                        selectTrackedStock(item.code, true);
                     }
-                    // 移动端体验：点击卡片后平滑滚动到图表区域
                     if (window.innerWidth < 900) {
                         el.detailHeader.scrollIntoView({ behavior: 'smooth' });
                     }
+                };
+
+                // 双击卡片直接跳转个股分析
+                card.addEventListener('dblclick', (e) => {
+                    e.preventDefault();
+                    jumpToDetail();
+                });
+
+                // 键盘无障碍支持：聚焦卡片后按 Enter 或空格键快速跳转
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        jumpToDetail();
+                    }
+                });
+
+                // 单击事件：支持小按钮直达、移动端直达以及桌面端选中标的高亮
+                card.addEventListener('click', (e) => {
+                    // 若点击了卡片右侧的「分析 ➔」快捷跳转按钮，直接跳转
+                    if (e.target.closest('.stock-item-jump-btn')) {
+                        e.stopPropagation();
+                        jumpToDetail();
+                        return;
+                    }
+                    // 移动端/触摸屏无双击习惯：单触卡片顺畅跳转
+                    if (window.innerWidth < 768) {
+                        jumpToDetail();
+                        return;
+                    }
+                    // 桌面端金融终端规范：单击高亮选中该股票并后台静默预载，不强行切走页面
+                    state.selectedCode = item.code;
+                    const items = el.stockList.querySelectorAll('.stock-item');
+                    items.forEach(c => c.classList.toggle('active', c.dataset.code === item.code));
+                    if (el.detailStockSelect) {
+                        el.detailStockSelect.value = item.code;
+                    }
+                    state.suppressDetailNavigation = true;
+                    selectTrackedStock(item.code, false).finally(() => {
+                        state.suppressDetailNavigation = false;
+                    });
                 });
 
                 // 暂存 DOM 引用，方便高亮切换

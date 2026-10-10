@@ -1,30 +1,27 @@
 <div align="center">
 
-# 🌈 Rainbow-FinGPT v2.0
-### *Decoupled Triple-Engine Framework for Asset Pricing and Risk Control in the Semiconductor Storage Supercycle*
+# 🌈 Rainbow-FinGPT v4.0
+### *All-in-One Multi-Asset Quantitative Research, Dynamic Hedging, and Tactical Asset Pricing Platform*
 
-[![arXiv](https://img.shields.io/badge/arXiv-2606.29290v1-b31b1b.svg?style=for-the-badge)](papers/2606.29290v1.pdf)
-[![Python 3.12](https://img.shields.io/badge/Python-3.12%2B-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![LLM Backend](https://img.shields.io/badge/LLM-DeepSeek--V4--Flash-6366f1.svg?style=for-the-badge&logo=openai&logoColor=white)](https://deepseek.com/)
-[![Live Terminal](https://img.shields.io/badge/Live_Terminal-Online-10b981.svg?style=for-the-badge&logo=vercel&logoColor=white)](https://yuxuanwucn.github.io/stock-dashboard/)
-[![License](https://img.shields.io/badge/License-MIT-amber.svg?style=for-the-badge)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Multi-Asset](https://img.shields.io/badge/Assets-Equity%20%7C%20Commodity%20%7C%20Wealth-emerald.svg?style=for-the-badge)](https://yuxuanwucn.github.io/stock-dashboard/)
+[![PolarStar 19.5](https://img.shields.io/badge/CZCE-PolarStar%2019.5%20Plugin-amber.svg?style=for-the-badge)](competitions/czce_futures/)
+[![License](https://img.shields.io/badge/License-MIT-purple.svg?style=for-the-badge)](LICENSE)
 
 **Wu Yuxuan (吴宇轩)**  
 *Aberdeen Institute of Data Science and Artificial Intelligence, South China Normal University (SCNU)*  
-*Rainbow-FinGPT Quantitative Finance & AI Lab* · Contact: `wuyuxuan@m.scnu.edu.cn`  
-**Preprint Reference**: `arXiv:2606.29290v1 [q-fin.PM]`
+*Rainbow-FinGPT Quantitative Finance & AI Lab* · Contact: `wuyuxuan@m.scnu.edu.cn`
 
-[🚀 Live Web Terminal](https://yuxuanwucn.github.io/stock-dashboard/) · [📖 中文说明文档 (README_CN)](README_CN.md) · [📄 Paper (PDF)](papers/2606.29290v1.pdf) · [📑 LaTeX Source](papers/storage_supercycle_paper.tex) · [🌐 Paper (HTML)](papers/Rainbow_FinGPT_v2_Paper.html) · [⚡ Quick Start](#-quick-start) · [🔬 One-Click Reproduction](#-one-click-academic-reproduction)
+[🚀 Live Web Terminal](https://yuxuanwucn.github.io/stock-dashboard/) · [👵 银发普惠理财通](docs/index_wealth.html) · [📈 A 股量化看板](docs/index.html) · [🛡️ 郑商所期现套保](docs/index_commodity.html) · [🏆 大创赛申报工件](competitions/dachuang_2026/) · [🌾 郑商所杯工件](competitions/czce_futures/)
 
 ---
 
-<img src="docs/assets/figures/fig0_triple_engine_framework.jpg" alt="Rainbow-FinGPT Decoupled Triple-Engine Framework" width="95%">
-
-</div>
-
-> [!TIP]
-> 🏆 **2026 China International College Students' Innovation Contest (Daguan Data Track)**:  
-> Specialized contest declaration files, 18-page roadshow PPT pitch scripts, defense QA playbooks, and publication-grade isolated empirical research dossiers are archived on the [**contest-2026 branch**](https://github.com/YuxuanWuCN/stock-dashboard/tree/contest-2026).
+> [!IMPORTANT]
+> 🏛️ **Rainbow-FinGPT v4.0 全域多资产投研中台已完成架构级综合合并 (Monorepo Synthesis)**：
+> - **A 股权益赛道 (Equity)**：完整纳管 202 只 A 股高景气池、存储超级周期回测、黄金杠铃策略及 CSMAR/TRD_Dalyr 走步评测（M0–M6）；
+> - **大宗商品赛道 (Commodity)**：完整纳管郑商所纯碱/玻璃产业链跨资产期望盈余 (TES) 动态套保、ADR-0001 两层解耦、ADR-0002 物理因果本体及极星 19.5 原生量化插件；
+> - **普惠财富赛道 (Wealth)**：适老银发理财安心资产配置、纯数学原生矢量 SVG 曲线与多端自愈；
+> - **双赛道物理隔离**：大创赛申报书与 18 页金牌路演文稿置于 [`competitions/dachuang_2026/`](competitions/dachuang_2026/)，郑商所杯材料置于 [`competitions/czce_futures/`](competitions/czce_futures/)，保证评审绝对独立合规。
 
 ---
 

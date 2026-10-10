@@ -85,6 +85,14 @@ try:
 except Exception as _bp_err:
     logger.warning("跳过 homepage/dataset 蓝图注册: %s", _bp_err)
 
+# ---- 全域多资产 API 蓝图 (v4.0) ----
+try:
+    from multi_asset_api import bp_v4 as multi_asset_api_v4_bp
+    app.register_blueprint(multi_asset_api_v4_bp)
+    logger.info("已注册 multi_asset_api_v4 蓝图")
+except Exception as _bp_err:
+    logger.warning("跳过 multi_asset_api_v4 蓝图注册: %s", _bp_err)
+
 HOME_DIR = os.path.abspath(os.path.join(DOCS_DIR, "home"))
 
 # ============================================================

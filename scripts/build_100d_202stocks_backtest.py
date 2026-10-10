@@ -21,10 +21,11 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(me
 logger = logging.getLogger("build_100d")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-RAW_60D_DIR = REPO_ROOT / "Rainbow_FinGPTv2" / "data" / "raw" / "backtest_paper_60d_202stocks"
-RAW_100D_DIR = REPO_ROOT / "Rainbow_FinGPTv2" / "data" / "raw" / "backtest_paper_100d_202stocks"
-OUTPUT_JSON = REPO_ROOT / "Rainbow_FinGPTv2" / "docs" / "data" / "paper" / "backtest_100d_202stocks.json"
-REPORT_MD_DIR = REPO_ROOT / "Rainbow_FinGPTv2" / "reports" / "tables" / "backtest_paper_100d_202stocks"
+BASE = REPO_ROOT if (REPO_ROOT / "data").exists() else (REPO_ROOT / "Rainbow_FinGPTv2")
+RAW_60D_DIR = BASE / "data" / "raw" / "backtest_paper_60d_202stocks"
+RAW_100D_DIR = BASE / "data" / "raw" / "backtest_paper_100d_202stocks"
+OUTPUT_JSON = BASE / "docs" / "data" / "paper" / "backtest_100d_202stocks.json"
+REPORT_MD_DIR = BASE / "reports" / "tables" / "backtest_paper_100d_202stocks"
 
 
 def generate_100d_dataset():

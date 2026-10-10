@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-28 22:33:57+08:00",
-  "trade_date": "2026-09-28",
+  "generated_at": "2026-10-09 18:14:13+08:00",
+  "trade_date": "2026-10-09",
   "code": "159329",
   "name": "沙特ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 37.8,
-    "risk": 9.1,
-    "technical": 50.0,
-    "industry": 52.6,
+    "risk_adjusted": 58.9,
+    "risk": 7.5,
+    "technical": 42.0,
+    "industry": 47.8,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-28 22:32:21"
+    "updated_at": "2026-10-09 18:10:29"
   },
   "nale_network": {
     "sector_name": "跨境中东",
@@ -67,34 +67,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 6.98,
-    "max_drawdown_60d_pct": -5.32,
-    "atr14_pct": 0.4,
+    "annualized_volatility_20d_pct": 9.61,
+    "max_drawdown_60d_pct": -7.45,
+    "atr14_pct": 0.68,
     "factors": [
       {
         "name": "20日波动率",
         "score": 0.0,
-        "value": 6.98
+        "value": 9.61
       },
       {
         "name": "60日最大回撤",
-        "score": 1.2,
-        "value": -5.32
+        "score": 3.5,
+        "value": -7.45
       },
       {
         "name": "ATR百分比",
-        "score": 0.0,
-        "value": 0.4
+        "score": 0.6,
+        "value": 0.68
       },
       {
         "name": "量价异常",
-        "score": 86.2,
-        "value": 1.36
+        "score": 56.7,
+        "value": 1.17
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 20.07
+        "score": 5.3,
+        "value": 20.08
       }
     ]
   },
@@ -114,29 +114,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 0.89,
-    "ma10": 0.892,
-    "ma20": 0.9039999999999999,
-    "ma60": 0.9013333333333333,
-    "rsi14": 31.7,
-    "macd_dif": -0.0058816284318634615,
-    "macd_dea": -0.003770378399104005,
-    "macd_hist": -0.004222500065518913,
-    "atr14_pct": 0.3986754367755059,
-    "boll_position": 0.2266959166949312,
-    "return_5d_pct": 0.0,
-    "return_20d_pct": -4.301075268817211,
-    "volume_ratio_5d": 1.36
+    "trend": "downtrend",
+    "ma5": 0.8780000000000001,
+    "ma10": 0.884,
+    "ma20": 0.8949999999999999,
+    "ma60": 0.8996666666666666,
+    "rsi14": 28.3,
+    "macd_dif": -0.009022111958606693,
+    "macd_dea": -0.006369734494851673,
+    "macd_hist": -0.005304754927510041,
+    "atr14_pct": 0.6801837426584942,
+    "boll_position": 0.06348106514399268,
+    "return_5d_pct": -2.2471910112359605,
+    "return_20d_pct": -5.434782608695654,
+    "volume_ratio_5d": 1.17
   },
   "industry": {
     "name": "跨境中东",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.73,
-    "return_20d_pct": -7.84,
-    "return_60d_pct": -17.56,
-    "relative_strength_20d_pct": 3.54
+    "return_5d_pct": -7.44,
+    "return_20d_pct": -7.28,
+    "return_60d_pct": -15.52,
+    "relative_strength_20d_pct": 1.94
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,22 +144,35 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": 0.04,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.41,
       "median_return_pct": 0.0,
-      "best_return_pct": 2.27,
+      "best_return_pct": 3.33,
       "worst_return_pct": -2.15
     },
     "horizon_5d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": 0.12,
+      "up_probability_pct": 40.0,
+      "average_return_pct": 0.3,
       "median_return_pct": 0.0,
       "best_return_pct": 3.33,
-      "worst_return_pct": -2.13
+      "worst_return_pct": -2.15
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=28.3，短期超卖。",
+      "contribution": -5.0
+    }
+  ],
   "kline_file": "../kline/159329.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

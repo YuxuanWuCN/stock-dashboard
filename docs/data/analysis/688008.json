@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-28 22:33:57+08:00",
-  "trade_date": "2026-09-28",
+  "generated_at": "2026-10-09 18:14:13+08:00",
+  "trade_date": "2026-10-09",
   "code": "688008",
   "name": "澜起科技",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 45.3,
-    "risk": 67.1,
-    "technical": 94.0,
+    "risk_adjusted": 64.2,
+    "risk": 59.1,
+    "technical": 80.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,13 +42,18 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-28 22:31:26"
+    "updated_at": "2026-10-09 18:08:02"
   },
   "nale_network": {
     "sector_name": "科技",
-    "sector_breadth_pct": 0.0,
+    "sector_breadth_pct": 50.0,
     "tier_role": "neutral",
-    "leader_stock": null,
+    "leader_stock": {
+      "code": "003040",
+      "name": "楚天龙",
+      "change_pct": 4.81761871988989,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -56,27 +61,27 @@
       {
         "code": "002371",
         "name": "北方华创",
-        "corr": 0.81
+        "corr": 0.8
       },
       {
         "code": "000021",
         "name": "深科技",
-        "corr": 0.75
+        "corr": 0.77
       },
       {
         "code": "688256",
         "name": "寒武纪",
-        "corr": 0.74
+        "corr": 0.73
       },
       {
         "code": "688525",
         "name": "佰维存储",
-        "corr": 0.73
+        "corr": 0.72
       },
       {
         "code": "688981",
         "name": "中芯国际",
-        "corr": 0.73
+        "corr": 0.72
       }
     ],
     "temporal_dynamics": {
@@ -91,36 +96,36 @@
     }
   },
   "risk": {
-    "level": "high",
-    "label": "高风险",
-    "annualized_volatility_20d_pct": 53.19,
-    "max_drawdown_60d_pct": -35.81,
-    "atr14_pct": 5.35,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 53.03,
+    "max_drawdown_60d_pct": -32.05,
+    "atr14_pct": 5.75,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 78.4,
-        "value": 53.19
+        "score": 76.6,
+        "value": 53.03
       },
       {
         "name": "60日最大回撤",
-        "score": 77.8,
-        "value": -35.81
+        "score": 76.0,
+        "value": -32.05
       },
       {
         "name": "ATR百分比",
-        "score": 78.4,
-        "value": 5.35
+        "score": 76.6,
+        "value": 5.75
       },
       {
         "name": "量价异常",
-        "score": 82.6,
-        "value": 1.3
+        "score": 9.9,
+        "value": 0.98
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 20.07
+        "score": 5.3,
+        "value": 20.08
       }
     ]
   },
@@ -140,29 +145,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 215.68,
-    "ma10": 204.763,
-    "ma20": 199.89000000000001,
-    "ma60": 212.70633333333336,
-    "rsi14": 52.0,
-    "macd_dif": 1.8105469998512262,
-    "macd_dea": -1.3446538160404984,
-    "macd_hist": 6.310401631783449,
-    "atr14_pct": 5.346543224822277,
-    "boll_position": 0.7035350036326432,
-    "return_5d_pct": 2.997086851330666,
-    "return_20d_pct": -2.0657276995305174,
-    "volume_ratio_5d": 1.3
+    "trend": "downtrend",
+    "ma5": 203.62399999999997,
+    "ma10": 209.045,
+    "ma20": 201.0455,
+    "ma60": 208.64383333333333,
+    "rsi14": 45.9,
+    "macd_dif": -0.02631848043102991,
+    "macd_dea": -0.03699780839516201,
+    "macd_hist": 0.021358655928264192,
+    "atr14_pct": 5.745487225968789,
+    "boll_position": 0.4191768704597615,
+    "return_5d_pct": -7.878787878787885,
+    "return_20d_pct": 3.994526603862947,
+    "volume_ratio_5d": 0.98
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.73,
-    "return_20d_pct": -7.84,
-    "return_60d_pct": -17.56,
-    "relative_strength_20d_pct": 5.78
+    "return_5d_pct": -7.44,
+    "return_20d_pct": -7.28,
+    "return_60d_pct": -15.52,
+    "relative_strength_20d_pct": 11.36
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -170,18 +175,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 1.19,
-      "median_return_pct": 2.38,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.68,
+      "median_return_pct": 1.12,
       "best_return_pct": 23.6,
-      "worst_return_pct": -14.96
+      "worst_return_pct": -32.05
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.7,
-      "median_return_pct": 2.18,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 1.81,
+      "median_return_pct": -1.37,
       "best_return_pct": 46.79,
-      "worst_return_pct": -26.16
+      "worst_return_pct": -18.69
     }
   },
   "fundamental": {
@@ -308,20 +313,26 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 35.8%，风险偏高。",
+      "detail": "近60日最大回撤 32.0%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 35.8%，风险扣分。",
+      "detail": "近60日最大回撤 32.0%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 53.2%，波动偏高。",
+      "detail": "20日年化波动率 53.0%，波动偏高。",
       "contribution": -5.0
     }
   ],

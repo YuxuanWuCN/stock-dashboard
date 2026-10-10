@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-28 22:33:57+08:00",
-  "trade_date": "2026-09-28",
+  "generated_at": "2026-10-09 18:14:13+08:00",
+  "trade_date": "2026-10-09",
   "code": "601799",
   "name": "星宇股份",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 22.7,
-    "risk": 48.5,
+    "risk_adjusted": 40.7,
+    "risk": 45.9,
     "technical": 60.0,
-    "industry": 27.6,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,22 +42,22 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-28 22:31:43"
+    "updated_at": "2026-10-09 18:09:46"
   },
   "nale_network": {
     "sector_name": "汽车车灯",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -67,34 +67,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 31.69,
-    "max_drawdown_60d_pct": -32.31,
-    "atr14_pct": 3.75,
+    "annualized_volatility_20d_pct": 30.54,
+    "max_drawdown_60d_pct": -31.35,
+    "atr14_pct": 3.55,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 43.1,
-        "value": 31.69
+        "score": 36.8,
+        "value": 30.54
       },
       {
         "name": "60日最大回撤",
-        "score": 70.1,
-        "value": -32.31
+        "score": 73.7,
+        "value": -31.35
       },
       {
         "name": "ATR百分比",
-        "score": 47.3,
-        "value": 3.75
+        "score": 39.8,
+        "value": 3.55
       },
       {
         "name": "量价异常",
-        "score": 84.4,
-        "value": 0.68
+        "score": 77.2,
+        "value": 0.72
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 20.07
+        "score": 5.3,
+        "value": 20.08
       }
     ]
   },
@@ -109,34 +109,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 70.876,
-    "ma10": 71.46099999999998,
-    "ma20": 73.82900000000001,
-    "ma60": 85.92266666666666,
-    "rsi14": 27.4,
-    "macd_dif": -4.2516803473070865,
-    "macd_dea": -4.543550943573581,
-    "macd_hist": 0.5837411925329885,
-    "atr14_pct": 3.7486094787801973,
-    "boll_position": 0.11707557815431274,
-    "return_5d_pct": -4.8914536960703465,
-    "return_20d_pct": -15.046637211585667,
-    "volume_ratio_5d": 0.68
+    "ma5": 69.27000000000001,
+    "ma10": 70.429,
+    "ma20": 72.2265,
+    "ma60": 83.92716666666666,
+    "rsi14": 31.6,
+    "macd_dif": -3.8246154177191727,
+    "macd_dea": -4.1872528244888665,
+    "macd_hist": 0.7252748135393876,
+    "atr14_pct": 3.5549827279957693,
+    "boll_position": 0.2096167201112181,
+    "return_5d_pct": -2.489039739782195,
+    "return_20d_pct": -7.919337606837596,
+    "volume_ratio_5d": 0.72
   },
   "industry": {
     "name": "汽车车灯",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.73,
-    "return_20d_pct": -7.84,
-    "return_60d_pct": -17.56,
-    "relative_strength_20d_pct": -7.2
+    "return_5d_pct": -7.44,
+    "return_20d_pct": -7.28,
+    "return_60d_pct": -15.52,
+    "relative_strength_20d_pct": -0.55
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,17 +144,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -1.25,
-      "median_return_pct": -2.32,
-      "best_return_pct": 18.62,
+      "up_probability_pct": 30.0,
+      "average_return_pct": -2.18,
+      "median_return_pct": -2.07,
+      "best_return_pct": 6.18,
       "worst_return_pct": -13.24
     },
     "horizon_5d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -1.63,
-      "median_return_pct": -2.73,
-      "best_return_pct": 10.86,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.75,
+      "median_return_pct": -1.96,
+      "best_return_pct": 11.35,
       "worst_return_pct": -19.7
     }
   },
@@ -295,20 +295,14 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 32.3%，风险偏高。",
+      "detail": "近60日最大回撤 31.4%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 32.3%，风险扣分。",
+      "detail": "近60日最大回撤 31.4%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=27.4，短期超卖。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/601799.json",

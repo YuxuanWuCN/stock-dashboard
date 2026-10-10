@@ -29,6 +29,12 @@
     <script src="https://fastly.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
 <body>
+    <nav style="background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 8px 24px; display: flex; gap: 12px; font-size: 0.85rem; align-items: center; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);">
+        <span style="color: #94a3b8; font-weight: 600;">Rainbow-FinGPT v4.0 全域中台:</span>
+        <a href="index_wealth.html" style="color: #f8fafc; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); transition: all 0.2s;">👵 银发安心理财 (普惠门面)</a>
+        <a href="index.html" style="color: #38bdf8; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(56,189,248,0.15); font-weight: bold;">📈 A 股量化学术看板 (202标的)</a>
+        <a href="index_commodity.html" style="color: #f8fafc; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); transition: all 0.2s;">🛡️ 郑商所期现双轨套保 (纯碱/玻璃)</a>
+    </nav>
     <div class="container">
         <!-- 顶部状态栏 -->
         <header class="header">
@@ -304,7 +310,7 @@
                         <h2>自选股列表</h2>
                         <button id="open-editor-btn" class="editor-btn" type="button">✏️ 编辑列表</button>
                     </div>
-                    <span class="tip">点击股票查看走势图与深度投研报告</span>
+                    <span class="tip">💡 单击选中标的，双击任意股票（或按回车）直接跳转至个股深度分析</span>
                 </div>
                 <div class="watchlist-search-wrap">
                     <input id="watchlist-search-input" class="watchlist-search-input" type="search" placeholder="搜索名称或代码" autocomplete="off" aria-label="搜索自选股">

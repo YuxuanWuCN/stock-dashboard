@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-28 22:33:57+08:00",
-  "trade_date": "2026-09-28",
+  "generated_at": "2026-10-09 18:14:13+08:00",
+  "trade_date": "2026-10-09",
   "code": "159981",
   "name": "能源化工ETF",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 49.3,
-    "risk": 26.5,
-    "technical": 88.0,
+    "risk_adjusted": 78.8,
+    "risk": 33.7,
+    "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-28 22:32:22"
+    "updated_at": "2026-10-09 18:10:30"
   },
   "nale_network": {
     "sector_name": "能化商品",
@@ -67,34 +67,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 34.41,
+    "annualized_volatility_20d_pct": 43.27,
     "max_drawdown_60d_pct": -7.69,
-    "atr14_pct": 2.57,
+    "atr14_pct": 2.68,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 49.1,
-        "value": 34.41
+        "score": 63.7,
+        "value": 43.27
       },
       {
         "name": "60日最大回撤",
-        "score": 4.8,
+        "score": 4.1,
         "value": -7.69
       },
       {
         "name": "ATR百分比",
-        "score": 29.9,
-        "value": 2.57
+        "score": 29.2,
+        "value": 2.68
       },
       {
         "name": "量价异常",
-        "score": 44.3,
-        "value": 0.88
+        "score": 69.6,
+        "value": 1.23
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 20.07
+        "score": 5.3,
+        "value": 20.08
       }
     ]
   },
@@ -115,28 +115,28 @@
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 1.734,
-    "ma10": 1.7570000000000001,
-    "ma20": 1.7295000000000003,
-    "ma60": 1.5771666666666668,
-    "rsi14": 58.5,
-    "macd_dif": 0.04287399324310637,
-    "macd_dea": 0.05243175244428789,
-    "macd_hist": -0.019115518402363044,
-    "atr14_pct": 2.568929192371872,
-    "boll_position": 0.6000345211392689,
-    "return_5d_pct": 0.5747126436781658,
-    "return_20d_pct": 12.903225806451601,
-    "volume_ratio_5d": 0.88
+    "ma5": 1.834,
+    "ma10": 1.783,
+    "ma20": 1.7689999999999997,
+    "ma60": 1.6058333333333332,
+    "rsi14": 72.0,
+    "macd_dif": 0.06258198140101845,
+    "macd_dea": 0.05251060328564589,
+    "macd_hist": 0.020142756230745115,
+    "atr14_pct": 2.683407723234068,
+    "boll_position": 1.1089405040089941,
+    "return_5d_pct": 10.285714285714276,
+    "return_20d_pct": 16.26506024096386,
+    "volume_ratio_5d": 1.23
   },
   "industry": {
     "name": "能化商品",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.73,
-    "return_20d_pct": -7.84,
-    "return_60d_pct": -17.56,
-    "relative_strength_20d_pct": 20.75
+    "return_5d_pct": -7.44,
+    "return_20d_pct": -7.28,
+    "return_60d_pct": -15.52,
+    "relative_strength_20d_pct": 23.64
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,18 +144,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.48,
-      "median_return_pct": 0.0,
-      "best_return_pct": 9.37,
-      "worst_return_pct": -7.47
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.59,
+      "median_return_pct": -0.69,
+      "best_return_pct": 10.81,
+      "worst_return_pct": -10.06
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.63,
-      "median_return_pct": 0.3,
-      "best_return_pct": 10.16,
-      "worst_return_pct": -8.28
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.57,
+      "median_return_pct": 0.0,
+      "best_return_pct": 16.91,
+      "worst_return_pct": -9.5
     }
   },
   "fundamental": null,
@@ -165,6 +165,18 @@
       "title": "中短期趋势向上",
       "detail": "收盘价位于20日和60日均线上方。",
       "contribution": 8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=72.0，短期超买。",
+      "contribution": -5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 43.3%，波动偏高。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/159981.json",

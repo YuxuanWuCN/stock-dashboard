@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rainbow-FinGPT v3.1 · 郑商所商品衍生品动态套保与跨资产双轨决策终端</title>
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #121826;
+            --bg-card: rgba(26, 34, 52, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f0f4f8;
+            --text-secondary: #8da2bc;
+            --accent-blue: #2563eb;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-red: #ef4444;
+            --accent-gold: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+        }
+
+        header {
+            padding: 1.2rem 2.5rem;
+            background: rgba(18, 24, 38, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #000;
+            font-weight: 800;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #fff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            max-width: 1500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .metrics-banner {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.2rem;
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(37, 99, 235, 0.4);
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .metric-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .val-green { color: #10b981; }
+        .val-cyan { color: #06b6d4; }
+        .val-gold { color: #f59e0b; }
+
+        .tabs-header {
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            color: var(--accent-cyan);
+            border-bottom-color: var(--accent-cyan);
+        }
+
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background: rgba(18, 24, 38, 0.9);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th, td {
+            padding: 14px 18px;
+        }
+
+        th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: background 0.15s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .rank-tag {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .rank-1 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .rank-2 { background: rgba(156, 163, 175, 0.2); color: #e5e7eb; border: 1px solid rgba(156, 163, 175, 0.4); }
+        .rank-3 { background: rgba(180, 83, 9, 0.2); color: #d97706; border: 1px solid rgba(180, 83, 9, 0.4); }
+        .rank-default { color: var(--text-secondary); }
+
+        .tag-futures {
+            background: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+        }
+
+        .tag-stock {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .dir-short { color: #f87171; font-weight: 600; }
+        .dir-long { color: #34d399; font-weight: 600; }
+
+        .surplus-highlight {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .simulator-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.8rem;
+            margin-top: 2rem;
+        }
+
+        .sim-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .slider-wrapper {
+            margin: 1.5rem 0;
+        }
+
+        .slider-label-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #1f293d;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-cyan);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+        }
+
+        .sim-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            background: rgba(10, 14, 23, 0.5);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav style="background: rgba(18, 24, 38, 0.95); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 8px 24px; display: flex; gap: 12px; font-size: 0.85rem; align-items: center; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);">
+        <span style="color: #8da2bc; font-weight: 600;">Rainbow-FinGPT v4.0 全域中台导航:</span>
+        <a href="index_wealth.html" style="color: #f0f4f8; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); transition: all 0.2s;">👵 银发安心理财 (普惠门面)</a>
+        <a href="index.html" style="color: #f0f4f8; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); transition: all 0.2s;">📈 A 股量化学术看板 (202标的)</a>
+        <a href="index_commodity.html" style="color: #06b6d4; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(6,182,212,0.18); font-weight: bold;">🛡️ 郑商所期现双轨套保 (纯碱/玻璃)</a>
+    </nav>
+
+    <header>
+        <div class="brand-title">
+            <span class="brand-badge">CZCE 2026</span>
+            <span class="brand-name">Rainbow-FinGPT v3.1 双轨决策与对冲终端</span>
+        </div>
+        <div class="header-status">
+            <span>交易标的: <b>纯碱(SA) / 玻璃(FG) / A股制造</b></span>
+            <div class="status-pill">
+                <div class="status-dot"></div>
+                <span>极星 19.5 插件: RUNNING (v19.5 兼容就绪)</span>
+            </div>
+            <span id="live-clock">2026-09-30 00:00:00</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- 核心指标摘要 -->
+        <div class="metrics-banner">
+            <div class="metric-card">
+                <div class="metric-label">自适应套保组合净值 (2019-2026)</div>
+                <div class="metric-value val-green">1.4312 <span style="font-size: 0.9rem; font-weight: normal;">(+43.12%)</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">全周期最大回撤压制 (MaxDD)</div>
+                <div class="metric-value val-cyan">−28.42% <span style="font-size: 0.9rem; font-weight: normal;">(裸暴露-71.4%)</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">套保有效性 (HE 方差平抑)</div>
+                <div class="metric-value val-gold">41.16% <span style="font-size: 0.9rem; font-weight: normal;">(消除深贴水倒挂)</span></div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">平均流动性资金节省率</div>
+                <div class="metric-value val-green">55.1% <span style="font-size: 0.9rem; font-weight: normal;">(日均释放122万)</span></div>
+            </div>
+        </div>
+
+        <!-- 标签页导航 -->
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab('mixed')">📊 跨资产·明日预期盈余综合总榜</button>
+            <button class="tab-btn" onclick="switchTab('stock')">📈 版面一：股票板块榜 (A股新能源)</button>
+            <button class="tab-btn" onclick="switchTab('futures')">📉 版面二：商品衍生品板块榜 (郑商所纯碱/玻璃)</button>
+        </div>
+
+        <!-- 榜单表格 -->
+        <div class="table-container">
+            <table id="ranking-table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">排名</th>
+                        <th style="width: 100px;">代码</th>
+                        <th>标的名称</th>
+                        <th>所属板块</th>
+                        <th>配置方向</th>
+                        <th>最新价 / 结算价</th>
+                        <th>明日预期盈余</th>
+                        <th>NALE 时滞信号</th>
+                        <th>风险评级</th>
+                        <th>核心决策归因</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- 动态注入数据 -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 双轨配置模拟器 -->
+        <div class="simulator-section">
+            <div class="sim-header">
+                <div>
+                    <h3 style="font-size: 1.15rem; font-weight: 700;">🛡️ 跨资产自适应避险保障包·动态配比模拟器</h3>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px;">
+                        模拟当股票端收益低迷时，通过拉动滑块引入极星 19.5 驱动的商品期货/期权保障包对组合的风险平抑效果
+                    </p>
+                </div>
+                <span class="tag-futures" style="font-size: 0.85rem; padding: 6px 12px;">极星 19.5 动态对冲联动</span>
+            </div>
+
+            <div class="slider-wrapper">
+                <div class="slider-label-row">
+                    <span><b>保障包配置比例 (Protection Ratio β):</b> <span id="beta-val" style="color: var(--accent-cyan); font-weight: 700;">50%</span></span>
+                    <span style="color: var(--text-secondary);">模式: 均衡防护 (平值 Put 领子 + 门控动态空头)</span>
+                </div>
+                <input type="range" id="beta-slider" min="0" max="100" value="50" oninput="updateSim(this.value)">
+            </div>
+
+            <div class="sim-results">
+                <div>
+                    <div class="metric-label">预期年化收益率</div>
+                    <div id="sim-return" class="metric-value val-green" style="font-size: 1.25rem;">+24.8%</div>
+                </div>
+                <div>
+                    <div class="metric-label">最大回撤预期上限</div>
+                    <div id="sim-drawdown" class="metric-value val-cyan" style="font-size: 1.25rem;">−28.4%</div>
+                </div>
+                <div>
+                    <div class="metric-label">日均保证金占用估算</div>
+                    <div id="sim-margin" class="metric-value val-gold" style="font-size: 1.25rem;">101.1 万元</div>
+                </div>
+                <div>
+                    <div class="metric-label">黑天鹅极值防穿仓评级</div>
+                    <div id="sim-safety" class="metric-value val-green" style="font-size: 1.25rem;">AAA (极安全)</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        华南师范大学 衍生品量化投研小组 · 第九届“郑商所杯”与国家级大创立项成果 · 极星 19.5 (郑商杯 v19.5) 原生兼容
+    </footer>
+
+    <script>
+        const DATA = {
+            mixed: [
+                { rank: 1, code: "SA701", name: "郑商所纯碱主力", sector: "商品衍生品 (郑商所)", type: "futures", dir: "期货空头 (做空锁利)", price: "1014.0", surplus: "+2.60%", nale: "-0.0818", risk: "稳健对冲", reason: "NALE 工业时滞预警供需坍塌，Trend Gate 触发破位状态 1" },
+                { rank: 2, code: "300750", name: "宁德时代 (储能中枢)", sector: "新能源制造 (A股)", type: "stock", dir: "现货做多", price: "195.50", surplus: "+1.88%", nale: "0.0000", risk: "高弹性", reason: "储能出海基本面扎实，主力资金净流入支撑特质 Alpha" },
+                { rank: 3, code: "FG701", name: "郑商所玻璃主力", sector: "商品衍生品 (郑商所)", type: "futures", dir: "跨期套利/领子", price: "1100.0", surplus: "+1.35%", nale: "-0.0490", risk: "中风险", reason: "现货深贴水修复诉求，下游光伏组件刚性点火支撑" },
+                { rank: 4, code: "601012", name: "隆基绿能 (光伏制造)", sector: "光伏制造业 (A股)", type: "stock", dir: "观望/低配", price: "13.80", surplus: "-0.65%", nale: "-0.1200", risk: "内卷压制", reason: "主材价格跌破现金成本线，大模型情绪持续低迷" }
+            ],
+            stock: [
+                { rank: 1, code: "300750", name: "宁德时代 (储能中枢)", sector: "新能源制造 (A股)", type: "stock", dir: "现货做多", price: "195.50", surplus: "+1.88%", nale: "0.0000", risk: "高弹性", reason: "储能出海基本面扎实，主力资金净流入支撑特质 Alpha" },
+                { rank: 2, code: "601012", name: "隆基绿能 (光伏制造)", sector: "光伏制造业 (A股)", type: "stock", dir: "观望/低配", price: "13.80", surplus: "-0.65%", nale: "-0.1200", risk: "内卷压制", reason: "主材价格跌破现金成本线，大模型情绪持续低迷" },
+                { rank: 3, code: "600438", name: "通威股份 (高纯晶硅)", sector: "硅料电池 (A股)", type: "stock", dir: "观望/避险", price: "18.20", surplus: "-0.92%", nale: "-0.1500", risk: "高风险", reason: "多晶硅环节严重过剩，价格筑底但尚未出现反转拐点" }
+            ],
+            futures: [
+                { rank: 1, code: "SA701", name: "郑商所纯碱主力", sector: "商品衍生品 (郑商所)", type: "futures", dir: "期货空头 (做空锁利)", price: "1014.0", surplus: "+2.60%", nale: "-0.0818", risk: "稳健对冲", reason: "NALE 工业时滞预警供需坍塌，Trend Gate 触发破位状态 1" },
+                { rank: 2, code: "FG701", name: "郑商所玻璃主力", sector: "商品衍生品 (郑商所)", type: "futures", dir: "跨期套利/领子", price: "1100.0", surplus: "+1.35%", nale: "-0.0490", risk: "中风险", reason: "现货深贴水修复诉求，下游光伏组件刚性点火支撑" },
+                { rank: 3, code: "TA701", name: "郑商所PTA主力", sector: "聚酯化纤 (郑商所)", type: "futures", dir: "区间震荡套利", price: "6256.0", surplus: "+0.85%", nale: "+0.0210", risk: "低风险", reason: "成本端原油弱平衡，下游短纤刚需补库" }
+            ]
+        };
+
+        function renderTable(tabKey) {
+            const items = DATA[tabKey];
+            const tbody = document.getElementById("table-body");
+            tbody.innerHTML = "";
+            items.forEach(it => {
+                const tr = document.createElement("tr");
+                const rankCls = it.rank === 1 ? "rank-1" : (it.rank === 2 ? "rank-2" : (it.rank === 3 ? "rank-3" : "rank-default"));
+                const typeTag = it.type === "futures" ? `<span class="tag-futures">期货衍生品</span>` : `<span class="tag-stock">股票标的</span>`;
+                const dirCls = it.dir.includes("空") ? "dir-short" : "dir-long";
+                const surplusColor = it.surplus.startsWith("+") ? "#10b981" : "#ef4444";
+
+                tr.innerHTML = `
+                    <td><span class="rank-tag ${rankCls}">${it.rank}</span></td>
+                    <td><b>${it.code}</b></td>
+                    <td>${it.name}</td>
+                    <td>${typeTag}</td>
+                    <td class="${dirCls}">${it.dir}</td>
+                    <td>¥${it.price}</td>
+                    <td class="surplus-highlight" style="color: ${surplusColor}">${it.surplus}</td>
+                    <td><code style="color: var(--accent-cyan);">${it.nale}</code></td>
+                    <td><span style="font-size: 0.8rem; color: var(--text-secondary);">${it.risk}</span></td>
+                    <td style="font-size: 0.85rem; color: #cbd5e1;">${it.reason}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function switchTab(tabKey) {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            event.target.classList.add("active");
+            renderTable(tabKey);
+        }
+
+        function updateSim(val) {
+            document.getElementById("beta-val").innerText = val + "%";
+            const ratio = val / 100.0;
+            // 动态线性插值计算
+            const ret = (18.2 + ratio * 13.0).toFixed(1);
+            const dd = (71.4 - ratio * 43.0).toFixed(1);
+            const margin = (ratio * 180.0 + 10.0).toFixed(1);
+
+            document.getElementById("sim-return").innerText = "+" + ret + "%";
+            document.getElementById("sim-drawdown").innerText = "−" + dd + "%";
+            document.getElementById("sim-margin").innerText = margin + " 万元";
+            document.getElementById("sim-safety").innerText = ratio >= 0.5 ? "AAA (极安全)" : (ratio >= 0.2 ? "AA (良好)" : "B (裸暴露高危)");
+        }
+
+        // 默认初始化
+        renderTable("mixed");
+
+        // 时钟实时跳动
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById("live-clock").innerText = now.toLocaleString("zh-CN");
+        }, 1000);
+    </script>
+</body>
+</html>

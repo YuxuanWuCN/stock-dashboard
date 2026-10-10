@@ -8,6 +8,9 @@ import time
 from pathlib import Path
 from typing import Any, Dict
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
@@ -60,7 +63,7 @@ def main():
     # 4. 全市场大盘 202 支股票 100 交易日因果回测
     print("\n[4/4] 启动【全市场大盘 202 支股票 100 交易日因果底座】回测...")
     build_100d_dataset_and_run_backtest()
-    market_json = REPO_ROOT / "Rainbow_FinGPTv2" / "docs" / "data" / "paper" / "backtest_100d_202stocks.json"
+    market_json = (REPO_ROOT / "docs" / "data" / "paper" / "backtest_100d_202stocks.json") if (REPO_ROOT / "docs").exists() else (REPO_ROOT / "Rainbow_FinGPTv2" / "docs" / "data" / "paper" / "backtest_100d_202stocks.json")
     if market_json.exists():
         with open(market_json, encoding="utf-8") as f:
             market_data = json.load(f)

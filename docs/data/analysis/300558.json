@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-28 22:33:57+08:00",
-  "trade_date": "2026-09-28",
+  "generated_at": "2026-10-09 18:14:13+08:00",
+  "trade_date": "2026-10-09",
   "code": "300558",
   "name": "贝达药业",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 43.4,
-    "risk": 56.2,
-    "technical": 89.0,
-    "industry": 48.7,
+    "risk_adjusted": 65.1,
+    "risk": 59.5,
+    "technical": 99.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,22 +42,22 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-28 22:31:46"
+    "updated_at": "2026-10-09 18:09:52"
   },
   "nale_network": {
     "sector_name": "靶向抗癌药",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -67,34 +67,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 35.42,
+    "annualized_volatility_20d_pct": 39.46,
     "max_drawdown_60d_pct": -35.11,
-    "atr14_pct": 4.64,
+    "atr14_pct": 5.04,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 53.3,
-        "value": 35.42
+        "score": 56.7,
+        "value": 39.46
       },
       {
         "name": "60日最大回撤",
-        "score": 75.4,
+        "score": 83.0,
         "value": -35.11
       },
       {
         "name": "ATR百分比",
-        "score": 65.9,
-        "value": 4.64
+        "score": 65.5,
+        "value": 5.04
       },
       {
         "name": "量价异常",
-        "score": 80.2,
+        "score": 78.4,
         "value": 1.29
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 20.07
+        "score": 5.3,
+        "value": 20.08
       }
     ]
   },
@@ -109,34 +109,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 49.286,
-    "ma10": 48.035999999999994,
-    "ma20": 48.081,
-    "ma60": 56.334833333333336,
-    "rsi14": 42.9,
-    "macd_dif": -1.610986370821884,
-    "macd_dea": -2.2509340192379943,
-    "macd_hist": 1.2798952968322208,
-    "atr14_pct": 4.636641043106182,
-    "boll_position": 0.4377320275671188,
-    "return_5d_pct": 1.0376958915713663,
-    "return_20d_pct": -5.61819980217606,
+    "trend": "range",
+    "ma5": 48.686,
+    "ma10": 48.937,
+    "ma20": 48.0115,
+    "ma60": 55.258500000000005,
+    "rsi14": 46.0,
+    "macd_dif": -1.1132179340130293,
+    "macd_dea": -1.6344128535621008,
+    "macd_hist": 1.042389839098143,
+    "atr14_pct": 5.0443124708079194,
+    "boll_position": 0.5724877282229885,
+    "return_5d_pct": 0.4146796599626912,
+    "return_20d_pct": -1.4649033570701908,
     "volume_ratio_5d": 1.29
   },
   "industry": {
     "name": "靶向抗癌药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.73,
-    "return_20d_pct": -7.84,
-    "return_60d_pct": -17.56,
-    "relative_strength_20d_pct": 2.22
+    "return_5d_pct": -7.44,
+    "return_20d_pct": -7.28,
+    "return_60d_pct": -15.52,
+    "relative_strength_20d_pct": 5.91
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,16 +144,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 1.41,
-      "median_return_pct": 0.15,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.49,
+      "median_return_pct": 0.01,
       "best_return_pct": 17.4,
       "worst_return_pct": -25.51
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 1.14,
-      "median_return_pct": -0.44,
+      "up_probability_pct": 40.0,
+      "average_return_pct": 0.55,
+      "median_return_pct": -1.09,
       "best_return_pct": 25.95,
       "worst_return_pct": -25.49
     }
@@ -280,12 +280,6 @@
     "cached_at": "2026-08-21 10:29:27"
   },
   "reasons": [
-    {
-      "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
     {
       "type": "negative",
       "title": "近期回撤较大",

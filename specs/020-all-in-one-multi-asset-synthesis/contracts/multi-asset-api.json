@@ -1,0 +1,175 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Rainbow-FinGPT v4.0 Multi-Asset Quantitative API",
+    "version": "4.0.0",
+    "description": "Unified API contract for cross-asset quantitative analysis, commodity TES hedging, equity multi-factor pricing, and silver-care wealth management."
+  },
+  "paths": {
+    "/api/v4/overview": {
+      "get": {
+        "summary": "Get multi-asset overview across Equity, Commodity, and Wealth domains",
+        "responses": {
+          "200": {
+            "description": "Multi-asset macro overview",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiAssetOverview"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v4/equity/ranking": {
+      "get": {
+        "summary": "Get 202-stock equity ranking, multi-factor scores, and Fama-MacBeth betas",
+        "responses": {
+          "200": {
+            "description": "Equity stock universe ranking",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EquityRankingResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v4/commodity/tes": {
+      "get": {
+        "summary": "Get CZCE soda ash / glass cross-asset expected surplus (TES) ranking",
+        "responses": {
+          "200": {
+            "description": "Commodity TES ranking and collar actions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommodityTESResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v4/intelligence/chokepoint": {
+      "get": {
+        "summary": "Get supply-chain chokepoint bottleneck scores and causal topology graph",
+        "responses": {
+          "200": {
+            "description": "Supply chain chokepoint topology data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChokepointGraphResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MultiAssetOverview": {
+        "type": "object",
+        "properties": {
+          "as_of_date": { "type": "string", "example": "2026-09-30" },
+          "market_temperature": { "type": "number", "example": 68.5 },
+          "active_domains": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["EQUITY", "COMMODITY", "WEALTH"] }
+          },
+          "equity_summary": {
+            "type": "object",
+            "properties": {
+              "universe_size": { "type": "integer", "example": 202 },
+              "top_pick": { "type": "string", "example": "688041" }
+            }
+          },
+          "commodity_summary": {
+            "type": "object",
+            "properties": {
+              "dominant_contract": { "type": "string", "example": "SA701" },
+              "hedging_mode": { "type": "string", "example": "COLLAR_DYNAMIC" }
+            }
+          }
+        },
+        "required": ["as_of_date", "market_temperature", "active_domains"]
+      },
+      "EquityRankingResponse": {
+        "type": "object",
+        "properties": {
+          "count": { "type": "integer" },
+          "stocks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": { "type": "string" },
+                "name": { "type": "string" },
+                "score": { "type": "number" },
+                "beta_mkt": { "type": "number" },
+                "p_value": { "type": "number" },
+                "sector": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "CommodityTESResponse": {
+        "type": "object",
+        "properties": {
+          "as_of_date": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "symbol": { "type": "string" },
+                "name": { "type": "string" },
+                "node_id": { "type": "string" },
+                "expected_surplus": { "type": "number" },
+                "veto_passed": { "type": "boolean" },
+                "action": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "ChokepointGraphResponse": {
+        "type": "object",
+        "properties": {
+          "nodes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "label": { "type": "string" },
+                "chokepoint_score": { "type": "number" }
+              }
+            }
+          },
+          "edges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source": { "type": "string" },
+                "target": { "type": "string" },
+                "k_ratio": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

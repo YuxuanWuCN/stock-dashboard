@@ -86,8 +86,12 @@ MA_WINDOWS = [5, 10, 20, 60]
 # 仓库根目录（src/ 的父目录）
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# 自选股列表
+# 自选股列表（核心稳健池，具备 3~5 日预测时序锁定保护）
 WATCHLIST_PATH = os.path.join(ROOT_DIR, "watchlist.csv")
+
+# 动态候选观察池（分离核心池，全市场热点/涨幅榜候选标的，待策略买点触发才晋级）
+OBSERVATION_POOL_PATH = os.path.join(ROOT_DIR, "data", "observation_pool.csv")
+WATCHLIST_LOCK_STATE_PATH = os.path.join(ROOT_DIR, "data", "watchlist_lock_state.json")
 
 # 数据输出目录
 DATA_DIR = os.path.join(ROOT_DIR, "docs", "data")

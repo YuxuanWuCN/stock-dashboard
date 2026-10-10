@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-09-28 22:33:57+08:00",
-  "trade_date": "2026-09-28",
+  "generated_at": "2026-10-09 18:14:13+08:00",
+  "trade_date": "2026-10-09",
   "code": "600660",
   "name": "福耀玻璃",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 44.5,
-    "risk": 22.6,
-    "technical": 71.0,
-    "industry": 47.2,
+    "risk_adjusted": 75.3,
+    "risk": 26.6,
+    "technical": 99.0,
+    "industry": 53.3,
     "leading": 50.0
   },
   "leading": {
@@ -42,22 +42,27 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-09-28 22:31:43"
+    "updated_at": "2026-10-09 18:09:46"
   },
   "nale_network": {
     "sector_name": "汽车玻璃",
     "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "600660",
+      "name": "福耀玻璃",
+      "change_pct": 4.549854791868348,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -67,34 +72,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 24.18,
-    "max_drawdown_60d_pct": -10.77,
-    "atr14_pct": 2.37,
+    "annualized_volatility_20d_pct": 29.21,
+    "max_drawdown_60d_pct": -12.16,
+    "atr14_pct": 2.65,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 28.1,
-        "value": 24.18
+        "score": 33.9,
+        "value": 29.21
       },
       {
         "name": "60日最大回撤",
-        "score": 15.0,
-        "value": -10.77
+        "score": 16.4,
+        "value": -12.16
       },
       {
         "name": "ATR百分比",
-        "score": 27.5,
-        "value": 2.37
+        "score": 28.1,
+        "value": 2.65
       },
       {
         "name": "量价异常",
-        "score": 47.3,
-        "value": 0.87
+        "score": 59.6,
+        "value": 1.18
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 20.07
+        "score": 5.3,
+        "value": 20.08
       }
     ]
   },
@@ -109,52 +114,52 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 52.818,
-    "ma10": 52.997,
-    "ma20": 53.9245,
-    "ma60": 54.32266666666667,
-    "rsi14": 43.9,
-    "macd_dif": -0.6432971438220392,
-    "macd_dea": -0.5267622257067659,
-    "macd_hist": -0.23306983623054656,
-    "atr14_pct": 2.3704781143447176,
-    "boll_position": 0.31177633350226563,
-    "return_5d_pct": 0.4365983295368192,
-    "return_20d_pct": -6.1213626685592715,
-    "volume_ratio_5d": 0.87
+    "trend": "range",
+    "ma5": 53.028,
+    "ma10": 52.9,
+    "ma20": 53.345000000000006,
+    "ma60": 54.437333333333335,
+    "rsi14": 51.6,
+    "macd_dif": -0.4978595820809346,
+    "macd_dea": -0.5465592613412759,
+    "macd_hist": 0.09739935852068249,
+    "atr14_pct": 2.647403214419949,
+    "boll_position": 0.6727127545204405,
+    "return_5d_pct": 2.9159519725557415,
+    "return_20d_pct": -3.588644884841985,
+    "volume_ratio_5d": 1.18
   },
   "industry": {
     "name": "汽车玻璃",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.73,
-    "return_20d_pct": -7.84,
-    "return_60d_pct": -17.56,
-    "relative_strength_20d_pct": 1.72
+    "return_5d_pct": -7.44,
+    "return_20d_pct": -7.28,
+    "return_60d_pct": -15.52,
+    "relative_strength_20d_pct": 3.78
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 28,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.7,
-      "average_return_pct": 0.61,
-      "median_return_pct": 0.6,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.03,
+      "median_return_pct": -0.18,
       "best_return_pct": 8.33,
       "worst_return_pct": -4.79
     },
     "horizon_5d": {
-      "up_probability_pct": 57.1,
-      "average_return_pct": 0.24,
-      "median_return_pct": 0.79,
-      "best_return_pct": 8.25,
+      "up_probability_pct": 53.3,
+      "average_return_pct": -0.28,
+      "median_return_pct": 0.5,
+      "best_return_pct": 6.21,
       "worst_return_pct": -6.66
     }
   },
@@ -279,14 +284,7 @@
     },
     "cached_at": "2026-08-21 10:16:26"
   },
-  "reasons": [
-    {
-      "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/600660.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

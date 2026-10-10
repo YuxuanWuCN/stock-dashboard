@@ -14,13 +14,14 @@ tools/auto_update_watchlist_top_gainers.py —— 动态热点股自动沉淀与
 """
 
 import csv
+from datetime import datetime, timedelta
 import json
 import logging
 import os
 import ssl
 import sys
 import urllib.request
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Optional, Any
 
 # 清理环境变量代理干扰
 for _k in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy", "ALL_PROXY", "all_proxy"):
@@ -29,7 +30,12 @@ os.environ["NO_PROXY"] = "*"
 os.environ["no_proxy"] = "*"
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from src.config import WATCHLIST_PATH, DATA_DIR
+from src.config import (
+    WATCHLIST_PATH,
+    DATA_DIR,
+    OBSERVATION_POOL_PATH,
+    WATCHLIST_LOCK_STATE_PATH,
+)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("auto_watchlist")
@@ -37,6 +43,7 @@ logger = logging.getLogger("auto_watchlist")
 MAX_WATCHLIST_SIZE = 400
 TOP_GAINERS_TO_ADD = 5  # 每日吸纳的新龙头数量
 MIN_AMOUNT_THRESHOLD = 150000000.0  # 成交额门槛：1.5 亿元
+MAX_OBSERVATION_SIZE = 100  # 观察池容纳候选数量上限
 
 
 def fetch_top_gainers_sina() -> List[Dict]:
@@ -121,8 +128,108 @@ def write_watchlist(path: str, items: List[Dict]):
             })
 
 
-def evaluate_lowest_priority_stocks(current_items: List[Dict], count_to_remove: int) -> Set[str]:
-    """当池子满 400 只时，根据成交额及活跃度淘汰末位冷门标的。"""
+def read_lock_state(path: str = WATCHLIST_LOCK_STATE_PATH) -> Dict[str, Dict]:
+    """读取核心池标的时序锁定状态字典。"""
+    if not os.path.exists(path):
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        logger.warning("读取锁定状态文件失败: %s", e)
+        return {}
+
+
+def save_lock_state(state: Dict[str, Dict], path: str = WATCHLIST_LOCK_STATE_PATH):
+    """持久化核心池标的时序锁定状态。"""
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(state, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        logger.warning("保存锁定状态失败: %s", e)
+
+
+def is_stock_locked(code: str, as_of_date: Optional[str] = None, lock_state: Optional[Dict] = None) -> bool:
+    """检查标的是否处于 3~5 日时序因果预测锁定期内。"""
+    if lock_state is None:
+        lock_state = read_lock_state()
+    info = lock_state.get(code)
+    if not info:
+        return False
+    lock_until = info.get("locked_until_date")
+    if not lock_until:
+        return False
+    if as_of_date is None:
+        as_of_date = datetime.now().strftime("%Y-%m-%d")
+    return as_of_date <= lock_until
+
+
+def lock_stock_for_days(code: str, days: int = 5, as_of_date: Optional[str] = None) -> Dict[str, Any]:
+    """为标的加锁 N 个交易日（约自然日 7 天），防止在时序预测周期结束前被意外淘汰。"""
+    now = datetime.now() if as_of_date is None else datetime.strptime(as_of_date, "%Y-%m-%d")
+    entry_date = now.strftime("%Y-%m-%d")
+    lock_until = (now + timedelta(days=max(days + 2, 7))).strftime("%Y-%m-%d")
+    state = read_lock_state()
+    state[code] = {
+        "entry_date": entry_date,
+        "locked_until_date": lock_until,
+        "lock_days": days,
+    }
+    save_lock_state(state)
+    return state[code]
+
+
+def read_observation_pool(path: str = OBSERVATION_POOL_PATH) -> List[Dict]:
+    """读取独立动态候选观察池。"""
+    if not os.path.exists(path):
+        return []
+    items = []
+    try:
+        with open(path, "r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row.get("code") and row.get("name"):
+                    items.append({
+                        "code": row["code"].strip(),
+                        "name": row["name"].strip(),
+                        "type": row.get("type", "stock").strip(),
+                        "category": row.get("category", "热点候选").strip(),
+                        "added_date": row.get("added_date", "").strip(),
+                        "change_pct": float(row.get("change_pct", 0.0) or 0.0),
+                        "amount": float(row.get("amount", 0.0) or 0.0),
+                    })
+    except Exception as e:
+        logger.warning("读取观察池失败: %s", e)
+    return items
+
+
+def write_observation_pool(path: str, items: List[Dict]):
+    """写入独立动态候选观察池。"""
+    fieldnames = ["code", "name", "type", "category", "added_date", "change_pct", "amount"]
+    try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8-sig", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            for item in items:
+                writer.writerow({
+                    "code": item["code"],
+                    "name": item["name"],
+                    "type": item.get("type", "stock"),
+                    "category": item.get("category", "热点候选"),
+                    "added_date": item.get("added_date", datetime.now().strftime("%Y-%m-%d")),
+                    "change_pct": round(float(item.get("change_pct", 0.0) or 0.0), 2),
+                    "amount": round(float(item.get("amount", 0.0) or 0.0), 2),
+                })
+    except Exception as e:
+        logger.warning("写入观察池失败: %s", e)
+
+
+def evaluate_lowest_priority_stocks(
+    current_items: List[Dict], count_to_remove: int, as_of_date: Optional[str] = None
+) -> Set[str]:
+    """当核心池超额时，根据成交额及活跃度淘汰末位标的。处于 5 日预测窗口锁定期内的标的豁免淘汰。"""
     summary_path = os.path.join(DATA_DIR, "summary.json")
     amount_map = {}
     if os.path.exists(summary_path):
@@ -134,70 +241,136 @@ def evaluate_lowest_priority_stocks(current_items: List[Dict], count_to_remove: 
         except Exception:
             pass
 
+    lock_state = read_lock_state()
+    today_str = as_of_date or datetime.now().strftime("%Y-%m-%d")
+
     scored_items = []
     for item in current_items:
         code = item["code"]
-        # ETF 指数类核心标的豁免淘汰
+        # 1. ETF 指数类核心标的豁免淘汰
         if item.get("type") == "etf" or code.startswith("51") or code.startswith("15") or code.startswith("58"):
+            score = 999999999
+        # 2. 处于 3~5 日时序因果预测锁定期内的标的豁免淘汰，确保完成回测验证闭环
+        elif is_stock_locked(code, as_of_date=today_str, lock_state=lock_state):
             score = 999999999
         else:
             score = amount_map.get(code, 0)
         scored_items.append((code, score))
 
     scored_items.sort(key=lambda x: x[1])
-    to_remove_codes = set(code for code, _ in scored_items[:count_to_remove])
+    # 仅从非豁免标的中挑选淘汰对象
+    eligible_to_remove = [code for code, score in scored_items if score < 999999999]
+    to_remove_codes = set(eligible_to_remove[:count_to_remove])
     return to_remove_codes
 
 
-def update_watchlist_with_top_gainers(max_size: int = MAX_WATCHLIST_SIZE, top_k: int = TOP_GAINERS_TO_ADD) -> int:
-    logger.info("=== 启动自选股热点龙头自动沉淀机制 (动态上限 %d 只) ===", max_size)
-    current_items = read_current_watchlist(WATCHLIST_PATH)
+def update_observation_pool_with_top_gainers(
+    pool_path: str = OBSERVATION_POOL_PATH,
+    max_observation_size: int = MAX_OBSERVATION_SIZE,
+    top_k: int = 15,
+) -> int:
+    """从市场涨幅榜吸纳新龙头进入独立候选观察池（完全不污染核心自选池）。"""
+    logger.info("=== 启动独立候选观察池更新机制 (上限 %d 只) ===", max_observation_size)
+    existing_items = read_observation_pool(pool_path)
+    existing_map = {it["code"]: it for it in existing_items}
+    core_watchlist_codes = {it["code"] for it in read_current_watchlist(WATCHLIST_PATH)}
+
+    candidates = fetch_top_gainers_sina()
+    if not candidates:
+        logger.warning("未能获取到有效市场涨幅榜数据，跳过观察池更新。")
+        return 0
+
+    today_str = datetime.now().strftime("%Y-%m-%d")
+    added_or_updated = 0
+
+    for cand in candidates:
+        code = cand["code"]
+        # 已经在核心自选池的标的不必重复堆积到观察池
+        if code in core_watchlist_codes:
+            continue
+
+        cand["added_date"] = today_str
+        existing_map[code] = cand
+        added_or_updated += 1
+        if added_or_updated >= top_k:
+            break
+
+    # 按加入日期及成交额降序排序截取上限
+    all_observed = list(existing_map.values())
+    all_observed.sort(key=lambda x: (x.get("added_date", ""), x.get("amount", 0.0)), reverse=True)
+    all_observed = all_observed[:max_observation_size]
+
+    write_observation_pool(pool_path, all_observed)
+    logger.info("✅ 动态候选观察池更新完成: 存量 %d 只 (本次新增/刷新 %d 只)", len(all_observed), added_or_updated)
+    return added_or_updated
+
+
+def promote_to_core_watchlist(
+    codes: List[str],
+    watchlist_path: str = WATCHLIST_PATH,
+    observation_path: str = OBSERVATION_POOL_PATH,
+    max_size: int = MAX_WATCHLIST_SIZE,
+    lock_days: int = 5,
+) -> int:
+    """当策略买点触发时，将观察池中的黑马标的晋级至核心跟踪池，并激活 5 日时序窗口锁定。"""
+    if not codes:
+        return 0
+    current_items = read_current_watchlist(watchlist_path)
     current_codes = {it["code"] for it in current_items}
-    logger.info("当前自选股存量: %d 只", len(current_items))
+    obs_items = {it["code"]: it for it in read_observation_pool(observation_path)}
 
-    # 1. 抓取今日全市场涨幅榜
-    top_candidates = fetch_top_gainers_sina()
-    if not top_candidates:
-        logger.warning("未能获取到有效市场涨幅榜数据，跳过本次更新。")
-        return 0
-
-    # 2. 筛选出尚未在自选股池中的龙头
-    new_to_add = []
-    for cand in top_candidates:
-        if cand["code"] not in current_codes:
-            new_to_add.append(cand)
-            if len(new_to_add) >= top_k:
-                break
-
-    if not new_to_add:
-        logger.info("今日前列热点龙头已全部存在于自选股池中。")
-        return 0
-
-    logger.info("今日发现并吸纳新龙头 (%d 只): %s", len(new_to_add), ", ".join(f"{c['name']}({c['code']}) +{c['change_pct']}%" for c in new_to_add))
-
-    # 3. 动态滑窗淘汰
-    updated_items = list(current_items)
-    for c in new_to_add:
-        updated_items.append({
-            "code": c["code"],
-            "name": c["name"],
-            "type": c["type"],
-            "category": c["category"],
+    promoted_items = []
+    for c in codes:
+        if c in current_codes:
+            continue
+        info = obs_items.get(c, {"code": c, "name": c, "type": "stock", "category": "策略晋级"})
+        promoted_items.append({
+            "code": info["code"],
+            "name": info["name"],
+            "type": info.get("type", "stock"),
+            "category": "策略晋级",
         })
+        lock_stock_for_days(c, days=lock_days)
+
+    if not promoted_items:
+        return 0
+
+    logger.info(
+        "🎯 策略买点触发，成功晋级 %d 只标的至核心池 (锁定 %d 日预测周期): %s",
+        len(promoted_items),
+        lock_days,
+        ", ".join(f"{it['name']}({it['code']})" for it in promoted_items),
+    )
+    updated_items = current_items + promoted_items
 
     if len(updated_items) > max_size:
         excess = len(updated_items) - max_size
-        logger.info("自选股总数 (%d) 超出上限 (%d)，执行末位淘汰 (%d 只)...", len(updated_items), max_size, excess)
         remove_codes = evaluate_lowest_priority_stocks(updated_items, excess)
         final_items = [it for it in updated_items if it["code"] not in remove_codes]
-        logger.info("已淘汰低活跃标的: %s", ", ".join(remove_codes))
+        logger.info("已淘汰低活跃非锁定标的: %s", ", ".join(remove_codes))
     else:
         final_items = updated_items
 
-    # 4. 落盘保存
-    write_watchlist(WATCHLIST_PATH, final_items)
-    logger.info("✅ 自选股沉淀完成！当前自选股总数: %d 只", len(final_items))
-    return len(new_to_add)
+    write_watchlist(watchlist_path, final_items)
+    return len(promoted_items)
+
+
+def update_watchlist_with_top_gainers(max_size: int = MAX_WATCHLIST_SIZE, top_k: int = TOP_GAINERS_TO_ADD) -> int:
+    """流水线主入口：自动刷新候选观察池，同时维护核心池的 5 日窗口锁定与淘汰保护。"""
+    # 1. 刷新候选观察池（不暴力塞入核心池，避免破坏预测时序与产生 Token 浪费）
+    added_obs = update_observation_pool_with_top_gainers(top_k=top_k)
+
+    # 2. 检查核心自选池是否超出上限，如果超出则在保护锁定标的的前提下末位淘汰
+    current_items = read_current_watchlist(WATCHLIST_PATH)
+    if len(current_items) > max_size:
+        excess = len(current_items) - max_size
+        remove_codes = evaluate_lowest_priority_stocks(current_items, excess)
+        if remove_codes:
+            final_items = [it for it in current_items if it["code"] not in remove_codes]
+            write_watchlist(WATCHLIST_PATH, final_items)
+            logger.info("核心自选池末位淘汰 (%d 只，时序锁定标的已受保护): %s", len(remove_codes), ", ".join(remove_codes))
+
+    return added_obs
 
 
 if __name__ == "__main__":

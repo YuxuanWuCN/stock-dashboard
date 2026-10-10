@@ -1,0 +1,23 @@
+{
+  "_comment": "Agent-极星 文件握手协议的唯一策略来源。两侧（极星内嵌Python3.7策略 与 外部agent）都只读此文件，禁止各自硬编码限额。修改后无需重启策略，下一个触发周期即生效。",
+  "protocol_version": "1.0",
+  "allow_trading": false,
+  "allowed_symbols": [
+    "ZCE|Z|SA|MAIN"
+  ],
+  "allowed_price_types": [
+    "LIMIT"
+  ],
+  "allowed_offsets": [
+    "ENTRY",
+    "EXIT",
+    "EXIT_TODAY"
+  ],
+  "max_lots_per_order": 1,
+  "max_orders_per_day": 3,
+  "max_open_orders": 1,
+  "max_request_age_sec": 120,
+  "min_available_for_entry": 100000.0,
+  "require_margin_rate_below_pct": 60.0,
+  "probe_interval_ms": 1000
+}
