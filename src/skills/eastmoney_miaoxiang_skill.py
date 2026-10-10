@@ -22,6 +22,8 @@ from typing import Any, Dict, List, Optional
 import numpy as np
 import pandas as pd
 
+from src.data.exceptions import MissingRealDataError
+
 logger = logging.getLogger("eastmoney_miaoxiang_skill")
 
 
@@ -112,9 +114,10 @@ class EastMoneyMiaoXiangSkill:
         )
     }
 
-    def __init__(self, api_key: Optional[str] = None, cache_db: Optional[str | Path] = None):
+    def __init__(self, api_key: Optional[str] = None, cache_db: Optional[str | Path] = None, allow_synthetic: bool = False):
         self.api_key = api_key or os.getenv("EASTMONEY_MIAOXIANG_API_KEY", "")
         self.cache_db = str(cache_db or Path("data/cache/eastmoney_miaoxiang.db"))
+        self.allow_synthetic = allow_synthetic
         self._init_cache()
 
     def _init_cache(self) -> None:
@@ -222,9 +225,10 @@ class EastMoneyMiaoXiangSkill:
         return snapshot
 
     def get_daily_factors_with_capital_flows(
-        self, start_date: str, end_date: str
+        self, start_date: str, end_date: str, allow_synthetic: Optional[bool] = None
     ) -> pd.DataFrame:
         """获取包含微观资金流指标的东财特色日频多因子矩阵。"""
+        effective_allow_synthetic = self.allow_synthetic if allow_synthetic is None else allow_synthetic
         dates = pd.date_range(start=start_date, end=end_date, freq="B").strftime("%Y-%m-%d").tolist()
         if not dates:
             return pd.DataFrame()
@@ -238,10 +242,18 @@ class EastMoneyMiaoXiangSkill:
             """
             cached_df = pd.read_sql(query, conn, params=[start_date, end_date])
 
-        if len(cached_df) == len(dates):
+        if len(cached_df) == len(dates) and not cached_df.empty:
+            cached_df.attrs["data_source"] = "cached_real"
             return cached_df
 
-        # 缓存未命中时生成全量统计因子并落库
+        # 缓存未命中时抛错，除非显式允许合成数据（受控测试夹具）
+        if not effective_allow_synthetic:
+            raise MissingRealDataError(
+                f"Missing real EastMoney factor data for {start_date} ~ {end_date} in cache ({self.cache_db}) "
+                "and allow_synthetic is False."
+            )
+
+        # 仅在显式传入 allow_synthetic=True 时生成合成代理数据
         np.random.seed(42)
         n = len(dates)
         mkt = np.random.normal(0.0004, 0.012, n)
@@ -249,9 +261,9 @@ class EastMoneyMiaoXiangSkill:
         hml = np.random.normal(0.00005, 0.007, n)
         mom = np.random.normal(0.0002, 0.008, n)
         rf = np.full(n, 0.00015)
-        large_flow = np.random.normal(-0.02, 0.05, n) # 主力大单净流率
-        northbound = np.random.normal(0.01, 0.03, n)   # 北向增减仓率
-        inst_seat = np.random.uniform(0.1, 0.6, n)     # 机构席位占比
+        large_flow = np.random.normal(-0.02, 0.05, n)  # 主力大单净流率
+        northbound = np.random.normal(0.01, 0.03, n)    # 北向增减仓率
+        inst_seat = np.random.uniform(0.1, 0.6, n)      # 机构席位占比
 
         df = pd.DataFrame({
             "date": dates,
@@ -264,20 +276,6 @@ class EastMoneyMiaoXiangSkill:
             "NORTHBOUND_DELTA": northbound,
             "INST_SEAT_RATIO": inst_seat
         })
-
-        # 存入 SQLite
-        with sqlite3.connect(self.cache_db) as conn:
-            records = []
-            for _, row in df.iterrows():
-                records.append((
-                    row["date"], float(row["MKT"]), float(row["SMB"]), float(row["HML"]),
-                    float(row["MOM"]), float(row["rf"]), float(row["LARGE_ORDER_INFLOW"]),
-                    float(row["NORTHBOUND_DELTA"]), float(row["INST_SEAT_RATIO"]), "CN"
-                ))
-            conn.executemany("""
-                INSERT OR REPLACE INTO factor_daily
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, records)
-            conn.commit()
-
+        df.attrs["data_source"] = "synthetic"
+        # 严禁将合成伪造数据写入 SQLite 缓存数据库 (factor_daily)！
         return df

@@ -30,6 +30,7 @@ from src.analysis.factor_providers import (
     EastMoneyMiaoXiangProvider,
     SCNUAcademicFactorProvider
 )
+from src.data.exceptions import MissingRealDataError
 
 logger = logging.getLogger("data_adapter")
 
@@ -106,8 +107,10 @@ class UnifiedDataAdapter:
         csmar_expected_trading_dates: Optional[Iterable[Any]] = None,
         school_expected_trading_dates: Optional[Iterable[Any]] = None,
         expected_trading_dates: Optional[Iterable[Any]] = None,
+        allow_synthetic: bool = False,
     ):
         self.mode = str(mode).strip().lower()
+        self.allow_synthetic = allow_synthetic
         # ``expected_trading_dates`` 是便捷别名；显式的市场参数优先。
         def freeze_calendar(value: Optional[Iterable[Any]]) -> Optional[tuple[Any, ...]]:
             if value is None:
@@ -132,8 +135,8 @@ class UnifiedDataAdapter:
         self.school_expected_trading_dates = school_expected_trading_dates
         self.cache_db = str(cache_db or Path("data/cache/unified_adapter.db"))
         self.cn_provider = AkshareProxyFactorProvider(db_path=self.cache_db)
-        self.us_provider = KennethFrenchFactorProvider(cache_dir=Path("data/cache/kenneth_french"))
-        self.eastmoney_provider = EastMoneyMiaoXiangProvider(db_path=self.cache_db)
+        self.us_provider = KennethFrenchFactorProvider(cache_dir=Path("data/cache/kenneth_french"), allow_synthetic=allow_synthetic)
+        self.eastmoney_provider = EastMoneyMiaoXiangProvider(db_path=self.cache_db, allow_synthetic=allow_synthetic)
         # CSMAR 是学校提供的可选依赖。默认模式不导入 SDK，官方模式则必须
         # 明确查询成功，不能回退为开源代理或合成数据。
         self.csmar_provider = (
@@ -272,11 +275,13 @@ class UnifiedDataAdapter:
         start_date: str,
         end_date: str,
         market: str = "CN",
-        include_micro_flows: bool = True
+        include_micro_flows: bool = True,
+        allow_synthetic: Optional[bool] = None,
     ) -> pd.DataFrame:
         """获取指定市场与日期的标准化多因子矩阵（带内存缓存）。"""
         market_norm = str(market).strip().upper()
-        cache_key = (start_date, end_date, market_norm, include_micro_flows)
+        effective_allow_synthetic = self.allow_synthetic if allow_synthetic is None else allow_synthetic
+        cache_key = (start_date, end_date, market_norm, include_micro_flows, effective_allow_synthetic)
         if hasattr(self, "_factor_cache") and cache_key in self._factor_cache:
             return self._factor_cache[cache_key].copy()
 
@@ -284,7 +289,8 @@ class UnifiedDataAdapter:
             start_date=start_date,
             end_date=end_date,
             market=market_norm,
-            include_micro_flows=include_micro_flows
+            include_micro_flows=include_micro_flows,
+            allow_synthetic=effective_allow_synthetic,
         )
         if hasattr(self, "_factor_cache"):
             self._factor_cache[cache_key] = result.copy()
@@ -295,7 +301,8 @@ class UnifiedDataAdapter:
         start_date: str,
         end_date: str,
         market: str = "CN",
-        include_micro_flows: bool = True
+        include_micro_flows: bool = True,
+        allow_synthetic: Optional[bool] = None,
     ) -> pd.DataFrame:
         """内部实现：获取指定市场与日期的标准化多因子矩阵。
         
@@ -304,16 +311,21 @@ class UnifiedDataAdapter:
             end_date: 'YYYY-MM-DD'
             market: 'CN' 或 'US'
             include_micro_flows: 是否包含微观资金流因子
+            allow_synthetic: 是否显式允许受控合成兜底
         
         Returns:
             pd.DataFrame: 包含 date 索引与标准因子列的 DataFrame
         """
+        effective_allow_synthetic = self.allow_synthetic if allow_synthetic is None else allow_synthetic
         market = str(market).strip().upper()
         if market == "US":
-            df = self.us_provider.get_daily_factors(start_date, end_date)
+            df = self.us_provider.get_daily_factors(start_date, end_date, allow_synthetic=effective_allow_synthetic)
             df["date"] = pd.to_datetime(df["date"])
             df.set_index("date", inplace=True)
-            return df[self.STANDARD_FACTOR_COLS]
+            res = df[self.STANDARD_FACTOR_COLS]
+            if "data_source" in df.attrs:
+                res.attrs["data_source"] = df.attrs["data_source"]
+            return res
 
         if market != "CN":
             raise ValueError(f"不支持的市场标识: {market!r}，仅支持 CN 或 US")
@@ -340,20 +352,33 @@ class UnifiedDataAdapter:
 
         # A 股市场
         if include_micro_flows and self.mode in ("production_7factor", "dual_track"):
-            df = self.eastmoney_provider.get_factors_with_flows(start_date, end_date)
-            if not df.empty:
-                df["date"] = pd.to_datetime(df["date"])
-                df.set_index("date", inplace=True)
-                cols = [c for c in (self.STANDARD_FACTOR_COLS + self.EXTENDED_FLOW_COLS) if c in df.columns]
-                return df[cols]
+            try:
+                df = self.eastmoney_provider.get_factors_with_flows(start_date, end_date, allow_synthetic=effective_allow_synthetic)
+                if not df.empty:
+                    df["date"] = pd.to_datetime(df["date"])
+                    df.set_index("date", inplace=True)
+                    cols = [c for c in (self.STANDARD_FACTOR_COLS + self.EXTENDED_FLOW_COLS) if c in df.columns]
+                    res = df[cols]
+                    if "data_source" in df.attrs:
+                        res.attrs["data_source"] = df.attrs["data_source"]
+                    return res
+            except MissingRealDataError:
+                if not effective_allow_synthetic:
+                    raise
 
         df = self.cn_provider.get_daily_factors(start_date, end_date)
         if not df.empty:
             df["date"] = pd.to_datetime(df["date"])
             df.set_index("date", inplace=True)
-            return df[self.STANDARD_FACTOR_COLS]
+            res = df[self.STANDARD_FACTOR_COLS]
+            res.attrs["data_source"] = "akshare_real"
+            return res
 
-        # 回退：生成正交合成因子
+        # 缺少真实数据且未显式允许合成兜底时，必须抛出 MissingRealDataError
+        if not effective_allow_synthetic:
+            raise MissingRealDataError(f"Missing real factor data for {start_date} ~ {end_date} and allow_synthetic=False.")
+
+        # 仅显式允许合成数据时生成正交合成因子并打标
         dates = pd.date_range(start_date, end_date, freq="B")
         n = len(dates)
         np.random.seed(42)
@@ -368,6 +393,7 @@ class UnifiedDataAdapter:
             syn_df["LARGE_ORDER_INFLOW"] = np.random.normal(-0.01, 0.04, n)
             syn_df["NORTHBOUND_DELTA"] = np.random.normal(0.005, 0.02, n)
             syn_df["INST_SEAT_RATIO"] = np.random.uniform(0.1, 0.5, n)
+        syn_df.attrs["data_source"] = "synthetic"
         return syn_df
 
     def assemble_market_packet(

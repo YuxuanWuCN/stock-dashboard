@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-from src.analysis import factor_db, fama_macbeth
+from src.analysis import config, factor_db, fama_macbeth
 from src.analysis.alpha_gate import evaluate_gate, VERDICT_PASS
 from src.analysis.similarity import find_similar_samples
 from src.llm.scnu_rag_filter import SCNURAGFilter
@@ -89,6 +89,7 @@ class StorageSupercycleBacktester:
         qualitative_feeds: Optional[Dict[str, str]] = None,
         initial_capital: float = 1000000.0,
         reversal_pct: float = 12.0,
+        min_obs_days: int = config.MIN_OBS_DAYS,
     ):
         self.klines = klines
         self.factors_df = factors_df
@@ -102,6 +103,7 @@ class StorageSupercycleBacktester:
         self.qualitative_feeds = qualitative_feeds or self._build_default_qualitative_feeds()
         self.initial_capital = initial_capital
         self.reversal_pct = reversal_pct
+        self.min_obs_days = min_obs_days
 
         # 初始化子引擎
         self.rag_filter = SCNURAGFilter(cs_threshold=12)
@@ -317,6 +319,64 @@ class StorageSupercycleBacktester:
             "equity_history": [round(e, 2) for e in equity_history],
         }
 
+    def evaluate_alpha_gate(self, code: str, history_df: pd.DataFrame) -> Dict[str, Any]:
+        """Layer 2: 滚动 Fama-MacBeth 回归与 Alpha Gate 硬门控评估（严格反作弊与数据充分性检查）。"""
+        min_obs = self.min_obs_days
+        if len(history_df) < min_obs:
+            return {
+                "alpha_gate_status": "insufficient_data",
+                "passes_alpha": False,
+                "alpha_val": None,
+                "alpha_p": None,
+                "alpha_ir": None,
+            }
+
+        aligned_f, aligned_k, _ = factor_db.align_with_kline(self.factors_df, history_df)
+        if len(aligned_k) < min_obs:
+            return {
+                "alpha_gate_status": "insufficient_data",
+                "passes_alpha": False,
+                "alpha_val": None,
+                "alpha_p": None,
+                "alpha_ir": None,
+            }
+
+        rets = pd.Series(aligned_k["close"].to_numpy(dtype=float)).pct_change().dropna()
+        f_sub = aligned_f.iloc[1:].reset_index(drop=True)
+        reg_res = fama_macbeth.regress_one(f_sub, rets.to_numpy(dtype=float), min_obs_days=min_obs)
+        if reg_res.get("status") == "insufficient_data":
+            return {
+                "alpha_gate_status": "insufficient_data",
+                "passes_alpha": False,
+                "alpha_val": None,
+                "alpha_p": None,
+                "alpha_ir": None,
+            }
+
+        alpha_val = reg_res.get("alpha")
+        alpha_p = reg_res.get("alpha_p_value")
+        ir_daily = reg_res.get("information_ratio") or 0.0
+        ir_val = ir_daily * np.sqrt(252) if ir_daily else 0.0
+
+        statistically = (alpha_p is not None and alpha_p < config.ALPHA_P_THRESHOLD)
+        economically = (ir_val is not None and ir_val >= config.IR_THRESHOLD)
+        passes_alpha = statistically and economically
+
+        if passes_alpha:
+            alpha_gate_status = "pass"
+        elif not statistically:
+            alpha_gate_status = "statistical"
+        else:
+            alpha_gate_status = "economical"
+
+        return {
+            "alpha_gate_status": alpha_gate_status,
+            "passes_alpha": passes_alpha,
+            "alpha_val": alpha_val,
+            "alpha_p": alpha_p,
+            "alpha_ir": ir_val,
+        }
+
     def _screen_candidates(
         self,
         current_date: str,
@@ -351,29 +411,13 @@ class StorageSupercycleBacktester:
 
             # 无未来函数：截断至 current_date
             history = df_all.loc[:current_date].copy()
-            if len(history) < 20:
+            gate_eval = self.evaluate_alpha_gate(code, history)
+            if not gate_eval["passes_alpha"]:
                 continue
 
-            # 对齐因子库运行 Fama-MacBeth 阶段一回归
-            aligned_f, aligned_k, _ = factor_db.align_with_kline(self.factors_df, history)
-            if len(aligned_k) < 20:
-                alpha_val = 0.0015
-                alpha_p = 0.02
-                ir_val = 0.45 * np.sqrt(252)
-            else:
-                rets = pd.Series(aligned_k["close"].to_numpy(dtype=float)).pct_change().dropna()
-                f_sub = aligned_f.iloc[1:].reset_index(drop=True)
-                reg_res = fama_macbeth.regress_one(f_sub, rets.to_numpy(dtype=float), min_obs_days=20)
-                gate_res = evaluate_gate(reg_res)
-                alpha_val = gate_res["alpha"]
-                alpha_p = gate_res["alpha_p_value"]
-                ir_daily = gate_res["information_ratio"] or 0.0
-                ir_val = ir_daily * np.sqrt(252) if ir_daily else 0.0
-
-            # Alpha Gate 硬门控：p < 0.05 (或超额正 Alpha 处于超级周期主升) 且 年化 IR >= 0.3
-            passes_alpha = (alpha_p is not None and alpha_p < 0.20) and (ir_val >= 0.30 or (alpha_val is not None and alpha_val > 0))
-            if not passes_alpha:
-                continue
+            alpha_val = gate_eval["alpha_val"]
+            ir_val = gate_eval["alpha_ir"]
+            alpha_p = gate_eval["alpha_p"]
 
             # ----------------------------------------------------
             # Layer 3: Trend Gate™ 布尔执行器与狩猎场斐波那契确认
@@ -534,12 +578,14 @@ class StorageSupercycleBacktester:
             information_ratio = 0.0
 
         # 5. Brier Score 预测校准度 BS = (1/N) * sum((P_pred - y)^2)
-        if brier_predictions and len(brier_predictions) == len(brier_outcomes):
+        if brier_predictions and len(brier_predictions) == len(brier_outcomes) and len(brier_predictions) > 0:
             p_arr = np.array(brier_predictions, dtype=float)
             y_arr = np.array(brier_outcomes, dtype=float)
             brier_score = float(np.mean((p_arr - y_arr) ** 2))
+            brier_status = "ok"
         else:
-            brier_score = 0.185  # 标准基线校准值
+            brier_score = None
+            brier_status = "no_predictions"
 
         # 交易统计
         n_trades = len(trades)
@@ -556,7 +602,8 @@ class StorageSupercycleBacktester:
             "sharpe_ratio": round(sharpe_ratio, 2),
             "max_drawdown_pct": round(max_dd, 2),
             "information_ratio": round(information_ratio, 2),
-            "brier_score": round(brier_score, 4),
+            "brier_score": round(brier_score, 4) if brier_score is not None else None,
+            "brier_status": brier_status,
             "win_rate_pct": round(win_rate, 2),
             "profit_factor": round(profit_factor, 2),
             "total_trades": n_trades,

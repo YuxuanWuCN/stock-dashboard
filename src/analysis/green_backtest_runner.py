@@ -661,9 +661,31 @@ class GreenBacktestRunner:
         ax6.legend(loc="upper left", frameon=True, fontsize=8.8)
         ax6.grid(True, alpha=0.3, ls="--")
 
-        np.random.seed(42)
-        t_stats = 2.85 + np.sin(np.linspace(0, 8, len(green_dates))) * 0.3 + np.random.normal(0, 0.1, len(green_dates))
-        ax7.plot(green_dates, t_stats, color="#059669", lw=1.4, label="Newey-West HAC 稳健 t-statistic")
+        # 真实滚动回归 Newey-West HAC t 统计量计算（杜绝正弦波与随机数伪造）
+        diff_ret = (excess_returns.mean(axis=1) - mkt_ret).values
+        T_len = len(diff_ret)
+        roll_window = min(60, max(20, T_len // 5))
+        real_t_stats = np.full(T_len, 0.0)
+        for i in range(roll_window, T_len):
+            sub_r = diff_ret[i - roll_window:i]
+            mean_r = np.mean(sub_r)
+            demeaned = sub_r - mean_r
+            gamma0 = np.mean(demeaned ** 2)
+            max_lags = max(1, int(4.0 * (roll_window / 100.0) ** (2.0 / 9.0)))
+            gamma_sum = 0.0
+            for lag in range(1, max_lags + 1):
+                w_lag = 1.0 - lag / (max_lags + 1.0)
+                gamma_sum += 2.0 * w_lag * np.mean(demeaned[lag:] * demeaned[:-lag])
+            hac_var = (gamma0 + gamma_sum) / roll_window
+            if hac_var > 1e-12:
+                real_t_stats[i] = mean_r / np.sqrt(hac_var)
+            else:
+                real_t_stats[i] = 0.0
+
+        if roll_window < T_len:
+            real_t_stats[:roll_window] = real_t_stats[roll_window]
+
+        ax7.plot(green_dates, real_t_stats, color="#059669", lw=1.4, label="Newey-West HAC 稳健 t-statistic (真实滚动估计)")
         ax7.axhline(2.0, color="#dc2626", ls="--", lw=1.2, label="95% 显著性门槛 (t=2.0, p<0.05)")
         ax7.axhline(3.0, color="#7c3aed", ls=":", lw=1.2, label="Harvey 顶级学术门槛 (t=3.0)")
         ax7.set_ylabel("t 统计量", fontsize=10)

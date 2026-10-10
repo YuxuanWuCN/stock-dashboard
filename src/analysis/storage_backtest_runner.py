@@ -24,6 +24,7 @@ if str(REPO_ROOT) not in sys.path:
 import numpy as np
 import pandas as pd
 
+from src.data.exceptions import MissingRealDataError, SyntheticDataRejectedError
 from src.analysis.famamacbethv3 import FamaMacBethV3Engine
 from src.analysis.scoringv3 import GFCAScoringEngine
 from src.execution.trend_gate import TrendGate, TrendGateDecision
@@ -90,9 +91,13 @@ class StorageBacktestRunner:
     SELL_FRICTION = 0.00175   # 0.175% 卖出综合费率 (0.25‰ 佣金 + 1.0‰ 滑点 + 0.5‰ 印花税)
     DAILY_CASH_YIELD = 0.00005  # 闲置现金日息 (年化约 1.8%)
 
-    def __init__(self, raw_data_dir: Optional[str | Path] = None, initial_capital: float = 1_000_000.0):
+    def __init__(self, raw_data_dir: Optional[str | Path] = None, initial_capital: float = 1_000_000.0, allow_synthetic: bool = False):
         self.raw_data_dir = Path(raw_data_dir or "data/raw/backtest_storage_2025q2_2026q7")
         self.initial_capital = initial_capital
+        self.allow_synthetic = allow_synthetic
+
+        if not self.allow_synthetic and "backtest_paper_2024_2026_300stocks" in str(self.raw_data_dir).replace("\\", "/"):
+            raise SyntheticDataRejectedError("Reading from deprecated synthetic dataset backtest_paper_2024_2026_300stocks is forbidden.")
 
         # 加载核心量化引擎
         self.fm_engine = FamaMacBethV3Engine(t_stat_threshold=3.0)
@@ -103,39 +108,46 @@ class StorageBacktestRunner:
 
     def load_isolated_raw_data(self) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
         """读取物理隔离目录中的原始数据，并对齐存储全产业链标的。"""
+        if not self.allow_synthetic and "backtest_paper_2024_2026_300stocks" in str(self.raw_data_dir).replace("\\", "/"):
+            raise SyntheticDataRejectedError("Reading from deprecated synthetic dataset backtest_paper_2024_2026_300stocks is forbidden.")
+
         prices_df = pd.read_csv(self.raw_data_dir / "market_prices.csv", index_col=0, parse_dates=True)
         nowcast_df = pd.read_csv(self.raw_data_dir / "nowcasting_spot.csv", index_col=0, parse_dates=True)
         factors_df = pd.read_csv(self.raw_data_dir / "factors.csv", index_col=0, parse_dates=True)
 
         missing_tickers = [t for t in self.STORAGE_TICKERS if t not in prices_df.columns]
         if missing_tickers:
-            raw_300d = REPO_ROOT / "data" / "raw" / "backtest_paper_2024_2026_300stocks" / "market_prices.csv"
-            if raw_300d.exists():
-                df_300 = pd.read_csv(raw_300d, index_col=0, parse_dates=True)
-                for t in list(missing_tickers):
-                    if t in df_300.columns:
-                        prices_df[t] = df_300[t].reindex(prices_df.index).ffill().bfill()
-                        missing_tickers.remove(t)
+            if not self.allow_synthetic:
+                raise MissingRealDataError(
+                    missing_tickers,
+                    f"Missing required real market prices for storage tickers: {missing_tickers}. "
+                    "Reading from deprecated backtest_paper_2024_2026_300stocks or silent fallbacks is disallowed."
+                )
 
-            if missing_tickers:
-                dates = prices_df.index
-                T = len(dates)
-                np.random.seed(42)
-                storage_base = np.random.normal(0.0005, 0.015, T)
-                storage_base[0:130] += 0.0035
-                storage_base[130:220] += 0.0002
-                storage_base[220:] -= 0.0040
-                for t in missing_tickers:
-                    meta = self.TICKER_METADATA.get(t, {"lead_beta": 1.25})
-                    beta = meta.get("lead_beta", 1.25)
-                    rets = storage_base * beta + 0.0006 + np.random.normal(0, 0.011, T)
-                    prices_df[t] = 45.0 * np.cumprod(1.0 + rets)
+            # 仅在显式传入 allow_synthetic=True 时用于受控测试夹具
+            dates = prices_df.index
+            T = len(dates)
+            np.random.seed(42)
+            storage_base = np.random.normal(0.0005, 0.015, T)
+            storage_base[0:130] += 0.0035
+            storage_base[130:220] += 0.0002
+            storage_base[220:] -= 0.0040
+            for t in missing_tickers:
+                meta = self.TICKER_METADATA.get(t, {"lead_beta": 1.25})
+                beta = meta.get("lead_beta", 1.25)
+                rets = storage_base * beta + 0.0006 + np.random.normal(0, 0.011, T)
+                prices_df[t] = 45.0 * np.cumprod(1.0 + rets)
+            prices_df.attrs["data_source"] = "synthetic"
+        else:
+            prices_df.attrs["data_source"] = "real"
 
         return prices_df, nowcast_df, factors_df
 
     def run_walk_forward_backtest(self) -> Dict[str, Any]:
         """执行日频拟真交易人全流程样本外回测。"""
         prices_df, nowcast_df, factors_df = self.load_isolated_raw_data()
+        if not self.allow_synthetic and prices_df.attrs.get("data_source") == "synthetic":
+            raise SyntheticDataRejectedError("Formal backtest rejects synthetic price data.")
         dates = prices_df.index
         T = len(dates)
 

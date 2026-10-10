@@ -24,6 +24,8 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+from src.data.exceptions import MissingRealDataError, SyntheticDataRejectedError
+
 logger = logging.getLogger("storage_gold_joint_runner")
 
 STORAGE_STOCKS = [
@@ -68,26 +70,27 @@ class StorageGoldJointEngine:
     RF_ANNUAL: float = 0.015
     DEADBAND_THRESHOLD: float = 0.08  # 8% 调仓死区
 
-    def __init__(self, prices_df: Optional[pd.DataFrame] = None):
+    def __init__(self, prices_df: Optional[pd.DataFrame] = None, allow_synthetic: bool = False):
         self.storage_codes = [c[0] for c in STORAGE_STOCKS]
         self.gold_codes = [c[0] for c in GOLD_STOCKS]
         self.all_codes = self.storage_codes + self.gold_codes
         self.meta_map = {c[0]: {"name": c[1], "sector": c[2], "beta": c[3], "alpha": c[4]} for c in STORAGE_STOCKS + GOLD_STOCKS}
+        self.allow_synthetic = allow_synthetic
 
         if prices_df is not None:
             self.prices_df = prices_df
         else:
-            self.prices_df = self._load_or_generate_dataset()
+            self.prices_df = self._load_or_generate_dataset(allow_synthetic=allow_synthetic)
 
-    def _load_or_generate_dataset(self) -> pd.DataFrame:
-        """优先从全市场 300 标的数据集提取，若无则自包含生成。"""
-        raw_300d = Path("data/raw/backtest_paper_2024_2026_300stocks/market_prices.csv")
-        if raw_300d.exists():
-            df = pd.read_csv(raw_300d, index_col=0, parse_dates=True)
-            cols = [c for c in self.all_codes if c in df.columns]
-            if len(cols) == len(self.all_codes):
-                sub_cols = cols + (["000300.SH"] if "000300.SH" in df.columns else [])
-                return df[sub_cols]
+    def _load_or_generate_dataset(self, allow_synthetic: bool = False) -> pd.DataFrame:
+        """加载数据集。严禁读取已作废的 300 标的数据集。"""
+        # 严禁读取已作废的合成数据集 backtest_paper_2024_2026_300stocks
+        if not allow_synthetic:
+            raise MissingRealDataError(
+                self.all_codes,
+                "Real price data for storage and gold universe is missing and allow_synthetic=False. "
+                "Reading from deprecated backtest_paper_2024_2026_300stocks is disallowed."
+            )
 
         np.random.seed(42)
         dates = pd.bdate_range(start="2024-01-02", end="2026-08-28")
@@ -111,10 +114,17 @@ class StorageGoldJointEngine:
             rets = np.clip(rets, -0.10, 0.10)
             p_dict[code] = 25.0 * np.cumprod(1.0 + rets)
 
-        return pd.DataFrame(p_dict, index=dates)
+        df = pd.DataFrame(p_dict, index=dates)
+        df.attrs["data_source"] = "synthetic"
+        return df
 
     def run_backtest(self) -> Dict[str, Any]:
         """运行四大策略体系因果逐步推进回测。"""
+        if not self.allow_synthetic and getattr(self.prices_df, "attrs", {}).get("data_source") == "synthetic":
+            raise SyntheticDataRejectedError(
+                "Formal backtest rejected synthetic data in StorageGoldJointEngine. Real data required."
+            )
+
         dates = self.prices_df.index
         T = len(dates)
         ann_factor = 252.0
@@ -258,12 +268,32 @@ class StorageGoldJointEngine:
         dyn_vol = strategy_stats["dynamic_regime_barbell"].annualized_volatility
         div_ratio = float(weighted_avg_vol / (dyn_vol + 1e-8))
 
+        # 真实 Newey-West HAC 稳健 t-statistic 计算（杜绝硬编码 3.82）
+        dyn_nav_arr = np.array(strategies["dynamic_regime_barbell"]["nav"])
+        if len(dyn_nav_arr) > 1 and len(csi300_nav) > 1:
+            dyn_r = np.diff(dyn_nav_arr) / dyn_nav_arr[:-1]
+            csi_r = np.diff(csi300_nav) / np.array(csi300_nav[:-1])
+            excess_dyn = dyn_r - csi_r[:len(dyn_r)]
+            T_ex = len(excess_dyn)
+            mean_ex = np.mean(excess_dyn)
+            demeaned = excess_dyn - mean_ex
+            gamma0 = np.mean(demeaned ** 2)
+            max_lags = max(1, int(4.0 * (T_ex / 100.0) ** (2.0 / 9.0)))
+            gamma_sum = 0.0
+            for lag in range(1, max_lags + 1):
+                w_lag = 1.0 - lag / (max_lags + 1.0)
+                gamma_sum += 2.0 * w_lag * np.mean(demeaned[lag:] * demeaned[:-lag])
+            hac_var = (gamma0 + gamma_sum) / T_ex
+            harvey_alpha_t = float(mean_ex / np.sqrt(hac_var)) if hac_var > 1e-12 else 0.0
+        else:
+            harvey_alpha_t = 0.0
+
         result = {
             "period": f"{dates[0].strftime('%Y-%m-%d')} ~ {dates[-1].strftime('%Y-%m-%d')} ({T} Trading Days)",
             "stock_counts": {"storage": len(self.storage_codes), "gold": len(self.gold_codes), "total": len(self.all_codes)},
             "correlation_storage_gold": corr_val,
             "diversification_ratio": div_ratio,
-            "harvey_alpha_t_stat": 3.82,
+            "harvey_alpha_t_stat": round(harvey_alpha_t, 2),
             "benchmark_csi300_return": float(csi300_nav[-1] - 1.0),
             "strategies": {k: asdict(v) for k, v in strategy_stats.items()},
             "nav_series": {

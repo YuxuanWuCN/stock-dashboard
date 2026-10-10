@@ -31,6 +31,7 @@ import numpy as np
 import pandas as pd
 
 from src.analysis import factor_db
+from src.data.exceptions import MissingRealDataError
 
 logger = logging.getLogger("factor_providers")
 
@@ -105,13 +106,15 @@ class KennethFrenchFactorProvider(BaseFactorProvider):
         "F-F_Momentum_Factor_daily_CSV.zip"
     )
 
-    def __init__(self, cache_dir: Optional[str | Path] = None):
+    def __init__(self, cache_dir: Optional[str | Path] = None, allow_synthetic: bool = False):
         root = Path(__file__).resolve().parent.parent.parent
         self.cache_dir = Path(cache_dir or (root / "docs" / "data" / "factors" / "french_cache"))
         self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.allow_synthetic = allow_synthetic
 
-    def get_daily_factors(self, start_date: str, end_date: str) -> pd.DataFrame:
+    def get_daily_factors(self, start_date: str, end_date: str, allow_synthetic: Optional[bool] = None) -> pd.DataFrame:
         """获取美股 Carhart 4 因子数据。"""
+        effective_allow_synthetic = self.allow_synthetic if allow_synthetic is None else allow_synthetic
         cache_file = self.cache_dir / "us_carhart4_daily.csv"
         if cache_file.exists():
             df = pd.read_csv(cache_file, dtype={"date": str})
@@ -119,6 +122,7 @@ class KennethFrenchFactorProvider(BaseFactorProvider):
             mask = (df["date"] >= start_date) & (df["date"] <= end_date)
             res = df[mask].copy().sort_values("date").reset_index(drop=True)
             if not res.empty:
+                res.attrs["data_source"] = "french_real"
                 return res
 
         # 尝试在线获取与解析
@@ -126,9 +130,13 @@ class KennethFrenchFactorProvider(BaseFactorProvider):
             df = self._fetch_and_parse_online()
             df.to_csv(cache_file, index=False, encoding="utf-8")
             mask = (df["date"] >= start_date) & (df["date"] <= end_date)
-            return df[mask].copy().sort_values("date").reset_index(drop=True)
+            res = df[mask].copy().sort_values("date").reset_index(drop=True)
+            res.attrs["data_source"] = "french_real"
+            return res
         except Exception as e:
-            logger.warning(f"获取 Kenneth French 美股因子失败 ({e})，生成合成代理数据")
+            if not effective_allow_synthetic:
+                raise MissingRealDataError(f"获取 Kenneth French 美股因子失败 ({e})，且未显式允许使用合成数据。") from e
+            logger.warning(f"获取 Kenneth French 美股因子失败 ({e})，显式生成受控合成代理数据")
             return self._generate_synthetic_fallback(start_date, end_date)
 
     def _fetch_and_parse_online(self) -> pd.DataFrame:
@@ -169,11 +177,11 @@ class KennethFrenchFactorProvider(BaseFactorProvider):
         return df_ff3[["date", "MKT", "SMB", "HML", "MOM", "rf"]].dropna().reset_index(drop=True)
 
     def _generate_synthetic_fallback(self, start_date: str, end_date: str) -> pd.DataFrame:
-        """在离线或网络受限时生成符合统计特性的美股 4 因子回退序列。"""
+        """在显式允许时生成符合统计特性的美股 4 因子回退序列。"""
         dates = pd.date_range(start_date, end_date, freq="B").strftime("%Y-%m-%d").tolist()
         np.random.seed(42)
         n = len(dates)
-        return pd.DataFrame({
+        df = pd.DataFrame({
             "date": dates,
             "MKT": np.random.normal(0.0004, 0.012, n),
             "SMB": np.random.normal(0.0001, 0.006, n),
@@ -181,6 +189,8 @@ class KennethFrenchFactorProvider(BaseFactorProvider):
             "MOM": np.random.normal(0.0002, 0.008, n),
             "rf": np.full(n, 0.00015),
         })
+        df.attrs["data_source"] = "synthetic"
+        return df
 
 
 class CSMARProviderError(Exception):
@@ -868,19 +878,25 @@ class EastMoneyMiaoXiangProvider(BaseFactorProvider):
     支持获取标准 Carhart 4 因子及微观资金流衍生因子（主力大单、北向增减仓、机构席位）。
     """
 
-    def __init__(self, db_path: Optional[str | Path] = None):
+    def __init__(self, db_path: Optional[str | Path] = None, allow_synthetic: bool = False):
         from src.skills.eastmoney_miaoxiang_skill import EastMoneyMiaoXiangSkill
-        self.skill = EastMoneyMiaoXiangSkill(cache_db=db_path)
+        self.allow_synthetic = allow_synthetic
+        self.skill = EastMoneyMiaoXiangSkill(cache_db=db_path, allow_synthetic=allow_synthetic)
 
-    def get_daily_factors(self, start_date: str, end_date: str) -> pd.DataFrame:
-        df = self.skill.get_daily_factors_with_capital_flows(start_date, end_date)
+    def get_daily_factors(self, start_date: str, end_date: str, allow_synthetic: Optional[bool] = None) -> pd.DataFrame:
+        effective_allow_synthetic = self.allow_synthetic if allow_synthetic is None else allow_synthetic
+        df = self.skill.get_daily_factors_with_capital_flows(start_date, end_date, allow_synthetic=effective_allow_synthetic)
         if df.empty:
             return pd.DataFrame(columns=["date", "MKT", "SMB", "HML", "MOM", "rf"])
-        return df[["date", "MKT", "SMB", "HML", "MOM", "rf"]]
+        res = df[["date", "MKT", "SMB", "HML", "MOM", "rf"]].copy()
+        if "data_source" in df.attrs:
+            res.attrs["data_source"] = df.attrs["data_source"]
+        return res
 
-    def get_factors_with_flows(self, start_date: str, end_date: str) -> pd.DataFrame:
+    def get_factors_with_flows(self, start_date: str, end_date: str, allow_synthetic: Optional[bool] = None) -> pd.DataFrame:
         """获取包含微观资金流的完整多因子矩阵。"""
-        return self.skill.get_daily_factors_with_capital_flows(start_date, end_date)
+        effective_allow_synthetic = self.allow_synthetic if allow_synthetic is None else allow_synthetic
+        return self.skill.get_daily_factors_with_capital_flows(start_date, end_date, allow_synthetic=effective_allow_synthetic)
 
 
 class SCNUAcademicFactorProvider(BaseFactorProvider):

@@ -18,6 +18,7 @@ from src.analysis.factor_providers import (
     SCNUAcademicFactorProvider,
 )
 from src.analysis import factor_db
+from src.data.exceptions import MissingRealDataError
 
 
 def test_akshare_proxy_provider_db_query(tmp_path):
@@ -49,11 +50,18 @@ def test_akshare_proxy_provider_db_query(tmp_path):
 
 
 def test_kenneth_french_provider_fallback(tmp_path):
-    """测试 Kenneth French 美股因子适配器回退机制与数据结构。"""
+    """测试 Kenneth French 美股因子适配器回退机制与数据结构（反作弊守卫与受控合成标记）。"""
     provider = KennethFrenchFactorProvider(cache_dir=tmp_path)
-    df = provider.get_daily_factors("2025-01-01", "2025-01-10")
+    # 默认不允许合成数据，应抛出 MissingRealDataError
+    with pytest.raises(MissingRealDataError):
+        provider.get_daily_factors("2025-01-01", "2025-01-10")
+
+    # 显式允许合成数据时，返回合法结构并带有 synthetic 标签
+    provider_syn = KennethFrenchFactorProvider(cache_dir=tmp_path, allow_synthetic=True)
+    df = provider_syn.get_daily_factors("2025-01-01", "2025-01-10")
 
     assert not df.empty
+    assert df.attrs.get("data_source") == "synthetic"
     assert "date" in df.columns
     assert "MKT" in df.columns
     assert "SMB" in df.columns
