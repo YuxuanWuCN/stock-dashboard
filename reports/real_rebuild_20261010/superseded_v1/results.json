@@ -1,0 +1,166 @@
+{
+  "generated_at": "2026-10-11 04:36:03",
+  "data_source": "data/task_split/csmar_master/csmar_factor_panel_master.csv",
+  "universe_size": 299,
+  "time_range": [
+    "2024-01-02",
+    "2026-08-28"
+  ],
+  "annualization_days": 244,
+  "trend_gate_study": {
+    "trigger_stats": {
+      "count": 68200,
+      "mean_ret_5d": 0.003415434601302933,
+      "mean_ret_10d": 0.009584647836022068,
+      "mean_ret_20d": 0.021355856359224948,
+      "win_rate_5d": 0.48703812316715545,
+      "win_rate_10d": 0.5075659824046921,
+      "win_rate_20d": 0.5271994134897361,
+      "mean_maxdd_5d": -0.020033321301638353,
+      "mean_maxdd_10d": -0.033413217110671606,
+      "mean_maxdd_20d": -0.05074877616820159
+    },
+    "uptrend_stats": {
+      "count": 67140,
+      "mean_ret_5d": 0.0041579860383060396,
+      "mean_ret_10d": 0.007909060297110785,
+      "mean_ret_20d": 0.013919291927789252,
+      "win_rate_5d": 0.4761840929401251,
+      "win_rate_10d": 0.4851355376824546,
+      "win_rate_20d": 0.48599940422996724,
+      "mean_maxdd_5d": -0.02525328130289971,
+      "mean_maxdd_10d": -0.041182257251348754,
+      "mean_maxdd_20d": -0.06184945257306345
+    },
+    "non_trigger_stats": {
+      "count": 100079,
+      "mean_ret_5d": 0.003873177172108954,
+      "mean_ret_10d": 0.006140885118737814,
+      "mean_ret_20d": 0.010564909961466314,
+      "win_rate_5d": 0.47473495938208815,
+      "win_rate_10d": 0.47771260704043805,
+      "win_rate_20d": 0.47397555930814655,
+      "mean_maxdd_5d": -0.023577496998083997,
+      "mean_maxdd_10d": -0.039330736724466464,
+      "mean_maxdd_20d": -0.06027216167883343
+    },
+    "placebo_summary": {
+      "placebo_mean_20d": 0.01487630731512852,
+      "placebo_std_20d": 0.0012254443604627484,
+      "placebo_ci_95_20d": [
+        0.01239145399666635,
+        0.017370938431444216
+      ],
+      "empirical_p_value_20d": 1.0,
+      "placebo_mean_maxdd_20d": -0.056401552529975134
+    }
+  },
+  "fama_macbeth_study": {
+    "n_periods": 585,
+    "hac_lags": 5,
+    "factors": {
+      "mom_20d": {
+        "mean_risk_premium": 0.003942975437972614,
+        "annualized_premium": 0.9620860068653179,
+        "classic_se": 0.00024625350176886803,
+        "classic_t": 16.011855302157148,
+        "newey_west_se": 0.00027975226174851644,
+        "newey_west_t": 14.094525682573948,
+        "p_value": 0.0,
+        "block_bootstrap_ci_95": [
+          0.0034108597199796154,
+          0.0044820698083247665
+        ],
+        "fdr_q_value": 0.0,
+        "bonferroni_p_value": 0.0,
+        "is_significant_5pct_fdr": true,
+        "is_significant_5pct_bonferroni": true
+      },
+      "mom_60d": {
+        "mean_risk_premium": 0.00014631602454655927,
+        "annualized_premium": 0.03570110998936046,
+        "classic_se": 0.00023153269724593626,
+        "classic_t": 0.6319454067912532,
+        "newey_west_se": 0.00024233697774479464,
+        "newey_west_t": 0.6037709387489549,
+        "p_value": 0.5459959432369961,
+        "block_bootstrap_ci_95": [
+          -0.0003111861376812626,
+          0.0006442175112214907
+        ],
+        "fdr_q_value": 0.6193963474346638,
+        "bonferroni_p_value": 1.0,
+        "is_significant_5pct_fdr": false,
+        "is_significant_5pct_bonferroni": false
+      },
+      "vol_20d": {
+        "mean_risk_premium": 0.00019731272453951088,
+        "annualized_premium": 0.04814430478764065,
+        "classic_se": 0.00036804658140990836,
+        "classic_t": 0.5361080213913351,
+        "newey_west_se": 0.0003972424334878101,
+        "newey_west_t": 0.49670606135174045,
+        "p_value": 0.6193963474346638,
+        "block_bootstrap_ci_95": [
+          -0.0005755756450110824,
+          0.0009967569391628802
+        ],
+        "fdr_q_value": 0.6193963474346638,
+        "bonferroni_p_value": 1.0,
+        "is_significant_5pct_fdr": false,
+        "is_significant_5pct_bonferroni": false
+      },
+      "turnover_20d": {
+        "mean_risk_premium": -0.0007085152144043442,
+        "annualized_premium": -0.17287771231465998,
+        "classic_se": 0.0001957446827542861,
+        "classic_t": -3.6195885601333413,
+        "newey_west_se": 0.0002051015281957552,
+        "newey_west_t": -3.454460923022063,
+        "p_value": 0.0005513941164596581,
+        "block_bootstrap_ci_95": [
+          -0.0010955117532356442,
+          -0.0003397053969762257
+        ],
+        "fdr_q_value": 0.0008270911746894871,
+        "bonferroni_p_value": 0.0033083646987579485,
+        "is_significant_5pct_fdr": true,
+        "is_significant_5pct_bonferroni": true
+      },
+      "amihud": {
+        "mean_risk_premium": 0.0005965298123295638,
+        "annualized_premium": 0.14555327420841357,
+        "classic_se": 0.00013122064360683626,
+        "classic_t": 4.546005841252299,
+        "newey_west_se": 0.00015016970058667018,
+        "newey_west_t": 3.9723713239028378,
+        "p_value": 7.116067781254287e-05,
+        "block_bootstrap_ci_95": [
+          0.00031083781010999065,
+          0.0008831547395012107
+        ],
+        "fdr_q_value": 0.00014232135562508574,
+        "bonferroni_p_value": 0.00042696406687525723,
+        "is_significant_5pct_fdr": true,
+        "is_significant_5pct_bonferroni": true
+      },
+      "price_pos": {
+        "mean_risk_premium": 0.012248164642423683,
+        "annualized_premium": 2.9885521727513784,
+        "classic_se": 0.00021939032734532286,
+        "classic_t": 55.82818892076738,
+        "newey_west_se": 0.00036106256960980517,
+        "newey_west_t": 33.92255435300338,
+        "p_value": 0.0,
+        "block_bootstrap_ci_95": [
+          0.01162463893354419,
+          0.012909362390675276
+        ],
+        "fdr_q_value": 0.0,
+        "bonferroni_p_value": 0.0,
+        "is_significant_5pct_fdr": true,
+        "is_significant_5pct_bonferroni": true
+      }
+    }
+  }
+}

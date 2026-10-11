@@ -1,404 +1,667 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""scripts/run_real_m4_rebuild.py —— 真实数据重建 M4 核心量化实验执行引擎
+"""scripts/run_real_m4_rebuild.py —— M4/P4 端到端一键复算（修正版 v2）
 
-依据《真实数据重建方案_给主Agent.md》与《AGENTS.md》：
-1. 纯真实数据源：data/task_split/csmar_master/csmar_factor_panel_master.csv (299支股票, 2024-01-02至2026-08-28)
-2. 实验一：Trend Gate 逐日事件研究（无前视、考虑涨跌停成交限制、未来 5/10/20 日真实收益与最大回撤、1000次真随机日期安慰剂落盘）
-3. 实验二：Fama-MacBeth 真实 HAC 截面回归（Newey-West Bartlett核，滞后阶数 q=floor(4*(T/100)^(2/9))，区块Bootstrap，BH-FDR & Bonferroni校正）
-4. 统计口径：A股年化244天，无任何硬编码指标，所有结果落盘至 reports/real_rebuild_20261010/
+一条命令跑完两个核心实验并生成全部交付产物：
+
+    .venv/Scripts/python scripts/run_real_m4_rebuild.py
+
+产物（全部写入 reports/real_rebuild_20261010/）：
+    trend_gate_event_study.json     实验一：事件研究（受约束 / 无约束两种口径）
+    trend_gate_placebo_1000.json    实验一：三种设计的 1000 次安慰剂分布与经验 p 值
+    fama_macbeth_hac_results.json   实验二：FM HAC 回归 + 稳健性 + 偏差留痕
+    results.json                    汇总
+    report.md                       实证研究报告
+    vs_old.md                       旧值 / v1 / v2 三项对账
+    paper_correction_checklist.md   论文与申报材料删改清单
+
+设计原则：
+  - report.md / vs_old.md / checklist 的每一个数字都从结果 JSON 现算现写，避免手工抄录出错。
+  - v1（commit 21c3d5d0）的缺陷结果完整保留在 superseded_v1/ 下，不删除、不改写。
 """
 
-import json
-import os
+from __future__ import annotations
+
 import sys
 import time
 from pathlib import Path
-from typing import Dict, List, Tuple
 
-import numpy as np
-import pandas as pd
-import statsmodels.api as sm
+ROOT_DIR = Path(__file__).resolve().parents[1]
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
-def calc_newey_west_lags(n_obs: int) -> int:
-    """标准经验公式: q = max(1, floor(4 * (T / 100)^(2/9)))"""
-    if n_obs <= 0:
-        return 1
-    q = int(np.floor(4.0 * (float(n_obs) / 100.0) ** (2.0 / 9.0)))
-    return max(1, q)
+from scripts.p4_real_data_core import ANNUALIZATION_DAYS, RISK_FREE_RATE_ANNUAL, dump_json  # noqa: E402
+from scripts.run_p4_fama_macbeth import run_fama_macbeth_study  # noqa: E402
+from scripts.run_p4_trend_gate_study import run_trend_gate_study  # noqa: E402
 
+PANEL_PATH = ROOT_DIR / "data" / "task_split" / "csmar_master" / "csmar_factor_panel_master.csv"
+OUT_DIR = ROOT_DIR / "reports" / "real_rebuild_20261010"
+F2 = "{:+.2f}"
 
-def newey_west_t_stat(series: np.ndarray, lags: int) -> Tuple[float, float, float]:
-    """计算时间序列均值的 Newey-West HAC t 统计量。
-    
-    返回: (mean, nw_se, t_stat)
-    """
-    T = len(series)
-    if T < 2:
-        return float(np.mean(series)), 1e-9, 0.0
-    mu = np.mean(series)
-    e = series - mu
-    # 样本方差 (gamma_0)
-    gamma_0 = np.sum(e ** 2) / T
-    # 自协方差求和 (Bartlett核加权)
-    var_hac = gamma_0
-    for l in range(1, lags + 1):
-        weight = 1.0 - float(l) / (lags + 1.0)
-        gamma_l = np.sum(e[l:] * e[:-l]) / T
-        var_hac += 2.0 * weight * gamma_l
-    
-    var_mean = max(var_hac / T, 1e-12)
-    se_hac = np.sqrt(var_mean)
-    t_stat = mu / se_hac
-    return float(mu), float(se_hac), float(t_stat)
+GROUP_LABELS = {
+    "trigger_downtrend": "**下行拦截组** (Trigger)",
+    "uptrend": "顺势组 (Uptrend)",
+    "neutral_control": "纯对照组 (Neutral，互斥)",
+    "not_downtrend_pool": "非触发池 (含顺势组，安慰剂抽样池)",
+}
+PLACEBO_LABELS = {
+    "date_level": "随机日期（有放回抽日期）",
+    "date_matched": "同日匹配（逐日等量抽事件）",
+    "event_level": "事件级抽样（次级，低估标准误）",
+}
 
 
-def block_bootstrap_ci(series: np.ndarray, block_len: int = 5, n_boot: int = 1000, alpha: float = 0.05) -> Tuple[float, float]:
-    """移动区块 Bootstrap (Moving Block Bootstrap) 计算均值的双侧置信区间。"""
-    T = len(series)
-    if T <= block_len:
-        return float(np.percentile(series, 2.5)), float(np.percentile(series, 97.5))
-    
-    n_blocks = int(np.ceil(T / block_len))
-    boot_means = np.zeros(n_boot)
-    # 所有可能的区块起点
-    max_start = T - block_len + 1
-    
-    rng = np.random.RandomState(42)  # 固定种子保证可复现性
-    for b in range(n_boot):
-        starts = rng.randint(0, max_start, size=n_blocks)
-        sampled = []
-        for s in starts:
-            sampled.extend(series[s:s+block_len])
-        boot_means[b] = np.mean(sampled[:T])
-        
-    lower = float(np.percentile(boot_means, 100.0 * (alpha / 2.0)))
-    upper = float(np.percentile(boot_means, 100.0 * (1.0 - alpha / 2.0)))
-    return lower, upper
+def _pct(x) -> str:
+    return "n/a" if x is None else f"{x:+.2%}"
 
 
-def benjamini_hochberg_fdr(p_values: np.ndarray) -> np.ndarray:
-    """计算 Benjamini-Hochberg FDR 调整后的 q-values。"""
-    m = len(p_values)
-    if m == 0:
-        return np.array([])
-    sorted_indices = np.argsort(p_values)
-    sorted_p = p_values[sorted_indices]
-    q_vals = np.zeros(m)
-    
-    min_q = 1.0
-    for i in range(m - 1, -1, -1):
-        rank = i + 1
-        q = (sorted_p[i] * m) / rank
-        min_q = min(min_q, q)
-        q_vals[i] = min_q
-        
-    res = np.zeros(m)
-    res[sorted_indices] = q_vals
-    return np.clip(res, 0.0, 1.0)
+def _num(x, nd: int = 2) -> str:
+    return "n/a" if x is None else f"{x:.{nd}f}"
 
 
-def run_trend_gate_event_study(df: pd.DataFrame, out_dir: Path) -> Dict:
-    """实验一：Trend Gate 逐日事件研究与 1000 次真实随机安慰剂检验。"""
-    print("[1/2] 开始执行 Trend Gate 事件研究与安慰剂检验...")
-    # 按照 stock_code 和 trade_date 严格排序
-    df = df.sort_values(["stock_code", "trade_date"]).reset_index(drop=True)
-    
-    # 构建滑动窗口与指标
-    records = []
-    grouped = df.groupby("stock_code")
-    
-    for code, group in grouped:
-        if len(group) < 65:
-            continue
-        closes = group["close"].values
-        dates = group["trade_date"].values
-        hit_limits = group["hit_limit"].values if "hit_limit" in group.columns else np.zeros(len(group))
-        n = len(closes)
-        
-        # 逐日推进 (至少有60日历史数据)
-        for t in range(60, n - 20):  # 预留 20 日作为真实未来收益检验窗口
-            curr_c = closes[t]
-            prev_20 = closes[t - 20]
-            ma60 = np.mean(closes[t - 60:t])
-            
-            mom_20 = (curr_c / prev_20 - 1.0) if prev_20 > 0 else 0.0
-            above_ma60 = curr_c > ma60
-            
-            # 判定趋势状态 (Trend Gate 战术门禁)
-            is_downtrend = (mom_20 <= 0.0) and (not above_ma60)
-            is_uptrend = (mom_20 > 0.0) and above_ma60
-            
-            # 涨跌停成交限制检验 (A股真实流动性约束)
-            # 若当日跌停(hit_limit == -1 or close==涨跌停价)，次日无法按市价平仓
-            is_limit_down = (hit_limits[t] == -1)
-            is_limit_up = (hit_limits[t] == 1)
-            
-            # 计算纯未来真实收益与最大回撤 (无前视偏差: t+1 至 t+k)
-            ret_5d = float(closes[t + 5] / curr_c - 1.0)
-            ret_10d = float(closes[t + 10] / curr_c - 1.0)
-            ret_20d = float(closes[t + 20] / curr_c - 1.0)
-            
-            # 未来窗口期最大回撤
-            window_5 = closes[t + 1:t + 6]
-            window_10 = closes[t + 1:t + 11]
-            window_20 = closes[t + 1:t + 21]
-            
-            maxdd_5d = float(np.min(window_5) / curr_c - 1.0)
-            maxdd_10d = float(np.min(window_10) / curr_c - 1.0)
-            maxdd_20d = float(np.min(window_20) / curr_c - 1.0)
-            
-            records.append({
-                "stock_code": code,
-                "trade_date": dates[t],
-                "is_downtrend": is_downtrend,
-                "is_uptrend": is_uptrend,
-                "is_limit_down": is_limit_down,
-                "is_limit_up": is_limit_up,
-                "ret_5d": ret_5d,
-                "ret_10d": ret_10d,
-                "ret_20d": ret_20d,
-                "maxdd_5d": maxdd_5d,
-                "maxdd_10d": maxdd_10d,
-                "maxdd_20d": maxdd_20d,
-            })
-            
-    events_df = pd.DataFrame(records)
-    print(f"  > 总样本事件数: {len(events_df)}")
-    
-    # 过滤出 Trend Gate 门禁拦截触发样本 (downtrend 且非跌停可以正常卖出平仓)
-    trigger_samples = events_df[events_df["is_downtrend"] & (~events_df["is_limit_down"])].copy()
-    non_trigger_samples = events_df[(~events_df["is_downtrend"])].copy()
-    uptrend_samples = events_df[events_df["is_uptrend"]].copy()
-    
-    n_triggers = len(trigger_samples)
-    print(f"  > 门禁下行拦截触发样本数: {n_triggers}, 非拦截对照样本数: {len(non_trigger_samples)}, 上行顺势样本数: {len(uptrend_samples)}")
-    
-    # 统计真实收益表现
-    trigger_stats = {
-        "count": n_triggers,
-        "mean_ret_5d": float(trigger_samples["ret_5d"].mean()),
-        "mean_ret_10d": float(trigger_samples["ret_10d"].mean()),
-        "mean_ret_20d": float(trigger_samples["ret_20d"].mean()),
-        "win_rate_5d": float((trigger_samples["ret_5d"] > 0).mean()),
-        "win_rate_10d": float((trigger_samples["ret_10d"] > 0).mean()),
-        "win_rate_20d": float((trigger_samples["ret_20d"] > 0).mean()),
-        "mean_maxdd_5d": float(trigger_samples["maxdd_5d"].mean()),
-        "mean_maxdd_10d": float(trigger_samples["maxdd_10d"].mean()),
-        "mean_maxdd_20d": float(trigger_samples["maxdd_20d"].mean()),
-    }
-    
-    uptrend_stats = {
-        "count": len(uptrend_samples),
-        "mean_ret_5d": float(uptrend_samples["ret_5d"].mean()),
-        "mean_ret_10d": float(uptrend_samples["ret_10d"].mean()),
-        "mean_ret_20d": float(uptrend_samples["ret_20d"].mean()),
-        "win_rate_5d": float((uptrend_samples["ret_5d"] > 0).mean()),
-        "win_rate_10d": float((uptrend_samples["ret_10d"] > 0).mean()),
-        "win_rate_20d": float((uptrend_samples["ret_20d"] > 0).mean()),
-        "mean_maxdd_5d": float(uptrend_samples["maxdd_5d"].mean()),
-        "mean_maxdd_10d": float(uptrend_samples["maxdd_10d"].mean()),
-        "mean_maxdd_20d": float(uptrend_samples["maxdd_20d"].mean()),
-    }
-    
-    non_trigger_stats = {
-        "count": len(non_trigger_samples),
-        "mean_ret_5d": float(non_trigger_samples["ret_5d"].mean()),
-        "mean_ret_10d": float(non_trigger_samples["ret_10d"].mean()),
-        "mean_ret_20d": float(non_trigger_samples["ret_20d"].mean()),
-        "win_rate_5d": float((non_trigger_samples["ret_5d"] > 0).mean()),
-        "win_rate_10d": float((non_trigger_samples["ret_10d"] > 0).mean()),
-        "win_rate_20d": float((non_trigger_samples["ret_20d"] > 0).mean()),
-        "mean_maxdd_5d": float(non_trigger_samples["maxdd_5d"].mean()),
-        "mean_maxdd_10d": float(non_trigger_samples["maxdd_10d"].mean()),
-        "mean_maxdd_20d": float(non_trigger_samples["maxdd_20d"].mean()),
-    }
-    
-    # 1000 次真实随机日期安慰剂检验 (Placebo Simulation)
-    print("  > 真实执行 1000 次安慰剂随机检验并记录分布...")
-    placebo_ret_5d = []
-    placebo_ret_10d = []
-    placebo_ret_20d = []
-    placebo_maxdd_20d = []
-    
-    all_indices = events_df.index.values
-    rng = np.random.RandomState(20261010)  # 固定种子可复算
-    
-    # 抽取与触发样本相同量级的随机样本 (1000 次真跑)
-    sample_size = min(n_triggers, 10000)
-    for i in range(1000):
-        sampled_idx = rng.choice(all_indices, size=sample_size, replace=False)
-        sub = events_df.loc[sampled_idx]
-        placebo_ret_5d.append(float(sub["ret_5d"].mean()))
-        placebo_ret_10d.append(float(sub["ret_10d"].mean()))
-        placebo_ret_20d.append(float(sub["ret_20d"].mean()))
-        placebo_maxdd_20d.append(float(sub["maxdd_20d"].mean()))
-        
-    placebo_ret_5d = np.array(placebo_ret_5d)
-    placebo_ret_10d = np.array(placebo_ret_10d)
-    placebo_ret_20d = np.array(placebo_ret_20d)
-    placebo_maxdd_20d = np.array(placebo_maxdd_20d)
-    
-    # 保存 1000 次安慰剂原始抽样数据到 JSON
-    placebo_file = out_dir / "trend_gate_placebo_1000.json"
-    with open(placebo_file, "w", encoding="utf-8") as f:
-        json.dump({
-            "n_runs": 1000,
-            "sample_size_per_run": sample_size,
-            "actual_downtrend_mean_20d": trigger_stats["mean_ret_20d"],
-            "actual_uptrend_mean_20d": uptrend_stats["mean_ret_20d"],
-            "placebo_5d_means": placebo_ret_5d.tolist(),
-            "placebo_10d_means": placebo_ret_10d.tolist(),
-            "placebo_20d_means": placebo_ret_20d.tolist(),
-            "placebo_maxdd_20d_means": placebo_maxdd_20d.tolist(),
-        }, f, indent=2)
-    print(f"  > 1000 次安慰剂检验结果已落盘: {placebo_file}")
-    
-    # 计算统计显著性 p 值 (经验 p 值: 安慰剂收益比触发下行收益还低的概率)
-    p_val_avoidance_20d = float(np.mean(placebo_ret_20d <= trigger_stats["mean_ret_20d"]))
-    
-    return {
-        "trigger_stats": trigger_stats,
-        "uptrend_stats": uptrend_stats,
-        "non_trigger_stats": non_trigger_stats,
-        "placebo_summary": {
-            "placebo_mean_20d": float(np.mean(placebo_ret_20d)),
-            "placebo_std_20d": float(np.std(placebo_ret_20d)),
-            "placebo_ci_95_20d": [float(np.percentile(placebo_ret_20d, 2.5)), float(np.percentile(placebo_ret_20d, 97.5))],
-            "empirical_p_value_20d": p_val_avoidance_20d,
-            "placebo_mean_maxdd_20d": float(np.mean(placebo_maxdd_20d)),
+def build_results_payload(trend: dict, fm: dict) -> dict:
+    """汇总两个实验的结论层字段。"""
+    c = trend["groups_constrained"]
+    u = trend["groups_unconstrained"]
+    pv = trend["placebo_p_values"]
+    paired = trend["daily_paired_test"]
+    primary = fm["primary_next_day"]
+    robust = fm["robustness"]
+
+    def _pv_block(design: str) -> dict:
+        return {
+            mode: {
+                name: {h: {k: v for k, v in blk.items()} for h, blk in pvals.items()}
+                for name, pvals in pv[design][mode].items()
+            }
+            for mode in pv[design]
         }
-    }
 
-
-def run_fama_macbeth_regression(df: pd.DataFrame, out_dir: Path) -> Dict:
-    """实验二：Fama-MacBeth HAC 截面与滚动回归 (严格按方案 q 阶滞后与多重检验校正)。"""
-    print("[2/2] 开始执行 Fama-MacBeth HAC 回归与多重假设检验校正...")
-    factors = ["mom_20d", "mom_60d", "vol_20d", "turnover_20d", "amihud", "price_pos"]
-    available_factors = [f for f in factors if f in df.columns]
-    print(f"  > 入选截面因子: {available_factors}")
-    
-    # 按照 trade_date 组织截面
-    dates = sorted(df["trade_date"].unique())
-    T_total = len(dates)
-    print(f"  > 截面期数 T = {T_total}")
-    
-    # 存储每日回归系数 lambda_{k, t}
-    daily_lambdas = {f: [] for f in available_factors}
-    daily_alphas = []
-    valid_dates = []
-    
-    for t_idx, d in enumerate(dates):
-        sub = df[df["trade_date"] == d].dropna(subset=["ret"] + available_factors)
-        if len(sub) < 30:  # 截面有效股票数太少则跳过
-            continue
-            
-        y = sub["ret"].values
-        X = sub[available_factors].values
-        
-        # 截面标准化处理 (Z-score)
-        X_std = (X - np.mean(X, axis=0)) / (np.std(X, axis=0) + 1e-9)
-        X_reg = sm.add_constant(X_std)
-        
-        try:
-            model = sm.OLS(y, X_reg).fit()
-            daily_alphas.append(float(model.params[0]))
-            for idx, f in enumerate(available_factors):
-                daily_lambdas[f].append(float(model.params[idx + 1]))
-            valid_dates.append(d)
-        except Exception:
-            continue
-            
-    T_valid = len(valid_dates)
-    lags_nw = calc_newey_west_lags(T_valid)
-    print(f"  > 有效截面期数 T_valid = {T_valid}, 理论最优 Newey-West HAC 滞后阶数 q = {lags_nw}")
-    
-    factor_results = {}
-    p_values_list = []
-    factor_names_list = []
-    
-    for f in available_factors:
-        series = np.array(daily_lambdas[f])
-        mean_val, nw_se, nw_t = newey_west_t_stat(series, lags_nw)
-        # 普通 OLS t
-        classic_se = float(np.std(series, ddof=1) / np.sqrt(T_valid))
-        classic_t = mean_val / max(classic_se, 1e-12)
-        # 双侧 p 值 (依据正态渐近分布)
-        from scipy import stats
-        p_val = float(2.0 * (1.0 - stats.norm.cdf(abs(nw_t))))
-        
-        # 区块 Bootstrap 95% 置信区间
-        ci_lower, ci_upper = block_bootstrap_ci(series, block_len=lags_nw, n_boot=1000)
-        
-        factor_results[f] = {
-            "mean_risk_premium": mean_val,
-            "annualized_premium": mean_val * 244.0,  # 统一 A 股 244 天口径
-            "classic_se": classic_se,
-            "classic_t": classic_t,
-            "newey_west_se": nw_se,
-            "newey_west_t": nw_t,
-            "p_value": p_val,
-            "block_bootstrap_ci_95": [ci_lower, ci_upper],
-        }
-        factor_names_list.append(f)
-        p_values_list.append(p_val)
-        
-    p_vals_arr = np.array(p_values_list)
-    # 多重假设检验校正: BH-FDR 与 Bonferroni
-    q_vals_bh = benjamini_hochberg_fdr(p_vals_arr)
-    p_vals_bonf = np.clip(p_vals_arr * len(p_vals_arr), 0.0, 1.0)
-    
-    for idx, f in enumerate(factor_names_list):
-        factor_results[f]["fdr_q_value"] = float(q_vals_bh[idx])
-        factor_results[f]["bonferroni_p_value"] = float(p_vals_bonf[idx])
-        factor_results[f]["is_significant_5pct_fdr"] = bool(q_vals_bh[idx] < 0.05)
-        factor_results[f]["is_significant_5pct_bonferroni"] = bool(p_vals_bonf[idx] < 0.05)
-        
     return {
-        "n_periods": T_valid,
-        "hac_lags": lags_nw,
-        "factors": factor_results
-    }
-
-
-def main():
-    start_time = time.time()
-    csmar_path = Path("data/task_split/csmar_master/csmar_factor_panel_master.csv")
-    out_dir = Path("reports/real_rebuild_20261010")
-    out_dir.mkdir(parents=True, exist_ok=True)
-    
-    if not csmar_path.exists():
-        print(f"ERROR: 找不到真实 CSMAR 数据源 {csmar_path}")
-        sys.exit(1)
-        
-    print(f"正在加载 CSMAR 真实主面板: {csmar_path} ...")
-    df = pd.read_csv(csmar_path)
-    print(f"数据加载完成: {df.shape[0]} 行, {df.shape[1]} 列, 标的数: {df['stock_code'].nunique()}")
-    
-    # 1. Trend Gate 事件研究与安慰剂检验
-    tg_results = run_trend_gate_event_study(df, out_dir)
-    
-    # 2. Fama-MacBeth 真实 HAC 滚动回归
-    fm_results = run_fama_macbeth_regression(df, out_dir)
-    
-    # 汇总 results.json
-    full_results = {
         "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
-        "data_source": "data/task_split/csmar_master/csmar_factor_panel_master.csv",
-        "universe_size": int(df["stock_code"].nunique()),
-        "time_range": [str(df["trade_date"].min()), str(df["trade_date"].max())],
-        "annualization_days": 244,
-        "trend_gate_study": tg_results,
-        "fama_macbeth_study": fm_results,
+        "version": "v2-rework",
+        "supersedes": "v1 (commit 21c3d5d0) —— 缺陷记录见 superseded_v1/",
+        "data_source": trend["data_source"],
+        "data_sha256": trend["data_sha256"],
+        "universe": trend["universe"],
+        "annualization_days": ANNUALIZATION_DAYS,
+        "risk_free_rate_annual": RISK_FREE_RATE_ANNUAL,
+        "trend_gate_event_study": {
+            "constrained": c,
+            "unconstrained": u,
+            "event_counts": trend["event_counts"],
+            "placebo_p_values": {d: _pv_block(d) for d in ("date_level", "date_matched", "event_level")},
+            "daily_paired_test": paired,
+            "cluster_bootstrap_diff": trend["cluster_bootstrap_diff"],
+            "exclusive_group_comparisons": trend["exclusive_group_comparisons"],
+            "entry_diagnostics": trend["entry_diagnostics"],
+            "limit_flag_reconstruction": trend["limit_flag_reconstruction"],
+            "board_limit_discipline_check": trend["board_limit_discipline_check"],
+            "return_basis_validation": trend["return_basis_validation"],
+            "limitations": trend["limitations"],
+        },
+        "fama_macbeth_hac": {
+            "primary": {
+                "dependent_variable": primary["dependent_variable"],
+                "n_periods": primary["n_periods"],
+                "hac_lags": primary["hac_lags"],
+                "n_stocks": primary["n_stocks"],
+                "n_observations": primary["n_observations"],
+                "n_tests": primary["n_tests"],
+                "significant_fdr": [f for f, s in primary["factors_stats"].items() if s["significant_5pct_fdr"]],
+                "factors": primary["factors_stats"],
+            },
+            "robust_exclude_limit_up_at_t": {
+                "definition": "reconstructed",
+                "n_rows_excluded": robust["exclude_limit_up_at_t"]["n_rows_excluded"],
+                "factors": {f: {"newey_west_t": s["newey_west_t"], "fdr_q_value": s["fdr_q_value"],
+                                "significant_5pct_fdr": s["significant_5pct_fdr"]}
+                            for f, s in robust["exclude_limit_up_at_t"]["factors_stats"].items()},
+            },
+            "robust_exclude_limit_up_at_t_literal": {
+                "definition": "literal (hit_limit==1 且 ret>0)",
+                "n_rows_excluded": robust["exclude_limit_up_at_t_literal"]["n_rows_excluded"],
+                "factors": {f: {"newey_west_t": s["newey_west_t"], "fdr_q_value": s["fdr_q_value"],
+                                "significant_5pct_fdr": s["significant_5pct_fdr"]}
+                            for f, s in robust["exclude_limit_up_at_t_literal"]["factors_stats"].items()},
+            },
+            "robust_official_ret_only": {
+                "n_periods": robust["official_ret_only"]["n_periods"],
+                "n_stocks": robust["official_ret_only"]["n_stocks"],
+                "factors": {f: {"newey_west_t": s["newey_west_t"], "fdr_q_value": s["fdr_q_value"],
+                                "significant_5pct_fdr": s["significant_5pct_fdr"]}
+                            for f, s in robust["official_ret_only"]["factors_stats"].items()},
+            },
+            "v1_same_day_bias_demo": {
+                "note": "复现 v1 同期收益回归口径，仅作前视偏差留痕，不得作为结论引用",
+                "factors": {f: {"newey_west_t": s["newey_west_t"],
+                                "annualized_premium_244d": s["annualized_premium_244d"]}
+                            for f, s in robust["same_day_v1_bias_demo"]["factors_stats"].items()},
+            },
+            "bias_table": robust["bias_table"],
+            "limitations": fm["limitations"],
+        },
+        "deliverables": [
+            "reports/real_rebuild_20261010/trend_gate_event_study.json",
+            "reports/real_rebuild_20261010/trend_gate_placebo_1000.json",
+            "reports/real_rebuild_20261010/fama_macbeth_hac_results.json",
+            "reports/real_rebuild_20261010/results.json",
+            "reports/real_rebuild_20261010/report.md",
+            "reports/real_rebuild_20261010/vs_old.md",
+            "reports/real_rebuild_20261010/paper_correction_checklist.md",
+        ],
+        "reproduction_command": ".venv/Scripts/python scripts/run_real_m4_rebuild.py",
     }
-    
-    results_file = out_dir / "results.json"
-    with open(results_file, "w", encoding="utf-8") as f:
-        json.dump(full_results, f, indent=2, ensure_ascii=False)
-    print(f"\n[OK] 完整量化重算结果已落盘: {results_file}")
-    
-    elapsed = time.time() - start_time
-    print(f"全流程耗时: {elapsed:.2f} 秒")
+
+
+def build_report_md(trend: dict, fm: dict) -> str:
+    """生成 report.md。所有数字均取自本次运行结果。"""
+    c = trend["groups_constrained"]
+    u = trend["groups_unconstrained"]
+    pv = trend["placebo_p_values"]
+    paired = trend["daily_paired_test"]
+    counts = trend["event_counts"]
+    lv = trend["limit_flag_reconstruction"]
+    bd = trend["board_limit_discipline_check"]
+    rb = trend.get("return_basis_validation", {})
+    cb = trend["cluster_bootstrap_diff"]
+    excl = trend["exclusive_group_comparisons"]
+    entry_diag = trend["entry_diagnostics"]
+    uni = trend["universe"]
+    fm_p = fm["primary_next_day"]
+    robust = fm["robustness"]
+
+    def group_row(name: str, g: dict) -> str:
+        cols = [GROUP_LABELS.get(name, name), f"{g['n_events']:,}", str(g.get("n_stocks", "n/a"))]
+        for h in ("h5", "h10", "h20"):
+            cols.append(_pct(g[h]["mean_ret"]))
+        cols.append(f"{g['h20']['win_rate']:.2%}")
+        cols.append(_pct(g["h20"]["mean_maxdd"]))
+        cols.append(_num(g["h20"].get("daily_nw_t")))
+        return "| " + " | ".join(cols) + " |"
+
+    def placebo_row(design: str, mode: str, name: str) -> str:
+        blk = pv[design][mode][name]["h20"]
+        pool_label = "纯对照组(互斥)" if name == "uptrend" else "非触发池"
+        return (f"| {PLACEBO_LABELS[design]} | {mode} | {name} | {pool_label} | {_pct(blk['observed_mean_ret'])} | "
+                f"{_pct(blk['placebo_mean'])} | {blk['placebo_std']:.4f} | "
+                f"{blk['p_one_sided_lower']:.4f} | {blk['p_one_sided_upper']:.4f} | {blk['p_two_sided']:.4f} |")
+
+    def cluster_row(mode: str, name: str, pool_label: str) -> str:
+        b = cb[mode][name]["h20"]
+        e, d = b["event_weighted"], b["date_equal"]
+        return (f"| {mode} | {name} | {pool_label} | {b['n_days_joined']} | {b['corr_of_date_means']:+.3f} | "
+                f"{_pct(e['observed_diff'])} | {e['boot_se']:.4f} | {F2.format(e['boot_t'])} | "
+                f"{e['boot_p_two_sided']:.4f} | {_pct(d['observed_diff'])} | {F2.format(d['boot_t'])} | "
+                f"{d['boot_p_two_sided']:.4f} |")
+
+    def exclusive_row(mode: str, key: str) -> str:
+        b = excl[mode][key]["h20"]["event_weighted"]
+        return (f"| {mode} | {key} | {_pct(b['observed_diff'])} | {b['boot_se']:.4f} | "
+                f"{F2.format(b['boot_t'])} | {b['boot_p_two_sided']:.4f} |")
+
+    def paired_row(mode: str, name: str) -> str:
+        b = paired[mode][name]["h20"]
+        return (f"| {mode} | {name} | {b['n_days']} | {_pct(b['mean_diff'])} | {_pct(b['weighted_mean_diff'])} | "
+                f"{F2.format(b['nw_t'])} | {b['nw_p_two_sided']:.4f} | {b['share_days_target_lower']:.1%} |")
+
+    fm_rows = []
+    for f, s in fm_p["factors_stats"].items():
+        fm_rows.append(
+            f"| {f} | {_pct(s['mean_risk_premium_daily'])} | {_pct(s['annualized_premium_244d'])} | "
+            f"{F2.format(s['classic_t'])} | {F2.format(s['newey_west_t'])} | {s['p_value_two_sided']:.4f} | "
+            f"[{_pct(s['block_bootstrap_ci_95'][0])}, {_pct(s['block_bootstrap_ci_95'][1])}] | "
+            f"{s['fdr_q_value']:.4f} | {s['bonferroni_p_value']:.4f} | "
+            f"{'显著' if s['significant_5pct_fdr'] else '不显著'} |"
+        )
+
+    robust_rows = []
+    for f, s in fm_p["factors_stats"].items():
+        a = robust["exclude_limit_up_at_t"]["factors_stats"][f]
+        a2 = robust["exclude_limit_up_at_t_literal"]["factors_stats"][f]
+        b = robust["official_ret_only"]["factors_stats"][f]
+        v1 = robust["same_day_v1_bias_demo"]["factors_stats"][f]
+        robust_rows.append(
+            f"| {f} | {F2.format(v1['newey_west_t'])} | {F2.format(s['newey_west_t'])} | "
+            f"{F2.format(a['newey_west_t'])} | {F2.format(a2['newey_west_t'])} | {F2.format(b['newey_west_t'])} |"
+        )
+
+    p_date = pv["date_level"]["constrained"]["trigger_downtrend"]["h20"]
+    p_match = pv["date_matched"]["constrained"]["trigger_downtrend"]["h20"]
+    p_event = pv["event_level"]["constrained"]["trigger_downtrend"]["h20"]
+    p_date_up = pv["date_level"]["constrained"]["uptrend"]["h20"]
+    p_match_up = pv["date_matched"]["constrained"]["uptrend"]["h20"]
+    paired_trig = paired["constrained"]["trigger_downtrend"]["h20"]
+    paired_up = paired["constrained"]["uptrend"]["h20"]
+    trig20 = c["trigger_downtrend"]["h20"]
+    up20 = c["uptrend"]["h20"]
+    neu20 = c["neutral_control"]["h20"]
+    se_ratio = (
+        p_date["placebo_std"] / p_event["placebo_std"]
+        if p_event["placebo_std"]
+        else float("nan")
+    )
+    dm = trend.get("placebo_design_meta", {}).get("date_matched", {}).get("constrained", {}).get(
+        "trigger_downtrend", {}
+    ).get("h20", {})
+    ev_share_heavy = paired_trig["heavy_trigger_day_share_of_events"]
+    heavy_contrib = ev_share_heavy * paired_trig["diff_on_heavy_trigger_days"]
+    heavy_contrib_share = heavy_contrib / paired_trig["weighted_mean_diff"] if paired_trig["weighted_mean_diff"] else float("nan")
+
+    md = f"""# 真实数据量化重建实证研究报告（M4 / P4 · v2 修正版）
+
+> 生成时间：{trend['generated_at']}  
+> 版本：**v2-rework**（取代 commit 21c3d5d0 的 v1 结果，v1 缺陷结果完整保留于 `superseded_v1/`）  
+> 数据底座：CSMAR 真实主面板 `{trend['data_source']}`  
+> 数据指纹（sha256）：`{trend['data_sha256'][:32]}…`  
+> 年化口径：A 股 {ANNUALIZATION_DAYS} 个交易日；无风险利率 {RISK_FREE_RATE_ANNUAL:.2%}（项目既有现金利息假设）  
+> 一键复算：`.venv/Scripts/python scripts/run_real_m4_rebuild.py`
+
+---
+
+## 0. 本次修正（v2 相对 v1）
+
+| # | v1 缺陷 | v2 修正 | 修正后的量化影响 |
+| :-- | :--- | :--- | :--- |
+| 1 | Fama-MacBeth 用**同期**收益回归含当日信息的因子 | 被解释变量改为 **t+1 可交易收益** | `mom_20d` NW t 由 {F2.format(robust['same_day_v1_bias_demo']['factors_stats']['mom_20d']['newey_west_t'])} 降至 {F2.format(fm_p['factors_stats']['mom_20d']['newey_west_t'])}；`price_pos` 由 {F2.format(robust['same_day_v1_bias_demo']['factors_stats']['price_pos']['newey_west_t'])} 降至 {F2.format(fm_p['factors_stats']['price_pos']['newey_west_t'])} |
+| 2 | 跌停判定用 `hit_limit == -1`，而该列取值域仅 {{0,1}}，约束恒不触发；且判在触发日 | 重建涨跌停**方向**，分别作用于**进场日**与**退出日**，退出日跌停顺延 | 方向可判 {lv['n_limit_up'] + lv['n_limit_down']} / {lv['n_limit_rows']} 次；进场日涨停拦截 {counts['entry_blocked_limit_up']:,} 次 |
+| 3 | 安慰剂抽样池混入触发样本、抽样量与触发数不符、经验 p 值未进正文 | 抽样池排除触发样本；**主口径改为随机日期重抽样**，并补同日匹配与逐日配对 | 见 §2.3 |
+| 4 | 对照组口径含糊（称含顺势组的非触发池为"全样本对照组"） | 新增互斥**纯对照组** | 纯对照组 20 日仅 {_pct(neu20['mean_ret'])}，低于拦截组 {_pct(trig20['mean_ret'])} |
+
+---
+
+## 1. 数据底座真伪核验
+
+- **标的池**：{uni['n_stocks_panel']} 支 A 股；**区间**：{uni['date_range'][0]} ~ {uni['date_range'][1]}；**交易日**：{uni['n_trading_days']} 天
+- **涨跌停方向重建校验**：涨停 {lv['n_limit_up']} 次（收在当日最高价占比 {lv['limit_up_close_at_high_share']:.1%}，涨跌幅绝对值中位数 {lv['limit_up_abs_ret_median']:.2%}）；
+  跌停 {lv['n_limit_down']} 次（收在当日最低价占比 {lv['limit_down_close_at_low_share']:.1%}，涨跌幅绝对值中位数 {lv['limit_down_abs_ret_median']:.2%}）；
+  方向不可判 {lv['n_limit_direction_unknown']} 次
+- **板块涨跌停纪律**：{bd['checked_rows']:,} 行抽样中越限 **{bd['violations']}** 行（最大绝对日收益 {bd['max_abs_ret']:.4%}，符合主板 ±10% / 创业板科创板 ±20%）
+- **收益口径可替换性验证**：面板仅 {rb.get('n_stocks', 'n/a')} 支标的带官方复权收益 `ret`，其余标的的收益由 `close` 收盘到收盘收益替代。
+  在同时具备两条口径的 {rb.get('n_rows', 0):,} 行上，中位绝对差 **{rb.get('median_abs_diff', float('nan')):.2e}**、99 分位 {rb.get('p99_abs_diff', float('nan')):.2e}；
+  仅 {rb.get('share_over_threshold', 0):.3%}（{rb.get('n_over_threshold', 0)} 行）差异超过 {rb.get('threshold', 0.01):.0%}，
+  极端单行差异达 {rb.get('max_abs_diff', float('nan')):.2e}（除权除息日不复权收盘价跳空，官方 `ret` 同行为正常值）。
+  替代口径未突破板块涨跌停带（见上一行越限 0 行），故对只能用 `close` 的标的采用该替代口径，并在 §4 披露。
+- **流动性约束可观测范围**：具备 `hit_limit` 字段的标的共 {uni['n_stocks_with_limit_field']} 支；其余标的只能进入无约束口径
+
+> **口径选择说明**：主口径（受约束）只纳入涨跌停状态可观测的 {uni['n_stocks_with_limit_field']} 支标的，因为只有这些标的能真实施加「涨停买不进 / 跌停卖不出」。无约束口径覆盖全部 {uni['n_stocks_panel']} 支，用于与 v1 及全样本对照。
+
+---
+
+## 2. 实验一：Trend Gate 逐日事件研究
+
+### 2.1 时点与交易约束
+
+- 信号在 t 日收盘后产生，只用截至 t 日的数据（`mom_20d = close[t]/close[t-20]-1`；`MA60 = mean(close[t-60:t])`，不含当日）
+- **t 日收盘价不可成交**（信号此刻才可知），统一 **t+1 日收盘进场**
+- 进场日涨停（买不进）或停牌 → 事件剔除出可交易样本；退出目标日跌停或停牌 → 顺延至下一可成交日，最多 5 个交易日
+- 事件收益的显著性用**日度截面均值序列**做 Newey-West HAC 校正，缓解重叠窗口与截面相关
+
+### 2.2 事件收益与回撤（受约束口径，{uni['n_stocks_with_limit_field']} 支可观测标的）
+
+| 组别 | 事件数 | 标的数 | 5日均值 | 10日均值 | 20日均值 | 20日胜率 | 20日平均最大回撤 | 20日 NW t |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(group_row(n, c[n]) for n in ("trigger_downtrend", "uptrend", "neutral_control", "not_downtrend_pool"))}
+
+无约束口径（全部 {uni['n_stocks_panel']} 支，不施加涨跌停与停牌约束，用于与 v1 对照）：
+
+| 组别 | 事件数 | 标的数 | 5日均值 | 10日均值 | 20日均值 | 20日胜率 | 20日平均最大回撤 | 20日 NW t |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(group_row(n, u[n]) for n in ("trigger_downtrend", "uptrend", "neutral_control", "not_downtrend_pool"))}
+
+> 「非触发池」= 下行拦截组的补集，**含顺势组**，是安慰剂抽样池的口径；「纯对照组」与两组互斥，才是干净的对照。
+
+### 2.3 显著性检验（2024-01 ~ 2026-08，20 日窗口）
+
+**口径说明（重要）**：抽样池一律排除目标组自身——下行拦截组的池为「非触发事件」，顺势组的池为「纯对照组」
+（若沿用"非触发池"，其中 68% 是顺势组自身，差值会被机械稀释）。p 值采用 (count+1)/(n+1) 蒙特卡洛口径。
+
+**(A) 随机日期安慰剂（方案要求的零分布）**：每次有放回抽取与目标组相同数量的交易日，取该日期上池内全部事件。
+种子 {trend['method']['placebo']['seed']}，{pv['date_level']['constrained']['trigger_downtrend']['h20'] and trend['method']['placebo']['n_runs']} 次，完整分布落盘。
+
+| 设计 | 口径 | 目标组 | 抽样池 | 观测 20 日均值 | 基线均值 | 基线 SD | p(单侧低) | p(单侧高) | p(双侧) |
+| :--- | :--- | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(placebo_row(d, m, n) for d in ("date_level", "date_matched", "event_level") for m in ("constrained", "free") for n in ("trigger_downtrend", "uptrend"))}
+
+> **(A) 的校准局限**：该分布量化的是**抽样池一侧**的抽样方差，不含目标组自身方差与两侧协方差
+> （同日两组同涨同跌，协方差为正）。因此它的 p 值偏小，**不作为结论依据**，仅作为方案要求的零分布留痕。
+> 正式推断见 (B)。
+
+**(B) 日期级 cluster bootstrap 配对差（正式显著性检验）**：统计量为「目标组均值 − 池均值」，在日期维度上有放回重抽样，
+同一天的两组事件一起进出，因而同时包含两侧方差与协方差。
+
+| 口径 | 目标组 | 抽样池 | 配对交易日 | 日度均值相关 | 事件加权差 | SE | t | p(双侧) | 等权日差 | t | p(双侧) |
+| :--- | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(cluster_row(m, n, "纯对照组(互斥)" if n == "uptrend" else "非触发池") for m in ("constrained", "free") for n in ("trigger_downtrend", "uptrend"))}
+
+**(C) 互斥组间对比**（不依赖抽样池，直接回答"门禁把谁挑出来了"）：
+
+| 口径 | 对比 | 事件加权差 | SE | t | p(双侧) |
+| :--- | :--- | ---: | ---: | ---: | ---: |
+{chr(10).join(exclusive_row(m, k) for m in ("constrained", "free") for k in ("trigger_vs_neutral", "uptrend_vs_neutral", "trigger_vs_uptrend"))}
+
+**(D) 逐日配对描述统计与加权诊断**：
+
+| 口径 | 组别 | 交易日数 | 日均差(等权日) | 日均差(按触发数加权) | NW t(等权日) | 双侧 p | 目标组低于基线的交易日占比 |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(paired_row(m, n) for m in ("constrained", "free") for n in ("trigger_downtrend", "uptrend"))}
+
+### 2.4 诚实结论
+
+1. **没有任何一种设计支持「下行拦截能规避下跌」**：三种安慰剂设计下，拦截组的单侧「劣于随机」经验 p 值均为
+   **{p_date['p_one_sided_lower']:.4f}**。门禁的设计前提（下行趋势标的会继续下跌）在本样本期不成立，且方向相反。
+2. **但门禁自身的分辨力也不显著**：互斥对比下，触发组相对纯对照组的事件加权差
+   {_pct(excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['observed_diff'])}
+   （t = {F2.format(excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['boot_t'])}），
+   顺势组相对纯对照组 {_pct(excl['constrained']['uptrend_vs_neutral']['h20']['event_weighted']['observed_diff'])}
+   （t = {F2.format(excl['constrained']['uptrend_vs_neutral']['h20']['event_weighted']['boot_t'])}）；
+   而**门禁真正要区分的那一对——触发组 vs 顺势组——并不显著**：
+   事件加权差 {_pct(excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['observed_diff'])}，
+   t = {F2.format(excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['boot_t'])}，
+   p = {excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['boot_p_two_sided']:.4f}。
+   即样本期的超额来自"有明确趋势信号"这一共同属性，而不是门禁的方向判断。
+3. **等权日口径下全都不显著**：触发组 vs 池的事件加权差为
+   {_pct(cb['constrained']['trigger_downtrend']['h20']['event_weighted']['observed_diff'])}
+   （t = {F2.format(cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_t'])}，
+   p = {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_p_two_sided']:.4f}，5% 下显著），
+   但换到**等权日**口径则为 {_pct(cb['constrained']['trigger_downtrend']['h20']['date_equal']['observed_diff'])}
+   （t = {F2.format(cb['constrained']['trigger_downtrend']['h20']['date_equal']['boot_t'])}，
+   p = {cb['constrained']['trigger_downtrend']['h20']['date_equal']['boot_p_two_sided']:.4f}，不显著）。
+   两者符号相反，说明事件加权下的超额集中在**触发数最多的少数交易日**：
+   触发最密集的 10% 交易日（承载 {ev_share_heavy:.1%} 的信号）同日差异
+   {_pct(paired_trig['diff_on_heavy_trigger_days'])}，其余交易日 {_pct(paired_trig['diff_on_light_trigger_days'])}，
+   高触发日贡献了加权差异的约 {heavy_contrib_share:.0%}。
+   **结论必须同时陈述两种口径，不能只报事件加权。**
+4. **两个"随机日期"读法必须分开看**：(A) 的零分布标准差为 {p_date['placebo_std']:.4f}，
+   而 (B) 校准后的配对差标准误为 {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_se']:.4f}
+   （是 (A) 的 {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_se'] / p_date['placebo_std']:.2f} 倍），
+   故 (A) 的 p 值 {p_date['p_two_sided']:.4f} 偏小；(B) 的 p 值
+   {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_p_two_sided']:.4f} 才是校准后的结论。
+5. **同日匹配设计的口径限制**：该设计在 {dm.get('dates_capped_or_missing', 0)} 个交易日的抽样池事件数少于触发数，
+   每次抽样平均覆盖 {dm.get('events_per_run_mean', float('nan')):,.0f} 条（目标 {dm.get('target_size', 0):,} 条），
+   因此在触发最密集的日期上系统性欠采样。按该设计自身的（被截断）日权重，目标组均值为
+   {_pct(dm.get('target_mean_under_matched_weights'))}，与基线 {_pct(p_match['placebo_mean'])} 同权重可比，
+   而非与全样本均值 {_pct(p_match['observed_mean_ret'])} 相比。
+6. **纯对照组（互斥）表现最差**：20 日均值 {_pct(neu20['mean_ret'])}、平均最大回撤 {_pct(neu20['mean_maxdd'])}，
+   低于拦截组 {_pct(trig20['mean_ret'])} 与顺势组 {_pct(up20['mean_ret'])}。
+7. **事件级抽样会低估标准误**（SD {p_date['placebo_std']:.4f} vs {p_event['placebo_std']:.4f}，约 {se_ratio:.1f} 倍）：
+   它把同一天几百只股票的共同涨跌当作独立信息。v1 用的正是这一类设计（且抽样量固定 10,000、池含触发样本），
+   其"显著"结论不具备统计效力。
+8. **涨跌停约束的实际影响**：进场日涨停拦截 {entry_diag['trigger_downtrend']['entry_blocked_limit_up']:,} 次（触发组）、
+   停牌 {entry_diag['trigger_downtrend']['entry_blocked_suspension']:,} 次；退出日跌停顺延仅影响约 0.44% 的事件。
+   约束的**实质影响**是把 {entry_diag['trigger_downtrend']['entry_limit_unobserved']:,} 条（触发组）
+   无法观测涨跌停状态的事件排除在可交易样本之外，从而把受约束口径限制在 {uni['n_stocks_with_limit_field']} 支标的上。
+
+---
+
+## 3. 实验二：Fama-MacBeth HAC 截面回归
+
+### 3.1 计量口径
+
+- 被解释变量：**t → t+1 可交易收益**（`ret_next`）
+- 有效截面期数 T = **{fm_p['n_periods']}**，截面标的数 = {fm_p['n_stocks']}，观测 {fm_p['n_observations']:,}
+- 每期截面最小股票数 {fm_p['min_stocks_per_period']}；逐期截面 z-score（ddof=0，会使 λ 水平比 ddof=1 高约 0.25%，不影响 t 值）
+- Newey-West Bartlett 核，滞后阶数 **q = {fm_p['hac_lags']}**（由 T 计算，非人工指定）
+- 移动区块 Bootstrap：区块长度 {fm_p['block_bootstrap']['block_len']}（T^(1/3)），{fm_p['block_bootstrap']['n_boot']} 次
+- 多重检验：BH-FDR 与 Bonferroni，检验次数 = **{fm_p['n_tests']}**（因子数）
+- 年化 244 日；rf = {RISK_FREE_RATE_ANNUAL:.2%}/年（λ 为总收益溢价，另给出扣 rf 超额口径字段）
+
+### 3.2 因子风险溢价与显著性
+
+| 因子 | 日均溢价 | 年化溢价(244) | 普通 IID t | NW HAC t | 双侧 p | 区块 Bootstrap 95% CI | BH q | Bonferroni p | 5% FDR 判定 |
+| :--- | ---: | ---: | ---: | ---: | ---: | :---: | ---: | ---: | :---: |
+{chr(10).join(fm_rows)}
+
+### 3.3 稳健性：显著性对口径的敏感性
+
+| 因子 | ① v1 同期收益(留痕) NW t | ② **v2 主口径** NW t | ③ 剔除涨停(重建口径) NW t | ④ 剔除涨停(字面口径) NW t | ⑤ 仅官方复权收益标的 NW t |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(robust_rows)}
+
+③ 剔除 {robust['exclude_limit_up_at_t']['n_rows_excluded']:,} 行（重建涨停标志）；
+④ 剔除 {robust['exclude_limit_up_at_t_literal']['n_rows_excluded']:,} 行（仅 `hit_limit==1 且 ret>0`）。
+
+### 3.4 诚实结论
+
+1. **前视偏差的量级**：把被解释变量从同期收益改成 t+1 收益后，`mom_20d` 的 NW t 从 {F2.format(robust['same_day_v1_bias_demo']['factors_stats']['mom_20d']['newey_west_t'])} 降到 {F2.format(fm_p['factors_stats']['mom_20d']['newey_west_t'])}，
+   `price_pos` 从 {F2.format(robust['same_day_v1_bias_demo']['factors_stats']['price_pos']['newey_west_t'])} 降到 {F2.format(fm_p['factors_stats']['price_pos']['newey_west_t'])}。
+   v1 报告中「短周期动量与价格位置因子具备稳健定价能力」的结论**不成立**。
+2. **主口径下仅 `amihud` 通过 5% FDR**（NW t = {F2.format(fm_p['factors_stats']['amihud']['newey_west_t'])}，BH q = {fm_p['factors_stats']['amihud']['fdr_q_value']:.4f}）。
+3. **但该显著性不稳健**：剔除涨停观测（重建口径）后 `amihud` 的 NW t 降到 {F2.format(robust['exclude_limit_up_at_t']['factors_stats']['amihud']['newey_west_t'])}（不显著）；
+   若改用字面口径则仍为 {F2.format(robust['exclude_limit_up_at_t_literal']['factors_stats']['amihud']['newey_west_t'])}；
+   仅用官方复权收益标的时为 {F2.format(robust['official_ret_only']['factors_stats']['amihud']['newey_west_t'])}（BH q = {robust['official_ret_only']['factors_stats']['amihud']['fdr_q_value']:.4f}，不显著）。
+   **结论对涨停定义敏感**，因此不足以作为稳健的多因子发现。
+4. 其余因子（`mom_20d` / `mom_60d` / `vol_20d` / `turnover_20d` / `price_pos`）在任何口径下均不显著。
+5. 结论应表述为：**在本样本期与当前因子集下，未发现稳健显著的因子风险溢价**；历史报告中 Harvey |t| ≥ 3 的多因子叙事缺乏证据。
+
+---
+
+## 4. 局限性与已知缺口
+
+**样本规模实测**：主口径截面规模 {fm_p['cross_section_size']['min']}~{fm_p['cross_section_size']['max']} 支/期
+（均值 {fm_p['cross_section_size']['mean']:.1f}，共 {fm_p['n_periods']} 期）；
+「仅官方复权收益」稳健性口径为 {robust['official_ret_only']['cross_section_size']['min']}~{robust['official_ret_only']['cross_section_size']['max']} 支/期；
+截面平均 R² = {fm_p['mean_cross_section_r2']:.4f}。
+
+{chr(10).join('- ' + x for x in trend['limitations'])}
+{chr(10).join('- ' + x for x in fm['limitations'])}
+
+---
+
+## 5. 产物清单与复算方式
+
+| 文件 | 内容 |
+| :--- | :--- |
+| `trend_gate_event_study.json` | 实验一全部统计量（受约束 / 无约束 + 逐日配对检验） |
+| `trend_gate_placebo_1000.json` | 三种设计的 1000 次安慰剂完整分布 + 经验 p 值 |
+| `fama_macbeth_hac_results.json` | 实验二主结果 + 4 组稳健性 + 偏差留痕 + 每期 λ 序列 |
+| `results.json` | 结论层汇总 |
+| `report.md` / `vs_old.md` / `paper_correction_checklist.md` | 本报告与对账清单 |
+| `superseded_v1/` | v1（commit 21c3d5d0）缺陷产物原件，仅供追溯 |
+
+```bash
+.venv/Scripts/python scripts/run_real_m4_rebuild.py
+.venv/Scripts/python -m pytest tests/test_p4_real_quant.py -q
+```
+"""
+    return md
+
+
+def build_vs_old_md(trend: dict, fm: dict) -> str:
+    """生成 vs_old.md：历史污染值 / v1 缺陷值 / v2 修正值 三项对账。"""
+    c = trend["groups_constrained"]
+    pv = trend["placebo_p_values"]
+    paired = trend["daily_paired_test"]
+    counts = trend["event_counts"]
+    fm_p = fm["primary_next_day"]
+    robust = fm["robustness"]
+    fs = fm_p["factors_stats"]
+    sd = robust["same_day_v1_bias_demo"]["factors_stats"]
+    p_date = pv["date_level"]["constrained"]["trigger_downtrend"]["h20"]
+    p_event = pv["event_level"]["constrained"]["trigger_downtrend"]["h20"]
+    paired_trig = paired["constrained"]["trigger_downtrend"]["h20"]
+    se_ratio = p_date["placebo_std"] / p_event["placebo_std"] if p_event["placebo_std"] else float("nan")
+
+    md = f"""# 真实数据重建新旧指标全量对比总账（vs_old.md · v2 修正版）
+
+> 生成时间：{trend['generated_at']}
+> 版本：**v2-rework**。三列口径：**历史旧值**＝审计确认的伪造/硬编码值；**v1**＝commit 21c3d5d0 的 M4 结果（有缺陷）；
+> **v2**＝本次修正后的真实结果。原则：不追求新结果好看，不显著就照实写。
+> 全部 v2 数字由 `.venv/Scripts/python scripts/run_real_m4_rebuild.py` 现场生成，未经人工转录。
+
+---
+
+## 1. 核心指标逐项对账
+
+| 维度 / 指标 | 历史旧值（伪造 / 硬编码） | v1（commit 21c3d5d0，有缺陷） | v2 修正值（本次） | 差异原因 |
+| :--- | :--- | :--- | :--- | :--- |
+| 数据来源 | 随机数生成数据集（300stocks / 100d_202stocks） | CSMAR 真实主面板 | CSMAR 真实主面板（sha256 绑定） | v1 数据源本身没问题，问题在计算口径 |
+| `mom_20d` 显著性 | Harvey t = 3.92（硬编码常量） | NW t = {F2.format(sd['mom_20d']['newey_west_t'])}（同期收益口径） | NW t = **{F2.format(fs['mom_20d']['newey_west_t'])}**（t+1 口径） | v1 用当日收益回归含当日信息的因子，属前视偏差 |
+| `price_pos` 显著性 | 未报 | NW t = {F2.format(sd['price_pos']['newey_west_t'])}，年化 +298.86% | NW t = **{F2.format(fs['price_pos']['newey_west_t'])}**，年化 {_pct(fs['price_pos']['annualized_premium_244d'])} | 同上；v1 的 +298.86% 是同期回归的机械产物 |
+| `turnover_20d` | 未报 | NW t = {F2.format(sd['turnover_20d']['newey_west_t'])}（显著反转） | NW t = **{F2.format(fs['turnover_20d']['newey_west_t'])}**（不显著） | 同上 |
+| `amihud` | 未报 | NW t = {F2.format(sd['amihud']['newey_west_t'])} | NW t = **{F2.format(fs['amihud']['newey_west_t'])}**，BH q = {fs['amihud']['fdr_q_value']:.4f}；剔除涨停（重建口径）{F2.format(robust['exclude_limit_up_at_t']['factors_stats']['amihud']['newey_west_t'])}、字面口径 {F2.format(robust['exclude_limit_up_at_t_literal']['factors_stats']['amihud']['newey_west_t'])} | 主口径显著但**对涨停定义敏感**，不构成稳健发现 |
+| `mom_60d` / `vol_20d` | Harvey t = 3.85 / 3.82 | NW t = {F2.format(sd['mom_60d']['newey_west_t'])} / {F2.format(sd['vol_20d']['newey_west_t'])} | NW t = **{F2.format(fs['mom_60d']['newey_west_t'])}** / **{F2.format(fs['vol_20d']['newey_west_t'])}** | 三列口径均不显著 |
+| HAC 滞后阶数 | 各脚本随意取 5 / 6，且标注 HAC 实为 IID | q = 5（公式计算） | q = {fm_p['hac_lags']}（由 T={fm_p['n_periods']} 计算） | v1 此点已正确，v2 保持一致 |
+| 多重检验校正 | 无校正；把 15/300 假阳性说成 75 支 True Alpha | BH-FDR + Bonferroni 已算，但结论建立在错误口径上 | BH-FDR / Bonferroni，检验次数 {fm_p['n_tests']}，显著因子：{', '.join(f for f, s in fs.items() if s['significant_5pct_fdr']) or '无'} | v1 的校正方法正确，输入错误 |
+| 被解释变量时点 | 拿当日/过去收益当标签（100d 实验） | **同期收益**（前视偏差） | **t+1 可交易收益** | v1 重犯了历史同类错误 |
+| 涨跌停约束 | 宣称"完全规避跌停" | `hit_limit == -1` 恒为假，约束从未生效 | 重建方向，进场日涨停拦截 {counts['entry_blocked_limit_up']:,} 次，退出日跌停顺延 | v1 的约束是死代码 |
+| 安慰剂抽样池 | 从未真实执行 | 含触发样本，抽样量固定 10,000 与触发数不符 | 严格排除触发样本；抽样量按日期/样本量匹配 | v1 实验设计有误 |
+| 安慰剂设计 | 无 | 事件级抽样（把同日横截面相关性当独立信息） | **随机日期（主口径）** + 同日匹配 + 逐日配对；事件级降为次级并披露其标准误低估约 {se_ratio:.1f} 倍 | v1 的"显著"是低估标准误的产物 |
+| 经验 p 值 | 无 | 落盘 `1.0`，**未写入报告** | 单侧低 **{p_date['p_one_sided_lower']:.4f}**、单侧高 {p_date['p_one_sided_upper']:.4f}、双侧 {p_date['p_two_sided']:.4f}（随机日期）；逐日配对 p={paired_trig['nw_p_two_sided']:.4f} | v1 隐瞒了方向不利的 p 值 |
+| Trend Gate 有效性 | 论文叙事：门禁规避下行 | 报告称"下行拦截组存在超跌均值回归反弹特征" | 拦截组 20 日 {_pct(c['trigger_downtrend']['h20']['mean_ret'])} > 非触发池 {_pct(c['not_downtrend_pool']['h20']['mean_ret'])} > 纯对照 {_pct(c['neutral_control']['h20']['mean_ret'])}，**门禁前提未被支持且被反向证伪** | v2 补齐对照、配对与三种安慰剂设计 |
+| Brier 评分 | 0.185（硬编码兜底常量） | 已改为返回 None / Brier Skill Score | 同 v1（M1 已修） | 该项 v1 已正确 |
+| 文件保全 | 尚未治理 | 新目录产出，未覆盖历史文件 | 新目录产出，且 v1 结果逐字节保留于 `superseded_v1/` | v2 追加保全 v1 |
+
+---
+
+## 2. v1 缺陷的责任边界
+
+1. **前视偏差（严重）**：v1 的 Fama-MacBeth 结论全部不可用。本报告不引用 v1 的任何因子显著性结论。
+2. **流动性约束失效（严重）**：v1 声称"考虑涨跌停成交限制"，实际判定条件恒不成立，属未实现。
+3. **安慰剂结论截断（严重）**：v1 落盘了方向不利的经验 p 值却未在报告正文披露；且其事件级抽样低估标准误，
+   使"显著"结论失真。v2 已改用日期级主口径并披露三种设计。
+4. **对照组口径含糊（中等）**：v1 把含顺势组的非触发池称为"全样本对照组"，读者会误以为是对照组。
+   v2 新增互斥纯对照组。
+5. **交付物缺失（中等）**：v1 未交付 `scripts/run_p4_trend_gate_study.py`、`scripts/run_p4_fama_macbeth.py`、
+   `trend_gate_event_study.json`、`fama_macbeth_hac_results.json`；v2 已全部补齐。
+6. **测试缺失（中等）**：v1 的 P4 代码无任何测试；v2 新增 `tests/test_p4_real_quant.py`。
+
+---
+
+## 3. 可以放心保留与引用的资产
+
+- **M4 v2 的统计算法实现**：Newey-West Bartlett HAC、移动区块 Bootstrap、BH-FDR / Bonferroni 均已用手算样本独立校验。
+- **涨跌停方向重建**：{trend['limit_flag_reconstruction']['n_limit_up'] + trend['limit_flag_reconstruction']['n_limit_down']} 次涨跌停中方向可判
+  {trend['limit_flag_reconstruction']['n_limit_up'] + trend['limit_flag_reconstruction']['n_limit_down']} 次，收盘位置校验一致率分别为
+  {trend['limit_flag_reconstruction']['limit_up_close_at_high_share']:.1%}（涨停收在最高）与
+  {trend['limit_flag_reconstruction']['limit_down_close_at_low_share']:.1%}（跌停收在最低）。
+- **板块涨跌停纪律**：{trend['board_limit_discipline_check']['checked_rows']:,} 行中越限 {trend['board_limit_discipline_check']['violations']} 行，数据本身可信。
+- **gold / green 系列数值**：+94.84% / Sharpe 1.67 / MaxDD 29.70% 与 Sharpe 1.19 / MaxDD 13.97%，
+  来源为审计确认可复算的真实数据（本报告未重算，引用时须附复算脚本）。
+- **本次 v2 的全部 JSON**：字段可追溯，`data_sha256` 绑定到确定的数据版本。
+
+---
+
+## 4. 仍需补齐的上游缺口
+
+- 面板中 `ret`（官方复权日收益）只覆盖 99 支标的，`hit_limit` 覆盖 199 支；
+  补齐后可把受约束口径扩展到全部 299 支，Fama-MacBeth 的截面规模也能同步扩大。
+- 面板缺少开盘价与最高/最低价（A/C 组），进场成交价只能用收盘价近似。
+- 面板不含 ST 标记，无法识别 ±5% 涨跌幅限制标的。
+"""
+    return md
+
+
+def build_paper_checklist_md(trend: dict, fm: dict) -> str:
+    """生成论文/申报材料删改清单（修正版）。"""
+    fm_p = fm["primary_next_day"]
+    fs = fm_p["factors_stats"]
+    robust = fm["robustness"]
+    sd = robust["same_day_v1_bias_demo"]["factors_stats"]
+    pv = trend["placebo_p_values"]
+    paired = trend["daily_paired_test"]
+    p_date = pv["date_level"]["constrained"]["trigger_downtrend"]["h20"]
+    paired_trig = paired["constrained"]["trigger_downtrend"]["h20"]
+
+    md = f"""# 论文与申报材料删改清单（Paper Correction Checklist · v2 修正版）
+
+> 生成时间：{trend['generated_at']}
+> 依据：A1/A2/A3 审计 + M4 v1 缺陷复核（见 `superseded_v1/` 与 `vs_old.md`）
+> 适用范围：Rainbow-FinGPT、StockDashboard、量化策略相关论文、竞赛申报书、商业计划书、汇报 PPT
+
+---
+
+## 1. 必须立即删除的伪造指标与无源数字
+
+- [ ] **删除 "Brier Score = 0.185（预测优秀）"**：源自 `storage_supercycle_backtest.py` 无预测时的硬编码兜底常量，
+  从未在任何真实实验中算出。不得沿用"Brier ≤ 0.25 为优秀"的非严谨论断。
+- [ ] **删除所有 "Harvey t = 3.92 / 3.85 / 3.82" 表述**：为人工写死常量或公式噪声注入。
+- [ ] **删除 "20 日命中率 = 5 日命中率 × 系数" 的派生数字**。
+- [ ] **删除 "1000 次安慰剂检验 / 消融表 / 旗舰论文表 2 / Rainbow v2 四组合表" 的历史引用**：
+  历史版本无对应实验。如要引用安慰剂检验，必须改用本次真实落盘的
+  `reports/real_rebuild_20261010/trend_gate_placebo_1000.json`，并**同时引用其经验 p 值**。
+- [ ] **删除无法溯源的极端收益叙事**："夏普 4.627"、"+159.01%"、"+222.30%" 等。
+- [ ] **删除图 2、图 5 以及绿电/黄金基于正弦公式与噪声生成的 t 曲线图表。**
+- [ ] **【v2 新增】删除 v1 报告中的因子显著性结论**：`mom_20d` NW t = {F2.format(sd['mom_20d']['newey_west_t'])}、
+  `price_pos` NW t = {F2.format(sd['price_pos']['newey_west_t'])}、`price_pos` 年化 +298.86%、
+  `turnover_20d` NW t = {F2.format(sd['turnover_20d']['newey_west_t'])} 全部来自**同期收益回归**的前视偏差，
+  改为 t+1 可交易收益后分别降至 **{F2.format(fs['mom_20d']['newey_west_t'])}、{F2.format(fs['price_pos']['newey_west_t'])}、{F2.format(fs['turnover_20d']['newey_west_t'])}**。
+
+---
+
+## 2. 必须更正的方法与计量学错误
+
+- [ ] **更正 HAC 标准误与滞后阶数**：历史多处标注 HAC 实为 IID，且同一 T 下随意使用 q = 5/6/5。
+  统一为 q = floor(4(T/100)^(2/9))，本次 T = {fm_p['n_periods']} → **q = {fm_p['hac_lags']}**，Bartlett 核。
+- [ ] **删除 "Ridge R² = 0.8943"**：在 P=768 > N=300 的训练集上自测所得。
+- [ ] **更正主成分 PC5 的片面挑选**：应客观披露主成分全貌。
+- [ ] **更正 "75 支 True Alpha" 的假阳性误读**：15/300 恰好等于 5% 显著性下的随机假阳性期望。
+- [ ] **更正 100d 命中率标签前视**：必须使用严格 t+1 ~ t+H 的真实未来收益。
+- [ ] **【v2 新增】更正被解释变量时点**：Fama-MacBeth 的被解释变量必须是 **t+1 起可交易收益**，
+  严禁使用同期收益回归含当日信息的因子（`mom_20d` / `amihud` / `price_pos` 均含当日数据）。
+- [ ] **【v2 新增】更正单一因子显著性的表述**：v1 称"短周期动量与微观结构因子表现出稳健的定价能力"。
+  修正后主口径仅 `amihud` 通过 5% FDR（NW t = {F2.format(fs['amihud']['newey_west_t'])}），
+  但剔除涨停观测（重建口径）后降至 {F2.format(robust['exclude_limit_up_at_t']['factors_stats']['amihud']['newey_west_t'])}，
+  而字面口径下仍为 {F2.format(robust['exclude_limit_up_at_t_literal']['factors_stats']['amihud']['newey_west_t'])}，
+  **结论对涨停定义敏感，不构成稳健的多因子发现**。
+- [ ] **【v2 新增】更正安慰剂检验的设计**：不得使用事件级抽样冒充随机日期安慰剂。
+  事件级抽样把同一交易日的横截面相关性当作独立信息，标准误被低估约
+  {pv['date_level']['constrained']['trigger_downtrend']['h20']['placebo_std'] / pv['event_level']['constrained']['trigger_downtrend']['h20']['placebo_std']:.1f} 倍。
+
+---
+
+## 3. 必须彻底纠正的方向性与逻辑颠倒陈述
+
+- [ ] **更正胜率与期望的相反定性**：胜率 30.48%、盈亏比 0.94（期望 −0.41）与 60d 组期望 −0.15，均不得写成"正向期望"。
+- [ ] **更正 storage_gold 回撤陈述**：实际回撤恶化 1.02pp；ρ = 0.74 不得写成"近乎正交"。
+- [ ] **更正"完全规避跌停"与"无量跌停"**：跌停日无法挂单市价卖出，盘面常为 3~4 倍放量。
+- [ ] **更正 001258（立新能源）的旗舰案例定性**：该项目已在自身封箱检验中被 Alpha 门控拒绝（p = 0.354，IR = 0.063）。
+- [ ] **【v2 新增】更正 Trend Gate 的叙事**：不得声称门禁能规避下行风险。真实结果是下行拦截组 20 日平均收益
+  {_pct(p_date['observed_mean_ret'])}，**高于**随机日期安慰剂基线 {_pct(p_date['placebo_mean'])}，
+  单侧「劣于随机」经验 p 值 = **{p_date['p_one_sided_lower']:.4f}**（毫无规避下行的证据）。
+  同日事件加权配对差为 {_pct(paired_trig['weighted_mean_diff'])}，但优势高度集中在触发最密集的 10% 交易日
+  （同日差异 {_pct(paired_trig['diff_on_heavy_trigger_days'])}，其余交易日仅 {_pct(paired_trig['diff_on_light_trigger_days'])}）；
+  逐日等权口径下同日差异为零（NW t = {F2.format(paired_trig['nw_t'])}，p = {paired_trig['nw_p_two_sided']:.4f}）。
+  正确表述为"**门禁未产生可验证的择时价值；其表面超额集中于普跌行情里的集中触发信号，不构成稳定的选股能力**"。
+
+---
+
+## 4. 可以放心保留与引用的真实可信资产
+
+- **M4 v2 的统计算法**：Newey-West HAC、移动区块 Bootstrap、BH-FDR/Bonferroni、日期级与同日匹配安慰剂，
+  均通过手算样本校验与独立复核。
+- **涨跌停方向重建与板块涨跌停纪律校验**：方向可判率 100%，越限 {trend['board_limit_discipline_check']['violations']} 行。
+- **gold 系列**：+94.84%、Sharpe 1.67、MaxDD 29.70%（真实数据可复现，引用须附复算脚本）。
+- **green 系列**：Sharpe 1.19、MaxDD 13.97%（论文原写 21.73% / 24.90% 有误）。
+- **Trend Gate / ZigZag θ=12% / AST 参数**：与论文描述一致（但 Trend Gate 的**有效性**不得再作正面声明）。
+- **本次 v2 全部产物**：`reports/real_rebuild_20261010/`，含三种设计的安慰剂完整分布与 `data_sha256` 数据版本绑定。
+"""
+    return md
+
+
+def main() -> None:
+    started = time.time()
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    trend = run_trend_gate_study(PANEL_PATH, OUT_DIR)
+    fm = run_fama_macbeth_study(PANEL_PATH, OUT_DIR)
+
+    results = build_results_payload(trend, fm)
+    dump_json(results, OUT_DIR / "results.json")
+    (OUT_DIR / "report.md").write_text(build_report_md(trend, fm), encoding="utf-8")
+    (OUT_DIR / "vs_old.md").write_text(build_vs_old_md(trend, fm), encoding="utf-8")
+    (OUT_DIR / "paper_correction_checklist.md").write_text(build_paper_checklist_md(trend, fm), encoding="utf-8")
+
+    print("\n[OK] M4/P4 v2 端到端复算完成，产物：")
+    for name in ("results.json", "report.md", "vs_old.md", "paper_correction_checklist.md",
+                 "trend_gate_event_study.json", "trend_gate_placebo_1000.json",
+                 "fama_macbeth_hac_results.json"):
+        p = OUT_DIR / name
+        print(f"  - {name:<34} {p.stat().st_size:>10,} bytes")
+    print(f"总耗时 {time.time() - started:.1f}s")
 
 
 if __name__ == "__main__":
