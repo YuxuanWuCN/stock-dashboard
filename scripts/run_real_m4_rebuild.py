@@ -98,6 +98,7 @@ def build_results_payload(trend: dict, fm: dict) -> dict:
             "cluster_bootstrap_diff": trend["cluster_bootstrap_diff"],
             "exclusive_group_comparisons": trend["exclusive_group_comparisons"],
             "entry_diagnostics": trend["entry_diagnostics"],
+            "exit_diagnostics": trend.get("exit_diagnostics", {}),
             "limit_flag_reconstruction": trend["limit_flag_reconstruction"],
             "board_limit_discipline_check": trend["board_limit_discipline_check"],
             "return_basis_validation": trend["return_basis_validation"],
@@ -188,20 +189,24 @@ def build_report_md(trend: dict, fm: dict) -> str:
         pool_label = "纯对照组(互斥)" if name == "uptrend" else "非触发池"
         return (f"| {PLACEBO_LABELS[design]} | {mode} | {name} | {pool_label} | {_pct(blk['observed_mean_ret'])} | "
                 f"{_pct(blk['placebo_mean'])} | {blk['placebo_std']:.4f} | "
-                f"{blk['p_one_sided_lower']:.4f} | {blk['p_one_sided_upper']:.4f} | {blk['p_two_sided']:.4f} |")
+                f"{blk['p_one_sided_lower']:.4f} | {blk['p_one_sided_upper']:.4f} | {blk['p_two_sided']:.4f} | "
+                f"{_pct(blk.get('observed_mean_ret_same_weight'))} | {blk.get('p_two_sided_same_weight', float('nan')):.4f} |")
 
     def cluster_row(mode: str, name: str, pool_label: str) -> str:
         b = cb[mode][name]["h20"]
         e, d = b["event_weighted"], b["date_equal"]
         return (f"| {mode} | {name} | {pool_label} | {b['n_days_joined']} | {b['corr_of_date_means']:+.3f} | "
-                f"{_pct(e['observed_diff'])} | {e['boot_se']:.4f} | {F2.format(e['boot_t'])} | "
-                f"{e['boot_p_two_sided']:.4f} | {_pct(d['observed_diff'])} | {F2.format(d['boot_t'])} | "
-                f"{d['boot_p_two_sided']:.4f} |")
+                f"{b['autocorr_of_event_weighted_contrib_lag1']:+.3f} | "
+                f"{_pct(e['observed_diff'])} | {e['hac_se']:.4f} | {F2.format(e['hac_t'])} | "
+                f"{e['hac_p_two_sided']:.4f} | {F2.format(e['block5_t'])} | {e['block5_p_two_sided']:.4f} | "
+                f"{F2.format(e['boot_iid_t'])} | {e['boot_iid_p_two_sided']:.4f} | {_pct(d['observed_diff'])} | "
+                f"{F2.format(d['hac_t'])} | {d['hac_p_two_sided']:.4f} |")
 
     def exclusive_row(mode: str, key: str) -> str:
         b = excl[mode][key]["h20"]["event_weighted"]
-        return (f"| {mode} | {key} | {_pct(b['observed_diff'])} | {b['boot_se']:.4f} | "
-                f"{F2.format(b['boot_t'])} | {b['boot_p_two_sided']:.4f} |")
+        return (f"| {mode} | {key} | {_pct(b['observed_diff'])} | {b['hac_se']:.4f} | "
+                f"{F2.format(b['hac_t'])} | {b['hac_p_two_sided']:.4f} | "
+                f"{b['boot_iid_p_two_sided']:.4f} |")
 
     def paired_row(mode: str, name: str) -> str:
         b = paired[mode][name]["h20"]
@@ -281,10 +286,12 @@ def build_report_md(trend: dict, fm: dict) -> str:
   方向不可判 {lv['n_limit_direction_unknown']} 次
 - **板块涨跌停纪律**：{bd['checked_rows']:,} 行抽样中越限 **{bd['violations']}** 行（最大绝对日收益 {bd['max_abs_ret']:.4%}，符合主板 ±10% / 创业板科创板 ±20%）
 - **收益口径可替换性验证**：面板仅 {rb.get('n_stocks', 'n/a')} 支标的带官方复权收益 `ret`，其余标的的收益由 `close` 收盘到收盘收益替代。
-  在同时具备两条口径的 {rb.get('n_rows', 0):,} 行上，中位绝对差 **{rb.get('median_abs_diff', float('nan')):.2e}**、99 分位 {rb.get('p99_abs_diff', float('nan')):.2e}；
+  在同时具备两条口径的 {rb.get('n_rows', 0):,} 行上，中位绝对差 **{rb.get('median_abs_diff', float('nan')):.2e}**、99 分位 {rb.get('p99_abs_diff', float('nan')):.2e}。
+  该中位数一致性表明常态非事件日价格变动中位吻合，但并不构成全样本分红复权等价性的证明；
   仅 {rb.get('share_over_threshold', 0):.3%}（{rb.get('n_over_threshold', 0)} 行）差异超过 {rb.get('threshold', 0.01):.0%}，
-  极端单行差异达 {rb.get('max_abs_diff', float('nan')):.2e}（除权除息日不复权收盘价跳空，官方 `ret` 同行为正常值）。
-  替代口径未突破板块涨跌停带（见上一行越限 0 行），故对只能用 `close` 的标的采用该替代口径，并在 §4 披露。
+  极端单行差异达 {rb.get('max_abs_diff', float('nan')):.2e}（具有潜在除权除息或口径跳空特征，但在缺乏原始公告日志核验前不假定全量证实）。
+  此外，事件研究采用收盘价区间收益（close price return basis），而 Fama-MacBeth 优先采用官方复权日收益（Dretwd basis），
+  两子实验收益底座口径存在差异，特此如实披露。对只能用 `close` 的标的采用该替代口径，并在 §4 披露。
 - **流动性约束可观测范围**：具备 `hit_limit` 字段的标的共 {uni['n_stocks_with_limit_field']} 支；其余标的只能进入无约束口径
 
 > **口径选择说明**：主口径（受约束）只纳入涨跌停状态可观测的 {uni['n_stocks_with_limit_field']} 支标的，因为只有这些标的能真实施加「涨停买不进 / 跌停卖不出」。无约束口径覆盖全部 {uni['n_stocks_panel']} 支，用于与 v1 及全样本对照。
@@ -320,27 +327,26 @@ def build_report_md(trend: dict, fm: dict) -> str:
 （若沿用"非触发池"，其中 68% 是顺势组自身，差值会被机械稀释）。p 值采用 (count+1)/(n+1) 蒙特卡洛口径。
 
 **(A) 随机日期安慰剂（方案要求的零分布）**：每次有放回抽取与目标组相同数量的交易日，取该日期上池内全部事件。
-种子 {trend['method']['placebo']['seed']}，{pv['date_level']['constrained']['trigger_downtrend']['h20'] and trend['method']['placebo']['n_runs']} 次，完整分布落盘。
+种子 {trend['method']['placebo']['seed']}，{trend['method']['placebo']['n_runs']} 次，完整分布落盘。
+**该表仅作描述性零分布留痕，不构成组间推断**——其权重按日期均匀，与事件加权的组均值不匹配，
+故末两列另给同权重读数（等权日的目标组均值 vs 同一零分布）。
 
-| 设计 | 口径 | 目标组 | 抽样池 | 观测 20 日均值 | 基线均值 | 基线 SD | p(单侧低) | p(单侧高) | p(双侧) |
-| :--- | :--- | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 设计 | 口径 | 目标组 | 抽样池 | 观测 20 日均值 | 基线均值 | 基线 SD | p(单侧低) | p(单侧高) | p(双侧) | 同权重观测均值 | 同权重 p(双侧) |
+| :--- | :--- | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 {chr(10).join(placebo_row(d, m, n) for d in ("date_level", "date_matched", "event_level") for m in ("constrained", "free") for n in ("trigger_downtrend", "uptrend"))}
 
-> **(A) 的校准局限**：该分布量化的是**抽样池一侧**的抽样方差，不含目标组自身方差与两侧协方差
-> （同日两组同涨同跌，协方差为正）。因此它的 p 值偏小，**不作为结论依据**，仅作为方案要求的零分布留痕。
-> 正式推断见 (B)。
+**(B) 日期级配对差（正式推断，含序列相关校正）**：统计量为交集配对日期上的池化均值差（中心化比率影响函数分数）。
+20 日持有窗口彼此重叠，日度贡献序列自相关极高（见 ACF(1) 列），因此**按日独立重抽样会显著低估标准误**。
+本表同时给出 i.i.d. 日 bootstrap（仅作对照）与两种序列相关稳健口径（Newey-West HAC、长度 5 的移动区块 bootstrap），**以 HAC 为准**。
 
-**(B) 日期级 cluster bootstrap 配对差（正式显著性检验）**：统计量为「目标组均值 − 池均值」，在日期维度上有放回重抽样，
-同一天的两组事件一起进出，因而同时包含两侧方差与协方差。
-
-| 口径 | 目标组 | 抽样池 | 配对交易日 | 日度均值相关 | 事件加权差 | SE | t | p(双侧) | 等权日差 | t | p(双侧) |
-| :--- | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 口径 | 目标组 | 抽样池 | 配对交易日 | 日度均值相关 | 贡献序列 ACF(1) | 事件加权差 | HAC SE | HAC t | HAC p | block5 t | block5 p | i.i.d. t | i.i.d. p | 等权日差 | HAC t | HAC p |
+| :--- | :--- | :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 {chr(10).join(cluster_row(m, n, "纯对照组(互斥)" if n == "uptrend" else "非触发池") for m in ("constrained", "free") for n in ("trigger_downtrend", "uptrend"))}
 
-**(C) 互斥组间对比**（不依赖抽样池，直接回答"门禁把谁挑出来了"）：
+**(C) 互斥组间对比**（不依赖抽样池，直接回答"门禁把谁挑出来了"；同样以 HAC 为准）：
 
-| 口径 | 对比 | 事件加权差 | SE | t | p(双侧) |
-| :--- | :--- | ---: | ---: | ---: | ---: |
+| 口径 | 对比 | 事件加权差 | HAC SE | HAC t | HAC p | i.i.d. p（对照） |
+| :--- | :--- | ---: | ---: | ---: | ---: | ---: |
 {chr(10).join(exclusive_row(m, k) for m in ("constrained", "free") for k in ("trigger_vs_neutral", "uptrend_vs_neutral", "trigger_vs_uptrend"))}
 
 **(D) 逐日配对描述统计与加权诊断**：
@@ -351,47 +357,46 @@ def build_report_md(trend: dict, fm: dict) -> str:
 
 ### 2.4 诚实结论
 
-1. **没有任何一种设计支持「下行拦截能规避下跌」**：三种安慰剂设计下，拦截组的单侧「劣于随机」经验 p 值均为
-   **{p_date['p_one_sided_lower']:.4f}**。门禁的设计前提（下行趋势标的会继续下跌）在本样本期不成立，且方向相反。
-2. **但门禁自身的分辨力也不显著**：互斥对比下，触发组相对纯对照组的事件加权差
-   {_pct(excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['observed_diff'])}
-   （t = {F2.format(excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['boot_t'])}），
-   顺势组相对纯对照组 {_pct(excl['constrained']['uptrend_vs_neutral']['h20']['event_weighted']['observed_diff'])}
-   （t = {F2.format(excl['constrained']['uptrend_vs_neutral']['h20']['event_weighted']['boot_t'])}）；
-   而**门禁真正要区分的那一对——触发组 vs 顺势组——并不显著**：
-   事件加权差 {_pct(excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['observed_diff'])}，
-   t = {F2.format(excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['boot_t'])}，
-   p = {excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['boot_p_two_sided']:.4f}。
-   即样本期的超额来自"有明确趋势信号"这一共同属性，而不是门禁的方向判断。
-3. **等权日口径下全都不显著**：触发组 vs 池的事件加权差为
-   {_pct(cb['constrained']['trigger_downtrend']['h20']['event_weighted']['observed_diff'])}
-   （t = {F2.format(cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_t'])}，
-   p = {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_p_two_sided']:.4f}，5% 下显著），
-   但换到**等权日**口径则为 {_pct(cb['constrained']['trigger_downtrend']['h20']['date_equal']['observed_diff'])}
-   （t = {F2.format(cb['constrained']['trigger_downtrend']['h20']['date_equal']['boot_t'])}，
-   p = {cb['constrained']['trigger_downtrend']['h20']['date_equal']['boot_p_two_sided']:.4f}，不显著）。
-   两者符号相反，说明事件加权下的超额集中在**触发数最多的少数交易日**：
-   触发最密集的 10% 交易日（承载 {ev_share_heavy:.1%} 的信号）同日差异
-   {_pct(paired_trig['diff_on_heavy_trigger_days'])}，其余交易日 {_pct(paired_trig['diff_on_light_trigger_days'])}，
-   高触发日贡献了加权差异的约 {heavy_contrib_share:.0%}。
-   **结论必须同时陈述两种口径，不能只报事件加权。**
-4. **两个"随机日期"读法必须分开看**：(A) 的零分布标准差为 {p_date['placebo_std']:.4f}，
-   而 (B) 校准后的配对差标准误为 {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_se']:.4f}
-   （是 (A) 的 {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_se'] / p_date['placebo_std']:.2f} 倍），
-   故 (A) 的 p 值 {p_date['p_two_sided']:.4f} 偏小；(B) 的 p 值
-   {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_p_two_sided']:.4f} 才是校准后的结论。
-5. **同日匹配设计的口径限制**：该设计在 {dm.get('dates_capped_or_missing', 0)} 个交易日的抽样池事件数少于触发数，
+1. **在当前样本期与检验设定下，未能支持「下行拦截能规避下跌」的假设**：三种安慰剂设计下，拦截组的单侧「劣于随机」经验 p 值均为
+   **{p_date['p_one_sided_lower']:.4f}**（同权重读数下亦未能拒绝无差异原假设）。门禁的设计假设（下行趋势标的在未来持有期内将延续深幅下跌）
+   在本样本期内未能得到实证支持，交集配对日期上的池化均值差反而呈现样本特定的超跌反弹迹象。
+2. **序列相关校正后，主口径下几乎没有显著结论**。20 日窗口彼此重叠使日度贡献序列 ACF(1) 高达
+   {cb['constrained']['trigger_downtrend']['h20']['autocorr_of_event_weighted_contrib_lag1']:+.3f}，
+   按日独立重抽样会把标准误低估：HAC SE = {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['hac_se']:.4f}
+   vs i.i.d. bootstrap SE = {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_iid_se']:.4f}
+   （比值 {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['hac_se'] / cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_iid_se']:.2f}×）：
+   | 检验 | 事件加权差 | i.i.d. p（不可用） | **HAC p（采用）** | block5 p（稳健性） |
+   | :--- | ---: | ---: | ---: | ---: |
+   | 触发 vs 非触发池（主口径） | {_pct(cb['constrained']['trigger_downtrend']['h20']['event_weighted']['observed_diff'])} | {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['boot_iid_p_two_sided']:.4f} | **{cb['constrained']['trigger_downtrend']['h20']['event_weighted']['hac_p_two_sided']:.4f}** | {cb['constrained']['trigger_downtrend']['h20']['event_weighted']['block5_p_two_sided']:.4f} |
+   | 触发 vs 纯对照 | {_pct(excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['observed_diff'])} | {excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['boot_iid_p_two_sided']:.4f} | **{excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['hac_p_two_sided']:.4f}** | {excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['block5_p_two_sided']:.4f} |
+   | 顺势 vs 纯对照 | {_pct(excl['constrained']['uptrend_vs_neutral']['h20']['event_weighted']['observed_diff'])} | {excl['constrained']['uptrend_vs_neutral']['h20']['event_weighted']['boot_iid_p_two_sided']:.4f} | **{excl['constrained']['uptrend_vs_neutral']['h20']['event_weighted']['hac_p_two_sided']:.4f}** | {excl['constrained']['uptrend_vs_neutral']['h20']['event_weighted']['block5_p_two_sided']:.4f} |
+   | 触发 vs 顺势（门禁自身分辨力） | {_pct(excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['observed_diff'])} | {excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['boot_iid_p_two_sided']:.4f} | **{excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['hac_p_two_sided']:.4f}** | {excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['block5_p_two_sided']:.4f} |
+
+   即：**门禁核心区分的对比组（触发 vs 顺势）在控制时序依赖后未能拒绝无差异原假设**（HAC p = {excl['constrained']['trigger_vs_uptrend']['h20']['event_weighted']['hac_p_two_sided']:.4f}）；触发组相对纯对照组的优势在主口径下
+   处于显著边缘（HAC p = {excl['constrained']['trigger_vs_neutral']['h20']['event_weighted']['hac_p_two_sided']:.4f}），
+   在自由口径下为 {excl['free']['trigger_vs_neutral']['h20']['event_weighted']['hac_p_two_sided']:.4f}，
+   **结论对样本口径与滞后阶数敏感，不足以支撑稳健的择时发现**。
+3. **等权日口径下同样全不显著**：触发组 vs 池的等权日差
+   {_pct(cb['constrained']['trigger_downtrend']['h20']['date_equal']['observed_diff'])}
+   （HAC t = {F2.format(cb['constrained']['trigger_downtrend']['h20']['date_equal']['hac_t'])}，
+   p = {cb['constrained']['trigger_downtrend']['h20']['date_equal']['hac_p_two_sided']:.4f}）。
+   事件加权与等权日的差异集中在**触发数最多的少数交易日**：触发最密集的 10% 交易日
+   （承载 {ev_share_heavy:.1%} 的信号）同日差异 {_pct(paired_trig['diff_on_heavy_trigger_days'])}，
+   其余交易日 {_pct(paired_trig['diff_on_light_trigger_days'])}，高触发日贡献加权差异的约 {heavy_contrib_share:.0%}。
+   **两种口径必须同时陈述。**
+4. **同日匹配设计的口径限制**：该设计在 {dm.get('dates_capped_or_missing', 0)} 个交易日的抽样池事件数少于触发数，
    每次抽样平均覆盖 {dm.get('events_per_run_mean', float('nan')):,.0f} 条（目标 {dm.get('target_size', 0):,} 条），
-   因此在触发最密集的日期上系统性欠采样。按该设计自身的（被截断）日权重，目标组均值为
+   触发最密集的日期上系统性欠采样。按该设计自身的（被截断）日权重，目标组均值为
    {_pct(dm.get('target_mean_under_matched_weights'))}，与基线 {_pct(p_match['placebo_mean'])} 同权重可比，
    而非与全样本均值 {_pct(p_match['observed_mean_ret'])} 相比。
-6. **纯对照组（互斥）表现最差**：20 日均值 {_pct(neu20['mean_ret'])}、平均最大回撤 {_pct(neu20['mean_maxdd'])}，
+5. **纯对照组（互斥）表现最差**：20 日均值 {_pct(neu20['mean_ret'])}、平均最大回撤 {_pct(neu20['mean_maxdd'])}，
    低于拦截组 {_pct(trig20['mean_ret'])} 与顺势组 {_pct(up20['mean_ret'])}。
-7. **事件级抽样会低估标准误**（SD {p_date['placebo_std']:.4f} vs {p_event['placebo_std']:.4f}，约 {se_ratio:.1f} 倍）：
+6. **事件级抽样会低估标准误**（SD {p_date['placebo_std']:.4f} vs {p_event['placebo_std']:.4f}）：
    它把同一天几百只股票的共同涨跌当作独立信息。v1 用的正是这一类设计（且抽样量固定 10,000、池含触发样本），
    其"显著"结论不具备统计效力。
-8. **涨跌停约束的实际影响**：进场日涨停拦截 {entry_diag['trigger_downtrend']['entry_blocked_limit_up']:,} 次（触发组）、
-   停牌 {entry_diag['trigger_downtrend']['entry_blocked_suspension']:,} 次；退出日跌停顺延仅影响约 0.44% 的事件。
+7. **涨跌停约束的实际影响**：进场日涨停拦截 {entry_diag['trigger_downtrend']['entry_blocked_limit_up']:,} 次（触发组）、
+   停牌 {entry_diag['trigger_downtrend']['entry_blocked_suspension']:,} 次；退出日因跌停顺延的事件占比
+   {trig20.get('share_any_defer', float('nan')):.4%}（平均顺延 {trig20.get('mean_defer_days', float('nan')):.4f} 个交易日）。
    约束的**实质影响**是把 {entry_diag['trigger_downtrend']['entry_limit_unobserved']:,} 条（触发组）
    无法观测涨跌停状态的事件排除在可交易样本之外，从而把受约束口径限制在 {uni['n_stocks_with_limit_field']} 支标的上。
 
@@ -408,6 +413,7 @@ def build_report_md(trend: dict, fm: dict) -> str:
 - 移动区块 Bootstrap：区块长度 {fm_p['block_bootstrap']['block_len']}（T^(1/3)），{fm_p['block_bootstrap']['n_boot']} 次
 - 多重检验：BH-FDR 与 Bonferroni，检验次数 = **{fm_p['n_tests']}**（因子数）
 - 年化 244 日；rf = {RISK_FREE_RATE_ANNUAL:.2%}/年（λ 为总收益溢价，另给出扣 rf 超额口径字段）
+- 经济学含义：截面回归因子斜率 λ_t 体现的是截面标准化因子暴露的边际定价价格（exposure price），并非可直接执行的投资组合净收益；严禁将因子溢价年化解读为实际交易策略的复合年化收益率（CAGR）。重叠持有期事件收益亦不构成可执行策略净值或夏普比率。
 
 ### 3.2 因子风险溢价与显著性
 
@@ -431,11 +437,14 @@ def build_report_md(trend: dict, fm: dict) -> str:
    v1 报告中「短周期动量与价格位置因子具备稳健定价能力」的结论**不成立**。
 2. **主口径下仅 `amihud` 通过 5% FDR**（NW t = {F2.format(fm_p['factors_stats']['amihud']['newey_west_t'])}，BH q = {fm_p['factors_stats']['amihud']['fdr_q_value']:.4f}）。
 3. **但该显著性不稳健**：剔除涨停观测（重建口径）后 `amihud` 的 NW t 降到 {F2.format(robust['exclude_limit_up_at_t']['factors_stats']['amihud']['newey_west_t'])}（不显著）；
-   若改用字面口径则仍为 {F2.format(robust['exclude_limit_up_at_t_literal']['factors_stats']['amihud']['newey_west_t'])}；
+   若改用字面口径（`hit_limit==1 且 ret>0`）则 NW t = {F2.format(robust['exclude_limit_up_at_t_literal']['factors_stats']['amihud']['newey_west_t'])}，
+   **BH q = {robust['exclude_limit_up_at_t_literal']['factors_stats']['amihud']['fdr_q_value']:.4f}，在该口径下仍然通过 5% FDR**；
    仅用官方复权收益标的时为 {F2.format(robust['official_ret_only']['factors_stats']['amihud']['newey_west_t'])}（BH q = {robust['official_ret_only']['factors_stats']['amihud']['fdr_q_value']:.4f}，不显著）。
-   **结论对涨停定义敏感**，因此不足以作为稳健的多因子发现。
+   也就是说：两种剔除口径的差别不仅是"定义"，更主要是**覆盖范围**——重建口径剔除 {robust['exclude_limit_up_at_t']['n_rows_excluded']:,} 行，
+   字面口径只剔到 {robust['exclude_limit_up_at_t_literal']['n_rows_excluded']:,} 行，差额来自 `ret` 缺失、方向只能由 close 收益推断的涨停样本。
+   **结论随口径在"显著/不显著"之间翻转，因此不足以作为稳健的多因子发现。**
 4. 其余因子（`mom_20d` / `mom_60d` / `vol_20d` / `turnover_20d` / `price_pos`）在任何口径下均不显著。
-5. 结论应表述为：**在本样本期与当前因子集下，未发现稳健显著的因子风险溢价**；历史报告中 Harvey |t| ≥ 3 的多因子叙事缺乏证据。
+5. 结论应表述为：**在本样本期与当前因子集下，实证检验未能拒绝因子风险溢价为零的原假设**；历史报告中 Harvey |t| ≥ 3 的多因子叙事缺乏证据，且因子斜率属于回归暴露定价而非可直接执行策略收益。
 
 ---
 
@@ -484,6 +493,9 @@ def build_vs_old_md(trend: dict, fm: dict) -> str:
     p_event = pv["event_level"]["constrained"]["trigger_downtrend"]["h20"]
     paired_trig = paired["constrained"]["trigger_downtrend"]["h20"]
     se_ratio = p_date["placebo_std"] / p_event["placebo_std"] if p_event["placebo_std"] else float("nan")
+    cb_trig_h20 = trend["cluster_bootstrap_diff"]["constrained"]["trigger_downtrend"]["h20"]
+    cb_trig = cb_trig_h20["event_weighted"]
+    excl_c = trend["exclusive_group_comparisons"]["constrained"]
 
     md = f"""# 真实数据重建新旧指标全量对比总账（vs_old.md · v2 修正版）
 
@@ -509,10 +521,12 @@ def build_vs_old_md(trend: dict, fm: dict) -> str:
 | 被解释变量时点 | 拿当日/过去收益当标签（100d 实验） | **同期收益**（前视偏差） | **t+1 可交易收益** | v1 重犯了历史同类错误 |
 | 涨跌停约束 | 宣称"完全规避跌停" | `hit_limit == -1` 恒为假，约束从未生效 | 重建方向，进场日涨停拦截 {counts['entry_blocked_limit_up']:,} 次，退出日跌停顺延 | v1 的约束是死代码 |
 | 安慰剂抽样池 | 从未真实执行 | 含触发样本，抽样量固定 10,000 与触发数不符 | 严格排除触发样本；抽样量按日期/样本量匹配 | v1 实验设计有误 |
-| 安慰剂设计 | 无 | 事件级抽样（把同日横截面相关性当独立信息） | **随机日期（主口径）** + 同日匹配 + 逐日配对；事件级降为次级并披露其标准误低估约 {se_ratio:.1f} 倍 | v1 的"显著"是低估标准误的产物 |
+| 安慰剂设计 | 无 | 事件级抽样（把同日横截面相关性当独立信息） | **随机日期零分布（描述）+ 同日匹配 + 日期级配对差（HAC 推断，交集配对日期上的池化均值差）**；事件级降为次级 | v1 的"显著"是低估标准误的产物 |
+| 推断的序列相关校正 | 无 | 无 | 日度贡献序列 ACF(1) 达 **{cb_trig_h20['autocorr_of_event_weighted_contrib_lag1']:+.3f}**（20 日窗口重叠），故按日独立重抽样不可用；正式推断改用 **Newey-West HAC**，并以 block5 bootstrap 交叉验证。校正后主口径 触发 vs 池 p 由 {cb_trig['boot_iid_p_two_sided']:.4f} 变为 **{cb_trig['hac_p_two_sided']:.4f}** | v1 与 v2 早期版本都在这点上不严谨 |
 | 经验 p 值 | 无 | 落盘 `1.0`，**未写入报告** | 单侧低 **{p_date['p_one_sided_lower']:.4f}**、单侧高 {p_date['p_one_sided_upper']:.4f}、双侧 {p_date['p_two_sided']:.4f}（随机日期）；逐日配对 p={paired_trig['nw_p_two_sided']:.4f} | v1 隐瞒了方向不利的 p 值 |
-| Trend Gate 有效性 | 论文叙事：门禁规避下行 | 报告称"下行拦截组存在超跌均值回归反弹特征" | 拦截组 20 日 {_pct(c['trigger_downtrend']['h20']['mean_ret'])} > 非触发池 {_pct(c['not_downtrend_pool']['h20']['mean_ret'])} > 纯对照 {_pct(c['neutral_control']['h20']['mean_ret'])}，**门禁前提未被支持且被反向证伪** | v2 补齐对照、配对与三种安慰剂设计 |
-| Brier 评分 | 0.185（硬编码兜底常量） | 已改为返回 None / Brier Skill Score | 同 v1（M1 已修） | 该项 v1 已正确 |
+| Trend Gate 有效性 | 论文叙事：门禁规避下行 | 报告称"下行拦截组存在超跌均值回归反弹特征" | 拦截组 20 日 {_pct(c['trigger_downtrend']['h20']['mean_ret'])} > 非触发池 {_pct(c['not_downtrend_pool']['h20']['mean_ret'])} > 纯对照 {_pct(c['neutral_control']['h20']['mean_ret'])}，**在本样本期内未支持门禁规避下行的假设（单侧经验检验未能拒绝下行拦截表现不劣于基线的零假设，p = {p_date['p_one_sided_lower']:.4f}）** | v2 补齐对照、配对与三种安慰剂设计 |
+| 门禁自身分辨力 | 未检验 | 未检验 | 触发 vs 顺势 交集配对池化均值差 {_pct(excl_c['trigger_vs_uptrend']['h20']['event_weighted']['observed_diff'])}，**HAC p = {excl_c['trigger_vs_uptrend']['h20']['event_weighted']['hac_p_two_sided']:.4f}（未能拒绝无差异原假设）** | v2 新增互斥组间对比；控制自相关后未能拒绝原假设 |
+| Brier 评分 | 0.185（硬编码兜底常量） | 已改为返回 `None` / Brier Skill Score | 同 v1（M1 已修） | 该项 v1 已正确 |
 | 文件保全 | 尚未治理 | 新目录产出，未覆盖历史文件 | 新目录产出，且 v1 结果逐字节保留于 `superseded_v1/` | v2 追加保全 v1 |
 
 ---
@@ -621,11 +635,11 @@ def build_paper_checklist_md(trend: dict, fm: dict) -> str:
 - [ ] **更正 001258（立新能源）的旗舰案例定性**：该项目已在自身封箱检验中被 Alpha 门控拒绝（p = 0.354，IR = 0.063）。
 - [ ] **【v2 新增】更正 Trend Gate 的叙事**：不得声称门禁能规避下行风险。真实结果是下行拦截组 20 日平均收益
   {_pct(p_date['observed_mean_ret'])}，**高于**随机日期安慰剂基线 {_pct(p_date['placebo_mean'])}，
-  单侧「劣于随机」经验 p 值 = **{p_date['p_one_sided_lower']:.4f}**（毫无规避下行的证据）。
-  同日事件加权配对差为 {_pct(paired_trig['weighted_mean_diff'])}，但优势高度集中在触发最密集的 10% 交易日
+  单侧「劣于随机」经验 p 值 = **{p_date['p_one_sided_lower']:.4f}**（在当前样本期与检验设定下未能支持规避下行的假设）。
+  交集配对日期上的池化均值差为 {_pct(paired_trig['weighted_mean_diff'])}，但优势高度集中在触发最密集的 10% 交易日
   （同日差异 {_pct(paired_trig['diff_on_heavy_trigger_days'])}，其余交易日仅 {_pct(paired_trig['diff_on_light_trigger_days'])}）；
-  逐日等权口径下同日差异为零（NW t = {F2.format(paired_trig['nw_t'])}，p = {paired_trig['nw_p_two_sided']:.4f}）。
-  正确表述为"**门禁未产生可验证的择时价值；其表面超额集中于普跌行情里的集中触发信号，不构成稳定的选股能力**"。
+  逐日等权口径下同日差异接近零（NW t = {F2.format(paired_trig['nw_t'])}，p = {paired_trig['nw_p_two_sided']:.4f}）。
+  正确表述为"**门禁在当前样本期未展现出稳健可验证的下行风险规避效应；其表面超额在交集配对日期上高度集中于少数极端普跌交易日，不构成普遍稳健的个股择时能力**"。
 
 ---
 
@@ -642,7 +656,22 @@ def build_paper_checklist_md(trend: dict, fm: dict) -> str:
     return md
 
 
+def regenerate_markdown_reports(out_dir: Path = OUT_DIR) -> None:
+    """从现有落盘 JSON 直接重新生成 report.md、vs_old.md 与 paper_correction_checklist.md，保持字节级一致。"""
+    import json
+    trend = json.loads((out_dir / "trend_gate_event_study.json").read_text(encoding="utf-8"))
+    fm = json.loads((out_dir / "fama_macbeth_hac_results.json").read_text(encoding="utf-8"))
+    (out_dir / "report.md").write_text(build_report_md(trend, fm), encoding="utf-8")
+    (out_dir / "vs_old.md").write_text(build_vs_old_md(trend, fm), encoding="utf-8")
+    (out_dir / "paper_correction_checklist.md").write_text(build_paper_checklist_md(trend, fm), encoding="utf-8")
+
+
 def main() -> None:
+    if "--only-reports" in sys.argv:
+        regenerate_markdown_reports(OUT_DIR)
+        print("[OK] Markdown 报告已从现有 JSON 重新生成。")
+        return
+
     started = time.time()
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 

@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
+from unittest.mock import patch
 
 from src.analysis.factor_providers import (
     BaseFactorProvider,
@@ -50,15 +51,16 @@ def test_akshare_proxy_provider_db_query(tmp_path):
 
 
 def test_kenneth_french_provider_fallback(tmp_path):
-    """测试 Kenneth French 美股因子适配器回退机制与数据结构（反作弊守卫与受控合成标记）。"""
+    """在线源不可用时默认拒绝合成；显式 opt-in 才能生成带标签的测试数据。"""
     provider = KennethFrenchFactorProvider(cache_dir=tmp_path)
-    # 默认不允许合成数据，应抛出 MissingRealDataError
-    with pytest.raises(MissingRealDataError):
-        provider.get_daily_factors("2025-01-01", "2025-01-10")
+    with patch.object(provider, "_fetch_and_parse_online", side_effect=OSError("offline fixture")):
+        with pytest.raises(MissingRealDataError):
+            provider.get_daily_factors("2025-01-01", "2025-01-10")
 
-    # 显式允许合成数据时，返回合法结构并带有 synthetic 标签
+    # 显式允许合成数据时，返回合法结构并带有 synthetic 标签。
     provider_syn = KennethFrenchFactorProvider(cache_dir=tmp_path, allow_synthetic=True)
-    df = provider_syn.get_daily_factors("2025-01-01", "2025-01-10")
+    with patch.object(provider_syn, "_fetch_and_parse_online", side_effect=OSError("offline fixture")):
+        df = provider_syn.get_daily_factors("2025-01-01", "2025-01-10")
 
     assert not df.empty
     assert df.attrs.get("data_source") == "synthetic"
@@ -373,7 +375,7 @@ def test_eastmoney_miaoxiang_provider(tmp_path):
     from src.skills.eastmoney_miaoxiang_skill import EastMoneyMiaoXiangSkill
 
     db_path = tmp_path / "eastmoney_test.db"
-    provider = EastMoneyMiaoXiangProvider(db_path=db_path)
+    provider = EastMoneyMiaoXiangProvider(db_path=db_path, allow_synthetic=True)
     
     # 1. 因子与资金流测试
     df = provider.get_factors_with_flows("2025-01-01", "2025-01-10")

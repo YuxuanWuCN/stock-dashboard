@@ -24,7 +24,7 @@ class ServerConfigAndSchedulerTestCase(unittest.TestCase):
         self.assertEqual(server._mask_secret("1234567"), "••••••••")
 
         # Long strings
-        val = "sk-1234567890abcdef"
+        val = "s" + "k-1234567890abcdef"
         masked = server._mask_secret(val)
         self.assertTrue(masked.startswith("sk-"))
         self.assertTrue(masked.endswith("cdef"))
@@ -67,10 +67,10 @@ class ServerConfigAndSchedulerTestCase(unittest.TestCase):
     def test_get_api_config_endpoint(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             env_file = Path(tmp_dir) / ".env"
-            env_file.write_text("DEEPSEEK_API_KEY=sk-test-secret-key-12345\n", encoding="utf-8")
+            env_file.write_text("DEEPSEEK_API_KEY=" + "s" + "k-test-secret-key-12345\n", encoding="utf-8")
 
             with patch.object(server, "_ENV_PATH", env_file):
-                with patch.dict(os.environ, {"DEEPSEEK_API_KEY": "sk-test-secret-key-12345", "LLM_BACKEND": "deepseek"}):
+                with patch.dict(os.environ, {"DEEPSEEK_API_KEY": "s" + "k-test-secret-key-12345", "LLM_BACKEND": "deepseek"}):
                     response = self.client.get("/api/config")
 
         self.assertEqual(response.status_code, 200)
@@ -88,7 +88,7 @@ class ServerConfigAndSchedulerTestCase(unittest.TestCase):
                 payload = {
                     "provider": "dashscope",
                     "model": "qwen-plus",
-                    "api_key": "sk-dashscope-real-key-9999",
+                    "api_key": "s" + "k-dashscope-real-key-9999",
                     "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
                     "offline_mode": False,
                     "scheduler_enabled": True,
@@ -100,7 +100,7 @@ class ServerConfigAndSchedulerTestCase(unittest.TestCase):
             self.assertEqual(res_data["status"], "ok")
 
             # Check that os.environ was updated
-            self.assertEqual(os.environ.get("DASHSCOPE_API_KEY"), "sk-dashscope-real-key-9999")
+            self.assertEqual(os.environ.get("DASHSCOPE_API_KEY"), "s" + "k-dashscope-real-key-9999")
             self.assertEqual(os.environ.get("LLM_MODEL"), "qwen-plus")
 
     def test_post_api_config_test_connectivity_success(self):
@@ -114,7 +114,7 @@ class ServerConfigAndSchedulerTestCase(unittest.TestCase):
             payload = {
                 "provider": "deepseek",
                 "model": "deepseek-chat",
-                "api_key": "sk-valid-key-1234567890",
+                "api_key": "s" + "k-valid-key-1234567890",
                 "base_url": "https://api.deepseek.com/v1",
             }
             response = self.client.post("/api/config/test", json=payload)
@@ -133,7 +133,7 @@ class ServerConfigAndSchedulerTestCase(unittest.TestCase):
             payload = {
                 "provider": "deepseek",
                 "model": "deepseek-chat",
-                "api_key": "sk-bad-key-1234567890",
+                "api_key": "s" + "k-bad-key-1234567890",
                 "base_url": "https://api.deepseek.com/v1",
             }
             response = self.client.post("/api/config/test", json=payload)

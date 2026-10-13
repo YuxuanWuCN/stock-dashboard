@@ -168,8 +168,11 @@ def run_fama_macbeth_study(
             "multiple_testing": "Benjamini-Hochberg FDR 与 Bonferroni，检验次数 = 因子数",
             "annualization_days": ANNUALIZATION_DAYS,
             "risk_free_rate_annual": RISK_FREE_RATE_ANNUAL,
-            "rf_note": "被解释变量为个股总收益（未扣无风险利率），λ 为总收益溢价；"
-                       "另给出扣除日度 rf 后的超额年化溢价字段",
+            "rf_note": (
+                "因因子在截面已完成 z-score 标准化且回归含截距项，各因子斜率 λ_t 对应零净投资、资金中性的多空因子组合收益，"
+                "自身即为超额收益，无需也不应扣除无风险利率 Rf；扣除 Rf 仅平移截距项 α_t（对应全截面等权基准），"
+                "对因子溢价斜率与 t 值无任何影响。字段 annualized_premium_excess_244d 维持与 annualized_premium_244d 一致以保障 schema 兼容。"
+            ),
             "harvey_convention": "|NW t| >= 3.0 仅作为多因子发现语境的标注，检验次数随表附出",
         },
         "primary_next_day": _compact(primary),

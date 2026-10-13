@@ -1,7 +1,7 @@
 {
   "experiment": "fama_macbeth_hac",
   "version": "v2-rework",
-  "generated_at": "2026-10-11 13:44:00",
+  "generated_at": "2026-10-12 09:22:36",
   "data_source": "data/task_split/csmar_master/csmar_factor_panel_master.csv",
   "data_sha256": "9396c41d14f445e47f42a569b14bf9db3d61e51753f2810f803db0fe7713303d",
   "method": {
@@ -14,7 +14,7 @@
     "multiple_testing": "Benjamini-Hochberg FDR 与 Bonferroni，检验次数 = 因子数",
     "annualization_days": 244,
     "risk_free_rate_annual": 0.015,
-    "rf_note": "被解释变量为个股总收益（未扣无风险利率），λ 为总收益溢价；另给出扣除日度 rf 后的超额年化溢价字段",
+    "rf_note": "因因子在截面已完成 z-score 标准化且回归含截距项，各因子斜率 λ_t 对应零净投资、资金中性的多空因子组合收益，自身即为超额收益，无需也不应扣除无风险利率 Rf；扣除 Rf 仅平移截距项 α_t（对应全截面等权基准），对因子溢价斜率与 t 值无任何影响。字段 annualized_premium_excess_244d 维持与 annualized_premium_244d 一致以保障 schema 兼容。",
     "harvey_convention": "|NW t| >= 3.0 仅作为多因子发现语境的标注，检验次数随表附出"
   },
   "primary_next_day": {
@@ -51,6 +51,9 @@
     "risk_free_rate_annual": 0.015,
     "annualization_days": 244,
     "mean_alpha_daily": 0.0009883047745318943,
+    "annualized_alpha_244d": 0.2411463649857822,
+    "annualized_alpha_excess_244d": 0.22614636498578222,
+    "alpha_newey_west_t": 1.6069386183506096,
     "excluded_limit_up_at_t": false,
     "limit_up_definition": null,
     "n_rows_excluded": 0,
@@ -58,7 +61,7 @@
       "mom_20d": {
         "mean_risk_premium_daily": -3.972611722757272e-05,
         "annualized_premium_244d": -0.009693172603527743,
-        "annualized_premium_excess_244d": -0.024693172603527744,
+        "annualized_premium_excess_244d": -0.009693172603527743,
         "std_daily": 0.006171503713406937,
         "classic_se": 0.00025537864073734806,
         "classic_t": -0.15555771270797175,
@@ -79,7 +82,7 @@
       "mom_60d": {
         "mean_risk_premium_daily": -6.449085060992321e-05,
         "annualized_premium_244d": -0.015735767548821264,
-        "annualized_premium_excess_244d": -0.030735767548821263,
+        "annualized_premium_excess_244d": -0.015735767548821264,
         "std_daily": 0.006208155429091082,
         "classic_se": 0.000256895299523727,
         "classic_t": -0.2510394340787337,
@@ -100,7 +103,7 @@
       "vol_20d": {
         "mean_risk_premium_daily": 0.0002303666186408562,
         "annualized_premium_244d": 0.05620945494836892,
-        "annualized_premium_excess_244d": 0.04120945494836891,
+        "annualized_premium_excess_244d": 0.05620945494836892,
         "std_daily": 0.006657666483089325,
         "classic_se": 0.00027549619928776714,
         "classic_t": 0.8361880099849537,
@@ -121,7 +124,7 @@
       "turnover_20d": {
         "mean_risk_premium_daily": -0.0002333971367904056,
         "annualized_premium_244d": -0.056948901376858964,
-        "annualized_premium_excess_244d": -0.07194890137685896,
+        "annualized_premium_excess_244d": -0.056948901376858964,
         "std_daily": 0.004800041703059156,
         "classic_se": 0.0001986271389494348,
         "classic_t": -1.1750515968002857,
@@ -142,7 +145,7 @@
       "amihud": {
         "mean_risk_premium_daily": 0.00040384257716022615,
         "annualized_premium_244d": 0.09853758882709518,
-        "annualized_premium_excess_244d": 0.08353758882709518,
+        "annualized_premium_excess_244d": 0.09853758882709518,
         "std_daily": 0.0027671011992652585,
         "classic_se": 0.00011450346234353012,
         "classic_t": 3.526902758177118,
@@ -163,7 +166,7 @@
       "price_pos": {
         "mean_risk_premium_daily": -0.00015774291897009161,
         "annualized_premium_244d": -0.038489272228702354,
-        "annualized_premium_excess_244d": -0.05348927222870235,
+        "annualized_premium_excess_244d": -0.038489272228702354,
         "std_daily": 0.0036607022912414668,
         "classic_se": 0.00015148093863258093,
         "classic_t": -1.041338404647064,
@@ -4963,6 +4966,9 @@
       "risk_free_rate_annual": 0.015,
       "annualization_days": 244,
       "mean_alpha_daily": 0.000792829722931944,
+      "annualized_alpha_244d": 0.19345045239539435,
+      "annualized_alpha_excess_244d": 0.17845045239539434,
+      "alpha_newey_west_t": 1.3235702658941773,
       "excluded_limit_up_at_t": true,
       "limit_up_definition": "reconstructed",
       "n_rows_excluded": 1001,
@@ -4970,7 +4976,7 @@
         "mom_20d": {
           "mean_risk_premium_daily": -0.00021432676575978382,
           "annualized_premium_244d": -0.05229573084538725,
-          "annualized_premium_excess_244d": -0.06729573084538726,
+          "annualized_premium_excess_244d": -0.05229573084538725,
           "std_daily": 0.006127654354252528,
           "classic_se": 0.0002535641413449666,
           "classic_t": -0.8452566069592565,
@@ -4991,7 +4997,7 @@
         "mom_60d": {
           "mean_risk_premium_daily": -5.4631291119122054e-05,
           "annualized_premium_244d": -0.013330035033065782,
-          "annualized_premium_excess_244d": -0.028330035033065783,
+          "annualized_premium_excess_244d": -0.013330035033065782,
           "std_daily": 0.006113912348722556,
           "classic_se": 0.00025299549311007605,
           "classic_t": -0.21593780366416437,
@@ -5012,7 +5018,7 @@
         "vol_20d": {
           "mean_risk_premium_daily": 7.170512883036309e-05,
           "annualized_premium_244d": 0.017496051434608594,
-          "annualized_premium_excess_244d": 0.002496051434608594,
+          "annualized_premium_excess_244d": 0.017496051434608594,
           "std_daily": 0.006552537278850498,
           "classic_se": 0.00027114592186316044,
           "classic_t": 0.2644521751890873,
@@ -5033,7 +5039,7 @@
         "turnover_20d": {
           "mean_risk_premium_daily": -0.00021512237354298226,
           "annualized_premium_244d": -0.05248985914448767,
-          "annualized_premium_excess_244d": -0.06748985914448767,
+          "annualized_premium_excess_244d": -0.05248985914448767,
           "std_daily": 0.004720539592466993,
           "classic_se": 0.00019533731820531528,
           "classic_t": -1.1012866129188448,
@@ -5054,7 +5060,7 @@
         "amihud": {
           "mean_risk_premium_daily": 0.00010090799130186182,
           "annualized_premium_244d": 0.024621549877654286,
-          "annualized_premium_excess_244d": 0.009621549877654284,
+          "annualized_premium_excess_244d": 0.024621549877654286,
           "std_daily": 0.0024663213630691694,
           "classic_se": 0.00010205710416309317,
           "classic_t": 0.9887404912117143,
@@ -5075,7 +5081,7 @@
         "price_pos": {
           "mean_risk_premium_daily": -0.00035126681321411127,
           "annualized_premium_244d": -0.08570910242424315,
-          "annualized_premium_excess_244d": -0.10070910242424315,
+          "annualized_premium_excess_244d": -0.08570910242424315,
           "std_daily": 0.003517660573719091,
           "classic_se": 0.0001455618302457152,
           "classic_t": -2.413179420876726,
@@ -5173,6 +5179,9 @@
       "risk_free_rate_annual": 0.015,
       "annualization_days": 244,
       "mean_alpha_daily": 0.0008877433043356661,
+      "annualized_alpha_244d": 0.21660936625790253,
+      "annualized_alpha_excess_244d": 0.20160936625790254,
+      "alpha_newey_west_t": 1.4724129212569275,
       "excluded_limit_up_at_t": true,
       "limit_up_definition": "literal",
       "n_rows_excluded": 450,
@@ -5180,7 +5189,7 @@
         "mom_20d": {
           "mean_risk_premium_daily": -8.864395291120293e-05,
           "annualized_premium_244d": -0.021629124510333515,
-          "annualized_premium_excess_244d": -0.03662912451033352,
+          "annualized_premium_excess_244d": -0.021629124510333515,
           "std_daily": 0.006122626890510322,
           "classic_se": 0.0002533561034150774,
           "classic_t": -0.34987889265874966,
@@ -5201,7 +5210,7 @@
         "mom_60d": {
           "mean_risk_premium_daily": -8.825499820906287e-05,
           "annualized_premium_244d": -0.02153421956301134,
-          "annualized_premium_excess_244d": -0.03653421956301134,
+          "annualized_premium_excess_244d": -0.02153421956301134,
           "std_daily": 0.006195878099341071,
           "classic_se": 0.00025638726000385586,
           "classic_t": -0.34422536520627267,
@@ -5222,7 +5231,7 @@
         "vol_20d": {
           "mean_risk_premium_daily": 0.00019429529445494037,
           "annualized_premium_244d": 0.04740805184700545,
-          "annualized_premium_excess_244d": 0.03240805184700545,
+          "annualized_premium_excess_244d": 0.04740805184700545,
           "std_daily": 0.00659603859156215,
           "classic_se": 0.00027294601899126525,
           "classic_t": 0.7118451303045316,
@@ -5243,7 +5252,7 @@
         "turnover_20d": {
           "mean_risk_premium_daily": -0.00025138023497755596,
           "annualized_premium_244d": -0.061336777334523654,
-          "annualized_premium_excess_244d": -0.07633677733452367,
+          "annualized_premium_excess_244d": -0.061336777334523654,
           "std_daily": 0.00471982814079332,
           "classic_se": 0.0001953078781255859,
           "classic_t": -1.2870972609508087,
@@ -5264,7 +5273,7 @@
         "amihud": {
           "mean_risk_premium_daily": 0.00032195602037178697,
           "annualized_premium_244d": 0.07855726897071602,
-          "annualized_premium_excess_244d": 0.06355726897071601,
+          "annualized_premium_excess_244d": 0.07855726897071602,
           "std_daily": 0.0027107770107796378,
           "classic_se": 0.00011217275084045763,
           "classic_t": 2.8701803063535665,
@@ -5285,7 +5294,7 @@
         "price_pos": {
           "mean_risk_premium_daily": -0.0002395545560106409,
           "annualized_premium_244d": -0.05845131166659638,
-          "annualized_premium_excess_244d": -0.0734513116665964,
+          "annualized_premium_excess_244d": -0.05845131166659638,
           "std_daily": 0.0036070695226941324,
           "classic_se": 0.00014926159887898984,
           "classic_t": -1.6049309253671726,
@@ -5383,6 +5392,9 @@
       "risk_free_rate_annual": 0.015,
       "annualization_days": 244,
       "mean_alpha_daily": 0.0010979877293164787,
+      "annualized_alpha_244d": 0.2679090059532208,
+      "annualized_alpha_excess_244d": 0.2529090059532208,
+      "alpha_newey_west_t": 1.5918828223745574,
       "excluded_limit_up_at_t": false,
       "limit_up_definition": null,
       "n_rows_excluded": 0,
@@ -5390,7 +5402,7 @@
         "mom_20d": {
           "mean_risk_premium_daily": 0.00010172422304932364,
           "annualized_premium_244d": 0.02482071042403497,
-          "annualized_premium_excess_244d": 0.009820710424034968,
+          "annualized_premium_excess_244d": 0.02482071042403497,
           "std_daily": 0.007311235052036401,
           "classic_se": 0.0003025410591010683,
           "classic_t": 0.33623278556495423,
@@ -5411,7 +5423,7 @@
         "mom_60d": {
           "mean_risk_premium_daily": -5.8910432110526814e-05,
           "annualized_premium_244d": -0.014374145434968542,
-          "annualized_premium_excess_244d": -0.029374145434968545,
+          "annualized_premium_excess_244d": -0.014374145434968542,
           "std_daily": 0.007061802107229061,
           "classic_se": 0.0002922194504043691,
           "classic_t": -0.20159654680414804,
@@ -5432,7 +5444,7 @@
         "vol_20d": {
           "mean_risk_premium_daily": 0.000319754390304536,
           "annualized_premium_244d": 0.07802007123430678,
-          "annualized_premium_excess_244d": 0.06302007123430678,
+          "annualized_premium_excess_244d": 0.07802007123430678,
           "std_daily": 0.008369107600652025,
           "classic_se": 0.00034631613663232253,
           "classic_t": 0.9233020251782647,
@@ -5453,7 +5465,7 @@
         "turnover_20d": {
           "mean_risk_premium_daily": -0.00016030062788545705,
           "annualized_premium_244d": -0.03911335320405152,
-          "annualized_premium_excess_244d": -0.05411335320405152,
+          "annualized_premium_excess_244d": -0.03911335320405152,
           "std_daily": 0.006592899580163162,
           "classic_se": 0.00027281612577535557,
           "classic_t": -0.5875775393770274,
@@ -5474,7 +5486,7 @@
         "amihud": {
           "mean_risk_premium_daily": 0.00035392391670114047,
           "annualized_premium_244d": 0.08635743567507828,
-          "annualized_premium_excess_244d": 0.07135743567507828,
+          "annualized_premium_excess_244d": 0.08635743567507828,
           "std_daily": 0.003095331189986676,
           "classic_se": 0.0001280857160003774,
           "classic_t": 2.763180218316441,
@@ -5495,7 +5507,7 @@
         "price_pos": {
           "mean_risk_premium_daily": -0.00027443771036790414,
           "annualized_premium_244d": -0.0669628013297686,
-          "annualized_premium_excess_244d": -0.0819628013297686,
+          "annualized_premium_excess_244d": -0.0669628013297686,
           "std_daily": 0.0037924661981050415,
           "classic_se": 0.00015693336789385833,
           "classic_t": -1.7487530794185193,
@@ -5593,6 +5605,9 @@
       "risk_free_rate_annual": 0.015,
       "annualization_days": 244,
       "mean_alpha_daily": 0.0010855766760429345,
+      "annualized_alpha_244d": 0.264880708954476,
+      "annualized_alpha_excess_244d": 0.24988070895447603,
+      "alpha_newey_west_t": 1.574354617812537,
       "excluded_limit_up_at_t": false,
       "limit_up_definition": null,
       "n_rows_excluded": 0,
@@ -5600,7 +5615,7 @@
         "mom_20d": {
           "mean_risk_premium_daily": 0.003942975405272859,
           "annualized_premium_244d": 0.9620859988865776,
-          "annualized_premium_excess_244d": 0.9470859988865776,
+          "annualized_premium_excess_244d": 0.9620859988865776,
           "std_daily": 0.005956077568159559,
           "classic_se": 0.00024625350011980304,
           "classic_t": 16.01185527659339,
@@ -5621,7 +5636,7 @@
         "mom_60d": {
           "mean_risk_premium_daily": 0.0001463160240650061,
           "annualized_premium_244d": 0.03570110987186149,
-          "annualized_premium_excess_244d": 0.020701109871861488,
+          "annualized_premium_excess_244d": 0.03570110987186149,
           "std_daily": 0.005600028825018932,
           "classic_se": 0.00023153269633438003,
           "classic_t": 0.6319454071994056,
@@ -5642,7 +5657,7 @@
         "vol_20d": {
           "mean_risk_premium_daily": 0.000197312699882494,
           "annualized_premium_244d": 0.04814429877132854,
-          "annualized_premium_excess_244d": 0.03314429877132854,
+          "annualized_premium_excess_244d": 0.04814429877132854,
           "std_daily": 0.008901858567877986,
           "classic_se": 0.00036804655493913915,
           "classic_t": 0.5361079929551901,
@@ -5663,7 +5678,7 @@
         "turnover_20d": {
           "mean_risk_premium_daily": -0.0007085151834983056,
           "annualized_premium_244d": -0.17287770477358655,
-          "annualized_premium_excess_244d": -0.18787770477358656,
+          "annualized_premium_excess_244d": -0.17287770477358655,
           "std_daily": 0.004734432056302025,
           "classic_se": 0.00019574467451135405,
           "classic_t": -3.6195885546669553,
@@ -5684,7 +5699,7 @@
         "amihud": {
           "mean_risk_premium_daily": 0.0005965093596763979,
           "annualized_premium_244d": 0.1455482837610411,
-          "annualized_premium_excess_244d": 0.13054828376104108,
+          "annualized_premium_excess_244d": 0.1455482837610411,
           "std_daily": 0.0031737337437233405,
           "classic_se": 0.00013121774085317984,
           "classic_t": 4.545950538379068,
@@ -5705,7 +5720,7 @@
         "price_pos": {
           "mean_risk_premium_daily": 0.012248164588641414,
           "annualized_premium_244d": 2.988552159628505,
-          "annualized_premium_excess_244d": 2.973552159628505,
+          "annualized_premium_excess_244d": 2.988552159628505,
           "std_daily": 0.005306344081644352,
           "classic_se": 0.00021939032660192478,
           "classic_t": 55.82818886479545,

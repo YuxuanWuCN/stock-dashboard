@@ -231,7 +231,12 @@ def summarize_market_sentiment(results: list[LLMSentimentResult]) -> dict:
 
 class LLMSentimentAnalyzer:
     """
-    LLM 情感分析器（FinGPT V1 模式），规则词典作为降级。
+    LLM 情感分析器（v2.6 改进：使用轻量 LLM 降低成本）。
+
+    改进点：
+    1. 优先使用轻量 LLM（gemini-3.8-flash / qwen-turbo）
+    2. 输入自动摘要（外部调用时已完成）
+    3. 规则词典作为降级
 
     用法:
         analyzer = LLMSentimentAnalyzer()
@@ -239,7 +244,16 @@ class LLMSentimentAnalyzer:
     """
 
     def __init__(self, llm_client: Optional[LLMCompletionClient] = None) -> None:
-        self._llm = llm_client or LLMClient()
+        # 如果配置了使用轻量 LLM，且未提供 client，则创建轻量客户端
+        from .config import SENTIMENT_USE_LIGHTWEIGHT_LLM, SENTIMENT_LIGHTWEIGHT_BACKEND
+
+        if llm_client is None and SENTIMENT_USE_LIGHTWEIGHT_LLM:
+            # 创建轻量 LLM 客户端（专用于情绪打分）
+            self._llm = LLMClient(backend=SENTIMENT_LIGHTWEIGHT_BACKEND)
+            logger.info("情绪分析启用轻量 LLM: %s", SENTIMENT_LIGHTWEIGHT_BACKEND)
+        else:
+            self._llm = llm_client or LLMClient()
+
         self._cache: dict[str, LLMSentimentResult] = {}
 
     @property

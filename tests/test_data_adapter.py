@@ -24,7 +24,7 @@ class _InjectedFactorProvider:
 def test_unified_data_adapter_factors(tmp_path):
     """测试多市场因子数据获取与列规范对齐。"""
     cache_db = tmp_path / "test_adapter.db"
-    adapter = UnifiedDataAdapter(mode="dual_track", cache_db=cache_db)
+    adapter = UnifiedDataAdapter(mode="dual_track", cache_db=cache_db, allow_synthetic=True)
 
     # 1. A 股 7 因子获取
     df_cn = adapter.get_market_factors("2024-01-01", "2024-01-20", market="CN", include_micro_flows=True)
@@ -47,7 +47,7 @@ def test_unified_data_adapter_factors(tmp_path):
 def test_market_data_packet_assembly(tmp_path):
     """测试 MarketDataPacket 标的数据封包装配与时序交集对齐。"""
     cache_db = tmp_path / "test_adapter_packet.db"
-    adapter = UnifiedDataAdapter(mode="dual_track", cache_db=cache_db)
+    adapter = UnifiedDataAdapter(mode="dual_track", cache_db=cache_db, allow_synthetic=True)
 
     dates = pd.date_range("2024-01-01", periods=10, freq="B")
     prices = [10.0, 10.5, 10.2, 10.8, 11.0, 11.2, 10.9, 11.5, 11.8, 12.0]

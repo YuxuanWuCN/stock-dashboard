@@ -370,8 +370,38 @@ def validate_return_basis(df: pd.DataFrame, threshold: float = 0.01) -> Dict[str
         "share_over_threshold": float(over.mean()),
         "n_over_threshold": int(over.sum()),
         "threshold": float(threshold),
-        "note": "差异超过阈值的行具有除权除息日特征（不复权收盘价跳空）；正式统计口径优先采用官方复权收益 ret。",
+        "note": (
+            "中位数绝对差异仅表明非除权日常态交易下价格变动中位一致，不能证明全样本分红复权等价性；"
+            "差异超过阈值的行具有潜在除权除息或口径跳空特征，但在缺乏原始公司公告日志核验前，不得断言每处异常点均已被证实为除权除息。"
+            "此外，事件研究采用收盘价区间收益（close price return basis），而 Fama-MacBeth 优先采用官方复权日收益（Dretwd basis），"
+            "两子实验在收益底座口径上存在差异，特此如实披露。"
+        ),
     }
+
+
+def calc_peak_to_trough_drawdown(prices: Sequence[float]) -> Tuple[float, float]:
+    """计算持有期内的真实峰谷最大回撤（peak-to-trough max drawdown）与入场最大不利偏移（MAE from entry）。
+
+    - True peak-to-trough max drawdown: min(p / cummax(p) - 1.0)
+    - Maximum adverse excursion from entry: min(p) / entry_price - 1.0
+
+    例如价格序列 [100.0, 120.0, 110.0]，入场价 100.0：
+      - cummax 为 [100.0, 120.0, 120.0]
+      - p / cummax - 1 为 [0.0, 0.0, -10/120] = [0.0, 0.0, -1/12]
+      - 峰谷最大回撤必须为 -1/12 (-0.08333...)
+      - 入场最大不利偏移 (MAE) 为 100/100 - 1 = 0.0
+    """
+    p = np.asarray(prices, dtype=float)
+    if len(p) == 0 or not np.isfinite(p[0]) or p[0] <= 0:
+        return float("nan"), float("nan")
+    valid = np.isfinite(p) & (p > 0)
+    if not np.all(valid):
+        return float("nan"), float("nan")
+    cummax = np.maximum.accumulate(p)
+    drawdowns = p / cummax - 1.0
+    max_dd = float(np.min(drawdowns))
+    mae = float(np.min(p) / p[0] - 1.0)
+    return max_dd, mae
 
 
 # ===========================================================================
@@ -455,9 +485,9 @@ def build_trend_gate_events(
                 rec[f"ret_{h}d_free"] = (
                     float(closes[target] / entry_close - 1.0) if entry_close > 0 else float("nan")
                 )
-                rec[f"maxdd_{h}d_free"] = (
-                    float(np.min(closes[e:target + 1]) / entry_close - 1.0) if entry_close > 0 else float("nan")
-                )
+                dd_free, mae_free = calc_peak_to_trough_drawdown(closes[e:target + 1])
+                rec[f"maxdd_{h}d_free"] = dd_free
+                rec[f"mae_{h}d_free"] = mae_free
 
                 # 受约束口径：退出日必须可成交（非跌停、非停牌、涨跌停状态可观测）
                 exit_idx = None
@@ -469,10 +499,13 @@ def build_trend_gate_events(
                 rec[f"defer_{h}d"] = int(0 if exit_idx is None else exit_idx - target)
                 if entry_ok and exit_idx is not None:
                     rec[f"ret_{h}d"] = float(closes[exit_idx] / entry_close - 1.0)
-                    rec[f"maxdd_{h}d"] = float(np.min(closes[e:exit_idx + 1]) / entry_close - 1.0)
+                    dd_c, mae_c = calc_peak_to_trough_drawdown(closes[e:exit_idx + 1])
+                    rec[f"maxdd_{h}d"] = dd_c
+                    rec[f"mae_{h}d"] = mae_c
                 else:
                     rec[f"ret_{h}d"] = float("nan")
                     rec[f"maxdd_{h}d"] = float("nan")
+                    rec[f"mae_{h}d"] = float("nan")
 
             records.append(rec)
 
@@ -514,6 +547,7 @@ def summarize_events(
         vals = pd.to_numeric(sub[col], errors="coerce")
         valid = vals.notna()
 
+        mae_col = f"mae_{h}d_free" if mode == "free" else f"mae_{h}d"
         block: Dict[str, object] = {
             "n_valid": int(valid.sum()),
             "coverage": float(valid.mean()),
@@ -522,10 +556,16 @@ def summarize_events(
             "win_rate": float((vals[valid] > 0).mean()) if valid.any() else float("nan"),
             "std_ret": float(vals[valid].std(ddof=1)) if valid.sum() > 1 else float("nan"),
             "mean_maxdd": float(pd.to_numeric(sub[dd_col], errors="coerce").mean()),
+            "mean_mae": float(pd.to_numeric(sub[mae_col], errors="coerce").mean()),
         }
         if mode == "constrained":
             block["mean_defer_days"] = float(pd.to_numeric(sub[f"defer_{h}d"], errors="coerce").mean())
+            block["share_any_defer"] = float(
+                (pd.to_numeric(sub[f"defer_{h}d"], errors="coerce") > 0).mean()
+            )
             block["exit_blocked_share"] = float(pd.to_numeric(sub[f"exit_blocked_{h}d"], errors="coerce").mean())
+            block["n_exit_censored"] = int((pd.to_numeric(sub[f"exit_blocked_{h}d"], errors="coerce") == 1).sum())
+            block["n_exit_deferred"] = int((pd.to_numeric(sub[f"defer_{h}d"], errors="coerce") > 0).sum())
             block["mean_ret_full_pool_free"] = float(
                 pd.to_numeric(sub[f"ret_{h}d_free"], errors="coerce").mean()
             )
@@ -672,17 +712,23 @@ def run_date_placebo(
         v_sum = agg["v_sum"].to_numpy(dtype=float)
         dd_sum = agg["dd_sum"].to_numpy(dtype=float)
         cnt = agg["n"].to_numpy(dtype=float)
+        date_means = v_sum / np.where(cnt > 0, cnt, 1.0)
+        date_dds = dd_sum / np.where(cnt > 0, cnt, 1.0)
         m = len(v_sum)
         draw_dates = int(n_target_dates)
 
         means = np.empty(n_runs, dtype=float)
         dds = np.empty(n_runs, dtype=float)
+        date_equal_means = np.empty(n_runs, dtype=float)
+        date_equal_dds = np.empty(n_runs, dtype=float)
         sizes = np.empty(n_runs, dtype=int)
         for i in range(n_runs):
             picked = rng.randint(0, m, size=draw_dates)
             total_n = float(cnt[picked].sum())
             means[i] = float(v_sum[picked].sum() / total_n)
             dds[i] = float(dd_sum[picked].sum() / total_n)
+            date_equal_means[i] = float(np.mean(date_means[picked]))
+            date_equal_dds[i] = float(np.mean(date_dds[picked]))
             sizes[i] = int(total_n)
         result[f"h{h}"] = {
             "design": "date_level",
@@ -697,9 +743,14 @@ def run_date_placebo(
             "events_per_run_max": int(np.max(sizes)),
             "dist_ret_means": means.tolist(),
             "dist_maxdd_means": dds.tolist(),
+            "dist_date_equal_ret_means": date_equal_means.tolist(),
+            "dist_date_equal_maxdd_means": date_equal_dds.tolist(),
             "mean": float(np.mean(means)),
             "std": float(np.std(means, ddof=1)),
             "ci_95": [float(np.percentile(means, 2.5)), float(np.percentile(means, 97.5))],
+            "date_equal_mean": float(np.mean(date_equal_means)),
+            "date_equal_std": float(np.std(date_equal_means, ddof=1)),
+            "date_equal_ci_95": [float(np.percentile(date_equal_means, 2.5)), float(np.percentile(date_equal_means, 97.5))],
             "maxdd_mean": float(np.mean(dds)),
             "maxdd_ci_95": [float(np.percentile(dds, 2.5)), float(np.percentile(dds, 97.5))],
         }
@@ -745,7 +796,12 @@ def run_date_matched_placebo(
         in_pool = pool_mask & valid
         in_target = target_mask & valid
         if not in_target.any() or not in_pool.any():
-            result[f"h{h}"] = {"error": "empty_pool"}
+            result[f"h{h}"] = {
+                "error": "empty_pool",
+                "status": "invalid_insufficient_control",
+                "match_status": "invalid_insufficient_control",
+                "is_valid_inference": False,
+            }
             continue
 
         target_counts = (
@@ -795,12 +851,21 @@ def run_date_matched_placebo(
             means[i] = s / total
             dds[i] = sd / total
             sizes[i] = total
+        is_insufficient = bool(capped > 0)
+        status_code = "invalid_insufficient_control" if is_insufficient else "valid_matched"
         result[f"h{h}"] = {
             "design": "date_matched",
+            "status": status_code,
+            "match_status": status_code,
+            "is_valid_inference": not is_insufficient,
             "pool_size": int(in_pool.sum()),
             "target_size": int(in_target.sum()),
             "dates_matched": int(len(tasks)),
             "dates_capped_or_missing": int(capped),
+            "events_target_requested": int(in_target.sum()),
+            "events_matched": int(w_total),
+            "control_insufficient": is_insufficient,
+            "sample_equality_claimed": False if is_insufficient else True,
             "events_per_run_mean": float(np.mean(sizes)),
             "target_mean_full_sample": float(np.mean(ret[in_target])),
             "target_mean_under_matched_weights": target_mean_matched,
@@ -813,6 +878,65 @@ def run_date_matched_placebo(
             "maxdd_ci_95": [float(np.percentile(dds, 2.5)), float(np.percentile(dds, 97.5))],
         }
     return result
+
+
+def safe_corrcoef(x: np.ndarray, y: np.ndarray) -> float:
+    """计算两序列的 Pearson 相关系数，遇到常数序列或方差极小序列时返回 nan，避免 RuntimeWarning。"""
+    x = np.asarray(x, dtype=float)
+    y = np.asarray(y, dtype=float)
+    if len(x) < 3 or len(y) < 3 or len(x) != len(y):
+        return float("nan")
+    valid = np.isfinite(x) & np.isfinite(y)
+    if valid.sum() < 3:
+        return float("nan")
+    xv = x[valid]
+    yv = y[valid]
+    sx = float(np.std(xv))
+    sy = float(np.std(yv))
+    if sx < 1e-12 or sy < 1e-12:
+        return float("nan")
+    val = float(np.corrcoef(xv, yv)[0, 1])
+    return val if np.isfinite(val) else float("nan")
+
+
+def block_bootstrap_ratio_diff(
+    ts: np.ndarray,
+    tn: np.ndarray,
+    ps: np.ndarray,
+    pn: np.ndarray,
+    block_len: int,
+    n_boot: int = 1000,
+    seed: int = 42,
+) -> np.ndarray:
+    """移动区块 Bootstrap（MBB）对配对日度汇总四元组 (ts, tn, ps, pn) 重抽样比率差。
+    直接计算每一轮重抽样下的全样本比率之差：
+        theta^* = sum(ts^*) / sum(tn^*) - sum(ps^*) / sum(pn^*)
+    严格保持时序依赖、横截面配对以及两组各日样本量权重的联合分布。
+    """
+    ts = np.asarray(ts, dtype=float)
+    tn = np.asarray(tn, dtype=float)
+    ps = np.asarray(ps, dtype=float)
+    pn = np.asarray(pn, dtype=float)
+    T = len(ts)
+    if T == 0:
+        return np.zeros(n_boot)
+    block_len = max(1, min(int(block_len), T))
+    n_blocks = int(np.ceil(T / block_len))
+    max_start = T - block_len
+    rng = np.random.RandomState(seed)
+    out = np.empty(n_boot, dtype=float)
+    for b in range(n_boot):
+        starts = rng.randint(0, max_start + 1, size=n_blocks)
+        idx = (starts[:, None] + np.arange(block_len)[None, :]).ravel()[:T]
+        sum_ts = float(ts[idx].sum())
+        sum_tn = float(tn[idx].sum())
+        sum_ps = float(ps[idx].sum())
+        sum_pn = float(pn[idx].sum())
+        if sum_tn > 0 and sum_pn > 0:
+            out[b] = sum_ts / sum_tn - sum_ps / sum_pn
+        else:
+            out[b] = np.nan
+    return out
 
 
 def date_cluster_bootstrap_diff(
@@ -864,7 +988,9 @@ def date_cluster_bootstrap_diff(
             out[f"h{h}"] = {"error": "insufficient_days"}
             continue
 
-        obs_event = float(ts.sum() / tn.sum() - ps.sum() / pn.sum())
+        mu_x = float(ts.sum() / tn.sum())
+        mu_y = float(ps.sum() / pn.sum())
+        obs_event = float(mu_x - mu_y)
         obs_date = float(np.mean(ts / tn - ps / pn))
 
         boot_event = np.empty(n_runs, dtype=float)
@@ -874,30 +1000,92 @@ def date_cluster_bootstrap_diff(
             boot_event[i] = float(ts[idx].sum() / tn[idx].sum() - ps[idx].sum() / pn[idx].sum())
             boot_date[i] = float(np.mean((ts / tn - ps / pn)[idx]))
 
-        def _block(obs: float, boot: np.ndarray) -> Dict[str, float]:
-            se = float(np.std(boot, ddof=1))
-            t_stat = obs / se if se > 0 else float("inf")
-            return {
-                "observed_diff": obs,
-                "boot_se": se,
-                "boot_t": t_stat,
-                "boot_p_two_sided": two_sided_normal_p(t_stat),
-                "boot_ci_95": [float(np.percentile(boot, 2.5)), float(np.percentile(boot, 97.5))],
-                "boot_ci_95_percentile_p": float(
-                    min(1.0, 2.0 * min(np.mean(boot <= 0.0), np.mean(boot >= 0.0)))
-                ),
-            }
+        def _block(
+            obs: float,
+            boot: np.ndarray,
+            series: np.ndarray,
+            paired_tuples: tuple | None = None,
+        ) -> Dict[str, object]:
+            """给出 i.i.d. 日 bootstrap、Newey-West HAC（含自动、H-1、扩展阶数敏感性）及区块 Bootstrap。"""
+            se_iid = float(np.std(boot, ddof=1))
+            t_iid = obs / se_iid if se_iid > 0 else float("inf")
 
-        block = {
+            q_auto = calc_newey_west_lags(len(series))
+            q_h1 = max(1, h - 1)
+            q_ext = max(int(q_auto + 5), int(h + 4), 20)
+
+            _, se_hac, t_hac = newey_west_t_stat(series, q_auto)
+            _, se_h1, t_h1 = newey_west_t_stat(series, q_h1)
+            _, se_ext, t_ext = newey_west_t_stat(series, q_ext)
+
+            out_blk: Dict[str, object] = {
+                "observed_diff": obs,
+                "boot_iid_se": se_iid,
+                "boot_iid_t": t_iid,
+                "boot_iid_p_two_sided": two_sided_normal_p(t_iid),
+                "hac_lags": int(q_auto),
+                "hac_se": se_hac,
+                "hac_t": t_hac,
+                "hac_p_two_sided": two_sided_normal_p(t_hac),
+                "hac_h_minus_1_lags": int(q_h1),
+                "hac_h_minus_1_se": se_h1,
+                "hac_h_minus_1_t": t_h1,
+                "hac_h_minus_1_p_two_sided": two_sided_normal_p(t_h1),
+                "hac_ext_lags": int(q_ext),
+                "hac_ext_se": se_ext,
+                "hac_ext_t": t_ext,
+                "hac_ext_p_two_sided": two_sided_normal_p(t_ext),
+                "boot_ci_95_iid": [float(np.percentile(boot, 2.5)), float(np.percentile(boot, 97.5))],
+            }
+            # 区块 Bootstrap：block2, block5, block_h, block20
+            block_lengths = [("block2", 2), ("block5", 5), (f"block_h{h}", h), ("block20", 20)]
+            for label, blen in block_lengths:
+                if paired_tuples is not None:
+                    ts_arr, tn_arr, ps_arr, pn_arr = paired_tuples
+                    blk = block_bootstrap_ratio_diff(ts_arr, tn_arr, ps_arr, pn_arr, blen, n_boot=n_runs, seed=seed)
+                else:
+                    blk = moving_block_bootstrap_means(series, blen, n_boot=n_runs, seed=seed)
+                se_blk = float(np.nanstd(blk, ddof=1))
+                t_blk = obs / se_blk if se_blk > 0 else float("inf")
+                out_blk[f"{label}_len"] = int(min(blen, len(series)))
+                out_blk[f"{label}_se"] = se_blk
+                out_blk[f"{label}_t"] = t_blk
+                out_blk[f"{label}_p_two_sided"] = two_sided_normal_p(t_blk)
+            return out_blk
+
+        def _pct_rank(dist: np.ndarray) -> float:
+            """观测值在分布自身上尾/下尾的经验位置（描述性，不作推断）。"""
+            return float(min(np.mean(dist <= 0.0), np.mean(dist >= 0.0)))
+
+        # 事件加权：中心化比率估计量影响函数分数
+        # psi_t = (S_t - mu_x * N_t) / sum(N) - (R_t - mu_y * M_t) / sum(M)
+        # z_t = T * psi_t + obs_event
+        # 其样本均值严格等于 obs_event，且对 z_t 做 HAC 得到的方差与比率估计量 delta 方法在时序依赖下的渐近方差严格吻合。
+        psi = (ts - mu_x * tn) / float(tn.sum()) - (ps - mu_y * pn) / float(pn.sum())
+        z = m * psi + obs_event
+        # 等权日：d_t = 当日目标均值 − 当日池均值，mean(d) 已经等于等权日差
+        d = ts / tn - ps / pn
+
+        corr_means = safe_corrcoef(ts / tn, ps / pn)
+        autocorr_z = safe_corrcoef(z[:-1], z[1:])
+
+        block: Dict[str, object] = {
             "design": "date_cluster_bootstrap_diff",
+            "n_days_target": int(len(g_t)),
+            "n_days_pool": int(len(g_p)),
             "n_days_joined": int(m),
+            "n_days_target_only": int(len(g_t) - m),
+            "n_days_pool_only": int(len(g_p) - m),
             "events_target": int(tn.sum()),
             "events_pool": int(pn.sum()),
-            "corr_of_date_means": float(np.corrcoef(ts / tn, ps / pn)[0, 1]) if m > 2 else float("nan"),
-            "event_weighted": _block(obs_event, boot_event),
-            "date_equal": _block(obs_date, boot_date),
+            "corr_of_date_means": corr_means,
+            "autocorr_of_event_weighted_contrib_lag1": autocorr_z,
+            "note": "推断以 hac_*（序列相关稳健）为准；boot_iid_* 按日独立重抽样，会低估标准误，仅作对照。",
+            "event_weighted": _block(obs_event, boot_event, z, paired_tuples=(ts, tn, ps, pn)),
+            "date_equal": _block(obs_date, boot_date, d, paired_tuples=None),
         }
-        block["event_weighted"]["dist_size"] = int(n_runs)
+        block["event_weighted"]["dist_tail_rank"] = _pct_rank(boot_event)
+        block["date_equal"]["dist_tail_rank"] = _pct_rank(boot_date)
         out[f"h{h}"] = block
     return out
 
@@ -936,6 +1124,8 @@ def daily_paired_test(
         weights = joined["size_t"].to_numpy(dtype=float)
         q = calc_newey_west_lags(len(diff))
         mean_d, se, t_stat = newey_west_t_stat(diff, q)
+        q_h1 = max(1, h - 1)
+        _, se_h1, t_h1 = newey_west_t_stat(diff, q_h1)
         # 等权日口径与事件加权口径的差异，用于定位「优势集中在少数高触发日」这类结构性效应
         weighted_mean_d = float(np.average(diff, weights=weights)) if weights.sum() > 0 else float("nan")
         median_size = float(np.median(weights))
@@ -956,6 +1146,10 @@ def daily_paired_test(
             "nw_t": t_stat,
             "nw_p_two_sided": two_sided_normal_p(t_stat),
             "hac_lags": int(q),
+            "nw_h_minus_1_lags": int(q_h1),
+            "nw_h_minus_1_se": se_h1,
+            "nw_h_minus_1_t": t_h1,
+            "nw_h_minus_1_p_two_sided": two_sided_normal_p(t_h1),
             "share_days_target_lower": float(np.mean(diff < 0)),
             "target_mean_on_paired_days": float(joined["mean_t"].mean()),
             "pool_mean_on_paired_days": float(joined["mean_p"].mean()),
@@ -1085,10 +1279,14 @@ def run_fama_macbeth(
         p_val = two_sided_normal_p(nw_t)
         ci_low, ci_high = block_bootstrap_ci(series, block_len=block_len, n_boot=bootstrap_runs, seed=bootstrap_seed)
         rf_daily = RISK_FREE_RATE_ANNUAL / ANNUALIZATION_DAYS
+        # 计量说明：因因子在截面已完成 z-score 标准化且回归含截距项，各因子斜率 λ_t 对应零净投资、
+        # 资金中性的多空因子组合收益，自身即为超额收益，无需也不应扣除无风险利率 Rf。
+        # 扣除 Rf 仅平移截距项 α_t（对应全截面等权基准），对因子溢价斜率与 t 值无任何影响。
+        # 字段 annualized_premium_excess_244d 维持与 annualized_premium_244d 一致以保障 schema 兼容。
         factors_out[f] = {
             "mean_risk_premium_daily": mean_v,
             "annualized_premium_244d": mean_v * ANNUALIZATION_DAYS,
-            "annualized_premium_excess_244d": (mean_v - rf_daily) * ANNUALIZATION_DAYS,
+            "annualized_premium_excess_244d": mean_v * ANNUALIZATION_DAYS,
             "std_daily": float(np.std(series, ddof=1)) if T > 1 else float("nan"),
             "classic_se": classic_se,
             "classic_t": classic_t,
@@ -1123,6 +1321,12 @@ def run_fama_macbeth(
                 "last": float(rm.iloc[-1]),
             }
 
+    alpha_arr = np.asarray(alphas, dtype=float)
+    mean_alpha = float(np.mean(alpha_arr)) if len(alpha_arr) else float("nan")
+    alpha_nw_mean, alpha_nw_se, alpha_nw_t = (
+        newey_west_t_stat(alpha_arr, lags) if len(alpha_arr) else (float("nan"), float("nan"), float("nan"))
+    )
+
     return {
         "dependent_variable": dependent,
         "factors": list(factors),
@@ -1145,7 +1349,10 @@ def run_fama_macbeth(
         "n_tests": int(len(factors)),
         "risk_free_rate_annual": RISK_FREE_RATE_ANNUAL,
         "annualization_days": ANNUALIZATION_DAYS,
-        "mean_alpha_daily": float(np.mean(alphas)) if alphas else float("nan"),
+        "mean_alpha_daily": mean_alpha,
+        "annualized_alpha_244d": mean_alpha * ANNUALIZATION_DAYS if np.isfinite(mean_alpha) else float("nan"),
+        "annualized_alpha_excess_244d": (mean_alpha - rf_daily) * ANNUALIZATION_DAYS if np.isfinite(mean_alpha) else float("nan"),
+        "alpha_newey_west_t": alpha_nw_t,
         "excluded_limit_up_at_t": bool(drop_limit_up_at_t),
         "limit_up_definition": limit_up_definition if drop_limit_up_at_t else None,
         "n_rows_excluded": int(n_excluded),

@@ -132,6 +132,29 @@ LLM_TIMEOUT_SECONDS = float(os.environ.get("LLM_TIMEOUT_SECONDS", "30"))
 LLM_DAILY_CALL_LIMIT = int(os.environ.get("LLM_DAILY_CALL_LIMIT", "2000"))
 
 # ============================================================
+# 情绪分析专用配置（v2.6 新增：使用轻量 LLM 降低成本）
+# ============================================================
+
+# 情绪分析是否使用独立的轻量 LLM（推荐 True）
+# True: 用 gemini-3.8-flash / qwen-turbo 等轻量模型
+# False: 用主 LLM（成本高 10 倍）
+SENTIMENT_USE_LIGHTWEIGHT_LLM = _env_flag("SENTIMENT_USE_LIGHTWEIGHT_LLM", True)
+
+# 轻量 LLM 后端选择（优先级高于主 LLM）
+# "gemini" → gemini-3.8-flash
+# "dashscope" → qwen-turbo
+# "openai" → gpt-3.5-turbo
+SENTIMENT_LIGHTWEIGHT_BACKEND = os.environ.get("SENTIMENT_LIGHTWEIGHT_BACKEND", "gemini")
+
+# 轻量模型映射
+SENTIMENT_LIGHTWEIGHT_MODELS = {
+    "gemini": "gemini-3.8-flash",
+    "dashscope": "qwen-turbo",
+    "openai": "gpt-3.5-turbo",
+    "deepseek": "deepseek-v4-flash",  # DeepSeek 已经是轻量的
+}
+
+# ============================================================
 # 嵌入与向量检索
 # ============================================================
 

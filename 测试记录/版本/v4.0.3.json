@@ -1,0 +1,150 @@
+{
+  "schema_version": 2,
+  "level": "heavy",
+  "passed": true,
+  "created_at": "2026-10-12T23:04:33+08:00",
+  "source_hash": "4a8f5e07ba4761160ecd6d7794b9d3dbab787fd63b3c7a3deaa3fcbf68b96546",
+  "bug_hash_before_logging": "2eb6585fe8750f800898ce86b6677f6c562442fb96ecd64860216eced6e37537",
+  "bug_archive_hash": "e64857d36c52b67c82663c24737b0169c5713faed6c114997fbd4a8834c69d2a",
+  "metadata": {
+    "version": "v4.0.3"
+  },
+  "checks": [
+    {
+      "name": "Python 语法",
+      "passed": true,
+      "details": "检查 375 个 Python 文件。",
+      "category": "test"
+    },
+    {
+      "name": "Notebook 结构与语法",
+      "passed": true,
+      "details": "检查 0 个 Notebook。",
+      "category": "test"
+    },
+    {
+      "name": "项目 JSON 配置",
+      "passed": true,
+      "details": "检查 1 个配置文件。",
+      "category": "test"
+    },
+    {
+      "name": "Python 自动化测试",
+      "passed": true,
+      "details": "22:59:22 [INFO] ��ע�� homepage_api / dataset_api ��ͼ\n22:59:22 [INFO] ��ע�� multi_asset_api_v4 ��ͼ\n22:59:22 [INFO] DailyAutoScheduler ��̨�ػ������߳�������\n...........................22:59:22 [INFO] ============================================================\n22:59:22 [INFO] 自选股短线风险收益排行榜分析开始 —— 2026-10-12 22:59:22\n22:59:22 [INFO] ============================================================\n22:59:22 [INFO] 自选股数量: 1\n22:59:22 [INFO] [1/1] 测试标的(000001) 分析中...\n22:59:22 [INFO] 测试标的(000001) ✓ 分析完成\n22:59:22 [INFO] Alpha 门控完成：通过 0 / 参与 1\n22:59:22 [INFO] 生成排行榜...\n22:59:22 [INFO] 排名 JSON 校验通过\n22:59:22 [INFO] 生成个股详情文件...\n22:59:22 [INFO]   000001.json ✓\n22:59:22 [INFO] 写入排行榜文件...\n22:59:22 [INFO] ============================================================\n22:59:22 [INFO] 排行榜分析完成！总 1 / 成功 1 / 失败 0 / 耗时 0.0 秒\n22:59:22 [INFO] 分析目录: D:\\股票分析项目\\Rainbow_FinGPTv2\\docs\\data\\analysis\n22:59:22 [INFO] ============================================================\n.22:59:22 [WARNING] LLM 报告生成异常已隔离，排行榜数据保持可用\n.22:59:22 [INFO] LLM 报告调度已关闭，跳过本次生成\n.22:59:22 [INFO] LLM 报告阶段完成：处理 3，新增 2，失败 0\n....................22:59:23 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.22:59:23 [WARNING] 去重后有效样本 2 < 最低 5\n.22:59:23 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.22:59:23 [INFO] KNN 相似分析完成: 30 样本, 3d预测 0.24%, 5d预测 0.40%, 置信度 medium\n.22:59:23 [INFO] KNN 相似分析完成: 5 样本, 3d预测 1.80%, 5d预测 1.56%, 置信度 low\n...22:59:23 [INFO] 🎯 策略买点触发，成功晋级 1 只标的至核心池 (锁定 5 日预测周期): 佰维存储(688525)\n.................................................................................................22:59:24 [INFO] 添加自选股: 佰维存储(688525) type=stock category=\n22:59:24 [INFO] 自选股 688525 added: 佰维存储()\n.22:59:24 [INFO] 添加自选股: 招商银行(600036) type=stock category=\n22:59:24 [INFO] 自选股 600036 added: 招商银行()\n22:59:24 [WARNING] GitHub 自选股同步失败: read_exception:RuntimeError\n.22:59:24 [INFO] 添加自选股: 佰维存储(688525) type=stock category=\n22:59:24 [INFO] 自选股 688525 added: 佰维存储()\n22:59:24 [INFO] GitHub 自选股已同步，commit=def456commit\n.22:59:24 [INFO] 添加自选股: 平安银行(000001) type=stock category=\n22:59:24 [INFO] 自选股 000001 added: 平安银行()\n22:59:24 [INFO] GitHub 自选股已同步，commit=newcommit\n...22:59:24 [INFO] 添加自选股: 佰维存储(688525) type=stock category=科技\n22:59:24 [INFO] 自选股 688525 added: 佰维存储(科技)\n...22:59:24 [INFO] 查询请求: code=000021 start=20260101 end=20261012\n22:59:24 [INFO] 查询成功 [在线实时]: 深科技(000021) + 深证成指\n.22:59:24 [INFO] 解析股票名称: 000021 → 深科技\n.C:\\Users\\45607\\AppData\\Roaming\\uv\\python\\cpython-3.12.12-windows-x86_64-none\\Lib\\unittest\\case.py:589: ResourceWarning: unclosed file <_io.BufferedReader name='D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\docs/index.html'>\n  if method() is not None:\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nC:\\Users\\45607\\AppData\\Roaming\\uv\\python\\cpython-3.12.12-windows-x86_64-none\\Lib\\unittest\\case.py:589: ResourceWarning: unclosed file <_io.BufferedReader name='D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\docs/portfolio.html'>\n  if method() is not None:\nResourceWarning: Enable tracemalloc to get the object allocation traceback\nC:\\Users\\45607\\AppData\\Roaming\\uv\\python\\cpython-3.12.12-windows-x86_64-none\\Lib\\unittest\\case.py:589: ResourceWarning: unclosed file <_io.BufferedReader name='D:\\\\股票分析项目\\\\Rainbow_FinGPTv2\\\\docs/assets/portfolio.css'>\n  if method() is not None:\nResourceWarning: Enable tracemalloc to get the object allocation traceback\n.......22:59:24 [INFO] 系统环境变量已热重载生效 (持久化状态: 已落盘)\n.22:59:24 [INFO] 系统环境变量已热重载生效 (持久化状态: 已落盘)\n...\n----------------------------------------------------------------------\nRan 176 tests in 1.949s\n\nOK",
+      "category": "test"
+    },
+    {
+      "name": "small 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 140 个业务代码文件；发现 166 个 small 级测试文件、106 个 unittest 可执行测试。要求：tests/test_*.py 中的业务单元测试，或 custom_commands.small。",
+      "category": "test"
+    },
+    {
+      "name": "其他语言专用检查",
+      "passed": true,
+      "details": "以下扩展名需要项目专用小测：.css, .html, .js；已配置自定义小测命令。",
+      "category": "environment"
+    },
+    {
+      "name": "medium 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 140 个业务代码文件；发现 1 个 medium 级测试文件、0 个 unittest 可执行测试。要求：tests/test_integration*.py，或 custom_commands.medium。",
+      "category": "test"
+    },
+    {
+      "name": "heavy 项目测试覆盖入口",
+      "passed": true,
+      "details": "发现 140 个业务代码文件；发现 1 个 heavy 级测试文件、0 个 unittest 可执行测试。要求：tests/test_reproducibility*.py，或 custom_commands.heavy。",
+      "category": "test"
+    },
+    {
+      "name": "秘密扫描",
+      "passed": true,
+      "details": "未发现高置信度硬编码秘密。",
+      "category": "security"
+    },
+    {
+      "name": "Python 依赖一致性",
+      "passed": true,
+      "details": "No broken requirements found.",
+      "category": "dependency"
+    },
+    {
+      "name": "弱断言扫描",
+      "passed": true,
+      "details": "D:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_analysis.py:360 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_analysis.py:370 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_analysis.py:379 [warn] assert-is-not-none: assertIsNotNone(result)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_dual_tier_pool_and_window_lock.py:94 [warn] assert-true-bare: assertTrue('000001' in to_remove or '000003' in to_remove)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:35 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:42 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:53 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:60 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:67 [warn] assert-true-bare: assertTrue(ok)\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_mut_runner.py:96 [warn] assert-true-bare: assertTrue(res['passed'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_prediction_accuracy_harness.py:80 [warn] assert-true-bare: assertTrue(math.isclose(f1[name][70], f2[name][70], rel_tol=1e-09, abs_tol=1e-12) or (math.isnan(f1[name][70]) and math.isnan(f2[name][70])))\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_prediction_accuracy_harness.py:100 [warn] assert-is-not-none: assertIsNotNone(cell['accuracy'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_prediction_accuracy_harness.py:112 [warn] assert-is-not-none: assertIsNotNone(r['ret1_reversal__h1']['accuracy'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_prediction_accuracy_harness.py:169 [warn] assert-is-not-none: assertIsNotNone(cell['hit_rate'])\nD:\\股票分析项目\\Rainbow_FinGPTv2\\tests\\test_server_config_and_scheduler.py:78 [warn] assert-true-bare: assertTrue(data['has_api_key'])\n弱断言占比 0.3%（上限 5%），error 级 0 条",
+      "category": "test"
+    },
+    {
+      "name": "股票业务单元测试",
+      "passed": true,
+      "details": "........................................................................ [ 98%]\n.                                                                        [100%]\n73 passed in 5.91s",
+      "category": "test"
+    },
+    {
+      "name": "LLM 模块单元测试",
+      "passed": true,
+      "details": "........................................................................ [ 66%]\n....................................                                     [100%]\n108 passed in 3.55s",
+      "category": "test"
+    },
+    {
+      "name": "v2.5 策略模块单元测试",
+      "passed": true,
+      "details": ".......................................                                  [100%]\n39 passed in 16.47s",
+      "category": "test"
+    },
+    {
+      "name": "Fama-MacBeth 多因子引擎单元测试",
+      "passed": true,
+      "details": "..........................................                               [100%]\n42 passed in 6.31s",
+      "category": "test"
+    },
+    {
+      "name": "情绪信号度量与数据口径修复单元测试",
+      "passed": true,
+      "details": "...................                                                      [100%]\n19 passed in 1.11s",
+      "category": "test"
+    },
+    {
+      "name": "校准系统建议与applier单元测试",
+      "passed": true,
+      "details": "...........                                                              [100%]\n11 passed in 0.33s",
+      "category": "test"
+    },
+    {
+      "name": "稳健组合选股字段修复测试",
+      "passed": true,
+      "details": "....                                                                     [100%]\n4 passed in 0.94s",
+      "category": "test"
+    },
+    {
+      "name": "股票离线综合流程测试",
+      "passed": true,
+      "details": ".                                                                        [100%]\n1 passed in 1.06s",
+      "category": "test"
+    },
+    {
+      "name": "Fama-MacBeth Alpha 门控集成测试",
+      "passed": true,
+      "details": "............                                                             [100%]\n12 passed in 6.42s",
+      "category": "test"
+    },
+    {
+      "name": "股票可复现性测试",
+      "passed": true,
+      "details": ".                                                                        [100%]\n1 passed in 1.57s",
+      "category": "test"
+    },
+    {
+      "name": "股票全量回归测试",
+      "passed": true,
+      "details": "........................................................................ [  3%]\n........................................................................ [  7%]\n........................................................................ [ 11%]\n........................................................................ [ 14%]\n........................................................................ [ 18%]\n........................................................................ [ 22%]\n........................................................................ [ 25%]\n........................................................................ [ 29%]\n........................................................................ [ 33%]\n........................................................................ [ 36%]\n........................................................................ [ 40%]\n........................................................................ [ 44%]\n........................................................................ [ 47%]\n........................................................................ [ 51%]\n........................................................................ [ 55%]\n........................................................................ [ 58%]\n........................................................................ [ 62%]\n........................................................................ [ 66%]\n........................................................................ [ 69%]\n........................................................................ [ 73%]\n........................................................................ [ 77%]\n........................................................................ [ 80%]\n......................................................... [ 83%]\n........................................................................ [ 87%]\n........................................................................ [ 91%]\n........................................................................ [ 94%]\n........................................................................ [ 98%]\n.............................                                            [100%]\n============================== warnings summary ===============================\ntests/test_evaluate_pca_nale_integration.py: 6 warnings\ntests/test_m4_domain_extension.py: 4 warnings\ntests/test_pca_nale_integration_review.py: 11 warnings\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\scripts\\evaluate_pca_nale_integration.py:661: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.\n    cutoff = (pd.Timestamp(first_apply_date).tz_localize(\"Asia/Shanghai\") - pd.Timedelta(minutes=1)).isoformat()\n\ntests/test_evaluate_pca_nale_integration.py: 576 warnings\ntests/test_m4_domain_extension.py: 320 warnings\ntests/test_pca_nale_integration_review.py: 968 warnings\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\scripts\\evaluate_pca_nale_integration.py:553: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.\n    stamp = pd.Timestamp(calendar[mature]).tz_localize(\"Asia/Shanghai\") + pd.Timedelta(hours=15)\n\ntests/test_evaluate_pca_nale_integration.py::test_end_to_end_attention_network_requires_corpus\ntests/test_m4_domain_extension.py::test_end_to_end_domain_c_includes_attention\ntests/test_pca_nale_asof_panel.py::test_text_flow_features_are_point_in_time\ntests/test_pca_nale_asof_panel.py::test_text_flow_recency_decreases_right_after_a_record\ntests/test_pca_nale_asof_panel.py::test_text_flow_features_cover_full_grid_and_reject_bad_records\ntests/test_pca_nale_asof_panel.py::test_text_family_end_to_end_on_fixture\ntests/test_pca_nale_integration_review.py::test_report_never_hides_isolated_nodes\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\src\\data\\pca_nale_asof_panel.py:585: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.\n    earliest = published + pd.Timedelta(days=int(lag_days))\n\ntests/test_fetch_student_b_csmar_data.py::test_fetch_rejects_auth_failure_without_writing_final_outputs\ntests/test_fetch_student_b_csmar_data.py::test_fetch_writes_raw_sources_and_standard_outputs\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\scripts\\fetch_student_b_csmar_data.py:348: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.\n    pd.Timestamp(args.start_date) - pd.Timedelta(days=int(args.fundamental_lookback_days))\n\ntests/test_nale_alpha_panel.py: 105 warnings\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\tests\\test_nale_alpha_panel.py:24: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.\n    next_day = (pd.Timestamp(day) + pd.Timedelta(days=1)).strftime(\"%Y-%m-%d\")\n\ntests/test_pca_nale_asof_panel.py::test_align_to_calendar_marks_suspension_delisting_and_not_listed\ntests/test_pca_nale_asof_panel.py::test_align_to_calendar_flags_not_listed_before_first_row\ntests/test_pca_nale_asof_panel.py::test_suspension_inside_horizon_is_refused_while_naive_shift_would_lie\ntests/test_pca_nale_asof_panel.py::test_forward_label_refused_across_suspension_inside_horizon\ntests/test_pca_nale_asof_panel.py::test_forward_label_refused_for_delisted_and_not_listed_rows\ntests/test_pca_nale_asof_panel.py::test_forward_label_refused_on_not_listed_row\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\src\\data\\pca_nale_asof_panel.py:339: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`\n    merged[\"row_present\"] = merged[\"row_present\"].fillna(False).astype(bool)\n\ntests/test_return_basis.py::test_unadjusted_split_day_uses_declared_total_return_not_price_crash\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\tests\\test_return_basis.py:162: UserWarning: compute_return_basis δ�յ������ verify_caliber ���������ȫ�������㸴�˽��ۣ�ȫ����ͳ�Ʋ��ǵ�ʱ��Ϣ���߲�/�ز������ʽ���� training ������� verification��������δ����Ϣ�����ʷ�С�\n    out = compute_return_basis(hand_computed_panel, hand_computed_declarations)\n\ntests/test_return_basis.py::test_forward_adjusted_close_return_matches_hand_computation\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\tests\\test_return_basis.py:180: UserWarning: compute_return_basis δ�յ������ verify_caliber ���������ȫ�������㸴�˽��ۣ�ȫ����ͳ�Ʋ��ǵ�ʱ��Ϣ���߲�/�ز������ʽ���� training ������� verification��������δ����Ϣ�����ʷ�С�\n    out = compute_return_basis(hand_computed_panel, hand_computed_declarations)\n\ntests/test_return_basis.py::test_first_day_rows_are_unavailable_and_never_zero\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\tests\\test_return_basis.py:198: UserWarning: compute_return_basis δ�յ������ verify_caliber ���������ȫ�������㸴�˽��ۣ�ȫ����ͳ�Ʋ��ǵ�ʱ��Ϣ���߲�/�ز������ʽ���� training ������� verification��������δ����Ϣ�����ʷ�С�\n    out = compute_return_basis(hand_computed_panel, hand_computed_declarations)\n\ntests/test_return_basis.py::test_unadjusted_without_declared_return_is_not_fabricated\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\tests\\test_return_basis.py:218: UserWarning: compute_return_basis δ�յ������ verify_caliber ���������ȫ�������㸴�˽��ۣ�ȫ����ͳ�Ʋ��ǵ�ʱ��Ϣ���߲�/�ز������ʽ���� training ������� verification��������δ����Ϣ�����ʷ�С�\n    out = compute_return_basis(panel, decl)\n\ntests/test_return_basis.py::test_contradicted_stock_is_excluded_from_basis\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\tests\\test_return_basis.py:331: UserWarning: compute_return_basis δ�յ������ verify_caliber ���������ȫ�������㸴�˽��ۣ�ȫ����ͳ�Ʋ��ǵ�ʱ��Ϣ���߲�/�ز������ʽ���� training ������� verification��������δ����Ϣ�����ʷ�С�\n    out = compute_return_basis(panel, decl)\n\ntests/test_unified_pipeline_runner.py::test_unified_pipeline_with_orthogonalization_and_bull_regime\n  D:\\��Ʊ������Ŀ\\Rainbow_FinGPTv2\\src\\pricing\\factor_orthogonalization.py:99: LowR2Warning: Low R2 (0.0000 < 0.3): style factors have weak explanatory power.\n    warnings.warn(\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n1958 passed, 2011 warnings, 15 subtests passed in 236.50s (0:03:56)",
+      "category": "test"
+    }
+  ],
+  "json_path": ".quality-state/reports/20261012230433-heavy-cf85e5.json",
+  "markdown_path": ".quality-state/reports/20261012230433-heavy-cf85e5.md",
+  "bug_hash_after_logging": "2eb6585fe8750f800898ce86b6677f6c562442fb96ecd64860216eced6e37537",
+  "bug_ids": []
+}

@@ -1,0 +1,30 @@
+<task>
+Finish the existing M4/P4 rework and produce a Chinese research paper draft. Repository: D:\股票分析项目\Rainbow_FinGPTv2. Use Gemini 3.8 Flash High. You implement; the orchestrator reviews and commits. DO NOT commit or stage.
+
+FIRST read AGENTS.md, the existing brief agy_brief_m4_final_review_v2.txt, current M4 scripts/tests/outputs, and quality_gate.py usage. The earlier brief is a checklist of audit issues, NOT a reliable statement that each issue is still present: several have already been fixed in this dirty worktree. Inspect and retain correct fixes. Worktree is based on 1f3a4172 and contains intentional uncommitted HAC fixes; never reset or discard them.
+
+Scope: scripts/p4_real_data_core.py, scripts/run_p4_trend_gate_study.py, scripts/run_p4_fama_macbeth.py, scripts/run_real_m4_rebuild.py, tests/test_p4_real_quant.py, reports/real_rebuild_20261010/. Paper deliverable: reports/real_rebuild_20261010/paper_draft_zh.md, self-contained Chinese paper with abstract, methods, data provenance, results, robustness, limitations, reproducibility, verified bibliographic references. Do not invent authors/affiliations, data provenance, references, performance or p-values. Mark as research draft, not peer-reviewed publication.
+
+Inspect and resolve all remaining audit issues:
+- Serial dependence of overlapping 20-day windows: official inference must use Newey-West HAC and meaningful block-bootstrap sensitivity, not iid date bootstrap. Check event-weighted daily contribution scaling: T*(sum_target_day/N - sum_control_day/M), so its mean equals the paired-date event-weighted difference. Explain paired-date intersection versus whole-sample means. Check lag/block lengths suitable for H=5/10/20; disclose sensitivity rather than manufacture significance.
+- Match estimands and weights for all placebo comparisons. IMPORTANT: the current date-level sampler pools per-date sums/counts; its ratio estimator is NOT automatically equal-day-weighted. Do not label an equal-day observed mean 'same weight' unless the null uses the exact same weighting. Correct the estimator pairing or label these distributions descriptive and do not draw inferential claims from incompatible p-values.
+- Every horizon uses its own observed mean. Uptrend controls must exclude uptrend; neutral control is exclusive. Date-matched capped weights must be used for BOTH target and null. Handle insufficient control samples explicitly, never silently min sample size while claiming equality.
+- Ensure saved FM per_period dates/lambdas/alpha really exist and reproduce the stated summary. Constant risk-free subtraction changes intercept, NOT each z-scored factor slope: inspect and correct any misleading excess-premium fields.
+- Return-basis limitations: close-to-close prices are not proven equivalent to dividend-adjusted returns by small median error or board limits. Existing max absolute error is ~0.673; disclose observed errors without calling all outliers proven ex-dividend events unless evidence exists. Do not claim unverified CSMAR authenticity from fingerprints alone.
+- Liquidity direction is reconstructed, not independently observed execution. Preserve conservative missing-status exclusion, entry/exit constraints and limitations. Max drawdown should be true peak-to-trough drawdown, not simply min(price)/entry - 1; inspect and correct metric/name as needed.
+- Report actual deferred-event share (defer>0), distinguish mean deferred days, disclose overlaps of block counts. Remove structurally zero diagnostics computed after filtering if misleading.
+- Avoid 'proven false', 'no difference', 'all insignificant', or causal claims from failure to reject or mixed sensitivity results. Report primary and unrestricted variants fully. Literal limit-up amihud can pass FDR; coverage differs from reconstructed exclusion. Do not omit this.
+- Synchronize report.md, vs_old.md, paper_correction_checklist.md, results.json and paper draft with final outputs. Do not repeat old performance claims as independently verified when not rerun.
+
+House workflow: before source edits use tools/run_quality.ps1 begin-unit with ASCII name/acceptance and read full bug bundle. PS wrapper historically aborts on stderr; direct .venv\Scripts\python.exe tools\quality_gate.py is equivalent. If state refuses begin-unit because pre-existing unreceipted edits, report exact refusal and use documented bootstrap only with a truthful reason ('existing reviewed-but-not-finally-verified M4 edits'); do not claim human verification that did not happen. Only gate CLI may maintain quality state/bug records.
+
+Run and fix relevant failures:
+.venv\Scripts\python.exe -m pytest tests\test_p4_real_quant.py -q
+.venv\Scripts\python.exe scripts\run_real_m4_rebuild.py
+.venv\Scripts\python.exe -m pytest tests\test_p4_real_quant.py -q
+Avoid repeatedly running full quantitative rebuild for report-only errors: validate all render builders from current JSON first. If quantitative logic changes, rerun the real data analysis. Generate all markdown from final data, with targeted tests checking actual estimands/numerical relationships, not just matching the same generator.
+
+Preserve superseded_v1 byte-for-byte; don't delete old artifacts or raw data. Version outputs as needed. No git add/commit/push/reset/checkout/stash. Don't change unrelated data/watchlist_lock_state.json or calibration/strategy_evolution files. Don't modify power settings or shut down; orchestrator handles those after completion. No unrelated bug fixes or infrastructure changes.
+
+End with a factual report: files changed, root causes fixed, exact commands/exits/test counts, resulting estimates and their sensitivity, paper path, remaining limitations, and whether source/artifacts are frozen. Save this report to reports/real_rebuild_20261010/antigravity_handoff.md. Stop writing once finished so orchestrator can validate an immutable snapshot.
+</task>

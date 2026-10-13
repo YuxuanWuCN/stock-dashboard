@@ -30,7 +30,7 @@ TEMP = ROOT / "docs/data/strategy/market_temperature.json"
 
 def test_load_kline_shape():
     df = vtf.load_kline(KLINE)
-    assert len(df) >= 267  # 前复权数据会随除权调整，允许根数小幅变化
+    assert len(df) >= 250  # 在线滚动 K 线覆盖约一年，交易日数随刷新日变化
     assert list(df.columns) == ["date", "open", "close", "low", "high", "volume"]
     assert df["date"].is_monotonic_increasing
     # 列序 [开,收,低,高] 校验：low <= min(open,close) 且 high >= max(open,close)

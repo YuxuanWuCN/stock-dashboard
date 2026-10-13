@@ -63,11 +63,14 @@ PLACEBO_RUNS = 1000
 PRIMARY_PLACEBO_DESIGN = "date_level"
 
 
-def _placebo_p_values(dist: dict, observed_by_horizon: dict, horizons) -> dict:
+def _placebo_p_values(dist: dict, observed_by_horizon: dict, horizons, alt_observed_by_horizon: dict | None = None) -> dict:
     """把安慰剂分布换算成经验 p 值。**每个 horizon 必须用它自己的观测均值。**
 
     v2 早期版本误用同一个（h20）观测值去算所有 horizon 的 p 值，导致 h5/h10 的
     p 值字段错得离谱；此处按 horizon 逐个取观测统计量，并有回归测试覆盖。
+
+    `alt_observed_by_horizon` 为「与零分布同权重」的目标组均值（等权日口径）。日均匀
+    抽样的零分布与事件加权的组均值权重不匹配，同权重读数一并落盘供对照。
     """
     out = {}
     for h in horizons:
@@ -76,7 +79,8 @@ def _placebo_p_values(dist: dict, observed_by_horizon: dict, horizons) -> dict:
         if "dist_ret_means" not in block:
             out[f"h{h}"] = {"error": block.get("error", "no_distribution")}
             continue
-        out[f"h{h}"] = {
+        design = block.get("design", "")
+        entry = {
             "observed_mean_ret": observed,
             "placebo_mean": block["mean"],
             "placebo_std": block["std"],
@@ -84,12 +88,57 @@ def _placebo_p_values(dist: dict, observed_by_horizon: dict, horizons) -> dict:
             "p_one_sided_lower": empirical_p_value(block["dist_ret_means"], observed, "lower"),
             "p_one_sided_upper": empirical_p_value(block["dist_ret_means"], observed, "upper"),
             "p_two_sided": empirical_p_value(block["dist_ret_means"], observed, "two"),
+            "weighting_matched": True if design == "event_level" else False,
+            "p_value_status": "matched_weights" if design == "event_level" else "descriptive_mismatched_weights",
         }
+        if "dist_date_equal_ret_means" in block and alt_observed_by_horizon:
+            alt = alt_observed_by_horizon.get(f"h{h}")
+            dist_eq = block["dist_date_equal_ret_means"]
+            entry["observed_mean_ret_same_weight"] = alt
+            entry["p_one_sided_lower_same_weight"] = empirical_p_value(dist_eq, alt, "lower")
+            entry["p_one_sided_upper_same_weight"] = empirical_p_value(dist_eq, alt, "upper")
+            entry["p_two_sided_same_weight"] = empirical_p_value(dist_eq, alt, "two")
+            entry["date_equal_placebo_mean"] = block.get("date_equal_mean")
+            entry["date_equal_placebo_std"] = block.get("date_equal_std")
+            entry["date_equal_weighting_matched"] = True
+        elif alt_observed_by_horizon:
+            alt = alt_observed_by_horizon.get(f"h{h}")
+            entry["observed_mean_ret_same_weight"] = alt
+            entry["p_one_sided_lower_same_weight"] = empirical_p_value(block["dist_ret_means"], alt, "lower")
+            entry["p_one_sided_upper_same_weight"] = empirical_p_value(block["dist_ret_means"], alt, "upper")
+            entry["p_two_sided_same_weight"] = empirical_p_value(block["dist_ret_means"], alt, "two")
+
+        if design == "date_matched" and (
+            block.get("control_insufficient")
+            or block.get("status") == "invalid_insufficient_control"
+            or block.get("dates_capped_or_missing", 0) > 0
+        ):
+            entry["p_value_status"] = "invalid_insufficient_control"
+            entry["match_status"] = "invalid_insufficient_control"
+            entry["status"] = "invalid_insufficient_control"
+            entry["is_valid_inference"] = False
+
+        out[f"h{h}"] = entry
     return out
 
 
 def _observed_by_horizon(group_summary: dict, horizons) -> dict:
     return {f"h{h}": group_summary[f"h{h}"]["mean_ret"] for h in horizons}
+
+
+def _date_equal_observed(events: pd.DataFrame, mask: np.ndarray, mode: str, horizons) -> dict:
+    """与「日均匀抽样」零分布同权重的目标组均值：先算每日截面均值，再对交易日等权平均。"""
+    suffix = "d_free" if mode == "free" else "d"
+    out = {}
+    for h in horizons:
+        vals = pd.to_numeric(events[f"ret_{h}{suffix}"], errors="coerce")
+        keep = mask & vals.notna().to_numpy()
+        if not keep.any():
+            out[f"h{h}"] = float("nan")
+            continue
+        daily = pd.DataFrame({"d": events.loc[keep, "trade_date"], "v": vals[keep]}).groupby("d")["v"].mean()
+        out[f"h{h}"] = float(daily.mean())
+    return out
 
 
 def run_trend_gate_study(
@@ -165,7 +214,10 @@ def run_trend_gate_study(
             placebo[design].setdefault(mode, {})[name] = dist
             observed = (constrained if mode == "constrained" else free)[name]
             placebo_p_values[design].setdefault(mode, {})[name] = _placebo_p_values(
-                dist, _observed_by_horizon(observed, horizons), horizons
+                dist,
+                _observed_by_horizon(observed, horizons),
+                horizons,
+                alt_observed_by_horizon=_date_equal_observed(events, gmask, mode, horizons),
             )
 
     print("  > 日期级 cluster bootstrap 配对差（正式显著性检验）")
@@ -214,12 +266,29 @@ def run_trend_gate_study(
                            ("neutral_control", neutral), ("not_downtrend_pool", not_trig))
     }
 
+    exit_diagnostics = {
+        name: {
+            f"h{h}": {
+                "n_tradable_entries": int((mask & tradable).sum()),
+                "exit_censored_count": int(((mask & tradable) & events[f"exit_blocked_{h}d"].fillna(False).to_numpy()).sum()),
+                "exit_deferred_count": int(((mask & tradable) & (events[f"defer_{h}d"].fillna(0).to_numpy() > 0)).sum()),
+                "exit_censored_share": float(((mask & tradable) & events[f"exit_blocked_{h}d"].fillna(False).to_numpy()).sum() / max(1, (mask & tradable).sum())),
+                "exit_deferred_share": float(((mask & tradable) & (events[f"defer_{h}d"].fillna(0).to_numpy() > 0)).sum() / max(1, (mask & tradable).sum())),
+            }
+            for h in horizons
+        }
+        for name, mask in (("trigger_downtrend", trig), ("uptrend", up),
+                           ("neutral_control", neutral), ("not_downtrend_pool", not_trig))
+    }
+
     payload = {
         "experiment": "trend_gate_event_study",
         "version": "v2-rework",
         "generated_at": time.strftime("%Y-%m-%d %H:%M:%S"),
         "data_source": str(panel_path.relative_to(ROOT_DIR)).replace("\\", "/"),
         "data_sha256": sha256_of_file(panel_path),
+        "entry_diagnostics": entry_diagnostics,
+        "exit_diagnostics": exit_diagnostics,
         "placebo_design_meta": {
             design: {
                 mode: {
@@ -247,11 +316,15 @@ def run_trend_gate_study(
             "neutral_control_rule": "非下行拦截且非顺势（与两组互斥）",
             "entry": "t+1 日收盘进场（信号在 t 日收盘后才可知，t 日收盘价不可成交）",
             "exit": f"进场后第 H 个交易日；若该日跌停或停牌则顺延，最多 {DEFAULT_MAX_DEFER} 个交易日",
+            "return_basis_disclosure": (
+                "事件研究采用收盘到收盘前向价格收益（unadjusted close-to-close price return basis），"
+                "未做分红再投资复权，与 Fama-MacBeth 截面回归优先使用的官方复权日收益 (Dretwd basis) 存在口径差异，特此明示披露。"
+            ),
             "horizons": list(horizons),
             "liquidity_constraints": [
                 "进场日涨停（收在最高价且涨跌幅触限）→ 无法买入，事件剔除出可交易样本",
                 "进场日停牌/异常交易 → 无法买入，事件剔除",
-                "退出日跌停 → 无法卖出，顺延至下一可成交日",
+                "退出日跌停 → 无法卖出，顺延至下一可成交日（顺延超期则标记为审查 exit_blocked 并剔除）",
                 "涨跌停状态不可观测的标的（100 支无 hit_limit 字段）→ 不进入可交易样本",
             ],
             "significance": "对每日截面均值序列做 Newey-West HAC 校正（重叠窗口与截面相关的处理）",
@@ -345,14 +418,17 @@ def run_trend_gate_study(
         for name, blk in bootstrap_diff[mode].items():
             e = blk["h20"]["event_weighted"]
             d = blk["h20"]["date_equal"]
-            print(f"  [clusterboot/{mode}/{name}] 20日 事件加权差={e['observed_diff']:+.4f} "
-                  f"SE={e['boot_se']:.4f} t={e['boot_t']:+.2f} p={e['boot_p_two_sided']:.4f} | "
-                  f"等权日差={d['observed_diff']:+.4f} t={d['boot_t']:+.2f} p={d['boot_p_two_sided']:.4f}")
+            print(f"  [paired-diff/{mode}/{name}] 20日 事件加权差={e['observed_diff']:+.4f} "
+                  f"HAC t={e['hac_t']:+.2f} p={e['hac_p_two_sided']:.4f} "
+                  f"(iid-bootstrap t={e['boot_iid_t']:+.2f} p={e['boot_iid_p_two_sided']:.4f}；"
+                  f"block5 t={e['block5_t']:+.2f} p={e['block5_p_two_sided']:.4f}) | "
+                  f"等权日差={d['observed_diff']:+.4f} HAC t={d['hac_t']:+.2f} p={d['hac_p_two_sided']:.4f}")
     for mode in ("constrained", "free"):
         for name, blk in exclusive_pairs[mode].items():
             e = blk["h20"]["event_weighted"]
             print(f"  [exclusive/{mode}/{name}] 20日 事件加权差={e['observed_diff']:+.4f} "
-                  f"t={e['boot_t']:+.2f} p={e['boot_p_two_sided']:.4f}")
+                  f"HAC t={e['hac_t']:+.2f} p={e['hac_p_two_sided']:.4f} "
+                  f"(iid p={e['boot_iid_p_two_sided']:.4f})")
 
     return payload
 

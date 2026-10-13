@@ -27,6 +27,7 @@ from scripts.p4_real_data_core import (
     bonferroni_adjust,
     build_trend_gate_events,
     calc_newey_west_lags,
+    calc_peak_to_trough_drawdown,
     classic_iid_t_stat,
     daily_paired_test,
     date_cluster_bootstrap_diff,
@@ -472,7 +473,10 @@ def test_placebo_reports_error_on_empty_pool_instead_of_fabricating():
     target = events["is_downtrend"].to_numpy()
     for fn in (run_placebo, run_date_placebo, run_date_matched_placebo):
         dist = fn(events, empty, target, horizons=(5,), n_runs=10, seed=1, mode="free")
-        assert dist["h5"] == {"error": "empty_pool"}
+        assert dist["h5"]["error"] == "empty_pool"
+        if fn is run_date_matched_placebo:
+            assert dist["h5"]["status"] == "invalid_insufficient_control"
+            assert dist["h5"]["is_valid_inference"] is False
 
 
 def test_placebo_rejects_unknown_mode():
@@ -574,7 +578,8 @@ def test_date_cluster_bootstrap_diff_matches_hand_computation():
     # 事件加权：(0.02*2+0.04*2)/4 − (0.01*3+0.03*3)/6 = 0.03 − 0.02
     assert b["event_weighted"]["observed_diff"] == pytest.approx(0.01)
     assert b["date_equal"]["observed_diff"] == pytest.approx(0.01)
-    assert b["event_weighted"]["boot_se"] == pytest.approx(0.0, abs=1e-15)
+    assert b["event_weighted"]["boot_iid_se"] == pytest.approx(0.0, abs=1e-15)
+    assert b["event_weighted"]["hac_se"] == pytest.approx(0.0, abs=1e-8)
 
 
 def test_date_cluster_bootstrap_difference_cancels_common_day_shock():
@@ -600,12 +605,13 @@ def test_date_cluster_bootstrap_difference_cancels_common_day_shock():
     res = date_cluster_bootstrap_diff(events, tgt, ~tgt, horizons=(5,), n_runs=100, seed=7, mode="free")
     b = res["h5"]["event_weighted"]
     assert b["observed_diff"] == pytest.approx(0.002, abs=1e-12)
-    assert b["boot_se"] == pytest.approx(0.0, abs=1e-12)
+    assert b["boot_iid_se"] == pytest.approx(0.0, abs=1e-12)
+    assert b["hac_se"] == pytest.approx(0.0, abs=1e-8)
 
     vals = events["ret_5d_free"].to_numpy()
     naive_se = float(np.sqrt(vals[tgt].var(ddof=1) / tgt.sum() + vals[~tgt].var(ddof=1) / (~tgt).sum()))
     assert naive_se > 0.003, f"未配对的 iid SE 应很大，实际 {naive_se}"
-    assert b["boot_se"] < naive_se / 10
+    assert b["hac_se"] < naive_se / 10
 
 
 def test_date_cluster_bootstrap_diff_reports_correlation_and_both_weightings():
@@ -626,7 +632,10 @@ def test_date_cluster_bootstrap_diff_reports_correlation_and_both_weightings():
     assert b["event_weighted"]["observed_diff"] == pytest.approx(0.01)
     assert b["date_equal"]["observed_diff"] == pytest.approx(0.01)
     assert b["corr_of_date_means"] == pytest.approx(1.0)
-    assert "boot_p_two_sided" in b["event_weighted"] and "boot_ci_95" in b["date_equal"]
+    for field in ("boot_iid_se", "hac_se", "block5_se", "boot_iid_p_two_sided", "hac_p_two_sided", "block5_p_two_sided"):
+        assert field in b["event_weighted"]
+    for field in ("hac_se", "hac_p_two_sided", "block5_p_two_sided"):
+        assert field in b["date_equal"]
 
 
 def test_date_matched_placebo_reports_same_weight_target_mean():
@@ -648,10 +657,44 @@ def test_date_matched_placebo_reports_same_weight_target_mean():
     res = run_date_matched_placebo(events, ~tgt, tgt, horizons=(5,), n_runs=20, seed=11, mode="free")
     b = res["h5"]
     assert b["dates_capped_or_missing"] == 1                      # 第 1 日池子不足
+    assert b["control_insufficient"] is True
+    assert b["sample_equality_claimed"] is False
+    assert b["status"] == "invalid_insufficient_control"
+    assert b["match_status"] == "invalid_insufficient_control"
+    assert b["is_valid_inference"] is False
     assert b["events_per_run_mean"] == pytest.approx(2.0)         # k=1 + k=1
     assert b["target_mean_full_sample"] == pytest.approx((3 * 0.05 + 0.01) / 4)
     # 同权重：第 1 日权重 1（被截断）而非 3
     assert b["target_mean_under_matched_weights"] == pytest.approx((0.05 + 0.01) / 2)
+
+
+def test_date_matched_placebo_invalid_insufficient_control_flag():
+    """验证当任一目标交易日缺乏充足对照事件时，同日匹配显式标记为 invalid_insufficient_control，
+    下游 _placebo_p_values 亦显式继承该失效状态，杜绝被误标为有效匹配推断。"""
+    from scripts.run_p4_trend_gate_study import _placebo_p_values
+    rows = []
+    # 目标组需要 3 个事件，但池子只有 1 个事件 -> 严重对照不足
+    rows.append({"trade_date": "2024-01-02", "is_target": True, "ret_5d": 0.05, "ret_5d_free": 0.05, "maxdd_5d": 0.0, "maxdd_5d_free": 0.0})
+    rows.append({"trade_date": "2024-01-02", "is_target": True, "ret_5d": 0.05, "ret_5d_free": 0.05, "maxdd_5d": 0.0, "maxdd_5d_free": 0.0})
+    rows.append({"trade_date": "2024-01-02", "is_target": True, "ret_5d": 0.05, "ret_5d_free": 0.05, "maxdd_5d": 0.0, "maxdd_5d_free": 0.0})
+    rows.append({"trade_date": "2024-01-02", "is_target": False, "ret_5d": 0.02, "ret_5d_free": 0.02, "maxdd_5d": 0.0, "maxdd_5d_free": 0.0})
+    df = pd.DataFrame(rows)
+    tgt = df["is_target"].to_numpy()
+    dist = run_date_matched_placebo(df, ~tgt, tgt, horizons=(5,), n_runs=10, seed=42, mode="free")
+    b = dist["h5"]
+    assert b["control_insufficient"] is True
+    assert b["sample_equality_claimed"] is False
+    assert b["status"] == "invalid_insufficient_control"
+    assert b["match_status"] == "invalid_insufficient_control"
+    assert b["is_valid_inference"] is False
+    assert b["dates_capped_or_missing"] == 1
+
+    # 检验下游 _placebo_p_values 转换结果
+    pv = _placebo_p_values(dist, {"h5": 0.05}, (5,))
+    assert pv["h5"]["p_value_status"] == "invalid_insufficient_control"
+    assert pv["h5"]["match_status"] == "invalid_insufficient_control"
+    assert pv["h5"]["status"] == "invalid_insufficient_control"
+    assert pv["h5"]["is_valid_inference"] is False
 
 
 def test_placebo_p_values_use_per_horizon_observed_mean():
@@ -707,6 +750,26 @@ def test_generated_report_has_no_unrendered_placeholders():
         assert not re.search(pattern, report, flags=re.IGNORECASE), f"报告出现未渲染占位符: {pattern}"
 
 
+def test_paper_draft_generated_matches_artifact_and_has_no_placeholders():
+    """验证生成的学术论文初稿 (paper_draft_zh.md) 与构建器脚本生成的文本逐字节一致，
+    且无任何未渲染的异常空值或 Python 格式占位符。"""
+    out_dir = Path(__file__).resolve().parents[1] / "reports" / "real_rebuild_20261010"
+    paper_path = out_dir / "paper_draft_zh.md"
+    if not paper_path.exists():
+        pytest.skip("paper_draft_zh.md 尚未生成")
+
+    trend = json.loads((out_dir / "trend_gate_event_study.json").read_text(encoding="utf-8"))
+    fm = json.loads((out_dir / "fama_macbeth_hac_results.json").read_text(encoding="utf-8"))
+    results = json.loads((out_dir / "results.json").read_text(encoding="utf-8"))
+
+    from scripts.p4_paper_builder import build_paper_draft_zh, validate_no_unrendered_placeholders
+    generated = build_paper_draft_zh(trend, fm, results)
+    on_disk = paper_path.read_text(encoding="utf-8")
+
+    assert generated == on_disk, "磁盘上的 paper_draft_zh.md 与 build_paper_draft_zh() 存在差异"
+    validate_no_unrendered_placeholders(generated)
+
+
 # ===========================================================================
 # 6. 收益构造
 # ===========================================================================
@@ -727,3 +790,145 @@ def test_attach_returns_next_day_and_fallback():
     # 官方口径次日收益在 ret 缺失处保持缺失，不做回落
     assert np.isnan(out["ret_next_official"].iloc[0])
     assert out["ret_next_official"].iloc[1] == pytest.approx(0.10)
+
+
+# ===========================================================================
+# 7. 阶段二 Acceptance 严格数学与计量断言测试
+# ===========================================================================
+def test_drawdown_peak_to_trough_vs_adverse_excursion():
+    """Acceptance 1: 真实峰谷最大回撤必须为 min(p/cummax(p)-1)，非 min(p)/entry-1。
+    手算小样本 [100, 120, 110] 峰谷回撤必须为 -1/12，而入场最大不利偏移 (MAE) 为 0。
+    """
+    prices = [100.0, 120.0, 110.0]
+    maxdd, mae = calc_peak_to_trough_drawdown(prices)
+    # cummax 为 [100, 120, 120]，p/cummax - 1 为 [0, 0, -10/120] = [0, 0, -1/12]
+    assert maxdd == pytest.approx(-1.0 / 12.0, abs=1e-12)
+    assert mae == pytest.approx(0.0, abs=1e-12)
+
+    # 复杂样本：[100, 150, 120, 130, 90]
+    # cummax: [100, 150, 150, 150, 150]
+    # drawdowns: [0, 0, -30/150=-0.2, -20/150=-0.1333, -60/150=-0.4] -> min = -0.4
+    # MAE from entry: min(p)/100 - 1 = 90/100 - 1 = -0.10
+    maxdd2, mae2 = calc_peak_to_trough_drawdown([100.0, 150.0, 120.0, 130.0, 90.0])
+    assert maxdd2 == pytest.approx(-0.40, abs=1e-12)
+    assert mae2 == pytest.approx(-0.10, abs=1e-12)
+
+    # 边界情况：单价格或非正价格
+    assert calc_peak_to_trough_drawdown([100.0]) == (pytest.approx(0.0), pytest.approx(0.0))
+    nan_dd, nan_mae = calc_peak_to_trough_drawdown([])
+    assert np.isnan(nan_dd) and np.isnan(nan_mae)
+
+
+def test_fama_macbeth_rf_subtraction_shifts_intercept_only():
+    """Acceptance 2: OLS 截面回归含截距时，被解释变量减去日度固定 Rf，
+    仅平移截距项 alpha_t -> alpha_t - Rf，z-score 因子斜率 lambda_{f,t} 严格保持不变。
+    因此不得从每个因子斜率中扣除 Rf。
+    """
+    rng = np.random.RandomState(42)
+    dates = [f"2025-01-{d:02d}" for d in range(2, 12)]  # 10 个交易日
+    rows = []
+    rf_daily = 0.015 / 244.0  # 年化 1.5%
+
+    for d in dates:
+        for i in range(40):  # 40 只股票
+            f1_val = rng.normal(0.0, 1.0)
+            f2_val = rng.normal(0.0, 1.0)
+            # 真实生成收益：y = alpha_true + 0.03 * f1 - 0.02 * f2 + noise
+            ret_val = 0.005 + 0.03 * f1_val - 0.02 * f2_val + rng.normal(0.0, 0.01)
+            rows.append({
+                "stock_code": f"{i:06d}",
+                "trade_date": d,
+                "f1": f1_val,
+                "f2": f2_val,
+                "ret_raw": ret_val,
+                "ret_excess": ret_val - rf_daily,
+                "limit_up": False,
+            })
+    df = pd.DataFrame(rows)
+
+    res_raw = run_fama_macbeth(df, factors=["f1", "f2"], dependent="ret_raw", min_stocks=30, bootstrap_runs=50)
+    res_excess = run_fama_macbeth(df, factors=["f1", "f2"], dependent="ret_excess", min_stocks=30, bootstrap_runs=50)
+
+    # 1. 逐期因子斜率 lambda 严格相同（浮点精度 1e-12）
+    for f in ["f1", "f2"]:
+        l_raw = np.array(res_raw["per_period_lambdas"][f])
+        l_excess = np.array(res_excess["per_period_lambdas"][f])
+        np.testing.assert_allclose(l_raw, l_excess, atol=1e-12)
+        # 因子统计量完全一致
+        assert res_raw["factors_stats"][f]["mean_risk_premium_daily"] == pytest.approx(
+            res_excess["factors_stats"][f]["mean_risk_premium_daily"], abs=1e-12
+        )
+        assert res_raw["factors_stats"][f]["newey_west_t"] == pytest.approx(
+            res_excess["factors_stats"][f]["newey_west_t"], abs=1e-12
+        )
+        # 因子年化溢价 excess 字段不得机械扣除 rf
+        assert res_raw["factors_stats"][f]["annualized_premium_excess_244d"] == pytest.approx(
+            res_raw["factors_stats"][f]["annualized_premium_244d"], abs=1e-12
+        )
+
+    # 2. 截距项逐期严格平移 -rf_daily
+    a_raw = np.array(res_raw["per_period_alpha"])
+    a_excess = np.array(res_excess["per_period_alpha"])
+    np.testing.assert_allclose(a_raw - rf_daily, a_excess, atol=1e-12)
+    assert res_raw["mean_alpha_daily"] - rf_daily == pytest.approx(res_excess["mean_alpha_daily"], abs=1e-12)
+
+
+def test_paired_ratio_influence_varying_counts_cancels_when_means_constant():
+    """Acceptance 3: 比率估计量的中心化影响函数在各日样本量变化但日均值差恒定时方差为零。
+    若采用未中心化的 S_t/N - R_t/M，会因各日样本量 N_t, M_t 的波动引入虚假方差。
+    """
+    # 5 个交易日，各日样本量剧烈变化，但各日组内均值完全恒定：目标恒为 0.05，池恒为 0.02
+    target_counts = [100, 2, 50, 10, 20]
+    pool_counts = [10, 80, 20, 5, 40]
+    dates = [f"2025-01-{d:02d}" for d in range(2, 7)]
+
+    rows = []
+    for d, nt, np_cnt in zip(dates, target_counts, pool_counts):
+        for _ in range(nt):
+            rows.append({"trade_date": d, "is_target": True, "ret_5d": 0.05, "ret_5d_free": 0.05,
+                         "maxdd_5d": 0.0, "maxdd_5d_free": 0.0})
+        for _ in range(np_cnt):
+            rows.append({"trade_date": d, "is_target": False, "ret_5d": 0.02, "ret_5d_free": 0.02,
+                         "maxdd_5d": 0.0, "maxdd_5d_free": 0.0})
+    events = pd.DataFrame(rows)
+    tgt = events["is_target"].to_numpy()
+
+    res = date_cluster_bootstrap_diff(events, tgt, ~tgt, horizons=(5,), n_runs=100, seed=1, mode="free")
+    ew = res["h5"]["event_weighted"]
+
+    # 观测均值差严格为 0.05 - 0.02 = 0.03
+    assert ew["observed_diff"] == pytest.approx(0.03, abs=1e-12)
+    # 中心化影响函数的 HAC SE 和 iid SE 均严格为 0
+    assert ew["hac_se"] == pytest.approx(0.0, abs=1e-8)
+    assert ew["boot_iid_se"] == pytest.approx(0.0, abs=1e-8)
+
+    # 验证未中心化的 naive 贡献序列在各日样本量波动下有很大方差（证明为何必须中心化）
+    ts = np.array([0.05 * c for c in target_counts])
+    tn = np.array(target_counts, dtype=float)
+    ps = np.array([0.02 * c for c in pool_counts])
+    pn = np.array(pool_counts, dtype=float)
+    m = len(dates)
+    naive_z = (ts / tn.sum() - ps / pn.sum()) * m
+    assert np.std(naive_z) > 0.05, "未中心化分数因日样本量波动引入了虚假方差"
+
+
+def test_serial_correlated_ar1_understates_iid_se():
+    """Acceptance 6: 正序列相关下（类似 20 日重叠持有期），经典 IID 标准误严重低估，
+    导致 IID t 值被虚假放大；Newey-West HAC 标准误正确放大以校正自相关。
+    """
+    rng = np.random.RandomState(123)
+    T = 300
+    rho = 0.8
+    # 模拟 AR(1) 过程: x_t = rho * x_{t-1} + e_t + 0.02 (带漂移)
+    innovations = rng.normal(0.0, 0.05, size=T)
+    x = np.empty(T, dtype=float)
+    x[0] = innovations[0] + 0.02
+    for t in range(1, T):
+        x[t] = rho * x[t - 1] + innovations[t] + 0.02 * (1.0 - rho)
+
+    _, se_iid, t_iid = classic_iid_t_stat(x)
+    _, se_hac, t_hac = newey_west_t_stat(x, lags=15)
+
+    # 理论上 AR(1) 在 rho=0.8 时方差膨胀系数约为 (1+rho)/(1-rho) = 9，SE 膨胀约 3 倍
+    assert se_iid < se_hac * 0.55, f"IID SE ({se_iid:.6f}) 未显著低于 HAC SE ({se_hac:.6f})"
+    assert abs(t_iid) > abs(t_hac) * 1.5, f"IID t ({t_iid:.2f}) 未显著虚高过 HAC t ({t_hac:.2f})"

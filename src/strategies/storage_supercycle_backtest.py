@@ -599,7 +599,7 @@ class StorageSupercycleBacktester:
         return {
             "annualized_return_pct": round(annualized_return_pct, 2),
             "total_return_pct": round(total_return_pct, 2),
-            "sharpe_ratio": round(sharpe_ratio, 2),
+            "sharpe_ratio": round(sharpe_ratio, 4),
             "max_drawdown_pct": round(max_dd, 2),
             "information_ratio": round(information_ratio, 2),
             "brier_score": round(brier_score, 4) if brier_score is not None else None,

@@ -312,5 +312,8 @@ class SectorGraphEngine:
             "spillover_prob_5d_pct": spillover_prob,
             "has_limit_up_resonance": has_limit_up,
             "co_movement_peers": sorted(peers, key=lambda x: x["corr"], reverse=True)[:5],
+            "corr_missing_evidence_count": int(missing_corr_count),
+            "leader_corr_with_stock": stock_corr_with_leader,
+            "leader_corr_missing": bool(leader_corr_missing),
             "temporal_dynamics": temporal_dynamics
         }
