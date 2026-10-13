@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "status": "PC5_EXTRACTION_COMPLETE_DESCRIPTIVE_ONLY",
+  "source_repository": "YuxuanWuCN/stock-dashboard",
+  "source_commit": "7d63bb4f22821549efa20c23e9ffb28ee35cbcd4",
+  "selected_component": 5,
+  "datasets": [
+    {
+      "id": "snapshot_768d",
+      "rows": 300,
+      "features": 768,
+      "retained_components": 10,
+      "pca_version": "pc5-full-svd-63860325d95daff9c609bee44540cd8f7d7d1240b2234de595f24f7af231d7c0",
+      "fit_end": null,
+      "training_rows": 300,
+      "sources": [
+        {
+          "path": "data\\task_split\\factors_768d_all.csv",
+          "git_blob": "9f5d0d47c91488803af671aefb5db6c8bbc2fbde",
+          "sha256": "6ba4dbc628a58f02730bdef63a0b97e619fd35dc9c783257a54be850d3c39dee"
+        },
+        {
+          "path": "data\\task_split\\universe_300_assigned.csv",
+          "git_blob": "f76a3ad489c197f7062d86efc5554a660f1264d2",
+          "sha256": "d752ee333205bf9116934dea1f1ab25c6ddf75e59db5c5a49f0eb309cecb6a98"
+        },
+        {
+          "path": "reports\\tables\\regression_768d\\pca_768d_explained_variance.csv",
+          "git_blob": "800cf2255ec1200f97c94b7bcff7249080aad3e2",
+          "sha256": "4e36d6ec60a0b890da150ffa406a771f8e14a6dceabdaabcf74125836e0f75d5"
+        }
+      ],
+      "provenance": {
+        "feature_sources": {
+          "local_semantic": 300
+        },
+        "historical_panel_available": false
+      },
+      "diagnostics": {
+        "selected_component": "PC05",
+        "selected_column_equals_fifth": true,
+        "loading_orthogonality_max_error": 1.9984014443252818e-15,
+        "training_covariance_off_diagonal_max": 3.669157137169213e-14,
+        "pc5_training_mean": 3.552713678800501e-17,
+        "pc5_training_std_population": 5.3361207551447905,
+        "pc5_z_training_std_population": 1.0,
+        "pc5_explained_variance_ratio": 0.03726987527943334,
+        "retained_explained_variance_ratio": 0.3015684578652451,
+        "pc5_near_degenerate": false,
+        "previous_report_pc5_explained_variance_ratio": 0.0372699081183582,
+        "variance_ratio_difference_from_previous_report": -3.283892486410922e-08
+      },
+      "limitations": [
+        "300行全部标记为local_semantic；是仓库的本地语义特征，未证实为历史LLM embedding。",
+        "没有date、available_at或历史特征版本；只作当前截面PCA描述，不能复制为历史回测面板。",
+        "dim_000至dim_767没有独立经济标签；不能把PC5直接命名为情绪或机构博弈。"
+      ]
+    },
+    {
+      "id": "legacy_green",
+      "rows": 258,
+      "features": 8,
+      "retained_components": 5,
+      "pca_version": "pc5-full-svd-df45aeff6ed1eb48d3e2452b161bb2a7d0b70644cc368c0829826a90cfd1addf",
+      "fit_end": null,
+      "training_rows": 258,
+      "sources": [
+        {
+          "path": "data\\week1_pca\\factors_for_pca.csv",
+          "git_blob": "923831054dd0b055d4df7f348d17da279a38f854",
+          "sha256": "a849b1e6f834df430c556c2baf177443026e0b81c0fa1e74692ec4be8e5e7b03"
+        },
+        {
+          "path": "data\\week1_pca\\pc5_raw.csv",
+          "git_blob": "cfd460d4781ba657fcc75e2b37ef4f4305821e0c",
+          "sha256": "3d741690fe0e61568769eb1459054eb916838503f0ae0e22b131f6990f6e10e7"
+        }
+      ],
+      "provenance": {
+        "historical_panel_available": false,
+        "point_in_time_availability_verified": false
+      },
+      "diagnostics": {
+        "selected_component": "PC05",
+        "selected_column_equals_fifth": true,
+        "loading_orthogonality_max_error": 1.3322676295501878e-15,
+        "training_covariance_off_diagonal_max": 6.220704885059242e-16,
+        "pc5_training_mean": 1.8934036078878638e-16,
+        "pc5_training_std_population": 0.964571775335564,
+        "pc5_z_training_std_population": 0.9999999999999998,
+        "pc5_explained_variance_ratio": 0.13291410139628604,
+        "retained_explained_variance_ratio": 0.7998036096637644,
+        "pc5_near_degenerate": false,
+        "legacy_sign_alignment": 1,
+        "legacy_pc5_max_abs_error_after_sign_alignment": 4.9743195673634943e-14
+      },
+      "limitations": [
+        "8个传统/资金流因子，属于独立于768维股票截面的另一套PCA基底。",
+        "上游metadata记录forward_backward_fill；全样本提取只用于复核旧交付，不作样本外预测。"
+      ]
+    }
+  ],
+  "config_sha256": "afb8fa497251b5090cd1b16dc53cde5b36ea8814d07049f181adf07767315a46",
+  "implementation": [
+    {
+      "path": "src\\pricing\\pc5_component.py",
+      "git_blob": "7d4d07ab29be3bb8e46079959f2f8d1a70f776df",
+      "sha256": "bf90bf28d23cffc4ee964620cda11cb238fc8b7c24755cbea62fb80c0afd6c0c"
+    },
+    {
+      "path": "scripts\\extract_pc5.py",
+      "git_blob": "7aae97db3df2c8510017b7ccec875155c166f435",
+      "sha256": "0dc7c53f4a620b6e6a75ab20a13f4672849126727e130af3808270a7d111cfc6"
+    },
+    {
+      "path": "scripts\\day2_pca_extraction.py",
+      "git_blob": "b40b0e72f97b7b1e01993709dfe9f8d425bdbf8f",
+      "sha256": "e8d8dd294fba09d683c4be2c2738e677d5e43bc31844d3535419251ce2d4d63f"
+    }
+  ],
+  "versions": {
+    "python": "3.13.9",
+    "numpy": "2.3.5",
+    "pandas": "2.3.3"
+  },
+  "performance_evaluation": "NOT_RUN_NO_POINT_IN_TIME_PANEL",
+  "stable_output_replacement": false,
+  "system_did_not_order": true,
+  "artifacts_sha256": {
+    "config_snapshot.json": "afb8fa497251b5090cd1b16dc53cde5b36ea8814d07049f181adf07767315a46",
+    "legacy_green/all_pcs.csv": "678eeb4d4b3af1e0bf2da929eaed88b18c0884beaefdf5f35fd5de087b26af77",
+    "legacy_green/checks.json": "81a3fc6f9f3f04394122d9afdf7898e491daf9c70045c65f83dfb4402c345a93",
+    "legacy_green/explained_variance.csv": "fcf7be1f1cfeffaaa76d36427e4e07565ed6ad31bdfd2b2518f149d1fdaab6ee",
+    "legacy_green/pc5_loadings.csv": "3b51a3569d97ef90adecee7b9818190a55864a1f241585a913b5a9c8b28bfc2c",
+    "legacy_green/pc5_raw.csv": "9e4c6ffff90a9139574b493e0600cb5b4410b52e46499dc9d84fb075adfdc70c",
+    "legacy_green/pc5_scores.csv": "9eacd3e4ad8bbe1ad2d5f6b9b625df602f8e27df3a429500ac94a63b632b4633",
+    "legacy_green/pc5_summary.png": "d4d143b8d716e98fc6738fbee2924d127e23a8e1f9ed17af28262e99e6479f75",
+    "legacy_green/pca_basis.json": "e91c04afdda51c772e4a8921329bb23b70e5b81aecf6e4502a1b66cf5c25e824",
+    "legacy_green/pca_loadings.csv": "2d082e762357dcfc1c95605d58a858a4a78eff1f70cdc8a952289e13f5492b65",
+    "README.md": "17ea44555d365f4e1bf8fce7831206160906955f799d2ce8212c966261052a5d",
+    "snapshot_768d/all_pcs.csv": "fb4fb5fb31c1f0c6367b00097825951e393c67a1974a85b9719b87b7b26beec4",
+    "snapshot_768d/checks.json": "6ded90392aa1cf5bd66ab8fbc6052a4c4e7ff748ed7ccda09e256e6376e40ae1",
+    "snapshot_768d/explained_variance.csv": "b7ba827aeed6db40c64bf7eb5560ee3deb6e4e2407d4733f230f629114f61126",
+    "snapshot_768d/pc5_loadings.csv": "ffffb1d7d7fc800a4d0d4eed3a7edc6e845b7ed032eaefb5b3b37deef6893b0b",
+    "snapshot_768d/pc5_raw.csv": "dd894860495f698bba52b85f327506ced6325310e09639d255f71a3268baa3e6",
+    "snapshot_768d/pc5_scores.csv": "e7c9eac17b33ed8bbe6394b6bdd53eda82455ca51898ab11c422f804e13523f0",
+    "snapshot_768d/pc5_summary.png": "99b05af4d1980cd56656a7d1067aa8146c6e0910aa95439d2b589133d798d860",
+    "snapshot_768d/pca_basis.json": "caa897892dd39ae8e05d630dadb6073d1c77f294a9488daf5718c0c7c110d19b",
+    "snapshot_768d/pca_loadings.csv": "d99550f0ebc799e23463933080f64162c1da2e1307e59eaa95b2007cca32ba52"
+  }
+}
