@@ -6,6 +6,7 @@ import Header from '@/sections/Header'
 import HeroSection from '@/sections/HeroSection'
 import MainGrid from '@/sections/MainGrid'
 import RiskRadarSection from '@/sections/RiskRadarSection'
+import SectorRotationSection from '@/sections/SectorRotationSection'
 import { headerData, heroData } from '@/data/mock'
 import { useHomepage } from '@/hooks/useHomepage'
 import { LEGACY_HOME_URL } from '@/services/api'
@@ -48,6 +49,8 @@ export default function App() {
       <SectionStack>
         <HeroSection mode={mode} data={{ ...heroData, ...data.hero }} />
         <MainGrid equityCurve={data.equityCurve} allocation={data.allocation} cashNote={data.cashNote} />
+        {/* 板块轮动：自己拉 /api/sector_rotation，不并入 homepage 视图模型（缺数据时宁显空态） */}
+        <SectorRotationSection />
         <RiskRadarSection events={data.riskEvents} />
         <ExpertModeSection open={expertOpen} onToggle={() => setExpertOpen((v) => !v)} data={data.expert} />
       </SectionStack>

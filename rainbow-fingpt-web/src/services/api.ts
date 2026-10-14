@@ -9,6 +9,7 @@ import type {
   ProcessDatasetRequest,
   ProcessDatasetResponse,
 } from '@/types/api'
+import type { SectorRotationResponse } from '@/types/sectorRotation'
 
 /**
  * 后端 API 客户端。
@@ -223,6 +224,16 @@ export function fetchOpenApiSpec(options: CallOptions = {}): Promise<Record<stri
   return request<Record<string, unknown>>('/api/v1/openapi.json', options)
 }
 
+/**
+ * GET /api/sector_rotation —— 板块轮动每日决策。
+ *
+ * 后端缺数据时返回 200 + `status: 'missing'`（不是 500），因此调用方要按
+ * `status` 与 `data` 是否为空两路处理，不要把缺数据当异常。
+ */
+export function fetchSectorRotation(options: CallOptions = {}): Promise<SectorRotationResponse> {
+  return request<SectorRotationResponse>('/api/sector_rotation', options)
+}
+
 /** 方便按需调用：全部接口函数的集合。 */
 export const api = {
   fetchDataset,
@@ -230,4 +241,5 @@ export const api = {
   submitData,
   fetchHomepage,
   fetchOpenApiSpec,
+  fetchSectorRotation,
 }

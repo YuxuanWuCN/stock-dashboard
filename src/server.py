@@ -585,6 +585,78 @@ def api_health():
     })
 
 
+# ============================================================
+# 板块轮动决策 API（阶段5 任务 5.1）
+# ============================================================
+
+_SECTOR_ROTATION_DIR = os.path.join(DOCS_DIR, "data", "sector_rotation")
+_SECTOR_ROTATION_STALE_DAYS = int(os.environ.get("SECTOR_ROTATION_STALE_DAYS", "5"))
+
+
+def _weekdays_between(start: date, end: date) -> int:
+    """start 到 end 之间的工作日数（不含 start，含 end 前一日；end<start 返回 0）。
+
+    与板块轮动模块同源近似口径（weekday<5，未含法定节假日调休）。
+    """
+    if end <= start:
+        return 0
+    count = 0
+    cur = start
+    while cur < end:
+        cur = cur + timedelta(days=1)
+        if cur.weekday() < 5:
+            count += 1
+    return count
+
+
+@app.route("/api/sector_rotation", methods=["GET"])
+def api_sector_rotation():
+    """读取板块轮动每日决策产物 docs/data/sector_rotation/latest_rotation.json。
+
+    缺文件/损坏一律返回 200 + 明确的 status 字段（missing/error），不抛 500。
+    """
+    path = os.path.join(_SECTOR_ROTATION_DIR, "latest_rotation.json")
+    if not os.path.exists(path):
+        logger.info("/api/sector_rotation: 决策产物缺失")
+        return jsonify({
+            "status": "missing",
+            "data": None,
+            "message": "板块轮动尚无每日决策产物（待每日流水线 6b 步或 tools/sector_rotation_daily.py 生成）",
+        })
+
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+    except (json.JSONDecodeError, OSError) as err:
+        logger.warning("/api/sector_rotation: 产物读取失败: %s", err)
+        return jsonify({
+            "status": "error",
+            "data": None,
+            "message": f"决策产物不可解析: {type(err).__name__}",
+        })
+
+    trade_date = str(payload.get("trade_date") or "")[:10]
+    age_trading_days = None
+    status = "ok"
+    try:
+        known = datetime.strptime(trade_date, "%Y-%m-%d").date()
+        age_trading_days = _weekdays_between(known, date.today())
+        if age_trading_days > _SECTOR_ROTATION_STALE_DAYS:
+            status = "stale"
+    except ValueError:
+        status = "stale"
+
+    return jsonify({
+        "status": status,
+        "age_trading_days": age_trading_days,
+        "stale_threshold_days": _SECTOR_ROTATION_STALE_DAYS,
+        "sentiment_source": payload.get("sentiment_source"),
+        "report_usable": payload.get("report_usable", False),
+        "strategy_validated": payload.get("strategy_validated", False),
+        "data": payload,
+    })
+
+
 
 
 

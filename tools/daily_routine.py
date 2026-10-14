@@ -225,6 +225,11 @@ def main() -> None:
     if run_step("6/9 每日市场情绪诊断与反转检测", [py_exec, "tools/daily_market_sentiment.py"], allow_fail=True):
         steps_passed += 1
 
+    # Step 6b: 板块轮动决策与归档（产物 docs/data/sector_rotation/latest_rotation.json）
+    steps_executed += 1
+    if run_step("6b/9 板块轮动决策与归档", [py_exec, "tools/sector_rotation_daily.py"], allow_fail=True):
+        steps_passed += 1
+
     # Step 7: 模拟盘绩效记录与温度联动调仓
     if not args.skip_paper:
         steps_executed += 1

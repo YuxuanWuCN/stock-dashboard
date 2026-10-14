@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-14T10:48:01",
+  "trade_date": "2026-08-27",
+  "requested_trade_date": "2026-08-27",
+  "sentiment_source": "price_breadth_proxy",
+  "report_usable": false,
+  "strategy_validated": false,
+  "holding_sector": "gold",
+  "portfolio_state": {
+    "current_sector": "gold",
+    "holding_days": 10,
+    "monthly_rotations": 0,
+    "days_since_last_rotation": 10
+  },
+  "sectors": {
+    "green": {
+      "name": "新能源",
+      "sector": "green",
+      "sector_id": "green",
+      "sentiment_score": -0.5,
+      "sentiment_trend": "stable",
+      "volatility": 0.3742,
+      "stock_count": 6,
+      "confidence": 0.4065,
+      "last_updated": "2026-08-27 (as-of 2026-08-19)",
+      "stock_sentiments": [
+        -0.2,
+        -0.8,
+        -0.4,
+        -1.0,
+        0.0,
+        -0.6
+      ]
+    },
+    "storage": {
+      "name": "存储芯片",
+      "sector": "storage",
+      "sector_id": "storage",
+      "sentiment_score": -0.5,
+      "sentiment_trend": "stable",
+      "volatility": 0.4303,
+      "stock_count": 4,
+      "confidence": 0.3204,
+      "last_updated": "2026-08-27 (as-of 2026-08-19)",
+      "stock_sentiments": [
+        0.0,
+        -0.6667,
+        -1.0,
+        -0.3333
+      ]
+    },
+    "gold": {
+      "name": "黄金避险",
+      "sector": "gold",
+      "sector_id": "gold",
+      "sentiment_score": 0.1667,
+      "sentiment_trend": "stable",
+      "volatility": 0.3742,
+      "stock_count": 6,
+      "confidence": 0.4065,
+      "last_updated": "2026-08-27 (as-of 2026-08-19)",
+      "stock_sentiments": [
+        0.6667,
+        -0.3333,
+        0.2667,
+        -0.1333,
+        0.4667,
+        0.0667
+      ]
+    }
+  },
+  "decision": {
+    "should_rotate": false,
+    "current_sector": "gold",
+    "target_sector": null,
+    "from_sector": "gold",
+    "to_sector": null,
+    "reason": "Current sector 'gold' is healthy (score=0.1667, trend='stable')",
+    "confidence": 0.4065,
+    "is_fallback": false,
+    "llm_rationale": null,
+    "execution_time_ms": 0.006,
+    "timestamp": "2026-08-27 00:00:00",
+    "metrics": {
+      "current_score": 0.1667,
+      "current_trend": "stable"
+    },
+    "llm_validation": null
+  },
+  "reason": "Current sector 'gold' is healthy (score=0.1667, trend='stable')",
+  "confidence": 0.4065,
+  "llm_validation": null,
+  "audit": {
+    "engine": "SectorRotationEngine",
+    "engine_version": "1.0",
+    "decision_path_ms": 0.006,
+    "python": "3.12.12",
+    "git_commit": "8af008f71e3af3cb106b6d3d2360241225456f4f",
+    "portfolio_state_used": {
+      "current_sector": "gold",
+      "holding_days": 10,
+      "monthly_rotations": 0,
+      "days_since_last_rotation": 10
+    },
+    "provider": {
+      "provider": "proxy",
+      "sentiment_source": "price_breadth_proxy",
+      "report_usable": false,
+      "return_window": 20,
+      "breadth_window": 5
+    },
+    "sector_inputs": {
+      "green": {
+        "stock_count": 6,
+        "sentiment_score": -0.5,
+        "sentiment_trend": "stable",
+        "confidence": 0.4065
+      },
+      "storage": {
+        "stock_count": 4,
+        "sentiment_score": -0.5,
+        "sentiment_trend": "stable",
+        "confidence": 0.3204
+      },
+      "gold": {
+        "stock_count": 6,
+        "sentiment_score": 0.1667,
+        "sentiment_trend": "stable",
+        "confidence": 0.4065
+      }
+    },
+    "advisor_audit": null
+  },
+  "notes": [],
+  "history_days_recorded": 1
+}
