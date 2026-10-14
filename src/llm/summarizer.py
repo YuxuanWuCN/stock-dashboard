@@ -70,8 +70,8 @@ def _clean_text(text: str) -> str:
     text = re.sub(r"<[^>]+>", "", text)
     # 去除多余空白
     text = re.sub(r"\s+", " ", text)
-    # 去除特殊符号（保留中文、数字、常用标点）
-    text = re.sub(r"[^一-龥a-zA-Z0-9，。！？、；：""''（）《》\s%]", "", text)
+    # 去除特殊符号（保留中文、数字、常用标点、中英文引号）
+    text = re.sub(r"""[^一-龥a-zA-Z0-9，。！？、；：“”‘’"'（）《》\s%]""", "", text)
     return text.strip()
 
 

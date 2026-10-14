@@ -169,3 +169,37 @@ class ServerConfigAndSchedulerTestCase(unittest.TestCase):
         # Weekday check: Monday (0) to Friday (4)
         self.assertIn(next_run.weekday(), [0, 1, 2, 3, 4])
         self.assertGreater(next_run, datetime.now())
+
+    def test_daily_scheduler_check_stale_data_on_startup_respects_enabled_and_test_env(self):
+        scheduler = server.DailyAutoScheduler()
+        scheduler.last_update_date = "2026-10-01"
+
+        # Case 1: Disabled via DAILY_UPDATE_ENABLED="false"
+        with patch.dict(os.environ, {"DAILY_UPDATE_ENABLED": "false"}), \
+             patch.object(scheduler, "run_update_job") as mock_job:
+            scheduler._check_stale_data_on_startup()
+            mock_job.assert_not_called()
+
+        # Case 2: In test environment (PYTEST_CURRENT_TEST)
+        with patch.dict(os.environ, {"DAILY_UPDATE_ENABLED": "true", "PYTEST_CURRENT_TEST": "test_dummy"}), \
+             patch.object(scheduler, "run_update_job") as mock_job:
+            scheduler._check_stale_data_on_startup()
+            mock_job.assert_not_called()
+
+        # Case 3: In test environment (TESTING="1")
+        with patch.dict(os.environ, {"DAILY_UPDATE_ENABLED": "true", "TESTING": "1"}, clear=False), \
+             patch.object(scheduler, "run_update_job") as mock_job:
+            scheduler._check_stale_data_on_startup()
+            mock_job.assert_not_called()
+
+        # Case 4: Weekday after 16:00, enabled, not in test env -> triggers catchup
+        test_env = {k: v for k, v in os.environ.items() if k not in ("PYTEST_CURRENT_TEST", "TESTING")}
+        test_env["DAILY_UPDATE_ENABLED"] = "true"
+        mock_now = datetime(2026, 10, 14, 16, 30)  # Wednesday 16:30
+        with patch.dict(os.environ, test_env, clear=True), \
+             patch("src.server.datetime") as mock_dt, \
+             patch.object(scheduler, "run_update_job") as mock_job:
+            mock_dt.now.return_value = mock_now
+            scheduler._check_stale_data_on_startup()
+            mock_job.assert_called_once_with("startup_catchup")
+

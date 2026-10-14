@@ -196,12 +196,27 @@ def test_end_to_end():
     print(f"  总节省: ~{(1 - (sum(len(summaries[i]) for i in kept_indices) / total_original_len))*100:.0f}%")
 
 
+
+def test_clean_text_quotes_preservation():
+    """验证文本清洗对中英文引号与标点的完整保留，无语法告警。"""
+    from llm.summarizer import _clean_text
+    sample = '公司董事长表示：“‘技术创新’是第一生产力”，目标是"100%"增长。'
+    cleaned = _clean_text(sample)
+    assert '“' in cleaned and '”' in cleaned, "中文双引号应保留"
+    assert '‘' in cleaned and '’' in cleaned, "中文单引号应保留"
+    assert '"' in cleaned, "英文双引号应保留"
+    assert '%' in cleaned, "百分号应保留"
+    assert cleaned == sample, "清洗后常规有效标点符号应完好保留"
+
+
 if __name__ == "__main__":
     test_summarize()
     print("\n")
     test_deduplication()
     test_end_to_end()
+    test_clean_text_quotes_preservation()
 
     print("\n" + "=" * 60)
     print("✓ 所有测试通过")
     print("=" * 60)
+

@@ -1331,10 +1331,12 @@ class DailyAutoScheduler:
     def _loop(self):
         logger.info("DailyAutoScheduler 后台守护调度线程已启动")
         time.sleep(8)
-        try:
-            self._check_stale_data_on_startup()
-        except Exception as e:
-            logger.warning("开机自检陈旧数据异常: %s", e)
+        enabled = os.environ.get("DAILY_UPDATE_ENABLED", "true").lower() in ("1", "true", "yes")
+        if enabled:
+            try:
+                self._check_stale_data_on_startup()
+            except Exception as e:
+                logger.warning("开机自检陈旧数据异常: %s", e)
 
         while not self._stop_event.is_set():
             time.sleep(30)
@@ -1361,6 +1363,11 @@ class DailyAutoScheduler:
 
     def _check_stale_data_on_startup(self):
         """开机自检：若当前已是工作日收盘后(16:00以后)，但数据仍为过去日期，自动静默补漏。"""
+        enabled = os.environ.get("DAILY_UPDATE_ENABLED", "true").lower() in ("1", "true", "yes")
+        if not enabled:
+            return
+        if os.environ.get("PYTEST_CURRENT_TEST") or os.environ.get("TESTING"):
+            return
         now = datetime.now()
         if now.weekday() < 5 and now.hour >= 16:
             today_str = now.strftime("%Y-%m-%d")
