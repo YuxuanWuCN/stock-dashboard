@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-13 18:10:48+08:00",
-  "trade_date": "2026-10-13",
+  "generated_at": "2026-10-14 16:36:27+08:00",
+  "trade_date": "2026-10-14",
   "code": "159663",
   "name": "机床ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 53.0,
-    "risk": 38.9,
+    "risk_adjusted": 48.7,
+    "risk": 43.1,
     "technical": 42.0,
-    "industry": 33.6,
+    "industry": 28.7,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-13 18:09:49"
+    "updated_at": "2026-10-14 16:35:29"
   },
   "nale_network": {
     "sector_name": "工业母机",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 31.73,
-    "max_drawdown_60d_pct": -28.45,
-    "atr14_pct": 4.11,
+    "annualized_volatility_20d_pct": 31.55,
+    "max_drawdown_60d_pct": -27.03,
+    "atr14_pct": 4.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 39.8,
-        "value": 31.73
+        "score": 39.2,
+        "value": 31.55
       },
       {
         "name": "60日最大回撤",
-        "score": 68.4,
-        "value": -28.45
+        "score": 65.1,
+        "value": -27.03
       },
       {
         "name": "ATR百分比",
-        "score": 45.6,
-        "value": 4.11
+        "score": 45.3,
+        "value": 4.14
       },
       {
         "name": "量价异常",
-        "score": 6.4,
-        "value": 1.02
+        "score": 53.5,
+        "value": 1.15
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 19.18
+        "score": 4.7,
+        "value": 19.2
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 0.86,
-    "ma10": 0.9049999999999999,
-    "ma20": 0.9395,
-    "ma60": 0.9738333333333333,
-    "rsi14": 29.1,
-    "macd_dif": -0.03707471688185082,
-    "macd_dea": -0.024365011362526275,
-    "macd_hist": -0.025419411038649094,
-    "atr14_pct": 4.105335544520006,
-    "boll_position": 0.026061495781422646,
-    "return_5d_pct": -7.692307692307699,
-    "return_20d_pct": -14.28571428571429,
-    "volume_ratio_5d": 1.02
+    "ma5": 0.8400000000000001,
+    "ma10": 0.8860000000000001,
+    "ma20": 0.9309999999999998,
+    "ma60": 0.9678333333333333,
+    "rsi14": 24.0,
+    "macd_dif": -0.04209131277150191,
+    "macd_dea": -0.028037906949724613,
+    "macd_hist": -0.028106811643554594,
+    "atr14_pct": 4.135951743676902,
+    "boll_position": -0.005643617588354487,
+    "return_5d_pct": -9.999999999999998,
+    "return_20d_pct": -16.49484536082474,
+    "volume_ratio_5d": 1.15
   },
   "industry": {
     "name": "工业母机",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.69,
-    "return_20d_pct": -8.38,
-    "return_60d_pct": -17.69,
-    "relative_strength_20d_pct": -4.19
+    "return_5d_pct": -4.25,
+    "return_20d_pct": -10.32,
+    "return_60d_pct": -14.94,
+    "relative_strength_20d_pct": -6.65
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 1.33,
-      "median_return_pct": 2.84,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 1.43,
+      "median_return_pct": 2.86,
       "best_return_pct": 12.22,
-      "worst_return_pct": -10.53
+      "worst_return_pct": -15.52
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.55,
-      "median_return_pct": 1.3,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.37,
+      "median_return_pct": 0.43,
       "best_return_pct": 17.09,
-      "worst_return_pct": -18.33
+      "worst_return_pct": -15.52
     }
   },
   "fundamental": null,
@@ -172,19 +172,19 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 28.4%，风险偏高。",
+      "detail": "近60日最大回撤 27.0%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 28.4%，风险扣分。",
+      "detail": "近60日最大回撤 27.0%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "warning",
       "title": "RSI偏低",
-      "detail": "RSI14=29.1，短期超卖。",
+      "detail": "RSI14=24.0，短期超卖。",
       "contribution": -5.0
     }
   ],

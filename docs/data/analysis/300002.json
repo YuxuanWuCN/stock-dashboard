@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-13 18:10:48+08:00",
-  "trade_date": "2026-10-13",
+  "generated_at": "2026-10-14 16:36:27+08:00",
+  "trade_date": "2026-10-14",
   "code": "300002",
   "name": "神州泰岳",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 57.9,
-    "risk": 28.9,
-    "technical": 63.0,
+    "risk_adjusted": 68.2,
+    "risk": 33.3,
+    "technical": 99.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-13 18:08:43"
+    "updated_at": "2026-10-14 16:34:34"
   },
   "nale_network": {
     "sector_name": "游戏/软件",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 30.62,
+    "annualized_volatility_20d_pct": 30.92,
     "max_drawdown_60d_pct": -15.07,
-    "atr14_pct": 2.88,
+    "atr14_pct": 2.92,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 37.4,
-        "value": 30.62
+        "score": 36.8,
+        "value": 30.92
       },
       {
         "name": "60日最大回撤",
-        "score": 28.7,
+        "score": 27.9,
         "value": -15.07
       },
       {
         "name": "ATR百分比",
-        "score": 29.8,
-        "value": 2.88
+        "score": 30.2,
+        "value": 2.92
       },
       {
         "name": "量价异常",
-        "score": 44.4,
-        "value": 1.11
+        "score": 85.5,
+        "value": 1.35
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 19.18
+        "score": 4.7,
+        "value": 19.2
       }
     ]
   },
@@ -112,53 +112,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 7.856,
-    "ma10": 7.934,
-    "ma20": 8.035,
-    "ma60": 8.148000000000001,
-    "rsi14": 47.5,
-    "macd_dif": -0.0769443671527208,
-    "macd_dea": -0.06727331729240513,
-    "macd_hist": -0.019342099720631334,
-    "atr14_pct": 2.8798149816952923,
-    "boll_position": 0.37019144331313475,
-    "return_5d_pct": 0.0,
-    "return_20d_pct": -4.910179640718559,
-    "volume_ratio_5d": 1.11
+    "trend": "range",
+    "ma5": 7.892,
+    "ma10": 7.915000000000001,
+    "ma20": 8.016,
+    "ma60": 8.150833333333333,
+    "rsi14": 51.2,
+    "macd_dif": -0.061336121855233294,
+    "macd_dea": -0.06608587800488175,
+    "macd_hist": 0.009499512299296908,
+    "atr14_pct": 2.9231235711946453,
+    "boll_position": 0.586135905611347,
+    "return_5d_pct": 2.281368821292773,
+    "return_20d_pct": -4.497041420118331,
+    "volume_ratio_5d": 1.35
   },
   "industry": {
     "name": "游戏/软件",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.69,
-    "return_20d_pct": -8.38,
-    "return_60d_pct": -17.69,
-    "relative_strength_20d_pct": 5.18
+    "return_5d_pct": -4.25,
+    "return_20d_pct": -10.32,
+    "return_60d_pct": -14.94,
+    "relative_strength_20d_pct": 5.35
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": 0.21,
-      "median_return_pct": -0.92,
+      "up_probability_pct": 37.9,
+      "average_return_pct": -0.15,
+      "median_return_pct": -1.62,
       "best_return_pct": 13.38,
-      "worst_return_pct": -9.41
+      "worst_return_pct": -11.74
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.27,
+      "up_probability_pct": 37.9,
+      "average_return_pct": -0.24,
       "median_return_pct": -0.63,
       "best_return_pct": 14.24,
-      "worst_return_pct": -12.21
+      "worst_return_pct": -12.63
     }
   },
   "fundamental": {
@@ -289,12 +289,6 @@
     "cached_at": "2026-08-21 10:06:16"
   },
   "reasons": [
-    {
-      "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
     {
       "type": "negative",
       "title": "近期回撤较大",

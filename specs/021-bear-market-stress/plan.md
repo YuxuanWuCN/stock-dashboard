@@ -1,26 +1,26 @@
 # 实现计划：熊市回测与压力测试
 
 **分支**：`fix/real-data-rebuild`（实施）/ `specs/021-bear-market-stress` | **日期**：2026-10-14
-**规格**：`工作规划/熊市回测与压力测试方案_交主Agent.md`（用户显式指定，代替 spec.md）
-**研究**：[research.md](./research.md)
+**规格**：[spec.md](./spec.md)（增补最小化修复规范）与 `工作规划/熊市回测与压力测试方案_交主Agent.md`
+**研究**：[research.md](./research.md) | **任务**：[tasks.md](./tasks.md) | **检查清单**：[checklist.md](./checklist.md)
 
 ## 概要
 
-在既有 FOF 组合引擎（`src/portfolio/`）上补齐三类压力实验能力：历史熊市窗口识别、合成冲击矩阵（7 冲击 × 3 防御假设 + 相关性失效）、流动性执行压力（半成交/延迟退出/冻结退出/换手上限），并新增 t_nale、defensive_only 对照模式与 OFAT 参数敏感性，由 `scripts/run_bear_market_stress.py` 一键产出 `reports/fof_stress_20261014/` 产物与分类报告。
+在既有 FOF 组合引擎（`src/portfolio/`）与压力测试体系上，完成 T-NALE 与 Risk-Constrained NALE 信号隔离与异质时效逻辑复用修复。由 `scripts/run_bear_market_stress.py` 输出独立修订产物至 `reports/fof_stress_20261014_fixed/`，绝不覆盖旧结果与基准。
 
 ## 技术背景
 
 **语言/版本**：Python 3.11+（`.venv`）
 **主要依赖项**：pandas、numpy、dataclasses（无新增第三方依赖）
 **存储**：本地 JSON K 线（`docs/data/kline/{code}.json`）→ 产物 CSV/MD/JSON
-**测试**：pytest（`tests/test_portfolio_stress.py`，33 项）
+**测试**：pytest（`tests/test_portfolio_stress.py`）
 **目标平台**：Windows 本地离线运行
-**约束条件**：全量编排 <60s（实测 17.5s）；默认参数必须 100% 向后兼容（不动旧回测行为）；未成交风险仓不得清零或变现金；合成结果不得写成历史实证。
+**约束条件**：全量编排 <60s；默认参数 100% 向后兼容；不覆盖旧产物；不人为调参。
 
 ## 宪章检查
 
-- 通过：无新增外部网络请求（离线 K 线）；所有新参数默认值不改变既有行为（有专门回归测试 `test_defaults_reproduce_unchanged_behavior`、`test_fill_fraction_one_is_backward_compatible`）。
-- 通过：质量门禁 small + medium（feature=portfolio_bear_stress）全 [PASS]。
+- 通过：无新增外部网络请求（离线 K 线）；所有新参数默认值不改变既有行为。
+- 通过：质量门禁已开启活动单元 `fix_tnale_stress_isolation`。
 
 ## 项目结构
 
@@ -28,7 +28,10 @@
 
 ```text
 specs/021-bear-market-stress/
+├── spec.md              # 最小化规范（5大范围）
 ├── plan.md              # 本文件
+├── tasks.md             # 任务清单
+├── checklist.md         # 需求质量检查清单
 ├── research.md          # Phase 0：数据覆盖 / T-NALE 现状 / 引擎缺口
 ├── data-model.md        # Phase 1：实体与状态转换
 ├── quickstart.md        # Phase 1：运行与验证入口

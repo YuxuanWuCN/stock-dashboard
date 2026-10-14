@@ -46,9 +46,9 @@ from src.portfolio.contracts import (
 from src.portfolio.rebalancer import RebalanceConfig
 from src.portfolio.stress_scenarios import (
     BearWindow, DEFENSIVE_ASSUMPTIONS, LIQUIDITY_MATRIX,
-    ParamGrid, SHOCK_MATRIX,
+    ParamGrid, SECTOR_HALF_LIVES, SHOCK_MATRIX,
     apply_correlation_stress, apply_liquidity_to_weights, apply_price_shock,
-    identify_bear_windows,
+    compute_point_in_time_stress_signals, identify_bear_windows,
 )
 
 logging.basicConfig(level=logging.INFO, format="%(name)s %(levelname)s %(message)s")
@@ -124,24 +124,20 @@ def build_assets(returns_df: pd.DataFrame) -> Dict[str, AssetInfo]:
     return assets
 
 
-def generate_signals(returns_df: pd.DataFrame, mode: str,
-                     seed: int = 42) -> Dict[str, Dict[str, PointInTimeSignal]]:
-    """为卫星 ETF 生成合成点时信号（离线，不依赖 LLM）。"""
-    rng = np.random.RandomState(seed)
-    sat_cols = [c for c in returns_df.columns if c in SAT_ETF]
-    signals: Dict[str, Dict[str, PointInTimeSignal]] = {}
-    for date in returns_df.index:
-        ds = str(date.date())
-        day_sig: Dict[str, PointInTimeSignal] = {}
-        for tk in sat_cols:
-            score = float(rng.uniform(-0.5, 0.8))
-            conf = float(rng.uniform(0.5, 0.95))
-            day_sig[tk] = PointInTimeSignal(
-                as_of_date=ds, ticker=tk, score=score,
-                confidence=conf, source_method=mode,
-            )
-        signals[ds] = day_sig
-    return signals
+def generate_signals(
+    returns_df: pd.DataFrame,
+    mode: str,
+    seed: int = 42,
+    halflife_mult: float = 1.0,
+) -> Dict[str, Dict[str, PointInTimeSignal]]:
+    """为各策略模式计算严格点时（Point-in-Time）的配置信号，无未来函数。"""
+    return compute_point_in_time_stress_signals(
+        returns_df=returns_df,
+        candidate_tickers=SAT_ETF,
+        mode=mode,
+        alpha=0.4,
+        halflife_mult=halflife_mult,
+    )
 
 
 # ============================================================================
@@ -343,10 +339,10 @@ def run_param_sensitivity(
         )
         assets = build_assets(window)
         engine = FOFBacktestEngine(assets, window, alloc_cfg, risk_cfg)
-        sig_map = generate_signals(window, "t_nale", seed)
+        sig_map = generate_signals(window, "t_nale", seed, halflife_mult=v["halflife_mult"])
         try:
             logs, m = engine.run_backtest(
-                "risk_constrained_nale", sig_map, bt_cfg,
+                "t_nale", sig_map, bt_cfg,
                 t_nale_halflife=5.0 * v["halflife_mult"],
             )
             rows.append({
@@ -541,12 +537,21 @@ def generate_report(
 def main():
     parser = argparse.ArgumentParser(description="熊市回测与压力测试")
     parser.add_argument("--offline", action="store_true", help="使用本地缓存（无外部请求）")
-    parser.add_argument("--out", default="reports/fof_stress_20261014", help="输出目录")
+    parser.add_argument("--out", default="reports/fof_stress_20261014_fixed", help="输出目录")
     parser.add_argument("--seed", type=int, default=42, help="随机种子")
     args = parser.parse_args()
 
     t0 = time.time()
-    out_dir = Path(args.out)
+    out_dir = Path(args.out).resolve()
+    protected_dirs = [
+        (Path(__file__).resolve().parents[1] / "reports" / "fof_stress_20261014").resolve(),
+        (Path(__file__).resolve().parents[1] / "reports" / "fof_rebuild_20261013").resolve(),
+    ]
+    if out_dir in protected_dirs:
+        raise PermissionError(
+            f"安全保护拦截：禁止覆盖历史产物目录 [{out_dir}]！"
+            "请指定新修订目录（如 reports/fof_stress_20261014_fixed）。"
+        )
     logger.info("熊市压力测试开始 | 输出: %s | seed=%d", out_dir, args.seed)
 
     # 1. 加载真实 ETF 收益数据

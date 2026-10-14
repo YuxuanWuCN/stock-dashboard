@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-13 18:10:48+08:00",
-  "trade_date": "2026-10-13",
+  "generated_at": "2026-10-14 16:36:27+08:00",
+  "trade_date": "2026-10-14",
   "code": "002594",
   "name": "比亚迪",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 68.0,
-    "risk": 26.1,
-    "technical": 84.0,
-    "industry": 57.0,
+    "risk_adjusted": 50.0,
+    "risk": 26.8,
+    "technical": 42.0,
+    "industry": 53.8,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-13 18:06:06"
+    "updated_at": "2026-10-14 16:33:30"
   },
   "nale_network": {
     "sector_name": "汽车",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 26.66,
-    "max_drawdown_60d_pct": -14.73,
-    "atr14_pct": 2.33,
+    "annualized_volatility_20d_pct": 26.72,
+    "max_drawdown_60d_pct": -15.03,
+    "atr14_pct": 2.31,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 28.7,
-        "value": 26.66
+        "score": 30.4,
+        "value": 26.72
       },
       {
         "name": "60日最大回撤",
-        "score": 27.5,
-        "value": -14.73
+        "score": 27.3,
+        "value": -15.03
       },
       {
         "name": "ATR百分比",
-        "score": 22.2,
-        "value": 2.33
+        "score": 22.7,
+        "value": 2.31
       },
       {
         "name": "量价异常",
-        "score": 60.8,
+        "score": 55.8,
         "value": 1.17
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 19.18
+        "score": 4.7,
+        "value": 19.2
       }
     ]
   },
@@ -118,28 +118,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 83.352,
-    "ma10": 83.89,
-    "ma20": 84.35249999999999,
-    "ma60": 88.78150000000001,
-    "rsi14": 40.5,
-    "macd_dif": -1.3128635664823491,
-    "macd_dea": -1.3603702666264046,
-    "macd_hist": 0.0950134002881109,
-    "atr14_pct": 2.332813116883778,
-    "boll_position": 0.1024404135154386,
-    "return_5d_pct": 0.19507437210437573,
-    "return_20d_pct": -5.005201710784879,
+    "ma5": 82.978,
+    "ma10": 83.376,
+    "ma20": 84.096,
+    "ma60": 88.64183333333332,
+    "rsi14": 38.7,
+    "macd_dif": -1.4137383998854034,
+    "macd_dea": -1.3710438915885461,
+    "macd_hist": -0.08538901659371456,
+    "atr14_pct": 2.314795785246074,
+    "boll_position": 0.02797674270580169,
+    "return_5d_pct": -2.2446284959788843,
+    "return_20d_pct": -5.925840360401979,
     "volume_ratio_5d": 1.17
   },
   "industry": {
     "name": "汽车",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.69,
-    "return_20d_pct": -8.38,
-    "return_60d_pct": -17.69,
-    "relative_strength_20d_pct": 5.09
+    "return_5d_pct": -4.25,
+    "return_20d_pct": -10.32,
+    "return_60d_pct": -14.94,
+    "relative_strength_20d_pct": 3.92
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.35,
-      "median_return_pct": -0.43,
-      "best_return_pct": 8.57,
-      "worst_return_pct": -5.5
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.67,
+      "median_return_pct": 0.32,
+      "best_return_pct": 11.05,
+      "worst_return_pct": -6.76
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.06,
-      "median_return_pct": -0.89,
-      "best_return_pct": 8.89,
-      "worst_return_pct": -11.31
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.1,
+      "median_return_pct": -1.16,
+      "best_return_pct": 8.4,
+      "worst_return_pct": -9.11
     }
   },
   "fundamental": {
@@ -294,6 +294,18 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 15.0%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 15.0%，风险扣分。",
+      "contribution": -7.0
     }
   ],
   "kline_file": "../kline/002594.json",

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-13 18:10:48+08:00",
-  "trade_date": "2026-10-13",
+  "generated_at": "2026-10-14 16:36:27+08:00",
+  "trade_date": "2026-10-14",
   "code": "688696",
   "name": "极米科技",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 62.1,
-    "risk": 42.7,
-    "technical": 79.0,
-    "industry": 51.3,
+    "risk_adjusted": 58.7,
+    "risk": 44.1,
+    "technical": 89.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-13 18:09:05"
+    "updated_at": "2026-10-14 16:34:46"
   },
   "nale_network": {
     "sector_name": "智能投影",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 45.36,
+    "annualized_volatility_20d_pct": 46.17,
     "max_drawdown_60d_pct": -12.15,
-    "atr14_pct": 4.7,
+    "atr14_pct": 4.74,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 67.3,
-        "value": 45.36
+        "score": 69.6,
+        "value": 46.17
       },
       {
         "name": "60日最大回撤",
-        "score": 15.2,
+        "score": 15.7,
         "value": -12.15
       },
       {
         "name": "ATR百分比",
-        "score": 56.1,
-        "value": 4.7
+        "score": 55.8,
+        "value": 4.74
       },
       {
         "name": "量价异常",
-        "score": 74.3,
-        "value": 1.26
+        "score": 73.8,
+        "value": 1.25
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 19.18
+        "score": 4.7,
+        "value": 19.2
       }
     ]
   },
@@ -112,51 +112,51 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 83.09200000000001,
-    "ma10": 83.656,
-    "ma20": 84.872,
-    "ma60": 74.71016666666668,
-    "rsi14": 53.3,
-    "macd_dif": 1.3970877580344023,
-    "macd_dea": 2.147902859223479,
-    "macd_hist": -1.501630202378153,
-    "atr14_pct": 4.699994806716985,
-    "boll_position": 0.3954180901362064,
-    "return_5d_pct": 3.4691358024691477,
-    "return_20d_pct": -7.001775410563694,
-    "volume_ratio_5d": 1.26
+    "trend": "uptrend",
+    "ma5": 83.27799999999999,
+    "ma10": 83.353,
+    "ma20": 84.6955,
+    "ma60": 75.0795,
+    "rsi14": 56.3,
+    "macd_dif": 1.470910417295471,
+    "macd_dea": 2.01250438033099,
+    "macd_hist": -1.0831879260710382,
+    "atr14_pct": 4.739505143976373,
+    "boll_position": 0.60929800151283,
+    "return_5d_pct": 1.096827456067917,
+    "return_20d_pct": -3.955182072829133,
+    "volume_ratio_5d": 1.25
   },
   "industry": {
     "name": "智能投影",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.69,
-    "return_20d_pct": -8.38,
-    "return_60d_pct": -17.69,
-    "relative_strength_20d_pct": 3.09
+    "return_5d_pct": -4.25,
+    "return_20d_pct": -10.32,
+    "return_60d_pct": -14.94,
+    "relative_strength_20d_pct": 5.89
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 51.7,
-      "average_return_pct": 0.61,
-      "median_return_pct": 0.3,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.18,
+      "median_return_pct": -0.26,
       "best_return_pct": 20.76,
       "worst_return_pct": -11.66
     },
     "horizon_5d": {
-      "up_probability_pct": 41.4,
-      "average_return_pct": 0.39,
-      "median_return_pct": -0.9,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.52,
+      "median_return_pct": -0.82,
       "best_return_pct": 21.08,
       "worst_return_pct": -11.34
     }
@@ -291,14 +291,14 @@
   "reasons": [
     {
       "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 45.4%，波动偏高。",
+      "detail": "20日年化波动率 46.2%，波动偏高。",
       "contribution": -5.0
     }
   ],

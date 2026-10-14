@@ -43,6 +43,13 @@ def test_summarize():
 
     summary = summarize_text(full_text, max_length=150, min_length=50)
 
+    # 摘要必须是裁短的非空字符串；TextRank 为确定性算法，同输入必同输出
+    assert isinstance(summary, str) and summary.strip(), "摘要必须是非空字符串"
+    assert 0 < len(summary) < len(full_text), "摘要长度必须严格小于原文"
+    assert summary == summarize_text(full_text, max_length=150, min_length=50), (
+        "摘要算法必须可复现"
+    )
+
     print(f"摘要长度: {len(summary)} 字")
     print(f"压缩比例: {len(summary)/len(full_text)*100:.1f}%\n")
     print(f"摘要内容:\n{summary}\n")
@@ -95,6 +102,26 @@ def test_deduplication():
     # 执行去重
     kept_indices = deduplicate_texts(texts, threshold=3)
 
+    # Simhash 性质：确定性、自距离为 0、两两对称且在 [0, 64] 内
+    assert compute_simhash(texts[0]) == hashes[0], "Simhash 必须可复现"
+    assert hamming_distance(hashes[0], hashes[0]) == 0, "同文自反汉明距离必须为 0"
+    for i in range(len(texts)):
+        for j in range(len(texts)):
+            dist = hamming_distance(hashes[i], hashes[j])
+            assert dist == hamming_distance(hashes[j], hashes[i]), "汉明距离必须对称"
+            assert 0 <= dist <= 64, "64 位哈希汉明距离必须在 [0, 64]"
+
+    # 完全相同文本必判重；语义无关文本不应判重
+    assert is_duplicate(texts[0], texts[0]), "相同文本必须判定为重复"
+    assert not is_duplicate(texts[0], "央行今日下调存款准备金率0.5个百分点，释放长期流动性约一万亿元"), (
+        "无关文本不应判定为重复"
+    )
+
+    # 去重结果合法性：升序无重复、首条必保留、不超过原始数量
+    assert kept_indices == sorted(set(kept_indices)), "保留索引必须升序且无重复"
+    assert kept_indices and kept_indices[0] == 0, "去重必须保留首条且结果非空"
+    assert len(kept_indices) <= len(texts), "去重后数量不得超过原始数量"
+
     print(f"\n去重后保留的索引: {kept_indices}")
     print("\n去重后新闻列表:")
     for idx in kept_indices:
@@ -130,6 +157,7 @@ def test_end_to_end():
     summaries = []
     total_original_len = 0
     total_summary_len = 0
+    original_lens = []
 
     for i, news in enumerate(news_list):
         full_text = f"{news['title']} {news['content']}"
@@ -137,6 +165,7 @@ def test_end_to_end():
 
         summary = summarize_text(full_text, max_length=100)
         summaries.append(summary)
+        original_lens.append(len(full_text))
         total_summary_len += len(summary)
 
         print(f"新闻 {i+1}:")
@@ -148,6 +177,14 @@ def test_end_to_end():
 
     # 步骤2: 去重
     kept_indices = deduplicate_texts(summaries, threshold=3)
+
+    # 端到端合法性：每条摘要非空且不长于原文；去重索引合法且保序
+    assert len(summaries) == len(news_list), "摘要数量必须与新闻数量一致"
+    for i, (summary, orig_len) in enumerate(zip(summaries, original_lens)):
+        assert isinstance(summary, str) and summary.strip(), f"新闻 {i+1} 摘要必须非空"
+        assert len(summary) <= orig_len, f"新闻 {i+1} 摘要不得长于原文"
+    assert kept_indices == sorted(set(kept_indices)), "保留索引必须升序且无重复"
+    assert all(0 <= idx < len(summaries) for idx in kept_indices), "保留索引必须在合法范围"
 
     print(f"去重后保留: {len(kept_indices)} 条")
     for idx in kept_indices:

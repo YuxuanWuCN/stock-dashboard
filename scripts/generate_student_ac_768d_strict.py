@@ -305,7 +305,11 @@ def generate_embeddings_fastembed(
         raise ExtractionError("fastembed 未安装，请执行 pip install fastembed") from e
 
     logger.info(f"加载 FastEmbed 本地中文模型: {EMBEDDING_MODEL}")
-    embedder = TextEmbedding(model_name=EMBEDDING_MODEL)
+    # 缓存钉到项目内稳定路径：fastembed 默认缓存跟随 %TEMP%，而质量门禁等工作流会将
+    # TEMP 重定向到专用目录（BUG-0019：临时目录下无模型缓存 → 离线下载失败）。
+    embed_cache_dir = DATA_DIR / "cache" / "fastembed"
+    embed_cache_dir.mkdir(parents=True, exist_ok=True)
+    embedder = TextEmbedding(model_name=EMBEDDING_MODEL, cache_dir=str(embed_cache_dir))
 
     logger.info(f"开始批量提取 {len(texts)} 篇金融研报的 768D 语义向量 (batch_size={batch_size})...")
     raw_vectors = list(embedder.embed(texts, batch_size=batch_size))

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-13 18:10:48+08:00",
-  "trade_date": "2026-10-13",
+  "generated_at": "2026-10-14 16:36:27+08:00",
+  "trade_date": "2026-10-14",
   "code": "600660",
   "name": "福耀玻璃",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 70.9,
-    "risk": 24.6,
-    "technical": 94.0,
+    "risk_adjusted": 73.3,
+    "risk": 26.0,
+    "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-13 18:09:02"
+    "updated_at": "2026-10-14 16:34:43"
   },
   "nale_network": {
     "sector_name": "汽车玻璃",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 28.36,
+    "annualized_volatility_20d_pct": 26.61,
     "max_drawdown_60d_pct": -12.16,
-    "atr14_pct": 2.53,
+    "atr14_pct": 2.47,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 33.9,
-        "value": 28.36
+        "score": 29.2,
+        "value": 26.61
       },
       {
         "name": "60日最大回撤",
-        "score": 15.8,
+        "score": 16.3,
         "value": -12.16
       },
       {
         "name": "ATR百分比",
-        "score": 25.7,
-        "value": 2.53
+        "score": 25.6,
+        "value": 2.47
       },
       {
         "name": "量价异常",
-        "score": 52.6,
-        "value": 1.14
+        "score": 73.3,
+        "value": 1.25
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 19.18
+        "score": 4.7,
+        "value": 19.2
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "range",
-    "ma5": 53.638,
-    "ma10": 53.214,
-    "ma20": 53.239,
-    "ma60": 54.59016666666667,
-    "rsi14": 51.7,
-    "macd_dif": -0.24560200254224895,
-    "macd_dea": -0.4514141998505302,
-    "macd_hist": 0.41162439461656253,
-    "atr14_pct": 2.5253124706488763,
-    "boll_position": 0.8238279747308518,
-    "return_5d_pct": 2.1509433962264124,
-    "return_20d_pct": -1.1141552511415465,
-    "volume_ratio_5d": 1.14
+    "ma5": 53.872,
+    "ma10": 53.412,
+    "ma20": 53.318,
+    "ma60": 54.67433333333334,
+    "rsi14": 54.4,
+    "macd_dif": -0.12950761286412416,
+    "macd_dea": -0.3870328846542289,
+    "macd_hist": 0.5150505435802095,
+    "atr14_pct": 2.4740579490034613,
+    "boll_position": 0.9654786632311044,
+    "return_5d_pct": 2.183650615901467,
+    "return_20d_pct": 2.9716005266127388,
+    "volume_ratio_5d": 1.25
   },
   "industry": {
     "name": "汽车玻璃",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.69,
-    "return_20d_pct": -8.38,
-    "return_60d_pct": -17.69,
-    "relative_strength_20d_pct": 8.98
+    "return_5d_pct": -4.25,
+    "return_20d_pct": -10.32,
+    "return_60d_pct": -14.94,
+    "relative_strength_20d_pct": 12.82
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,16 +147,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.12,
-      "median_return_pct": -0.0,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.42,
+      "median_return_pct": -0.46,
       "best_return_pct": 8.33,
-      "worst_return_pct": -4.79
+      "worst_return_pct": -4.86
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.57,
-      "median_return_pct": -0.06,
+      "up_probability_pct": 53.3,
+      "average_return_pct": -0.32,
+      "median_return_pct": 0.27,
       "best_return_pct": 6.21,
       "worst_return_pct": -6.15
     }

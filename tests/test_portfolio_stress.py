@@ -27,9 +27,9 @@ from src.portfolio.contracts import (
 from src.portfolio.risk_budget import RiskBudgetManager
 from src.portfolio.stress_scenarios import (
     BearWindow, DEFENSIVE_ASSUMPTIONS, LIQUIDITY_MATRIX,
-    ParamGrid, SHOCK_MATRIX, ShockScenario,
+    ParamGrid, SECTOR_HALF_LIVES, SHOCK_MATRIX, ShockScenario,
     apply_correlation_stress, apply_liquidity_to_weights, apply_price_shock,
-    identify_bear_windows,
+    compute_point_in_time_stress_signals, identify_bear_windows,
 )
 
 
@@ -545,3 +545,182 @@ class TestEngineLiquidityStress:
             "delayed_exit_days 未对回测结果产生任何影响，接线失效"
         # 基线在 due_idx 若不是调仓日，则强制减仓应使其换手 > 0（新参数不是空操作）
         assert logs3 != logs0
+
+
+# ============================================================================
+# 13. T-NALE 信号隔离与点时时效修复验证 (spec-021 验收标准)
+# ============================================================================
+
+class TestTNaleStressIsolation:
+    def _create_multi_asset_test_data(self, n_days: int = 40):
+        dates = pd.date_range("2026-01-05", periods=n_days, freq="B")
+        # 构造不同行业收益，使其产生分化的动量和正负切换
+        rng = np.random.RandomState(42)
+        data = {
+            "510300": [0.0005] * n_days,  # 核心基准
+            "512760": [0.01 if (i % 7 < 4) else -0.008 for i in range(n_days)],  # 半导体
+            "515790": [0.008 if (i % 5 < 3) else -0.006 for i in range(n_days)], # 光伏
+            "518880": [0.003 if (i % 3 == 0) else -0.002 for i in range(n_days)], # 黄金
+            "512010": [0.005 if (i % 9 < 5) else -0.004 for i in range(n_days)], # 医药
+            "511010": [0.0001] * n_days,  # 防御国债
+        }
+        df = pd.DataFrame(data, index=dates)
+        assets = {
+            "510300": AssetInfo(ticker="510300", name="BETA", asset_type=AssetType.BROAD_EQUITY,
+                                role=AssetRole.CORE_BETA, benchmark_weight=0.3),
+            "512760": AssetInfo(ticker="512760", name="SEMI", asset_type=AssetType.SECTOR_ETF,
+                                role=AssetRole.SATELLITE_ALPHA, benchmark_weight=0.0, max_weight=0.15),
+            "515790": AssetInfo(ticker="515790", name="SOLAR", asset_type=AssetType.SECTOR_ETF,
+                                role=AssetRole.SATELLITE_ALPHA, benchmark_weight=0.0, max_weight=0.15),
+            "518880": AssetInfo(ticker="518880", name="GOLD", asset_type=AssetType.SECTOR_ETF,
+                                role=AssetRole.SATELLITE_ALPHA, benchmark_weight=0.0, max_weight=0.15),
+            "512010": AssetInfo(ticker="512010", name="MED", asset_type=AssetType.SECTOR_ETF,
+                                role=AssetRole.SATELLITE_ALPHA, benchmark_weight=0.0, max_weight=0.15),
+            "511010": AssetInfo(ticker="511010", name="DEF", asset_type=AssetType.SECTOR_ETF,
+                                role=AssetRole.CORE_DEFENSIVE, benchmark_weight=0.7),
+        }
+        return df, assets, dates
+
+    def test_static_vs_t_nale_signal_and_weight_differentiation(self):
+        """测试 1：静态 NALE 与 T-NALE 产生截面差异有效信号与目标配置权重。"""
+        from src.portfolio.allocator import AllocationConfig, FOFAllocator
+        from src.portfolio.backtest import BacktestConfig, FOFBacktestEngine
+
+        df, assets, dates = self._create_multi_asset_test_data(n_days=40)
+        sat_tickers = ["512760", "515790", "518880", "512010"]
+
+        static_sigs = compute_point_in_time_stress_signals(df, sat_tickers, mode="risk_constrained_nale")
+        tnale_sigs = compute_point_in_time_stress_signals(df, sat_tickers, mode="t_nale")
+
+        # 1. 验证信号层面存在截面分化（T-NALE 分数与静态 NALE 分数不全相同）
+        different_signals_count = 0
+        different_cross_section_ratio_count = 0
+
+        for d in dates[5:]:
+            ds = str(d.date())
+            s_map = static_sigs.get(ds, {})
+            t_map = tnale_sigs.get(ds, {})
+            # 至少有一只标的分数有差异
+            diffs = [abs(s_map[tk].score - t_map[tk].score) for tk in sat_tickers if tk in s_map and tk in t_map]
+            if diffs and max(diffs) > 1e-4:
+                different_signals_count += 1
+
+            # 验证截面相对比例变化（证明不是同乘一个常数，而是异质半衰期导致相对排序变化）
+            pos_static = [s_map[tk].score for tk in sat_tickers if tk in s_map and s_map[tk].score > 0]
+            pos_tnale = [t_map[tk].score for tk in sat_tickers if tk in t_map and t_map[tk].score > 0]
+            if len(pos_static) >= 2 and len(pos_tnale) >= 2:
+                r_static = pos_static[0] / (pos_static[1] + 1e-6)
+                r_tnale = pos_tnale[0] / (pos_tnale[1] + 1e-6)
+                if abs(r_static - r_tnale) > 1e-4:
+                    different_cross_section_ratio_count += 1
+
+        assert different_signals_count > 0, "T-NALE 与静态 NALE 信号完全相同，未实现信号隔离"
+        assert different_cross_section_ratio_count > 0, "T-NALE 信号截面相对排序未发生任何分化（仍为标量缩放）"
+
+        # 2. 验证引擎目标配置权重与回测结果分化
+        cfg = BacktestConfig(start_date=str(dates[0].date()), end_date=str(dates[-1].date()), rebalance_frequency_days=5)
+        alloc_cfg = AllocationConfig(base_defensive_weight=0.50, base_beta_weight=0.30, base_satellite_budget=0.20)
+        engine_static = FOFBacktestEngine(assets, df, alloc_config=alloc_cfg)
+        engine_tnale = FOFBacktestEngine(assets, df, alloc_config=alloc_cfg)
+
+        logs_static, m_static = engine_static.run_backtest("risk_constrained_nale", static_sigs, cfg)
+        logs_tnale, m_tnale = engine_tnale.run_backtest("t_nale", tnale_sigs, cfg)
+
+        # 检查权重偏离度
+        weight_diffs = []
+        for l_s, l_t in zip(logs_static, logs_tnale):
+            w_diff = sum(abs(l_s.weights.get(tk, 0.0) - l_t.weights.get(tk, 0.0)) for tk in assets)
+            weight_diffs.append(w_diff)
+
+        assert max(weight_diffs) > 1e-3, f"回测中 T-NALE 与静态 NALE 配置权重完全重合 (max_diff={max(weight_diffs)})"
+        # 指标分化：收益、回撤或换手必然产生差异
+        assert (m_static.total_turnover != m_tnale.total_turnover or
+                m_static.annualized_return != m_tnale.annualized_return or
+                m_static.max_drawdown != m_tnale.max_drawdown), "量化指标完全一致，隔离失败"
+
+    def test_mode_isolation_no_aliasing(self):
+        """测试 2：模式标识不会把 T-NALE 映射成 risk_constrained_nale。"""
+        from scripts.run_bear_market_stress import run_all_modes
+        df, assets, dates = self._create_multi_asset_test_data(n_days=35)
+
+        start = str(dates[0].date())
+        end = str(dates[-1].date())
+        results = run_all_modes(df, start, end, seed=42)
+
+        assert "t_nale" in results
+        assert "risk_constrained_nale" in results
+
+        _, m_rc = results["risk_constrained_nale"]
+        _, m_tnale = results["t_nale"]
+
+        assert m_rc is not None and m_tnale is not None
+        # 验证两个模式结果不再完全相等（历史 bug：6 个浮点指标 100% 相同）
+        same_metrics = (
+            abs(m_rc.annualized_return - m_tnale.annualized_return) < 1e-9 and
+            abs(m_rc.max_drawdown - m_tnale.max_drawdown) < 1e-9 and
+            abs(m_rc.total_turnover - m_tnale.total_turnover) < 1e-9 and
+            abs(m_rc.total_trading_costs - m_tnale.total_trading_costs) < 1e-9
+        )
+        assert not same_metrics, "历史 Bug 复现：t_nale 与 risk_constrained_nale 指标仍然 100% 完全相同"
+
+    def test_t_nale_point_in_time_truncation_invariance(self):
+        """测试 3：未来数据追加不改变历史信号与节点年龄（严格无未来函数）。"""
+        df, _, dates = self._create_multi_asset_test_data(n_days=40)
+        sat_tickers = ["512760", "515790", "518880", "512010"]
+
+        # 截断数据 T_short = 25 日
+        df_short = df.iloc[:25].copy()
+        sigs_short = compute_point_in_time_stress_signals(df_short, sat_tickers, mode="t_nale")
+
+        # 完整数据 T_full = 40 日（向未来追加 15 日）
+        sigs_full = compute_point_in_time_stress_signals(df, sat_tickers, mode="t_nale")
+
+        # 验证在历史区间 t <= 25 内，信号分数、置信度、节点年龄和衰减因子 100% 逐位不变
+        short_dates = [str(d.date()) for d in df_short.index]
+        for ds in short_dates:
+            assert ds in sigs_short and ds in sigs_full
+            for tk in sat_tickers:
+                s_short = sigs_short[ds][tk]
+                s_full = sigs_full[ds][tk]
+
+                assert s_short.score == pytest.approx(s_full.score, abs=1e-12), f"{ds} {tk} score 因未来数据发生改变"
+                assert s_short.confidence == pytest.approx(s_full.confidence, abs=1e-12)
+                assert s_short.details.get("node_age") == s_full.details.get("node_age"), f"{ds} {tk} node_age 受到未来数据污染"
+                assert s_short.details.get("t_nale_factor") == pytest.approx(s_full.details.get("t_nale_factor"), abs=1e-12)
+
+    def test_output_dir_protection(self):
+        """测试 4：结果产物安全拦截，禁止覆盖历史产物目录。"""
+        import os
+        import subprocess
+        import sys
+        from pathlib import Path
+
+        script_path = str(Path("scripts/run_bear_market_stress.py").resolve())
+        python_exe = sys.executable
+        env = dict(os.environ, PYTHONIOENCODING="utf-8")
+
+        # 尝试传入受保护的历史目录 reports/fof_stress_20261014
+        proc = subprocess.run(
+            [python_exe, script_path, "--out", "reports/fof_stress_20261014"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            env=env,
+        )
+        assert proc.returncode != 0, "安全拦截失效：对 reports/fof_stress_20261014 应当报错拒绝退出"
+        output = (proc.stderr or "") + (proc.stdout or "")
+        assert "安全保护拦截" in output, "未输出安全保护拦截提示"
+
+        # 尝试传入受保护的基准目录 reports/fof_rebuild_20261013
+        proc2 = subprocess.run(
+            [python_exe, script_path, "--out", "reports/fof_rebuild_20261013"],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            env=env,
+        )
+        assert proc2.returncode != 0, "安全拦截失效：对 reports/fof_rebuild_20261013 应当报错拒绝退出"
+        output2 = (proc2.stderr or "") + (proc2.stdout or "")
+        assert "安全保护拦截" in output2, "未输出安全保护拦截提示"

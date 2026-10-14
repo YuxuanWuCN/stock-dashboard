@@ -153,7 +153,8 @@ class ServerConfigAndSchedulerTestCase(unittest.TestCase):
         self.assertIn("next_scheduled_time", data)
 
     def test_system_run_update_endpoint(self):
-        with patch.object(server.daily_scheduler, "trigger_update_now", return_value=True):
+        with patch.object(server.daily_scheduler, "is_updating", False), \
+             patch.object(server.daily_scheduler, "trigger_update_now", return_value=True):
             response = self.client.post("/api/system/run-update", json={"force": True})
             self.assertEqual(response.status_code, 200)
             data = response.get_json()

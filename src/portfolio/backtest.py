@@ -82,7 +82,7 @@ class FOFBacktestEngine:
         mode: str,
         signals_by_date: Dict[str, Dict[str, PointInTimeSignal]],
         config: BacktestConfig,
-        t_nale_halflife: float = 5.0,
+        t_nale_halflife: float | Dict[str, float] = 5.0,
         t_nale_age_map: Optional[Dict[str, int]] = None,
         fill_fraction: float = 1.0,
         delayed_exit_days: int = 0,
@@ -344,19 +344,52 @@ class FOFBacktestEngine:
     def _apply_t_nale_decay(
         self,
         signals: Dict[str, PointInTimeSignal],
-        halflife: float,
+        halflife: float | Dict[str, float] = 5.0,
         age_map: Optional[Dict[str, int]] = None,
     ) -> Dict[str, PointInTimeSignal]:
-        """T-NALE 异质半衰期衰减：score_decayed = score * 0.5^(age/halflife)。"""
+        """T-NALE 异质半衰期衰减：score_decayed = score * 0.5^(age/halflife)。
+
+        支持：
+        1. 异质半衰期字典映射 {ticker: halflife_days} 或标量半衰期（倍率）；
+        2. 显式年龄映射 age_map 或从信号 details["node_age"] 中自动提取点时动态年龄；
+        3. 若信号 details 中已标记 is_t_nale_decayed=True 且未显式指定覆盖参数，则保持现有衰减避免二次衰减。
+        """
         import copy
         decayed: Dict[str, PointInTimeSignal] = {}
         amap = age_map or {}
         for ticker, sig in signals.items():
-            age = amap.get(ticker, 1)  # 默认假设信号年龄 1 天
-            factor = math.pow(0.5, age / max(halflife, 0.1))
+            # 若信号在生成层已按异质半衰期衰减过，且调用者未提供显式 age_map 覆盖且 halflife 为基准 5.0，则透传
+            if sig.details.get("is_t_nale_decayed") and not amap and (isinstance(halflife, (int, float)) and halflife == 5.0):
+                decayed[ticker] = sig
+                continue
+
+            if ticker in amap:
+                age = float(amap[ticker])
+            else:
+                age = float(sig.details.get("node_age", sig.details.get("t_nale_age", 1.0)))
+
+            if isinstance(halflife, dict):
+                h = float(halflife.get(ticker, 5.0))
+            elif isinstance(halflife, (int, float)):
+                base_h = sig.details.get("sector_half_life")
+                if base_h is not None:
+                    mult = float(halflife) / 5.0
+                    h = float(base_h) * mult
+                else:
+                    h = float(halflife)
+            else:
+                h = 5.0
+
+            factor = math.pow(0.5, age / max(h, 0.1))
             new_sig = copy.copy(sig)
             new_sig.score = sig.score * factor
-            new_sig.details = {**sig.details, "t_nale_age": age, "t_nale_factor": factor}
+            new_sig.details = {
+                **sig.details,
+                "t_nale_age": age,
+                "t_nale_factor": factor,
+                "t_nale_halflife": h,
+                "is_t_nale_decayed": True,
+            }
             decayed[ticker] = new_sig
         return decayed
 

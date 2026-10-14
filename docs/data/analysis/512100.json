@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-13 18:10:48+08:00",
-  "trade_date": "2026-10-13",
+  "generated_at": "2026-10-14 16:36:27+08:00",
+  "trade_date": "2026-10-14",
   "code": "512100",
   "name": "中证1000ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 52.2,
-    "risk": 23.9,
+    "risk_adjusted": 48.5,
+    "risk": 25.3,
     "technical": 42.0,
-    "industry": 48.1,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-13 18:09:09"
+    "updated_at": "2026-10-14 16:34:50"
   },
   "nale_network": {
     "sector_name": "小盘成长",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 21.98,
-    "max_drawdown_60d_pct": -12.77,
-    "atr14_pct": 2.65,
+    "annualized_volatility_20d_pct": 22.07,
+    "max_drawdown_60d_pct": -13.0,
+    "atr14_pct": 2.64,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 18.1,
-        "value": 21.98
+        "score": 17.5,
+        "value": 22.07
       },
       {
         "name": "60日最大回撤",
-        "score": 18.7,
-        "value": -12.77
+        "score": 19.2,
+        "value": -13.0
       },
       {
         "name": "ATR百分比",
-        "score": 27.5,
-        "value": 2.65
+        "score": 27.3,
+        "value": 2.64
       },
       {
         "name": "量价异常",
-        "score": 81.9,
-        "value": 1.32
+        "score": 90.7,
+        "value": 1.43
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 19.18
+        "score": 4.7,
+        "value": 19.2
       }
     ]
   },
@@ -118,28 +118,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 2.898,
-    "ma10": 2.982,
-    "ma20": 3.0300000000000002,
-    "ma60": 3.033666666666667,
-    "rsi14": 31.0,
-    "macd_dif": -0.053310766455179515,
-    "macd_dea": -0.028011666954976897,
-    "macd_hist": -0.050598199000405235,
-    "atr14_pct": 2.645311448846984,
-    "boll_position": 0.020842576250151852,
-    "return_5d_pct": -4.36241610738255,
-    "return_20d_pct": -8.064516129032262,
-    "volume_ratio_5d": 1.32
+    "ma5": 2.866,
+    "ma10": 2.9480000000000004,
+    "ma20": 3.0149999999999997,
+    "ma60": 3.027,
+    "rsi14": 28.5,
+    "macd_dif": -0.061781564096363706,
+    "macd_dea": -0.034765646316558096,
+    "macd_hist": -0.05403183555961122,
+    "atr14_pct": 2.643843142742497,
+    "boll_position": 0.0044317488599493375,
+    "return_5d_pct": -5.387205387205396,
+    "return_20d_pct": -9.646302250803851,
+    "volume_ratio_5d": 1.43
   },
   "industry": {
     "name": "小盘成长",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.69,
-    "return_20d_pct": -8.38,
-    "return_60d_pct": -17.69,
-    "relative_strength_20d_pct": 2.03
+    "return_5d_pct": -4.25,
+    "return_20d_pct": -10.32,
+    "return_60d_pct": -14.94,
+    "relative_strength_20d_pct": 0.2
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.84,
-      "median_return_pct": 1.08,
-      "best_return_pct": 6.65,
-      "worst_return_pct": -9.35
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.66,
+      "median_return_pct": 0.46,
+      "best_return_pct": 6.34,
+      "worst_return_pct": -5.18
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.14,
-      "median_return_pct": -0.44,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.07,
+      "median_return_pct": -0.6,
       "best_return_pct": 9.06,
-      "worst_return_pct": -8.72
+      "worst_return_pct": -7.76
     }
   },
   "fundamental": null,
@@ -168,6 +168,12 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=28.5，短期超卖。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/512100.json",

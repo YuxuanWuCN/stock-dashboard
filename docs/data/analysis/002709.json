@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-13 18:10:48+08:00",
-  "trade_date": "2026-10-13",
+  "generated_at": "2026-10-14 16:36:27+08:00",
+  "trade_date": "2026-10-14",
   "code": "002709",
   "name": "天赐材料",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 49.8,
-    "risk": 57.5,
-    "technical": 78.0,
-    "industry": 57.0,
+    "risk_adjusted": 40.2,
+    "risk": 59.5,
+    "technical": 57.0,
+    "industry": 46.9,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-13 18:08:57"
+    "updated_at": "2026-10-14 16:34:38"
   },
   "nale_network": {
     "sector_name": "电解液",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 50.12,
+    "annualized_volatility_20d_pct": 53.82,
     "max_drawdown_60d_pct": -23.71,
-    "atr14_pct": 4.65,
+    "atr14_pct": 5.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 76.0,
-        "value": 50.12
+        "score": 76.6,
+        "value": 53.82
       },
       {
         "name": "60日最大回撤",
-        "score": 55.6,
+        "score": 54.1,
         "value": -23.71
       },
       {
         "name": "ATR百分比",
-        "score": 53.8,
-        "value": 4.65
+        "score": 61.6,
+        "value": 5.14
       },
       {
         "name": "量价异常",
         "score": 99.4,
-        "value": 2.21
+        "value": 2.28
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 19.18
+        "score": 4.7,
+        "value": 19.2
       }
     ]
   },
@@ -118,28 +118,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 33.422,
-    "ma10": 32.657,
-    "ma20": 32.903,
-    "ma60": 35.64783333333333,
-    "rsi14": 45.4,
-    "macd_dif": -0.6928008401687933,
-    "macd_dea": -1.0738889039253479,
-    "macd_hist": 0.7621761275131091,
-    "atr14_pct": 4.649889455525166,
-    "boll_position": 0.4778413014196903,
-    "return_5d_pct": 5.534105534105538,
-    "return_20d_pct": -3.529411764705892,
-    "volume_ratio_5d": 2.21
+    "ma5": 33.362,
+    "ma10": 32.416,
+    "ma20": 32.764500000000005,
+    "ma60": 35.52833333333333,
+    "rsi14": 39.0,
+    "macd_dif": -0.8179475858995175,
+    "macd_dea": -1.022700642298846,
+    "macd_hist": 0.409506112798657,
+    "atr14_pct": 5.140344096633825,
+    "boll_position": 0.11971650464654265,
+    "return_5d_pct": -0.9615384615384692,
+    "return_20d_pct": -8.226908226908236,
+    "volume_ratio_5d": 2.28
   },
   "industry": {
     "name": "电解液",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.69,
-    "return_20d_pct": -8.38,
-    "return_60d_pct": -17.69,
-    "relative_strength_20d_pct": 6.56
+    "return_5d_pct": -4.25,
+    "return_20d_pct": -10.32,
+    "return_60d_pct": -14.94,
+    "relative_strength_20d_pct": 1.62
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,17 +147,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.23,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.09,
       "median_return_pct": -1.12,
-      "best_return_pct": 18.71,
+      "best_return_pct": 14.8,
       "worst_return_pct": -17.52
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.99,
-      "median_return_pct": -0.63,
-      "best_return_pct": 10.45,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.6,
+      "median_return_pct": -1.05,
+      "best_return_pct": 23.26,
       "worst_return_pct": -25.92
     }
   },
@@ -302,16 +302,16 @@
       "contribution": -7.0
     },
     {
-      "type": "positive",
-      "title": "成交活跃",
-      "detail": "近5日量能为前期2.21倍。",
-      "contribution": 5.0
-    },
-    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 50.1%，波动偏高。",
+      "detail": "20日年化波动率 53.8%，波动偏高。",
       "contribution": -5.0
+    },
+    {
+      "type": "warning",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期2.28倍。",
+      "contribution": 2.0
     }
   ],
   "kline_file": "../kline/002709.json",

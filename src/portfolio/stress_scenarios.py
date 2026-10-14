@@ -19,6 +19,9 @@ from typing import Any, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
+from src.portfolio.contracts import PointInTimeSignal
+from src.portfolio.signal_adapter import NALESignalAdapter
+
 logger = logging.getLogger("portfolio.stress_scenarios")
 
 
@@ -403,3 +406,188 @@ class ParamGrid:
         for v in self.defensive_returns:
             variants.append({**base, "defensive_ret": v, "_dimension": "defensive_ret"})
         return variants
+
+
+# ============================================================================
+# 5. 异质半衰期先验与点时压力信号引擎
+# ============================================================================
+
+# 行业/主题 ETF 先验信息半衰期（交易日，对齐 tools/run_fof_pipeline.py 与产业链物理流转）
+SECTOR_HALF_LIVES: Dict[str, float] = {
+    "512760": 12.0,  # 芯片/半导体: 产业链库存时滞长，半衰期 12 天
+    "515790": 8.0,   # 光伏/新能源: 产能周期中等，半衰期 8 天
+    "518880": 3.0,   # 黄金: 宏观地缘突发脉冲，时效性极强，半衰期 3 天
+    "512010": 15.0,  # 医药: 政策/集采长周期慢变量，半衰期 15 天
+    "512690": 10.0,  # 酒/消费: 渠道库存与动销周期，半衰期 10 天
+    "588000": 4.0,   # 科创50: 高 Beta 成长情绪脉冲，半衰期 4 天
+    "515030": 8.0,   # 新能车: 产能排产周期，半衰期 8 天
+    "512880": 5.0,   # 证券: 市场交易量高频情绪，半衰期 5 天
+    "512660": 6.0,   # 军工: 订单驱动脉冲，半衰期 6 天
+    "512100": 5.0,   # 中证1000: 小盘成长情绪，半衰期 5 天
+    "515050": 10.0,  # 5G通信: 算力光模块与通信设备周期，半衰期 10 天
+}
+
+
+def compute_point_in_time_stress_signals(
+    returns_df: pd.DataFrame,
+    candidate_tickers: List[str],
+    mode: str,
+    alpha: float = 0.4,
+    halflife_mult: float = 1.0,
+) -> Dict[str, Dict[str, PointInTimeSignal]]:
+    """为各策略模式计算严格点时（Point-in-Time）的配置信号，无未来函数。
+
+    依据普通 FOF 回测流水线（tools/run_fof_pipeline.py）标准复用：
+    1. baseline / defensive_only: 无卫星信号（返回空字典）；
+    2. sentiment_only: 仅包含截至 t-1 的滚动动量/夏普打分，无网络拓扑与时效衰减；
+    3. nale / risk_constrained_nale: 静态 NALE（通过行业拓扑邻接矩阵静态传导，无时效衰减）；
+    4. t_nale: 异质时效 T-NALE，各行业先验半衰期（SECTOR_HALF_LIVES）与动量极性切换
+       动态信息年龄（node_ages）截面衰减，再经动态 Alpha 拓扑传导。
+    """
+    def _norm_date(val: Any) -> str:
+        s = str(val)
+        return s[:10] if " " in s else s
+
+    dates = list(returns_df.index)
+    sat_cols = [c for c in returns_df.columns if c in candidate_tickers]
+    signals: Dict[str, Dict[str, PointInTimeSignal]] = {}
+
+    if mode in ("baseline", "defensive_only") or not sat_cols:
+        for d in dates:
+            signals[_norm_date(d)] = {}
+        return signals
+
+    n_sat = len(sat_cols)
+    adapter = NALESignalAdapter(default_alpha=alpha)
+
+    # 构造行业拓扑邻接矩阵 W（对齐 tools/run_fof_pipeline.py 先验）
+    base_adj = np.eye(n_sat)
+    for i in range(n_sat):
+        for j in range(n_sat):
+            if i != j:
+                c1, c2 = sat_cols[i], sat_cols[j]
+                if c1 in ["512760", "588000"] and c2 in ["512760", "588000"]:
+                    base_adj[i, j] = 0.6
+                elif c1 in ["515790", "512760"] and c2 in ["515790", "512760"]:
+                    base_adj[i, j] = 0.4
+                elif c1 == "518880" or c2 == "518880":
+                    base_adj[i, j] = 0.1
+                else:
+                    base_adj[i, j] = 0.2
+
+    node_ages: Dict[str, float] = {c: 0.0 for c in sat_cols}
+    prev_signs: Dict[str, float] = {c: 0.0 for c in sat_cols}
+
+    for t_idx in range(len(dates)):
+        curr_date = _norm_date(dates[t_idx])
+        if t_idx == 0:
+            signals[curr_date] = {
+                tk: PointInTimeSignal(
+                    as_of_date=curr_date,
+                    ticker=tk,
+                    score=0.0,
+                    confidence=0.5,
+                    source_method=mode,
+                    is_valid=True,
+                    details={"node_age": 0.0, "sector_half_life": SECTOR_HALF_LIVES.get(tk, 7.0)},
+                )
+                for tk in sat_cols
+            }
+            continue
+
+        # 截至 t-1 的历史滚动窗口 (严格点时，长度最多 20 日)
+        lookback_slice = returns_df.iloc[max(0, t_idx - 20):t_idx]
+
+        raw_scores: Dict[str, float] = {}
+        for c in sat_cols:
+            m_ret = float(lookback_slice[c].mean())
+            m_std = float(lookback_slice[c].std(ddof=1)) if len(lookback_slice) > 1 else 0.01
+            if math.isnan(m_std) or m_std < 1e-6:
+                m_std = 1e-6
+            sharpe_proxy = m_ret / m_std
+            score_val = float(np.tanh(sharpe_proxy * 1.5))
+            raw_scores[c] = score_val
+
+            # 动态跟踪节点信息年龄（自最近一次动量极性切换起计算）
+            curr_sign = float(np.sign(score_val))
+            if curr_sign != prev_signs[c] or prev_signs[c] == 0.0:
+                node_ages[c] = 0.0
+                prev_signs[c] = curr_sign
+            else:
+                node_ages[c] += 1.0
+
+        if mode == "sentiment_only":
+            signals[curr_date] = {
+                tk: PointInTimeSignal(
+                    as_of_date=curr_date,
+                    ticker=tk,
+                    score=raw_scores[tk],
+                    confidence=0.8,
+                    source_method="sentiment_only",
+                    is_valid=True,
+                    details={"node_age": node_ages[tk], "sector_half_life": SECTOR_HALF_LIVES.get(tk, 7.0)},
+                )
+                for tk in sat_cols
+            }
+        elif mode in ("nale", "risk_constrained_nale"):
+            propagated_scores = adapter.compute_static_nale(
+                node_scores=raw_scores,
+                adjacency_matrix=base_adj,
+                ticker_list=sat_cols,
+                alpha=alpha,
+            )
+            signals[curr_date] = {
+                tk: PointInTimeSignal(
+                    as_of_date=curr_date,
+                    ticker=tk,
+                    score=propagated_scores[tk],
+                    confidence=0.9,
+                    source_method=mode,
+                    is_valid=True,
+                    details={"node_age": node_ages[tk], "sector_half_life": SECTOR_HALF_LIVES.get(tk, 7.0)},
+                )
+                for tk in sat_cols
+            }
+        elif mode == "t_nale":
+            # 异质时效 T-NALE：各标的异质半衰期与动态年龄分化
+            decayed_s0: Dict[str, float] = {}
+            decay_factors: Dict[str, float] = {}
+            for c in sat_cols:
+                h_i = SECTOR_HALF_LIVES.get(c, 7.0) * max(halflife_mult, 0.1)
+                age_i = node_ages[c]
+                decay_i = math.exp(-math.log(2.0) / max(h_i, 0.1) * age_i)
+                decayed_s0[c] = raw_scores[c] * decay_i
+                decay_factors[c] = decay_i
+
+            avg_age = sum(node_ages.values()) / max(1, len(node_ages))
+            dyn_alpha = alpha * math.exp(-0.03 * avg_age)
+
+            propagated_scores = adapter.compute_static_nale(
+                node_scores=decayed_s0,
+                adjacency_matrix=base_adj,
+                ticker_list=sat_cols,
+                alpha=dyn_alpha,
+            )
+            signals[curr_date] = {
+                tk: PointInTimeSignal(
+                    as_of_date=curr_date,
+                    ticker=tk,
+                    score=propagated_scores[tk],
+                    confidence=0.9,
+                    source_method="t_nale",
+                    is_valid=True,
+                    details={
+                        "node_age": node_ages[tk],
+                        "t_nale_age": node_ages[tk],
+                        "sector_half_life": SECTOR_HALF_LIVES.get(tk, 7.0),
+                        "t_nale_factor": decay_factors[tk],
+                        "is_t_nale_decayed": True,
+                    },
+                )
+                for tk in sat_cols
+            }
+        else:
+            raise ValueError(f"未知信号模式: {mode}")
+
+    return signals
+
