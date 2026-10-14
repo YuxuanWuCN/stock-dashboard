@@ -15,7 +15,7 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
 from .config import (
     COOLDOWN_DAYS,
@@ -29,6 +29,9 @@ from .config import (
     TREND_STABLE,
 )
 from .utils.sector_utils import SectorState, validate_confidence
+
+if TYPE_CHECKING:  # 避免循环导入：advisor 反向依赖本模块的 RotationDecision
+    from .llm_decision_advisor import LLMDecisionAdvisor
 
 
 # ============================================================================
@@ -163,6 +166,75 @@ class SectorRotationEngine:
         )
         return float(score)
 
+    def _maybe_llm_validate(
+        self,
+        decision: RotationDecision,
+        sector_states: Dict[str, SectorState],
+        advisor: Optional["LLMDecisionAdvisor"],
+        llm_validation_enabled: bool,
+    ) -> RotationDecision:
+        """可选 LLM 复核注入（阶段3 决策融合，任务 2.2 遗留）。
+
+        规则（方案硬约束）：
+        - 默认 advisor=None / llm_validation_enabled=False 时零行为变化；
+        - LLM 同意 → llm_validation.status='agreed'；
+        - LLM 反对 → 记录分歧，绝不推翻量化 should_rotate；
+        - LLM 异常/超时/内部降级 → 量化结论保留 + status='unavailable'，禁止静默伪造。
+        """
+        if advisor is None or not llm_validation_enabled:
+            return decision
+
+        import json as _json
+
+        try:
+            llm_out = advisor.validate_decision(
+                quantitative_decision=decision,
+                sector_data=sector_states,
+                current_sector=decision.current_sector,
+            )
+        except Exception as exc:  # noqa: BLE001 - 复核失败不得影响主链路
+            decision.llm_validation = {
+                "status": "unavailable",
+                "error": f"{type(exc).__name__}: {exc}",
+            }
+            return decision
+
+        validation: Dict[str, Any]
+        try:
+            validation = _json.loads(llm_out.llm_rationale or "")
+        except (ValueError, TypeError):
+            validation = dict(llm_out.llm_validation or {})
+        if not isinstance(validation, dict):
+            validation = {}
+
+        llm_fell_back = bool(validation.get("fallback"))
+        if llm_fell_back:
+            status = "unavailable"
+        elif (
+            bool(validation.get("should_rotate", decision.should_rotate)) == decision.should_rotate
+            and (validation.get("target_sector") or None) == (decision.target_sector or None)
+        ):
+            status = "agreed"
+        else:
+            status = "diverged"
+
+        decision.llm_validation = {
+            "status": status,
+            "llm_should_rotate": bool(validation.get("should_rotate", decision.should_rotate)),
+            "llm_target_sector": validation.get("target_sector"),
+            "llm_reason": validation.get("reason", ""),
+            "llm_confidence": validation.get("confidence"),
+            "raw": validation,
+        }
+        if status == "unavailable":
+            decision.llm_rationale = (
+                validation.get("reason") or validation.get("error")
+                or "LLM validation unavailable; quantitative decision preserved"
+            )
+        elif validation.get("reason"):
+            decision.llm_rationale = validation["reason"]
+        return decision
+
     def evaluate(
         self,
         current_sector: str,
@@ -171,6 +243,8 @@ class SectorRotationEngine:
         monthly_rotations: int = 0,
         days_since_last_rotation: int = 10,
         timestamp: str = "",
+        advisor: Optional["LLMDecisionAdvisor"] = None,
+        llm_validation_enabled: bool = False,
     ) -> RotationDecision:
         """评估当前板块并输出量化轮动决策。
 
@@ -185,11 +259,17 @@ class SectorRotationEngine:
             timestamp: 决策生成时间戳（可选）
 
         Returns:
-            RotationDecision 决策结果
+            RotationDecision 决策结果；llm_validation_enabled 且传入 advisor 时，
+            量化决策定稿后进行一次 LLM 复核（只回填 llm_validation/llm_rationale，
+            不推翻量化 should_rotate；LLM 异常/超时/降级标记 status=unavailable）
         """
         t0 = time.perf_counter()
         curr_sec = str(current_sector).strip().lower()
         now_ts = timestamp or datetime.now().isoformat()
+
+        def _ret(decision: RotationDecision) -> RotationDecision:
+            """统一出口：量化决策定稿后执行可选 LLM 复核注入。"""
+            return self._maybe_llm_validate(decision, sector_states, advisor, llm_validation_enabled)
 
         # --------------------------------------------------------------------
         # 步骤 1: 交易风控与调仓门禁规则检查 (Risk Guardrails)
@@ -197,7 +277,7 @@ class SectorRotationEngine:
         # 1.1 最短持仓交易日约束 (MIN_HOLDING_DAYS = 5)
         if holding_days < self.min_holding_days:
             elapsed_ms = (time.perf_counter() - t0) * 1000.0
-            return RotationDecision(
+            return _ret(RotationDecision(
                 should_rotate=False,
                 current_sector=curr_sec,
                 target_sector=None,
@@ -207,12 +287,12 @@ class SectorRotationEngine:
                 execution_time_ms=elapsed_ms,
                 timestamp=now_ts,
                 metrics={"holding_days": holding_days, "min_holding_days": self.min_holding_days},
-            )
+            ))
 
         # 1.2 单月最大轮动次数约束 (MAX_ROTATION_PER_MONTH = 3)
         if monthly_rotations >= self.max_monthly_rotations:
             elapsed_ms = (time.perf_counter() - t0) * 1000.0
-            return RotationDecision(
+            return _ret(RotationDecision(
                 should_rotate=False,
                 current_sector=curr_sec,
                 target_sector=None,
@@ -222,12 +302,12 @@ class SectorRotationEngine:
                 execution_time_ms=elapsed_ms,
                 timestamp=now_ts,
                 metrics={"monthly_rotations": monthly_rotations, "max_monthly_rotations": self.max_monthly_rotations},
-            )
+            ))
 
         # 1.3 调仓冷却期约束 (COOLDOWN_DAYS = 7)
         if days_since_last_rotation < self.cooldown_days:
             elapsed_ms = (time.perf_counter() - t0) * 1000.0
-            return RotationDecision(
+            return _ret(RotationDecision(
                 should_rotate=False,
                 current_sector=curr_sec,
                 target_sector=None,
@@ -237,14 +317,14 @@ class SectorRotationEngine:
                 execution_time_ms=elapsed_ms,
                 timestamp=now_ts,
                 metrics={"days_since_last_rotation": days_since_last_rotation, "cooldown_days": self.cooldown_days},
-            )
+            ))
 
         # --------------------------------------------------------------------
         # 步骤 2: 当前持仓板块健康度评估与下沉触发判定 (Decline Trigger)
         # --------------------------------------------------------------------
         if curr_sec not in sector_states:
             elapsed_ms = (time.perf_counter() - t0) * 1000.0
-            return RotationDecision(
+            return _ret(RotationDecision(
                 should_rotate=False,
                 current_sector=curr_sec,
                 target_sector=None,
@@ -253,7 +333,7 @@ class SectorRotationEngine:
                 is_fallback=False,
                 execution_time_ms=elapsed_ms,
                 timestamp=now_ts,
-            )
+            ))
 
         curr_state = sector_states[curr_sec]
 
@@ -266,7 +346,7 @@ class SectorRotationEngine:
 
         if not is_declining:
             elapsed_ms = (time.perf_counter() - t0) * 1000.0
-            return RotationDecision(
+            return _ret(RotationDecision(
                 should_rotate=False,
                 current_sector=curr_sec,
                 target_sector=None,
@@ -279,7 +359,7 @@ class SectorRotationEngine:
                     "current_score": curr_state.sentiment_score,
                     "current_trend": curr_state.sentiment_trend,
                 },
-            )
+            ))
 
         # --------------------------------------------------------------------
         # 步骤 3: 候选目标板块筛选与多因子评分 (Target Candidate Selection)
@@ -318,7 +398,7 @@ class SectorRotationEngine:
             # 边界判定：若目标板块与当前板块相同，则为 noop (B10)
             if best_candidate == curr_sec:
                 elapsed_ms = (time.perf_counter() - t0) * 1000.0
-                return RotationDecision(
+                return _ret(RotationDecision(
                     should_rotate=False,
                     current_sector=curr_sec,
                     target_sector=curr_sec,
@@ -327,10 +407,10 @@ class SectorRotationEngine:
                     is_fallback=False,
                     execution_time_ms=elapsed_ms,
                     timestamp=now_ts,
-                )
+                ))
 
             elapsed_ms = (time.perf_counter() - t0) * 1000.0
-            return RotationDecision(
+            return _ret(RotationDecision(
                 should_rotate=True,
                 current_sector=curr_sec,
                 target_sector=best_candidate,
@@ -347,7 +427,7 @@ class SectorRotationEngine:
                     "target_score": best_state.sentiment_score,
                     "candidate_scores": candidate_scores,
                 },
-            )
+            ))
 
         # --------------------------------------------------------------------
         # 步骤 5: 无合格候选板块 -> 防御资产降级 (Defensive Fallback)
@@ -358,7 +438,7 @@ class SectorRotationEngine:
         # 若当前持仓已在防御资产板块，则维持现有持仓，不触发重复轮动 (B10)
         if curr_sec == defensive_sec:
             elapsed_ms = (time.perf_counter() - t0) * 1000.0
-            return RotationDecision(
+            return _ret(RotationDecision(
                 should_rotate=False,
                 current_sector=curr_sec,
                 target_sector=defensive_sec,
@@ -367,13 +447,13 @@ class SectorRotationEngine:
                 is_fallback=True,
                 execution_time_ms=elapsed_ms,
                 timestamp=now_ts,
-            )
+            ))
 
         def_state = sector_states.get(defensive_sec)
         def_confidence = def_state.confidence if def_state else 0.80
 
         elapsed_ms = (time.perf_counter() - t0) * 1000.0
-        return RotationDecision(
+        return _ret(RotationDecision(
             should_rotate=True,
             current_sector=curr_sec,
             target_sector=defensive_sec,
@@ -386,7 +466,7 @@ class SectorRotationEngine:
             execution_time_ms=elapsed_ms,
             timestamp=now_ts,
             metrics={"fallback_target": defensive_sec},
-        )
+        ))
 
     def decide(
         self,
@@ -397,6 +477,8 @@ class SectorRotationEngine:
         monthly_rotations: int = 0,
         days_since_last_rotation: int = 10,
         timestamp: str = "",
+        advisor: Optional["LLMDecisionAdvisor"] = None,
+        llm_validation_enabled: bool = False,
     ) -> RotationDecision:
         """兼容适配层方法，支持多形式传参。"""
         eff_current = current_sector
@@ -421,4 +503,6 @@ class SectorRotationEngine:
             monthly_rotations=eff_monthly_rotations,
             days_since_last_rotation=eff_days_since_last_rotation,
             timestamp=timestamp,
+            advisor=advisor,
+            llm_validation_enabled=llm_validation_enabled,
         )
