@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "300196",
   "name": "长海股份",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 55.1,
-    "risk": 65.0,
+    "risk_adjusted": 53.9,
+    "risk": 64.0,
     "technical": 50.0,
     "industry": 57.0,
     "leading": 50.0
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:06:53"
+    "updated_at": "2026-10-13 18:06:11"
   },
   "nale_network": {
     "sector_name": "材料",
@@ -53,6 +53,9 @@
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
@@ -67,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 60.83,
-    "max_drawdown_60d_pct": -24.69,
-    "atr14_pct": 6.25,
+    "annualized_volatility_20d_pct": 59.67,
+    "max_drawdown_60d_pct": -24.1,
+    "atr14_pct": 6.24,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 80.7,
-        "value": 60.83
+        "score": 83.0,
+        "value": 59.67
       },
       {
         "name": "60日最大回撤",
-        "score": 57.9,
-        "value": -24.69
+        "score": 56.7,
+        "value": -24.1
       },
       {
         "name": "ATR百分比",
-        "score": 81.9,
-        "value": 6.25
+        "score": 77.8,
+        "value": 6.24
       },
       {
         "name": "量价异常",
-        "score": 91.8,
-        "value": 0.5
+        "score": 93.0,
+        "value": 0.43
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
@@ -115,28 +118,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 17.088,
-    "ma10": 18.351999999999997,
-    "ma20": 18.311999999999998,
-    "ma60": 17.5785,
-    "rsi14": 38.0,
-    "macd_dif": -0.15534351700717153,
-    "macd_dea": 0.17638955490320513,
-    "macd_hist": -0.6634661438207533,
-    "atr14_pct": 6.251207975762339,
-    "boll_position": 0.18510043223836228,
-    "return_5d_pct": -12.791932059447985,
-    "return_20d_pct": -0.06082725060828631,
-    "volume_ratio_5d": 0.5
+    "ma5": 16.466,
+    "ma10": 17.514000000000003,
+    "ma20": 18.269,
+    "ma60": 17.45583333333333,
+    "rsi14": 35.3,
+    "macd_dif": -0.4114684732454066,
+    "macd_dea": -0.01704036886024919,
+    "macd_hist": -0.7888562087703148,
+    "atr14_pct": 6.240633429531304,
+    "boll_position": 0.11987662042390677,
+    "return_5d_pct": -9.653605905735374,
+    "return_20d_pct": -4.559088182363535,
+    "volume_ratio_5d": 0.43
   },
   "industry": {
     "name": "材料",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": 7.31
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": 5.53
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,16 +147,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 2.26,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 2.08,
       "median_return_pct": 2.07,
       "best_return_pct": 23.99,
       "worst_return_pct": -18.49
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 2.29,
-      "median_return_pct": 2.01,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.9,
+      "median_return_pct": 1.74,
       "best_return_pct": 30.72,
       "worst_return_pct": -27.14
     }
@@ -283,20 +286,26 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 24.7%，风险偏高。",
+      "detail": "近60日最大回撤 24.1%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 24.7%，风险扣分。",
+      "detail": "近60日最大回撤 24.1%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 60.8%，波动偏高。",
+      "detail": "20日年化波动率 59.7%，波动偏高。",
       "contribution": -5.0
+    },
+    {
+      "type": "warning",
+      "title": "成交缩量",
+      "detail": "近5日量能仅为前期0.43倍。",
+      "contribution": -3.0
     }
   ],
   "kline_file": "../kline/300196.json",

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "300382",
   "name": "斯莱克",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 38.3,
-    "risk": 74.2,
+    "risk_adjusted": 38.1,
+    "risk": 71.5,
     "technical": 42.0,
     "industry": 27.0,
     "leading": 50.0
@@ -42,35 +42,30 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:09:59"
+    "updated_at": "2026-10-13 18:09:15"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 38.5,
-    "tier_role": "divergent",
+    "sector_breadth_pct": 53.8,
+    "tier_role": "follower_catchup",
     "leader_stock": {
-      "code": "688152",
-      "name": "麒麟信安",
-      "change_pct": 19.99476576812353,
+      "code": "688655",
+      "name": "迅捷兴",
+      "change_pct": 20.003390405153425,
       "is_limit_up": true
     },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 2.95,
+    "spillover_prob_5d_pct": 5.9,
     "has_limit_up_resonance": true,
     "co_movement_peers": [
       {
         "code": "688328",
         "name": "深科达",
-        "corr": 0.76
+        "corr": 0.75
       },
       {
         "code": "300128",
         "name": "锦富技术",
-        "corr": 0.73
-      },
-      {
-        "code": "688598",
-        "name": "金博股份",
         "corr": 0.71
       },
       {
@@ -79,17 +74,25 @@
         "corr": 0.7
       },
       {
+        "code": "688598",
+        "name": "金博股份",
+        "corr": 0.69
+      },
+      {
         "code": "300004",
         "name": "南风股份",
-        "corr": 0.68
+        "corr": 0.66
       }
     ],
+    "corr_missing_evidence_count": 2,
+    "leader_corr_with_stock": 0.59,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
-      "optimal_holding_days": 5.0,
+      "peak_spillover_return_pct": 2.54,
+      "optimal_holding_days": 14,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.557,
       "dynamic_alpha_physical_peak": 0.564
@@ -98,76 +101,76 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 78.17,
-    "max_drawdown_60d_pct": -39.41,
-    "atr14_pct": 8.66,
+    "annualized_volatility_20d_pct": 69.32,
+    "max_drawdown_60d_pct": -37.46,
+    "atr14_pct": 8.65,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 91.2,
-        "value": 78.17
+        "score": 89.5,
+        "value": 69.32
       },
       {
         "name": "60日最大回撤",
-        "score": 88.3,
-        "value": -39.41
+        "score": 85.4,
+        "value": -37.46
       },
       {
         "name": "ATR百分比",
-        "score": 96.5,
-        "value": 8.66
+        "score": 95.3,
+        "value": 8.65
       },
       {
         "name": "量价异常",
-        "score": 46.2,
-        "value": 1.13
+        "score": 41.5,
+        "value": 0.9
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
   "forecast": {
     "return_3d_pct": -0.03,
-    "return_5d_pct": 0.88,
+    "return_5d_pct": 3.83,
     "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 46.7,
+    "up_probability_5d_pct": 52.6,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0,
+    "peak_spillover_return_pct": 2.54,
+    "optimal_holding_days": 14,
     "dynamic_alpha_peak": 0.564
   },
   "technical": {
-    "trend": "range",
-    "ma5": 13.931999999999999,
-    "ma10": 15.008,
-    "ma20": 15.755,
-    "ma60": 15.6975,
-    "rsi14": 32.6,
-    "macd_dif": -0.7508354362809104,
-    "macd_dea": -0.40054819238413675,
-    "macd_hist": -0.7005744877935474,
-    "atr14_pct": 8.660288306322482,
-    "boll_position": 0.061432485782203734,
-    "return_5d_pct": -17.144678138941995,
-    "return_20d_pct": -29.38620315046171,
-    "volume_ratio_5d": 1.13
+    "trend": "downtrend",
+    "ma5": 13.053999999999998,
+    "ma10": 14.235,
+    "ma20": 15.1955,
+    "ma60": 15.484166666666669,
+    "rsi14": 31.2,
+    "macd_dif": -0.9621070732908947,
+    "macd_dea": -0.5893302869853402,
+    "macd_hist": -0.7455535726111091,
+    "atr14_pct": 8.64532226657981,
+    "boll_position": 0.0914137831694139,
+    "return_5d_pct": -14.837398373983735,
+    "return_20d_pct": -33.28025477707006,
+    "volume_ratio_5d": 0.9
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": -22.02
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": -23.19
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -175,17 +178,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.77,
-      "median_return_pct": 1.61,
-      "best_return_pct": 22.48,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.83,
+      "median_return_pct": 1.2,
+      "best_return_pct": 21.31,
       "worst_return_pct": -28.88
     },
     "horizon_5d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": 1.28,
-      "median_return_pct": -0.6,
-      "best_return_pct": 36.02,
+      "average_return_pct": 1.18,
+      "median_return_pct": -0.46,
+      "best_return_pct": 24.02,
       "worst_return_pct": -20.64
     }
   },
@@ -312,21 +315,33 @@
   },
   "reasons": [
     {
+      "title": "T-NALE·热点龙头时空时滞共振",
+      "detail": "同板块龙头【迅捷兴】封板催化，经产业链物理传导（时滞τ≈14天），注入 +2.95% 溢出预期及 +5.9% 看涨胜率（波峰前瞻+2.54%）",
+      "impact": "positive",
+      "score_delta": 4.5
+    },
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 39.4%，风险偏高。",
+      "detail": "近60日最大回撤 37.5%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 39.4%，风险扣分。",
+      "detail": "近60日最大回撤 37.5%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 78.2%，波动偏高。",
+      "detail": "20日年化波动率 69.3%，波动偏高。",
       "contribution": -5.0
     }
   ],

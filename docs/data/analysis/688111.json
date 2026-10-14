@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "688111",
   "name": "金山办公",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 60.8,
-    "risk": 33.7,
-    "technical": 91.0,
-    "industry": 51.5,
+    "risk_adjusted": 63.6,
+    "risk": 30.8,
+    "technical": 86.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,38 +42,36 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:07:58"
+    "updated_at": "2026-10-13 18:07:02"
   },
   "nale_network": {
     "sector_name": "科技",
     "sector_breadth_pct": 50.0,
     "tier_role": "neutral",
-    "leader_stock": {
-      "code": "003040",
-      "name": "楚天龙",
-      "change_pct": 4.81761871988989,
-      "is_limit_up": false
-    },
+    "leader_stock": null,
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
-        "code": "600570",
-        "name": "恒生电子",
+        "code": "002415",
+        "name": "海康威视",
         "corr": 0.67
       },
       {
-        "code": "002415",
-        "name": "海康威视",
+        "code": "600570",
+        "name": "恒生电子",
         "corr": 0.66
       },
       {
         "code": "002230",
         "name": "科大讯飞",
-        "corr": 0.65
+        "corr": 0.63
       }
     ],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
       "physical_lag_sigma_days": 5.0,
@@ -88,34 +86,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 28.29,
+    "annualized_volatility_20d_pct": 28.37,
     "max_drawdown_60d_pct": -22.3,
-    "atr14_pct": 3.24,
+    "atr14_pct": 3.13,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 32.7,
-        "value": 28.29
+        "score": 34.5,
+        "value": 28.37
       },
       {
         "name": "60日最大回撤",
-        "score": 49.7,
+        "score": 49.1,
         "value": -22.3
       },
       {
         "name": "ATR百分比",
-        "score": 35.7,
-        "value": 3.24
+        "score": 32.2,
+        "value": 3.13
       },
       {
         "name": "量价异常",
-        "score": 35.7,
-        "value": 0.92
+        "score": 16.4,
+        "value": 0.97
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
@@ -136,28 +134,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 221.12800000000001,
-    "ma10": 223.279,
-    "ma20": 226.939,
-    "ma60": 240.34433333333337,
-    "rsi14": 49.3,
-    "macd_dif": -4.966291604944047,
-    "macd_dea": -5.345274608547045,
-    "macd_hist": 0.7579660072059955,
-    "atr14_pct": 3.236835831472341,
-    "boll_position": 0.5760712953779702,
-    "return_5d_pct": 3.116695941989822,
-    "return_20d_pct": -4.2250575193474305,
-    "volume_ratio_5d": 0.92
+    "ma5": 225.37600000000003,
+    "ma10": 224.573,
+    "ma20": 225.82,
+    "ma60": 240.3415,
+    "rsi14": 53.0,
+    "macd_dif": -3.402777373003204,
+    "macd_dea": -4.794219352324948,
+    "macd_hist": 2.782883958643488,
+    "atr14_pct": 3.134897928041814,
+    "boll_position": 0.843901495923753,
+    "return_5d_pct": 7.164591977869983,
+    "return_20d_pct": -2.9599632613868887,
+    "volume_ratio_5d": 0.97
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": 3.15
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": 7.13
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -165,16 +163,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -0.89,
-      "median_return_pct": -1.55,
-      "best_return_pct": 13.5,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.57,
+      "median_return_pct": -2.16,
+      "best_return_pct": 11.58,
       "worst_return_pct": -10.77
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -1.08,
-      "median_return_pct": -2.29,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.7,
+      "median_return_pct": -1.99,
       "best_return_pct": 13.67,
       "worst_return_pct": -9.42
     }

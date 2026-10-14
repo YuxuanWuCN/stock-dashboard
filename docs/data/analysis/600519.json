@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "600519",
   "name": "贵州茅台",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 76.7,
-    "risk": 11.2,
-    "technical": 89.0,
-    "industry": 55.8,
+    "risk_adjusted": 83.2,
+    "risk": 12.1,
+    "technical": 99.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,17 +42,20 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:10:03"
+    "updated_at": "2026-10-13 18:09:19"
   },
   "nale_network": {
     "sector_name": "搜索自选",
-    "sector_breadth_pct": 50.0,
+    "sector_breadth_pct": 0.0,
     "tier_role": "neutral",
     "leader_stock": null,
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
@@ -67,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.26,
+    "annualized_volatility_20d_pct": 14.4,
     "max_drawdown_60d_pct": -9.27,
-    "atr14_pct": 1.61,
+    "atr14_pct": 1.63,
     "factors": [
       {
         "name": "20日波动率",
         "score": 6.4,
-        "value": 15.26
+        "value": 14.4
       },
       {
         "name": "60日最大回撤",
-        "score": 7.0,
+        "score": 5.8,
         "value": -9.27
       },
       {
         "name": "ATR百分比",
-        "score": 9.9,
-        "value": 1.61
+        "score": 10.5,
+        "value": 1.63
       },
       {
         "name": "量价异常",
-        "score": 48.0,
-        "value": 1.14
+        "score": 65.5,
+        "value": 1.19
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
@@ -114,29 +117,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 1251.374,
-    "ma10": 1250.86,
-    "ma20": 1269.5385,
-    "ma60": 1291.076,
-    "rsi14": 46.9,
-    "macd_dif": -12.150502689712766,
-    "macd_dea": -12.51829814188476,
-    "macd_hist": 0.7355909043439866,
-    "atr14_pct": 1.60647650240468,
-    "boll_position": 0.43485742144843886,
-    "return_5d_pct": 2.1018593371058936,
-    "return_20d_pct": -2.762379896526246,
-    "volume_ratio_5d": 1.14
+    "trend": "range",
+    "ma5": 1268.06,
+    "ma10": 1256.18,
+    "ma20": 1265.3825000000002,
+    "ma60": 1293.5246666666667,
+    "rsi14": 51.0,
+    "macd_dif": -7.20337495722697,
+    "macd_dea": -10.867869550903743,
+    "macd_hist": 7.328989187353546,
+    "atr14_pct": 1.626853399089737,
+    "boll_position": 0.6288848750799458,
+    "return_5d_pct": 3.181501804820419,
+    "return_20d_pct": -3.124596317657158,
+    "volume_ratio_5d": 1.19
   },
   "industry": {
     "name": "搜索自选",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": 4.61
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": 6.97
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,16 +147,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.39,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.14,
       "median_return_pct": -0.94,
-      "best_return_pct": 4.41,
+      "best_return_pct": 5.6,
       "worst_return_pct": -4.51
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.12,
-      "median_return_pct": -1.12,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.17,
+      "median_return_pct": -0.82,
       "best_return_pct": 10.03,
       "worst_return_pct": -3.91
     }
@@ -279,14 +282,7 @@
     },
     "cached_at": "2026-08-09 09:30:07"
   },
-  "reasons": [
-    {
-      "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/600519.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

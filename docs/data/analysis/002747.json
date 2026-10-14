@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "002747",
   "name": "埃斯顿",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 51.5,
-    "risk": 44.3,
+    "risk_adjusted": 50.7,
+    "risk": 43.4,
     "technical": 42.0,
-    "industry": 32.3,
+    "industry": 31.4,
     "leading": 50.0
   },
   "leading": {
@@ -42,22 +42,25 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:09:48"
+    "updated_at": "2026-10-13 18:09:04"
   },
   "nale_network": {
     "sector_name": "工业机器人整机",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -67,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 27.22,
-    "max_drawdown_60d_pct": -37.21,
-    "atr14_pct": 4.52,
+    "annualized_volatility_20d_pct": 26.0,
+    "max_drawdown_60d_pct": -39.01,
+    "atr14_pct": 4.68,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 29.8,
-        "value": 27.22
+        "score": 26.9,
+        "value": 26.0
       },
       {
         "name": "60日最大回撤",
-        "score": 86.0,
-        "value": -37.21
+        "score": 89.5,
+        "value": -39.01
       },
       {
         "name": "ATR百分比",
-        "score": 56.1,
-        "value": 4.52
+        "score": 55.0,
+        "value": 4.68
       },
       {
         "name": "量价异常",
         "score": 18.7,
-        "value": 0.96
+        "value": 0.97
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
@@ -109,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 27.746000000000002,
-    "ma10": 28.68,
-    "ma20": 29.113500000000005,
-    "ma60": 32.3025,
-    "rsi14": 32.2,
-    "macd_dif": -1.1627454251874738,
-    "macd_dea": -1.0635053554335376,
-    "macd_hist": -0.19848013950787236,
-    "atr14_pct": 4.517269121965828,
-    "boll_position": -0.03927143500663837,
-    "return_5d_pct": -7.870528109028974,
-    "return_20d_pct": -12.236286919831219,
-    "volume_ratio_5d": 0.96
+    "ma5": 26.802,
+    "ma10": 27.912,
+    "ma20": 28.685000000000002,
+    "ma60": 31.812666666666665,
+    "rsi14": 27.9,
+    "macd_dif": -1.3612495791158992,
+    "macd_dea": -1.1571154944531692,
+    "macd_hist": -0.40826816932545995,
+    "atr14_pct": 4.6781526388698484,
+    "boll_position": -0.05303266599828524,
+    "return_5d_pct": -8.096590909090917,
+    "return_20d_pct": -15.369522563767168,
+    "volume_ratio_5d": 0.97
   },
   "industry": {
     "name": "工业机器人整机",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": -4.87
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": -5.28
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.68,
-      "median_return_pct": 0.12,
-      "best_return_pct": 18.43,
-      "worst_return_pct": -13.62
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.0,
+      "median_return_pct": -1.01,
+      "best_return_pct": 19.92,
+      "worst_return_pct": -15.97
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.79,
-      "median_return_pct": -0.42,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 1.83,
+      "median_return_pct": -1.08,
       "best_return_pct": 39.21,
-      "worst_return_pct": -21.34
+      "worst_return_pct": -19.34
     }
   },
   "fundamental": {
@@ -301,14 +304,20 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 37.2%，风险偏高。",
+      "detail": "近60日最大回撤 39.0%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 37.2%，风险扣分。",
+      "detail": "近60日最大回撤 39.0%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=27.9，短期超卖。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/002747.json",

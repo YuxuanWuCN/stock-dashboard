@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-09-30",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-12",
   "code": "003095",
   "name": "中欧医疗健康混合A",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 73.9,
-    "risk": 25.3,
-    "technical": 85.0,
+    "risk_adjusted": 59.1,
+    "risk": 44.6,
+    "technical": 58.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,22 +42,20 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:10:31"
+    "updated_at": "2026-10-13 18:09:50"
   },
   "nale_network": {
     "sector_name": "公募医药",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "leader",
-    "leader_stock": {
-      "code": "003095",
-      "name": "中欧医疗健康混合A",
-      "change_pct": 4.102564102564095,
-      "is_limit_up": false
-    },
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
+    "leader_stock": null,
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
@@ -70,26 +68,26 @@
     }
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
-    "annualized_volatility_20d_pct": 33.31,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 38.02,
     "max_drawdown_60d_pct": -13.49,
-    "atr14_pct": 1.69,
+    "atr14_pct": 1.93,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 42.7,
-        "value": 33.31
+        "score": 56.1,
+        "value": 38.02
       },
       {
         "name": "60日最大回撤",
-        "score": 21.1,
+        "score": 21.6,
         "value": -13.49
       },
       {
         "name": "ATR百分比",
-        "score": 11.1,
-        "value": 1.69
+        "score": 14.6,
+        "value": 1.93
       },
       {
         "name": "量价异常",
@@ -98,8 +96,8 @@
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 19.91
+        "score": 96.5,
+        "value": 20.91
       }
     ]
   },
@@ -119,29 +117,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 1.986,
-    "ma10": 1.986,
-    "ma20": 1.9555,
-    "ma60": 1.9871666666666665,
-    "rsi14": 56.3,
-    "macd_dif": 0.004343274461090507,
-    "macd_dea": -0.002142271802928056,
-    "macd_hist": 0.012971092528037126,
-    "atr14_pct": 1.6912093591027941,
-    "boll_position": 0.8966583543761414,
-    "return_5d_pct": 0.0,
-    "return_20d_pct": 5.181347150259064,
+    "trend": "downtrend",
+    "ma5": 1.9460000000000002,
+    "ma10": 1.9760000000000002,
+    "ma20": 1.9514999999999998,
+    "ma60": 1.988,
+    "rsi14": 42.4,
+    "macd_dif": -0.00886798812143974,
+    "macd_dea": -0.0033532545240479955,
+    "macd_hist": -0.011029467194783489,
+    "atr14_pct": 1.9314177618063821,
+    "boll_position": 0.1876361095091795,
+    "return_5d_pct": -3.076923076923077,
+    "return_20d_pct": -2.577319587628868,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "公募医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.09,
-    "return_20d_pct": -7.1,
-    "return_60d_pct": -15.35,
-    "relative_strength_20d_pct": 12.28
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": 5.8
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -149,22 +147,29 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.56,
-      "median_return_pct": -1.63,
-      "best_return_pct": 9.23,
-      "worst_return_pct": -7.01
+      "up_probability_pct": 46.7,
+      "average_return_pct": 1.03,
+      "median_return_pct": 0.0,
+      "best_return_pct": 13.53,
+      "worst_return_pct": -5.11
     },
     "horizon_5d": {
       "up_probability_pct": 40.0,
-      "average_return_pct": 0.34,
-      "median_return_pct": -0.29,
-      "best_return_pct": 15.62,
-      "worst_return_pct": -6.54
+      "average_return_pct": 1.18,
+      "median_return_pct": -1.36,
+      "best_return_pct": 17.06,
+      "worst_return_pct": -6.09
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    }
+  ],
   "kline_file": "../kline/003095.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

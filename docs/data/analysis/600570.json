@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "600570",
   "name": "恒生电子",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 43.6,
-    "risk": 29.0,
-    "technical": 50.0,
-    "industry": 38.0,
+    "risk_adjusted": 61.7,
+    "risk": 27.5,
+    "technical": 89.0,
+    "industry": 47.5,
     "leading": 50.0
   },
   "leading": {
@@ -42,18 +42,13 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:07:59"
+    "updated_at": "2026-10-13 18:07:02"
   },
   "nale_network": {
     "sector_name": "科技",
     "sector_breadth_pct": 50.0,
     "tier_role": "neutral",
-    "leader_stock": {
-      "code": "003040",
-      "name": "楚天龙",
-      "change_pct": 4.81761871988989,
-      "is_limit_up": false
-    },
+    "leader_stock": null,
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -61,12 +56,12 @@
       {
         "code": "002230",
         "name": "科大讯飞",
-        "corr": 0.7
+        "corr": 0.69
       },
       {
         "code": "688111",
         "name": "金山办公",
-        "corr": 0.67
+        "corr": 0.66
       },
       {
         "code": "002415",
@@ -76,14 +71,17 @@
       {
         "code": "601138",
         "name": "工业富联",
-        "corr": 0.43
+        "corr": 0.4
       },
       {
-        "code": "003040",
-        "name": "楚天龙",
-        "corr": 0.43
+        "code": "000063",
+        "name": "中兴通讯",
+        "corr": 0.4
       }
     ],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
       "physical_lag_sigma_days": 5.0,
@@ -98,34 +96,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 25.88,
+    "annualized_volatility_20d_pct": 23.92,
     "max_drawdown_60d_pct": -19.29,
-    "atr14_pct": 2.55,
+    "atr14_pct": 2.51,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 26.3,
-        "value": 25.88
+        "score": 22.8,
+        "value": 23.92
       },
       {
         "name": "60日最大回撤",
-        "score": 41.5,
+        "score": 42.7,
         "value": -19.29
       },
       {
         "name": "ATR百分比",
-        "score": 26.9,
-        "value": 2.55
+        "score": 25.1,
+        "value": 2.51
       },
       {
         "name": "量价异常",
-        "score": 45.6,
-        "value": 0.87
+        "score": 49.1,
+        "value": 1.13
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
@@ -146,28 +144,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 19.292,
-    "ma10": 19.765,
-    "ma20": 20.304,
-    "ma60": 21.2915,
-    "rsi14": 37.8,
-    "macd_dif": -0.6048702748824439,
-    "macd_dea": -0.5225543171033701,
-    "macd_hist": -0.1646319155581477,
-    "atr14_pct": 2.55197156890593,
-    "boll_position": 0.24706617390887886,
-    "return_5d_pct": -2.2567703109328097,
-    "return_20d_pct": -9.34883720930233,
-    "volume_ratio_5d": 0.87
+    "ma5": 19.439999999999998,
+    "ma10": 19.657999999999998,
+    "ma20": 20.097,
+    "ma60": 21.24816666666667,
+    "rsi14": 42.7,
+    "macd_dif": -0.5250310749652058,
+    "macd_dea": -0.5306423264581167,
+    "macd_hist": 0.011222502985821725,
+    "atr14_pct": 2.5056169978869454,
+    "boll_position": 0.38727259037984774,
+    "return_5d_pct": 2.53623188405796,
+    "return_20d_pct": -8.244557665585928,
+    "volume_ratio_5d": 1.13
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": -1.98
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": 1.85
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -176,15 +174,15 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 33.3,
-      "average_return_pct": -1.16,
-      "median_return_pct": -1.53,
-      "best_return_pct": 7.5,
+      "average_return_pct": -1.29,
+      "median_return_pct": -1.92,
+      "best_return_pct": 6.55,
       "worst_return_pct": -10.06
     },
     "horizon_5d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.76,
-      "median_return_pct": -1.62,
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.99,
+      "median_return_pct": -0.86,
       "best_return_pct": 10.95,
       "worst_return_pct": -9.55
     }

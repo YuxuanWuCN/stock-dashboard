@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-09-30",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-12",
   "code": "005827",
   "name": "易方达蓝筹精选混合",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 61.0,
-    "risk": 6.6,
-    "technical": 50.0,
-    "industry": 53.4,
+    "risk_adjusted": 50.3,
+    "risk": 22.1,
+    "technical": 42.0,
+    "industry": 53.1,
     "leading": 50.0
   },
   "leading": {
@@ -42,22 +42,25 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:10:30"
+    "updated_at": "2026-10-13 18:09:50"
   },
   "nale_network": {
     "sector_name": "公募重仓",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -67,24 +70,24 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 12.62,
-    "max_drawdown_60d_pct": -7.05,
-    "atr14_pct": 0.65,
+    "annualized_volatility_20d_pct": 14.19,
+    "max_drawdown_60d_pct": -8.33,
+    "atr14_pct": 0.76,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 2.9,
-        "value": 12.62
+        "score": 5.8,
+        "value": 14.19
       },
       {
         "name": "60日最大回撤",
-        "score": 2.9,
-        "value": -7.05
+        "score": 3.5,
+        "value": -8.33
       },
       {
         "name": "ATR百分比",
         "score": 0.0,
-        "value": 0.65
+        "value": 0.76
       },
       {
         "name": "量价异常",
@@ -93,8 +96,8 @@
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 19.91
+        "score": 96.5,
+        "value": 20.91
       }
     ]
   },
@@ -109,53 +112,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 1.466,
-    "ma10": 1.479,
-    "ma20": 1.488,
-    "ma60": 1.5118333333333334,
-    "rsi14": 36.9,
-    "macd_dif": -0.014338744975139095,
-    "macd_dea": -0.01120851439367837,
-    "macd_hist": -0.006260461162921449,
-    "atr14_pct": 0.6507562379727988,
-    "boll_position": 0.1123058570649846,
-    "return_5d_pct": -2.6666666666666727,
-    "return_20d_pct": -3.311258278145701,
+    "ma5": 1.4420000000000002,
+    "ma10": 1.4629999999999999,
+    "ma20": 1.4785,
+    "ma60": 1.5075,
+    "rsi14": 32.0,
+    "macd_dif": -0.019665002281922028,
+    "macd_dea": -0.014764228953746756,
+    "macd_hist": -0.009801546656350545,
+    "atr14_pct": 0.7575023787756531,
+    "boll_position": 0.032528763327409324,
+    "return_5d_pct": -1.379310344827589,
+    "return_20d_pct": -4.666666666666675,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "公募重仓",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.09,
-    "return_20d_pct": -7.1,
-    "return_60d_pct": -15.35,
-    "relative_strength_20d_pct": 3.79
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": 3.71
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 48.3,
-      "average_return_pct": 0.0,
-      "median_return_pct": 0.0,
-      "best_return_pct": 2.67,
-      "worst_return_pct": -4.3
-    },
-    "horizon_5d": {
-      "up_probability_pct": 37.9,
-      "average_return_pct": -0.04,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.08,
       "median_return_pct": 0.0,
       "best_return_pct": 5.29,
-      "worst_return_pct": -3.23
+      "worst_return_pct": -2.72
+    },
+    "horizon_5d": {
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.19,
+      "median_return_pct": 0.0,
+      "best_return_pct": 3.87,
+      "worst_return_pct": -3.8
     }
   },
   "fundamental": null,

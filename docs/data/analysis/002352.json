@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "002352",
   "name": "顺丰控股",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 78.3,
-    "risk": 8.6,
-    "technical": 91.0,
+    "risk_adjusted": 73.5,
+    "risk": 11.6,
+    "technical": 94.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,22 +42,25 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:08:06"
+    "updated_at": "2026-10-13 18:07:27"
   },
   "nale_network": {
     "sector_name": "物流",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -67,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 11.41,
+    "annualized_volatility_20d_pct": 10.83,
     "max_drawdown_60d_pct": -12.61,
     "atr14_pct": 1.47,
     "factors": [
       {
         "name": "20日波动率",
         "score": 1.2,
-        "value": 11.41
+        "value": 10.83
       },
       {
         "name": "60日最大回撤",
-        "score": 18.7,
+        "score": 17.5,
         "value": -12.61
       },
       {
         "name": "ATR百分比",
-        "score": 7.0,
+        "score": 6.4,
         "value": 1.47
       },
       {
         "name": "量价异常",
-        "score": 13.5,
-        "value": 1.03
+        "score": 55.0,
+        "value": 1.15
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
@@ -109,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "range",
-    "ma5": 30.648000000000003,
-    "ma10": 30.732999999999997,
-    "ma20": 30.831,
-    "ma60": 32.195,
-    "rsi14": 44.2,
-    "macd_dif": -0.35729122095703403,
-    "macd_dea": -0.43258801849020156,
-    "macd_hist": 0.15059359506633507,
-    "atr14_pct": 1.4744878021763348,
-    "boll_position": 0.5138702242444771,
-    "return_5d_pct": 1.015062213490503,
-    "return_20d_pct": -2.311589613679532,
-    "volume_ratio_5d": 1.03
+    "ma5": 30.932,
+    "ma10": 30.798000000000002,
+    "ma20": 30.797999999999995,
+    "ma60": 32.18366666666667,
+    "rsi14": 50.3,
+    "macd_dif": -0.24865974906266786,
+    "macd_dea": -0.3742422146135521,
+    "macd_hist": 0.2511649311017685,
+    "atr14_pct": 1.4676898012057222,
+    "boll_position": 0.8454707009793556,
+    "return_5d_pct": 2.196001311045559,
+    "return_20d_pct": -0.31969309462915874,
+    "volume_ratio_5d": 1.15
   },
   "industry": {
     "name": "物流",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": 5.06
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": 9.77
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,16 +147,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.24,
-      "median_return_pct": -0.17,
-      "best_return_pct": 4.59,
-      "worst_return_pct": -4.67
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.76,
+      "median_return_pct": -0.36,
+      "best_return_pct": 4.09,
+      "worst_return_pct": -5.15
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.51,
-      "median_return_pct": -0.23,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.71,
+      "median_return_pct": -0.83,
       "best_return_pct": 3.88,
       "worst_return_pct": -7.65
     }

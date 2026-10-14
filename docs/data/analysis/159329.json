@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "159329",
   "name": "沙特ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 58.9,
-    "risk": 7.5,
+    "risk_adjusted": 55.2,
+    "risk": 10.0,
     "technical": 42.0,
-    "industry": 47.8,
+    "industry": 49.4,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:10:29"
+    "updated_at": "2026-10-13 18:09:48"
   },
   "nale_network": {
     "sector_name": "跨境中东",
@@ -53,6 +53,9 @@
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
@@ -67,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 9.61,
-    "max_drawdown_60d_pct": -7.45,
-    "atr14_pct": 0.68,
+    "annualized_volatility_20d_pct": 10.33,
+    "max_drawdown_60d_pct": -9.57,
+    "atr14_pct": 0.76,
     "factors": [
       {
         "name": "20日波动率",
         "score": 0.0,
-        "value": 9.61
+        "value": 10.33
       },
       {
         "name": "60日最大回撤",
-        "score": 3.5,
-        "value": -7.45
+        "score": 7.0,
+        "value": -9.57
       },
       {
         "name": "ATR百分比",
         "score": 0.6,
-        "value": 0.68
+        "value": 0.76
       },
       {
         "name": "量价异常",
-        "score": 56.7,
-        "value": 1.17
+        "score": 80.1,
+        "value": 1.3
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
@@ -115,28 +118,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 0.8780000000000001,
-    "ma10": 0.884,
-    "ma20": 0.8949999999999999,
-    "ma60": 0.8996666666666666,
-    "rsi14": 28.3,
-    "macd_dif": -0.009022111958606693,
-    "macd_dea": -0.006369734494851673,
-    "macd_hist": -0.005304754927510041,
-    "atr14_pct": 0.6801837426584942,
-    "boll_position": 0.06348106514399268,
-    "return_5d_pct": -2.2471910112359605,
-    "return_20d_pct": -5.434782608695654,
-    "volume_ratio_5d": 1.17
+    "ma5": 0.866,
+    "ma10": 0.877,
+    "ma20": 0.8885,
+    "ma60": 0.8983333333333333,
+    "rsi14": 20.7,
+    "macd_dif": -0.012105916369544722,
+    "macd_dea": -0.008157043558801024,
+    "macd_hist": -0.007897745621487397,
+    "atr14_pct": 0.7623494342064074,
+    "boll_position": -0.09378520978281808,
+    "return_5d_pct": -3.409090909090917,
+    "return_20d_pct": -7.608695652173925,
+    "volume_ratio_5d": 1.3
   },
   "industry": {
     "name": "跨境中东",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": 1.94
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": 2.48
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -144,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.41,
-      "median_return_pct": 0.0,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.55,
+      "median_return_pct": 1.08,
       "best_return_pct": 3.33,
-      "worst_return_pct": -2.15
+      "worst_return_pct": -2.25
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.3,
+      "up_probability_pct": 36.7,
+      "average_return_pct": 0.16,
       "median_return_pct": 0.0,
       "best_return_pct": 3.33,
-      "worst_return_pct": -2.15
+      "worst_return_pct": -3.12
     }
   },
   "fundamental": null,
@@ -169,7 +172,7 @@
     {
       "type": "warning",
       "title": "RSI偏低",
-      "detail": "RSI14=28.3，短期超卖。",
+      "detail": "RSI14=20.7，短期超卖。",
       "contribution": -5.0
     }
   ],

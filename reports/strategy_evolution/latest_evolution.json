@@ -1,15 +1,15 @@
 {
-  "analysis_date": "20261005_101545",
+  "analysis_date": "20261011_215151",
   "champion": {
     "name": "defensive_top5",
     "stats": {
-      "cumulative_return": 3.72,
-      "avg_daily_return": 0.531,
-      "volatility": 0.772,
+      "cumulative_return": 2.95,
+      "avg_daily_return": 0.421,
+      "volatility": 0.754,
       "win_rate": 85.7,
       "max_drawdown": 0.83,
-      "sharpe": 0.689,
-      "score": 12.1,
+      "sharpe": 0.559,
+      "score": 11.38,
       "trading_days": 7
     },
     "analysis": {
@@ -17,20 +17,20 @@
         {
           "code": "513520",
           "name": "日经ETF",
-          "appearances": 4,
-          "avg_return": 1.34
+          "appearances": 5,
+          "avg_return": 1.03
+        },
+        {
+          "code": "603259",
+          "name": "药明康德",
+          "appearances": 3,
+          "avg_return": 1.03
         },
         {
           "code": "513100",
           "name": "纳指ETF",
           "appearances": 4,
-          "avg_return": 0.92
-        },
-        {
-          "code": "600763",
-          "name": "通策医疗",
-          "appearances": 3,
-          "avg_return": 0.62
+          "avg_return": 0.81
         },
         {
           "code": "513500",
@@ -39,226 +39,173 @@
           "avg_return": 0.54
         },
         {
-          "code": "513030",
-          "name": "德国ETF",
+          "code": "159981",
+          "name": "能源化工ETF",
           "appearances": 3,
-          "avg_return": 0.5
+          "avg_return": 0.25
         }
       ],
-      "prediction_accuracy": 20.0,
-      "llm_analysis": {
-        "type": "json_object",
-        "success_factors": [
-          "全球宽基ETF配置：日经ETF、纳指ETF、标普500ETF、德国ETF合计出现17次，平均收益在0.50%-1.34%之间，捕捉了日本、美国、欧洲主要股市上涨，是收益主要来源。",
-          "地域分散降低单一市场冲击：覆盖日本、美国、德国及中国医疗资产，虽仍以权益为主，但区域分散降低了单一政策或单一市场波动风险。",
-          "ETF工具优势：跨境ETF持仓透明、费率较低、流动性较好，避免个股黑天鹅，适合作为防御型组合的底层配置。",
-          "正收益频率高且盈亏比尚可：最近7天收益为[1.16,0.19,0.01,1.29,-0.83,0.4,1.5]，6正1负，累计+3.72%，单日最大亏损-0.83小于最大盈利+1.5。",
-          "预测准确率低但收益为正：5/25=20%说明策略并非依赖短线方向预测，而更多来自配置持有和标的自身趋势，减少了高频预测错误的拖累。"
-        ],
-        "holdings_characteristics": {
-          "industry": "以跨境宽基指数ETF为主，覆盖日本、美国、德国市场，辅以中国医疗服务个股通策医疗。",
-          "market_cap": "ETF成分股偏大盘和全球龙头，通策医疗偏中盘；整体呈现大中盘特征。",
-          "volatility": "整体中低，但跨境ETF受汇率、QDII溢价和海外市场波动影响，通策医疗波动相对更高。"
-        },
-        "sustainability": {
-          "score": 6.5,
-          "reasoning": "核心持仓在样本期内均录得正平均收益，且最近7天累计正收益，显示当前全球权益beta、汇率和跨境ETF环境有利。但预测准确率仅20%，样本仅25次，优势可能来自市场beta而非稳定alpha；跨境ETF高相关、QDII溢价、汇率和海外估值风险会侵蚀优势。因此可持续性中等，需依赖风控和再平衡。",
-          "risk_factors": [
-            "QDII额度与溢价风险：跨境ETF可能溢价交易，溢价回落时亏损放大。",
-            "汇率风险：人民币汇率波动直接影响跨境ETF的人民币计价收益。",
-            "海外市场回调：日经、纳指、标普500、德国市场估值或政策转向可能导致同步下跌。",
-            "持仓相关性高：四只海外ETF同涨同跌，分散效果低于表面地域分散。",
-            "通策医疗政策与业绩风险：医疗政策、集采、消费医疗需求波动可能拖累个股。",
-            "样本少与过拟合：25次预测和7天收益不足以证明长期有效。"
-          ]
-        },
-        "improvement_directions": [
-          {
-            "direction": "加入趋势或动量择时",
-            "reason": "预测准确率仅20%，说明择时信号弱；用均线、动量或波动率过滤可避免在下跌趋势中持有。",
-            "expected_impact": "提高胜率，降低回撤，减少无效交易。"
-          },
-          {
-            "direction": "监控并规避QDII高溢价",
-            "reason": "跨境ETF常因额度受限出现溢价，买入高溢价会透支未来收益。",
-            "expected_impact": "降低买贵风险，提升实际收益稳定性。"
-          },
-          {
-            "direction": "增加低相关防御资产",
-            "reason": "当前核心持仓以海外权益为主，相关性高，防御性不足。",
-            "expected_impact": "降低组合波动，改善夏普比率。"
-          },
-          {
-            "direction": "设置止损与定期再平衡",
-            "reason": "最近7天出现-0.83单日回撤，海外与医疗资产均有尾部风险。",
-            "expected_impact": "控制单日和累计回撤，锁定已有利润。"
-          },
-          {
-            "direction": "扩大样本并分市场环境验证",
-            "reason": "25次预测样本太少，无法区分运气与能力。",
-            "expected_impact": "提高策略可信度，避免过拟合。"
-          }
-        ]
-      }
+      "prediction_accuracy": 27.586206896551722,
+      "llm_analysis": null
     },
-    "cumulative_return": 3.72,
-    "sharpe_ratio": 0.689,
+    "cumulative_return": 2.95,
+    "sharpe_ratio": 0.559,
     "win_rate": 0.857,
     "max_drawdown": 0.83
   },
   "all_strategies": {
     "aggressive": {
-      "cumulative_return": 1.08,
-      "avg_daily_return": 0.154,
-      "volatility": 2.213,
-      "win_rate": 42.9,
-      "max_drawdown": 5.7,
-      "sharpe": 0.07,
-      "score": 4.5,
+      "cumulative_return": 3.87,
+      "avg_daily_return": 0.553,
+      "volatility": 1.948,
+      "win_rate": 57.1,
+      "max_drawdown": 3.28,
+      "sharpe": 0.284,
+      "score": 8.28,
       "trading_days": 7
     },
     "robust": {
-      "cumulative_return": -1.34,
-      "avg_daily_return": -0.191,
-      "volatility": 0.313,
+      "cumulative_return": -1.03,
+      "avg_daily_return": -0.147,
+      "volatility": 0.296,
       "win_rate": 28.6,
-      "max_drawdown": 1.56,
-      "sharpe": -0.612,
-      "score": 0.67,
+      "max_drawdown": 1.12,
+      "sharpe": -0.497,
+      "score": 1.13,
       "trading_days": 7
     },
     "bluechip": {
-      "cumulative_return": 0.27,
-      "avg_daily_return": 0.039,
-      "volatility": 0.77,
+      "cumulative_return": 0.5,
+      "avg_daily_return": 0.071,
+      "volatility": 0.776,
       "win_rate": 57.1,
       "max_drawdown": 1.57,
-      "sharpe": 0.05,
-      "score": 5.82,
+      "sharpe": 0.092,
+      "score": 6.04,
       "trading_days": 7
     },
     "defensive": {
-      "cumulative_return": -0.26,
-      "avg_daily_return": -0.037,
-      "volatility": 0.695,
+      "cumulative_return": -0.24,
+      "avg_daily_return": -0.034,
+      "volatility": 0.696,
       "win_rate": 57.1,
       "max_drawdown": 1.58,
-      "sharpe": -0.053,
-      "score": 5.29,
+      "sharpe": -0.049,
+      "score": 5.31,
       "trading_days": 7
     },
     "global": {
-      "cumulative_return": -1.14,
-      "avg_daily_return": -0.163,
-      "volatility": 0.985,
+      "cumulative_return": -0.98,
+      "avg_daily_return": -0.14,
+      "volatility": 0.993,
       "win_rate": 42.9,
       "max_drawdown": 2.25,
-      "sharpe": -0.165,
-      "score": 3.05,
+      "sharpe": -0.141,
+      "score": 3.19,
       "trading_days": 7
     },
     "tech": {
-      "cumulative_return": -5.58,
-      "avg_daily_return": -0.797,
-      "volatility": 1.198,
-      "win_rate": 28.6,
-      "max_drawdown": 5.67,
-      "sharpe": -0.665,
-      "score": -2.39,
+      "cumulative_return": -1.83,
+      "avg_daily_return": -0.261,
+      "volatility": 0.713,
+      "win_rate": 42.9,
+      "max_drawdown": 2.4,
+      "sharpe": -0.366,
+      "score": 2.21,
       "trading_days": 7
     },
     "aggressive_v1": {
-      "cumulative_return": 0.35,
-      "avg_daily_return": 0.05,
-      "volatility": 0.881,
+      "cumulative_return": -0.02,
+      "avg_daily_return": -0.003,
+      "volatility": 0.808,
       "win_rate": 42.9,
       "max_drawdown": 1.99,
-      "sharpe": 0.057,
-      "score": 4.41,
+      "sharpe": -0.004,
+      "score": 4.07,
       "trading_days": 7
     },
     "aggressive_v2": {
-      "cumulative_return": 5.93,
-      "avg_daily_return": 0.847,
-      "volatility": 1.669,
+      "cumulative_return": 2.67,
+      "avg_daily_return": 0.381,
+      "volatility": 1.294,
       "win_rate": 57.1,
       "max_drawdown": 2.12,
-      "sharpe": 0.508,
-      "score": 10.08,
+      "sharpe": 0.295,
+      "score": 7.69,
       "trading_days": 7
     },
     "aggressive_v3": {
-      "cumulative_return": 5.17,
-      "avg_daily_return": 0.739,
-      "volatility": 1.571,
+      "cumulative_return": 1.76,
+      "avg_daily_return": 0.251,
+      "volatility": 1.059,
       "win_rate": 57.1,
       "max_drawdown": 2.09,
-      "sharpe": 0.47,
-      "score": 9.55,
+      "sharpe": 0.238,
+      "score": 7.04,
       "trading_days": 7
     },
     "defensive_momentum": {
-      "cumulative_return": 2.24,
-      "avg_daily_return": 0.32,
-      "volatility": 0.93,
+      "cumulative_return": 1.23,
+      "avg_daily_return": 0.176,
+      "volatility": 0.819,
       "win_rate": 85.7,
       "max_drawdown": 1.56,
-      "sharpe": 0.344,
-      "score": 10.45,
+      "sharpe": 0.215,
+      "score": 9.58,
       "trading_days": 7
     },
     "defensive_top5": {
-      "cumulative_return": 3.72,
-      "avg_daily_return": 0.531,
-      "volatility": 0.772,
+      "cumulative_return": 2.95,
+      "avg_daily_return": 0.421,
+      "volatility": 0.754,
       "win_rate": 85.7,
       "max_drawdown": 0.83,
-      "sharpe": 0.689,
-      "score": 12.1,
+      "sharpe": 0.559,
+      "score": 11.38,
       "trading_days": 7
     },
     "defensive_weighted": {
-      "cumulative_return": 2.24,
-      "avg_daily_return": 0.32,
-      "volatility": 0.93,
+      "cumulative_return": 1.23,
+      "avg_daily_return": 0.176,
+      "volatility": 0.819,
       "win_rate": 85.7,
       "max_drawdown": 1.56,
-      "sharpe": 0.344,
-      "score": 10.45,
+      "sharpe": 0.215,
+      "score": 9.58,
       "trading_days": 7
     },
     "global_v1": {
-      "cumulative_return": 2.24,
-      "avg_daily_return": 0.32,
-      "volatility": 0.93,
+      "cumulative_return": 1.23,
+      "avg_daily_return": 0.176,
+      "volatility": 0.819,
       "win_rate": 85.7,
       "max_drawdown": 1.56,
-      "sharpe": 0.344,
-      "score": 10.45,
+      "sharpe": 0.215,
+      "score": 9.58,
       "trading_days": 7
     },
     "global_v2": {
-      "cumulative_return": 2.24,
-      "avg_daily_return": 0.32,
-      "volatility": 0.93,
+      "cumulative_return": 1.23,
+      "avg_daily_return": 0.176,
+      "volatility": 0.819,
       "win_rate": 85.7,
       "max_drawdown": 1.56,
-      "sharpe": 0.344,
-      "score": 10.45,
+      "sharpe": 0.215,
+      "score": 9.58,
       "trading_days": 7
     },
     "global_v3": {
-      "cumulative_return": 2.24,
-      "avg_daily_return": 0.32,
-      "volatility": 0.93,
+      "cumulative_return": 1.23,
+      "avg_daily_return": 0.176,
+      "volatility": 0.819,
       "win_rate": 85.7,
       "max_drawdown": 1.56,
-      "sharpe": 0.344,
-      "score": 10.45,
+      "sharpe": 0.215,
+      "score": 9.58,
       "trading_days": 7
     }
   },
   "variants": [],
-  "llm_analysis": "**成功因素：**全球宽基ETF配置：日经ETF、纳指ETF、标普500ETF、德国ETF合计出现17次，平均收益在0.50%-1.34%之间，捕捉了日本、美国、欧洲主要股市上涨，是收益主要来源。；地域分散降低单一市场冲击：覆盖日本、美国、德国及中国医疗资产，虽仍以权益为主，但区域分散降低了单一政策或单一市场波动风险。；ETF工具优势：跨境ETF持仓透明、费率较低、流动性较好，避免个股黑天鹅，适合作为防御型组合的底层配置。；正收益频率高且盈亏比尚可：最近7天收益为[1.16,0.19,0.01,1.29,-0.83,0.4,1.5]，6正1负，累计+3.72%，单日最大亏损-0.83小于最大盈利+1.5。；预测准确率低但收益为正：5/25=20%说明策略并非依赖短线方向预测，而更多来自配置持有和标的自身趋势，减少了高频预测错误的拖累。\n**可持续性（6.5/10）：**核心持仓在样本期内均录得正平均收益，且最近7天累计正收益，显示当前全球权益beta、汇率和跨境ETF环境有利。但预测准确率仅20%，样本仅25次，优势可能来自市场beta而非稳定alpha；跨境ETF高相关、QDII溢价、汇率和海外估值风险会侵蚀优势。因此可持续性中等，需依赖风控和再平衡。\n**改进方向：**加入趋势或动量择时（预测准确率仅20%，说明择时信号弱；用均线、动量或波动率过滤可避免在下跌趋势中持有。）；监控并规避QDII高溢价（跨境ETF常因额度受限出现溢价，买入高溢价会透支未来收益。）；增加低相关防御资产（当前核心持仓以海外权益为主，相关性高，防御性不足。）；设置止损与定期再平衡（最近7天出现-0.83单日回撤，海外与医疗资产均有尾部风险。）；扩大样本并分市场环境验证（25次预测样本太少，无法区分运气与能力。）",
-  "source_file": "weekly_analysis_20261005_101545.json"
+  "llm_analysis": "（无 LLM 深度分析）",
+  "source_file": "weekly_analysis_20261011_215151.json"
 }

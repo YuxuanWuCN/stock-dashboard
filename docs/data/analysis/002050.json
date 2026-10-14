@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-09 18:14:13+08:00",
-  "trade_date": "2026-10-09",
+  "generated_at": "2026-10-13 18:10:48+08:00",
+  "trade_date": "2026-10-13",
   "code": "002050",
   "name": "三花智控",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 52.6,
-    "risk": 34.7,
+    "risk_adjusted": 55.7,
+    "risk": 34.4,
     "technical": 42.0,
     "industry": 42.0,
     "leading": 50.0
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-09 18:09:47"
+    "updated_at": "2026-10-13 18:09:03"
   },
   "nale_network": {
     "sector_name": "热管理/机器人旋转执行器",
@@ -53,6 +53,9 @@
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
+    "corr_missing_evidence_count": 0,
+    "leader_corr_with_stock": null,
+    "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
@@ -67,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 30.53,
-    "max_drawdown_60d_pct": -21.54,
-    "atr14_pct": 3.7,
+    "annualized_volatility_20d_pct": 28.07,
+    "max_drawdown_60d_pct": -22.25,
+    "atr14_pct": 3.74,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 36.3,
-        "value": 30.53
+        "score": 32.7,
+        "value": 28.07
       },
       {
         "name": "60日最大回撤",
         "score": 48.5,
-        "value": -21.54
+        "value": -22.25
       },
       {
         "name": "ATR百分比",
-        "score": 41.5,
-        "value": 3.7
+        "score": 40.4,
+        "value": 3.74
       },
       {
         "name": "量价异常",
-        "score": 26.3,
-        "value": 1.05
+        "score": 43.3,
+        "value": 1.11
       },
       {
         "name": "行业波动",
-        "score": 5.3,
-        "value": 20.08
+        "score": 0.6,
+        "value": 19.18
       }
     ]
   },
@@ -115,45 +118,45 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 34.816,
-    "ma10": 35.324,
-    "ma20": 35.1805,
-    "ma60": 36.91616666666667,
-    "rsi14": 36.4,
-    "macd_dif": -0.5489949960702205,
-    "macd_dea": -0.5324936994537375,
-    "macd_hist": -0.03300259323296606,
-    "atr14_pct": 3.704631389514806,
-    "boll_position": 0.05285194189791658,
-    "return_5d_pct": -6.61846496106786,
-    "return_20d_pct": -7.186290768380321,
-    "volume_ratio_5d": 1.05
+    "ma5": 33.698,
+    "ma10": 34.725,
+    "ma20": 34.8575,
+    "ma60": 36.603833333333334,
+    "rsi14": 31.4,
+    "macd_dif": -0.8109569622835835,
+    "macd_dea": -0.6121628068192368,
+    "macd_hist": -0.3975883109286933,
+    "atr14_pct": 3.7403728616115592,
+    "boll_position": -0.036889625833971706,
+    "return_5d_pct": -8.725021108922038,
+    "return_20d_pct": -10.857614073666856,
+    "volume_ratio_5d": 1.11
   },
   "industry": {
     "name": "热管理/机器人旋转执行器",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -7.44,
-    "return_20d_pct": -7.28,
-    "return_60d_pct": -15.52,
-    "relative_strength_20d_pct": 0.18
+    "return_5d_pct": -3.69,
+    "return_20d_pct": -8.38,
+    "return_60d_pct": -17.69,
+    "relative_strength_20d_pct": -0.77
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 28,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 58.6,
-      "average_return_pct": 0.78,
-      "median_return_pct": 1.1,
+      "up_probability_pct": 60.7,
+      "average_return_pct": 1.29,
+      "median_return_pct": 1.96,
       "best_return_pct": 9.14,
       "worst_return_pct": -12.74
     },
     "horizon_5d": {
-      "up_probability_pct": 51.7,
-      "average_return_pct": 0.55,
-      "median_return_pct": 0.11,
+      "up_probability_pct": 57.1,
+      "average_return_pct": 1.21,
+      "median_return_pct": 0.63,
       "best_return_pct": 22.96,
       "worst_return_pct": -11.86
     }
@@ -289,13 +292,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 21.5%，风险偏高。",
+      "detail": "近60日最大回撤 22.2%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 21.5%，风险扣分。",
+      "detail": "近60日最大回撤 22.2%，风险扣分。",
       "contribution": -7.0
     }
   ],
