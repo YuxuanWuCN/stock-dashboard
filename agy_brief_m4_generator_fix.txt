@@ -1,6 +1,0 @@
-<task>
-Repository D:\股票分析项目\Rainbow_FinGPTv2. Previous M4 work generated reports/real_rebuild_20261010/paper_draft_zh.md and scripts/p4_paper_builder.py. P4 tests 38 passed and quality small passed.
-
-Fix only the paper generator validation defect: its placeholder regex currently flags legitimate LaTeX braces such as {i,t} and {S_t} as unrendered placeholders, so `python scripts/p4_paper_builder.py` fails even though output is deterministic. Narrow the check to actual Python-format placeholders or explicit unresolved tokens (nan/None and `{identifier}` only when not LaTeX), without weakening detection of real unresolved placeholders. Run generator twice and prove identical hash.
-Create/update reports/real_rebuild_20261010/antigravity_stage3_paper.md with exact commands/results and limitations. Do not modify quantitative JSON, unrelated source, or commit. Keep matched placebo invalid_insufficient_control wording already present. Report files changed.
-</task>
