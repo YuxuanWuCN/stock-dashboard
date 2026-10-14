@@ -10,8 +10,8 @@ r"""tools/sector_rotation_daily.py —— 板块轮动每日决策 CLI（阶段5
   python tools/sector_rotation_daily.py --trade-date 2026-10-14
 
 退出码：
-  0 成功；2 参数/数据错误（无 K 线日历等）。
-  阶段6 接入 monitoring 后，critical 告警将以非 0 退出。
+  0 成功；2 参数/数据错误（无 K 线日历等）；3 存在 severity=critical 监控告警
+  （由 monitoring 判定，经 daily_routine 日志机制体现）。
 """
 
 from __future__ import annotations
@@ -24,6 +24,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
 from src.sector_rotation.daily_job import LATEST_NAME, run_daily  # noqa: E402
+from src.sector_rotation.monitoring import run_monitoring  # noqa: E402
 
 
 def main() -> int:
@@ -34,6 +35,8 @@ def main() -> int:
     ap.add_argument("--news-fixture", default=None, help="离线新闻夹具 JSON（提供则不发起外部请求）")
     ap.add_argument("--use-advisor", action="store_true", help="启用 LLM 决策复核（不推翻量化结论）")
     ap.add_argument("--out-dir", default=None, help="产物目录（默认 docs/data/sector_rotation）")
+    ap.add_argument("--no-monitor", action="store_true",
+                    help="跳过监控告警检查（仅调试用；不产出 alerts 报告，也不会返回退出码 3）")
     args = ap.parse_args()
 
     try:
@@ -58,7 +61,17 @@ def main() -> int:
     for note in payload.get("notes") or []:
         print(f"  note: {note}")
     print(f"  -> {out_root}/{LATEST_NAME}")
-    return 0
+
+    if args.no_monitor:
+        return 0
+    report = run_monitoring(out_dir=Path(args.out_dir) if args.out_dir else None)
+    summary = report["summary"]
+    print(f"[monitoring] critical={summary['critical']} warning={summary['warning']} "
+          f"info={summary['info']} -> reports/sector_rotation/alerts_*.json")
+    for alert in report["alerts"]:
+        if alert["severity"] in ("critical", "warning"):
+            print(f"  [{alert['severity']}] {alert['check']}: {alert['message']}")
+    return 3 if report["has_critical"] else 0
 
 
 if __name__ == "__main__":

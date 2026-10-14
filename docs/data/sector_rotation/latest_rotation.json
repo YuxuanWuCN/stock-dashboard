@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-14T10:48:01",
+  "generated_at": "2026-10-14T12:16:22",
   "trade_date": "2026-08-27",
   "requested_trade_date": "2026-08-27",
   "sentiment_source": "price_breadth_proxy",
@@ -9,7 +9,7 @@
   "holding_sector": "gold",
   "portfolio_state": {
     "current_sector": "gold",
-    "holding_days": 10,
+    "holding_days": 1,
     "monthly_rotations": 0,
     "days_since_last_rotation": 10
   },
@@ -76,30 +76,30 @@
     "target_sector": null,
     "from_sector": "gold",
     "to_sector": null,
-    "reason": "Current sector 'gold' is healthy (score=0.1667, trend='stable')",
-    "confidence": 0.4065,
+    "reason": "Holding period too short (1 < 5 trading days)",
+    "confidence": 0.0,
     "is_fallback": false,
     "llm_rationale": null,
-    "execution_time_ms": 0.006,
+    "execution_time_ms": 0.005,
     "timestamp": "2026-08-27 00:00:00",
     "metrics": {
-      "current_score": 0.1667,
-      "current_trend": "stable"
+      "holding_days": 1,
+      "min_holding_days": 5
     },
     "llm_validation": null
   },
-  "reason": "Current sector 'gold' is healthy (score=0.1667, trend='stable')",
-  "confidence": 0.4065,
+  "reason": "Holding period too short (1 < 5 trading days)",
+  "confidence": 0.0,
   "llm_validation": null,
   "audit": {
     "engine": "SectorRotationEngine",
     "engine_version": "1.0",
-    "decision_path_ms": 0.006,
+    "decision_path_ms": 0.005,
     "python": "3.12.12",
-    "git_commit": "8af008f71e3af3cb106b6d3d2360241225456f4f",
+    "git_commit": "6cef554eb6dfb475c5498ca307e0fec91dd5da0a",
     "portfolio_state_used": {
       "current_sector": "gold",
-      "holding_days": 10,
+      "holding_days": 1,
       "monthly_rotations": 0,
       "days_since_last_rotation": 10
     },
@@ -133,5 +133,5 @@
     "advisor_audit": null
   },
   "notes": [],
-  "history_days_recorded": 1
+  "history_days_recorded": 2
 }
