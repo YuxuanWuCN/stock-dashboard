@@ -50,6 +50,12 @@ class BacktestConfig:
     risk_free_rate: float = 0.02          # 无风险利率 (年化 2.0%)
 
 
+STRESS_MODES = [
+    "baseline", "nale", "risk_constrained_nale", "sentiment_only",
+    "t_nale", "defensive_only",
+]
+
+
 class FOFBacktestEngine:
     """FOF 组合点时回测执行引擎。"""
 
@@ -73,15 +79,42 @@ class FOFBacktestEngine:
 
     def run_backtest(
         self,
-        mode: str,                         # "baseline", "nale", "risk_constrained_nale", "sentiment_only"
+        mode: str,
         signals_by_date: Dict[str, Dict[str, PointInTimeSignal]],
         config: BacktestConfig,
+        t_nale_halflife: float = 5.0,
+        t_nale_age_map: Optional[Dict[str, int]] = None,
+        fill_fraction: float = 1.0,
+        delayed_exit_days: int = 0,
+        frozen_exit_days: int = 0,
     ) -> Tuple[List[BacktestLogEntry], PerformanceMetrics]:
-        """运行单组回测策略。"""
+        """运行单组回测策略。
+
+        Args:
+            mode: 策略模式 (baseline/nale/risk_constrained_nale/sentiment_only/t_nale/defensive_only)
+            signals_by_date: 点时信号字典
+            config: 回测配置
+            t_nale_halflife: T-NALE 异质半衰期基值（交易日）
+            t_nale_age_map: 节点年龄映射 {ticker: signal_age_days}
+            fill_fraction: 每次调仓的实际成交比例（<1.0 模拟流动性冲击下的部分成交，
+                未成交部分保留原仓位，用于熊市压力测试）
+            delayed_exit_days: 风险门（进入 DEFENSIVE/PROTECTIVE）触发后，强制减仓动作
+                延迟多少个交易日执行（0=不启用该压力情景）
+            frozen_exit_days: 风险门触发后连续多少个交易日内无法减仓（0=不启用）
+        """
         # 1. 过滤日期区间
+        # 兼容性修复：returns_df.index 既可能是纯日期字符串（如 test_portfolio_fof.py），
+        # 也可能是 pandas Timestamp（如 scripts/run_bear_market_stress.py 用 pct_change()
+        # 后的默认索引）。统一归一化为 "YYYY-MM-DD" 后再与 config 以及
+        # signals_by_date 的 key 进行匹配，避免 Timestamp 带时间部分导致信号永远
+        # 查不到（历史隐藏 bug：导致所有依赖卫星信号的模式静默退化为无信号运行）。
+        def _norm_date(val) -> str:
+            s = str(val)
+            return s[:10] if " " in s else s
+
         dates = [
             d for d in self.returns_df.index
-            if config.start_date <= str(d) <= config.end_date
+            if config.start_date <= _norm_date(d) <= config.end_date
         ]
         if len(dates) < 5:
             raise ValueError(f"回测区间 [{config.start_date}, {config.end_date}] 内有效交易日不足 ({len(dates)} 天)")
@@ -106,8 +139,16 @@ class FOFBacktestEngine:
 
         days_since_last_rebalance = config.rebalance_frequency_days  # 首日立即调仓
 
+        # 流动性/执行压力跟踪变量（默认全 0/1.0 时不改变既有行为）
+        _SEVERITY = {"normal": 0, "watch": 1, "defensive": 2, "protective": 3}
+        risk_tickers = set(self.allocator.beta_tickers) | set(self.allocator.satellite_tickers)
+        prev_severity = 0
+        frozen_until_idx = -1
+        forced_exit_due_idx: Optional[int] = None
+        forced_exit_state: Optional[RiskState] = None
+
         for i, dt_val in enumerate(dates):
-            date_str = str(dt_val)
+            date_str = _norm_date(dt_val)
             day_returns = self.returns_df.loc[dt_val].to_dict()
 
             # 基准当日收益
@@ -119,8 +160,9 @@ class FOFBacktestEngine:
             should_rebalance = (days_since_last_rebalance >= config.rebalance_frequency_days)
             daily_turnover = 0.0
             daily_fee = 0.0
+            in_frozen_window = i <= frozen_until_idx
 
-            if should_rebalance:
+            if should_rebalance or (forced_exit_due_idx is not None and i >= forced_exit_due_idx):
                 # 获取点时信号
                 date_signals = signals_by_date.get(date_str, {})
 
@@ -152,6 +194,27 @@ class FOFBacktestEngine:
                         current_risk_state=current_risk_state,
                         volatility_scale=vol_scale,
                     )
+                elif mode == "defensive_only":
+                    # 100% 防御底仓，无信号
+                    target_pw = self.allocator.allocate(
+                        trade_date=date_str,
+                        signals={},
+                        current_risk_state=RiskState.PROTECTIVE,
+                        effective_satellite_budget=0.0,
+                        volatility_scale=0.0,
+                    )
+                elif mode == "t_nale":
+                    # T-NALE: 信号按节点年龄指数衰减
+                    date_signals = self._apply_t_nale_decay(
+                        date_signals, t_nale_halflife, t_nale_age_map)
+                    vol_scale = self.risk_manager.compute_volatility_scale(historical_returns)
+                    current_risk_state, _, _ = self.risk_manager.update_risk_state(nav)
+                    target_pw = self.allocator.allocate(
+                        trade_date=date_str,
+                        signals=date_signals,
+                        current_risk_state=current_risk_state,
+                        volatility_scale=vol_scale,
+                    )
                 elif mode == "sentiment_only":
                     # 仅情绪，无网络传导
                     target_pw = self.allocator.allocate(
@@ -164,17 +227,47 @@ class FOFBacktestEngine:
                 else:
                     raise ValueError(f"未知回测模式: {mode}")
 
+                # 风险门强制减仓（delayed_exit_days 压力情景）：到点时以触发状态覆盖目标权重
+                forced_this_bar = (forced_exit_due_idx is not None and i >= forced_exit_due_idx)
+                if forced_this_bar:
+                    forced_pw = self.allocator.allocate(
+                        trade_date=date_str,
+                        signals={},
+                        current_risk_state=forced_exit_state or RiskState.DEFENSIVE,
+                        effective_satellite_budget=0.0,
+                        volatility_scale=0.0,
+                    )
+                    tgt_risk_w = sum(target_pw.weights.get(t, 0.0) for t in risk_tickers)
+                    forced_risk_w = sum(forced_pw.weights.get(t, 0.0) for t in risk_tickers)
+                    if forced_risk_w < tgt_risk_w - 1e-9:
+                        target_pw = forced_pw
+
                 # 执行死区与调仓
                 executed_weights, daily_turnover, daily_fee, day_trades = (
                     self.rebalancer.apply_deadband_and_execute(
                         trade_date=date_str,
                         current_weights=current_weights,
                         target_weights=target_pw,
+                        fill_fraction=fill_fraction,
                     )
                 )
+
+                # 冻结期（frozen_exit_days 压力情景）：禁止风险资产净减仓，未成交仓位保留原状
+                if in_frozen_window:
+                    cur_risk_w = sum(current_weights.get(t, 0.0) for t in risk_tickers)
+                    new_risk_w = sum(executed_weights.get(t, 0.0) for t in risk_tickers)
+                    if new_risk_w < cur_risk_w - 1e-9:
+                        executed_weights = dict(current_weights)
+                        daily_turnover = 0.0
+                        daily_fee = 0.0
+                        day_trades = []
+
                 current_weights = executed_weights
                 all_trades.extend(day_trades)
                 days_since_last_rebalance = 0
+                if forced_this_bar:
+                    forced_exit_due_idx = None
+                    forced_exit_state = None
             else:
                 days_since_last_rebalance += 1
 
@@ -194,6 +287,16 @@ class FOFBacktestEngine:
 
             # 更新回撤状态跟踪
             curr_state, dd, peak = self.risk_manager.update_risk_state(nav)
+
+            # 风险门触发检测：严重度升高至 DEFENSIVE/PROTECTIVE 时，登记冻结窗口与延迟减仓
+            curr_sev = _SEVERITY.get(curr_state.value, 0)
+            if curr_sev >= 2 and curr_sev > prev_severity:
+                if frozen_exit_days > 0:
+                    frozen_until_idx = i + frozen_exit_days
+                if delayed_exit_days > 0:
+                    forced_exit_due_idx = i + delayed_exit_days + 1
+                    forced_exit_state = curr_state
+            prev_severity = curr_sev
 
             # 统计各角色权重
             sat_w = sum(current_weights.get(t, 0.0) for t in self.allocator.satellite_tickers)
@@ -237,6 +340,27 @@ class FOFBacktestEngine:
         # 2. 计算综合业绩指标
         metrics = self._calculate_metrics(logs, config)
         return logs, metrics
+
+    def _apply_t_nale_decay(
+        self,
+        signals: Dict[str, PointInTimeSignal],
+        halflife: float,
+        age_map: Optional[Dict[str, int]] = None,
+    ) -> Dict[str, PointInTimeSignal]:
+        """T-NALE 异质半衰期衰减：score_decayed = score * 0.5^(age/halflife)。"""
+        import copy
+        decayed: Dict[str, PointInTimeSignal] = {}
+        amap = age_map or {}
+        for ticker, sig in signals.items():
+            age = amap.get(ticker, 1)  # 默认假设信号年龄 1 天
+            factor = math.pow(0.5, age / max(halflife, 0.1))
+            new_sig = copy.copy(sig)
+            new_sig.score = sig.score * factor
+            new_sig.details = {**sig.details, "t_nale_age": age, "t_nale_factor": factor}
+            decayed[ticker] = new_sig
+        return decayed
+
+    # ------------------------------------------------------------------
 
     def _calculate_metrics(
         self,
@@ -297,7 +421,8 @@ class FOFBacktestEngine:
         # 月度胜率与亏损月份数
         df["month"] = df["date"].dt.to_period("M")
         monthly_grouped = df.groupby("month").apply(
-            lambda g: (g["nav"].iloc[-1] / g["nav"].iloc[0] - 1.0)
+            lambda g: (g["nav"].iloc[-1] / g["nav"].iloc[0] - 1.0),
+            include_groups=False,
         )
         total_months = len(monthly_grouped)
         win_months = int((monthly_grouped > 0).sum())

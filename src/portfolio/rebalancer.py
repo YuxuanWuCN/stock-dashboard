@@ -50,8 +50,13 @@ class RebalanceManager:
         current_weights: Dict[str, float],
         target_weights: PortfolioWeights,
         asset_prices: Optional[Dict[str, float]] = None,
+        fill_fraction: float = 1.0,
     ) -> Tuple[Dict[str, float], float, float, List[BacktestTrade]]:
         """应用调仓死区、换手限制并计算交易费用。
+
+        fill_fraction <1.0 模拟流动性冲击下的部分成交：目标调仓幅度只有
+        fill_fraction 比例真正执行，未成交部分继续持有原仓位（不得清零或变成
+        现金），用于熊市压力测试的 half-fill 情景。
 
         返回: (执行后实际权重, 本次换手率, 本次交易总成本, 交易明细列表)
         """
@@ -104,6 +109,17 @@ class RebalanceManager:
         sum_exec = sum(executed_weights.values())
         if abs(sum_exec - 1.0) > 1e-6:
             executed_weights[primary_def] += (1.0 - sum_exec)
+
+        # 3.5 部分成交（流动性压力）：未成交部分保留原仓位，不清零
+        if fill_fraction < 1.0:
+            for t in self.assets:
+                w_c = current_weights.get(t, 0.0)
+                w_e = executed_weights.get(t, 0.0)
+                executed_weights[t] = w_c + (w_e - w_c) * fill_fraction
+            executed_turnover = 0.5 * sum(
+                abs(executed_weights.get(t, 0.0) - current_weights.get(t, 0.0))
+                for t in self.assets
+            )
 
         # 4. 计算费用与生成交易订单
         trades: List[BacktestTrade] = []
