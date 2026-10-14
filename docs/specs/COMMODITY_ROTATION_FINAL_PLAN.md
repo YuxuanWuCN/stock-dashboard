@@ -19,20 +19,29 @@
 
 ## 📊 板块定义
 
-### 四大商品板块
+> **仓库实际对齐（2026-10-14）**：`data/raw/commodity_futures/` 目前仅有 9 个品种日频数据：
+> ag（沪银，2012-05-10 起）、al（沪铝）、cu（沪铜）、i（大商所铁矿）、m（豆粕）、
+> p（棕榈油，2007-10-29 起）、rb（螺纹）、sc（上原油，2018-03-26 起）、ta（PTA，2006-12-19 起）。
+> 原清单中的 **OI/RM/JM/J/FU/NG/ZN/PB 为待补抓品种**；实施前先更新本表，禁止臆测未入库品种的数据。
+
+### 四大商品板块（按实际可得品种落地）
 
 ```
 1. 农产品 (AGRI)
-   - 豆粕 (M)、豆油 (OI)、菜粕 (RM)
-   
+   - 豆粕 (M) ✓、棕榈油 (P) ✓
+   - 豆油 (OI) ✗ 待补抓、菜粕 (RM) ✗ 待补抓
+
 2. 黑色 (BLACK)
-   - 焦煤 (JM)、焦炭 (J)、铁矿 (I)、螺纹 (RB)
-   
-3. 能源 (ENERGY)
-   - 原油 (SC)、燃油 (FU)、天然气 (NG)
-   
+   - 铁矿 (I) ✓、螺纹 (RB) ✓
+   - 焦煤 (JM) ✗ 待补抓、焦炭 (J) ✗ 待补抓
+
+3. 能源化工 (ENERGY)
+   - 原油 (SC) ✓、PTA (TA) ✓
+   - 燃油 (FU) ✗ 待补抓、天然气 (NG) ✗ 待补抓
+
 4. 金属 (METALS)
-   - 铜 (CU)、铝 (AL)、锌 (ZN)、铅 (PB)
+   - 白银 (AG) ✓、铜 (CU) ✓、铝 (AL) ✓
+   - 锌 (ZN) ✗ 待补抓、铅 (PB) ✗ 待补抓
 ```
 
 ---
@@ -81,12 +90,12 @@
 - 本地存储 SQLite / Parquet
 
 **输出**:
-- `data/futures/AGRI.parquet` (日期, 合约, OHLCV)
-- `data/futures/BLACK.parquet`
-- `data/futures/ENERGY.parquet`
-- `data/futures/METALS.parquet`
+- `data/futures/AGRI.parquet` (日期, 合约, OHLCV) —— 首版仅含 m/p
+- `data/futures/BLACK.parquet` —— 首版仅含 i/rb
+- `data/futures/ENERGY.parquet` —— 首版仅含 sc/ta
+- `data/futures/METALS.parquet` —— 首版仅含 ag/al/cu
 
-**验收**: 数据覆盖 2023-01-01 ~ 今日，无缺失值
+**验收**: 数据覆盖 2023-01-01 ~ 今日，无缺失值（仅限上述已有数据品种；待补抓品种不入验收范围）
 
 ---
 
@@ -119,7 +128,7 @@ class NaleForFutures:
 - `results/nale_futures_daily.csv` 
   (date, contract, PC01-PC10, alpha_nale, S0)
 
-**验收**: 覆盖所有 12 个期货合约，无 NaN 值
+**验收**: 覆盖所有 9 个已有数据期货品种（ag/al/cu/i/m/p/rb/sc/ta，逐合约展开），无 NaN 值；原计划的 OI/RM/JM/J/FU/NG/ZN/PB 待补数据后纳入
 
 ---
 
