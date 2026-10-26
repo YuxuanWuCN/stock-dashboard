@@ -207,5 +207,5 @@
 2. `Rainbow_FinGPTv2/reports/tables/backtest_paper_100d_202stocks/DEPRECATED_SYNTHETIC_NOTICE.md`
 3. `Rainbow_FinGPTv2/reports/tables/backtest_storage_2025q2_2026q7/DEPRECATED_SYNTHETIC_NOTICE.md`
 4. `Rainbow_FinGPTv2/本人研究成果/figures/DEPRECATED_SYNTHETIC_NOTICE.md`
-5. `Rainbow_FinGPTv2/reports/DEPRECATED_STORAGE_GOLD_JOINT_NOTICE.md`
-6. `Rainbow_FinGPTv2/reports/DEPRECATED_BACKTEST_RESULTS_ENHANCED_NOTICE.md`
+5. `Rainbow_FinGPTv2/reports/作废声明/DEPRECATED_STORAGE_GOLD_JOINT_NOTICE.md`
+6. `Rainbow_FinGPTv2/reports/作废声明/DEPRECATED_BACKTEST_RESULTS_ENHANCED_NOTICE.md`
