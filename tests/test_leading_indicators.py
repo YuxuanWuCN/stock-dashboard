@@ -44,7 +44,7 @@ def test_tracker_fallback_mode():
     # 模拟 client 不可用
     mock_client = MagicMock()
     mock_client.backend = "deepseek"
-    mock_client.model = "deepseek-v4-flash"
+    mock_client.model = "deepseek-flash"
     mock_client.is_available = False
     mock_client.unavailable_reason = "Mocked offline"
 

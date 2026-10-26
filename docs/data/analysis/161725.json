@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "161725",
   "name": "招商中证白酒指数A",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 58.6,
-    "risk": 11.6,
-    "technical": 60.0,
-    "industry": 50.1,
+    "risk_adjusted": 70.0,
+    "risk": 14.5,
+    "technical": 83.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:35:31"
+    "updated_at": "2026-10-23 17:33:31"
   },
   "nale_network": {
     "sector_name": "公募白酒",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.17,
+    "annualized_volatility_20d_pct": 19.14,
     "max_drawdown_60d_pct": -10.34,
-    "atr14_pct": 1.5,
+    "atr14_pct": 1.83,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 7.0,
-        "value": 15.17
+        "score": 8.7,
+        "value": 19.14
       },
       {
         "name": "60日最大回撤",
-        "score": 9.3,
+        "score": 6.4,
         "value": -10.34
       },
       {
         "name": "ATR百分比",
-        "score": 7.0,
-        "value": 1.5
+        "score": 9.9,
+        "value": 1.83
       },
       {
         "name": "量价异常",
-        "score": 50.6,
-        "value": 0.86
+        "score": 75.0,
+        "value": 1.29
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 0.5279999999999999,
-    "ma10": 0.526,
-    "ma20": 0.5295,
-    "ma60": 0.548,
-    "rsi14": 33.8,
-    "macd_dif": -0.005715602721059643,
-    "macd_dea": -0.0061917695317563505,
-    "macd_hist": 0.0009523336213934155,
-    "atr14_pct": 1.5046679959008729,
-    "boll_position": 0.14496833094133332,
-    "return_5d_pct": -1.8867924528301883,
-    "return_20d_pct": -7.142857142857151,
-    "volume_ratio_5d": 0.86
+    "trend": "range",
+    "ma5": 0.532,
+    "ma10": 0.531,
+    "ma20": 0.529,
+    "ma60": 0.5463333333333333,
+    "rsi14": 47.3,
+    "macd_dif": -0.0026857724501888613,
+    "macd_dea": -0.0034901786223388125,
+    "macd_hist": 0.0016088123442999022,
+    "atr14_pct": 1.8290218310076576,
+    "boll_position": 0.5400320384514665,
+    "return_5d_pct": -1.851851851851849,
+    "return_20d_pct": 0.0,
+    "volume_ratio_5d": 1.29
   },
   "industry": {
     "name": "公募白酒",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": 2.71
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 15.31
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,29 +147,22 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.24,
+      "up_probability_pct": 33.3,
+      "average_return_pct": 0.01,
       "median_return_pct": 0.0,
       "best_return_pct": 7.41,
       "worst_return_pct": -3.64
     },
     "horizon_5d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -0.09,
-      "median_return_pct": -1.44,
+      "up_probability_pct": 23.3,
+      "average_return_pct": -0.64,
+      "median_return_pct": -1.75,
       "best_return_pct": 8.82,
-      "worst_return_pct": -4.29
+      "worst_return_pct": -5.26
     }
   },
   "fundamental": null,
-  "reasons": [
-    {
-      "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/161725.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

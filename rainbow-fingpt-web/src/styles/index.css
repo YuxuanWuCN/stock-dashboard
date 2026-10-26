@@ -25,9 +25,12 @@
 }
 
 @layer components {
-  /* 全站唯一的卡片语言：白底 + 1px 描边 + 统一阴影 + 16px 圆角 */
+  /* 全站卡片交互语言：白底 + 1px 描边 + 统一阴影 + 16px 圆角 + 灵动微交互 */
   .card-surface {
-    @apply rounded-card border border-line bg-white shadow-card;
+    @apply rounded-card border border-line bg-white shadow-card transition-all duration-300;
+  }
+  .card-surface:hover {
+    @apply -translate-y-0.5 shadow-float border-slate-300/80;
   }
   /* ---------------------------------------------------------------
      排版阶梯

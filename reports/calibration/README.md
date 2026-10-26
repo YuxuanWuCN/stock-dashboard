@@ -13,7 +13,7 @@
 | `tools/calibration.py` | 生成校准报告 | 每日自动检查 / 周日统一分析 |
 | `tools/apply_calibration.py` | 应用调参建议 | 人工审核后执行 |
 | `tools/verify_calibration.py` | 验证调参效果 | 调参后 5 天 |
-| `tools/daily_local.ps1` | 每日自动任务（已集成校准检查） | 每天 18:00 |
+| `tools/daily_local.ps1` | 每日自动任务（已集成校准检查） | 每个工作日 17:30 |
 | `tools/weekly_calibration.ps1` | 周日统一校准分析 | 每周日 20:00 |
 
 ### 工作流程

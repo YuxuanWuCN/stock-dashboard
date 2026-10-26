@@ -1,0 +1,308 @@
+{
+  "generated_at": "20261018_201702",
+  "analysis_period": "past_7_days",
+  "champion": {
+    "name": "aggressive",
+    "stats": {
+      "cumulative_return": 6.75,
+      "avg_daily_return": 0.964,
+      "volatility": 1.614,
+      "win_rate": 71.4,
+      "max_drawdown": 0.76,
+      "sharpe": 0.597,
+      "score": 12.31,
+      "trading_days": 7
+    },
+    "analysis": {
+      "core_holdings": [
+        {
+          "code": "301560",
+          "name": "众捷股份",
+          "appearances": 5,
+          "avg_return": 7.09
+        },
+        {
+          "code": "688655",
+          "name": "迅捷兴",
+          "appearances": 5,
+          "avg_return": 5.24
+        },
+        {
+          "code": "688185",
+          "name": "康希诺",
+          "appearances": 4,
+          "avg_return": 3.57
+        },
+        {
+          "code": "688137",
+          "name": "近岸蛋白",
+          "appearances": 7,
+          "avg_return": 3.52
+        },
+        {
+          "code": "688356",
+          "name": "键凯科技",
+          "appearances": 3,
+          "avg_return": 2.38
+        }
+      ],
+      "prediction_accuracy": 54.285714285714285,
+      "llm_analysis": {
+        "success_factors": [
+          "核心持仓贡献显著：众捷股份5次出现、平均收益7.09%，迅捷兴5次出现、平均收益5.24%，近岸蛋白7次出现、平均收益3.52%，说明策略对特定高弹性标的具备重复捕捉能力。",
+          "收益弹性优先：核心持仓集中在科创、创业板成长方向，单笔收益空间较大，能够以少数高收益交易覆盖部分低收益或亏损交易。",
+          "胜率不高但依赖盈亏比：预测准确率54.3%，并非高命中率策略，成功更可能来自盈利交易幅度大于亏损交易，而非单纯依赖预测准确率。",
+          "近期收益集中于行情启动段：最近7日收益合计约+6.75%，其中前3日贡献约+6.78%，显示策略在动量启动或主题发酵阶段更有效。",
+          "行业主题阶段性共振：持仓覆盖生物医药、电子制造、汽车零部件等方向，在主题轮动和高风险偏好环境中容易形成阶段性超额收益。"
+        ],
+        "holdings_characteristics": {
+          "industry": "以生物医药（疫苗、蛋白试剂、药用材料）为主，同时包含电子制造（PCB）和汽车零部件等成长主题。",
+          "market_cap": "代码集中于301/688板块，呈现中小盘成长风格；数据未直接给出市值，需以实时市值进一步校验。",
+          "volatility": "中高波动：核心个股平均收益区间为2.38%-7.09%，近期出现单日+4.2%、+2.56%的收益，同时也存在负收益日。"
+        },
+        "sustainability": {
+          "score": 6.0,
+          "reasoning": "当前优势具备一定延续性，但稳定性中等偏低。核心持仓平均收益为正且近7日累计约+6.75%，说明策略在特定阶段有效；但预测准确率仅54.3%，收益高度集中于少数交易日和少数标的，最近3日出现-0.36%、-0.4%的衰减信号，显示策略对主题行情和风险偏好较敏感。样本仅35次预测和7日收益，统计稳定性仍需滚动验证。",
+          "risk_factors": [
+            "主题/风格切换风险：生物医药和电子制造成分较高，主题退潮时可能放大回撤。",
+            "中小盘与科创创业流动性风险：高波动标的在风险偏好下降时价格冲击和流动性风险更明显。",
+            "收益集中风险：收益依赖少数高收益持仓和少数交易日，样本不足35次预测，稳定性有待验证。",
+            "胜率偏低风险：54.3%准确率下，若盈亏比下降，策略容易转为负收益。",
+            "近期动量衰减：最近3日两负一正，短期优势减弱，需警惕策略进入震荡失效期。"
+          ]
+        },
+        "improvement_directions": [
+          {
+            "direction": "提高信号胜率与确认条件",
+            "reason": "预测准确率54.3%仅略高于随机水平，需要过滤弱信号，减少低质量交易。",
+            "expected_impact": "降低无效交易频率，提升胜率和净值稳定性。"
+          },
+          {
+            "direction": "强化止盈止损与动态仓位管理",
+            "reason": "核心持仓波动较大，近期收益前高后低，需要通过规则保护利润并控制回撤。",
+            "expected_impact": "改善回撤控制，提高风险调整后收益。"
+          },
+          {
+            "direction": "降低行业与市值集中度",
+            "reason": "持仓集中在生物医药、电子制造和中小盘成长方向，主题退潮时相关性冲击较高。",
+            "expected_impact": "分散单一主题风险，提升策略在不同市场环境下的可持续性。"
+          },
+          {
+            "direction": "加入市场环境与风格择时",
+            "reason": "近期正收益集中在行情启动段，后续出现衰减，策略对风险偏好和主题热度依赖较强。",
+            "expected_impact": "在有利环境加仓、不利环境减仓，减少无效暴露和回撤。"
+          },
+          {
+            "direction": "扩大样本并进行滚动回测",
+            "reason": "当前仅35次预测和7日收益样本，存在偶然性和过拟合风险。",
+            "expected_impact": "验证核心因子稳定性，提高实盘可信度和策略可复制性。"
+          }
+        ]
+      }
+    }
+  },
+  "all_strategies": {
+    "aggressive": {
+      "cumulative_return": 6.75,
+      "avg_daily_return": 0.964,
+      "volatility": 1.614,
+      "win_rate": 71.4,
+      "max_drawdown": 0.76,
+      "sharpe": 0.597,
+      "score": 12.31,
+      "trading_days": 7
+    },
+    "robust": {
+      "cumulative_return": -0.35,
+      "avg_daily_return": -0.05,
+      "volatility": 0.124,
+      "win_rate": 28.6,
+      "max_drawdown": 0.38,
+      "sharpe": -0.404,
+      "score": 1.8,
+      "trading_days": 7
+    },
+    "bluechip": {
+      "cumulative_return": 0.58,
+      "avg_daily_return": 0.083,
+      "volatility": 0.288,
+      "win_rate": 57.1,
+      "max_drawdown": 0.37,
+      "sharpe": 0.288,
+      "score": 6.6,
+      "trading_days": 7
+    },
+    "defensive": {
+      "cumulative_return": 0.1,
+      "avg_daily_return": 0.014,
+      "volatility": 0.151,
+      "win_rate": 42.9,
+      "max_drawdown": 0.27,
+      "sharpe": 0.095,
+      "score": 4.51,
+      "trading_days": 7
+    },
+    "global": {
+      "cumulative_return": 0.91,
+      "avg_daily_return": 0.13,
+      "volatility": 0.324,
+      "win_rate": 57.1,
+      "max_drawdown": 0.35,
+      "sharpe": 0.401,
+      "score": 7.03,
+      "trading_days": 7
+    },
+    "tech": {
+      "cumulative_return": -0.08,
+      "avg_daily_return": -0.011,
+      "volatility": 0.238,
+      "win_rate": 57.1,
+      "max_drawdown": 0.51,
+      "sharpe": -0.048,
+      "score": 5.52,
+      "trading_days": 7
+    },
+    "aggressive_v1": {
+      "cumulative_return": -0.76,
+      "avg_daily_return": -0.109,
+      "volatility": 0.967,
+      "win_rate": 57.1,
+      "max_drawdown": 1.74,
+      "sharpe": -0.112,
+      "score": 4.86,
+      "trading_days": 7
+    },
+    "aggressive_v2": {
+      "cumulative_return": -0.76,
+      "avg_daily_return": -0.109,
+      "volatility": 0.967,
+      "win_rate": 57.1,
+      "max_drawdown": 1.74,
+      "sharpe": -0.112,
+      "score": 4.86,
+      "trading_days": 7
+    },
+    "aggressive_v3": {
+      "cumulative_return": -0.76,
+      "avg_daily_return": -0.109,
+      "volatility": 0.967,
+      "win_rate": 57.1,
+      "max_drawdown": 1.74,
+      "sharpe": -0.112,
+      "score": 4.86,
+      "trading_days": 7
+    },
+    "defensive_momentum": {
+      "cumulative_return": -0.76,
+      "avg_daily_return": -0.109,
+      "volatility": 0.967,
+      "win_rate": 57.1,
+      "max_drawdown": 1.74,
+      "sharpe": -0.112,
+      "score": 4.86,
+      "trading_days": 7
+    },
+    "defensive_top5": {
+      "cumulative_return": -1.43,
+      "avg_daily_return": -0.204,
+      "volatility": 1.428,
+      "win_rate": 57.1,
+      "max_drawdown": 3.89,
+      "sharpe": -0.143,
+      "score": 4.18,
+      "trading_days": 7
+    },
+    "defensive_weighted": {
+      "cumulative_return": -0.76,
+      "avg_daily_return": -0.109,
+      "volatility": 0.967,
+      "win_rate": 57.1,
+      "max_drawdown": 1.74,
+      "sharpe": -0.112,
+      "score": 4.86,
+      "trading_days": 7
+    },
+    "global_v1": {
+      "cumulative_return": -0.76,
+      "avg_daily_return": -0.109,
+      "volatility": 0.967,
+      "win_rate": 57.1,
+      "max_drawdown": 1.74,
+      "sharpe": -0.112,
+      "score": 4.86,
+      "trading_days": 7
+    },
+    "global_v2": {
+      "cumulative_return": -0.76,
+      "avg_daily_return": -0.109,
+      "volatility": 0.967,
+      "win_rate": 57.1,
+      "max_drawdown": 1.74,
+      "sharpe": -0.112,
+      "score": 4.86,
+      "trading_days": 7
+    },
+    "global_v3": {
+      "cumulative_return": -0.76,
+      "avg_daily_return": -0.109,
+      "volatility": 0.967,
+      "win_rate": 57.1,
+      "max_drawdown": 1.74,
+      "sharpe": -0.112,
+      "score": 4.86,
+      "trading_days": 7
+    }
+  },
+  "variants": [
+    {
+      "name": "aggressive_v1",
+      "display_name": "信号确认增强型（高弹性标的 + 双重确认过滤）",
+      "description": "提升稳定性（提高胜率、减少弱信号交易）",
+      "changes": {
+        "min_signal_confidence": "0.58",
+        "entry_confirmation_days": "2（需连续2日满足信号，或次日收盘价站上5日均线）",
+        "max_new_positions_per_day": "2",
+        "watchlist_core_retention": "保留历史出现≥3次且平均收益>0的标的为核心池，非核心池信号需置信度≥0.65"
+      },
+      "llm_reasoning": "交易次数预计下降20%-30%，胜率目标由54.3%提升至58%-60%，夏普比率有望从0.597升至0.70以上，最大回撤控制在0.7%以内。"
+    },
+    {
+      "name": "aggressive_v2",
+      "display_name": "动态止盈止损型（分层止盈 + 波动率仓位）",
+      "description": "降低风险（保护已有利润、控制回撤）",
+      "changes": {
+        "stop_loss": "-3.5%",
+        "take_profit": "分层止盈：+5%减仓1/2，+8%再减仓1/3，剩余仓位用移动止盈",
+        "trailing_stop": "最高点回撤3%触发离场",
+        "time_stop": "持有3个交易日且浮盈<1%即离场",
+        "position_sizing": "波动率倒数加权，单票12%-18%"
+      },
+      "llm_reasoning": "最大回撤由0.76%降至0.55%-0.65%，单笔平均盈利略有下降但盈亏比提升，风险调整后收益（夏普）预计提升15%-20%。"
+    },
+    {
+      "name": "aggressive_v3",
+      "display_name": "风格择时与分散型（主题热度门控 + 行业上限）",
+      "description": "提升稳定性（降低主题与市值集中度、加入环境择时）",
+      "changes": {
+        "max_single_industry_weight": "30%",
+        "max_single_stock_weight": "15%",
+        "market_regime_filter": "以创业板指/科创50的5日动量+20日动量作为门控：双正→总仓位85%；单正→60%；双负→40%",
+        "low_correlation_buffer": "10%-15%配置宽基ETF或低波动价值股作为缓冲",
+        "market_cap_floor": "剔除日均成交额<1.5亿的标的，并设市值下限30亿",
+        "backtest_sample_window": "滚动窗口≥120个交易日、≥200次预测再评估调参"
+      },
+      "llm_reasoning": "收益弹性略有下降（-5%至-10%），但回撤更可控、策略在震荡与退潮环境下存活率提升；稳定性评分目标由6.0提升至7.0以上，适合作为主策略的低波动并行版本。"
+    }
+  ],
+  "next_week_strategies": [
+    "aggressive",
+    "robust",
+    "bluechip",
+    "defensive",
+    "global",
+    "tech",
+    "aggressive_v1",
+    "aggressive_v2",
+    "aggressive_v3"
+  ]
+}

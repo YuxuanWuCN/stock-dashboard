@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "300660",
   "name": "江苏雷利",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 40.0,
-    "risk": 30.3,
-    "technical": 42.0,
-    "industry": 42.0,
+    "risk_adjusted": 48.7,
+    "risk": 48.9,
+    "technical": 82.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,13 +42,18 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:34:44"
+    "updated_at": "2026-10-23 17:32:43"
   },
   "nale_network": {
     "sector_name": "微特电机/机器人",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "300660",
+      "name": "江苏雷利",
+      "change_pct": 6.515463917525766,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -68,36 +73,36 @@
     }
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
-    "annualized_volatility_20d_pct": 25.65,
-    "max_drawdown_60d_pct": -22.84,
-    "atr14_pct": 3.45,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 41.73,
+    "max_drawdown_60d_pct": -25.69,
+    "atr14_pct": 4.09,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 24.6,
-        "value": 25.65
+        "score": 53.5,
+        "value": 41.73
       },
       {
         "name": "60日最大回撤",
-        "score": 49.4,
-        "value": -22.84
+        "score": 54.7,
+        "value": -25.69
       },
       {
         "name": "ATR百分比",
-        "score": 36.6,
-        "value": 3.45
+        "score": 43.0,
+        "value": 4.09
       },
       {
         "name": "量价异常",
-        "score": 25.6,
-        "value": 0.94
+        "score": 98.3,
+        "value": 2.27
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -117,48 +122,48 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 22.758,
-    "ma10": 23.193,
-    "ma20": 23.2835,
-    "ma60": 25.000999999999998,
-    "rsi14": 31.3,
-    "macd_dif": -0.5692795561158448,
-    "macd_dea": -0.5372309371640457,
-    "macd_hist": -0.06409723790359823,
-    "atr14_pct": 3.4528451578332002,
-    "boll_position": -0.17096145478580807,
-    "return_5d_pct": -7.185122569737956,
-    "return_20d_pct": -10.184049079754597,
-    "volume_ratio_5d": 0.94
+    "trend": "range",
+    "ma5": 23.851999999999997,
+    "ma10": 22.967000000000002,
+    "ma20": 23.2425,
+    "ma60": 24.6505,
+    "rsi14": 65.5,
+    "macd_dif": -0.08129962728379425,
+    "macd_dea": -0.4403419795851123,
+    "macd_hist": 0.7180847046026361,
+    "atr14_pct": 4.0936240445087195,
+    "boll_position": 1.1656379382798205,
+    "return_5d_pct": 19.638721630384424,
+    "return_20d_pct": 10.715816545220758,
+    "volume_ratio_5d": 2.27
   },
   "industry": {
     "name": "微特电机/机器人",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": -0.34
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 26.02
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.6,
-      "median_return_pct": 0.26,
-      "best_return_pct": 11.56,
-      "worst_return_pct": -9.67
+      "up_probability_pct": 17.2,
+      "average_return_pct": -3.73,
+      "median_return_pct": -3.74,
+      "best_return_pct": 9.51,
+      "worst_return_pct": -14.25
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.9,
-      "median_return_pct": -1.23,
-      "best_return_pct": 16.77,
-      "worst_return_pct": -11.98
+      "up_probability_pct": 20.7,
+      "average_return_pct": -3.09,
+      "median_return_pct": -3.93,
+      "best_return_pct": 28.14,
+      "worst_return_pct": -14.79
     }
   },
   "fundamental": {
@@ -291,21 +296,27 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 22.8%，风险偏高。",
+      "detail": "近60日最大回撤 25.7%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 22.8%，风险扣分。",
+      "detail": "近60日最大回撤 25.7%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期2.27倍。",
+      "contribution": 5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 41.7%，波动偏高。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/300660.json",

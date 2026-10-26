@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "002459",
   "name": "晶澳科技",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 53.1,
-    "risk": 27.2,
-    "technical": 68.0,
+    "risk_adjusted": 60.0,
+    "risk": 24.7,
+    "technical": 88.0,
     "industry": 57.0,
     "leading": 35.0
   },
@@ -817,50 +817,58 @@
       117300.0,
       117000.0,
       104740.0,
-      107060.0
+      107060.0,
+      100900.0,
+      98820.0,
+      96320.0,
+      100560.0,
+      100520.0,
+      95040.0,
+      94180.0,
+      97280.0
     ],
     "momentum_metrics": {
-      "slope_pct": -25.38,
+      "slope_pct": -23.5,
       "momentum": "decelerating",
       "inflection_flag": "none",
-      "latest_value": 107060.0,
+      "latest_value": 97280.0,
       "confidence": "high"
     },
-    "updated_at": "2026-10-14 16:34:10"
+    "updated_at": "2026-10-23 17:32:12"
   },
   "nale_network": {
     "sector_name": "新能源",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": {
+      "code": "300750",
+      "name": "宁德时代",
+      "change_pct": 7.799101674152714,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
         "code": "601012",
         "name": "隆基绿能",
-        "corr": 0.89
+        "corr": 0.9
       },
       {
         "code": "600438",
         "name": "通威股份",
-        "corr": 0.82
-      },
-      {
-        "code": "300274",
-        "name": "阳光电源",
-        "corr": 0.45
+        "corr": 0.81
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.31,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 35.0,
       "physical_lag_sigma_days": 8.0,
       "peak_horizon_days": 35,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -870,34 +878,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 26.31,
-    "max_drawdown_60d_pct": -17.38,
-    "atr14_pct": 2.92,
+    "annualized_volatility_20d_pct": 29.09,
+    "max_drawdown_60d_pct": -19.27,
+    "atr14_pct": 3.24,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 28.1,
-        "value": 26.31
+        "score": 26.7,
+        "value": 29.09
       },
       {
         "name": "60日最大回撤",
-        "score": 33.7,
-        "value": -17.38
+        "score": 35.5,
+        "value": -19.27
       },
       {
         "name": "ATR百分比",
-        "score": 30.8,
-        "value": 2.92
+        "score": 32.6,
+        "value": 3.24
       },
       {
         "name": "量价异常",
-        "score": 34.9,
-        "value": 1.08
+        "score": 4.7,
+        "value": 0.99
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -912,34 +920,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 35.0,
     "peak_horizon_days": 35,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 6.734,
-    "ma10": 6.715000000000001,
-    "ma20": 6.7325,
-    "ma60": 7.125,
-    "rsi14": 41.4,
-    "macd_dif": -0.1008814110359939,
-    "macd_dea": -0.12367028956793366,
-    "macd_hist": 0.04557775706387951,
-    "atr14_pct": 2.9231835580175485,
-    "boll_position": 0.2715659519900691,
-    "return_5d_pct": -1.7804154302670683,
-    "return_20d_pct": -4.335260115606932,
-    "volume_ratio_5d": 1.08
+    "ma5": 6.522,
+    "ma10": 6.561,
+    "ma20": 6.6659999999999995,
+    "ma60": 7.046666666666666,
+    "rsi14": 46.6,
+    "macd_dif": -0.11721051047871445,
+    "macd_dea": -0.1252936520833131,
+    "macd_hist": 0.01616628320919733,
+    "atr14_pct": 3.2421560007734698,
+    "boll_position": 0.4297970870788009,
+    "return_5d_pct": 2.795031055900621,
+    "return_20d_pct": 0.6079027355623046,
+    "volume_ratio_5d": 0.99
   },
   "industry": {
     "name": "新能源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": 5.51
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 15.91
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -947,18 +955,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.64,
-      "median_return_pct": -0.85,
-      "best_return_pct": 14.85,
-      "worst_return_pct": -8.95
+      "up_probability_pct": 36.7,
+      "average_return_pct": -1.87,
+      "median_return_pct": -3.31,
+      "best_return_pct": 7.63,
+      "worst_return_pct": -7.59
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -1.37,
-      "median_return_pct": -0.56,
-      "best_return_pct": 6.98,
-      "worst_return_pct": -11.61
+      "up_probability_pct": 30.0,
+      "average_return_pct": -2.71,
+      "median_return_pct": -2.52,
+      "best_return_pct": 4.82,
+      "worst_return_pct": -14.31
     }
   },
   "fundamental": {
@@ -1098,13 +1106,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 17.4%，风险偏高。",
+      "detail": "近60日最大回撤 19.3%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 17.4%，风险扣分。",
+      "detail": "近60日最大回撤 19.3%，风险扣分。",
       "contribution": -7.0
     }
   ],

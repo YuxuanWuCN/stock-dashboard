@@ -26,6 +26,7 @@ if sys.platform == "win32":
         pass
 
 from src.config import DATA_DIR
+from src.llm.config import DEEPSEEK_V4_FLASH_MODEL
 from src.utils import beijing_datetime_str, beijing_date_str
 
 
@@ -240,7 +241,7 @@ def analyze_market_sentiment(client, market_data, news):
 
     try:
         response = client.chat.completions.create(
-            model="deepseek-v4-flash",
+            model=DEEPSEEK_V4_FLASH_MODEL,
             messages=[
                 {"role": "system", "content": "你是一个专业的市场情绪分析师，精通技术分析和市场心理学。"},
                 {"role": "user", "content": prompt}

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "300002",
   "name": "神州泰岳",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 68.2,
-    "risk": 33.3,
-    "technical": 99.0,
+    "risk_adjusted": 62.8,
+    "risk": 29.2,
+    "technical": 86.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,20 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:34:34"
+    "updated_at": "2026-10-23 17:32:34"
   },
   "nale_network": {
     "sector_name": "游戏/软件",
     "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "300002",
+      "name": "神州泰岳",
+      "change_pct": 5.78947368421052,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +65,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +75,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 30.92,
+    "annualized_volatility_20d_pct": 39.36,
     "max_drawdown_60d_pct": -15.07,
-    "atr14_pct": 2.92,
+    "atr14_pct": 3.23,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 36.8,
-        "value": 30.92
+        "score": 46.5,
+        "value": 39.36
       },
       {
         "name": "60日最大回撤",
-        "score": 27.9,
+        "score": 22.7,
         "value": -15.07
       },
       {
         "name": "ATR百分比",
-        "score": 30.2,
-        "value": 2.92
+        "score": 31.4,
+        "value": 3.23
       },
       {
         "name": "量价异常",
-        "score": 85.5,
-        "value": 1.35
+        "score": 25.6,
+        "value": 0.93
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -112,53 +117,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "range",
-    "ma5": 7.892,
-    "ma10": 7.915000000000001,
-    "ma20": 8.016,
-    "ma60": 8.150833333333333,
-    "rsi14": 51.2,
-    "macd_dif": -0.061336121855233294,
-    "macd_dea": -0.06608587800488175,
-    "macd_hist": 0.009499512299296908,
-    "atr14_pct": 2.9231235711946453,
-    "boll_position": 0.586135905611347,
-    "return_5d_pct": 2.281368821292773,
-    "return_20d_pct": -4.497041420118331,
-    "volume_ratio_5d": 1.35
+    "ma5": 7.822,
+    "ma10": 7.872,
+    "ma20": 7.9079999999999995,
+    "ma60": 8.114666666666666,
+    "rsi14": 52.4,
+    "macd_dif": -0.071480371620809,
+    "macd_dea": -0.07659660804082144,
+    "macd_hist": 0.010232472840024875,
+    "atr14_pct": 3.2262802000208803,
+    "boll_position": 0.7019718497938763,
+    "return_5d_pct": 4.280155642023331,
+    "return_20d_pct": 0.0,
+    "volume_ratio_5d": 0.93
   },
   "industry": {
     "name": "游戏/软件",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": 5.35
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 15.31
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 37.9,
-      "average_return_pct": -0.15,
-      "median_return_pct": -1.62,
+      "up_probability_pct": 30.0,
+      "average_return_pct": -1.41,
+      "median_return_pct": -2.17,
       "best_return_pct": 13.38,
       "worst_return_pct": -11.74
     },
     "horizon_5d": {
-      "up_probability_pct": 37.9,
-      "average_return_pct": -0.24,
-      "median_return_pct": -0.63,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.36,
+      "median_return_pct": -1.78,
       "best_return_pct": 14.24,
-      "worst_return_pct": -12.63
+      "worst_return_pct": -13.14
     }
   },
   "fundamental": {

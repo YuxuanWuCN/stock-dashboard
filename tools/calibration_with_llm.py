@@ -22,6 +22,7 @@ from src.config import DATA_DIR
 from src.utils import beijing_datetime_str
 
 # 导入 Prompt 模板
+from src.llm.config import DEEPSEEK_V4_FLASH_MODEL
 from src.llm.strategy_optimization_prompts import (
     MARKET_REGIME_ANALYSIS,
     STRATEGY_FAILURE_DIAGNOSIS,
@@ -63,7 +64,7 @@ def call_llm_with_retry(client, prompt, max_retries=3):
     for attempt in range(max_retries):
         try:
             response = client.chat.completions.create(
-                model="deepseek-v4-flash",  # 使用 v4-flash
+                model=DEEPSEEK_V4_FLASH_MODEL,
                 messages=[
                     {"role": "system", "content": "你是一个专业的量化投资分析师，精通技术分析和风险管理。"},
                     {"role": "user", "content": prompt}

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "601066",
   "name": "中信建投",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 59.5,
-    "risk": 16.9,
-    "technical": 68.0,
-    "industry": 55.4,
+    "risk_adjusted": 75.4,
+    "risk": 14.9,
+    "technical": 89.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,46 +42,51 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:33:54"
+    "updated_at": "2026-10-23 17:31:53"
   },
   "nale_network": {
     "sector_name": "券商",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": {
+      "code": "300059",
+      "name": "东方财富",
+      "change_pct": 4.33070866141732,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
-        "code": "600030",
-        "name": "中信证券",
-        "corr": 0.82
-      },
-      {
         "code": "300059",
         "name": "东方财富",
-        "corr": 0.81
+        "corr": 0.83
+      },
+      {
+        "code": "600030",
+        "name": "中信证券",
+        "corr": 0.74
       },
       {
         "code": "601688",
         "name": "华泰证券",
-        "corr": 0.7
+        "corr": 0.68
       },
       {
         "code": "601211",
         "name": "国泰君安",
-        "corr": 0.4
+        "corr": 0.44
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.83,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -91,34 +96,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 17.55,
-    "max_drawdown_60d_pct": -17.69,
-    "atr14_pct": 2.0,
+    "annualized_volatility_20d_pct": 17.54,
+    "max_drawdown_60d_pct": -14.54,
+    "atr14_pct": 2.06,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 11.1,
-        "value": 17.55
+        "score": 5.8,
+        "value": 17.54
       },
       {
         "name": "60日最大回撤",
-        "score": 34.9,
-        "value": -17.69
+        "score": 20.9,
+        "value": -14.54
       },
       {
         "name": "ATR百分比",
-        "score": 15.7,
-        "value": 2.0
+        "score": 12.8,
+        "value": 2.06
       },
       {
         "name": "量价异常",
-        "score": 9.9,
-        "value": 0.98
+        "score": 45.9,
+        "value": 1.14
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -133,52 +138,52 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 23.032,
-    "ma10": 23.130000000000003,
-    "ma20": 23.432499999999997,
-    "ma60": 24.89216666666667,
-    "rsi14": 37.2,
-    "macd_dif": -0.48661344795993955,
-    "macd_dea": -0.5172573919067329,
-    "macd_hist": 0.061287887893586745,
-    "atr14_pct": 1.9975826216066368,
-    "boll_position": 0.27428894451904207,
-    "return_5d_pct": 0.08684324793746256,
-    "return_20d_pct": -5.377668308702788,
-    "volume_ratio_5d": 0.98
+    "ma5": 22.694,
+    "ma10": 22.884999999999998,
+    "ma20": 23.1065,
+    "ma60": 24.435666666666666,
+    "rsi14": 42.4,
+    "macd_dif": -0.42276239396815996,
+    "macd_dea": -0.4581546767292271,
+    "macd_hist": 0.0707845655221343,
+    "atr14_pct": 2.0601298049675383,
+    "boll_position": 0.382282154184334,
+    "return_5d_pct": 0.21853146853147987,
+    "return_20d_pct": -1.1211729193618014,
+    "volume_ratio_5d": 1.14
   },
   "industry": {
     "name": "券商",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": 4.47
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 14.19
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 31.0,
-      "average_return_pct": -0.2,
-      "median_return_pct": -0.86,
-      "best_return_pct": 11.4,
+      "up_probability_pct": 30.0,
+      "average_return_pct": -0.55,
+      "median_return_pct": -1.59,
+      "best_return_pct": 11.73,
       "worst_return_pct": -8.0
     },
     "horizon_5d": {
-      "up_probability_pct": 34.5,
-      "average_return_pct": -0.41,
-      "median_return_pct": -1.31,
-      "best_return_pct": 21.59,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.67,
+      "median_return_pct": -1.24,
+      "best_return_pct": 8.55,
       "worst_return_pct": -8.21
     }
   },
@@ -189,18 +194,6 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
-    },
-    {
-      "type": "negative",
-      "title": "近期回撤较大",
-      "detail": "近60日最大回撤 17.7%，风险偏高。",
-      "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "回撤风险",
-      "detail": "近60日最大回撤 17.7%，风险扣分。",
-      "contribution": -7.0
     }
   ],
   "kline_file": "../kline/601066.json",

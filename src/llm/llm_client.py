@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Optional, Protocol
 
 from .config import (
+    DEEPSEEK_REASONING_MIN_TOKENS,
     DEEPSEEK_V4_FLASH_MODEL,
     LLM_BACKEND,
     LLM_CONFIG,
@@ -16,6 +17,8 @@ from .config import (
     LLM_ENABLED,
     LLM_MAX_TOKENS,
     LLM_TIMEOUT_SECONDS,
+    LLM_TOKENS_UNLIMITED,
+    is_deepseek_reasoning_model,
 )
 
 logger = logging.getLogger("stock-dashboard.llm.client")
@@ -242,20 +245,28 @@ class LLMClient:
             timeout=LLM_TIMEOUT_SECONDS,
         )
         effective_max = max_tokens or LLM_MAX_TOKENS
-        if "v4" in self.model:
-            effective_max = max(effective_max, 500)
+        # 推理模型先消耗 thinking token，再产出正文：小预算调用（如 LLM 预测器的
+        # 300 token）必须抬升下限，否则会以 finish_reason=length 返回空正文，
+        # 被误判为 invalid_response 而降级；不设上限的调用不受此约束。
+        if is_deepseek_reasoning_model(self.model):
+            effective_max = max(effective_max, DEEPSEEK_REASONING_MIN_TOKENS)
 
         self._call_count += 1
+        request: dict[str, Any] = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            "temperature": temperature,
+        }
+        # LLM_TOKENS_UNLIMITED：不设输出上限，请求中省略 max_tokens，
+        # 由服务端按模型默认输出上限截断；其余情况仍受 LLM_MAX_TOKENS
+        # 与推理模型 thinking 下限约束。
+        if max_tokens != LLM_TOKENS_UNLIMITED:
+            request["max_tokens"] = effective_max
         try:
-            response = client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                max_tokens=effective_max,
-                temperature=temperature,
-            )
+            response = client.chat.completions.create(**request)
             choices = getattr(response, "choices", None)
             if not choices:
                 raise LLMUnavailableError(

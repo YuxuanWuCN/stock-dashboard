@@ -2,6 +2,7 @@
 
 import json
 
+from src.llm.config import LLM_TOKENS_UNLIMITED
 from src.llm.llm_client import LLMClient
 from src.llm.llm_sentiment import (
     LLMSentimentAnalyzer,
@@ -44,15 +45,20 @@ def test_label_from_score():
 # ---- LLM 路径 ----
 
 class _FakeLLMClient:
-    """模拟 LLM 客户端。"""
+    """模拟 LLM 客户端，并记录每次调用的 kwargs。"""
     is_available = True
 
     def __init__(self, response):
         self.response = response
         self.calls = 0
+        self.calls_kwargs = []
 
     def complete(self, system_prompt, user_prompt, max_tokens=None, temperature=0.3):
         self.calls += 1
+        self.calls_kwargs.append(
+            {"system_prompt": system_prompt, "user_prompt": user_prompt,
+             "max_tokens": max_tokens, "temperature": temperature}
+        )
         return self.response
 
 
@@ -64,6 +70,20 @@ def test_analyze_with_llm_uses_llm():
     assert result.score == 0.8
     assert result.source == "llm"
     assert fake.calls == 1
+    # 情感分析不设输出上限：必须传哨兵 LLM_TOKENS_UNLIMITED
+    assert fake.calls_kwargs[0]["max_tokens"] == LLM_TOKENS_UNLIMITED
+
+
+def test_analyze_batch_with_llm_passes_unlimited_tokens():
+    fake = _FakeLLMClient(json.dumps([
+        {"sentiment": "positive", "score": 0.6},
+        {"sentiment": "negative", "score": -0.5},
+    ]))
+    analyzer = LLMSentimentAnalyzer(llm_client=fake)
+    results = analyzer.analyze_batch(["业绩超预期", "计提大额减值"])
+    assert [r.label for r in results] == ["positive", "negative"]
+    assert fake.calls == 1
+    assert fake.calls_kwargs[0]["max_tokens"] == LLM_TOKENS_UNLIMITED
 
 
 def test_analyze_with_llm_negative():

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "603019",
   "name": "中科曙光",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 54.0,
-    "risk": 43.1,
-    "technical": 37.0,
-    "industry": 29.0,
+    "risk_adjusted": 64.7,
+    "risk": 48.9,
+    "technical": 99.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:34:21"
+    "updated_at": "2026-10-23 17:32:23"
   },
   "nale_network": {
     "sector_name": "AI算力服务器",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 28.0,
       "physical_lag_sigma_days": 6.5,
       "peak_horizon_days": 28,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.28,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 26.29,
-    "max_drawdown_60d_pct": -32.42,
-    "atr14_pct": 3.67,
+    "annualized_volatility_20d_pct": 41.58,
+    "max_drawdown_60d_pct": -31.29,
+    "atr14_pct": 3.66,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 27.5,
-        "value": 26.29
+        "score": 51.2,
+        "value": 41.58
       },
       {
         "name": "60日最大回撤",
-        "score": 79.1,
-        "value": -32.42
+        "score": 73.3,
+        "value": -31.29
       },
       {
         "name": "ATR百分比",
-        "score": 39.5,
-        "value": 3.67
+        "score": 35.5,
+        "value": 3.66
       },
       {
         "name": "量价异常",
-        "score": 64.5,
-        "value": 1.2
+        "score": 73.3,
+        "value": 1.28
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -112,53 +112,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 28.0,
     "peak_horizon_days": 28,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.28,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 73.49600000000001,
-    "ma10": 77.309,
-    "ma20": 80.152,
-    "ma60": 85.55316666666666,
-    "rsi14": 19.5,
-    "macd_dif": -3.3280835939185636,
-    "macd_dea": -2.198866311266999,
-    "macd_hist": -2.258434565303129,
-    "atr14_pct": 3.670173529976681,
-    "boll_position": -0.15388864853526554,
-    "return_5d_pct": -13.191649899396374,
-    "return_20d_pct": -16.36782166222438,
-    "volume_ratio_5d": 1.2
+    "trend": "range",
+    "ma5": 75.82199999999999,
+    "ma10": 73.191,
+    "ma20": 77.129,
+    "ma60": 82.97616666666666,
+    "rsi14": 50.5,
+    "macd_dif": -2.262770929458682,
+    "macd_dea": -2.8568850000122943,
+    "macd_hist": 1.1882281411072242,
+    "atr14_pct": 3.6568546351706823,
+    "boll_position": 0.5484945348268737,
+    "return_5d_pct": 10.825766174801355,
+    "return_20d_pct": -5.527334300919218,
+    "volume_ratio_5d": 1.28
   },
   "industry": {
     "name": "AI算力服务器",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": -6.52
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 9.78
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 27,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 77.8,
-      "average_return_pct": 3.81,
-      "median_return_pct": 3.52,
-      "best_return_pct": 16.22,
-      "worst_return_pct": -4.05
+      "up_probability_pct": 36.7,
+      "average_return_pct": -1.18,
+      "median_return_pct": -2.23,
+      "best_return_pct": 9.97,
+      "worst_return_pct": -13.75
     },
     "horizon_5d": {
-      "up_probability_pct": 70.4,
-      "average_return_pct": 2.71,
-      "median_return_pct": 4.08,
-      "best_return_pct": 15.2,
-      "worst_return_pct": -9.74
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.89,
+      "median_return_pct": -1.53,
+      "best_return_pct": 12.24,
+      "worst_return_pct": -14.4
     }
   },
   "fundamental": {
@@ -291,26 +291,20 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 32.4%，风险偏高。",
+      "detail": "近60日最大回撤 31.3%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 32.4%，风险扣分。",
+      "detail": "近60日最大回撤 31.3%，风险扣分。",
       "contribution": -7.0
     },
     {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=19.5，短期超卖。",
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 41.6%，波动偏高。",
       "contribution": -5.0
     }
   ],

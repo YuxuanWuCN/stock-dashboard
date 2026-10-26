@@ -13,7 +13,7 @@ import pytest
 import src.strategies.daily_brief as db
 from src.strategies.daily_brief import build_candidates, generate_daily_brief
 
-MODEL = "deepseek-v4-flash"
+MODEL = "deepseek-flash"
 
 
 class FakeAdapter:

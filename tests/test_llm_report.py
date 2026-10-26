@@ -3,6 +3,7 @@
 import json
 from unittest.mock import patch
 
+from src.llm.config import DEEPSEEK_V4_FLASH_MODEL
 from src.llm.llm_client import LLMClient
 from src.llm.report_generator import ReportGenerator, _parse_llm_json
 from src.llm.rag_engine import RAGEngine
@@ -114,7 +115,7 @@ def test_llm_report_uses_llm_when_available():
     class _FakeClient:
         is_available = True
         backend = "deepseek"
-        model = "deepseek-v4-flash"
+        model = DEEPSEEK_V4_FLASH_MODEL
         unavailable_reason = ""
 
         def __init__(self):
@@ -138,7 +139,7 @@ def test_llm_report_uses_llm_when_available():
     assert report["scores"] == _scores()
     assert report["llm_metadata"]["pipeline"] == "fingpt_style_rag"
     assert report["llm_metadata"]["backend"] == "deepseek"
-    assert report["llm_metadata"]["model"] == "deepseek-v4-flash"
+    assert report["llm_metadata"]["model"] == DEEPSEEK_V4_FLASH_MODEL
     assert report["llm_metadata"]["mode"] == "deepseek_api"
     assert report["llm_metadata"]["fallback_reason"] == ""
     assert fake_client.calls == 2
@@ -170,7 +171,7 @@ def test_llm_invalid_shape_retries_then_degrades():
     class _InvalidShapeClient:
         is_available = True
         backend = "deepseek"
-        model = "deepseek-v4-flash"
+        model = DEEPSEEK_V4_FLASH_MODEL
         unavailable_reason = ""
 
         def __init__(self):

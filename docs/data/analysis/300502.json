@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "300502",
   "name": "新易盛",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 46.2,
-    "risk": 69.1,
-    "technical": 42.0,
+    "risk_adjusted": 45.0,
+    "risk": 77.2,
+    "technical": 50.0,
     "industry": 27.0,
     "leading": 50.0
   },
@@ -46,15 +46,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:34:30"
+    "updated_at": "2026-10-23 17:32:30"
   },
   "nale_network": {
     "sector_name": "光模块",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -64,7 +64,7 @@
       "physical_lag_tau_days": 28.0,
       "physical_lag_sigma_days": 6.5,
       "peak_horizon_days": 28,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.28,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -74,34 +74,34 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 57.17,
-    "max_drawdown_60d_pct": -40.5,
-    "atr14_pct": 7.57,
+    "annualized_volatility_20d_pct": 62.99,
+    "max_drawdown_60d_pct": -47.45,
+    "atr14_pct": 9.35,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 78.9,
-        "value": 57.17
+        "score": 81.4,
+        "value": 62.99
       },
       {
         "name": "60日最大回撤",
-        "score": 91.3,
-        "value": -40.5
+        "score": 98.8,
+        "value": -47.45
       },
       {
         "name": "ATR百分比",
-        "score": 87.2,
-        "value": 7.57
+        "score": 94.2,
+        "value": 9.35
       },
       {
         "name": "量价异常",
-        "score": 44.8,
-        "value": 1.13
+        "score": 84.3,
+        "value": 1.37
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -116,34 +116,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 28.0,
     "peak_horizon_days": 28,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.28,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 355.67999999999995,
-    "ma10": 384.621,
-    "ma20": 404.929,
-    "ma60": 425.7056666666667,
-    "rsi14": 29.3,
-    "macd_dif": -19.057842874336245,
-    "macd_dea": -9.809069731292851,
-    "macd_hist": -18.497546286086788,
-    "atr14_pct": 7.566585586440863,
-    "boll_position": -0.02323415922921811,
-    "return_5d_pct": -14.96143958868894,
-    "return_20d_pct": -20.557156580211334,
-    "volume_ratio_5d": 1.13
+    "ma5": 283.86,
+    "ma10": 306.192,
+    "ma20": 361.75800000000004,
+    "ma60": 398.75350000000003,
+    "rsi14": 20.8,
+    "macd_dif": -38.639794773309575,
+    "macd_dea": -28.283256540165553,
+    "macd_hist": -20.713076466288044,
+    "atr14_pct": 9.347823241825939,
+    "boll_position": 0.10496331166448561,
+    "return_5d_pct": -14.95878270502754,
+    "return_20d_pct": -38.49271810340764,
+    "volume_ratio_5d": 1.37
   },
   "industry": {
     "name": "光模块",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": -10.71
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": -23.19
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -151,18 +151,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 73.3,
-      "average_return_pct": 3.25,
+      "up_probability_pct": 76.7,
+      "average_return_pct": 2.65,
       "median_return_pct": 2.89,
       "best_return_pct": 23.72,
-      "worst_return_pct": -11.99
+      "worst_return_pct": -18.18
     },
     "horizon_5d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 3.06,
-      "median_return_pct": 3.71,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 2.06,
+      "median_return_pct": 3.3,
       "best_return_pct": 26.96,
-      "worst_return_pct": -16.81
+      "worst_return_pct": -25.38
     }
   },
   "fundamental": {
@@ -296,25 +296,25 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 40.5%，风险偏高。",
+      "detail": "近60日最大回撤 47.5%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 40.5%，风险扣分。",
+      "detail": "近60日最大回撤 47.5%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "warning",
       "title": "RSI偏低",
-      "detail": "RSI14=29.3，短期超卖。",
+      "detail": "RSI14=20.8，短期超卖。",
       "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 57.2%，波动偏高。",
+      "detail": "20日年化波动率 63.0%，波动偏高。",
       "contribution": -5.0
     }
   ],

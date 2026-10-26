@@ -1,0 +1,308 @@
+{
+  "generated_at": "20261025_200050",
+  "analysis_period": "past_7_days",
+  "champion": {
+    "name": "aggressive",
+    "stats": {
+      "cumulative_return": -0.79,
+      "avg_daily_return": -0.113,
+      "volatility": 0.318,
+      "win_rate": 28.6,
+      "max_drawdown": 1.15,
+      "sharpe": -0.355,
+      "score": 1.56,
+      "trading_days": 7
+    },
+    "analysis": {
+      "core_holdings": [
+        {
+          "code": "688356",
+          "name": "键凯科技",
+          "appearances": 3,
+          "avg_return": 0.19
+        },
+        {
+          "code": "301560",
+          "name": "众捷股份",
+          "appearances": 6,
+          "avg_return": -0.2
+        },
+        {
+          "code": "688328",
+          "name": "深科达",
+          "appearances": 5,
+          "avg_return": -1.37
+        },
+        {
+          "code": "688185",
+          "name": "康希诺",
+          "appearances": 5,
+          "avg_return": -1.98
+        },
+        {
+          "code": "688244",
+          "name": "永信至诚",
+          "appearances": 3,
+          "avg_return": -2.96
+        }
+      ],
+      "prediction_accuracy": 52.17391304347826,
+      "llm_analysis": {
+        "success_factors": [
+          "预测准确率为52.2%（24/46），略高于随机水平，提供微弱胜率基础；但仅高于50%约2.2个百分点，统计优势有限。",
+          "核心持仓中键凯科技（688356）出现3次且平均收益+0.19，是样本内少数正贡献来源，说明策略在部分科创板医药材料/精细化工成长股上有一定选股能力。",
+          "策略风格偏激进，聚焦科创板/创业板高波动中小市值成长股，能够放大短期反弹收益；近7日正收益日幅度（0.36、0.34）略高于亏损日均值（约-0.30），体现一定收益弹性。",
+          "高频/重复交易特征明显：众捷股份出现6次、深科达和康希诺各5次，说明策略通过快速轮动和反复交易捕捉短期波动，而非长期持有。"
+        ],
+        "holdings_characteristics": {
+          "industry": "科创板/创业板科技成长为主，覆盖生物医药、专用设备、信息安全、汽车零部件等，行业分散但成长风格集中",
+          "market_cap": "中小市值为主（688/301板块集中），具备高弹性",
+          "volatility": "高波动，个股收益离散度大（核心持仓平均收益从+0.19到-2.96）"
+        },
+        "sustainability": {
+          "score": 4.0,
+          "reasoning": "数据对持续性支持偏弱：预测准确率仅52.2%，接近随机；核心5只持仓合计22次出现，加权平均收益约-1.19，仅1只正收益，4只负收益且部分重仓反复交易于亏损标的；最近7天收益合计-0.79、均值-0.113、正收益天数2/7，显示近期已处于负期望和频繁回撤状态。策略优势更可能来自短期高波动风格和少数正贡献标的，样本仅46次预测，统计显著性不足，风格切换或流动性收缩时容易失效。",
+          "risk_factors": [
+            "核心持仓负贡献集中：众捷股份、深科达、康希诺、永信至诚平均收益均为负，重复交易可能放大亏损。",
+            "预测准确率仅52.2%，接近随机，信号稳定性不足。",
+            "近期7天收益均值为负、正收益天数仅2/7，回撤频繁。",
+            "中小市值高波动成长风格集中，易受市场风格切换、流动性和风险偏好下降冲击。",
+            "样本量有限（46次预测/22次核心持仓），存在过拟合和幸存者偏差风险。",
+            "高换手带来交易成本和冲击成本，可能侵蚀净收益。"
+          ]
+        },
+        "improvement_directions": [
+          {
+            "direction": "剔除或降权持续负贡献标的",
+            "reason": "核心持仓4/5平均收益为负，加权平均约-1.19；众捷股份、深科达、康希诺、永信至诚反复出现但贡献为负。",
+            "expected_impact": "减少亏损来源，提升组合期望收益和胜率。"
+          },
+          {
+            "direction": "增加信号确认与过滤条件",
+            "reason": "预测准确率52.2%仅略高于随机，需提高信号显著性，避免低质量交易。",
+            "expected_impact": "将准确率提升至55%以上，降低无效交易频率。"
+          },
+          {
+            "direction": "引入波动率目标和动态仓位管理",
+            "reason": "高波动中小盘集中，近期收益均值-0.113且回撤频繁，固定仓位会放大组合波动。",
+            "expected_impact": "降低最大回撤，提高夏普/卡玛比率和风险调整后收益。"
+          },
+          {
+            "direction": "设置个股和组合止损/止盈纪律",
+            "reason": "负收益标的多且幅度大（永信至诚-2.96、康希诺-1.98），需要限制单票拖累。",
+            "expected_impact": "控制单票亏损扩大，改善尾部风险。"
+          },
+          {
+            "direction": "控制换手并评估交易成本",
+            "reason": "重复交易频繁，激进策略换手高，交易成本和冲击成本可能侵蚀净收益。",
+            "expected_impact": "改善净收益，减少成本对策略的拖累。"
+          }
+        ]
+      }
+    }
+  },
+  "all_strategies": {
+    "aggressive": {
+      "cumulative_return": -0.79,
+      "avg_daily_return": -0.113,
+      "volatility": 0.318,
+      "win_rate": 28.6,
+      "max_drawdown": 1.15,
+      "sharpe": -0.355,
+      "score": 1.56,
+      "trading_days": 7
+    },
+    "robust": {
+      "cumulative_return": -0.53,
+      "avg_daily_return": -0.076,
+      "volatility": 0.1,
+      "win_rate": 28.6,
+      "max_drawdown": 0.66,
+      "sharpe": -0.759,
+      "score": 0.95,
+      "trading_days": 7
+    },
+    "bluechip": {
+      "cumulative_return": -5.14,
+      "avg_daily_return": -0.734,
+      "volatility": 1.955,
+      "win_rate": 42.9,
+      "max_drawdown": 5.63,
+      "sharpe": -0.376,
+      "score": -0.11,
+      "trading_days": 7
+    },
+    "defensive": {
+      "cumulative_return": -0.92,
+      "avg_daily_return": -0.131,
+      "volatility": 0.151,
+      "win_rate": 14.3,
+      "max_drawdown": 0.92,
+      "sharpe": -0.871,
+      "score": -0.96,
+      "trading_days": 7
+    },
+    "global": {
+      "cumulative_return": -0.83,
+      "avg_daily_return": -0.119,
+      "volatility": 0.358,
+      "win_rate": 57.1,
+      "max_drawdown": 1.21,
+      "sharpe": -0.331,
+      "score": 4.43,
+      "trading_days": 7
+    },
+    "tech": {
+      "cumulative_return": -3.37,
+      "avg_daily_return": -0.481,
+      "volatility": 0.997,
+      "win_rate": 28.6,
+      "max_drawdown": 3.67,
+      "sharpe": -0.483,
+      "score": -0.5,
+      "trading_days": 7
+    },
+    "aggressive_v1": {
+      "cumulative_return": -4.5,
+      "avg_daily_return": -0.643,
+      "volatility": 1.776,
+      "win_rate": 28.6,
+      "max_drawdown": 5.99,
+      "sharpe": -0.362,
+      "score": -1.17,
+      "trading_days": 7
+    },
+    "aggressive_v2": {
+      "cumulative_return": -4.5,
+      "avg_daily_return": -0.643,
+      "volatility": 1.776,
+      "win_rate": 28.6,
+      "max_drawdown": 5.99,
+      "sharpe": -0.362,
+      "score": -1.17,
+      "trading_days": 7
+    },
+    "aggressive_v3": {
+      "cumulative_return": -4.5,
+      "avg_daily_return": -0.643,
+      "volatility": 1.776,
+      "win_rate": 28.6,
+      "max_drawdown": 5.99,
+      "sharpe": -0.362,
+      "score": -1.17,
+      "trading_days": 7
+    },
+    "defensive_momentum": {
+      "cumulative_return": -3.72,
+      "avg_daily_return": -0.531,
+      "volatility": 0.533,
+      "win_rate": 14.3,
+      "max_drawdown": 3.72,
+      "sharpe": -0.998,
+      "score": -3.17,
+      "trading_days": 7
+    },
+    "defensive_top5": {
+      "cumulative_return": -5.02,
+      "avg_daily_return": -0.717,
+      "volatility": 1.17,
+      "win_rate": 14.3,
+      "max_drawdown": 5.02,
+      "sharpe": -0.613,
+      "score": -3.31,
+      "trading_days": 7
+    },
+    "defensive_weighted": {
+      "cumulative_return": -3.72,
+      "avg_daily_return": -0.531,
+      "volatility": 0.533,
+      "win_rate": 14.3,
+      "max_drawdown": 3.72,
+      "sharpe": -0.998,
+      "score": -3.17,
+      "trading_days": 7
+    },
+    "global_v1": {
+      "cumulative_return": -3.72,
+      "avg_daily_return": -0.531,
+      "volatility": 0.533,
+      "win_rate": 14.3,
+      "max_drawdown": 3.72,
+      "sharpe": -0.998,
+      "score": -3.17,
+      "trading_days": 7
+    },
+    "global_v2": {
+      "cumulative_return": -3.72,
+      "avg_daily_return": -0.531,
+      "volatility": 0.533,
+      "win_rate": 14.3,
+      "max_drawdown": 3.72,
+      "sharpe": -0.998,
+      "score": -3.17,
+      "trading_days": 7
+    },
+    "global_v3": {
+      "cumulative_return": -3.72,
+      "avg_daily_return": -0.531,
+      "volatility": 0.533,
+      "win_rate": 14.3,
+      "max_drawdown": 3.72,
+      "sharpe": -0.998,
+      "score": -3.17,
+      "trading_days": 7
+    }
+  },
+  "variants": [
+    {
+      "name": "aggressive_v1",
+      "display_name": "波动率目标+纪律止损版激进策略",
+      "description": "降低风险与最大回撤，同时保留中小市值高波动成长股的收益弹性",
+      "changes": {
+        "组合波动率目标": "年化波动率目标25%-30%，按20日ATR倒数动态分配仓位，单票仓位上限15%",
+        "单票止损": "固定止损-5%，或入场后ATR的2倍止损，二者取更近者",
+        "移动止盈": "浮盈达到+8%后启动3%回撤止盈；浮盈+12%后回撤阈值收紧至2%",
+        "负贡献标的处理": "对上述标的设置观察名单：连续2次交易负收益后5个交易日禁入；再次交易仓位减半",
+        "最大持仓数": "8-12只，单行业暴露不超过30%"
+      },
+      "llm_reasoning": "最大回撤有望从1.15%降至0.8%以内，夏普比率由负转正或显著改善；保留高波动成长股弹性的同时限制单票尾部风险。"
+    },
+    {
+      "name": "aggressive_v2",
+      "display_name": "信号确认+低换手稳定版",
+      "description": "提升信号稳定性与预测准确率，降低无效交易和交易成本",
+      "changes": {
+        "信号置信度阈值": "仅交易模型评分前30%的信号，或预测置信度≥55%才入场",
+        "多信号确认": "要求技术动量、量价配合、趋势过滤三项中至少2项确认",
+        "同标的交易冷却期": "同一标的亏损后5个交易日禁入；盈利后再次入场需重新满足置信度阈值",
+        "调仓频率/换手限制": "日换手不超过30%，每周单标的调仓不超过2次；非信号确认不主动交易",
+        "流动性过滤": "20日日均成交额≥1亿元，剔除停牌、涨跌停无法成交标的"
+      },
+      "llm_reasoning": "预测准确率目标提升至55%以上，换手率下降30%-40%，无效交易减少；收益稳定性提升，净收益受交易成本侵蚀降低。"
+    },
+    {
+      "name": "aggressive_v3",
+      "display_name": "正贡献聚焦+动态加仓收益增强版",
+      "description": "提高收益弹性，放大有效选股的正贡献，同时控制亏损标的重复交易",
+      "changes": {
+        "选股池过滤": "保留高波动成长风格，但增加盈利质量与正贡献特征过滤：近两期营收/利润不恶化、20日相对强度排名前50%",
+        "仓位分配": "对正贡献特征标的给予1.2-1.5倍基准仓位，单票上限20%；负贡献特征标的降至0.5倍或剔除",
+        "加仓条件": "首笔浮盈≥3%且量价确认后加仓至1.5倍；若浮亏则不补仓",
+        "分批止盈": "浮盈+6%止盈1/2，+10%止盈剩余1/2；高波动标的可放宽至+8%/+12%",
+        "负贡献黑名单": "短期剔除众捷股份、深科达、康希诺、永信至诚，或仅允许在置信度≥60%且仓位≤5%时参与"
+      },
+      "llm_reasoning": "在最大回撤可控前提下提升组合期望收益；正贡献标的仓位集中度提高，负贡献标的拖累下降，目标累计收益由负转正并提高卡玛比率。"
+    }
+  ],
+  "next_week_strategies": [
+    "aggressive",
+    "robust",
+    "bluechip",
+    "defensive",
+    "global",
+    "tech",
+    "aggressive_v1",
+    "aggressive_v2",
+    "aggressive_v3"
+  ]
+}

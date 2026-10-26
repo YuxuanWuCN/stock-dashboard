@@ -9,14 +9,19 @@ import type { HealthGaugeData } from '@/types'
  */
 export default function HealthGaugeCard({ data, className }: { data: HealthGaugeData; className?: string }) {
   return (
-    <div className={cn('rounded-[14px] bg-white/95 px-3 pb-2 pt-2 shadow-float desk:w-[294px] desk:shrink-0', className)}>
+    <div
+      className={cn(
+        'group rounded-[14px] border border-white/80 bg-white/95 px-3 pb-2 pt-2.5 shadow-float backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:border-brand/30 desk:w-[294px] desk:shrink-0',
+        className,
+      )}
+    >
       <div className="flex items-center justify-center text-[13.5px] font-bold leading-5 text-ink-900 lg:text-[14px] desk:text-[15px]">
         {data.title}
         {data.tip && <HelpTip label={data.tip} />}
       </div>
       {/* 卡片总高锁定 155：8 + 20 + 2 + 78 + 18 + 5 + 16 + 8 */}
-      <HealthGauge percent={data.percent} className="mx-auto mt-0.5 h-[78px] w-[159px]" />
-      <div className="text-center text-[14px] font-extrabold leading-[18px] text-ink-900 lg:text-[15px] desk:text-[16px]">{data.level}</div>
+      <HealthGauge percent={data.percent} className="mx-auto mt-0.5 h-[78px] w-[159px] transition-transform duration-300 group-hover:scale-[1.03]" />
+      <div className="text-center text-[14px] font-extrabold leading-[18px] text-emerald-700 lg:text-[15px] desk:text-[16px]">{data.level}</div>
       <div className="mt-[5px] text-center text-[11.5px] leading-4 text-ink-600 lg:text-[12px] desk:text-[12.5px]">{data.desc}</div>
     </div>
   )

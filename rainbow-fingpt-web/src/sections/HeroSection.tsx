@@ -1,16 +1,13 @@
 import { Container } from '@/components/layout/PageShell'
 import HealthGaugeCard from '@/components/hero/HealthGaugeCard'
 import MetricCard from '@/components/hero/MetricCard'
+import AgentLiveHUD from '@/components/hero/AgentLiveHUD'
 import { heroForMode } from '@/data/mock'
 import type { HeroData, ViewMode } from '@/types'
 
 /**
  * 02 Hero · 1178 × 293
- * 图层：暖白底 → 照片层（右下，固定 293 高）→ 照片层内部的左向渐变 → 内容。
- *
- * 两个关键约束（修的就是这两个 bug）：
- * 1. 照片层高度锁死 293 且贴右下，不随 Hero 变高而拉伸 —— 否则窄屏会把人物裁成只露头。
- * 2. 渐变画在照片层内部（而不是覆盖整个 Hero）—— 否则换个宽度渐变就和照片左缘错位，出现硬边。
+ * 融入赛博量化 AgentLiveHUD 实时心跳、动态思维流与微交互卡片。
  */
 export default function HeroSection({ mode = 'retail', data }: { mode?: ViewMode; data?: HeroData }) {
   const hero = data ?? heroForMode(mode)
@@ -33,6 +30,9 @@ export default function HeroSection({ mode = 'retail', data }: { mode?: ViewMode
 
         {/* 纵向节奏按设计稿实测：26 顶距 → H1 36 → 8 → 副标题 24 → 28 → 指标板 166 → 5 底距 = 293 */}
         <div className="hero-content relative flex min-h-[293px] flex-col px-5 pb-5 sm:px-[30px]">
+          {/* 实时量化智能体心跳与推演 HUD */}
+          <AgentLiveHUD />
+
           <h1 className="max-w-[560px] text-[23px] font-extrabold leading-8 tracking-[.2px] text-ink-900 lg:text-[26px] lg:leading-9 desk:text-[28px]">
             {hero.title}
           </h1>

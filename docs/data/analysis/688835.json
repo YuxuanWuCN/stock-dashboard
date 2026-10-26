@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "688835",
   "name": "C高凯",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 50.0,
-    "risk": 81.4,
-    "technical": 80.0,
+    "risk_adjusted": 43.5,
+    "risk": 77.0,
+    "technical": 50.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,24 +42,24 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:35:00"
+    "updated_at": "2026-10-23 17:33:00"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 20.5,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 66.7,
+    "tier_role": "divergent",
     "leader_stock": {
-      "code": "688685",
-      "name": "迈信林",
-      "change_pct": 12.349224583572651,
-      "is_limit_up": false
+      "code": "301699",
+      "name": "洛轴股份",
+      "change_pct": 20.0,
+      "is_limit_up": true
     },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
+    "has_limit_up_resonance": true,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 1,
-    "leader_corr_with_stock": -0.03,
+    "leader_corr_with_stock": -0.13,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
@@ -68,21 +68,21 @@
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.2,
-      "dynamic_alpha_physical_peak": 0.2
+      "dynamic_alpha_sentiment_t0": 0.557,
+      "dynamic_alpha_physical_peak": 0.564
     }
   },
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 95.88,
+    "annualized_volatility_20d_pct": 61.91,
     "max_drawdown_60d_pct": null,
-    "atr14_pct": 9.35,
+    "atr14_pct": 10.62,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 94.2,
-        "value": 95.88
+        "score": 80.8,
+        "value": 61.91
       },
       {
         "name": "60日最大回撤",
@@ -91,18 +91,18 @@
       },
       {
         "name": "ATR百分比",
-        "score": 95.9,
-        "value": 9.35
+        "score": 97.1,
+        "value": 10.62
       },
       {
         "name": "量价异常",
-        "score": 65.7,
+        "score": 59.9,
         "value": 0.8
       },
       {
         "name": "行业波动",
-        "score": 99.4,
-        "value": 95.88
+        "score": 98.8,
+        "value": 61.91
       }
     ]
   },
@@ -119,32 +119,32 @@
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.2
+    "dynamic_alpha_peak": 0.564
   },
   "technical": {
     "trend": "range",
-    "ma5": 349.88199999999995,
-    "ma10": 354.311,
-    "ma20": 334.91999999999996,
+    "ma5": 306.328,
+    "ma10": 330.029,
+    "ma20": 342.59749999999997,
     "ma60": null,
-    "rsi14": 75.2,
-    "macd_dif": 20.84246655743425,
-    "macd_dea": null,
-    "macd_hist": null,
-    "atr14_pct": 9.346666127992046,
-    "boll_position": 0.6364077586193031,
-    "return_5d_pct": 3.9739184069080835,
-    "return_20d_pct": 30.65141169957557,
+    "rsi14": 58.9,
+    "macd_dif": 1.5188284229703868,
+    "macd_dea": 11.544286475868367,
+    "macd_hist": -20.05091610579596,
+    "atr14_pct": 10.623491974493758,
+    "boll_position": 0.06533684803306311,
+    "return_5d_pct": -13.489358045203236,
+    "return_20d_pct": -9.637652972681842,
     "volume_ratio_5d": 0.8
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
     "return_60d_pct": null,
-    "relative_strength_20d_pct": 40.5
+    "relative_strength_20d_pct": 5.67
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -289,15 +289,9 @@
   },
   "reasons": [
     {
-      "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=75.2，短期超买。",
-      "contribution": -5.0
-    },
-    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 95.9%，波动偏高。",
+      "detail": "20日年化波动率 61.9%，波动偏高。",
       "contribution": -5.0
     }
   ],

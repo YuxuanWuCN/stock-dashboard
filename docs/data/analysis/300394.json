@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "300394",
   "name": "天孚通信",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 53.0,
-    "risk": 67.9,
+    "risk_adjusted": 49.7,
+    "risk": 64.7,
     "technical": 50.0,
-    "industry": 39.2,
+    "industry": 27.0,
     "leading": 50.0
   },
   "leading": {
@@ -46,15 +46,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:34:30"
+    "updated_at": "2026-10-23 17:32:30"
   },
   "nale_network": {
     "sector_name": "光器件",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -64,7 +64,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -72,36 +72,36 @@
     }
   },
   "risk": {
-    "level": "high",
-    "label": "高风险",
-    "annualized_volatility_20d_pct": 69.9,
-    "max_drawdown_60d_pct": -38.35,
-    "atr14_pct": 7.96,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 74.12,
+    "max_drawdown_60d_pct": -32.29,
+    "atr14_pct": 8.86,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 88.9,
-        "value": 69.9
+        "score": 87.8,
+        "value": 74.12
       },
       {
         "name": "60日最大回撤",
-        "score": 87.8,
-        "value": -38.35
+        "score": 75.6,
+        "value": -32.29
       },
       {
         "name": "ATR百分比",
-        "score": 89.0,
-        "value": 7.96
+        "score": 90.7,
+        "value": 8.86
       },
       {
         "name": "量价异常",
-        "score": 8.1,
-        "value": 0.99
+        "score": 5.8,
+        "value": 1.02
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -116,34 +116,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 235.07,
-    "ma10": 248.02400000000003,
-    "ma20": 258.34849999999994,
-    "ma60": 243.37783333333334,
-    "rsi14": 40.4,
-    "macd_dif": -5.487299407780853,
-    "macd_dea": -0.943831306720591,
-    "macd_hist": -9.086936202120523,
-    "atr14_pct": 7.9577636906449,
-    "boll_position": 0.05834644663707229,
-    "return_5d_pct": -12.183149902212676,
-    "return_20d_pct": -11.240310077519378,
-    "volume_ratio_5d": 0.99
+    "trend": "downtrend",
+    "ma5": 204.126,
+    "ma10": 216.2,
+    "ma20": 238.83800000000002,
+    "ma60": 241.2295,
+    "rsi14": 35.9,
+    "macd_dif": -14.922251317359326,
+    "macd_dea": -10.269733407898936,
+    "macd_hist": -9.305035818920778,
+    "atr14_pct": 8.858410849716297,
+    "boll_position": 0.1584303444305796,
+    "return_5d_pct": -5.6343984962406,
+    "return_20d_pct": -27.675130560057614,
+    "volume_ratio_5d": 1.02
   },
   "industry": {
     "name": "光器件",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": -1.39
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": -12.37
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -151,18 +151,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 3.88,
-      "median_return_pct": 4.66,
+      "up_probability_pct": 73.3,
+      "average_return_pct": 4.75,
+      "median_return_pct": 6.33,
       "best_return_pct": 24.88,
-      "worst_return_pct": -23.52
+      "worst_return_pct": -17.71
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 4.42,
-      "median_return_pct": 2.56,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 3.05,
+      "median_return_pct": 1.61,
       "best_return_pct": 31.57,
-      "worst_return_pct": -19.39
+      "worst_return_pct": -24.57
     }
   },
   "fundamental": {
@@ -289,20 +289,26 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 38.4%，风险偏高。",
+      "detail": "近60日最大回撤 32.3%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 38.4%，风险扣分。",
+      "detail": "近60日最大回撤 32.3%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 69.9%，波动偏高。",
+      "detail": "20日年化波动率 74.1%，波动偏高。",
       "contribution": -5.0
     }
   ],

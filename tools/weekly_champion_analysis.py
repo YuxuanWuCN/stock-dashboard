@@ -19,6 +19,7 @@ from pathlib import Path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.config import DATA_DIR
+from src.llm.config import DEEPSEEK_V4_FLASH_MODEL
 from src.utils import beijing_date_str
 
 PERFORMANCE_DIR = os.path.join(DATA_DIR, "paper")
@@ -60,7 +61,7 @@ def call_llm_for_analysis(client, prompt, temperature=0.3):
 
     try:
         response = client.chat.completions.create(
-            model="deepseek-v4-flash",  # 使用 v4-flash
+            model=DEEPSEEK_V4_FLASH_MODEL,
             messages=[
                 {"role": "system", "content": "你是一个专业的量化策略分析师，精通技术分析和策略优化。"},
                 {"role": "user", "content": prompt}

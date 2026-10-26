@@ -11,9 +11,28 @@ from pathlib import Path
 ROOT_PATH = Path(__file__).resolve().parents[2]
 ROOT_DIR = str(ROOT_PATH)
 
-# 用户指定的唯一 DeepSeek 推理模型。FinGPT 风格管线会再次校验该值，
+# 用户指定的唯一 DeepSeek 推理模型（DeepSeek-V4.1-Flash）。
+# 平台 /models 返回的官方 id 是 "deepseek-flash"（name=DeepSeek-V4.1-Flash）；
+# 旧写法 "deepseek-v4-flash" 虽仍被服务端接受，但会解析回同一个 id，
+# 因此这里统一使用官方 id。FinGPT 风格管线会再次校验该值，
 # 防止环境变量或兼容网关悄悄切换到其他模型。
-DEEPSEEK_V4_FLASH_MODEL = "deepseek-v4-flash"
+DEEPSEEK_V4_FLASH_MODEL = "deepseek-flash"
+
+# DeepSeek 推理模型先产出 thinking token、再产出正文：若 max_tokens 太小
+# （如 LLM 预测器的 300 token），预算会被思维链吃光，接口以 finish_reason=length
+# 返回空正文。下列模型名在请求前必须抬升 token 下限，保证正文仍有预算。
+# 情感分析已改为不设上限（LLM_TOKENS_UNLIMITED），不再受该下限约束。
+DEEPSEEK_REASONING_MODELS = ("deepseek-flash", "deepseek-v4-flash", "deepseek-v4-pro")
+DEEPSEEK_REASONING_MIN_TOKENS = 500
+
+
+def is_deepseek_reasoning_model(model: str) -> bool:
+    """返回模型标识是否属于需要预留 thinking 预算的 DeepSeek 推理模型。"""
+    name = (model or "").strip().lower()
+    return any(
+        name == candidate or name.startswith(f"{candidate}-")
+        for candidate in DEEPSEEK_REASONING_MODELS
+    )
 
 
 def resolve_api_key_file_path(
@@ -126,6 +145,10 @@ LLM_CONFIG = {
 
 # 单次报告生成的最大 token 数（防止成本失控）
 LLM_MAX_TOKENS = int(os.environ.get("LLM_MAX_TOKENS", "1200"))
+# 传给 LLMClient.complete(max_tokens=...) 的哨兵值：表示不设输出上限。
+# 请求中会省略 max_tokens，由服务端按模型默认输出上限截断
+# （deepseek-flash 的 max_output_tokens 为 393216）。成本护栏仅剩调用次数上限。
+LLM_TOKENS_UNLIMITED = 0
 # 每次调用超时（秒）
 LLM_TIMEOUT_SECONDS = float(os.environ.get("LLM_TIMEOUT_SECONDS", "30"))
 # 每日全管线调用次数上限（保护 API 预算；本地测试可调高）
@@ -151,7 +174,7 @@ SENTIMENT_LIGHTWEIGHT_MODELS = {
     "gemini": "gemini-3.8-flash",
     "dashscope": "qwen-turbo",
     "openai": "gpt-3.5-turbo",
-    "deepseek": "deepseek-v4-flash",  # DeepSeek 已经是轻量的
+    "deepseek": "deepseek-flash",  # DeepSeek 已经是轻量的（V4.1-Flash）
 }
 
 # ============================================================

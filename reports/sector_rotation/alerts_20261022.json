@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-22T18:51:07",
+  "rotation_trade_date": "2026-08-27",
+  "calendar_last_date": "2026-08-27",
+  "history_days_recorded": 7,
+  "has_critical": false,
+  "summary": {
+    "info": 0,
+    "warning": 3,
+    "critical": 0
+  },
+  "alerts": [
+    {
+      "check": "validity.sample_size",
+      "severity": "warning",
+      "message": "板块 green 样本数 1 低于预期 6",
+      "detail": {
+        "sector": "green",
+        "stock_count": 1,
+        "expected": 6
+      }
+    },
+    {
+      "check": "validity.sample_size",
+      "severity": "warning",
+      "message": "板块 storage 样本数 1 低于预期 6",
+      "detail": {
+        "sector": "storage",
+        "stock_count": 1,
+        "expected": 6
+      }
+    },
+    {
+      "check": "validity.sample_size",
+      "severity": "warning",
+      "message": "板块 gold 样本数 1 低于预期 6",
+      "detail": {
+        "sector": "gold",
+        "stock_count": 1,
+        "expected": 6
+      }
+    }
+  ]
+}

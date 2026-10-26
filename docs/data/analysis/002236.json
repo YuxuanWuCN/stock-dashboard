@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "002236",
   "name": "大华股份",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 58.9,
-    "risk": 11.1,
-    "technical": 42.0,
-    "industry": 54.4,
+    "risk_adjusted": 62.5,
+    "risk": 13.2,
+    "technical": 71.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:34:33"
+    "updated_at": "2026-10-23 17:32:33"
   },
   "nale_network": {
     "sector_name": "智能物联",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.77,
-    "max_drawdown_60d_pct": -11.2,
-    "atr14_pct": 1.63,
+    "annualized_volatility_20d_pct": 20.49,
+    "max_drawdown_60d_pct": -13.16,
+    "atr14_pct": 1.96,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 8.8,
-        "value": 15.77
+        "score": 11.6,
+        "value": 20.49
       },
       {
         "name": "60日最大回撤",
-        "score": 11.0,
-        "value": -11.2
+        "score": 14.5,
+        "value": -13.16
       },
       {
         "name": "ATR百分比",
-        "score": 10.5,
-        "value": 1.63
+        "score": 11.6,
+        "value": 1.96
       },
       {
         "name": "量价异常",
-        "score": 29.1,
-        "value": 1.07
+        "score": 29.7,
+        "value": 1.09
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 15.302000000000001,
-    "ma10": 15.367,
-    "ma20": 15.562999999999999,
-    "ma60": 15.966666666666667,
-    "rsi14": 31.9,
-    "macd_dif": -0.20114351321622692,
-    "macd_dea": -0.16616164243059947,
-    "macd_hist": -0.0699637415712549,
-    "atr14_pct": 1.6252239110102509,
-    "boll_position": -0.06015861757480111,
-    "return_5d_pct": -2.2193211488250597,
-    "return_20d_pct": -5.726872246696035,
-    "volume_ratio_5d": 1.07
+    "ma5": 14.886000000000001,
+    "ma10": 14.971,
+    "ma20": 15.253500000000003,
+    "ma60": 15.813833333333333,
+    "rsi14": 45.4,
+    "macd_dif": -0.2584499671001481,
+    "macd_dea": -0.24699086200608045,
+    "macd_hist": -0.022918210188135335,
+    "atr14_pct": 1.9597628965395755,
+    "boll_position": 0.4056583139449703,
+    "return_5d_pct": 2.8590878148400334,
+    "return_20d_pct": -3.696622052262588,
+    "volume_ratio_5d": 1.09
   },
   "industry": {
     "name": "智能物联",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": 4.12
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 11.61
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 1.06,
-      "median_return_pct": 1.05,
-      "best_return_pct": 6.12,
-      "worst_return_pct": -5.09
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.01,
+      "median_return_pct": -1.15,
+      "best_return_pct": 6.63,
+      "worst_return_pct": -9.07
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.12,
-      "median_return_pct": 0.42,
-      "best_return_pct": 5.96,
-      "worst_return_pct": -6.64
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.35,
+      "median_return_pct": -1.65,
+      "best_return_pct": 8.6,
+      "worst_return_pct": -9.81
     }
   },
   "fundamental": {

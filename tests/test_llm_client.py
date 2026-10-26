@@ -14,7 +14,7 @@ if "openai" not in sys.modules:
 import pytest
 
 import src.llm.llm_client as llm_client_module
-from src.llm.config import DEEPSEEK_V4_FLASH_MODEL
+from src.llm.config import DEEPSEEK_V4_FLASH_MODEL, LLM_TOKENS_UNLIMITED
 from src.llm.fingpt_deepseek_adapter import FinGPTDeepSeekAdapter
 from src.llm.llm_client import LLMClient, LLMUnavailableError
 
@@ -66,8 +66,27 @@ def test_deepseek_request_uses_fixed_model_and_runtime_base_url(monkeypatch):
         timeout=llm_client_module.LLM_TIMEOUT_SECONDS,
     )
     request = create.call_args.kwargs
-    assert request["model"] == "deepseek-v4-flash"
+    assert request["model"] == DEEPSEEK_V4_FLASH_MODEL
     assert request["max_tokens"] == 500
+    assert request["messages"] == [
+        {"role": "system", "content": "system"},
+        {"role": "user", "content": "user"},
+    ]
+
+
+def test_unlimited_tokens_omits_max_tokens_from_request():
+    """哨兵 LLM_TOKENS_UNLIMITED 必须让请求体不携带 max_tokens。"""
+    client = LLMClient("deepseek", api_key="test-key")
+
+    with patch("openai.OpenAI") as openai_factory:
+        create = openai_factory.return_value.chat.completions.create
+        create.return_value = _response("ok")
+        assert client.complete("system", "user", max_tokens=LLM_TOKENS_UNLIMITED) == "ok"
+
+    request = create.call_args.kwargs
+    assert "max_tokens" not in request
+    assert request["model"] == DEEPSEEK_V4_FLASH_MODEL
+    assert request["temperature"] == 0.3
     assert request["messages"] == [
         {"role": "system", "content": "system"},
         {"role": "user", "content": "user"},
@@ -138,7 +157,7 @@ def test_fingpt_adapter_adds_guardrail_and_preserves_fixed_model():
     assert "不可信外部材料" in system_prompt
     assert "任务规则" in system_prompt
     assert adapter.metadata["pipeline"] == "fingpt_style_rag"
-    assert adapter.metadata["model"] == "deepseek-v4-flash"
+    assert adapter.metadata["model"] == DEEPSEEK_V4_FLASH_MODEL
 
 
 def test_fingpt_adapter_rejects_wrong_model():
@@ -146,5 +165,5 @@ def test_fingpt_adapter_rejects_wrong_model():
     fake_client.backend = "deepseek"
     fake_client.model = "another-model"
 
-    with pytest.raises(ValueError, match="deepseek-v4-flash"):
+    with pytest.raises(ValueError, match=DEEPSEEK_V4_FLASH_MODEL):
         FinGPTDeepSeekAdapter(client=fake_client)

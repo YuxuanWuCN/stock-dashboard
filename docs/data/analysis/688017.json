@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "688017",
   "name": "绿的谐波",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 52.7,
-    "risk": 52.1,
-    "technical": 42.0,
-    "industry": 29.8,
+    "risk_adjusted": 52.0,
+    "risk": 72.1,
+    "technical": 86.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,13 +42,18 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:34:44"
+    "updated_at": "2026-10-23 17:32:43"
   },
   "nale_network": {
     "sector_name": "谐波减速器",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "688017",
+      "name": "绿的谐波",
+      "change_pct": 12.046982458851714,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -68,36 +73,36 @@
     }
   },
   "risk": {
-    "level": "medium",
-    "label": "中等风险",
-    "annualized_volatility_20d_pct": 36.28,
-    "max_drawdown_60d_pct": -36.3,
-    "atr14_pct": 5.92,
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 68.67,
+    "max_drawdown_60d_pct": -38.55,
+    "atr14_pct": 6.21,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 48.5,
-        "value": 36.28
+        "score": 85.5,
+        "value": 68.67
       },
       {
         "name": "60日最大回撤",
-        "score": 84.3,
-        "value": -36.3
+        "score": 86.0,
+        "value": -38.55
       },
       {
         "name": "ATR百分比",
-        "score": 72.7,
-        "value": 5.92
+        "score": 75.0,
+        "value": 6.21
       },
       {
         "name": "量价异常",
-        "score": 12.8,
-        "value": 0.97
+        "score": 91.9,
+        "value": 1.61
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -117,29 +122,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 254.296,
-    "ma10": 266.669,
-    "ma20": 276.61400000000003,
-    "ma60": 303.8498333333334,
-    "rsi14": 31.4,
-    "macd_dif": -13.500158108536823,
-    "macd_dea": -11.185006432086517,
-    "macd_hist": -4.6303033529006115,
-    "atr14_pct": 5.917703076503214,
-    "boll_position": -0.037640038638084336,
-    "return_5d_pct": -10.15890410958904,
-    "return_20d_pct": -15.92944554590826,
-    "volume_ratio_5d": 0.97
+    "trend": "range",
+    "ma5": 265.05,
+    "ma10": 254.78400000000002,
+    "ma20": 266.735,
+    "ma60": 294.72783333333336,
+    "rsi14": 57.3,
+    "macd_dif": -7.92038427407789,
+    "macd_dea": -11.738819692074904,
+    "macd_hist": 7.636870835994028,
+    "atr14_pct": 6.211366744797594,
+    "boll_position": 0.8224430400832313,
+    "return_5d_pct": 22.4920802534319,
+    "return_20d_pct": -0.2167704641640511,
+    "volume_ratio_5d": 1.61
   },
   "industry": {
     "name": "谐波减速器",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": -6.08
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 15.09
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +152,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 2.49,
-      "median_return_pct": 2.32,
-      "best_return_pct": 28.45,
+      "up_probability_pct": 30.0,
+      "average_return_pct": -2.91,
+      "median_return_pct": -3.52,
+      "best_return_pct": 17.36,
       "worst_return_pct": -19.89
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 3.47,
-      "median_return_pct": 2.4,
-      "best_return_pct": 37.34,
-      "worst_return_pct": -19.48
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.54,
+      "median_return_pct": -2.11,
+      "best_return_pct": 32.1,
+      "worst_return_pct": -20.76
     }
   },
   "fundamental": {
@@ -273,21 +278,27 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 36.3%，风险偏高。",
+      "detail": "近60日最大回撤 38.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 36.3%，风险扣分。",
+      "detail": "近60日最大回撤 38.5%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.61倍。",
+      "contribution": 5.0
+    },
+    {
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 68.7%，波动偏高。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/688017.json",

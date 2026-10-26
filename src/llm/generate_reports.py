@@ -332,7 +332,7 @@ def _generate_reports_inner(
                     metadata = old.get("llm_metadata", {}) or {}
                     is_deepseek_report = (
                         metadata.get("mode") == "deepseek_api"
-                        and metadata.get("model") == "deepseek-v4-flash"
+                        and metadata.get("model") == DEEPSEEK_V4_FLASH_MODEL
                     )
                     if is_deepseek_report or (
                         not metadata and len(sections) >= 5

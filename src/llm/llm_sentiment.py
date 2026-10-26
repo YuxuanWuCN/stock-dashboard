@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from .config import (
+    LLM_TOKENS_UNLIMITED,
     SENTIMENT_POSITIVE_THRESHOLD,
     SENTIMENT_NEGATIVE_THRESHOLD,
 )
@@ -343,7 +344,7 @@ class LLMSentimentAnalyzer:
         raw = self._llm.complete(
             _LLM_SYSTEM_PROMPT,
             user_prompt,
-            max_tokens=len(texts) * 60,
+            max_tokens=LLM_TOKENS_UNLIMITED,
             temperature=0.1,
         )
         parsed = _parse_llm_batch_response(raw)
@@ -387,7 +388,12 @@ class LLMSentimentAnalyzer:
             f"<untrusted_news>{json.dumps(text, ensure_ascii=False)}</untrusted_news>\n\n"
             "请输出 JSON。"
         )
-        raw = self._llm.complete(_LLM_SYSTEM_PROMPT, user_prompt, max_tokens=30, temperature=0.1)
+        raw = self._llm.complete(
+            _LLM_SYSTEM_PROMPT,
+            user_prompt,
+            max_tokens=LLM_TOKENS_UNLIMITED,
+            temperature=0.1,
+        )
         parsed = _parse_llm_response(raw)
         if not parsed:
             raise LLMUnavailableError(

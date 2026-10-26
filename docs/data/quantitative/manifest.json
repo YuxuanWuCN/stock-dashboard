@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-10-13 18:17:34",
+  "generated_at": "2026-10-23 17:38:09",
   "portfolios": [
     {
       "key": "aggressive",
       "file": "paper/performance_aggressive.json",
       "name": "激进组合-全库扫描版",
       "color": "#d97706",
-      "description": "激进进攻：每日自动调仓，温度联动持仓 5 只",
+      "description": "激进进攻：每日自动调仓，温度联动持仓 10 只",
       "risk_profile": "aggressive",
       "is_benchmark": false,
       "is_variant": false,
@@ -16,35 +16,35 @@
     {
       "key": "aggressive_v1",
       "file": "paper/performance_aggressive_v1.json",
-      "name": "趋势过滤增强版",
+      "name": "信号确认增强型（高弹性标的 + 双重确认过滤）",
       "color": "#f59e0b",
-      "description": "提升策略稳定性，减少亏损交易",
+      "description": "提升稳定性（提高胜率、减少弱信号交易）",
       "risk_profile": "",
       "is_benchmark": false,
       "is_variant": true,
-      "parent_strategy": "aggressive_v2"
+      "parent_strategy": "aggressive"
     },
     {
       "key": "aggressive_v2",
       "file": "paper/performance_aggressive_v2.json",
-      "name": "动态止盈止损优化版",
+      "name": "动态止盈止损型（分层止盈 + 波动率仓位）",
       "color": "#f59e0b",
-      "description": "提高盈亏比，增强收益能力",
+      "description": "降低风险（保护已有利润、控制回撤）",
       "risk_profile": "",
       "is_benchmark": false,
       "is_variant": true,
-      "parent_strategy": "aggressive_v2"
+      "parent_strategy": "aggressive"
     },
     {
       "key": "aggressive_v3",
       "file": "paper/performance_aggressive_v3.json",
-      "name": "行业分散轮动版",
+      "name": "风格择时与分散型（主题热度门控 + 行业上限）",
       "color": "#f59e0b",
-      "description": "降低行业集中风险，平滑组合波动",
+      "description": "提升稳定性（降低主题与市值集中度、加入环境择时）",
       "risk_profile": "",
       "is_benchmark": false,
       "is_variant": true,
-      "parent_strategy": "aggressive_v2"
+      "parent_strategy": "aggressive"
     },
     {
       "key": "bluechip",
@@ -106,7 +106,7 @@
       "file": "paper/performance_global.json",
       "name": "全球组合",
       "color": "#8b5cf6",
-      "description": "全球分散：温度联动持仓 2 只",
+      "description": "全球分散：温度联动持仓 3 只",
       "risk_profile": "moderate",
       "is_benchmark": false,
       "is_variant": false,
@@ -161,7 +161,7 @@
       "file": "paper/performance.json",
       "name": "稳健组合-防守型",
       "color": "#2f9e6e",
-      "description": "稳健防守：温度联动仓位 20%",
+      "description": "稳健防守：温度联动仓位 40%",
       "risk_profile": "defensive",
       "is_benchmark": false,
       "is_variant": false,

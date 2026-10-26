@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "601211",
   "name": "国泰君安",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 56.2,
-    "risk": 16.7,
-    "technical": 66.0,
+    "risk_adjusted": 58.6,
+    "risk": 24.2,
+    "technical": 50.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,46 +42,51 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:33:59"
+    "updated_at": "2026-10-23 17:31:59"
   },
   "nale_network": {
     "sector_name": "券商",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
+    "leader_stock": {
+      "code": "300059",
+      "name": "东方财富",
+      "change_pct": 4.33070866141732,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
-        "code": "600030",
-        "name": "中信证券",
-        "corr": 0.62
-      },
-      {
         "code": "601688",
         "name": "华泰证券",
-        "corr": 0.62
+        "corr": 0.67
       },
       {
-        "code": "300059",
-        "name": "东方财富",
-        "corr": 0.41
+        "code": "600030",
+        "name": "中信证券",
+        "corr": 0.66
       },
       {
         "code": "601066",
         "name": "中信建投",
-        "corr": 0.4
+        "corr": 0.44
+      },
+      {
+        "code": "300059",
+        "name": "东方财富",
+        "corr": 0.43
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.43,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -91,34 +96,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 21.39,
-    "max_drawdown_60d_pct": -13.63,
-    "atr14_pct": 2.03,
+    "annualized_volatility_20d_pct": 24.07,
+    "max_drawdown_60d_pct": -15.91,
+    "atr14_pct": 2.48,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 17.0,
-        "value": 21.39
+        "score": 16.3,
+        "value": 24.07
       },
       {
         "name": "60日最大回撤",
-        "score": 22.7,
-        "value": -13.63
+        "score": 26.2,
+        "value": -15.91
       },
       {
         "name": "ATR百分比",
-        "score": 16.3,
-        "value": 2.03
+        "score": 20.9,
+        "value": 2.48
       },
       {
         "name": "量价异常",
-        "score": 19.2,
-        "value": 1.04
+        "score": 78.5,
+        "value": 1.31
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -133,34 +138,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 16.918,
-    "ma10": 16.98,
-    "ma20": 17.2455,
-    "ma60": 17.854499999999998,
-    "rsi14": 43.1,
-    "macd_dif": -0.2229575685472689,
-    "macd_dea": -0.2150646746665772,
-    "macd_hist": -0.015785787761383396,
-    "atr14_pct": 2.0337638168461103,
-    "boll_position": 0.2916033381242952,
-    "return_5d_pct": 0.47421458209839784,
-    "return_20d_pct": -3.1428571428571472,
-    "volume_ratio_5d": 1.04
+    "ma5": 16.142000000000003,
+    "ma10": 16.429,
+    "ma20": 16.6375,
+    "ma60": 17.302,
+    "rsi14": 36.6,
+    "macd_dif": -0.30696415550157496,
+    "macd_dea": -0.2533287957669099,
+    "macd_hist": -0.10727071946933009,
+    "atr14_pct": 2.482941070992309,
+    "boll_position": 0.17826673954309577,
+    "return_5d_pct": -3.543543543543548,
+    "return_20d_pct": -5.640423031727382,
+    "volume_ratio_5d": 1.31
   },
   "industry": {
     "name": "券商",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": 6.71
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": 9.67
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -168,18 +173,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.99,
-      "median_return_pct": -1.18,
-      "best_return_pct": 9.89,
-      "worst_return_pct": -5.77
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.22,
+      "median_return_pct": -0.44,
+      "best_return_pct": 8.65,
+      "worst_return_pct": -5.71
     },
     "horizon_5d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -0.86,
-      "median_return_pct": -1.49,
-      "best_return_pct": 11.32,
-      "worst_return_pct": -6.15
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.17,
+      "median_return_pct": -1.56,
+      "best_return_pct": 11.3,
+      "worst_return_pct": -6.25
     }
   },
   "fundamental": null,
@@ -189,6 +194,18 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 15.9%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 15.9%，风险扣分。",
+      "contribution": -7.0
     }
   ],
   "kline_file": "../kline/601211.json",

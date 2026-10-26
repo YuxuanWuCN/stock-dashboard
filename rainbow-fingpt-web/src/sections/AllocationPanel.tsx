@@ -6,6 +6,7 @@ import SectionHeader from '@/components/ui/SectionHeader'
 import DonutChart from '@/components/charts/DonutChart'
 import { BulbIcon, OrgIcon } from '@/components/icons'
 import { allocationData, cashNoteData } from '@/data/mock'
+import CountUp from '@/components/ui/CountUp'
 import type { AllocationSegment, CashNoteData } from '@/types'
 
 /**
@@ -123,19 +124,19 @@ function LegendRow({
         onBlur={() => onHover(null)}
         onClick={onToggle}
         className={cn(
-          'flex w-full items-center gap-2.5 rounded-lg px-1.5 py-1 transition-colors duration-150',
-          'enabled:hover:bg-chip enabled:active:bg-line',
+          'group flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 transition-all duration-200',
+          'enabled:hover:bg-slate-100/80 enabled:hover:scale-[1.02] enabled:active:bg-line',
           'disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent',
-          active && 'bg-chip',
+          active && 'bg-slate-100 shadow-xs',
         )}
       >
         <i
-          className="h-3 w-3 shrink-0 rounded-full transition-transform duration-150"
-          style={{ background: segment.color, transform: active ? 'scale(1.15)' : undefined }}
+          className="h-3 w-3 shrink-0 rounded-full transition-transform duration-200 group-hover:scale-125"
+          style={{ background: segment.color, transform: active ? 'scale(1.2)' : undefined }}
         />
-        <b className="t-label min-w-0 flex-1 truncate text-left font-medium text-ink-800 lg:text-[13px]">{segment.name}</b>
+        <b className="t-label min-w-0 flex-1 truncate text-left font-medium text-ink-800 transition-colors group-hover:text-ink-900 lg:text-[13px]">{segment.name}</b>
         <em className="num text-[15px] font-extrabold not-italic text-ink-900 lg:text-[16px] desk:text-[17px]">
-          {segment.weight}%
+          <CountUp value={segment.weight} duration={1000} />%
         </em>
       </button>
     </li>

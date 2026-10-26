@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-14 16:36:27+08:00",
-  "trade_date": "2026-10-14",
+  "generated_at": "2026-10-23 17:34:10+08:00",
+  "trade_date": "2026-10-23",
   "code": "300196",
   "name": "长海股份",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 45.5,
-    "risk": 65.2,
-    "technical": 42.0,
-    "industry": 49.4,
+    "risk_adjusted": 53.3,
+    "risk": 52.7,
+    "technical": 58.0,
+    "industry": 27.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-14 16:33:32"
+    "updated_at": "2026-10-23 17:31:30"
   },
   "nale_network": {
     "sector_name": "材料",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 60.33,
-    "max_drawdown_60d_pct": -25.3,
-    "atr14_pct": 6.27,
+    "annualized_volatility_20d_pct": 36.81,
+    "max_drawdown_60d_pct": -30.28,
+    "atr14_pct": 5.89,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 81.9,
-        "value": 60.33
+        "score": 41.3,
+        "value": 36.81
       },
       {
         "name": "60日最大回撤",
-        "score": 60.5,
-        "value": -25.3
+        "score": 68.0,
+        "value": -30.28
       },
       {
         "name": "ATR百分比",
-        "score": 76.2,
-        "value": 6.27
+        "score": 69.8,
+        "value": 5.89
       },
       {
         "name": "量价异常",
-        "score": 95.3,
-        "value": 0.42
+        "score": 85.5,
+        "value": 0.61
       },
       {
         "name": "行业波动",
-        "score": 4.7,
-        "value": 19.2
+        "score": 5.2,
+        "value": 21.3
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 16.131999999999998,
-    "ma10": 17.097,
-    "ma20": 18.2075,
-    "ma60": 17.376166666666666,
-    "rsi14": 33.0,
-    "macd_dif": -0.530994405383062,
-    "macd_dea": -0.11983117478642405,
-    "macd_hist": -0.8223264611932759,
-    "atr14_pct": 6.273664293708286,
-    "boll_position": 0.08131892997937161,
-    "return_5d_pct": -9.743290548424731,
-    "return_20d_pct": -7.365269461077839,
-    "volume_ratio_5d": 0.42
+    "trend": "downtrend",
+    "ma5": 14.687999999999999,
+    "ma10": 15.013,
+    "ma20": 16.6825,
+    "ma60": 17.10216666666667,
+    "rsi14": 34.6,
+    "macd_dif": -0.9572584324561699,
+    "macd_dea": -0.7453318792688475,
+    "macd_hist": -0.4238531063746449,
+    "atr14_pct": 5.893655715880396,
+    "boll_position": 0.25758358822685673,
+    "return_5d_pct": 1.4413177762525597,
+    "return_20d_pct": -28.633510381458237,
+    "volume_ratio_5d": 0.61
   },
   "industry": {
     "name": "材料",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -4.25,
-    "return_20d_pct": -10.32,
-    "return_60d_pct": -14.94,
-    "relative_strength_20d_pct": 2.48
+    "return_5d_pct": -3.89,
+    "return_20d_pct": -15.59,
+    "return_60d_pct": -19.23,
+    "relative_strength_20d_pct": -13.33
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,17 +147,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.94,
-      "median_return_pct": 1.96,
-      "best_return_pct": 23.99,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 1.23,
+      "median_return_pct": 1.08,
+      "best_return_pct": 26.65,
       "worst_return_pct": -18.49
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.01,
-      "median_return_pct": 0.28,
-      "best_return_pct": 24.05,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 1.24,
+      "median_return_pct": -1.19,
+      "best_return_pct": 31.0,
       "worst_return_pct": -27.14
     }
   },
@@ -285,27 +285,21 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 25.3%，风险偏高。",
+      "detail": "近60日最大回撤 30.3%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 25.3%，风险扣分。",
+      "detail": "近60日最大回撤 30.3%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "波动较大",
-      "detail": "20日年化波动率 60.3%，波动偏高。",
-      "contribution": -5.0
-    },
-    {
-      "type": "warning",
-      "title": "成交缩量",
-      "detail": "近5日量能仅为前期0.42倍。",
-      "contribution": -3.0
     }
   ],
   "kline_file": "../kline/300196.json",

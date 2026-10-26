@@ -13,6 +13,8 @@
 # 1. 市场环境识别 Prompt
 # ============================================================================
 
+from .config import DEEPSEEK_V4_FLASH_MODEL
+
 MARKET_REGIME_ANALYSIS = """
 你是一个专业的市场环境分析师。根据以下数据判断当前市场状态：
 
@@ -351,7 +353,7 @@ def analyze_market_with_gpt(api_client, market_data):
     )
 
     response = api_client.chat.completions.create(
-        model="deepseek-v4-flash",  # 使用 v4-flash
+        model=DEEPSEEK_V4_FLASH_MODEL,
         messages=[
             {"role": "system", "content": "你是一个专业的量化分析师。"},
             {"role": "user", "content": prompt}
@@ -367,7 +369,7 @@ def diagnose_strategy_failure(api_client, strategy_data):
     prompt = STRATEGY_FAILURE_DIAGNOSIS.format(**strategy_data)
 
     response = api_client.chat.completions.create(
-        model="deepseek-v4-flash",  # 使用 v4-flash
+        model=DEEPSEEK_V4_FLASH_MODEL,
         messages=[
             {"role": "system", "content": "你是一个量化策略诊断专家。"},
             {"role": "user", "content": prompt}
@@ -383,7 +385,7 @@ def optimize_parameters(api_client, params_data):
     prompt = PARAMETER_OPTIMIZATION.format(**params_data)
 
     response = api_client.chat.completions.create(
-        model="deepseek-v4-flash",  # 使用 v4-flash
+        model=DEEPSEEK_V4_FLASH_MODEL,
         messages=[
             {"role": "system", "content": "你是一个参数优化专家。"},
             {"role": "user", "content": prompt}
