@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-03T17:46:19",
+  "rotation_trade_date": "2026-11-03",
+  "calendar_last_date": "2026-11-03",
+  "history_days_recorded": 15,
+  "has_critical": true,
+  "summary": {
+    "info": 0,
+    "warning": 1,
+    "critical": 1
+  },
+  "alerts": [
+    {
+      "check": "freshness.components",
+      "severity": "warning",
+      "message": "板块 storage 成分股数据不完整（市场日历末日 2026-11-03）：缺失 K 线 2 只: 688123, 002049",
+      "detail": {
+        "sector": "storage",
+        "calendar_last": "2026-11-03",
+        "stale": [],
+        "missing": [
+          "688123",
+          "002049"
+        ],
+        "worst_lag": null
+      }
+    },
+    {
+      "check": "freshness.components",
+      "severity": "critical",
+      "message": "板块 gold 成分股数据不完整（市场日历末日 2026-11-03）：陈旧成分股 6 只: 600547(2026-08-27, 滞后42日), 601899(2026-08-27, 滞后42日), 600489(2026-08-27, 滞后42日), 002155(2026-08-27, 滞后42日), 000975(2026-08-27, 滞后42日), 600988(2026-08-27, 滞后42日)；缺失 K 线 1 只: 600362",
+      "detail": {
+        "sector": "gold",
+        "calendar_last": "2026-11-03",
+        "stale": [
+          {
+            "code": "600547",
+            "last_date": "2026-08-27",
+            "lag": 42
+          },
+          {
+            "code": "601899",
+            "last_date": "2026-08-27",
+            "lag": 42
+          },
+          {
+            "code": "600489",
+            "last_date": "2026-08-27",
+            "lag": 42
+          },
+          {
+            "code": "002155",
+            "last_date": "2026-08-27",
+            "lag": 42
+          },
+          {
+            "code": "000975",
+            "last_date": "2026-08-27",
+            "lag": 42
+          },
+          {
+            "code": "600988",
+            "last_date": "2026-08-27",
+            "lag": 42
+          }
+        ],
+        "missing": [
+          "600362"
+        ],
+        "worst_lag": 42
+      }
+    }
+  ]
+}

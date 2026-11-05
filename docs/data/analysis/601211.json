@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-23 17:34:10+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-11-05 17:34:58+08:00",
+  "trade_date": "2026-11-05",
   "code": "601211",
   "name": "国泰君安",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 58.6,
-    "risk": 24.2,
-    "technical": 50.0,
+    "risk_adjusted": 80.1,
+    "risk": 15.7,
+    "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,51 +42,46 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-23 17:31:59"
+    "updated_at": "2026-11-05 17:33:03"
   },
   "nale_network": {
     "sector_name": "券商",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": {
-      "code": "300059",
-      "name": "东方财富",
-      "change_pct": 4.33070866141732,
-      "is_limit_up": false
-    },
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "sector_breadth_pct": 60.0,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
         "code": "601688",
         "name": "华泰证券",
-        "corr": 0.67
+        "corr": 0.81
       },
       {
         "code": "600030",
         "name": "中信证券",
-        "corr": 0.66
+        "corr": 0.74
       },
       {
         "code": "601066",
         "name": "中信建投",
-        "corr": 0.44
+        "corr": 0.61
       },
       {
         "code": "300059",
         "name": "东方财富",
-        "corr": 0.43
+        "corr": 0.56
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": 0.43,
+    "leader_corr_with_stock": null,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -96,34 +91,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 24.07,
-    "max_drawdown_60d_pct": -15.91,
-    "atr14_pct": 2.48,
+    "annualized_volatility_20d_pct": 28.55,
+    "max_drawdown_60d_pct": -11.4,
+    "atr14_pct": 2.57,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 16.3,
-        "value": 24.07
+        "score": 16.8,
+        "value": 28.55
       },
       {
         "name": "60日最大回撤",
-        "score": 26.2,
-        "value": -15.91
+        "score": 7.5,
+        "value": -11.4
       },
       {
         "name": "ATR百分比",
-        "score": 20.9,
-        "value": 2.48
+        "score": 20.8,
+        "value": 2.57
       },
       {
         "name": "量价异常",
-        "score": 78.5,
-        "value": 1.31
+        "score": 34.7,
+        "value": 1.14
       },
       {
         "name": "行业波动",
-        "score": 5.2,
-        "value": 21.3
+        "score": 7.5,
+        "value": 31.04
       }
     ]
   },
@@ -138,76 +133,57 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 16.142000000000003,
-    "ma10": 16.429,
-    "ma20": 16.6375,
-    "ma60": 17.302,
-    "rsi14": 36.6,
-    "macd_dif": -0.30696415550157496,
-    "macd_dea": -0.2533287957669099,
-    "macd_hist": -0.10727071946933009,
-    "atr14_pct": 2.482941070992309,
-    "boll_position": 0.17826673954309577,
-    "return_5d_pct": -3.543543543543548,
-    "return_20d_pct": -5.640423031727382,
-    "volume_ratio_5d": 1.31
+    "trend": "range",
+    "ma5": 16.464000000000002,
+    "ma10": 16.304,
+    "ma20": 16.389,
+    "ma60": 17.001166666666666,
+    "rsi14": 52.5,
+    "macd_dif": -0.11776746568642338,
+    "macd_dea": -0.2138618908004411,
+    "macd_hist": 0.19218885022803545,
+    "atr14_pct": 2.570815512714476,
+    "boll_position": 0.6960646662113927,
+    "return_5d_pct": 4.842767295597494,
+    "return_20d_pct": 2.2699386503067576,
+    "volume_ratio_5d": 1.14
   },
   "industry": {
     "name": "券商",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.89,
-    "return_20d_pct": -15.59,
-    "return_60d_pct": -19.23,
-    "relative_strength_20d_pct": 9.67
+    "return_5d_pct": -1.2,
+    "return_20d_pct": -12.04,
+    "return_60d_pct": -18.36,
+    "relative_strength_20d_pct": 12.45
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.22,
-      "median_return_pct": -0.44,
-      "best_return_pct": 8.65,
-      "worst_return_pct": -5.71
+      "up_probability_pct": 17.2,
+      "average_return_pct": -1.25,
+      "median_return_pct": -1.25,
+      "best_return_pct": 6.38,
+      "worst_return_pct": -5.17
     },
     "horizon_5d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.17,
-      "median_return_pct": -1.56,
-      "best_return_pct": 11.3,
-      "worst_return_pct": -6.25
+      "up_probability_pct": 24.1,
+      "average_return_pct": -1.09,
+      "median_return_pct": -1.71,
+      "best_return_pct": 9.17,
+      "worst_return_pct": -7.49
     }
   },
   "fundamental": null,
-  "reasons": [
-    {
-      "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
-      "title": "近期回撤较大",
-      "detail": "近60日最大回撤 15.9%，风险偏高。",
-      "contribution": -7.0
-    },
-    {
-      "type": "negative",
-      "title": "回撤风险",
-      "detail": "近60日最大回撤 15.9%，风险扣分。",
-      "contribution": -7.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/601211.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

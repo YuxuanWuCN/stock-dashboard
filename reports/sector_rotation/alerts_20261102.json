@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-02T23:52:11",
+  "rotation_trade_date": "2026-11-02",
+  "calendar_last_date": "2026-11-02",
+  "history_days_recorded": 1,
+  "has_critical": true,
+  "summary": {
+    "info": 0,
+    "warning": 2,
+    "critical": 1
+  },
+  "alerts": [
+    {
+      "check": "validity.sample_size",
+      "severity": "warning",
+      "message": "板块 storage 样本数 4 低于预期 6",
+      "detail": {
+        "sector": "storage",
+        "stock_count": 4,
+        "expected": 6
+      }
+    },
+    {
+      "check": "freshness.components",
+      "severity": "warning",
+      "message": "板块 storage 成分股数据不完整（市场日历末日 2026-11-02）：缺失 K 线 2 只: 688123, 002049",
+      "detail": {
+        "sector": "storage",
+        "calendar_last": "2026-11-02",
+        "stale": [],
+        "missing": [
+          "688123",
+          "002049"
+        ],
+        "worst_lag": null
+      }
+    },
+    {
+      "check": "freshness.components",
+      "severity": "critical",
+      "message": "板块 gold 成分股数据不完整（市场日历末日 2026-11-02）：陈旧成分股 6 只: 600547(2026-08-27, 滞后41日), 601899(2026-08-27, 滞后41日), 600489(2026-08-27, 滞后41日), 002155(2026-08-27, 滞后41日), 000975(2026-08-27, 滞后41日), 600988(2026-08-27, 滞后41日)；缺失 K 线 1 只: 600362",
+      "detail": {
+        "sector": "gold",
+        "calendar_last": "2026-11-02",
+        "stale": [
+          {
+            "code": "600547",
+            "last_date": "2026-08-27",
+            "lag": 41
+          },
+          {
+            "code": "601899",
+            "last_date": "2026-08-27",
+            "lag": 41
+          },
+          {
+            "code": "600489",
+            "last_date": "2026-08-27",
+            "lag": 41
+          },
+          {
+            "code": "002155",
+            "last_date": "2026-08-27",
+            "lag": 41
+          },
+          {
+            "code": "000975",
+            "last_date": "2026-08-27",
+            "lag": 41
+          },
+          {
+            "code": "600988",
+            "last_date": "2026-08-27",
+            "lag": 41
+          }
+        ],
+        "missing": [
+          "600362"
+        ],
+        "worst_lag": 41
+      }
+    }
+  ]
+}

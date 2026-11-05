@@ -124,5 +124,3 @@ classDiagram
 2. **大宗期现产业链快照**：
    - `docs/data/commodity/`：`ranking_cross_asset.json`, `basis_history.json`, `warehouse_receipts.json`。
    - `02_极星量化与实盘/logs/ranking_cross_asset.json`：极星 19.5 专用行情互通接口。
-3. **普惠财富快照**：
-   - `docs/data/wealth/`：`home_snapshot.json`（适老配置环图、健康晴雨表、安心绝对收益曲线）。

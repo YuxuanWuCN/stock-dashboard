@@ -25,6 +25,13 @@ from .config import (
 
 logger = logging.getLogger("stock-dashboard.industry")
 
+# 东财行业板块历史接口的周期参数取值与其它 AkShare 接口不同：
+# ``stock_zh_a_hist`` 用 "daily"，而 ``stock_board_industry_hist_em`` 只认
+# {"日k", "周k", "月k"}，传 "daily" 会在 period_map 里 KeyError。
+# 2026-11-02 事故：这里长期写成 "daily"，导致行业板块真实数据从未成功过
+# （全日志 0 次成功、4060 次降级），即使网络正常也必然失败。
+BOARD_HIST_PERIOD = "日k"
+
 
 class IndustryProvider:
     """行业数据提供器，封装缓存与降级逻辑。"""
@@ -34,6 +41,11 @@ class IndustryProvider:
         self._industry_cache: dict[str, pd.DataFrame] = {}
         # 缓存：index_code -> DataFrame
         self._index_cache: dict[str, pd.DataFrame] = {}
+        # 失败负缓存：板块代码 -> 已确认失败（本次运行不再重试）
+        # 2026-11-02 事故：行业接口整体不可用时，同一板块被反复重试，
+        # 「通用(BK1448)」单日失败 63 次（21 轮 × 3 次尝试），日志被刷屏且拖慢流水线。
+        # 负缓存让每个板块在本次运行内只尝试一轮，失败后直接走降级。
+        self._board_failures: set[str] = set()
         # 行业名称 -> 东财板块代码
         self._board_map: dict[str, str] = {}
         # 是否已初始化板块映射
@@ -153,10 +165,15 @@ class IndustryProvider:
         # 尝试东财行业板块
         board_code = self._find_board_code(category) if std_name else None
         if board_code:
-            df = self._fetch_board_history(board_code, cache_key)
-            if df is not None:
-                self._industry_cache[cache_key] = df
-                return df, "industry", cache_key
+            if board_code in self._board_failures:
+                # 本次运行已确认该板块不可用，直接降级，不再浪费重试与日志
+                logger.debug("行业 %s(%s) 已在本次运行中失败，跳过重试", cache_key, board_code)
+            else:
+                df = self._fetch_board_history(board_code, cache_key)
+                if df is not None:
+                    self._industry_cache[cache_key] = df
+                    return df, "industry", cache_key
+                self._board_failures.add(board_code)
 
         # 降级：使用市场指数
         logger.info("行业 '%s' 降级为市场指数参照", category)
@@ -176,7 +193,7 @@ class IndustryProvider:
             try:
                 df = ak.stock_board_industry_hist_em(
                     symbol=board_code,
-                    period="daily",
+                    period=BOARD_HIST_PERIOD,
                     start_date="20210101",
                     end_date="20991231",
                     adjust="",

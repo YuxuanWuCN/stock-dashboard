@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-23 17:34:10+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-11-05 17:34:58+08:00",
+  "trade_date": "2026-11-05",
   "code": "002466",
   "name": "天齐锂业",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 48.8,
+    "risk_adjusted": 62.2,
     "risk": 38.1,
-    "technical": 50.0,
-    "industry": 42.0,
+    "technical": 94.0,
+    "industry": 52.9,
     "leading": 50.0
   },
   "leading": {
@@ -2423,24 +2423,38 @@
       889.78,
       887.5,
       880.3,
-      864.0
+      864.0,
+      861.41,
+      860.31,
+      868.99,
+      865.26,
+      854.76,
+      836.08,
+      840.01,
+      863.79,
+      884.09
     ],
     "momentum_metrics": {
-      "slope_pct": -8.77,
+      "slope_pct": -2.25,
       "momentum": "flat",
       "inflection_flag": "none",
-      "latest_value": 864.0,
+      "latest_value": 884.09,
       "confidence": "high"
     },
-    "updated_at": "2026-10-23 17:32:40"
+    "updated_at": "2026-11-05 17:33:35"
   },
   "nale_network": {
     "sector_name": "锂矿资源",
     "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "002466",
+      "name": "天齐锂业",
+      "change_pct": 5.027624309392265,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -2450,7 +2464,7 @@
       "physical_lag_tau_days": 35.0,
       "physical_lag_sigma_days": 8.0,
       "peak_horizon_days": 35,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -2460,34 +2474,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 34.37,
-    "max_drawdown_60d_pct": -30.32,
-    "atr14_pct": 4.05,
+    "annualized_volatility_20d_pct": 40.0,
+    "max_drawdown_60d_pct": -31.14,
+    "atr14_pct": 4.01,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 36.0,
-        "value": 34.37
+        "score": 32.4,
+        "value": 40.0
       },
       {
         "name": "60日最大回撤",
-        "score": 68.6,
-        "value": -30.32
+        "score": 56.6,
+        "value": -31.14
       },
       {
         "name": "ATR百分比",
-        "score": 41.3,
-        "value": 4.05
+        "score": 35.8,
+        "value": 4.01
       },
       {
         "name": "量价异常",
-        "score": 11.6,
-        "value": 0.97
+        "score": 59.5,
+        "value": 1.24
       },
       {
         "name": "行业波动",
-        "score": 5.2,
-        "value": 21.3
+        "score": 7.5,
+        "value": 31.04
       }
     ]
   },
@@ -2502,53 +2516,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 35.0,
     "peak_horizon_days": 35,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 35.995999999999995,
-    "ma10": 36.864999999999995,
-    "ma20": 39.169,
-    "ma60": 44.0535,
-    "rsi14": 29.9,
-    "macd_dif": -2.3702017008271596,
-    "macd_dea": -2.2092184175948804,
-    "macd_hist": -0.32196656646455857,
-    "atr14_pct": 4.045186346255562,
-    "boll_position": 0.19606750517834928,
-    "return_5d_pct": -1.2349066959385202,
-    "return_20d_pct": -15.793167992512869,
-    "volume_ratio_5d": 0.97
+    "trend": "range",
+    "ma5": 35.726,
+    "ma10": 35.896,
+    "ma20": 36.6495,
+    "ma60": 42.59066666666667,
+    "rsi14": 50.3,
+    "macd_dif": -1.534026024801065,
+    "macd_dea": -1.9453957151154406,
+    "macd_hist": 0.8227393806287511,
+    "atr14_pct": 4.01459341699835,
+    "boll_position": 0.7101181533300357,
+    "return_5d_pct": 8.908622171297642,
+    "return_20d_pct": -6.561808798230507,
+    "volume_ratio_5d": 1.24
   },
   "industry": {
     "name": "锂矿资源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.89,
-    "return_20d_pct": -15.59,
-    "return_60d_pct": -19.23,
-    "relative_strength_20d_pct": -0.49
+    "return_5d_pct": -1.2,
+    "return_20d_pct": -12.04,
+    "return_60d_pct": -18.36,
+    "relative_strength_20d_pct": 3.62
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": -0.07,
-      "median_return_pct": 0.94,
-      "best_return_pct": 12.26,
-      "worst_return_pct": -19.24
+      "up_probability_pct": 24.1,
+      "average_return_pct": -3.22,
+      "median_return_pct": -4.33,
+      "best_return_pct": 8.66,
+      "worst_return_pct": -14.38
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.61,
-      "median_return_pct": -1.82,
-      "best_return_pct": 17.74,
-      "worst_return_pct": -20.0
+      "up_probability_pct": 34.5,
+      "average_return_pct": -2.33,
+      "median_return_pct": -5.81,
+      "best_return_pct": 15.69,
+      "worst_return_pct": -14.48
     }
   },
   "fundamental": {
@@ -2675,27 +2689,15 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 30.3%，风险偏高。",
+      "detail": "近60日最大回撤 31.1%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 30.3%，风险扣分。",
+      "detail": "近60日最大回撤 31.1%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=29.9，短期超卖。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/002466.json",

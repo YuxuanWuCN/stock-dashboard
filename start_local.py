@@ -127,19 +127,18 @@ def main() -> int:
         print()
         print("Stock Dashboard 2.1 is running:")
         print(f"  Dashboard: {WEB_URL}")
-        print(f"  Wealth Terminal: {WEB_URL}index_wealth.html")
         if backend is not None:
             print(f"  API health: {API_HEALTH_URL}")
         print("Press Ctrl+C to stop services.")
 
         if not args.no_browser:
-            webbrowser.open(f"{WEB_URL}index_wealth.html")
+            webbrowser.open(WEB_URL)
 
         backend_warned = False
         while frontend.poll() is None:
             if backend is not None and backend.poll() is not None and not backend_warned:
                 print(f"\n[Notice] Backend API process exited (code {backend.poll()}).")
-                print(f"[Notice] Static dashboard remains active at {WEB_URL}index_wealth.html")
+                print(f"[Notice] Static dashboard remains active at {WEB_URL}")
                 backend_warned = True
             time.sleep(0.5)
 

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-23 17:34:10+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-11-05 17:34:58+08:00",
+  "trade_date": "2026-11-05",
   "code": "600519",
   "name": "贵州茅台",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 76.3,
-    "risk": 11.3,
-    "technical": 93.0,
+    "risk_adjusted": 89.9,
+    "risk": 16.1,
+    "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-23 17:33:02"
+    "updated_at": "2026-11-05 17:33:54"
   },
   "nale_network": {
     "sector_name": "搜索自选",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 16.75,
-    "max_drawdown_60d_pct": -9.27,
-    "atr14_pct": 1.79,
+    "annualized_volatility_20d_pct": 24.41,
+    "max_drawdown_60d_pct": -8.83,
+    "atr14_pct": 2.08,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 4.7,
-        "value": 16.75
+        "score": 11.0,
+        "value": 24.41
       },
       {
         "name": "60日最大回撤",
-        "score": 4.7,
-        "value": -9.27
+        "score": 3.5,
+        "value": -8.83
       },
       {
         "name": "ATR百分比",
-        "score": 7.0,
-        "value": 1.79
+        "score": 11.6,
+        "value": 2.08
       },
       {
         "name": "量价异常",
-        "score": 65.1,
-        "value": 1.23
+        "score": 85.0,
+        "value": 1.44
       },
       {
         "name": "行业波动",
-        "score": 5.2,
-        "value": 21.3
+        "score": 7.5,
+        "value": 31.04
       }
     ]
   },
@@ -117,29 +117,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 1324.006,
-    "ma10": 1311.0890000000002,
-    "ma20": 1280.9745,
-    "ma60": 1299.150666666667,
-    "rsi14": 63.1,
-    "macd_dif": 12.60983544408441,
-    "macd_dea": 5.133935400250678,
-    "macd_hist": 14.951800087667465,
-    "atr14_pct": 1.7893267088880176,
-    "boll_position": 0.8987544415879348,
-    "return_5d_pct": 0.4514672686230181,
-    "return_20d_pct": 5.3686719600940735,
-    "volume_ratio_5d": 1.23
+    "trend": "uptrend",
+    "ma5": 1441.9180000000001,
+    "ma10": 1393.522,
+    "ma20": 1348.7055,
+    "ma60": 1310.2533333333333,
+    "rsi14": 70.4,
+    "macd_dif": 42.54755450866287,
+    "macd_dea": 28.423164174877364,
+    "macd_hist": 28.248780667571012,
+    "atr14_pct": 2.0835465053161117,
+    "boll_position": 0.9260956207378075,
+    "return_5d_pct": 7.237813884785815,
+    "return_20d_pct": 15.62442765112002,
+    "volume_ratio_5d": 1.44
   },
   "industry": {
     "name": "搜索自选",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.89,
-    "return_20d_pct": -15.59,
-    "return_60d_pct": -19.23,
-    "relative_strength_20d_pct": 20.68
+    "return_5d_pct": -1.2,
+    "return_20d_pct": -12.04,
+    "return_60d_pct": -18.36,
+    "relative_strength_20d_pct": 25.81
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,17 +147,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 24.1,
-      "average_return_pct": -0.92,
-      "median_return_pct": -1.44,
+      "up_probability_pct": 41.4,
+      "average_return_pct": -0.62,
+      "median_return_pct": -0.95,
       "best_return_pct": 9.15,
-      "worst_return_pct": -4.22
+      "worst_return_pct": -4.23
     },
     "horizon_5d": {
-      "up_probability_pct": 31.0,
-      "average_return_pct": -0.67,
-      "median_return_pct": -1.73,
-      "best_return_pct": 9.62,
+      "up_probability_pct": 37.9,
+      "average_return_pct": -0.18,
+      "median_return_pct": -0.93,
+      "best_return_pct": 9.15,
       "worst_return_pct": -6.18
     }
   },
@@ -282,7 +282,20 @@
     },
     "cached_at": "2026-08-09 09:30:07"
   },
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏高",
+      "detail": "RSI14=70.4，短期超买。",
+      "contribution": -5.0
+    }
+  ],
   "kline_file": "../kline/600519.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

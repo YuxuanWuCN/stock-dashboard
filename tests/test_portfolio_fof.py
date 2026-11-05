@@ -300,6 +300,32 @@ def test_allocator_graceful_fallback_on_negative_or_invalid_signals(sample_asset
     assert pw.weights["BOND"] >= 0.50
 
 
+def test_allocator_protective_state_zeroes_beta_and_satellite(sample_assets):
+    """契约验证：极度保护状态 (PROTECTIVE) 下，卫星仓清零，核心 Beta 清零，100% 切换为全额防御底仓。"""
+    allocator = FOFAllocator(assets=sample_assets)
+    signals = {
+        "SAT_CHIP": PointInTimeSignal("2026-10-13", "SAT_CHIP", score=0.9, confidence=1.0, source_method="test"),
+        "SAT_GREEN": PointInTimeSignal("2026-10-13", "SAT_GREEN", score=0.8, confidence=1.0, source_method="test"),
+    }
+
+    pw = allocator.allocate(
+        trade_date="2026-10-13",
+        signals=signals,
+        current_risk_state=RiskState.PROTECTIVE,
+        volatility_scale=1.0,
+    )
+
+    # 1. 卫星与 Beta 必须全部归零
+    assert pw.weights["SAT_CHIP"] == 0.0
+    assert pw.weights["SAT_GREEN"] == 0.0
+    assert pw.weights["INDEX300"] == 0.0
+
+    # 2. 100% 由防御底仓吸收并严格归一
+    assert pytest.approx(pw.weights["BOND"], rel=1e-5) == 1.0
+    assert pytest.approx(sum(pw.weights.values()), rel=1e-5) == 1.0
+
+
+
 # ============================================================================
 # 4. 风险预算状态机测试
 # ============================================================================

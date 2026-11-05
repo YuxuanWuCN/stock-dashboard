@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-23 17:34:10+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-11-05 17:34:58+08:00",
+  "trade_date": "2026-11-05",
   "code": "688180",
   "name": "君实生物",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 55.6,
-    "risk": 49.3,
-    "technical": 71.0,
-    "industry": 57.0,
+    "risk_adjusted": 70.7,
+    "risk": 38.6,
+    "technical": 99.0,
+    "industry": 53.4,
     "leading": 50.0
   },
   "leading": {
@@ -42,20 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-23 17:32:46"
+    "updated_at": "2026-11-05 17:33:40"
   },
   "nale_network": {
     "sector_name": "抗体药物",
     "sector_breadth_pct": 100.0,
-    "tier_role": "leader",
-    "leader_stock": {
-      "code": "688180",
-      "name": "君实生物",
-      "change_pct": 4.484009231783722,
-      "is_limit_up": false
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -65,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -75,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 44.12,
-    "max_drawdown_60d_pct": -25.91,
-    "atr14_pct": 4.42,
+    "annualized_volatility_20d_pct": 46.99,
+    "max_drawdown_60d_pct": -28.41,
+    "atr14_pct": 4.36,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 59.9,
-        "value": 44.12
+        "score": 43.4,
+        "value": 46.99
       },
       {
         "name": "60日最大回撤",
-        "score": 56.4,
-        "value": -25.91
+        "score": 50.9,
+        "value": -28.41
       },
       {
         "name": "ATR百分比",
-        "score": 47.1,
-        "value": 4.42
+        "score": 41.0,
+        "value": 4.36
       },
       {
         "name": "量价异常",
-        "score": 70.3,
-        "value": 0.74
+        "score": 35.3,
+        "value": 1.15
       },
       {
         "name": "行业波动",
-        "score": 5.2,
-        "value": 21.3
+        "score": 7.5,
+        "value": 31.04
       }
     ]
   },
@@ -117,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 30.756,
-    "ma10": 30.802999999999997,
-    "ma20": 32.7555,
-    "ma60": 34.6625,
-    "rsi14": 45.7,
-    "macd_dif": -0.9965239037371276,
-    "macd_dea": -0.9036794327559061,
-    "macd_hist": -0.185688941962443,
-    "atr14_pct": 4.420197561269381,
-    "boll_position": 0.3740657714095624,
-    "return_5d_pct": 5.739072405739076,
-    "return_20d_pct": -3.1479217603911924,
-    "volume_ratio_5d": 0.74
+    "trend": "range",
+    "ma5": 30.121999999999996,
+    "ma10": 30.362000000000002,
+    "ma20": 30.6895,
+    "ma60": 33.74616666666667,
+    "rsi14": 49.5,
+    "macd_dif": -0.7895312214634416,
+    "macd_dea": -0.950505469566067,
+    "macd_hist": 0.3219484962052508,
+    "atr14_pct": 4.357422879711623,
+    "boll_position": 0.6363452310937336,
+    "return_5d_pct": 4.859249329758719,
+    "return_20d_pct": -6.373429084380621,
+    "volume_ratio_5d": 1.15
   },
   "industry": {
     "name": "抗体药物",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.89,
-    "return_20d_pct": -15.59,
-    "return_60d_pct": -19.23,
-    "relative_strength_20d_pct": 12.16
+    "return_5d_pct": -1.2,
+    "return_20d_pct": -12.04,
+    "return_60d_pct": -18.36,
+    "relative_strength_20d_pct": 3.81
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -152,17 +147,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -1.11,
-      "median_return_pct": -2.11,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.74,
+      "median_return_pct": -2.32,
       "best_return_pct": 14.23,
       "worst_return_pct": -12.86
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.86,
-      "median_return_pct": -0.15,
-      "best_return_pct": 19.72,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -1.23,
+      "median_return_pct": -1.88,
+      "best_return_pct": 18.28,
       "worst_return_pct": -14.64
     }
   },
@@ -302,26 +297,20 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 25.9%，风险偏高。",
+      "detail": "近60日最大回撤 28.4%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 25.9%，风险扣分。",
+      "detail": "近60日最大回撤 28.4%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 44.1%，波动偏高。",
+      "detail": "20日年化波动率 47.0%，波动偏高。",
       "contribution": -5.0
     }
   ],

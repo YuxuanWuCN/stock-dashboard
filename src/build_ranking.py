@@ -29,6 +29,11 @@ if os.environ.get("STOCK_PROXY", "").strip().lower() == "direct":
 else:
     configure_proxy_from_system()
 
+# ---- 出站网络护栏：IPv4 优先 + ASCII CA bundle（必须在 import akshare 之前）----
+from src.net_guard import configure_outbound_network
+
+configure_outbound_network()
+
 import akshare as ak
 import pandas as pd
 import numpy as np

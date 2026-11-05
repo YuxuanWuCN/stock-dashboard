@@ -49,7 +49,6 @@ pytest tests/integration/test_multi_asset_synthesis.py -v
 ## 3. 运行统一全景交互终端 (Launching Web Terminal)
 
 ### 3.1 零依赖离线演示模式 (适用于答辩现场弱网/无网环境)
-- **银发普惠与学术双核终端**：直接双击或通过本地浏览器打开 `docs/index_wealth.html`。
 - **A 股机构量化看板**：打开 `docs/index.html`。
 - **郑商所跨资产期望盈余看板**：打开 `docs/index_commodity.html`（或从主看板顶部导航一键穿透）。
 

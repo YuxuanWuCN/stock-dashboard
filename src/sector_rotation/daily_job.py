@@ -251,7 +251,12 @@ def run_daily(
     history_path = out_root / HISTORY_NAME
 
     store = store if store is not None else KlineStore.from_dir(KLINE_DIR, get_all_tickers())
-    full_calendar = store.common_dates("2000-01-01", "2099-12-31")
+    # 每日决策用「市场日历」而不是「所有成分股的交集」：交集语义要求每只成分股
+    # 在每个交易日都有价格，只要有任意一只 K 线陈旧，整个日历就被拖回那一天。
+    # 2026-11-02 事故：黄金板块 6 只成分股不在 watchlist.csv 里、K 线停在
+    # 2026-08-27，导致轮动决策日连续多日被钉死在 2026-08-27。
+    # 成分股自身的陈旧改由 monitoring 的新鲜度告警暴露，不再绑架交易日历。
+    full_calendar = store.market_dates("2000-01-01", "2099-12-31")
     if not full_calendar:
         raise ValueError("K 线日历为空，无法执行每日决策")
     trade_date = str(trade_date or full_calendar[-1])[:10]

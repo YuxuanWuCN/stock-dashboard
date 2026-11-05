@@ -170,9 +170,19 @@ class FOFAllocator:
 
         total_satellite_used = sum(final_satellite.values())
 
-        # 4. 核心 Beta 仓位分配 (经波动率缩放)
+        # 4. 核心 Beta 仓位分配 (经波动率缩放与风险状态机联动)
         tentative_beta: Dict[str, float] = {}
-        target_beta_total = self.alloc_config.base_beta_weight * volatility_scale
+        if current_risk_state == RiskState.PROTECTIVE:
+            target_beta_total = 0.0
+            active_constraints.append("RiskState.PROTECTIVE: broad beta zeroed (100% defensive bottom warehouse)")
+        elif current_risk_state == RiskState.DEFENSIVE:
+            target_beta_total = self.alloc_config.base_beta_weight * volatility_scale * 0.50
+            active_constraints.append("RiskState.DEFENSIVE: broad beta scaled to 50%")
+        elif current_risk_state == RiskState.WATCH:
+            target_beta_total = self.alloc_config.base_beta_weight * volatility_scale * 0.80
+            active_constraints.append("RiskState.WATCH: broad beta scaled to 80%")
+        else:
+            target_beta_total = self.alloc_config.base_beta_weight * volatility_scale
         if self.beta_tickers:
             each_beta = target_beta_total / len(self.beta_tickers)
             for t in self.beta_tickers:

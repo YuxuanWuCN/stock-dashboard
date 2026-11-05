@@ -34,6 +34,17 @@ if os.environ.get("STOCK_PROXY", "").strip().lower() == "direct":
 else:
     configure_proxy_from_system()
 
+# ---- 出站网络护栏：IPv4 优先 + ASCII CA bundle ----
+# 必须在 import akshare 之前执行：本机 IPv6 出口对 push2his.eastmoney.com
+# 单向故障，而 getaddrinfo 默认 IPv6 优先，会导致 stock_zh_a_hist 等接口
+# 全部 RemoteDisconnected。详见 src/net_guard.py 的模块文档。
+try:
+    from .net_guard import configure_outbound_network
+except ImportError:  # Support direct execution from src/.
+    from net_guard import configure_outbound_network
+
+configure_outbound_network()
+
 import akshare as ak
 import pandas as pd
 

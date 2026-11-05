@@ -17,7 +17,6 @@ DOCS_DIR = REPO_ROOT / "docs"
 def test_web_dashboards_presence_and_cross_navigation():
     """验证三大全域核心交互看板存在且具备全局多资产置顶互通导航"""
     dashboards = [
-        "index_wealth.html",     # 银发普惠理财门面
         "index.html",            # A 股学术计量看板
         "index_commodity.html"   # 郑商所期现套保看板
     ]
@@ -29,7 +28,6 @@ def test_web_dashboards_presence_and_cross_navigation():
         
         # 验证置顶中台导航栏与跨看板跳转链接
         assert "Rainbow-FinGPT v4.0" in content, f"{d} 缺少 v4.0 全域中台导航标头"
-        assert "index_wealth.html" in content, f"{d} 缺少指向银发普惠看板的导航"
         assert "index.html" in content, f"{d} 缺少指向 A 股学术看板的导航"
         assert "index_commodity.html" in content, f"{d} 缺少指向郑商所套保看板的导航"
 

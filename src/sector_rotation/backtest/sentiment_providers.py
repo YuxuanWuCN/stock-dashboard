@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Protocol, Tuple
 
@@ -85,7 +86,16 @@ class KlineStore:
         return entry[1].get(date) if entry else None
 
     def common_dates(self, start: str, end: str) -> List[str]:
-        """所有已加载 code 的日期交集，截断到 [start, end]（回测交易日历）。"""
+        """所有已加载 code 的日期交集，截断到 [start, end]（回测交易日历）。
+
+        注意：这是**回测**语义——回测要求每个成分股在每个交易日都有价格，
+        所以取交集是正确的。但每日决策（``daily_job.run_daily``）不能用它来
+        回答「今天是哪个交易日」：只要有任意一只成分股的 K 线陈旧，
+        整个日历就会被拖回那一天。2026-11-02 事故正是如此——黄金板块
+        6 只成分股不在 ``watchlist.csv`` 里，K 线停在 2026-08-27，
+        于是轮动决策日连续多日被钉在 2026-08-27。
+        每日决策请改用 :meth:`market_dates`。
+        """
         common: Optional[set] = None
         for dates, _ in self._prices.values():
             s = set(dates)
@@ -93,6 +103,47 @@ class KlineStore:
         if not common:
             return []
         return sorted(d for d in common if start <= d <= end)
+
+    def market_dates(
+        self,
+        start: str,
+        end: str,
+        min_coverage: float = 0.5,
+    ) -> List[str]:
+        """市场交易日历：出现在至少 ``min_coverage`` 比例的标的里的日期。
+
+        与 :meth:`common_dates` 的区别是**容忍个别标的缺失**。每日决策关心的是
+        「市场今天开没开盘」，而不是「所有成分股是否都有今天的数据」；
+        后者应由数据新鲜度告警来管，不该反过来绑架日历。
+
+        Args:
+            start: 起始日（含），``YYYY-MM-DD``
+            end: 结束日（含），``YYYY-MM-DD``
+            min_coverage: 覆盖阈值 (0, 1]。默认 0.5，即至少一半标的有该日价格。
+
+        Returns:
+            升序日期列表；无任何数据时返回空列表。
+        """
+        total = len(self._prices)
+        if total == 0:
+            return []
+
+        counts: Dict[str, int] = {}
+        for dates, _ in self._prices.values():
+            for d in dates:
+                if start <= d <= end:
+                    counts[d] = counts.get(d, 0) + 1
+
+        threshold = max(1, int(math.ceil(total * float(min_coverage))))
+        return sorted(d for d, n in counts.items() if n >= threshold)
+
+    def last_date(self, code: str) -> Optional[str]:
+        """某只标的的最后一个有价格的日期；无数据返回 ``None``。"""
+        entry = self._prices.get(code)
+        if not entry:
+            return None
+        dates, _ = entry
+        return dates[-1] if dates else None
 
     def file_sha256_map(self, kline_dir: Path) -> Dict[str, str]:
         """输出所用 kline 文件的 sha256（供 run_manifest 追溯）。"""

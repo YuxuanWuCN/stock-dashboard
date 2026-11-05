@@ -69,6 +69,93 @@ def _trading_lag(calendar: List[str], asof_date: Optional[str]) -> Optional[int]
     return len(calendar) - 1 - calendar.index(asof_date)
 
 
+def check_component_freshness(
+    store: "KlineStore",
+    calendar: List[str],
+    sectors: Optional[Dict[str, Any]] = None,
+    critical_lag: int = FRESHNESS_CRITICAL_LAG_DAYS,
+) -> List[Alert]:
+    """检查各板块成分股自身的 K 线是否陈旧。
+
+    为什么需要这条独立检查：``check_freshness`` 用「公共交易日历的最后一天」
+    作为基准，而该日历一旦退化成陈旧成分股的交集，基准本身也会被拖回旧日期，
+    ``lag`` 恒为 0，告警永远不触发。2026-11-02 事故中轮动决策日连续多日停在
+    2026-08-27 而监控全绿，正是这个盲区。
+
+    本函数以**市场日历**（``market_dates``，容忍个别标的缺失）为基准，逐板块
+    比较成分股的最新价格日期，把陈旧成分股暴露成告警。
+
+    Args:
+        store: 已加载的 K 线数据层
+        calendar: 市场交易日历（升序，最后一项为最近交易日）
+        sectors: 板块定义；缺省用全局 ``SECTORS``
+        critical_lag: 超过该滞后交易日数升级为 critical
+
+    Returns:
+        每个板块至多一条告警；全部新鲜时返回空列表。
+    """
+    alerts: List[Alert] = []
+    if not calendar:
+        return alerts
+
+    sector_map = sectors if sectors is not None else SECTORS
+    cal_last = calendar[-1]
+
+    for sector_id, cfg in sector_map.items():
+        stale: List[Dict[str, Any]] = []
+        missing: List[str] = []
+        for code in cfg.tickers:
+            last = store.last_date(code)
+            if last is None:
+                missing.append(code)
+                continue
+            lag = _trading_lag(calendar, last)
+            if lag is None:
+                # 末日不在市场日历内：可能停牌或数据缺口，按陈旧处理
+                stale.append({"code": code, "last_date": last, "lag": None})
+            elif lag > 0:
+                stale.append({"code": code, "last_date": last, "lag": lag})
+
+        if not stale and not missing:
+            continue
+
+        worst_lag = max(
+            (s["lag"] for s in stale if isinstance(s.get("lag"), int)),
+            default=None,
+        )
+        severity = SEVERITY_WARNING
+        if worst_lag is not None and worst_lag >= critical_lag:
+            severity = SEVERITY_CRITICAL
+        elif stale and worst_lag is None:
+            severity = SEVERITY_WARNING
+
+        parts: List[str] = []
+        if stale:
+            desc = ", ".join(
+                f"{s['code']}({s['last_date']}"
+                + (f", 滞后{s['lag']}日" if isinstance(s.get("lag"), int) else "")
+                + ")"
+                for s in stale
+            )
+            parts.append(f"陈旧成分股 {len(stale)} 只: {desc}")
+        if missing:
+            parts.append(f"缺失 K 线 {len(missing)} 只: {', '.join(missing)}")
+
+        alerts.append(_alert(
+            "freshness.components",
+            severity,
+            f"板块 {sector_id} 成分股数据不完整（市场日历末日 {cal_last}）："
+            + "；".join(parts),
+            sector=sector_id,
+            calendar_last=cal_last,
+            stale=stale,
+            missing=missing,
+            worst_lag=worst_lag,
+        ))
+
+    return alerts
+
+
 # ============================================================================
 # 1. 数据新鲜度
 # ============================================================================
@@ -291,9 +378,12 @@ def run_monitoring(
 
     history_rows = load_history(history_path)
 
+    store: Optional[KlineStore] = None
     if calendar is None:
         store = KlineStore.from_dir(kline_root, get_all_tickers())
-        calendar = store.common_dates("2000-01-01", "2099-12-31")
+        # 基准用市场日历（容忍个别标的缺失），否则陈旧成分股会把基准本身拖回旧日期，
+        # 让下面的新鲜度检查恒为「无滞后」。成分股陈旧由 check_component_freshness 负责。
+        calendar = store.market_dates("2000-01-01", "2099-12-31")
     kline_last = calendar[-1] if calendar else None
 
     alerts: List[Alert] = []
@@ -313,6 +403,10 @@ def run_monitoring(
             payload.get("llm_validation"),
             (payload.get("audit") or {}).get("advisor_audit"),
             history_rows))
+
+    # 成分股新鲜度独立于 latest_rotation 是否存在：数据烂了就该报，与决策产物无关。
+    if store is not None and calendar:
+        alerts.extend(check_component_freshness(store, calendar))
 
     counts = summarize(alerts)
     report = {

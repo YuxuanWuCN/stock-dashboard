@@ -31,9 +31,9 @@
 <body>
     <nav style="background: rgba(15, 23, 42, 0.95); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 8px 24px; display: flex; gap: 12px; font-size: 0.85rem; align-items: center; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px);">
         <span style="color: #94a3b8; font-weight: 600;">Rainbow-FinGPT v4.0 全域中台:</span>
-        <a href="index_wealth.html" style="color: #f8fafc; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); transition: all 0.2s;">👵 银发安心理财 (普惠门面)</a>
         <a href="index.html" style="color: #38bdf8; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(56,189,248,0.15); font-weight: bold;">📈 A 股量化学术看板 (202标的)</a>
         <a href="index_commodity.html" style="color: #f8fafc; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); transition: all 0.2s;">🛡️ 郑商所期现双轨套保 (纯碱/玻璃)</a>
+        <a href="index_wealth.html" style="color: #f8fafc; text-decoration: none; padding: 4px 12px; border-radius: 4px; background: rgba(255,255,255,0.05); transition: all 0.2s;">👵 银发安心理财 (个人养老/普惠)</a>
     </nav>
     <div class="container">
         <!-- 顶部状态栏 -->
@@ -90,12 +90,7 @@
                     <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                     <span>量化组合实盘</span>
                 </a>
-                <a href="index_wealth.html" class="portfolio-link wealth-portal-link" title="切换至银发普惠养老金融看板（微信理财通/蚂蚁财富风格）" style="background: linear-gradient(135deg, rgba(197, 155, 39, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%); border-color: rgba(197, 155, 39, 0.4);">
-                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="#c59b27" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                    <span style="color: #f59e0b; font-weight: 600;">🛡️ 银发普惠理财通</span>
-                </a>
+
                 <div id="status-bar" class="status-bar loading">
                     <span class="status-indicator"></span>
                     <span id="status-text">正在加载运行信息...</span>
@@ -129,12 +124,7 @@
                 <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
                 <span>科研成果与实证</span>
             </button>
-            <a href="index_wealth.html" class="app-nav-btn app-nav-link" title="前往银发普惠养老金融终端" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid rgba(197, 155, 39, 0.3); background: rgba(197, 155, 39, 0.08);">
-                <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="#c59b27" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                </svg>
-                <span style="color: #f59e0b; font-weight: 600;">银发普惠版 🛡️</span>
-            </a>
+
             <button type="button" class="app-nav-btn" data-page="paper">
                 <svg class="nav-icon" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
                 <span>模拟盘</span>

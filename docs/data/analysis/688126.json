@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-23 17:34:10+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-11-05 17:34:58+08:00",
+  "trade_date": "2026-11-05",
   "code": "688126",
   "name": "沪硅产业",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 55.2,
-    "risk": 51.3,
-    "technical": 58.0,
-    "industry": 36.3,
+    "risk_adjusted": 40.7,
+    "risk": 76.6,
+    "technical": 94.0,
+    "industry": 40.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,20 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-23 17:32:37"
+    "updated_at": "2026-11-05 17:33:32"
   },
   "nale_network": {
     "sector_name": "硅片",
     "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "688126",
+      "name": "沪硅产业",
+      "change_pct": 4.125838060856115,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +65,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -68,36 +73,36 @@
     }
   },
   "risk": {
-    "level": "medium",
-    "label": "中等风险",
-    "annualized_volatility_20d_pct": 42.21,
-    "max_drawdown_60d_pct": -32.39,
-    "atr14_pct": 5.35,
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 69.5,
+    "max_drawdown_60d_pct": -41.56,
+    "atr14_pct": 5.96,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 55.8,
-        "value": 42.21
+        "score": 72.8,
+        "value": 69.5
       },
       {
         "name": "60日最大回撤",
-        "score": 76.2,
-        "value": -32.39
+        "score": 80.9,
+        "value": -41.56
       },
       {
         "name": "ATR百分比",
-        "score": 61.0,
-        "value": 5.35
+        "score": 66.5,
+        "value": 5.96
       },
       {
         "name": "量价异常",
-        "score": 25.0,
-        "value": 0.93
+        "score": 87.9,
+        "value": 1.48
       },
       {
         "name": "行业波动",
-        "score": 5.2,
-        "value": 21.3
+        "score": 82.7,
+        "value": 36.79
       }
     ]
   },
@@ -112,53 +117,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 19.322,
-    "ma10": 19.554000000000002,
-    "ma20": 21.642000000000003,
-    "ma60": 23.5155,
-    "rsi14": 33.2,
-    "macd_dif": -1.3308767537411512,
-    "macd_dea": -1.1716526460400447,
-    "macd_hist": -0.318448215402213,
-    "atr14_pct": 5.347857402650248,
-    "boll_position": 0.2533460026959831,
-    "return_5d_pct": 1.572327044025168,
-    "return_20d_pct": -18.158783783783782,
-    "volume_ratio_5d": 0.93
+    "trend": "range",
+    "ma5": 18.26,
+    "ma10": 18.29,
+    "ma20": 19.0215,
+    "ma60": 22.561999999999998,
+    "rsi14": 51.4,
+    "macd_dif": -1.0665318002720774,
+    "macd_dea": -1.3282626577843222,
+    "macd_hist": 0.5234617150244896,
+    "atr14_pct": 5.960509463297846,
+    "boll_position": 0.7430662003584324,
+    "return_5d_pct": 16.301843317972352,
+    "return_20d_pct": -6.397774687065361,
+    "volume_ratio_5d": 1.48
   },
   "industry": {
     "name": "硅片",
-    "reference_type": "index",
-    "benchmark_code": "399001",
-    "return_5d_pct": -3.89,
-    "return_20d_pct": -15.59,
-    "return_60d_pct": -19.23,
-    "relative_strength_20d_pct": -2.85
+    "reference_type": "industry",
+    "benchmark_code": "BK1319",
+    "return_5d_pct": 9.55,
+    "return_20d_pct": 1.57,
+    "return_60d_pct": -4.05,
+    "relative_strength_20d_pct": -7.97
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.33,
-      "median_return_pct": 0.82,
-      "best_return_pct": 22.92,
-      "worst_return_pct": -19.41
+      "up_probability_pct": 17.2,
+      "average_return_pct": -4.26,
+      "median_return_pct": -3.52,
+      "best_return_pct": 9.93,
+      "worst_return_pct": -19.27
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 0.92,
-      "median_return_pct": -0.13,
-      "best_return_pct": 26.07,
-      "worst_return_pct": -29.45
+      "up_probability_pct": 27.6,
+      "average_return_pct": -3.71,
+      "median_return_pct": -5.18,
+      "best_return_pct": 15.04,
+      "worst_return_pct": -22.42
     }
   },
   "fundamental": {
@@ -291,26 +296,20 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 32.4%，风险偏高。",
+      "detail": "近60日最大回撤 41.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 32.4%，风险扣分。",
+      "detail": "近60日最大回撤 41.6%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 42.2%，波动偏高。",
+      "detail": "20日年化波动率 69.5%，波动偏高。",
       "contribution": -5.0
     }
   ],

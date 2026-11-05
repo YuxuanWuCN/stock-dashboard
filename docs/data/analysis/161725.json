@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-23 17:34:10+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-11-05 17:34:58+08:00",
+  "trade_date": "2026-11-05",
   "code": "161725",
   "name": "招商中证白酒指数A",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 70.0,
-    "risk": 14.5,
-    "technical": 83.0,
+    "risk_adjusted": 73.3,
+    "risk": 21.4,
+    "technical": 82.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-23 17:33:31"
+    "updated_at": "2026-11-05 17:34:23"
   },
   "nale_network": {
     "sector_name": "公募白酒",
@@ -70,14 +70,14 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 19.14,
+    "annualized_volatility_20d_pct": 31.1,
     "max_drawdown_60d_pct": -10.34,
-    "atr14_pct": 1.83,
+    "atr14_pct": 2.15,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 8.7,
-        "value": 19.14
+        "score": 19.7,
+        "value": 31.1
       },
       {
         "name": "60日最大回撤",
@@ -86,18 +86,18 @@
       },
       {
         "name": "ATR百分比",
-        "score": 9.9,
-        "value": 1.83
+        "score": 13.9,
+        "value": 2.15
       },
       {
         "name": "量价异常",
-        "score": 75.0,
-        "value": 1.29
+        "score": 99.4,
+        "value": 2.01
       },
       {
         "name": "行业波动",
-        "score": 5.2,
-        "value": 21.3
+        "score": 7.5,
+        "value": 31.04
       }
     ]
   },
@@ -118,51 +118,58 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 0.532,
-    "ma10": 0.531,
-    "ma20": 0.529,
-    "ma60": 0.5463333333333333,
-    "rsi14": 47.3,
-    "macd_dif": -0.0026857724501888613,
-    "macd_dea": -0.0034901786223388125,
-    "macd_hist": 0.0016088123442999022,
-    "atr14_pct": 1.8290218310076576,
-    "boll_position": 0.5400320384514665,
-    "return_5d_pct": -1.851851851851849,
-    "return_20d_pct": 0.0,
-    "volume_ratio_5d": 1.29
+    "ma5": 0.58,
+    "ma10": 0.557,
+    "ma20": 0.5439999999999999,
+    "ma60": 0.5459999999999999,
+    "rsi14": 69.7,
+    "macd_dif": 0.011683780112330955,
+    "macd_dea": 0.004700818243492548,
+    "macd_hist": 0.013965923737676814,
+    "atr14_pct": 2.1545765947707496,
+    "boll_position": 1.0174094612658995,
+    "return_5d_pct": 11.32075471698113,
+    "return_20d_pct": 11.32075471698113,
+    "volume_ratio_5d": 2.01
   },
   "industry": {
     "name": "公募白酒",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.89,
-    "return_20d_pct": -15.59,
-    "return_60d_pct": -19.23,
-    "relative_strength_20d_pct": 15.31
+    "return_5d_pct": -1.2,
+    "return_20d_pct": -12.04,
+    "return_60d_pct": -18.36,
+    "relative_strength_20d_pct": 21.5
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 28,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": 0.01,
-      "median_return_pct": 0.0,
-      "best_return_pct": 7.41,
-      "worst_return_pct": -3.64
+      "up_probability_pct": 7.1,
+      "average_return_pct": -1.81,
+      "median_return_pct": -1.85,
+      "best_return_pct": 3.92,
+      "worst_return_pct": -5.97
     },
     "horizon_5d": {
-      "up_probability_pct": 23.3,
-      "average_return_pct": -0.64,
-      "median_return_pct": -1.75,
-      "best_return_pct": 8.82,
-      "worst_return_pct": -5.26
+      "up_probability_pct": 25.0,
+      "average_return_pct": -0.81,
+      "median_return_pct": -0.86,
+      "best_return_pct": 9.26,
+      "worst_return_pct": -6.45
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期2.01倍。",
+      "contribution": 5.0
+    }
+  ],
   "kline_file": "../kline/161725.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

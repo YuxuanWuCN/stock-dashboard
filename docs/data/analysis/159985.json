@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-23 17:34:10+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-11-05 17:34:58+08:00",
+  "trade_date": "2026-11-05",
   "code": "159985",
   "name": "豆粕ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 75.9,
-    "risk": 15.4,
-    "technical": 71.0,
-    "industry": 57.0,
+    "risk_adjusted": 76.4,
+    "risk": 10.7,
+    "technical": 50.0,
+    "industry": 54.1,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-10-23 17:33:27"
+    "updated_at": "2026-11-05 17:34:19"
   },
   "nale_network": {
     "sector_name": "农产品大宗",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 20.67,
-    "max_drawdown_60d_pct": -11.02,
-    "atr14_pct": 1.68,
+    "annualized_volatility_20d_pct": 18.09,
+    "max_drawdown_60d_pct": -13.47,
+    "atr14_pct": 1.56,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 12.2,
-        "value": 20.67
+        "score": 3.5,
+        "value": 18.09
       },
       {
         "name": "60日最大回撤",
-        "score": 7.6,
-        "value": -11.02
+        "score": 15.6,
+        "value": -13.47
       },
       {
         "name": "ATR百分比",
-        "score": 5.8,
-        "value": 1.68
+        "score": 4.0,
+        "value": 1.56
       },
       {
         "name": "量价异常",
-        "score": 79.1,
-        "value": 0.69
+        "score": 38.7,
+        "value": 1.16
       },
       {
         "name": "行业波动",
-        "score": 5.2,
-        "value": 21.3
+        "score": 7.5,
+        "value": 31.04
       }
     ]
   },
@@ -117,29 +117,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 2.1999999999999997,
-    "ma10": 2.23,
-    "ma20": 2.2595,
-    "ma60": 2.241333333333333,
-    "rsi14": 45.9,
-    "macd_dif": -0.02319586337789481,
-    "macd_dea": -0.013004724905216081,
-    "macd_hist": -0.020382276945357457,
-    "atr14_pct": 1.6777284639288914,
-    "boll_position": 0.33189723360352064,
-    "return_5d_pct": 0.9049773755656076,
-    "return_20d_pct": -5.907172995780597,
-    "volume_ratio_5d": 0.69
+    "trend": "downtrend",
+    "ma5": 2.1479999999999997,
+    "ma10": 2.165,
+    "ma20": 2.2009999999999996,
+    "ma60": 2.2439999999999998,
+    "rsi14": 36.6,
+    "macd_dif": -0.035903965457587894,
+    "macd_dea": -0.030153831268445928,
+    "macd_hist": -0.011500268378283933,
+    "atr14_pct": 1.5647878942140634,
+    "boll_position": 0.1632914969161571,
+    "return_5d_pct": -0.9302325581395321,
+    "return_20d_pct": -6.167400881057272,
+    "volume_ratio_5d": 1.16
   },
   "industry": {
     "name": "农产品大宗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.89,
-    "return_20d_pct": -15.59,
-    "return_60d_pct": -19.23,
-    "relative_strength_20d_pct": 9.4
+    "return_5d_pct": -1.2,
+    "return_20d_pct": -12.04,
+    "return_60d_pct": -18.36,
+    "relative_strength_20d_pct": 4.02
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,22 +147,29 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.21,
+      "up_probability_pct": 63.3,
+      "average_return_pct": 0.6,
       "median_return_pct": 0.51,
-      "best_return_pct": 4.21,
-      "worst_return_pct": -4.96
+      "best_return_pct": 5.83,
+      "worst_return_pct": -4.17
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.13,
-      "median_return_pct": 0.22,
-      "best_return_pct": 8.04,
-      "worst_return_pct": -5.37
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.91,
+      "median_return_pct": 0.5,
+      "best_return_pct": 8.25,
+      "worst_return_pct": -3.7
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    }
+  ],
   "kline_file": "../kline/159985.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

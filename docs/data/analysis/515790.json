@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-10-23 17:34:10+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-11-05 17:34:58+08:00",
+  "trade_date": "2026-11-05",
   "code": "515790",
   "name": "光伏ETF",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 50.2,
-    "risk": 26.1,
-    "technical": 50.0,
+    "risk_adjusted": 57.2,
+    "risk": 36.4,
+    "technical": 86.0,
     "industry": 57.0,
     "leading": 35.0
   },
@@ -825,24 +825,38 @@
       100520.0,
       95040.0,
       94180.0,
-      97280.0
+      97280.0,
+      95280.0,
+      98500.0,
+      93300.0,
+      88360.0,
+      88500.0,
+      90700.0,
+      89300.0,
+      86460.0,
+      91580.0
     ],
     "momentum_metrics": {
-      "slope_pct": -23.5,
+      "slope_pct": -21.73,
       "momentum": "decelerating",
       "inflection_flag": "none",
-      "latest_value": 97280.0,
+      "latest_value": 91580.0,
       "confidence": "high"
     },
-    "updated_at": "2026-10-23 17:32:50"
+    "updated_at": "2026-11-05 17:33:44"
   },
   "nale_network": {
     "sector_name": "光伏绿电",
     "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "515790",
+      "name": "光伏ETF",
+      "change_pct": 4.109589041095894,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -852,7 +866,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -860,36 +874,36 @@
     }
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
-    "annualized_volatility_20d_pct": 26.57,
-    "max_drawdown_60d_pct": -20.22,
-    "atr14_pct": 2.86,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 36.22,
+    "max_drawdown_60d_pct": -24.72,
+    "atr14_pct": 3.16,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 21.5,
-        "value": 26.57
+        "score": 30.1,
+        "value": 36.22
       },
       {
         "name": "60日最大回撤",
-        "score": 37.8,
-        "value": -20.22
+        "score": 43.9,
+        "value": -24.72
       },
       {
         "name": "ATR百分比",
-        "score": 26.7,
-        "value": 2.86
+        "score": 27.2,
+        "value": 3.16
       },
       {
         "name": "量价异常",
-        "score": 40.7,
-        "value": 1.12
+        "score": 98.3,
+        "value": 1.8
       },
       {
         "name": "行业波动",
-        "score": 5.2,
-        "value": 21.3
+        "score": 7.5,
+        "value": 31.04
       }
     ]
   },
@@ -904,53 +918,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 0.718,
-    "ma10": 0.727,
-    "ma20": 0.7585,
-    "ma60": 0.8081666666666667,
-    "rsi14": 32.6,
-    "macd_dif": -0.026817495690004245,
-    "macd_dea": -0.024717008867199394,
-    "macd_hist": -0.004200973645609701,
-    "atr14_pct": 2.8618909981134464,
-    "boll_position": 0.23926901650724897,
-    "return_5d_pct": 0.0,
-    "return_20d_pct": -8.860759493670889,
-    "volume_ratio_5d": 1.12
+    "trend": "range",
+    "ma5": 0.708,
+    "ma10": 0.706,
+    "ma20": 0.7190000000000001,
+    "ma60": 0.7903333333333332,
+    "rsi14": 57.2,
+    "macd_dif": -0.01795547405879716,
+    "macd_dea": -0.0249584779732889,
+    "macd_hist": 0.01400600782898348,
+    "atr14_pct": 3.1601321508965894,
+    "boll_position": 0.8962878949265459,
+    "return_5d_pct": 10.144927536231885,
+    "return_20d_pct": 0.0,
+    "volume_ratio_5d": 1.8
   },
   "industry": {
     "name": "光伏绿电",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -3.89,
-    "return_20d_pct": -15.59,
-    "return_60d_pct": -19.23,
-    "relative_strength_20d_pct": 6.45
+    "return_5d_pct": -1.2,
+    "return_20d_pct": -12.04,
+    "return_60d_pct": -18.36,
+    "relative_strength_20d_pct": 10.18
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 55.2,
-      "average_return_pct": -0.2,
-      "median_return_pct": 0.91,
-      "best_return_pct": 10.48,
-      "worst_return_pct": -7.84
+      "up_probability_pct": 23.3,
+      "average_return_pct": -2.21,
+      "median_return_pct": -2.7,
+      "best_return_pct": 3.66,
+      "worst_return_pct": -7.69
     },
     "horizon_5d": {
-      "up_probability_pct": 31.0,
-      "average_return_pct": -1.04,
-      "median_return_pct": -0.91,
-      "best_return_pct": 7.62,
-      "worst_return_pct": -11.76
+      "up_probability_pct": 26.7,
+      "average_return_pct": -2.59,
+      "median_return_pct": -3.27,
+      "best_return_pct": 6.1,
+      "worst_return_pct": -10.58
     }
   },
   "fundamental": null,
@@ -963,21 +977,21 @@
     },
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 20.2%，风险偏高。",
+      "detail": "近60日最大回撤 24.7%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 20.2%，风险扣分。",
+      "detail": "近60日最大回撤 24.7%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "positive",
+      "title": "成交活跃",
+      "detail": "近5日量能为前期1.80倍。",
+      "contribution": 5.0
     }
   ],
   "kline_file": "../kline/515790.json",

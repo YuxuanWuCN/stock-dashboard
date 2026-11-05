@@ -75,16 +75,6 @@ GITHUB_SYNC_ENABLED = bool(GITHUB_TOKEN and GITHUB_REPO)
 
 CORS(app, resources={r"/api/*": {"origins": ALLOWED_ORIGINS}})
 
-# ---- 养老金融首页 BFF & 数据集 API 蓝图 ----
-try:
-    from homepage_api import bp as homepage_api_v1_bp
-    from dataset_api import bp as dataset_api_v1_bp
-    app.register_blueprint(homepage_api_v1_bp)
-    app.register_blueprint(dataset_api_v1_bp)
-    logger.info("已注册 homepage_api / dataset_api 蓝图")
-except Exception as _bp_err:
-    logger.warning("跳过 homepage/dataset 蓝图注册: %s", _bp_err)
-
 # ---- 全域多资产 API 蓝图 (v4.0) ----
 try:
     from multi_asset_api import bp_v4 as multi_asset_api_v4_bp
@@ -93,7 +83,6 @@ try:
 except Exception as _bp_err:
     logger.warning("跳过 multi_asset_api_v4 蓝图注册: %s", _bp_err)
 
-HOME_DIR = os.path.abspath(os.path.join(DOCS_DIR, "home"))
 
 # ============================================================
 # 股票代码 → 大盘指数映射
@@ -564,16 +553,6 @@ def index():
         "example": "/api/query?code=600519&start_date=2025-07-01",
     })
 
-
-@app.route("/home")
-@app.route("/home/<path:filename>")
-def serve_home(filename: str = "index.html"):
-    """银发安心理财助手 React SPA 入口"""
-    filepath = os.path.join(HOME_DIR, filename)
-    if os.path.isfile(filepath):
-        return send_from_directory(HOME_DIR, filename)
-    # SPA fallback: 非文件路径回退到 index.html
-    return send_from_directory(HOME_DIR, "index.html")
 
 
 @app.route("/api/health")

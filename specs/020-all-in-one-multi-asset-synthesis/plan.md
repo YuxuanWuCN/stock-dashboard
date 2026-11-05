@@ -8,13 +8,13 @@
 
 ## 1. 概要 (Summary)
 
-将用户 GitHub 账号（`YuxuanWuCN`）下割裂的高价值核心资产——特别是 `contest-2026`（大创赛国奖级全景工程、202 只 A 股高景气标的池、CSMAR 行情走步评测、金牌路演文稿）与 `v3.1`（郑商所纯碱/玻璃商品期现双轨套保、ADR-0001 两层解耦、ADR-0002 物理因果本体、极星 19.5 插件、343 项测试），辅以 `serenity-chokepoint-investing-enhanced`（供应链卡脖子瓶颈拓扑推演）与 `main`（银发适老普惠与学术双核前端），进行系统级的“全域多资产因果量化投研中台（Rainbow-FinGPT v4.0）”架构合成。
+将用户 GitHub 账号（`YuxuanWuCN`）下割裂的高价值核心资产——特别是 `contest-2026`（大创赛国奖级全景工程、202 只 A 股高景气标的池、CSMAR 行情走步评测、金牌路演文稿）与 `v3.1`（郑商所纯碱/玻璃商品期现双轨套保、ADR-0001 两层解耦、ADR-0002 物理因果本体、极星 19.5 插件、343 项测试），辅以 `serenity-chokepoint-investing-enhanced`（供应链卡脖子瓶颈拓扑推演）与通用学术前端，进行系统级的“全域多资产因果量化投研中台（Rainbow-FinGPT v4.0）”架构合成。
 
 **实施原则与底线**：
 1. **严禁暴力 Git Merge**：针对 `v3.1` 为孤立分支（Orphan Branch，无共同父提交）的技术事实，杜绝使用 `--allow-unrelated-histories` 强行合并导致的文件大面积覆写与测试击穿。
 2. **分层多资产 Monorepo 解耦**：通过清晰的命名空间隔离（`src/core/math/`、`src/assets/equity/`、`src/assets/commodity/`、`src/intelligence/`），确保各资产轨道独立可测、依赖单向流动。
 3. **赛事申报材料物理隔离**：建立 `competitions/dachuang_2026/` 与 `competitions/czce_futures/`，杜绝赛道材料交叉污染。
-4. **统一多模交互终端**：Web 端支持银发普惠、A 股量化、郑商所套保、因果拓扑四维一键穿透，并全面保留单文件离线容灾能力。
+4. **统一多模交互终端**：Web 端支持 A 股量化、郑商所套保、因果拓扑三维一键穿透，并全面保留单文件离线容灾能力。
 
 ---
 
@@ -91,11 +91,8 @@ Rainbow_FinGPTv2/
 │   │   │   ├── tes_pipeline.py       # 跨资产期望盈余计算
 │   │   │   ├── polarstar_plugin/     # 极星 19.5 量化插件
 │   │   │   └── warehouse_receipts.py # 仓单与基差跟踪
-│   │   └── wealth/                   # 普惠财富赛道 (来自 main)
-│   │       └── silver_allocation.py  # 银发安心配置算法
 │   └── server.py                     # 多资产统一 API 网关
 ├── docs/                             # 统一全景交互前端 (支持单文件离线)
-│   ├── index_wealth.html             # 银发普惠与学术双核终端 (React 18 + SVG)
 │   ├── index.html                    # A 股机构量化看板
 │   ├── index_commodity.html          # 郑商所期现套保看板
 │   └── data/                         # 离线同构学术快照
