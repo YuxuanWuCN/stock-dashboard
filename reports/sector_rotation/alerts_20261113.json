@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-11-13T14:46:14",
+  "rotation_trade_date": "2026-11-13",
+  "calendar_last_date": "2026-11-13",
+  "history_days_recorded": 22,
+  "has_critical": true,
+  "summary": {
+    "info": 0,
+    "warning": 4,
+    "critical": 1
+  },
+  "alerts": [
+    {
+      "check": "validity.sample_size",
+      "severity": "warning",
+      "message": "板块 green 样本数 0 低于预期 6",
+      "detail": {
+        "sector": "green",
+        "stock_count": 0,
+        "expected": 6
+      }
+    },
+    {
+      "check": "validity.sample_size",
+      "severity": "warning",
+      "message": "板块 storage 样本数 3 低于预期 6",
+      "detail": {
+        "sector": "storage",
+        "stock_count": 3,
+        "expected": 6
+      }
+    },
+    {
+      "check": "validity.sample_size",
+      "severity": "warning",
+      "message": "板块 gold 样本数 0 低于预期 6",
+      "detail": {
+        "sector": "gold",
+        "stock_count": 0,
+        "expected": 6
+      }
+    },
+    {
+      "check": "freshness.components",
+      "severity": "warning",
+      "message": "板块 storage 成分股数据不完整（市场日历末日 2026-11-13）：缺失 K 线 2 只: 688123, 002049",
+      "detail": {
+        "sector": "storage",
+        "calendar_last": "2026-11-13",
+        "stale": [],
+        "missing": [
+          "688123",
+          "002049"
+        ],
+        "worst_lag": null
+      }
+    },
+    {
+      "check": "freshness.components",
+      "severity": "critical",
+      "message": "板块 gold 成分股数据不完整（市场日历末日 2026-11-13）：陈旧成分股 6 只: 600547(2026-08-27, 滞后50日), 601899(2026-08-27, 滞后50日), 600489(2026-08-27, 滞后50日), 002155(2026-08-27, 滞后50日), 000975(2026-08-27, 滞后50日), 600988(2026-08-27, 滞后50日)；缺失 K 线 1 只: 600362",
+      "detail": {
+        "sector": "gold",
+        "calendar_last": "2026-11-13",
+        "stale": [
+          {
+            "code": "600547",
+            "last_date": "2026-08-27",
+            "lag": 50
+          },
+          {
+            "code": "601899",
+            "last_date": "2026-08-27",
+            "lag": 50
+          },
+          {
+            "code": "600489",
+            "last_date": "2026-08-27",
+            "lag": 50
+          },
+          {
+            "code": "002155",
+            "last_date": "2026-08-27",
+            "lag": 50
+          },
+          {
+            "code": "000975",
+            "last_date": "2026-08-27",
+            "lag": 50
+          },
+          {
+            "code": "600988",
+            "last_date": "2026-08-27",
+            "lag": 50
+          }
+        ],
+        "missing": [
+          "600362"
+        ],
+        "worst_lag": 50
+      }
+    }
+  ]
+}

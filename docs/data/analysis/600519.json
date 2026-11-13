@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-05 17:34:58+08:00",
-  "trade_date": "2026-11-05",
+  "generated_at": "2026-11-13 14:26:17+08:00",
+  "trade_date": "2026-11-13",
   "code": "600519",
   "name": "贵州茅台",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 89.9,
-    "risk": 16.1,
-    "technical": 100.0,
+    "risk_adjusted": 72.9,
+    "risk": 15.5,
+    "technical": 67.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-05 17:33:54"
+    "updated_at": "2026-11-13 14:25:13"
   },
   "nale_network": {
     "sector_name": "搜索自选",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 50.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 24.41,
-    "max_drawdown_60d_pct": -8.83,
-    "atr14_pct": 2.08,
+    "annualized_volatility_20d_pct": 25.98,
+    "max_drawdown_60d_pct": -7.93,
+    "atr14_pct": 2.05,
     "factors": [
       {
         "name": "20日波动率",
         "score": 11.0,
-        "value": 24.41
+        "value": 25.98
       },
       {
         "name": "60日最大回撤",
-        "score": 3.5,
-        "value": -8.83
+        "score": 2.9,
+        "value": -7.93
       },
       {
         "name": "ATR百分比",
         "score": 11.6,
-        "value": 2.08
+        "value": 2.05
       },
       {
         "name": "量价异常",
-        "score": 85.0,
-        "value": 1.44
+        "score": 82.1,
+        "value": 0.69
       },
       {
         "name": "行业波动",
-        "score": 7.5,
-        "value": 31.04
+        "score": 6.4,
+        "value": 31.77
       }
     ]
   },
@@ -112,52 +112,52 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 1441.9180000000001,
-    "ma10": 1393.522,
-    "ma20": 1348.7055,
-    "ma60": 1310.2533333333333,
-    "rsi14": 70.4,
-    "macd_dif": 42.54755450866287,
-    "macd_dea": 28.423164174877364,
-    "macd_hist": 28.248780667571012,
-    "atr14_pct": 2.0835465053161117,
-    "boll_position": 0.9260956207378075,
-    "return_5d_pct": 7.237813884785815,
-    "return_20d_pct": 15.62442765112002,
-    "volume_ratio_5d": 1.44
+    "ma5": 1426.3020000000001,
+    "ma10": 1440.205,
+    "ma20": 1390.238,
+    "ma60": 1319.8048333333334,
+    "rsi14": 62.3,
+    "macd_dif": 35.23360920746131,
+    "macd_dea": 36.21691298065917,
+    "macd_hist": -1.9666075463957071,
+    "atr14_pct": 2.054223631219878,
+    "boll_position": 0.7053064769452628,
+    "return_5d_pct": -1.242257398485891,
+    "return_20d_pct": 7.972159518434907,
+    "volume_ratio_5d": 0.69
   },
   "industry": {
     "name": "搜索自选",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.2,
-    "return_20d_pct": -12.04,
-    "return_60d_pct": -18.36,
-    "relative_strength_20d_pct": 25.81
+    "return_5d_pct": -2.38,
+    "return_20d_pct": -5.24,
+    "return_60d_pct": -22.31,
+    "relative_strength_20d_pct": 13.09
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 41.4,
-      "average_return_pct": -0.62,
-      "median_return_pct": -0.95,
-      "best_return_pct": 9.15,
-      "worst_return_pct": -4.23
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.04,
+      "median_return_pct": -0.68,
+      "best_return_pct": 9.31,
+      "worst_return_pct": -4.11
     },
     "horizon_5d": {
-      "up_probability_pct": 37.9,
-      "average_return_pct": -0.18,
-      "median_return_pct": -0.93,
-      "best_return_pct": 9.15,
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.06,
+      "median_return_pct": -0.65,
+      "best_return_pct": 10.03,
       "worst_return_pct": -6.18
     }
   },
@@ -288,12 +288,6 @@
       "title": "中短期趋势向上",
       "detail": "收盘价位于20日和60日均线上方。",
       "contribution": 8.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=70.4，短期超买。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/600519.json",

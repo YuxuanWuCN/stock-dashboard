@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-05 17:34:58+08:00",
-  "trade_date": "2026-11-05",
+  "generated_at": "2026-11-13 14:26:17+08:00",
+  "trade_date": "2026-11-13",
   "code": "159562",
   "name": "黄金股ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 63.1,
-    "risk": 49.2,
-    "technical": 91.0,
-    "industry": 57.0,
+    "risk_adjusted": 46.0,
+    "risk": 45.2,
+    "technical": 60.0,
+    "industry": 30.1,
     "leading": 50.0
   },
   "leading": {
@@ -2432,24 +2432,29 @@
       836.08,
       840.01,
       863.79,
-      884.09
+      884.09,
+      868.57,
+      881.0,
+      883.42,
+      872.98,
+      851.33
     ],
     "momentum_metrics": {
-      "slope_pct": -2.25,
+      "slope_pct": -5.57,
       "momentum": "flat",
       "inflection_flag": "none",
-      "latest_value": 884.09,
+      "latest_value": 851.33,
       "confidence": "high"
     },
-    "updated_at": "2026-11-05 17:34:20"
+    "updated_at": "2026-11-13 14:25:40"
   },
   "nale_network": {
     "sector_name": "贵金属弹性",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -2459,7 +2464,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -2469,34 +2474,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 55.58,
+    "annualized_volatility_20d_pct": 53.46,
     "max_drawdown_60d_pct": -32.13,
-    "atr14_pct": 4.18,
+    "atr14_pct": 4.38,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 57.2,
-        "value": 55.58
+        "score": 54.3,
+        "value": 53.46
       },
       {
         "name": "60日最大回撤",
-        "score": 58.4,
+        "score": 59.0,
         "value": -32.13
       },
       {
         "name": "ATR百分比",
-        "score": 36.4,
-        "value": 4.18
+        "score": 41.6,
+        "value": 4.38
       },
       {
         "name": "量价异常",
-        "score": 90.8,
-        "value": 1.54
+        "score": 48.6,
+        "value": 0.84
       },
       {
         "name": "行业波动",
-        "score": 7.5,
-        "value": 31.04
+        "score": 6.4,
+        "value": 31.77
       }
     ]
   },
@@ -2511,34 +2516,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 1.786,
-    "ma10": 1.8060000000000003,
-    "ma20": 1.8990000000000002,
-    "ma60": 2.154333333333333,
-    "rsi14": 50.1,
-    "macd_dif": -0.08705427528151799,
-    "macd_dea": -0.09766235829572331,
-    "macd_hist": 0.021216166028410643,
-    "atr14_pct": 4.176774278854937,
-    "boll_position": 0.5889490225302196,
-    "return_5d_pct": 8.37988826815641,
-    "return_20d_pct": -2.5125628140703515,
-    "volume_ratio_5d": 1.54
+    "trend": "downtrend",
+    "ma5": 1.8699999999999999,
+    "ma10": 1.8439999999999999,
+    "ma20": 1.8575000000000004,
+    "ma60": 2.116333333333333,
+    "rsi14": 38.8,
+    "macd_dif": -0.05397766141293214,
+    "macd_dea": -0.06685835949399056,
+    "macd_hist": 0.02576139616211684,
+    "atr14_pct": 4.380824629402087,
+    "boll_position": 0.2611641942776135,
+    "return_5d_pct": -6.349206349206349,
+    "return_20d_pct": -11.05527638190955,
+    "volume_ratio_5d": 0.84
   },
   "industry": {
     "name": "贵金属弹性",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.2,
-    "return_20d_pct": -12.04,
-    "return_60d_pct": -18.36,
-    "relative_strength_20d_pct": 7.67
+    "return_5d_pct": -2.38,
+    "return_20d_pct": -5.24,
+    "return_60d_pct": -22.31,
+    "relative_strength_20d_pct": -5.93
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -2546,22 +2551,28 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -1.97,
-      "median_return_pct": -3.19,
-      "best_return_pct": 12.81,
-      "worst_return_pct": -14.84
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.1,
+      "median_return_pct": 0.6,
+      "best_return_pct": 14.53,
+      "worst_return_pct": -9.17
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -1.44,
-      "median_return_pct": -3.23,
-      "best_return_pct": 23.1,
-      "worst_return_pct": -11.51
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.48,
+      "median_return_pct": -1.64,
+      "best_return_pct": 11.73,
+      "worst_return_pct": -12.45
     }
   },
   "fundamental": null,
   "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
     {
       "type": "negative",
       "title": "近期回撤较大",
@@ -2575,15 +2586,9 @@
       "contribution": -7.0
     },
     {
-      "type": "positive",
-      "title": "成交活跃",
-      "detail": "近5日量能为前期1.54倍。",
-      "contribution": 5.0
-    },
-    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 55.6%，波动偏高。",
+      "detail": "20日年化波动率 53.5%，波动偏高。",
       "contribution": -5.0
     }
   ],

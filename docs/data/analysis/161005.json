@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-05 17:34:58+08:00",
-  "trade_date": "2026-11-05",
+  "generated_at": "2026-11-13 14:26:17+08:00",
+  "trade_date": "2026-11-13",
   "code": "161005",
   "name": "富国天惠成长混合A",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 72.7,
-    "risk": 15.1,
-    "technical": 81.0,
-    "industry": 47.5,
+    "risk_adjusted": 56.2,
+    "risk": 19.9,
+    "technical": 60.0,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-05 17:34:23"
+    "updated_at": "2026-11-13 14:25:42"
   },
   "nale_network": {
     "sector_name": "公募成长",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 22.73,
+    "annualized_volatility_20d_pct": 21.84,
     "max_drawdown_60d_pct": -22.22,
-    "atr14_pct": 2.11,
+    "atr14_pct": 2.08,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 5.8,
-        "value": 22.73
+        "score": 5.2,
+        "value": 21.84
       },
       {
         "name": "60日最大回撤",
-        "score": 36.4,
+        "score": 37.0,
         "value": -22.22
       },
       {
         "name": "ATR百分比",
-        "score": 12.1,
-        "value": 2.11
+        "score": 12.7,
+        "value": 2.08
       },
       {
         "name": "量价异常",
-        "score": 6.9,
-        "value": 1.02
+        "score": 55.5,
+        "value": 0.81
       },
       {
         "name": "行业波动",
-        "score": 7.5,
-        "value": 31.04
+        "score": 6.4,
+        "value": 31.77
       }
     ]
   },
@@ -112,52 +112,52 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 2.572,
-    "ma10": 2.589,
-    "ma20": 2.6494999999999997,
-    "ma60": 2.929666666666667,
-    "rsi14": 40.5,
-    "macd_dif": -0.09144248102457997,
-    "macd_dea": -0.10179242812601891,
-    "macd_hist": 0.020699894202877878,
-    "atr14_pct": 2.111125846817742,
-    "boll_position": 0.4437261659808353,
-    "return_5d_pct": 2.734375,
-    "return_20d_pct": -8.362369337979104,
-    "volume_ratio_5d": 1.02
+    "ma5": 2.566,
+    "ma10": 2.573,
+    "ma20": 2.5940000000000003,
+    "ma60": 2.8735,
+    "rsi14": 33.1,
+    "macd_dif": -0.07146835597085799,
+    "macd_dea": -0.08273761747746751,
+    "macd_hist": 0.02253852301321904,
+    "atr14_pct": 2.0779007089109616,
+    "boll_position": 0.11904761904756606,
+    "return_5d_pct": -1.9379844961240456,
+    "return_20d_pct": -4.887218045112796,
+    "volume_ratio_5d": 0.81
   },
   "industry": {
     "name": "公募成长",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.2,
-    "return_20d_pct": -12.04,
-    "return_60d_pct": -18.36,
-    "relative_strength_20d_pct": 1.82
+    "return_5d_pct": -2.38,
+    "return_20d_pct": -5.24,
+    "return_60d_pct": -22.31,
+    "relative_strength_20d_pct": 0.23
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 28,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.98,
-      "median_return_pct": -1.18,
-      "best_return_pct": 2.41,
+      "up_probability_pct": 39.3,
+      "average_return_pct": -0.17,
+      "median_return_pct": -0.16,
+      "best_return_pct": 4.55,
       "worst_return_pct": -6.67
     },
     "horizon_5d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.92,
-      "median_return_pct": -0.88,
-      "best_return_pct": 3.1,
+      "up_probability_pct": 39.3,
+      "average_return_pct": -0.67,
+      "median_return_pct": -0.63,
+      "best_return_pct": 5.24,
       "worst_return_pct": -6.48
     }
   },

@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-05 17:43:37",
+  "generated_at": "2026-11-13 14:46:24",
   "portfolios": [
     {
       "key": "aggressive",
       "file": "paper/performance_aggressive.json",
       "name": "激进组合-全库扫描版",
       "color": "#d97706",
-      "description": "激进进攻：每日自动调仓，温度联动持仓 16 只",
+      "description": "激进进攻：每日自动调仓，温度联动持仓 5 只",
       "risk_profile": "aggressive",
       "is_benchmark": false,
       "is_variant": false,
@@ -80,6 +80,39 @@
       "parent_strategy": "bluechip"
     },
     {
+      "key": "bluechip_v1",
+      "file": "paper/performance_bluechip_v1.json",
+      "name": "bluechip_confidence_gate（信号置信度过滤增强版）",
+      "color": "#f59e0b",
+      "description": "提高收益与稳定性",
+      "risk_profile": "",
+      "is_benchmark": false,
+      "is_variant": true,
+      "parent_strategy": "bluechip"
+    },
+    {
+      "key": "bluechip_v2",
+      "file": "paper/performance_bluechip_v2.json",
+      "name": "bluechip_volatility_parity（波动率动态仓位与回撤控制版）",
+      "color": "#f59e0b",
+      "description": "降低风险与最大回撤",
+      "risk_profile": "",
+      "is_benchmark": false,
+      "is_variant": true,
+      "parent_strategy": "bluechip"
+    },
+    {
+      "key": "bluechip_v3",
+      "file": "paper/performance_bluechip_v3.json",
+      "name": "bluechip_diversified_tilt（行业分散与收益归因优化版）",
+      "color": "#f59e0b",
+      "description": "提升稳定性与收益可持续性",
+      "risk_profile": "",
+      "is_benchmark": false,
+      "is_variant": true,
+      "parent_strategy": "bluechip"
+    },
+    {
       "key": "bluechip_weighted",
       "file": "paper/performance_bluechip_weighted.json",
       "name": "Bluechip 加权版",
@@ -139,7 +172,7 @@
       "file": "paper/performance_global.json",
       "name": "全球组合",
       "color": "#8b5cf6",
-      "description": "全球分散：温度联动持仓 5 只",
+      "description": "全球分散：温度联动持仓 2 只",
       "risk_profile": "moderate",
       "is_benchmark": false,
       "is_variant": false,
@@ -194,7 +227,7 @@
       "file": "paper/performance.json",
       "name": "稳健组合-防守型",
       "color": "#2f9e6e",
-      "description": "稳健防守：温度联动仓位 64%",
+      "description": "稳健防守：温度联动仓位 20%",
       "risk_profile": "defensive",
       "is_benchmark": false,
       "is_variant": false,

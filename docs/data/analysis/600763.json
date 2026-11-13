@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-05 17:34:58+08:00",
-  "trade_date": "2026-11-05",
+  "generated_at": "2026-11-13 14:26:17+08:00",
+  "trade_date": "2026-11-13",
   "code": "600763",
   "name": "通策医疗",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 69.1,
-    "risk": 23.7,
-    "technical": 85.0,
+    "risk_adjusted": 77.2,
+    "risk": 19.3,
+    "technical": 80.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-05 17:33:41"
+    "updated_at": "2026-11-13 14:25:00"
   },
   "nale_network": {
     "sector_name": "口腔医疗",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 25.24,
+    "annualized_volatility_20d_pct": 27.21,
     "max_drawdown_60d_pct": -13.79,
-    "atr14_pct": 2.78,
+    "atr14_pct": 2.87,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 12.1,
-        "value": 25.24
+        "score": 13.9,
+        "value": 27.21
       },
       {
         "name": "60日最大回撤",
-        "score": 17.3,
+        "score": 16.8,
         "value": -13.79
       },
       {
         "name": "ATR百分比",
-        "score": 23.7,
-        "value": 2.78
+        "score": 25.4,
+        "value": 2.87
       },
       {
         "name": "量价异常",
-        "score": 98.8,
-        "value": 1.87
+        "score": 49.1,
+        "value": 0.84
       },
       {
         "name": "行业波动",
-        "score": 7.5,
-        "value": 31.04
+        "score": 6.4,
+        "value": 31.77
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 36.854,
-    "ma10": 35.449,
-    "ma20": 34.253,
-    "ma60": 34.6115,
-    "rsi14": 72.9,
-    "macd_dif": 0.8529874313573629,
-    "macd_dea": 0.32993031363918146,
-    "macd_hist": 1.0461142354363628,
-    "atr14_pct": 2.7808891996034006,
-    "boll_position": 1.0133597906381362,
-    "return_5d_pct": 9.93861444022215,
-    "return_20d_pct": 12.268656716417903,
-    "volume_ratio_5d": 1.87
+    "trend": "uptrend",
+    "ma5": 36.028,
+    "ma10": 36.644,
+    "ma20": 35.1945,
+    "ma60": 34.56466666666667,
+    "rsi14": 51.1,
+    "macd_dif": 0.6320240533048036,
+    "macd_dea": 0.6783629859682507,
+    "macd_hist": -0.09267786532689426,
+    "atr14_pct": 2.8745916950358605,
+    "boll_position": 0.5232369672442082,
+    "return_5d_pct": -6.0340244550770805,
+    "return_20d_pct": 9.172328597899938,
+    "volume_ratio_5d": 0.84
   },
   "industry": {
     "name": "口腔医疗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.2,
-    "return_20d_pct": -12.04,
-    "return_60d_pct": -18.36,
-    "relative_strength_20d_pct": 22.45
+    "return_5d_pct": -2.38,
+    "return_20d_pct": -5.24,
+    "return_60d_pct": -22.31,
+    "relative_strength_20d_pct": 14.29
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 16.7,
-      "average_return_pct": -2.2,
-      "median_return_pct": -2.14,
-      "best_return_pct": 4.49,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.23,
+      "median_return_pct": -0.77,
+      "best_return_pct": 8.31,
       "worst_return_pct": -8.68
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -1.75,
-      "median_return_pct": -2.89,
-      "best_return_pct": 8.12,
-      "worst_return_pct": -9.91
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.03,
+      "median_return_pct": -1.11,
+      "best_return_pct": 9.86,
+      "worst_return_pct": -7.46
     }
   },
   "fundamental": {
@@ -285,15 +285,9 @@
   "reasons": [
     {
       "type": "positive",
-      "title": "成交活跃",
-      "detail": "近5日量能为前期1.87倍。",
-      "contribution": 5.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏高",
-      "detail": "RSI14=72.9，短期超买。",
-      "contribution": -5.0
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
     }
   ],
   "kline_file": "../kline/600763.json",

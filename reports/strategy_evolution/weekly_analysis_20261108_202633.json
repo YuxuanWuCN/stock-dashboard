@@ -1,0 +1,311 @@
+{
+  "generated_at": "20261108_202633",
+  "analysis_period": "past_7_days",
+  "champion": {
+    "name": "bluechip",
+    "stats": {
+      "cumulative_return": 1.68,
+      "avg_daily_return": 0.24,
+      "volatility": 0.884,
+      "win_rate": 71.4,
+      "max_drawdown": 1.46,
+      "sharpe": 0.271,
+      "score": 8.55,
+      "trading_days": 7
+    },
+    "analysis": {
+      "core_holdings": [
+        {
+          "code": "300750",
+          "name": "宁德时代",
+          "appearances": 7,
+          "avg_return": 1.53
+        },
+        {
+          "code": "600519",
+          "name": "贵州茅台",
+          "appearances": 7,
+          "avg_return": 1.28
+        }
+      ],
+      "prediction_accuracy": 21.428571428571427,
+      "llm_analysis": {
+        "success_factors": [
+          "低预测胜率但组合收益为正：预测准确率仅3/14=21.4%，但最近7天累计收益为+1.68%，说明盈利并非依赖高方向胜率，而更可能来自持仓期收益、盈亏比或仓位暴露。",
+          "核心持仓重复出现且平均收益为正：宁德时代与贵州茅台各出现7次，平均收益分别为1.53%和1.28%，显示筛选机制持续捕捉到强势蓝筹，并对组合形成稳定贡献。",
+          "正收益天数占优：最近7天中5天为正收益，最大单日收益+1.56%，亏损日为-0.38%和-1.46%，正收益出现频率高于亏损日。",
+          "聚焦高流动性龙头：核心持仓均为大盘/超大盘蓝筹，流动性和基本面透明度较高，有利于控制交易冲击成本与策略容量。",
+          "收益与短期预测准确率脱钩：3/14的准确率下仍实现正收益，数据表明策略优势更可能来自持有强势标的和收益分布，而非短期择时准确率。"
+        ],
+        "holdings_characteristics": {
+          "industry": "新能源动力电池与食品饮料（白酒）龙头",
+          "market_cap": "大盘/超大盘蓝筹",
+          "volatility": "低至中等，贵州茅台偏低，宁德时代中等"
+        },
+        "sustainability": {
+          "score": 6.5,
+          "reasoning": "核心持仓为高流动性蓝筹，重复出现且平均收益为正，具备一定稳定性；但预测准确率仅21.4%，最近7天累计收益仅+1.68%，且出现-1.46%的单日回撤，说明优势对市场风格、少数核心持仓和持仓周期较敏感，可持续性中等。",
+          "risk_factors": [
+            "预测准确率偏低，若盈亏比或持仓收益下降，组合容易转为亏损。",
+            "核心持仓集中于宁德时代和贵州茅台，存在行业与风格集中风险。",
+            "蓝筹行情反转、市场风险偏好变化或流动性收紧会削弱策略优势。",
+            "近期单日回撤达-1.46%，收益波动可能侵蚀累计收益。"
+          ]
+        },
+        "improvement_directions": [
+          {
+            "direction": "提高信号胜率与置信度过滤",
+            "reason": "预测准确率仅3/14=21.4%，存在较多低置信度预测，需减少无效交易。",
+            "expected_impact": "降低试错成本和交易摩擦，目标提升准确率并改善收益稳定性。"
+          },
+          {
+            "direction": "引入波动率动态仓位与回撤控制",
+            "reason": "最近7天单日收益在-1.46%至+1.56%之间波动，亏损日对累计收益影响明显。",
+            "expected_impact": "降低最大回撤，平滑净值曲线并提升风险调整后收益。"
+          },
+          {
+            "direction": "降低核心持仓与行业集中度",
+            "reason": "宁德时代与贵州茅台各出现7次，组合暴露集中于新能源和白酒龙头。",
+            "expected_impact": "分散行业风格切换风险，减少单一龙头波动对组合的冲击。"
+          },
+          {
+            "direction": "拆解预测准确率与收益归因",
+            "reason": "低准确率仍能盈利，说明收益来源可能来自盈亏比、持仓周期或少数大额盈利，需要量化归因。",
+            "expected_impact": "识别真实收益来源，优化入场条件、持有周期和仓位分配。"
+          }
+        ]
+      }
+    }
+  },
+  "all_strategies": {
+    "aggressive": {
+      "cumulative_return": -6.12,
+      "avg_daily_return": -0.874,
+      "volatility": 1.571,
+      "win_rate": 42.9,
+      "max_drawdown": 6.12,
+      "sharpe": -0.557,
+      "score": -1.11,
+      "trading_days": 7
+    },
+    "robust": {
+      "cumulative_return": -0.11,
+      "avg_daily_return": -0.016,
+      "volatility": 0.554,
+      "win_rate": 42.9,
+      "max_drawdown": 0.95,
+      "sharpe": -0.028,
+      "score": 4.07,
+      "trading_days": 7
+    },
+    "bluechip": {
+      "cumulative_return": 1.68,
+      "avg_daily_return": 0.24,
+      "volatility": 0.884,
+      "win_rate": 71.4,
+      "max_drawdown": 1.46,
+      "sharpe": 0.271,
+      "score": 8.55,
+      "trading_days": 7
+    },
+    "defensive": {
+      "cumulative_return": 0.03,
+      "avg_daily_return": 0.004,
+      "volatility": 0.567,
+      "win_rate": 57.1,
+      "max_drawdown": 1.22,
+      "sharpe": 0.008,
+      "score": 5.63,
+      "trading_days": 7
+    },
+    "global": {
+      "cumulative_return": 0.69,
+      "avg_daily_return": 0.099,
+      "volatility": 0.487,
+      "win_rate": 71.4,
+      "max_drawdown": 0.96,
+      "sharpe": 0.203,
+      "score": 7.87,
+      "trading_days": 7
+    },
+    "tech": {
+      "cumulative_return": 0.91,
+      "avg_daily_return": 0.13,
+      "volatility": 0.788,
+      "win_rate": 57.1,
+      "max_drawdown": 1.41,
+      "sharpe": 0.165,
+      "score": 6.45,
+      "trading_days": 7
+    },
+    "aggressive_v1": {
+      "cumulative_return": -7.72,
+      "avg_daily_return": -1.103,
+      "volatility": 4.374,
+      "win_rate": 42.9,
+      "max_drawdown": 13.64,
+      "sharpe": -0.252,
+      "score": -2.21,
+      "trading_days": 7
+    },
+    "aggressive_v2": {
+      "cumulative_return": -7.72,
+      "avg_daily_return": -1.103,
+      "volatility": 4.374,
+      "win_rate": 42.9,
+      "max_drawdown": 13.64,
+      "sharpe": -0.252,
+      "score": -2.21,
+      "trading_days": 7
+    },
+    "aggressive_v3": {
+      "cumulative_return": -7.72,
+      "avg_daily_return": -1.103,
+      "volatility": 4.374,
+      "win_rate": 42.9,
+      "max_drawdown": 13.64,
+      "sharpe": -0.252,
+      "score": -2.21,
+      "trading_days": 7
+    },
+    "bluechip_momentum": {
+      "cumulative_return": -2.22,
+      "avg_daily_return": -0.444,
+      "volatility": 0.579,
+      "win_rate": 20.0,
+      "max_drawdown": 2.22,
+      "sharpe": -0.767,
+      "score": -1.09,
+      "trading_days": 5
+    },
+    "bluechip_top5": {
+      "cumulative_return": -3.19,
+      "avg_daily_return": -0.638,
+      "volatility": 0.707,
+      "win_rate": 20.0,
+      "max_drawdown": 3.19,
+      "sharpe": -0.903,
+      "score": -2.04,
+      "trading_days": 5
+    },
+    "bluechip_weighted": {
+      "cumulative_return": -2.22,
+      "avg_daily_return": -0.444,
+      "volatility": 0.579,
+      "win_rate": 20.0,
+      "max_drawdown": 2.22,
+      "sharpe": -0.767,
+      "score": -1.09,
+      "trading_days": 5
+    },
+    "defensive_momentum": {
+      "cumulative_return": -1.22,
+      "avg_daily_return": -0.174,
+      "volatility": 0.705,
+      "win_rate": 42.9,
+      "max_drawdown": 2.22,
+      "sharpe": -0.247,
+      "score": 2.84,
+      "trading_days": 7
+    },
+    "defensive_top5": {
+      "cumulative_return": -4.67,
+      "avg_daily_return": -0.667,
+      "volatility": 0.587,
+      "win_rate": 14.3,
+      "max_drawdown": 4.67,
+      "sharpe": -1.137,
+      "score": -4.12,
+      "trading_days": 7
+    },
+    "defensive_weighted": {
+      "cumulative_return": -1.22,
+      "avg_daily_return": -0.174,
+      "volatility": 0.705,
+      "win_rate": 42.9,
+      "max_drawdown": 2.22,
+      "sharpe": -0.247,
+      "score": 2.84,
+      "trading_days": 7
+    },
+    "global_v1": {
+      "cumulative_return": -1.22,
+      "avg_daily_return": -0.174,
+      "volatility": 0.705,
+      "win_rate": 42.9,
+      "max_drawdown": 2.22,
+      "sharpe": -0.247,
+      "score": 2.84,
+      "trading_days": 7
+    },
+    "global_v2": {
+      "cumulative_return": -1.22,
+      "avg_daily_return": -0.174,
+      "volatility": 0.705,
+      "win_rate": 42.9,
+      "max_drawdown": 2.22,
+      "sharpe": -0.247,
+      "score": 2.84,
+      "trading_days": 7
+    },
+    "global_v3": {
+      "cumulative_return": -1.22,
+      "avg_daily_return": -0.174,
+      "volatility": 0.705,
+      "win_rate": 42.9,
+      "max_drawdown": 2.22,
+      "sharpe": -0.247,
+      "score": 2.84,
+      "trading_days": 7
+    }
+  },
+  "variants": [
+    {
+      "name": "bluechip_v1",
+      "display_name": "bluechip_confidence_gate（信号置信度过滤增强版）",
+      "description": "提高收益与稳定性",
+      "changes": {
+        "入场信号置信度阈值": "仅当模型输出概率 ≥ 0.55（或置信度分位数前60%）时开仓",
+        "单标的单日最大开仓次数": "≤1次/标的/日，且同一标的连续开仓需间隔≥1个交易日",
+        "最低盈亏比过滤": "要求预期盈亏比 ≥ 1.5，否则不交易",
+        "单标的仓位上限": "单标的≤25%，前两大核心持仓合计≤40%"
+      },
+      "llm_reasoning": "预计交易频次下降20%~35%，信号准确率提升至30%以上，单日最大亏损有望从-1.46%收窄至-1.0%以内，夏普比率从0.271提升至0.35以上"
+    },
+    {
+      "name": "bluechip_v2",
+      "display_name": "bluechip_volatility_parity（波动率动态仓位与回撤控制版）",
+      "description": "降低风险与最大回撤",
+      "changes": {
+        "仓位权重方式": "按目标波动率反比加权，单标的权重 = 目标组合波动率 / 标的20日已实现波动率，设0.3倍下限和1.5倍上限",
+        "组合目标年化波动率": "设定8%~10%目标波动率，超出则整体降仓",
+        "单日最大回撤触发阈值": "单日组合回撤≥1.2%时次日减仓30%；累计回撤≥3%时整体仓位降至50%",
+        "现金仓位保留比例": "常态保留10%~15%现金，波动率超标时提升至30%"
+      },
+      "llm_reasoning": "预计最大回撤从1.46%降至1.0%以内，年化波动率下降约20%，夏普比率提升至0.4左右，净值曲线更平滑"
+    },
+    {
+      "name": "bluechip_v3",
+      "display_name": "bluechip_diversified_tilt（行业分散与收益归因优化版）",
+      "description": "提升稳定性与收益可持续性",
+      "changes": {
+        "行业权重上限": "单一行业权重≤30%，至少覆盖3个申万一级行业",
+        "候选池行业分散规则": "同一行业最多保留2个标的进入候选池，超出时按综合评分截断",
+        "持仓周期归因参数": "引入1/3/5日收益归因统计，按近20个交易日的持仓期收益表现动态选择持有周期（±1日调整）",
+        "盈亏比与胜率联合权重": "评分 = 0.4×预测胜率分位 + 0.6×预期盈亏比分位，优先选择盈亏比高分位标的"
+      },
+      "llm_reasoning": "预计行业集中度显著下降，单一行业冲击对组合影响减少30%~40%，在保持核心蓝筹优势的同时提升收益可持续性评分（从6.5提升至7.5以上），预计夏普比率提升至0.35~0.45"
+    }
+  ],
+  "next_week_strategies": [
+    "aggressive",
+    "robust",
+    "bluechip",
+    "defensive",
+    "global",
+    "tech",
+    "bluechip_v1",
+    "bluechip_v2",
+    "bluechip_v3"
+  ]
+}

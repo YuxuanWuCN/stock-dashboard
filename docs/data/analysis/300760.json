@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-05 17:34:58+08:00",
-  "trade_date": "2026-11-05",
+  "generated_at": "2026-11-13 14:26:17+08:00",
+  "trade_date": "2026-11-13",
   "code": "300760",
   "name": "迈瑞医疗",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 89.1,
-    "risk": 20.2,
-    "technical": 100.0,
-    "industry": 62.0,
+    "risk_adjusted": 76.0,
+    "risk": 21.6,
+    "technical": 80.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,21 +42,21 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-05 17:33:14"
+    "updated_at": "2026-11-13 14:24:20"
   },
   "nale_network": {
     "sector_name": "医药",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 66.7,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
         "code": "300015",
         "name": "爱尔眼科",
-        "corr": 0.63
+        "corr": 0.61
       },
       {
         "code": "600196",
@@ -71,7 +71,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -81,34 +81,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 31.27,
-    "max_drawdown_60d_pct": -9.47,
-    "atr14_pct": 3.09,
+    "annualized_volatility_20d_pct": 31.07,
+    "max_drawdown_60d_pct": -9.54,
+    "atr14_pct": 2.83,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 20.8,
-        "value": 31.27
+        "score": 19.1,
+        "value": 31.07
       },
       {
         "name": "60日最大回撤",
-        "score": 4.6,
-        "value": -9.47
+        "score": 5.2,
+        "value": -9.54
       },
       {
         "name": "ATR百分比",
-        "score": 25.4,
-        "value": 3.09
+        "score": 24.3,
+        "value": 2.83
       },
       {
         "name": "量价异常",
-        "score": 75.1,
-        "value": 1.34
+        "score": 87.3,
+        "value": 0.65
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 27.74
+        "score": 6.4,
+        "value": 31.77
       }
     ]
   },
@@ -123,34 +123,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 182.398,
-    "ma10": 180.51299999999998,
-    "ma20": 173.7385,
-    "ma60": 163.47566666666668,
-    "rsi14": 64.4,
-    "macd_dif": 5.698388001541218,
-    "macd_dea": 4.948187168115402,
-    "macd_hist": 1.5004016668516318,
-    "atr14_pct": 3.0910613970175493,
-    "boll_position": 0.8494798988204081,
-    "return_5d_pct": 2.8435754189944262,
-    "return_20d_pct": 16.80837563451778,
-    "volume_ratio_5d": 1.34
+    "ma5": 178.766,
+    "ma10": 180.172,
+    "ma20": 177.103,
+    "ma60": 165.09633333333335,
+    "rsi14": 58.2,
+    "macd_dif": 4.012838753061146,
+    "macd_dea": 4.725017880222924,
+    "macd_hist": -1.4243582543235558,
+    "atr14_pct": 2.8318500898764922,
+    "boll_position": 0.617925037940359,
+    "return_5d_pct": -1.8266338528848847,
+    "return_20d_pct": 8.138554216867465,
+    "volume_ratio_5d": 0.65
   },
   "industry": {
     "name": "医药",
-    "reference_type": "industry",
-    "benchmark_code": "BK1216",
-    "return_5d_pct": 4.57,
-    "return_20d_pct": -4.04,
-    "return_60d_pct": 0.61,
-    "relative_strength_20d_pct": 20.85
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -2.38,
+    "return_20d_pct": -5.24,
+    "return_60d_pct": -22.31,
+    "relative_strength_20d_pct": 13.26
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -158,18 +158,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.75,
-      "median_return_pct": -0.84,
-      "best_return_pct": 7.31,
-      "worst_return_pct": -5.41
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.99,
+      "median_return_pct": 1.49,
+      "best_return_pct": 8.95,
+      "worst_return_pct": -5.03
     },
     "horizon_5d": {
       "up_probability_pct": 40.0,
-      "average_return_pct": -0.4,
-      "median_return_pct": -0.59,
-      "best_return_pct": 7.82,
-      "worst_return_pct": -7.75
+      "average_return_pct": 0.05,
+      "median_return_pct": -0.51,
+      "best_return_pct": 10.81,
+      "worst_return_pct": -6.74
     }
   },
   "fundamental": {

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-05 17:34:58+08:00",
-  "trade_date": "2026-11-05",
+  "generated_at": "2026-11-13 14:26:17+08:00",
+  "trade_date": "2026-11-13",
   "code": "300124",
   "name": "汇川技术",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 62.0,
-    "risk": 28.2,
-    "technical": 85.0,
+    "risk_adjusted": 53.1,
+    "risk": 34.9,
+    "technical": 70.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-05 17:33:34"
+    "updated_at": "2026-11-13 14:24:48"
   },
   "nale_network": {
     "sector_name": "工业自动化/工控",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 40.67,
-    "max_drawdown_60d_pct": -23.64,
-    "atr14_pct": 3.53,
+    "annualized_volatility_20d_pct": 44.82,
+    "max_drawdown_60d_pct": -20.67,
+    "atr14_pct": 3.65,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 33.5,
-        "value": 40.67
+        "score": 40.5,
+        "value": 44.82
       },
       {
         "name": "60日最大回撤",
-        "score": 41.0,
-        "value": -23.64
+        "score": 35.3,
+        "value": -20.67
       },
       {
         "name": "ATR百分比",
-        "score": 31.2,
-        "value": 3.53
+        "score": 32.4,
+        "value": 3.65
       },
       {
         "name": "量价异常",
-        "score": 5.8,
-        "value": 1.01
+        "score": 65.3,
+        "value": 0.79
       },
       {
         "name": "行业波动",
-        "score": 7.5,
-        "value": 31.04
+        "score": 6.4,
+        "value": 31.77
       }
     ]
   },
@@ -117,29 +117,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 56.54600000000001,
-    "ma10": 55.773,
-    "ma20": 52.974000000000004,
-    "ma60": 56.16583333333333,
-    "rsi14": 63.4,
-    "macd_dif": 0.9288589106210949,
-    "macd_dea": 0.07835571002662174,
-    "macd_hist": 1.7010064011889463,
-    "atr14_pct": 3.5251981569050415,
-    "boll_position": 0.9113780147223784,
-    "return_5d_pct": 2.042972877773863,
-    "return_20d_pct": 16.228686058174514,
-    "volume_ratio_5d": 1.01
+    "trend": "downtrend",
+    "ma5": 55.041999999999994,
+    "ma10": 55.92100000000001,
+    "ma20": 54.55,
+    "ma60": 55.355,
+    "rsi14": 46.4,
+    "macd_dif": 0.4135062982829396,
+    "macd_dea": 0.5610540966090003,
+    "macd_hist": -0.2950955966521214,
+    "atr14_pct": 3.6547094622645564,
+    "boll_position": 0.4057389753075538,
+    "return_5d_pct": -5.400635368866913,
+    "return_20d_pct": 7.847082494969815,
+    "volume_ratio_5d": 0.79
   },
   "industry": {
     "name": "工业自动化/工控",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.2,
-    "return_20d_pct": -12.04,
-    "return_60d_pct": -18.36,
-    "relative_strength_20d_pct": 26.41
+    "return_5d_pct": -2.38,
+    "return_20d_pct": -5.24,
+    "return_60d_pct": -22.31,
+    "relative_strength_20d_pct": 12.97
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 20.0,
-      "average_return_pct": -2.84,
-      "median_return_pct": -3.62,
-      "best_return_pct": 11.86,
-      "worst_return_pct": -12.4
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.96,
+      "median_return_pct": -1.34,
+      "best_return_pct": 5.04,
+      "worst_return_pct": -6.84
     },
     "horizon_5d": {
-      "up_probability_pct": 26.7,
-      "average_return_pct": -2.35,
-      "median_return_pct": -2.43,
-      "best_return_pct": 14.76,
-      "worst_return_pct": -12.09
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.6,
+      "median_return_pct": -2.23,
+      "best_return_pct": 15.04,
+      "worst_return_pct": -11.1
     }
   },
   "fundamental": {
@@ -285,20 +285,26 @@
   "reasons": [
     {
       "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    },
+    {
+      "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 23.6%，风险偏高。",
+      "detail": "近60日最大回撤 20.7%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 23.6%，风险扣分。",
+      "detail": "近60日最大回撤 20.7%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 40.7%，波动偏高。",
+      "detail": "20日年化波动率 44.8%，波动偏高。",
       "contribution": -5.0
     }
   ],
