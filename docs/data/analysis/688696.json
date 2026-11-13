@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-13 14:26:17+08:00",
+  "generated_at": "2026-11-13 18:37:48+08:00",
   "trade_date": "2026-11-13",
   "code": "688696",
   "name": "极米科技",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 74.1,
-    "risk": 42.3,
+    "risk_adjusted": 73.0,
+    "risk": 41.9,
     "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
@@ -42,20 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-13 14:24:58"
+    "updated_at": "2026-11-13 18:36:27"
   },
   "nale_network": {
     "sector_name": "智能投影",
     "sector_breadth_pct": 100.0,
-    "tier_role": "leader",
-    "leader_stock": {
-      "code": "688696",
-      "name": "极米科技",
-      "change_pct": 4.155523554824117,
-      "is_limit_up": false
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -65,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -75,14 +70,14 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 75.25,
+    "annualized_volatility_20d_pct": 75.08,
     "max_drawdown_60d_pct": -12.25,
-    "atr14_pct": 5.58,
+    "atr14_pct": 5.6,
     "factors": [
       {
         "name": "20日波动率",
         "score": 79.8,
-        "value": 75.25
+        "value": 75.08
       },
       {
         "name": "60日最大回撤",
@@ -92,17 +87,17 @@
       {
         "name": "ATR百分比",
         "score": 64.2,
-        "value": 5.58
+        "value": 5.6
       },
       {
         "name": "量价异常",
-        "score": 16.8,
-        "value": 0.95
+        "score": 15.0,
+        "value": 0.96
       },
       {
         "name": "行业波动",
-        "score": 6.4,
-        "value": 31.77
+        "score": 4.6,
+        "value": 32.36
       }
     ]
   },
@@ -117,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 100.49600000000001,
-    "ma10": 98.82300000000001,
-    "ma20": 94.9455,
-    "ma60": 85.39566666666666,
-    "rsi14": 60.5,
-    "macd_dif": 3.931113963088251,
-    "macd_dea": 3.631688354249797,
-    "macd_hist": 0.5988512176769074,
-    "atr14_pct": 5.582504684021264,
-    "boll_position": 0.8187455624035673,
-    "return_5d_pct": 5.259875259875257,
-    "return_20d_pct": 16.484527780973202,
-    "volume_ratio_5d": 0.95
+    "ma5": 100.434,
+    "ma10": 98.792,
+    "ma20": 94.92999999999999,
+    "ma60": 85.3905,
+    "rsi14": 60.2,
+    "macd_dif": 3.9063846183589135,
+    "macd_dea": 3.6267424853039296,
+    "macd_hist": 0.5592842661099677,
+    "atr14_pct": 5.599647590926134,
+    "boll_position": 0.8050709380740714,
+    "return_5d_pct": 4.937629937629939,
+    "return_20d_pct": 16.127919015299664,
+    "volume_ratio_5d": 0.96
   },
   "industry": {
     "name": "智能投影",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.38,
-    "return_20d_pct": -5.24,
-    "return_60d_pct": -22.31,
-    "relative_strength_20d_pct": 21.61
+    "return_5d_pct": -1.85,
+    "return_20d_pct": -7.06,
+    "return_60d_pct": -23.24,
+    "relative_strength_20d_pct": 23.19
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -303,7 +298,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 75.2%，波动偏高。",
+      "detail": "20日年化波动率 75.1%，波动偏高。",
       "contribution": -5.0
     }
   ],

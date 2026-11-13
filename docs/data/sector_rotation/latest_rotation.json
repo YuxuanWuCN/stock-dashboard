@@ -1,15 +1,15 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-13T14:46:14",
+  "generated_at": "2026-11-13T19:07:07",
   "trade_date": "2026-11-13",
   "requested_trade_date": "2026-11-13",
-  "sentiment_source": "llm_news_replay",
-  "report_usable": true,
+  "sentiment_source": "price_breadth_proxy",
+  "report_usable": false,
   "strategy_validated": false,
   "holding_sector": "gold",
   "portfolio_state": {
     "current_sector": "gold",
-    "holding_days": 21,
+    "holding_days": 22,
     "monthly_rotations": 0,
     "days_since_last_rotation": 10
   },
@@ -18,41 +18,56 @@
       "name": "新能源",
       "sector": "green",
       "sector_id": "green",
-      "sentiment_score": 0.0,
-      "sentiment_trend": "stable",
-      "volatility": 0.0,
-      "stock_count": 0,
-      "confidence": 0.0,
+      "sentiment_score": -0.3333,
+      "sentiment_trend": "declining",
+      "volatility": 0.3742,
+      "stock_count": 6,
+      "confidence": 0.4065,
       "last_updated": "2026-11-13 (as-of 2026-11-12)",
-      "stock_sentiments": []
+      "stock_sentiments": [
+        -0.4333,
+        -0.2333,
+        -0.6333,
+        0.1667,
+        -0.0333,
+        -0.8333
+      ]
     },
     "storage": {
       "name": "存储芯片",
       "sector": "storage",
       "sector_id": "storage",
-      "sentiment_score": 0.381,
-      "sentiment_trend": "stable",
-      "volatility": 0.4437,
-      "stock_count": 3,
-      "confidence": 0.4402,
+      "sentiment_score": -0.0,
+      "sentiment_trend": "declining",
+      "volatility": 0.4303,
+      "stock_count": 4,
+      "confidence": 0.3204,
       "last_updated": "2026-11-13 (as-of 2026-11-12)",
       "stock_sentiments": [
-        0.2143,
-        0.25,
-        1.0
+        -0.5,
+        -0.1667,
+        0.5,
+        0.1667
       ]
     },
     "gold": {
       "name": "黄金避险",
       "sector": "gold",
       "sector_id": "gold",
-      "sentiment_score": 0.0,
+      "sentiment_score": 0.1667,
       "sentiment_trend": "stable",
-      "volatility": 0.0,
-      "stock_count": 0,
-      "confidence": 0.0,
+      "volatility": 0.3742,
+      "stock_count": 6,
+      "confidence": 0.4065,
       "last_updated": "2026-11-13 (as-of 2026-11-12)",
-      "stock_sentiments": []
+      "stock_sentiments": [
+        0.4667,
+        -0.3333,
+        0.2667,
+        -0.1333,
+        0.0667,
+        0.6667
+      ]
     }
   },
   "decision": {
@@ -61,61 +76,64 @@
     "target_sector": null,
     "from_sector": "gold",
     "to_sector": null,
-    "reason": "Current sector 'gold' is healthy (score=0.0000, trend='stable')",
-    "confidence": 0.0,
+    "reason": "Current sector 'gold' is healthy (score=0.1667, trend='stable')",
+    "confidence": 0.4065,
     "is_fallback": false,
     "llm_rationale": null,
-    "execution_time_ms": 0.006,
+    "execution_time_ms": 0.009,
     "timestamp": "2026-11-13 00:00:00",
     "metrics": {
-      "current_score": 0.0,
+      "current_score": 0.1667,
       "current_trend": "stable"
     },
     "llm_validation": null
   },
-  "reason": "Current sector 'gold' is healthy (score=0.0000, trend='stable')",
-  "confidence": 0.0,
+  "reason": "Current sector 'gold' is healthy (score=0.1667, trend='stable')",
+  "confidence": 0.4065,
   "llm_validation": null,
   "audit": {
     "engine": "SectorRotationEngine",
     "engine_version": "1.0",
-    "decision_path_ms": 0.006,
+    "decision_path_ms": 0.009,
     "python": "3.12.12",
-    "git_commit": "418f2a308733369ff34b32e3e7f69b0bfad2dd1d",
+    "git_commit": "cc4fa717e609c6e056df449b3fcce84134d9824c",
     "portfolio_state_used": {
       "current_sector": "gold",
-      "holding_days": 21,
+      "holding_days": 22,
       "monthly_rotations": 0,
       "days_since_last_rotation": 10
     },
     "provider": {
-      "provider": "llm",
-      "sentiment_source": "llm_news_replay",
-      "report_usable": true,
-      "lookback_days": 7
+      "provider": "proxy",
+      "sentiment_source": "price_breadth_proxy",
+      "report_usable": false,
+      "return_window": 20,
+      "breadth_window": 5
     },
     "sector_inputs": {
       "green": {
-        "stock_count": 0,
-        "sentiment_score": 0.0,
-        "sentiment_trend": "stable",
-        "confidence": 0.0
+        "stock_count": 6,
+        "sentiment_score": -0.3333,
+        "sentiment_trend": "declining",
+        "confidence": 0.4065
       },
       "storage": {
-        "stock_count": 3,
-        "sentiment_score": 0.381,
-        "sentiment_trend": "stable",
-        "confidence": 0.4402
+        "stock_count": 4,
+        "sentiment_score": -0.0,
+        "sentiment_trend": "declining",
+        "confidence": 0.3204
       },
       "gold": {
-        "stock_count": 0,
-        "sentiment_score": 0.0,
+        "stock_count": 6,
+        "sentiment_score": 0.1667,
         "sentiment_trend": "stable",
-        "confidence": 0.0
+        "confidence": 0.4065
       }
     },
     "advisor_audit": null
   },
-  "notes": [],
-  "history_days_recorded": 22
+  "notes": [
+    "当日无可用新闻（离线/接口不可达/无夹具），情绪降级为价格宽度代理。"
+  ],
+  "history_days_recorded": 23
 }
