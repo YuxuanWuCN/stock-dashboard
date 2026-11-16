@@ -213,3 +213,29 @@ def vol_target_scale(
 
     raw_scale = target_vol / realized_vol
     return float(np.clip(raw_scale, 0.0, max_leverage))
+
+
+def weights_hrp_vt(
+    returns: pd.DataFrame,
+    cash_asset: str,
+    target_vol: float = 0.08,
+    window: int = 60,
+) -> pd.Series:
+    """A4: HRP on mature risk assets, scaled to target vol with no borrowing.
+
+    The caller supplies only returns known at allocation time. Cash receives
+    the uninvested proportion and does not participate in the clustering.
+    """
+    risk = returns.drop(columns=[cash_asset], errors="ignore").dropna(how="any")
+    if not np.isfinite(target_vol) or target_vol <= 0 or window < 10:
+        raise ValueError("volatility target must be positive and window at least 10")
+    if not np.isfinite(risk.to_numpy()).all():
+        raise ValueError("HRP-VT received non-finite returns")
+    risk = risk.loc[:, risk.std().gt(0)]
+    if risk.empty:
+        return pd.Series({cash_asset: 1.0})
+    core = weights_hrp(risk)
+    scale = vol_target_scale(risk @ core, target_vol=target_vol, window=window)
+    result = core * scale
+    result[cash_asset] = 1.0 - scale
+    return result
