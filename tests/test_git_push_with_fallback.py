@@ -345,3 +345,55 @@ def test_transitive_guard_has_teeth(tmp_path):
 
     with pytest.raises(AssertionError, match="daily_routine.py 未调用共享助手"):
         _shared_push_helper_users(tmp_path)
+
+
+def test_commit_refuses_second_out_of_scope_file_with_real_nul_delimiter():
+    """真实 git diff --cached -z 用 \\x00 分隔多路径，首项合法时不得放行第二项越界路径。"""
+    commands = []
+
+    def runner(command: list[str], *, check: bool, **kwargs):
+        assert check is False
+        commands.append(command)
+        if "rev-parse" in command:
+            return SimpleNamespace(returncode=0, stdout="fix/real-data-rebuild")
+        if "--name-only" in command:
+            return SimpleNamespace(
+                returncode=0,
+                stdout=b"docs/data/summary.json\x00README.md\x00",
+            )
+        return SimpleNamespace(returncode=0, stdout="")
+
+    result = git_push.commit_worktree(runner=runner, env={})
+
+    assert result.ok is False
+    assert result.exit_code == 1
+    assert "README.md" in result.notes[0]
+    assert not any("add" in c or "commit" in c for c in commands)
+
+
+def test_daily_routine_passes_reports_in_git_commit_paths(monkeypatch):
+    """9/9 步自动推送必须默认暂存 reports，避免 pre-commit 门禁因未跟踪报告拒绝提交。"""
+    import tools.daily_routine as daily_routine
+
+    captured_calls = []
+
+    def fake_run_step(step_name, cmd_args, timeout_sec=600, allow_fail=False, extra_env=None):
+        captured_calls.append((step_name, list(cmd_args), dict(extra_env or {})))
+        return True
+
+    monkeypatch.setattr(daily_routine, "run_step", fake_run_step)
+    monkeypatch.setattr(daily_routine, "sync_dashboard_data", lambda: None)
+    monkeypatch.delenv("GIT_COMMIT_PATHS", raising=False)
+    monkeypatch.setattr(
+        "sys.argv",
+        ["daily_routine.py", "--skip-fetch", "--skip-ranking", "--skip-paper"],
+    )
+
+    daily_routine.main()
+
+    push_calls = [c for c in captured_calls if "git_push_with_fallback.py" in " ".join(c[1])]
+    assert len(push_calls) == 1
+    commit_paths = push_calls[0][2].get("GIT_COMMIT_PATHS", "")
+    assert "docs/data" in commit_paths
+    assert "reports" in commit_paths
+    assert Path(__file__).resolve().parents[1].joinpath("tools", "daily_morning.ps1").read_text(encoding="utf-8").count("docs/data reports") >= 1

@@ -30,6 +30,7 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import sys
 from collections.abc import Callable, Mapping, Sequence
@@ -181,7 +182,9 @@ def commit_worktree(
     raw_staged_paths = getattr(staged_paths, "stdout", "") or ""
     if isinstance(raw_staged_paths, bytes):
         raw_staged_paths = raw_staged_paths.decode("utf-8", errors="replace")
-    existing_paths = [path for path in str(raw_staged_paths).split("\\0") if path]
+    existing_paths = [
+        path for path in re.split(r"\x00|\\0", str(raw_staged_paths)) if path
+    ]
     outside_paths = [
         path
         for path in existing_paths

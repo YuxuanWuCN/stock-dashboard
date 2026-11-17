@@ -1,0 +1,364 @@
+{
+  "generated_at": "20261116_111542",
+  "analysis_period": "past_7_days",
+  "champion": {
+    "name": "aggressive",
+    "stats": {
+      "cumulative_return": -2.7,
+      "avg_daily_return": -0.386,
+      "volatility": 1.29,
+      "win_rate": 57.1,
+      "max_drawdown": 4.57,
+      "sharpe": -0.299,
+      "score": 3.04,
+      "trading_days": 7
+    },
+    "analysis": {
+      "core_holdings": [
+        {
+          "code": "002371",
+          "name": "北方华创",
+          "appearances": 3,
+          "avg_return": 4.86
+        },
+        {
+          "code": "688328",
+          "name": "深科达",
+          "appearances": 6,
+          "avg_return": 2.78
+        },
+        {
+          "code": "000021",
+          "name": "深科技",
+          "appearances": 6,
+          "avg_return": 1.38
+        },
+        {
+          "code": "002415",
+          "name": "海康威视",
+          "appearances": 3,
+          "avg_return": -0.04
+        },
+        {
+          "code": "688017",
+          "name": "绿的谐波",
+          "appearances": 6,
+          "avg_return": -0.55
+        }
+      ],
+      "prediction_accuracy": 50.74626865671642,
+      "llm_analysis": {
+        "success_factors": [
+          "预测准确率50.7%（34/67）略高于随机水平，说明策略具备一定边际选股优势，但优势幅度有限。",
+          "收益贡献集中于正收益核心持仓：深科达出现6次、平均收益2.78%，深科技出现6次、平均收益1.38%，提供重复性正贡献；北方华创出现3次、平均收益4.86%，提供高弹性收益。",
+          "策略偏向科技成长与先进制造方向，核心持仓覆盖半导体设备、智能制造、安防和机器人零部件，较契合高景气产业交易机会。",
+          "最近7天正收益天数4/7，短线择时具备一定胜率；但总收益约-2.70%，表明收益被两次超过2%的单日回撤明显侵蚀。"
+        ],
+        "holdings_characteristics": {
+          "industry": "电子/半导体设备、智能制造与自动化、安防、机器人零部件，整体偏科技成长制造。",
+          "market_cap": "中大盘科技龙头与小盘高弹性标的混合；北方华创、海康威视偏大盘，深科达偏小盘，深科技、绿的谐波偏中小盘。",
+          "volatility": "中高波动。科技成长属性强，近期组合单日出现-2.33%和-2.13%的回撤，波动与回撤风险较突出。"
+        },
+        "sustainability": {
+          "score": 6.0,
+          "reasoning": "策略当前优势主要来自少数正贡献持仓和科技成长风格，准确率仅50.7%，边际Alpha较弱。深科达、深科技各出现6次且平均收益为正，但重复参与同一批标的可能带来样本集中和过拟合风险；北方华创平均收益最高但仅出现3次，稳定性仍需更多样本验证。与此同时，绿的谐波出现6次、平均收益-0.55%，海康威视出现3次、平均收益-0.04%，负贡献持仓仍被保留并拖累组合。最近7天总收益约-2.70%，两次单日回撤超过2%，说明策略对市场风格和波动较敏感。若科技成长风格延续且及时剔除负贡献标的，短期优势可延续；中期可持续性中等偏弱。",
+          "risk_factors": [
+            "预测准确率仅50.7%，选股Alpha边际较弱。",
+            "收益集中于少数标的且部分标的样本次数少，存在过拟合与路径依赖风险。",
+            "科技成长风格暴露较高，风格切换时组合回撤可能放大。",
+            "负贡献持仓未及时剔除，绿的谐波平均收益-0.55%、海康威视平均收益-0.04%，持续拖累组合。",
+            "最近7天总收益约-2.70%，且出现-2.33%和-2.13%的单日回撤，风控与回撤管理不足。"
+          ]
+        },
+        "improvement_directions": [
+          {
+            "direction": "建立负贡献持仓黑名单与动态剔除机制",
+            "reason": "绿的谐波出现6次、平均收益-0.55%，海康威视出现3次、平均收益-0.04%，持续负贡献标的仍在组合中。",
+            "expected_impact": "减少无效交易和负贡献拖累，提升组合胜率与平均收益。"
+          },
+          {
+            "direction": "优化仓位权重，提高高贡献标的权重但设置单票上限",
+            "reason": "北方华创3次平均收益4.86%但样本少，深科达6次平均收益2.78%且重复性较好，当前收益结构较集中。",
+            "expected_impact": "增强正贡献标的收益贡献，同时控制集中度风险。"
+          },
+          {
+            "direction": "加入波动率目标与止损规则",
+            "reason": "最近7天总收益约-2.70%，两次单日回撤分别为-2.33%和-2.13%，回撤明显侵蚀收益。",
+            "expected_impact": "降低最大回撤和净值波动，提高风险调整后收益。"
+          },
+          {
+            "direction": "提升信号确认与准确率，引入趋势、量价和行业轮动过滤",
+            "reason": "50.7%的准确率仅略高于随机水平，单一信号的优势不够稳固。",
+            "expected_impact": "若准确率提升至55%以上，可显著改善期望收益和策略稳定性。"
+          },
+          {
+            "direction": "降低行业与风格集中度，增加市值和行业分散",
+            "reason": "核心持仓集中在科技成长制造，风格暴露单一，易受科技成长风格切换冲击。",
+            "expected_impact": "降低风格切换风险，平滑净值曲线并提升长期可持续性。"
+          }
+        ]
+      }
+    }
+  },
+  "all_strategies": {
+    "aggressive": {
+      "cumulative_return": -2.7,
+      "avg_daily_return": -0.386,
+      "volatility": 1.29,
+      "win_rate": 57.1,
+      "max_drawdown": 4.57,
+      "sharpe": -0.299,
+      "score": 3.04,
+      "trading_days": 7
+    },
+    "robust": {
+      "cumulative_return": -0.22,
+      "avg_daily_return": -0.031,
+      "volatility": 0.547,
+      "win_rate": 28.6,
+      "max_drawdown": 1.63,
+      "sharpe": -0.057,
+      "score": 2.45,
+      "trading_days": 7
+    },
+    "bluechip": {
+      "cumulative_return": -2.82,
+      "avg_daily_return": -0.403,
+      "volatility": 0.737,
+      "win_rate": 28.6,
+      "max_drawdown": 3.54,
+      "sharpe": -0.547,
+      "score": -0.28,
+      "trading_days": 7
+    },
+    "defensive": {
+      "cumulative_return": -1.55,
+      "avg_daily_return": -0.221,
+      "volatility": 0.658,
+      "win_rate": 42.9,
+      "max_drawdown": 2.72,
+      "sharpe": -0.336,
+      "score": 2.41,
+      "trading_days": 7
+    },
+    "global": {
+      "cumulative_return": -2.37,
+      "avg_daily_return": -0.339,
+      "volatility": 0.281,
+      "win_rate": 14.3,
+      "max_drawdown": 2.37,
+      "sharpe": -1.204,
+      "score": -2.64,
+      "trading_days": 7
+    },
+    "tech": {
+      "cumulative_return": -0.4,
+      "avg_daily_return": -0.057,
+      "volatility": 0.732,
+      "win_rate": 28.6,
+      "max_drawdown": 2.2,
+      "sharpe": -0.078,
+      "score": 2.24,
+      "trading_days": 7
+    },
+    "aggressive_v1": {
+      "cumulative_return": 0.12,
+      "avg_daily_return": 0.017,
+      "volatility": 3.281,
+      "win_rate": 28.6,
+      "max_drawdown": 8.04,
+      "sharpe": 0.005,
+      "score": 2.14,
+      "trading_days": 7
+    },
+    "aggressive_v2": {
+      "cumulative_return": 0.12,
+      "avg_daily_return": 0.017,
+      "volatility": 3.281,
+      "win_rate": 28.6,
+      "max_drawdown": 8.04,
+      "sharpe": 0.005,
+      "score": 2.14,
+      "trading_days": 7
+    },
+    "aggressive_v3": {
+      "cumulative_return": 0.12,
+      "avg_daily_return": 0.017,
+      "volatility": 3.281,
+      "win_rate": 28.6,
+      "max_drawdown": 8.04,
+      "sharpe": 0.005,
+      "score": 2.14,
+      "trading_days": 7
+    },
+    "bluechip_momentum": {
+      "cumulative_return": -3.56,
+      "avg_daily_return": -0.509,
+      "volatility": 0.479,
+      "win_rate": 14.3,
+      "max_drawdown": 3.56,
+      "sharpe": -1.061,
+      "score": -3.19,
+      "trading_days": 7
+    },
+    "bluechip_top5": {
+      "cumulative_return": -2.85,
+      "avg_daily_return": -0.407,
+      "volatility": 0.457,
+      "win_rate": 14.3,
+      "max_drawdown": 2.85,
+      "sharpe": -0.891,
+      "score": -2.35,
+      "trading_days": 7
+    },
+    "bluechip_v1": {
+      "cumulative_return": -1.48,
+      "avg_daily_return": -0.37,
+      "volatility": 0.306,
+      "win_rate": 0.0,
+      "max_drawdown": 1.48,
+      "sharpe": -1.207,
+      "score": -3.45,
+      "trading_days": 4
+    },
+    "bluechip_v2": {
+      "cumulative_return": -1.48,
+      "avg_daily_return": -0.37,
+      "volatility": 0.306,
+      "win_rate": 0.0,
+      "max_drawdown": 1.48,
+      "sharpe": -1.207,
+      "score": -3.45,
+      "trading_days": 4
+    },
+    "bluechip_v3": {
+      "cumulative_return": -1.48,
+      "avg_daily_return": -0.37,
+      "volatility": 0.306,
+      "win_rate": 0.0,
+      "max_drawdown": 1.48,
+      "sharpe": -1.207,
+      "score": -3.45,
+      "trading_days": 4
+    },
+    "bluechip_weighted": {
+      "cumulative_return": -3.56,
+      "avg_daily_return": -0.509,
+      "volatility": 0.479,
+      "win_rate": 14.3,
+      "max_drawdown": 3.56,
+      "sharpe": -1.061,
+      "score": -3.19,
+      "trading_days": 7
+    },
+    "defensive_momentum": {
+      "cumulative_return": -3.56,
+      "avg_daily_return": -0.509,
+      "volatility": 0.479,
+      "win_rate": 14.3,
+      "max_drawdown": 3.56,
+      "sharpe": -1.061,
+      "score": -3.19,
+      "trading_days": 7
+    },
+    "defensive_top5": {
+      "cumulative_return": -2.85,
+      "avg_daily_return": -0.407,
+      "volatility": 0.457,
+      "win_rate": 14.3,
+      "max_drawdown": 2.85,
+      "sharpe": -0.891,
+      "score": -2.35,
+      "trading_days": 7
+    },
+    "defensive_weighted": {
+      "cumulative_return": -3.56,
+      "avg_daily_return": -0.509,
+      "volatility": 0.479,
+      "win_rate": 14.3,
+      "max_drawdown": 3.56,
+      "sharpe": -1.061,
+      "score": -3.19,
+      "trading_days": 7
+    },
+    "global_v1": {
+      "cumulative_return": -3.56,
+      "avg_daily_return": -0.509,
+      "volatility": 0.479,
+      "win_rate": 14.3,
+      "max_drawdown": 3.56,
+      "sharpe": -1.061,
+      "score": -3.19,
+      "trading_days": 7
+    },
+    "global_v2": {
+      "cumulative_return": -3.56,
+      "avg_daily_return": -0.509,
+      "volatility": 0.479,
+      "win_rate": 14.3,
+      "max_drawdown": 3.56,
+      "sharpe": -1.061,
+      "score": -3.19,
+      "trading_days": 7
+    },
+    "global_v3": {
+      "cumulative_return": -3.56,
+      "avg_daily_return": -0.509,
+      "volatility": 0.479,
+      "win_rate": 14.3,
+      "max_drawdown": 3.56,
+      "sharpe": -1.061,
+      "score": -3.19,
+      "trading_days": 7
+    }
+  },
+  "variants": [
+    {
+      "name": "aggressive_v1",
+      "display_name": "稳健增强版：负贡献剔除+单票限额",
+      "description": "提升稳定性，保留科技成长核心优势，同时减少负贡献标的重复入选和收益过度集中。",
+      "changes": {
+        "动态负贡献黑名单": "滚动20个交易日内出现≥3次且平均收益<-0.3%或胜率<40%的标的进入10日冷却；连续2次止损的标的冷却5日",
+        "单票仓位上限": "18%",
+        "单行业暴露上限": "单一大行业≤70%，持仓数维持6-8只",
+        "正贡献核心池优先级": "在满足单票上限前提下，最近20日正贡献且胜率≥50%的标的优先入选，核心池权重上浮10%-15%"
+      },
+      "llm_reasoning": "组合胜率提升约2-3个百分点，负贡献交易减少，最大回撤有望控制在4%以内，同时保留科技成长核心收益来源。"
+    },
+    {
+      "name": "aggressive_v2",
+      "display_name": "风险控制版：波动率目标+分层止损",
+      "description": "降低回撤和净值波动，提高风险调整后收益，保留原策略短线择时与科技成长选股能力。",
+      "changes": {
+        "组合波动率目标": "年化波动目标25%；滚动20日实现波动>28%时总仓位降至70%，>32%时降至50%",
+        "个股止损规则": "-4%减半，-6%硬止损；若同时跌破20日均线则提前至-4%止损",
+        "组合回撤降仓阈值": "组合回撤达3.5%降仓至70%，达4.5%降仓至50%；恢复需连续3日净值新高或回撤修复至2%以内",
+        "单票风险预算": "1.5%"
+      },
+      "llm_reasoning": "最大回撤有望下降20%-30%，夏普比率改善，单日极端回撤概率降低；收益弹性略降但风险调整后收益提升。"
+    },
+    {
+      "name": "aggressive_v3",
+      "display_name": "信号确认版：趋势量价过滤+行业轮动",
+      "description": "提高预测准确率和收益质量，保留科技成长主方向，同时过滤弱信号和风格不利阶段。",
+      "changes": {
+        "模型概率阈值": "0.55",
+        "技术确认条件": "需同时满足收盘价>20日均线、成交量>5日均量1.2倍；否则信号降级为观察",
+        "行业轮动过滤": "候选池限定近20日动量排名前3行业，但保留半导体设备、智能制造作为核心观察方向",
+        "持仓周期与止盈": "延长至5-8日；盈利>3%后启用移动止盈，回撤1.5%止盈"
+      },
+      "llm_reasoning": "信号准确率有望提升至55%左右，无效交易减少，平均单笔收益改善；收益弹性仍保留，但交易频率和回撤波动下降。"
+    }
+  ],
+  "next_week_strategies": [
+    "aggressive",
+    "robust",
+    "bluechip",
+    "defensive",
+    "global",
+    "tech",
+    "aggressive_v1",
+    "aggressive_v2",
+    "aggressive_v3"
+  ]
+}

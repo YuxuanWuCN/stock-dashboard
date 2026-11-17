@@ -1,4 +1,4 @@
-# daily_morning.ps1 —— 早上 8:00 美股补数据任务
+﻿# daily_morning.ps1 —— 早上 8:00 美股补数据任务
 #
 # 背景：晚上 18:00 运行时美股尚未开盘，美股行情停留在上一个美股交易日（滞后一天）。
 # 本任务在美股收盘后（北京时间次日早上）重新抓取全市场数据，重新生成排行榜/AI研报
@@ -81,7 +81,8 @@ Invoke-Step -Name "random_control" -StepArgs @("tools\random_control.py")
 Invoke-Step -Name "market_benchmark" -StepArgs @("tools\market_benchmark.py")
 
 # 4) 提交并推送数据（仅当有变化；GitHub 直连失败时自动走本机代理重试）
-git add docs/data
+if (-not $env:GIT_COMMIT_PATHS) { $env:GIT_COMMIT_PATHS = "docs/data,reports" }
+git add docs/data reports
 if (-not (git diff --cached --quiet)) {
     $tradeDate = Get-Date -Format "yyyy-MM-dd"
     git commit -m ("chore(data): morning US catch-up for " + $tradeDate) *>> $logFile

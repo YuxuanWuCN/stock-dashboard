@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-13 18:37:48+08:00",
-  "trade_date": "2026-11-13",
+  "generated_at": "2026-11-17 19:21:47+08:00",
+  "trade_date": "2026-11-17",
   "code": "002466",
   "name": "天齐锂业",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 52.2,
-    "risk": 33.2,
-    "technical": 60.0,
-    "industry": 48.0,
+    "risk_adjusted": 45.7,
+    "risk": 36.1,
+    "technical": 52.0,
+    "industry": 49.7,
     "leading": 50.0
   },
   "leading": {
@@ -2438,24 +2438,26 @@
       883.42,
       872.98,
       851.33,
-      837.55
+      837.55,
+      829.49,
+      832.5
     ],
     "momentum_metrics": {
-      "slope_pct": -7.03,
+      "slope_pct": -6.2,
       "momentum": "flat",
       "inflection_flag": "none",
-      "latest_value": 837.55,
+      "latest_value": 832.5,
       "confidence": "high"
     },
-    "updated_at": "2026-11-13 18:36:22"
+    "updated_at": "2026-11-17 19:20:13"
   },
   "nale_network": {
     "sector_name": "锂矿资源",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -2465,7 +2467,7 @@
       "physical_lag_tau_days": 35.0,
       "physical_lag_sigma_days": 8.0,
       "peak_horizon_days": 35,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -2473,36 +2475,36 @@
     }
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
-    "annualized_volatility_20d_pct": 36.58,
-    "max_drawdown_60d_pct": -31.14,
-    "atr14_pct": 4.19,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 38.12,
+    "max_drawdown_60d_pct": -33.07,
+    "atr14_pct": 4.16,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 30.1,
-        "value": 36.58
+        "score": 31.8,
+        "value": 38.12
       },
       {
         "name": "60日最大回撤",
-        "score": 57.2,
-        "value": -31.14
+        "score": 56.6,
+        "value": -33.07
       },
       {
         "name": "ATR百分比",
-        "score": 37.0,
-        "value": 4.19
+        "score": 37.6,
+        "value": 4.16
       },
       {
         "name": "量价异常",
-        "score": 17.9,
-        "value": 0.95
+        "score": 37.6,
+        "value": 0.87
       },
       {
         "name": "行业波动",
-        "score": 4.6,
-        "value": 32.36
+        "score": 7.5,
+        "value": 33.16
       }
     ]
   },
@@ -2517,34 +2519,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 35.0,
     "peak_horizon_days": 35,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 35.501999999999995,
-    "ma10": 35.88,
-    "ma20": 35.881,
-    "ma60": 41.362833333333334,
-    "rsi14": 36.0,
-    "macd_dif": -1.201587788555834,
-    "macd_dea": -1.4085545688258052,
-    "macd_hist": 0.41393356053994257,
-    "atr14_pct": 4.185221986535206,
-    "boll_position": 0.14334652146292787,
-    "return_5d_pct": -6.8891280947254945,
-    "return_20d_pct": -5.049396267837536,
-    "volume_ratio_5d": 0.95
+    "ma5": 34.61,
+    "ma10": 35.626000000000005,
+    "ma20": 35.603,
+    "ma60": 40.859833333333334,
+    "rsi14": 34.4,
+    "macd_dif": -1.3322515540015019,
+    "macd_dea": -1.3754459887507808,
+    "macd_hist": 0.08638886949855795,
+    "atr14_pct": 4.156967213474824,
+    "boll_position": 0.09415543534541251,
+    "return_5d_pct": -5.659325341511002,
+    "return_20d_pct": -7.287671232876702,
+    "volume_ratio_5d": 0.87
   },
   "industry": {
     "name": "锂矿资源",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.85,
-    "return_20d_pct": -7.06,
-    "return_60d_pct": -23.24,
-    "relative_strength_20d_pct": 2.01
+    "return_5d_pct": -5.36,
+    "return_20d_pct": -9.85,
+    "return_60d_pct": -27.65,
+    "relative_strength_20d_pct": 2.57
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -2553,17 +2555,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 56.7,
-      "average_return_pct": -0.2,
+      "average_return_pct": -0.65,
       "median_return_pct": 0.55,
-      "best_return_pct": 12.26,
-      "worst_return_pct": -14.43
+      "best_return_pct": 9.06,
+      "worst_return_pct": -19.24
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.68,
-      "median_return_pct": -1.98,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.88,
+      "median_return_pct": -3.14,
       "best_return_pct": 17.74,
-      "worst_return_pct": -14.48
+      "worst_return_pct": -20.0
     }
   },
   "fundamental": {
@@ -2697,13 +2699,13 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 31.1%，风险偏高。",
+      "detail": "近60日最大回撤 33.1%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 31.1%，风险扣分。",
+      "detail": "近60日最大回撤 33.1%，风险扣分。",
       "contribution": -7.0
     }
   ],

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-13 18:37:48+08:00",
-  "trade_date": "2026-11-13",
+  "generated_at": "2026-11-17 19:21:47+08:00",
+  "trade_date": "2026-11-17",
   "code": "002007",
   "name": "华兰生物",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 62.6,
-    "risk": 18.6,
-    "technical": 42.0,
-    "industry": 38.6,
+    "risk_adjusted": 56.9,
+    "risk": 17.9,
+    "technical": 50.0,
+    "industry": 46.7,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-13 18:36:29"
+    "updated_at": "2026-11-17 19:20:23"
   },
   "nale_network": {
     "sector_name": "血制品/流感疫苗",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 27.35,
-    "max_drawdown_60d_pct": -13.0,
-    "atr14_pct": 2.28,
+    "annualized_volatility_20d_pct": 27.68,
+    "max_drawdown_60d_pct": -13.19,
+    "atr14_pct": 2.16,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 13.9,
-        "value": 27.35
+        "score": 15.6,
+        "value": 27.68
       },
       {
         "name": "60日最大回撤",
-        "score": 13.9,
-        "value": -13.0
+        "score": 15.0,
+        "value": -13.19
       },
       {
         "name": "ATR百分比",
-        "score": 16.8,
-        "value": 2.28
+        "score": 15.6,
+        "value": 2.16
       },
       {
         "name": "量价异常",
-        "score": 69.4,
-        "value": 0.78
+        "score": 52.0,
+        "value": 0.82
       },
       {
         "name": "行业波动",
-        "score": 4.6,
-        "value": 32.36
+        "score": 7.5,
+        "value": 33.16
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 12.038,
-    "ma10": 12.215,
-    "ma20": 12.4605,
-    "ma60": 12.894833333333333,
-    "rsi14": 31.7,
-    "macd_dif": -0.2662541674423462,
-    "macd_dea": -0.21856834197911065,
-    "macd_hist": -0.0953716509264711,
-    "atr14_pct": 2.2756300804508287,
-    "boll_position": 0.09574720286809099,
-    "return_5d_pct": -4.227642276422772,
-    "return_20d_pct": -8.752904725019373,
-    "volume_ratio_5d": 0.78
+    "ma5": 11.732000000000001,
+    "ma10": 11.934000000000001,
+    "ma20": 12.148,
+    "ma60": 12.650833333333333,
+    "rsi14": 36.7,
+    "macd_dif": -0.2725245251074053,
+    "macd_dea": -0.23818954542646797,
+    "macd_hist": -0.0686699593618747,
+    "atr14_pct": 2.1636349661815863,
+    "boll_position": 0.2409872729662121,
+    "return_5d_pct": -2.0050125313283207,
+    "return_20d_pct": -8.28772478498826,
+    "volume_ratio_5d": 0.82
   },
   "industry": {
     "name": "血制品/流感疫苗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -1.85,
-    "return_20d_pct": -7.06,
-    "return_60d_pct": -23.24,
-    "relative_strength_20d_pct": -1.69
+    "return_5d_pct": -5.36,
+    "return_20d_pct": -9.85,
+    "return_60d_pct": -27.65,
+    "relative_strength_20d_pct": 1.57
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 76.7,
-      "average_return_pct": 1.3,
-      "median_return_pct": 1.66,
-      "best_return_pct": 5.3,
-      "worst_return_pct": -5.04
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.1,
+      "median_return_pct": -0.0,
+      "best_return_pct": 5.75,
+      "worst_return_pct": -7.0
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 0.47,
-      "median_return_pct": 0.48,
-      "best_return_pct": 8.16,
-      "worst_return_pct": -6.75
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.2,
+      "median_return_pct": -0.63,
+      "best_return_pct": 8.29,
+      "worst_return_pct": -4.61
     }
   },
   "fundamental": {

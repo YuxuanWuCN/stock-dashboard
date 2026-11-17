@@ -42,6 +42,7 @@ sys.path.insert(0, str(ROOT_DIR))
 LOG_DIR = ROOT_DIR / ".quality-state"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 LOG_FILE = LOG_DIR / "daily_routine.log"
+DEFAULT_DAILY_COMMIT_PATHS = "docs/data,reports"
 
 
 class Colors:
@@ -67,7 +68,13 @@ def log_message(msg: str, color: str = "") -> None:
         pass
 
 
-def run_step(step_name: str, cmd_args: list[str], timeout_sec: int = 600, allow_fail: bool = False) -> bool:
+def run_step(
+    step_name: str,
+    cmd_args: list[str],
+    timeout_sec: int = 600,
+    allow_fail: bool = False,
+    extra_env: dict[str, str] | None = None,
+) -> bool:
     """运行流水线单个步骤并记录耗时与退出码。"""
     t0 = time.time()
     log_message(f"🚀 开始执行: {step_name} ...", Colors.CYAN)
@@ -78,6 +85,8 @@ def run_step(step_name: str, cmd_args: list[str], timeout_sec: int = 600, allow_
     env["PYTHONUTF8"] = "1"
     env["STOCK_PROXY"] = env.get("STOCK_PROXY", "direct")
     env["LLM_DAILY_CALL_LIMIT"] = env.get("LLM_DAILY_CALL_LIMIT", "800")
+    if extra_env:
+        env.update(extra_env)
 
     try:
         proc = subprocess.Popen(
@@ -256,7 +265,16 @@ def main() -> None:
     # Step 9: 自动 Git 提交与推送
     if not args.skip_push and not args.dry_run:
         steps_executed += 1
-        git_push_ok = run_step("9/9 自动 Git 提交与云端推送", [py_exec, "tools/git_push_with_fallback.py"], allow_fail=True)
+        push_env = {
+            "GIT_COMMIT_PATHS": os.environ.get("GIT_COMMIT_PATHS", "").strip()
+            or DEFAULT_DAILY_COMMIT_PATHS
+        }
+        git_push_ok = run_step(
+            "9/9 自动 Git 提交与云端推送",
+            [py_exec, "tools/git_push_with_fallback.py"],
+            allow_fail=True,
+            extra_env=push_env,
+        )
         if git_push_ok:
             steps_passed += 1
 
