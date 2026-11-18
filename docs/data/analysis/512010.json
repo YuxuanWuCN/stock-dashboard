@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-17 19:21:47+08:00",
-  "trade_date": "2026-11-17",
+  "generated_at": "2026-11-18 18:37:12+08:00",
+  "trade_date": "2026-11-18",
   "code": "512010",
   "name": "医药ETF",
   "type": "etf",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 62.6,
-    "risk": 28.0,
+    "risk_adjusted": 65.9,
+    "risk": 16.9,
     "technical": 63.0,
     "industry": 57.0,
     "leading": 50.0
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-17 19:19:39"
+    "updated_at": "2026-11-18 18:35:14"
   },
   "nale_network": {
     "sector_name": "通用",
@@ -56,7 +56,7 @@
       {
         "code": "510050",
         "name": "上证50ETF",
-        "corr": 0.4
+        "corr": 0.42
       }
     ],
     "corr_missing_evidence_count": 0,
@@ -78,32 +78,32 @@
     "label": "低风险",
     "annualized_volatility_20d_pct": 29.65,
     "max_drawdown_60d_pct": -10.0,
-    "atr14_pct": 2.42,
+    "atr14_pct": 2.44,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 16.8,
+        "score": 17.3,
         "value": 29.65
       },
       {
         "name": "60日最大回撤",
-        "score": 6.9,
+        "score": 7.5,
         "value": -10.0
       },
       {
         "name": "ATR百分比",
         "score": 20.2,
-        "value": 2.42
+        "value": 2.44
       },
       {
         "name": "量价异常",
-        "score": 47.4,
-        "value": 0.84
+        "score": 53.2,
+        "value": 0.82
       },
       {
         "name": "行业波动",
-        "score": 83.2,
-        "value": 41.55
+        "score": 2.9,
+        "value": 33.22
       }
     ]
   },
@@ -123,29 +123,29 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
+    "trend": "rebound",
     "ma5": 0.38,
-    "ma10": 0.386,
+    "ma10": 0.385,
     "ma20": 0.381,
-    "ma60": 0.38,
+    "ma60": 0.3796666666666667,
     "rsi14": 49.1,
-    "macd_dif": 0.0010536581842182091,
-    "macd_dea": 0.0015936070021829573,
-    "macd_hist": -0.0010798976359294964,
-    "atr14_pct": 2.420999496987425,
-    "boll_position": 0.4674527722547949,
-    "return_5d_pct": -2.564102564102566,
+    "macd_dif": 0.0008040233320253942,
+    "macd_dea": 0.001435690282161437,
+    "macd_hist": -0.0012633339002720853,
+    "atr14_pct": 2.4360408795875195,
+    "boll_position": 0.4674527722547948,
+    "return_5d_pct": 0.0,
     "return_20d_pct": 0.0,
-    "volume_ratio_5d": 0.84
+    "volume_ratio_5d": 0.82
   },
   "industry": {
     "name": "通用",
-    "reference_type": "industry",
-    "benchmark_code": "BK1398",
-    "return_5d_pct": -8.65,
-    "return_20d_pct": -11.42,
-    "return_60d_pct": -19.06,
-    "relative_strength_20d_pct": 11.42
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -6.41,
+    "return_20d_pct": -8.93,
+    "return_60d_pct": -27.1,
+    "relative_strength_20d_pct": 8.93
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -154,21 +154,28 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 30.0,
-      "average_return_pct": 0.64,
+      "average_return_pct": -0.07,
       "median_return_pct": 0.0,
-      "best_return_pct": 8.11,
-      "worst_return_pct": -3.03
+      "best_return_pct": 5.56,
+      "worst_return_pct": -5.26
     },
     "horizon_5d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": 0.24,
+      "up_probability_pct": 26.7,
+      "average_return_pct": 0.02,
       "median_return_pct": 0.0,
-      "best_return_pct": 8.57,
-      "worst_return_pct": -5.13
+      "best_return_pct": 6.06,
+      "worst_return_pct": -5.88
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "positive",
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
+    }
+  ],
   "kline_file": "../kline/512010.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

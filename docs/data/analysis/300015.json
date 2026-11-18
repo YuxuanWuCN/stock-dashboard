@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-17 19:21:47+08:00",
-  "trade_date": "2026-11-17",
+  "generated_at": "2026-11-18 18:37:12+08:00",
+  "trade_date": "2026-11-18",
   "code": "300015",
   "name": "爱尔眼科",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 66.6,
-    "risk": 13.5,
-    "technical": 85.0,
+    "risk_adjusted": 72.9,
+    "risk": 14.2,
+    "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,13 +42,18 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-17 19:19:13"
+    "updated_at": "2026-11-18 18:35:03"
   },
   "nale_network": {
     "sector_name": "医药",
-    "sector_breadth_pct": 50.0,
+    "sector_breadth_pct": 33.3,
     "tier_role": "neutral",
-    "leader_stock": null,
+    "leader_stock": {
+      "code": "300122",
+      "name": "智飞生物",
+      "change_pct": 9.748892171344169,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -56,16 +61,16 @@
       {
         "code": "300760",
         "name": "迈瑞医疗",
-        "corr": 0.62
+        "corr": 0.63
       },
       {
         "code": "300122",
         "name": "智飞生物",
-        "corr": 0.49
+        "corr": 0.43
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.43,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
@@ -81,18 +86,18 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 26.73,
+    "annualized_volatility_20d_pct": 27.19,
     "max_drawdown_60d_pct": -9.44,
     "atr14_pct": 2.41,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 13.9,
-        "value": 26.73
+        "score": 15.0,
+        "value": 27.19
       },
       {
         "name": "60日最大回撤",
-        "score": 5.2,
+        "score": 5.8,
         "value": -9.44
       },
       {
@@ -103,12 +108,12 @@
       {
         "name": "量价异常",
         "score": 38.7,
-        "value": 0.87
+        "value": 0.88
       },
       {
         "name": "行业波动",
-        "score": 1.2,
-        "value": 27.9
+        "score": 2.9,
+        "value": 33.22
       }
     ]
   },
@@ -129,28 +134,28 @@
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 8.861999999999998,
-    "ma10": 8.901,
-    "ma20": 8.611,
-    "ma60": 8.2895,
-    "rsi14": 69.9,
-    "macd_dif": 0.2258935925819241,
-    "macd_dea": 0.19555518295704005,
-    "macd_hist": 0.06067681924976809,
-    "atr14_pct": 2.4107024553751235,
-    "boll_position": 0.8612860222532238,
-    "return_5d_pct": 3.3898305084745894,
-    "return_20d_pct": 15.239294710327457,
-    "volume_ratio_5d": 0.87
+    "ma5": 8.941999999999998,
+    "ma10": 8.917,
+    "ma20": 8.667,
+    "ma60": 8.298,
+    "rsi14": 66.7,
+    "macd_dif": 0.23100737148323347,
+    "macd_dea": 0.2026456204661368,
+    "macd_hist": 0.05672350203419335,
+    "atr14_pct": 2.405231723364033,
+    "boll_position": 0.7911270359580765,
+    "return_5d_pct": 4.608294930875578,
+    "return_20d_pct": 14.070351758793965,
+    "volume_ratio_5d": 0.88
   },
   "industry": {
     "name": "医药",
-    "reference_type": "industry",
-    "benchmark_code": "BK1216",
-    "return_5d_pct": -5.97,
-    "return_20d_pct": -6.97,
-    "return_60d_pct": -13.9,
-    "relative_strength_20d_pct": 22.21
+    "reference_type": "index",
+    "benchmark_code": "399001",
+    "return_5d_pct": -6.41,
+    "return_20d_pct": -8.93,
+    "return_60d_pct": -27.1,
+    "relative_strength_20d_pct": 23.0
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -158,18 +163,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 13.3,
-      "average_return_pct": -1.8,
-      "median_return_pct": -1.85,
+      "up_probability_pct": 16.7,
+      "average_return_pct": -1.85,
+      "median_return_pct": -1.97,
       "best_return_pct": 10.45,
-      "worst_return_pct": -7.69
+      "worst_return_pct": -8.43
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -1.43,
-      "median_return_pct": -1.46,
+      "up_probability_pct": 36.7,
+      "average_return_pct": -1.35,
+      "median_return_pct": -1.94,
       "best_return_pct": 11.17,
-      "worst_return_pct": -13.16
+      "worst_return_pct": -13.3
     }
   },
   "fundamental": {

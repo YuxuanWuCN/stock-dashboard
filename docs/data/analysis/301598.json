@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-17 19:21:47+08:00",
-  "trade_date": "2026-11-17",
+  "generated_at": "2026-11-18 18:37:12+08:00",
+  "trade_date": "2026-11-18",
   "code": "301598",
   "name": "博科测试",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 68.2,
-    "risk": 26.4,
+    "risk_adjusted": 63.4,
+    "risk": 25.6,
     "technical": 58.0,
     "industry": 57.0,
     "leading": 50.0
@@ -42,18 +42,13 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-17 19:20:31"
+    "updated_at": "2026-11-18 18:36:00"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 10.3,
+    "sector_breadth_pct": 30.8,
     "tier_role": "neutral",
-    "leader_stock": {
-      "code": "688244",
-      "name": "永信至诚",
-      "change_pct": 14.023960535588445,
-      "is_limit_up": false
-    },
+    "leader_stock": null,
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -66,16 +61,21 @@
       {
         "code": "301152",
         "name": "天力锂能",
-        "corr": 0.62
+        "corr": 0.61
       },
       {
         "code": "301216",
         "name": "万凯新材",
-        "corr": 0.61
+        "corr": 0.6
+      },
+      {
+        "code": "300313",
+        "name": "天山生物",
+        "corr": 0.41
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": 0.06,
+    "leader_corr_with_stock": null,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
@@ -91,34 +91,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 31.34,
+    "annualized_volatility_20d_pct": 31.33,
     "max_drawdown_60d_pct": -14.28,
-    "atr14_pct": 3.4,
+    "atr14_pct": 3.42,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 20.2,
-        "value": 31.34
+        "score": 19.1,
+        "value": 31.33
       },
       {
         "name": "60日最大回撤",
-        "score": 19.7,
+        "score": 21.4,
         "value": -14.28
       },
       {
         "name": "ATR百分比",
-        "score": 29.5,
-        "value": 3.4
+        "score": 28.9,
+        "value": 3.42
       },
       {
         "name": "量价异常",
-        "score": 83.8,
-        "value": 0.71
+        "score": 82.7,
+        "value": 0.69
       },
       {
         "name": "行业波动",
-        "score": 7.5,
-        "value": 33.16
+        "score": 2.9,
+        "value": 33.22
       }
     ]
   },
@@ -139,28 +139,28 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 51.205999999999996,
-    "ma10": 51.412,
-    "ma20": 51.01199999999999,
-    "ma60": 50.799499999999995,
-    "rsi14": 45.4,
-    "macd_dif": 0.15922619617072797,
-    "macd_dea": 0.29055887887669496,
-    "macd_hist": -0.26266536541193397,
-    "atr14_pct": 3.4043351619875164,
-    "boll_position": 0.24221020639104374,
-    "return_5d_pct": -4.732824427480908,
-    "return_20d_pct": -0.3592814371257469,
-    "volume_ratio_5d": 0.71
+    "ma5": 50.61,
+    "ma10": 51.261,
+    "ma20": 51.012,
+    "ma60": 50.82483333333333,
+    "rsi14": 45.7,
+    "macd_dif": 0.05954350809960118,
+    "macd_dea": 0.24435580374055993,
+    "macd_hist": -0.3696245912819175,
+    "atr14_pct": 3.4231940592183365,
+    "boll_position": 0.2563744807651595,
+    "return_5d_pct": -5.626888217522663,
+    "return_20d_pct": 0.0,
+    "volume_ratio_5d": 0.69
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.36,
-    "return_20d_pct": -9.85,
-    "return_60d_pct": -27.65,
-    "relative_strength_20d_pct": 9.49
+    "return_5d_pct": -6.41,
+    "return_20d_pct": -8.93,
+    "return_60d_pct": -27.1,
+    "relative_strength_20d_pct": 8.93
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -168,15 +168,15 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 70.0,
-      "average_return_pct": 1.53,
-      "median_return_pct": 1.88,
+      "up_probability_pct": 73.3,
+      "average_return_pct": 1.23,
+      "median_return_pct": 1.51,
       "best_return_pct": 11.34,
-      "worst_return_pct": -7.43
+      "worst_return_pct": -8.22
     },
     "horizon_5d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 0.48,
+      "up_probability_pct": 56.7,
+      "average_return_pct": -0.26,
       "median_return_pct": 0.55,
       "best_return_pct": 9.14,
       "worst_return_pct": -10.69
