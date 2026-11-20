@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-18 18:37:12+08:00",
-  "trade_date": "2026-11-18",
+  "generated_at": "2026-11-20 22:05:57+08:00",
+  "trade_date": "2026-11-20",
   "code": "300161",
   "name": "华中数控",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 62.7,
-    "risk": 38.2,
-    "technical": 58.0,
-    "industry": 57.0,
+    "risk_adjusted": 51.2,
+    "risk": 42.0,
+    "technical": 42.0,
+    "industry": 38.7,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-18 18:35:46"
+    "updated_at": "2026-11-20 22:04:39"
   },
   "nale_network": {
     "sector_name": "数控系统",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 53.93,
-    "max_drawdown_60d_pct": -14.52,
-    "atr14_pct": 4.67,
+    "annualized_volatility_20d_pct": 55.41,
+    "max_drawdown_60d_pct": -19.27,
+    "atr14_pct": 5.25,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 53.8,
-        "value": 53.93
+        "score": 56.1,
+        "value": 55.41
       },
       {
         "name": "60日最大回撤",
-        "score": 22.0,
-        "value": -14.52
+        "score": 30.1,
+        "value": -19.27
       },
       {
         "name": "ATR百分比",
-        "score": 44.5,
-        "value": 4.67
+        "score": 53.2,
+        "value": 5.25
       },
       {
         "name": "量价异常",
-        "score": 72.3,
+        "score": 69.4,
         "value": 0.73
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 33.22
+        "score": 0.6,
+        "value": 31.16
       }
     ]
   },
@@ -118,28 +118,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 25.308,
-    "ma10": 25.994999999999997,
-    "ma20": 25.735000000000003,
-    "ma60": 25.933666666666667,
-    "rsi14": 42.5,
-    "macd_dif": -0.08308374470652424,
-    "macd_dea": 0.0645401020809856,
-    "macd_hist": -0.2952476935750197,
-    "atr14_pct": 4.666893867484193,
-    "boll_position": 0.14888278104277536,
-    "return_5d_pct": -10.307017543859654,
-    "return_20d_pct": -0.5672609400324213,
+    "ma5": 23.961999999999996,
+    "ma10": 25.307000000000002,
+    "ma20": 25.503,
+    "ma60": 25.785500000000003,
+    "rsi14": 32.2,
+    "macd_dif": -0.47655246273656005,
+    "macd_dea": -0.09412262567535003,
+    "macd_hist": -0.7648596741224201,
+    "atr14_pct": 5.2546015522247504,
+    "boll_position": -0.17696684969501195,
+    "return_5d_pct": -14.779270633397324,
+    "return_20d_pct": -13.786407766990294,
     "volume_ratio_5d": 0.73
   },
   "industry": {
     "name": "数控系统",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.41,
-    "return_20d_pct": -8.93,
-    "return_60d_pct": -27.1,
-    "relative_strength_20d_pct": 8.36
+    "return_5d_pct": -6.49,
+    "return_20d_pct": -12.14,
+    "return_60d_pct": -26.6,
+    "relative_strength_20d_pct": -1.64
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.63,
-      "median_return_pct": 0.27,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.95,
+      "median_return_pct": 1.72,
       "best_return_pct": 19.64,
-      "worst_return_pct": -13.98
+      "worst_return_pct": -7.74
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.48,
-      "median_return_pct": 0.75,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 1.03,
+      "median_return_pct": -0.93,
       "best_return_pct": 41.51,
-      "worst_return_pct": -14.36
+      "worst_return_pct": -12.91
     }
   },
   "fundamental": {
@@ -291,8 +291,20 @@
     },
     {
       "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 19.3%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 19.3%，风险扣分。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 53.9%，波动偏高。",
+      "detail": "20日年化波动率 55.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

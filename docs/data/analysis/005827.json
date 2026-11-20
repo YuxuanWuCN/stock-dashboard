@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-18 18:37:12+08:00",
-  "trade_date": "2026-11-17",
+  "generated_at": "2026-11-20 22:05:57+08:00",
+  "trade_date": "2026-11-20",
   "code": "005827",
   "name": "易方达蓝筹精选混合",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 66.5,
-    "risk": 9.1,
-    "technical": 60.0,
+    "risk_adjusted": 51.9,
+    "risk": 8.9,
+    "technical": 42.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-18 18:36:32"
+    "updated_at": "2026-11-20 22:05:22"
   },
   "nale_network": {
     "sector_name": "公募重仓",
@@ -70,24 +70,24 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 15.77,
-    "max_drawdown_60d_pct": -12.82,
-    "atr14_pct": 0.71,
+    "annualized_volatility_20d_pct": 13.91,
+    "max_drawdown_60d_pct": -12.99,
+    "atr14_pct": 0.68,
     "factors": [
       {
         "name": "20日波动率",
         "score": 1.2,
-        "value": 15.77
+        "value": 13.91
       },
       {
         "name": "60日最大回撤",
-        "score": 15.0,
-        "value": -12.82
+        "score": 13.9,
+        "value": -12.99
       },
       {
         "name": "ATR百分比",
         "score": 0.0,
-        "value": 0.71
+        "value": 0.68
       },
       {
         "name": "量价异常",
@@ -96,8 +96,8 @@
       },
       {
         "name": "行业波动",
-        "score": 0.0,
-        "value": 33.16
+        "score": 0.6,
+        "value": 31.16
       }
     ]
   },
@@ -118,28 +118,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 1.374,
-    "ma10": 1.3889999999999998,
-    "ma20": 1.3835,
-    "ma60": 1.4505000000000001,
-    "rsi14": 34.1,
-    "macd_dif": -0.016466422640863065,
-    "macd_dea": -0.017157201092286755,
-    "macd_hist": 0.0013815569028473793,
-    "atr14_pct": 0.7142527119731558,
-    "boll_position": 0.12292455551466593,
-    "return_5d_pct": -2.857142857142847,
-    "return_20d_pct": -3.5460992907801248,
+    "ma5": 1.3560000000000003,
+    "ma10": 1.372,
+    "ma20": 1.3785,
+    "ma60": 1.4409999999999998,
+    "rsi14": 29.0,
+    "macd_dif": -0.019501220709223777,
+    "macd_dea": -0.017759292161887492,
+    "macd_hist": -0.0034838570946725683,
+    "atr14_pct": 0.6832084035883866,
+    "boll_position": 0.0014692949784002884,
+    "return_5d_pct": -2.1897810218978075,
+    "return_20d_pct": -2.898550724637672,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "公募重仓",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.36,
-    "return_20d_pct": -9.85,
-    "return_60d_pct": -27.65,
-    "relative_strength_20d_pct": 6.31
+    "return_5d_pct": -6.49,
+    "return_20d_pct": -12.14,
+    "return_60d_pct": -26.6,
+    "relative_strength_20d_pct": 9.24
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 26.7,
-      "average_return_pct": -0.36,
-      "median_return_pct": -0.59,
-      "best_return_pct": 5.29,
-      "worst_return_pct": -3.52
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.02,
+      "median_return_pct": 0.0,
+      "best_return_pct": 2.53,
+      "worst_return_pct": -2.72
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.31,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -0.54,
       "median_return_pct": 0.0,
-      "best_return_pct": 3.87,
-      "worst_return_pct": -3.49
+      "best_return_pct": 2.68,
+      "worst_return_pct": -3.8
     }
   },
   "fundamental": null,
@@ -168,6 +168,12 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=29.0，短期超卖。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/005827.json",

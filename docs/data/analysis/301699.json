@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-18 18:37:12+08:00",
-  "trade_date": "2026-11-18",
+  "generated_at": "2026-11-20 22:05:57+08:00",
+  "trade_date": "2026-11-20",
   "code": "301699",
   "name": "洛轴股份",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": null
   },
   "scores": {
-    "risk_adjusted": 38.4,
-    "risk": 81.4,
-    "technical": 42.0,
-    "industry": 50.6,
+    "risk_adjusted": 42.3,
+    "risk": 72.2,
+    "technical": 58.0,
+    "industry": 34.2,
     "leading": 50.0
   },
   "leading": {
@@ -42,19 +42,30 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-18 18:36:49"
+    "updated_at": "2026-11-20 22:05:38"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 30.8,
+    "sector_breadth_pct": 5.1,
     "tier_role": "neutral",
-    "leader_stock": null,
+    "leader_stock": {
+      "code": "301282",
+      "name": "金禄电子",
+      "change_pct": 8.17257102770957,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
-    "co_movement_peers": [],
+    "co_movement_peers": [
+      {
+        "code": "688685",
+        "name": "迈信林",
+        "corr": 0.47
+      }
+    ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.19,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
@@ -70,14 +81,14 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 96.15,
+    "annualized_volatility_20d_pct": 62.73,
     "max_drawdown_60d_pct": null,
-    "atr14_pct": 8.93,
+    "atr14_pct": 8.31,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 90.8,
-        "value": 96.15
+        "score": 66.5,
+        "value": 62.73
       },
       {
         "name": "60日最大回撤",
@@ -86,18 +97,18 @@
       },
       {
         "name": "ATR百分比",
-        "score": 86.7,
-        "value": 8.93
+        "score": 79.2,
+        "value": 8.31
       },
       {
         "name": "量价异常",
-        "score": 96.0,
-        "value": 0.6
+        "score": 91.9,
+        "value": 0.57
       },
       {
         "name": "行业波动",
         "score": 98.3,
-        "value": 96.15
+        "value": 62.73
       }
     ]
   },
@@ -118,32 +129,32 @@
   },
   "technical": {
     "trend": "range",
-    "ma5": 29.256,
-    "ma10": 30.935000000000002,
-    "ma20": 31.165,
+    "ma5": 27.898000000000003,
+    "ma10": 30.004999999999995,
+    "ma20": 30.881,
     "ma60": null,
-    "rsi14": 37.1,
-    "macd_dif": -0.6608637465933462,
-    "macd_dea": -0.16876459504043106,
-    "macd_hist": -0.9841983031058303,
-    "atr14_pct": 8.927220893626412,
-    "boll_position": -0.0005579865127108643,
-    "return_5d_pct": -16.656403940886687,
-    "return_20d_pct": -6.072172102706452,
-    "volume_ratio_5d": 0.6
+    "rsi14": 40.7,
+    "macd_dif": -0.9042304249485262,
+    "macd_dea": -0.42106440574358195,
+    "macd_hist": -0.9663320384098886,
+    "atr14_pct": 8.313184204545092,
+    "boll_position": 0.16535060473486818,
+    "return_5d_pct": -7.178299702282509,
+    "return_20d_pct": -16.038300418910843,
+    "volume_ratio_5d": 0.57
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.41,
-    "return_20d_pct": -8.93,
+    "return_5d_pct": -6.49,
+    "return_20d_pct": -12.14,
     "return_60d_pct": null,
-    "relative_strength_20d_pct": 2.86
+    "relative_strength_20d_pct": -3.9
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 0,
+    "sample_size": 1,
     "minimum_sample_size": 15,
     "confidence": "low",
     "horizon_3d": {
@@ -286,7 +297,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 96.2%，波动偏高。",
+      "detail": "20日年化波动率 62.7%，波动偏高。",
       "contribution": -5.0
     }
   ],

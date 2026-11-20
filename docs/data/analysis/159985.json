@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-18 18:37:12+08:00",
-  "trade_date": "2026-11-18",
+  "generated_at": "2026-11-20 22:05:57+08:00",
+  "trade_date": "2026-11-20",
   "code": "159985",
   "name": "豆粕ETF",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 76.7,
-    "risk": 10.8,
-    "technical": 68.0,
+    "risk_adjusted": 63.5,
+    "risk": 9.1,
+    "technical": 42.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-18 18:36:29"
+    "updated_at": "2026-11-20 22:05:20"
   },
   "nale_network": {
     "sector_name": "农产品大宗",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 20.88,
-    "max_drawdown_60d_pct": -13.88,
-    "atr14_pct": 1.6,
+    "annualized_volatility_20d_pct": 19.35,
+    "max_drawdown_60d_pct": -14.69,
+    "atr14_pct": 1.67,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 4.0,
-        "value": 20.88
+        "score": 3.5,
+        "value": 19.35
       },
       {
         "name": "60日最大回撤",
-        "score": 19.7,
-        "value": -13.88
+        "score": 20.8,
+        "value": -14.69
       },
       {
         "name": "ATR百分比",
-        "score": 4.6,
-        "value": 1.6
+        "score": 5.2,
+        "value": 1.67
       },
       {
         "name": "量价异常",
-        "score": 33.5,
-        "value": 0.9
+        "score": 16.8,
+        "value": 0.94
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 33.22
+        "score": 0.6,
+        "value": 31.16
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 2.156,
-    "ma10": 2.145,
-    "ma20": 2.1574999999999998,
-    "ma60": 2.245333333333333,
-    "rsi14": 41.9,
-    "macd_dif": -0.02415215702761886,
-    "macd_dea": -0.026859696537985915,
-    "macd_hist": 0.005415079020734112,
-    "atr14_pct": 1.6029163818542767,
-    "boll_position": 0.289702243951928,
-    "return_5d_pct": -2.73972602739726,
-    "return_20d_pct": -2.2935779816513846,
-    "volume_ratio_5d": 0.9
+    "ma5": 2.118,
+    "ma10": 2.1399999999999997,
+    "ma20": 2.1465,
+    "ma60": 2.2415,
+    "rsi14": 36.8,
+    "macd_dif": -0.02883825957595354,
+    "macd_dea": -0.027198133530692677,
+    "macd_hist": -0.0032802520905217264,
+    "atr14_pct": 1.6722044012799424,
+    "boll_position": 0.06466274807193487,
+    "return_5d_pct": -4.5662100456621,
+    "return_20d_pct": -6.278026905829604,
+    "volume_ratio_5d": 0.94
   },
   "industry": {
     "name": "农产品大宗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.41,
-    "return_20d_pct": -8.93,
-    "return_60d_pct": -27.1,
-    "relative_strength_20d_pct": 6.63
+    "return_5d_pct": -6.49,
+    "return_20d_pct": -12.14,
+    "return_60d_pct": -26.6,
+    "relative_strength_20d_pct": 5.86
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.47,
-      "median_return_pct": 0.47,
-      "best_return_pct": 5.83,
-      "worst_return_pct": -4.17
+      "up_probability_pct": 40.0,
+      "average_return_pct": -0.05,
+      "median_return_pct": 0.0,
+      "best_return_pct": 4.25,
+      "worst_return_pct": -4.96
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.73,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.7,
       "median_return_pct": -0.23,
-      "best_return_pct": 8.25,
-      "worst_return_pct": -4.8
+      "best_return_pct": 8.04,
+      "worst_return_pct": -5.37
     }
   },
   "fundamental": null,

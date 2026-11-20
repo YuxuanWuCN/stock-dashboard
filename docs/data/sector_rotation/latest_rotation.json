@@ -1,15 +1,15 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-11-18T18:44:49",
-  "trade_date": "2026-11-18",
-  "requested_trade_date": "2026-11-18",
+  "generated_at": "2026-11-20T22:14:07",
+  "trade_date": "2026-11-20",
+  "requested_trade_date": "2026-11-20",
   "sentiment_source": "price_breadth_proxy",
   "report_usable": false,
   "strategy_validated": false,
   "holding_sector": "gold",
   "portfolio_state": {
     "current_sector": "gold",
-    "holding_days": 25,
+    "holding_days": 26,
     "monthly_rotations": 0,
     "days_since_last_rotation": 10
   },
@@ -23,14 +23,14 @@
       "volatility": 0.3742,
       "stock_count": 6,
       "confidence": 0.4065,
-      "last_updated": "2026-11-18 (as-of 2026-11-17)",
+      "last_updated": "2026-11-20 (as-of 2026-11-19)",
       "stock_sentiments": [
-        -0.2,
-        -1.0,
-        -0.6,
-        0.0,
         -0.4,
-        -0.8
+        -1.0,
+        -0.8,
+        -0.6,
+        -0.2,
+        0.0
       ]
     },
     "storage": {
@@ -42,12 +42,12 @@
       "volatility": 0.4303,
       "stock_count": 4,
       "confidence": 0.3204,
-      "last_updated": "2026-11-18 (as-of 2026-11-17)",
+      "last_updated": "2026-11-20 (as-of 2026-11-19)",
       "stock_sentiments": [
         -0.3333,
-        -1.0,
+        -0.6667,
         0.0,
-        -0.6667
+        -1.0
       ]
     },
     "gold": {
@@ -59,7 +59,7 @@
       "volatility": 0.3742,
       "stock_count": 6,
       "confidence": 0.4065,
-      "last_updated": "2026-11-18 (as-of 2026-11-17)",
+      "last_updated": "2026-11-20 (as-of 2026-11-19)",
       "stock_sentiments": [
         0.4667,
         -0.3333,
@@ -80,8 +80,8 @@
     "confidence": 0.4065,
     "is_fallback": false,
     "llm_rationale": null,
-    "execution_time_ms": 0.013,
-    "timestamp": "2026-11-18 00:00:00",
+    "execution_time_ms": 0.01,
+    "timestamp": "2026-11-20 00:00:00",
     "metrics": {
       "current_score": 0.1667,
       "current_trend": "stable"
@@ -94,12 +94,12 @@
   "audit": {
     "engine": "SectorRotationEngine",
     "engine_version": "1.0",
-    "decision_path_ms": 0.013,
+    "decision_path_ms": 0.01,
     "python": "3.12.12",
-    "git_commit": "6e0932138d6e8fb0569de8b30a3f906d2abe00b5",
+    "git_commit": "f01a9f137a0738206f7bdb2b279e80b80150f612",
     "portfolio_state_used": {
       "current_sector": "gold",
-      "holding_days": 25,
+      "holding_days": 26,
       "monthly_rotations": 0,
       "days_since_last_rotation": 10
     },
@@ -135,5 +135,5 @@
   "notes": [
     "当日无可用新闻（离线/接口不可达/无夹具），情绪降级为价格宽度代理。"
   ],
-  "history_days_recorded": 26
+  "history_days_recorded": 27
 }

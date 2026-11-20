@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-18 18:37:12+08:00",
-  "trade_date": "2026-11-18",
+  "generated_at": "2026-11-20 22:05:57+08:00",
+  "trade_date": "2026-11-20",
   "code": "515050",
   "name": "5GETF",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 47.9,
-    "risk": 61.3,
-    "technical": 60.0,
+    "risk_adjusted": 46.2,
+    "risk": 63.5,
+    "technical": 52.0,
     "industry": 27.0,
     "leading": 50.0
   },
@@ -46,15 +46,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-18 18:35:50"
+    "updated_at": "2026-11-20 22:04:43"
   },
   "nale_network": {
     "sector_name": "通信与5G",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -64,7 +64,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -74,34 +74,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 76.21,
-    "max_drawdown_60d_pct": -45.37,
-    "atr14_pct": 7.23,
+    "annualized_volatility_20d_pct": 74.16,
+    "max_drawdown_60d_pct": -46.3,
+    "atr14_pct": 7.15,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 78.0,
-        "value": 76.21
+        "score": 77.5,
+        "value": 74.16
       },
       {
         "name": "60日最大回撤",
-        "score": 87.9,
-        "value": -45.37
+        "score": 84.4,
+        "value": -46.3
       },
       {
         "name": "ATR百分比",
-        "score": 72.8,
-        "value": 7.23
+        "score": 70.5,
+        "value": 7.15
       },
       {
         "name": "量价异常",
-        "score": 9.2,
-        "value": 1.03
+        "score": 49.7,
+        "value": 0.81
       },
       {
         "name": "行业波动",
-        "score": 2.9,
-        "value": 33.22
+        "score": 0.6,
+        "value": 31.16
       }
     ]
   },
@@ -116,53 +116,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 0.634,
-    "ma10": 0.6519999999999999,
-    "ma20": 0.6895,
-    "ma60": 0.8855000000000001,
-    "rsi14": 33.6,
-    "macd_dif": -0.06614670127218059,
-    "macd_dea": -0.06747715993376341,
-    "macd_hist": 0.0026609173231656458,
-    "atr14_pct": 7.22888979983959,
-    "boll_position": 0.16379893832163236,
-    "return_5d_pct": -14.084507042253513,
-    "return_20d_pct": -25.609756097560975,
-    "volume_ratio_5d": 1.03
+    "ma5": 0.598,
+    "ma10": 0.638,
+    "ma20": 0.6695,
+    "ma60": 0.8713333333333334,
+    "rsi14": 30.9,
+    "macd_dif": -0.0665769695114179,
+    "macd_dea": -0.06704710661154457,
+    "macd_hist": 0.0009402742002533604,
+    "atr14_pct": 7.153643996001614,
+    "boll_position": 0.09648643516248841,
+    "return_5d_pct": -12.121212121212132,
+    "return_20d_pct": -27.500000000000014,
+    "volume_ratio_5d": 0.81
   },
   "industry": {
     "name": "通信与5G",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.41,
-    "return_20d_pct": -8.93,
-    "return_60d_pct": -27.1,
-    "relative_strength_20d_pct": -16.68
+    "return_5d_pct": -6.49,
+    "return_20d_pct": -12.14,
+    "return_60d_pct": -26.6,
+    "relative_strength_20d_pct": -15.36
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.1,
-      "median_return_pct": 0.63,
-      "best_return_pct": 11.01,
-      "worst_return_pct": -15.32
+      "up_probability_pct": 55.2,
+      "average_return_pct": 0.33,
+      "median_return_pct": 1.28,
+      "best_return_pct": 12.71,
+      "worst_return_pct": -16.98
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.79,
-      "median_return_pct": 0.63,
-      "best_return_pct": 15.97,
-      "worst_return_pct": -14.41
+      "up_probability_pct": 55.2,
+      "average_return_pct": 1.16,
+      "median_return_pct": 1.8,
+      "best_return_pct": 19.49,
+      "worst_return_pct": -14.29
     }
   },
   "fundamental": null,
@@ -176,19 +176,19 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 45.4%，风险偏高。",
+      "detail": "近60日最大回撤 46.3%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 45.4%，风险扣分。",
+      "detail": "近60日最大回撤 46.3%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 76.2%，波动偏高。",
+      "detail": "20日年化波动率 74.2%，波动偏高。",
       "contribution": -5.0
     }
   ],
