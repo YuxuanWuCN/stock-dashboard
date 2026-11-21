@@ -1,0 +1,311 @@
+{
+  "stock_panel": {
+    "rows": 192199,
+    "stocks": 299,
+    "sessions": 644,
+    "first_date": "2024-01-02",
+    "last_date": "2026-08-28",
+    "missing_stock_date_rows": 357,
+    "return_basis_rows": {
+      "forward_adjusted_close_return": 128600,
+      "declared_total_return": 63399,
+      "unavailable": 200
+    },
+    "cohort_stocks": {
+      "student_B": 100,
+      "student_C": 100,
+      "student_A": 99
+    }
+  },
+  "stock_panel_sha256": "b1525effea47304ffbe8608e6c869e6899b871105a6c7bcdc59412a0c24e5a21",
+  "stock_basis_policy_sha256": "cb37cf817e04588081d32f68997981b1d6c231048ef0b639aa09fa2558cf7b34",
+  "reader": "local DuckDB implementation",
+  "legacy_tables_sha256": {
+    "defense_method_results.csv": "b4a9d09c21fa757c45bc927b20460a637d112de2a9e453d0294b6686c92316d2",
+    "futures_sensitivity.csv": "369bef2b94e482201d7ea2312fc0fc6528870f299290612f605e1bd908715798",
+    "verdict.csv": "42efc56a426d3421351ff72affedea1b267ac08364bbed6aef1c5a28b4d87f44"
+  },
+  "market": {
+    "requested_start_date": "2010-01-01",
+    "cutoff": "2026-11-13",
+    "registry_page": "https://www.csrc.gov.cn/csrc/c101900/c6551799/content.shtml",
+    "registry_doc": "https://www.csrc.gov.cn/csrc/c101900/c6551799/6551799/files/个人养老金基金名录（截至2026年9月30日）.docx",
+    "registry_sha256": "8d722e65e97af06935ad6aebb2c720c87d169928dc2f0337829f8df21be5a55b",
+    "registry_rows": {
+      "017247": [
+        "",
+        "017247",
+        "华夏养老目标日期2040三年持有期混合型基金中基金（FOF）",
+        "华夏基金管理有限公司"
+      ],
+      "017258": [
+        "",
+        "017258",
+        "建信普泽养老目标日期2040三年持有期混合型发起式基金中基金（FOF）",
+        "建信基金管理有限责任公司"
+      ],
+      "017377": [
+        "",
+        "017377",
+        "南方养老目标日期2040三年持有期混合型发起式基金中基金（FOF）",
+        "南方基金管理股份有限公司"
+      ]
+    },
+    "funds": [
+      {
+        "code": "510050",
+        "name": "上证50ETF华夏",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/510050.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_510050.html",
+        "nav_response_sha256": "20744ce95be296de5447091a2214fc03a0c03f3fe9a5561ad2a9d3265a56e780",
+        "actions_response_sha256": "de7f038934935377e56c0bcdb16837d81ae6516665877c1969022cb007686fbd"
+      },
+      {
+        "code": "510300",
+        "name": "沪深300ETF华泰柏瑞",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/510300.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_510300.html",
+        "nav_response_sha256": "f4c976cc4d15b83670b8922029667896e97e897d072c3535c1c40496e66a29af",
+        "actions_response_sha256": "882cb6c2c9ed282374220f817f8f344068031afa34793e99286c98ac5a054e69"
+      },
+      {
+        "code": "159915",
+        "name": "创业板ETF易方达",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/159915.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_159915.html",
+        "nav_response_sha256": "e635c1af5322b931a05e2443370ba48e7e5779fa89abc757c5dcd74e88691bf6",
+        "actions_response_sha256": "cdeb0f022954f21e6c8e37342e48ac4977eace5e9447f7588b454b63f6020e67"
+      },
+      {
+        "code": "588000",
+        "name": "科创50ETF华夏",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/588000.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_588000.html",
+        "nav_response_sha256": "f8666e2607665557fc74303bad52aca5f822879a5c152e2be89a4c284da97236",
+        "actions_response_sha256": "08688cbf9acfbe151234ce2adddccbdc341e4f463afc41e4f1f39ba968e8cebb"
+      },
+      {
+        "code": "512660",
+        "name": "军工ETF国泰",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/512660.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_512660.html",
+        "nav_response_sha256": "c61c5ecd41e3244697247936f7add3a028a73dd960ee3cfd4c388d4a63ba073b",
+        "actions_response_sha256": "db5ff2cc7d24e03299f4fce5da9979bcaf84d956597f57f7f07c442a64892db4"
+      },
+      {
+        "code": "512880",
+        "name": "证券ETF国泰",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/512880.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_512880.html",
+        "nav_response_sha256": "ccfeeff730223c0ba2d1161b07b1b8f93604f0ffe858253959280aea6fd1cce9",
+        "actions_response_sha256": "16d1c8b006d3e07be8d66cfb84416507fc8eee94c762682652117665437b6357"
+      },
+      {
+        "code": "515030",
+        "name": "新能源车ETF华夏",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/515030.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_515030.html",
+        "nav_response_sha256": "753b084ab7e8c1901e234b91a0815aeb0bddc7c197e373a873ed388d654d81c9",
+        "actions_response_sha256": "082874efd26b6c2fcfca2d60229882608f23326b6a6befcda7abf5e4a2d24230"
+      },
+      {
+        "code": "515790",
+        "name": "光伏ETF华泰柏瑞",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/515790.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_515790.html",
+        "nav_response_sha256": "f50f5e2e3483d283bc457e827e69791c8782ca0ebad3a2d4d1aaa9daedde6e44",
+        "actions_response_sha256": "5ef9ec817be88cca6e746acf023d2ebac06b4f9791bd97af9c4c461221405d12"
+      },
+      {
+        "code": "518880",
+        "name": "黄金ETF华安",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/518880.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_518880.html",
+        "nav_response_sha256": "650affb5e5bda3deccaff150f99d822a420e94dbcf3eabb8317c594b9a177092",
+        "actions_response_sha256": "4894a6a5f0f9e394d2838b5d0a1889dff2307a58350711887f088766e254a10d"
+      },
+      {
+        "code": "511010",
+        "name": "国债ETF国泰",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/511010.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_511010.html",
+        "nav_response_sha256": "ecb79584e2348585e994843deaa0b7d9d64586228c3c485df5a6d09dac9f9c7b",
+        "actions_response_sha256": "f1a49a4fc5c6fdd01edc927bd4a4fa206e983a19227be4f0d5f1c3825185bead"
+      },
+      {
+        "code": "511880",
+        "name": "银华日利ETF",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/511880.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_511880.html",
+        "nav_response_sha256": "2639190e69ef109a679222d7c6559f1887b0f52d88f6feedbcabb828bfbb18e0",
+        "actions_response_sha256": "23b7c7d006ba949cbace0e7d1574ee605c34a0edda4e345f726014f343be3723"
+      },
+      {
+        "code": "510880",
+        "name": "红利ETF华泰柏瑞",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/510880.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_510880.html",
+        "nav_response_sha256": "8c4d74ddef6233fc97d6f296b1543323376ac16e963601927b25acd4b1a83fd7",
+        "actions_response_sha256": "325e191f482b1f90185135231480317ac203ba27c86c0affaffb804394cefb24"
+      },
+      {
+        "code": "017247",
+        "name": "华夏养老2040三年持有混合(FOF)Y",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/017247.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_017247.html",
+        "nav_response_sha256": "ac320002143198d08053342b276bf7ebf4c8ae5cd24b77b0f1b2d139d070f13b",
+        "actions_response_sha256": "f0287ba37dc067faabfaecfcde4ef3a6a1e479cf9743def1dabbea04b6f733b6",
+        "status_date": "2026-11-11",
+        "subscription_status": "开放申购",
+        "status_source": "https://api.fund.eastmoney.com/f10/lsjz?fundCode=017247&pageIndex=1&pageSize=20&endDate=2026-11-13"
+      },
+      {
+        "code": "017258",
+        "name": "建信普泽养老目标日期2040三年持有混合(FOF)Y",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/017258.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_017258.html",
+        "nav_response_sha256": "8cb652fb326741e41c94e2cc2acb5f7272fd05f6f1f30410932e83bdfd8f11d7",
+        "actions_response_sha256": "e73ee9b832525bdbce4a55887390f483a24f419dc76fe17b9c87bd4bbf54c1b5",
+        "status_date": "2026-11-11",
+        "subscription_status": "开放申购",
+        "status_source": "https://api.fund.eastmoney.com/f10/lsjz?fundCode=017258&pageIndex=1&pageSize=20&endDate=2026-11-13"
+      },
+      {
+        "code": "017377",
+        "name": "南方养老2040三年持有混合发起(FOF)Y",
+        "nav_source": "https://fund.eastmoney.com/pingzhongdata/017377.js",
+        "actions_source": "https://fundf10.eastmoney.com/fhsp_017377.html",
+        "nav_response_sha256": "d06acb8087b4dc7a5b3beba2e2379ea48856a953cd2cc2fc3ac135a70f2affb7",
+        "actions_response_sha256": "d4223772fc19403401136243ecc2322ad9941716fc97996b5d9aabb4e8d726a4",
+        "status_date": "2026-11-11",
+        "subscription_status": "开放申购",
+        "status_source": "https://api.fund.eastmoney.com/f10/lsjz?fundCode=017377&pageIndex=1&pageSize=20&endDate=2026-11-13"
+      }
+    ],
+    "etf_quotes": [
+      {
+        "code": "510050",
+        "symbol": "sh510050",
+        "source": "https://finance.sina.com.cn/realstock/company/sh510050/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "510300",
+        "symbol": "sh510300",
+        "source": "https://finance.sina.com.cn/realstock/company/sh510300/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "159915",
+        "symbol": "sz159915",
+        "source": "https://finance.sina.com.cn/realstock/company/sz159915/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "588000",
+        "symbol": "sh588000",
+        "source": "https://finance.sina.com.cn/realstock/company/sh588000/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "512660",
+        "symbol": "sh512660",
+        "source": "https://finance.sina.com.cn/realstock/company/sh512660/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "512880",
+        "symbol": "sh512880",
+        "source": "https://finance.sina.com.cn/realstock/company/sh512880/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "515030",
+        "symbol": "sh515030",
+        "source": "https://finance.sina.com.cn/realstock/company/sh515030/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "515790",
+        "symbol": "sh515790",
+        "source": "https://finance.sina.com.cn/realstock/company/sh515790/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "518880",
+        "symbol": "sh518880",
+        "source": "https://finance.sina.com.cn/realstock/company/sh518880/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "511010",
+        "symbol": "sh511010",
+        "source": "https://finance.sina.com.cn/realstock/company/sh511010/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "511880",
+        "symbol": "sh511880",
+        "source": "https://finance.sina.com.cn/realstock/company/sh511880/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      },
+      {
+        "code": "510880",
+        "symbol": "sh510880",
+        "source": "https://finance.sina.com.cn/realstock/company/sh510880/hisdata_klc2/klc_kl.js",
+        "decoder": "akshare 1.18.96"
+      }
+    ],
+    "futures": [
+      {
+        "code": "AU",
+        "source": "https://stock2.finance.sina.com.cn/futures/api/json.php/InnerFuturesNewService.getDailyKLine?symbol=AU0",
+        "response_sha256": "4109a18205e9c12db26c4ca51956d6fff3bfcf167ef8b823ea6733ae30845d54"
+      },
+      {
+        "code": "M",
+        "source": "https://stock2.finance.sina.com.cn/futures/api/json.php/InnerFuturesNewService.getDailyKLine?symbol=M0",
+        "response_sha256": "402315af1d90a1167d2d7620d994dacda18e4944953ae7bebde2188e30238844"
+      },
+      {
+        "code": "CU",
+        "source": "https://stock2.finance.sina.com.cn/futures/api/json.php/InnerFuturesNewService.getDailyKLine?symbol=CU0",
+        "response_sha256": "361128b2ff1832cd3a1de5067298d9e06279c1a109917289fb7cc594828366e2"
+      }
+    ],
+    "snapshot_sha256": {
+      "actions.csv": "48859b268790d722ac680b75535a554981b8db446e527cffdcb6a62e9c3b4dde",
+      "etf_close.csv": "349e4c7d79a8bc9cbdd316849e496033c19f30faa13dcfcde2f0e9134a356aac",
+      "fund_nav.csv": "1f0a42a12755a86c3aecdd31ff0ad79d4622bee96207e13606d6e1363636e34d",
+      "futures_close.csv": "2ed23c8b71858c9cd4b512f5cc4a7f2694598d2ee4a11af3041e8c73e2e23f25"
+    }
+  },
+  "software": {
+    "duckdb": "1.4.3",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scipy": "1.18.0",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2",
+    "pyarrow": "24.0.0",
+    "akshare": "1.18.96",
+    "requests": "2.34.2",
+    "lxml": "6.1.0"
+  },
+  "output_sha256": {
+    "daily_ledger.csv": "d56ad215f485543255fa7baa1a4c03ee9252e10038babe2d34f0db62c3571f97",
+    "defense_method_results.csv": "76a63cad05db7e7b14a41ced64beea2931a9a2c52d5145c19df26e9abb692d84",
+    "eet_net_replacement.csv": "d28496017169a999709bc52b5373ff1dbc9fd8cf20b34c23079d864dc46df880",
+    "etf_data_audit.csv": "fa241062503933f52760bf30da5fb8677ae9d54c8c3126d78975840a5b42e716",
+    "fund_products.csv": "49bede87aa9274c3942581296fcf1448c093a36c746ea955f31312e71171d87c",
+    "futures_comparison.csv": "5b5c142d9387a350f0c4d14b2b458f51e1d5dddf7c245cf08fe4d3d004f6f987",
+    "futures_variants.csv": "3a31ba416e4e52c7968a99442d0317192d0758234c7be4767b0597deb9dc67f4",
+    "paired_block_comparison.csv": "07298a013bf31ecd76c5c454196bad32327d86b64ff0afbc44466b7650a09ec2",
+    "price_only_replay.csv": "ab48883f7b5957ed5be45c1de68d9d879ccde5e1617ee40a37a3d047a8e673a7",
+    "retirement_age_profile.csv": "1693584bc1cadf279622d8c2f8137cf586bab156514f9ec93779c792b2724aa9",
+    "retirement_ruin.csv": "049e64e9de6b0afec7c9b85408e0d7ff4d16fd321d6840389789d2346994d92b",
+    "stability_verdict.csv": "acd5561a72b3f6d167f2c7bc0ed0454dafe55a70cf94a9d864eca4470e16ac5f",
+    "tdf_comparison.csv": "cd1cdc3a2733ad8b714d7463c844ab4dfa0d9ae879cc95f1455752bc287cfe59",
+    "tdf_daily_nav.csv": "fed7d17bb8759a5c20d973cbe47a5e490c19de3133b3f03a134a2bb485ded0a5"
+  }
+}
