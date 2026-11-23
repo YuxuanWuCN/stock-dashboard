@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-20 22:05:57+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23 17:34:11+08:00",
+  "trade_date": "2026-11-23",
   "code": "002594",
   "name": "比亚迪",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 61.3,
-    "risk": 11.9,
-    "technical": 50.0,
+    "risk_adjusted": 63.2,
+    "risk": 13.5,
+    "technical": 42.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-20 22:03:18"
+    "updated_at": "2026-11-23 17:31:29"
   },
   "nale_network": {
     "sector_name": "汽车",
@@ -70,29 +70,29 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 19.94,
-    "max_drawdown_60d_pct": -13.69,
-    "atr14_pct": 2.17,
+    "annualized_volatility_20d_pct": 20.45,
+    "max_drawdown_60d_pct": -15.47,
+    "atr14_pct": 2.25,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 4.6,
-        "value": 19.94
+        "score": 5.8,
+        "value": 20.45
       },
       {
         "name": "60日最大回撤",
-        "score": 17.3,
-        "value": -13.69
+        "score": 22.5,
+        "value": -15.47
       },
       {
         "name": "ATR百分比",
-        "score": 13.9,
-        "value": 2.17
+        "score": 16.8,
+        "value": 2.25
       },
       {
         "name": "量价异常",
-        "score": 32.9,
-        "value": 0.87
+        "score": 26.6,
+        "value": 0.92
       },
       {
         "name": "行业波动",
@@ -118,19 +118,19 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 80.21000000000001,
-    "ma10": 81.274,
-    "ma20": 82.4885,
-    "ma60": 84.413,
-    "rsi14": 37.5,
-    "macd_dif": -1.0031823754945037,
-    "macd_dea": -0.6818421918154414,
-    "macd_hist": -0.6426803673581247,
-    "atr14_pct": 2.1686905776352106,
-    "boll_position": 0.1608330329412788,
-    "return_5d_pct": -0.38754844355542994,
-    "return_20d_pct": -2.1370670596904895,
-    "volume_ratio_5d": 0.87
+    "ma5": 79.72,
+    "ma10": 80.588,
+    "ma20": 82.2705,
+    "ma60": 84.20583333333333,
+    "rsi14": 32.6,
+    "macd_dif": -1.1882090233253564,
+    "macd_dea": -0.7831155547090538,
+    "macd_hist": -0.8101869372326052,
+    "atr14_pct": 2.2519737506971413,
+    "boll_position": 0.03740216175146076,
+    "return_5d_pct": -3.043856379674481,
+    "return_20d_pct": -5.2912621359223255,
+    "volume_ratio_5d": 0.92
   },
   "industry": {
     "name": "汽车",
@@ -139,7 +139,7 @@
     "return_5d_pct": -6.49,
     "return_20d_pct": -12.14,
     "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 10.0
+    "relative_strength_20d_pct": 5.79
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.07,
-      "median_return_pct": -1.36,
-      "best_return_pct": 8.57,
-      "worst_return_pct": -8.03
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.6,
+      "median_return_pct": 0.42,
+      "best_return_pct": 8.27,
+      "worst_return_pct": -5.17
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": 0.09,
-      "median_return_pct": -0.92,
-      "best_return_pct": 8.89,
-      "worst_return_pct": -6.43
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.1,
+      "median_return_pct": -0.4,
+      "best_return_pct": 8.01,
+      "worst_return_pct": -7.64
     }
   },
   "fundamental": {
@@ -294,6 +294,18 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 15.5%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 15.5%，风险扣分。",
+      "contribution": -7.0
     }
   ],
   "kline_file": "../kline/002594.json",

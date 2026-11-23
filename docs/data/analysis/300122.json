@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-20 22:05:57+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23 17:34:11+08:00",
+  "trade_date": "2026-11-23",
   "code": "300122",
   "name": "智飞生物",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 67.7,
-    "risk": 32.3,
+    "risk_adjusted": 71.1,
+    "risk": 32.5,
     "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
@@ -42,36 +42,41 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-20 22:04:01"
+    "updated_at": "2026-11-23 17:32:11"
   },
   "nale_network": {
     "sector_name": "医药",
-    "sector_breadth_pct": 16.7,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "sector_breadth_pct": 83.3,
+    "tier_role": "core_mid",
+    "leader_stock": {
+      "code": "603259",
+      "name": "药明康德",
+      "change_pct": 4.0838068181818175,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
-        "code": "600196",
-        "name": "复星医药",
-        "corr": 0.47
-      },
-      {
         "code": "300015",
         "name": "爱尔眼科",
+        "corr": 0.44
+      },
+      {
+        "code": "600196",
+        "name": "复星医药",
         "corr": 0.42
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.21,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -81,14 +86,14 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 48.98,
+    "annualized_volatility_20d_pct": 48.92,
     "max_drawdown_60d_pct": -18.6,
     "atr14_pct": 4.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 47.4,
-        "value": 48.98
+        "score": 43.4,
+        "value": 48.92
       },
       {
         "name": "60日最大回撤",
@@ -97,13 +102,13 @@
       },
       {
         "name": "ATR百分比",
-        "score": 35.8,
+        "score": 35.3,
         "value": 4.14
       },
       {
         "name": "量价异常",
-        "score": 35.8,
-        "value": 1.14
+        "score": 50.9,
+        "value": 1.17
       },
       {
         "name": "行业波动",
@@ -123,25 +128,25 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 14.163999999999998,
-    "ma10": 14.151999999999997,
-    "ma20": 14.007499999999999,
-    "ma60": 13.443333333333333,
-    "rsi14": 53.5,
-    "macd_dif": 0.2739123511106012,
-    "macd_dea": 0.2797753310443706,
-    "macd_hist": -0.011725959867538771,
-    "atr14_pct": 4.1421835664401,
-    "boll_position": 0.5501021276444262,
-    "return_5d_pct": 2.093862815884484,
-    "return_20d_pct": 9.867909867909885,
-    "volume_ratio_5d": 1.14
+    "ma5": 14.3,
+    "ma10": 14.128,
+    "ma20": 14.0695,
+    "ma60": 13.449833333333334,
+    "rsi14": 55.1,
+    "macd_dif": 0.2656445674902166,
+    "macd_dea": 0.27694917909232275,
+    "macd_hist": -0.022609223204212325,
+    "atr14_pct": 4.135840158812793,
+    "boll_position": 0.5881098498278037,
+    "return_5d_pct": 4.996326230712711,
+    "return_20d_pct": 9.501915708812248,
+    "volume_ratio_5d": 1.17
   },
   "industry": {
     "name": "医药",
@@ -150,7 +155,7 @@
     "return_5d_pct": -6.49,
     "return_20d_pct": -12.14,
     "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 22.01
+    "relative_strength_20d_pct": 20.58
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -159,15 +164,15 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 43.3,
-      "average_return_pct": -1.12,
-      "median_return_pct": -0.75,
-      "best_return_pct": 8.91,
-      "worst_return_pct": -9.05
+      "average_return_pct": -0.77,
+      "median_return_pct": -0.6,
+      "best_return_pct": 9.27,
+      "worst_return_pct": -9.6
     },
     "horizon_5d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.64,
-      "median_return_pct": -1.58,
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.87,
+      "median_return_pct": -1.42,
       "best_return_pct": 17.4,
       "worst_return_pct": -12.92
     }
@@ -321,7 +326,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 49.0%，波动偏高。",
+      "detail": "20日年化波动率 48.9%，波动偏高。",
       "contribution": -5.0
     }
   ],

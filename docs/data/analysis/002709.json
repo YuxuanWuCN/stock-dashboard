@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-20 22:05:57+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23 17:34:11+08:00",
+  "trade_date": "2026-11-23",
   "code": "002709",
   "name": "天赐材料",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 49.4,
-    "risk": 43.9,
+    "risk_adjusted": 52.7,
+    "risk": 44.1,
     "technical": 42.0,
     "industry": 42.0,
     "leading": 50.0
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-20 22:04:29"
+    "updated_at": "2026-11-23 17:32:35"
   },
   "nale_network": {
     "sector_name": "电解液",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,28 +70,28 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 38.02,
-    "max_drawdown_60d_pct": -36.82,
-    "atr14_pct": 5.05,
+    "annualized_volatility_20d_pct": 38.8,
+    "max_drawdown_60d_pct": -36.01,
+    "atr14_pct": 4.96,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 33.5,
-        "value": 38.02
+        "score": 34.1,
+        "value": 38.8
       },
       {
         "name": "60日最大回撤",
-        "score": 64.2,
-        "value": -36.82
+        "score": 62.4,
+        "value": -36.01
       },
       {
         "name": "ATR百分比",
-        "score": 48.0,
-        "value": 5.05
+        "score": 47.4,
+        "value": 4.96
       },
       {
         "name": "量价异常",
-        "score": 80.9,
+        "score": 86.7,
         "value": 0.66
       },
       {
@@ -112,24 +112,24 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 25.282,
-    "ma10": 26.369999999999997,
-    "ma20": 26.729000000000003,
-    "ma60": 30.81433333333333,
-    "rsi14": 28.3,
-    "macd_dif": -1.2987982510885026,
-    "macd_dea": -1.192213699409057,
-    "macd_hist": -0.21316910335889094,
-    "atr14_pct": 5.049309811118704,
-    "boll_position": -0.08177049073839424,
-    "return_5d_pct": -9.803921568627437,
-    "return_20d_pct": -12.348845731037006,
+    "ma5": 24.944,
+    "ma10": 26.018,
+    "ma20": 26.575499999999998,
+    "ma60": 30.589333333333332,
+    "rsi14": 31.9,
+    "macd_dif": -1.3455323517847795,
+    "macd_dea": -1.2228774293344506,
+    "macd_hist": -0.24530984490065766,
+    "atr14_pct": 4.955821528662236,
+    "boll_position": 0.07388491066266503,
+    "return_5d_pct": -6.487523992322464,
+    "return_20d_pct": -11.19212541013489,
     "volume_ratio_5d": 0.66
   },
   "industry": {
@@ -139,7 +139,7 @@
     "return_5d_pct": -6.49,
     "return_20d_pct": -12.14,
     "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": -0.21
+    "relative_strength_20d_pct": -0.11
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,16 +147,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 1.91,
-      "median_return_pct": 2.26,
-      "best_return_pct": 9.83,
+      "up_probability_pct": 56.7,
+      "average_return_pct": 1.39,
+      "median_return_pct": 1.9,
+      "best_return_pct": 11.32,
       "worst_return_pct": -19.17
     },
     "horizon_5d": {
       "up_probability_pct": 43.3,
-      "average_return_pct": 0.92,
-      "median_return_pct": -2.04,
+      "average_return_pct": 0.63,
+      "median_return_pct": -3.04,
       "best_return_pct": 23.26,
       "worst_return_pct": -23.0
     }
@@ -292,20 +292,14 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 36.8%，风险偏高。",
+      "detail": "近60日最大回撤 36.0%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 36.8%，风险扣分。",
+      "detail": "近60日最大回撤 36.0%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=28.3，短期超卖。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/002709.json",

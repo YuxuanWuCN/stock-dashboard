@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-20 22:05:57+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23 17:34:11+08:00",
+  "trade_date": "2026-11-23",
   "code": "603259",
   "name": "药明康德",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 67.7,
-    "risk": 37.4,
-    "technical": 58.0,
+    "risk_adjusted": 83.4,
+    "risk": 36.3,
+    "technical": 98.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,13 +42,18 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-20 22:04:00"
+    "updated_at": "2026-11-23 17:32:11"
   },
   "nale_network": {
     "sector_name": "医药",
-    "sector_breadth_pct": 16.7,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 83.3,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "603259",
+      "name": "药明康德",
+      "change_pct": 4.0838068181818175,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -76,14 +81,14 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 48.67,
+    "annualized_volatility_20d_pct": 50.72,
     "max_drawdown_60d_pct": -19.46,
-    "atr14_pct": 4.9,
+    "atr14_pct": 4.83,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 46.2,
-        "value": 48.67
+        "score": 46.8,
+        "value": 50.72
       },
       {
         "name": "60日最大回撤",
@@ -92,13 +97,13 @@
       },
       {
         "name": "ATR百分比",
-        "score": 45.1,
-        "value": 4.9
+        "score": 43.9,
+        "value": 4.83
       },
       {
         "name": "量价异常",
-        "score": 67.6,
-        "value": 0.74
+        "score": 57.2,
+        "value": 0.8
       },
       {
         "name": "行业波动",
@@ -123,20 +128,20 @@
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 143.95600000000002,
-    "ma10": 146.571,
-    "ma20": 145.2345,
-    "ma60": 152.78233333333336,
-    "rsi14": 41.4,
-    "macd_dif": -1.7711936533377184,
-    "macd_dea": -1.6384618927825019,
-    "macd_hist": -0.26546352111043303,
-    "atr14_pct": 4.90226144786761,
-    "boll_position": 0.25070338748414134,
-    "return_5d_pct": -3.7593984962405957,
-    "return_20d_pct": -2.708678828081801,
-    "volume_ratio_5d": 0.74
+    "trend": "range",
+    "ma5": 144.384,
+    "ma10": 146.197,
+    "ma20": 145.262,
+    "ma60": 152.51900000000003,
+    "rsi14": 49.2,
+    "macd_dif": -1.5458987166806253,
+    "macd_dea": -1.6199492547785974,
+    "macd_hist": 0.14810107619594426,
+    "atr14_pct": 4.830189281246671,
+    "boll_position": 0.5723050096497925,
+    "return_5d_pct": 1.4818918357454525,
+    "return_20d_pct": 0.3767123287671259,
+    "volume_ratio_5d": 0.8
   },
   "industry": {
     "name": "医药",
@@ -145,7 +150,7 @@
     "return_5d_pct": -6.49,
     "return_20d_pct": -12.14,
     "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 9.43
+    "relative_strength_20d_pct": 11.46
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -154,16 +159,16 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 53.3,
-      "average_return_pct": 0.36,
-      "median_return_pct": 0.32,
-      "best_return_pct": 12.31,
-      "worst_return_pct": -6.75
+      "average_return_pct": 0.61,
+      "median_return_pct": 0.09,
+      "best_return_pct": 12.41,
+      "worst_return_pct": -6.86
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 2.04,
-      "median_return_pct": -0.04,
-      "best_return_pct": 19.47,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 1.0,
+      "median_return_pct": 0.08,
+      "best_return_pct": 25.66,
       "worst_return_pct": -8.54
     }
   },
@@ -297,12 +302,6 @@
   "reasons": [
     {
       "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
-    },
-    {
-      "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 19.5%，风险偏高。",
       "contribution": -7.0
@@ -316,7 +315,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 48.7%，波动偏高。",
+      "detail": "20日年化波动率 50.7%，波动偏高。",
       "contribution": -5.0
     }
   ],

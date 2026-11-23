@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-20 22:05:57+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23 17:34:11+08:00",
+  "trade_date": "2026-11-23",
   "code": "600032",
   "name": "浙江新能",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 62.9,
-    "risk": 28.4,
+    "risk_adjusted": 65.0,
+    "risk": 28.2,
     "technical": 42.0,
-    "industry": 49.8,
+    "industry": 48.7,
     "leading": 50.0
   },
   "leading": {
@@ -42,20 +42,20 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-20 22:05:40"
+    "updated_at": "2026-11-23 17:33:52"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 5.1,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 97.4,
+    "tier_role": "core_mid",
     "leader_stock": {
-      "code": "301282",
-      "name": "金禄电子",
-      "change_pct": 8.17257102770957,
+      "code": "688137",
+      "name": "近岸蛋白",
+      "change_pct": 11.628865979381445,
       "is_limit_up": false
     },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
@@ -70,13 +70,13 @@
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": 0.06,
+    "leader_corr_with_stock": -0.01,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -86,29 +86,29 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 29.42,
+    "annualized_volatility_20d_pct": 29.55,
     "max_drawdown_60d_pct": -22.15,
-    "atr14_pct": 3.88,
+    "atr14_pct": 3.82,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 20.2,
-        "value": 29.42
+        "score": 18.5,
+        "value": 29.55
       },
       {
         "name": "60日最大回撤",
-        "score": 34.7,
+        "score": 35.8,
         "value": -22.15
       },
       {
         "name": "ATR百分比",
         "score": 34.1,
-        "value": 3.88
+        "value": 3.82
       },
       {
         "name": "量价异常",
-        "score": 67.1,
-        "value": 0.74
+        "score": 68.2,
+        "value": 0.76
       },
       {
         "name": "行业波动",
@@ -128,25 +128,25 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 6.632,
-    "ma10": 6.843999999999999,
-    "ma20": 6.899499999999999,
-    "ma60": 7.0485,
-    "rsi14": 31.9,
-    "macd_dif": -0.14840213205479635,
-    "macd_dea": -0.0896315538617695,
-    "macd_hist": -0.1175411563860537,
-    "atr14_pct": 3.8756629539584644,
-    "boll_position": -0.1347867184731315,
-    "return_5d_pct": -8.092485549132943,
-    "return_20d_pct": -9.530583214793742,
-    "volume_ratio_5d": 0.74
+    "ma5": 6.548,
+    "ma10": 6.766,
+    "ma20": 6.8685,
+    "ma60": 7.042666666666666,
+    "rsi14": 32.7,
+    "macd_dif": -0.1702316369674053,
+    "macd_dea": -0.10575157035792745,
+    "macd_hist": -0.12896013321895566,
+    "atr14_pct": 3.8226580023462193,
+    "boll_position": -0.010751952611770442,
+    "return_5d_pct": -6.176470588235294,
+    "return_20d_pct": -8.857142857142863,
+    "volume_ratio_5d": 0.76
   },
   "industry": {
     "name": "热点龙头",
@@ -155,7 +155,7 @@
     "return_5d_pct": -6.49,
     "return_20d_pct": -12.14,
     "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 2.61
+    "relative_strength_20d_pct": 2.22
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -164,14 +164,14 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 53.3,
-      "average_return_pct": 1.85,
+      "average_return_pct": 1.89,
       "median_return_pct": 1.49,
       "best_return_pct": 22.1,
       "worst_return_pct": -21.02
     },
     "horizon_5d": {
       "up_probability_pct": 53.3,
-      "average_return_pct": 1.64,
+      "average_return_pct": 1.52,
       "median_return_pct": 1.46,
       "best_return_pct": 24.83,
       "worst_return_pct": -25.8

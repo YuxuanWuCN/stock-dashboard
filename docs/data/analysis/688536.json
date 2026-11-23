@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-20 22:05:57+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23 17:34:11+08:00",
+  "trade_date": "2026-11-23",
   "code": "688536",
   "name": "思瑞浦",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 39.1,
-    "risk": 84.4,
-    "technical": 42.0,
+    "risk_adjusted": 41.9,
+    "risk": 84.7,
+    "technical": 50.0,
     "industry": 27.0,
     "leading": 50.0
   },
@@ -45,13 +45,18 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-20 22:04:27"
+    "updated_at": "2026-11-23 17:32:34"
   },
   "nale_network": {
     "sector_name": "模拟芯片",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "688536",
+      "name": "思瑞浦",
+      "change_pct": 6.151960784313731,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -73,14 +78,14 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 113.78,
+    "annualized_volatility_20d_pct": 116.31,
     "max_drawdown_60d_pct": -43.01,
-    "atr14_pct": 9.86,
+    "atr14_pct": 9.41,
     "factors": [
       {
         "name": "20日波动率",
         "score": 94.8,
-        "value": 113.78
+        "value": 116.31
       },
       {
         "name": "60日最大回撤",
@@ -90,16 +95,16 @@
       {
         "name": "ATR百分比",
         "score": 87.9,
-        "value": 9.86
+        "value": 9.41
       },
       {
         "name": "量价异常",
-        "score": 45.1,
-        "value": 0.83
+        "score": 52.6,
+        "value": 0.81
       },
       {
         "name": "行业波动",
-        "score": 96.0,
+        "score": 92.5,
         "value": 31.16
       }
     ]
@@ -121,19 +126,19 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 216.71599999999998,
-    "ma10": 234.977,
-    "ma20": 249.618,
-    "ma60": 286.7536666666667,
-    "rsi14": 33.6,
-    "macd_dif": -18.01298159619975,
-    "macd_dea": -14.366100875585213,
-    "macd_hist": -7.293761441229076,
-    "atr14_pct": 9.857787804037876,
-    "boll_position": 0.015183766345466847,
-    "return_5d_pct": -13.793103448275856,
-    "return_20d_pct": -23.84365550453579,
-    "volume_ratio_5d": 0.83
+    "ma5": 215.56,
+    "ma10": 231.24300000000002,
+    "ma20": 246.87600000000003,
+    "ma60": 285.17400000000004,
+    "rsi14": 38.8,
+    "macd_dif": -18.056850578897382,
+    "macd_dea": -15.104250787573939,
+    "macd_hist": -5.905199582646887,
+    "atr14_pct": 9.4108431526922,
+    "boll_position": 0.18432409697705107,
+    "return_5d_pct": -2.599739126523637,
+    "return_20d_pct": -20.207082059029435,
+    "volume_ratio_5d": 0.81
   },
   "industry": {
     "name": "模拟芯片",
@@ -142,7 +147,7 @@
     "return_5d_pct": -6.49,
     "return_20d_pct": -12.14,
     "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": -11.7
+    "relative_strength_20d_pct": -9.13
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -150,18 +155,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 2.71,
-      "median_return_pct": 3.88,
-      "best_return_pct": 21.15,
-      "worst_return_pct": -20.53
+      "up_probability_pct": 60.0,
+      "average_return_pct": 1.66,
+      "median_return_pct": 4.28,
+      "best_return_pct": 18.96,
+      "worst_return_pct": -22.57
     },
     "horizon_5d": {
       "up_probability_pct": 56.7,
-      "average_return_pct": 2.19,
-      "median_return_pct": 1.31,
-      "best_return_pct": 20.61,
-      "worst_return_pct": -21.78
+      "average_return_pct": 1.67,
+      "median_return_pct": 1.14,
+      "best_return_pct": 18.92,
+      "worst_return_pct": -17.43
     }
   },
   "fundamental": {
@@ -307,7 +312,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 113.8%，波动偏高。",
+      "detail": "20日年化波动率 116.3%，波动偏高。",
       "contribution": -5.0
     }
   ],

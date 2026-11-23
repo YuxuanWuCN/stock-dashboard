@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-20 22:05:57+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23 17:34:11+08:00",
+  "trade_date": "2026-11-23",
   "code": "159663",
   "name": "机床ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 49.2,
-    "risk": 47.8,
-    "technical": 42.0,
-    "industry": 27.0,
+    "risk_adjusted": 46.3,
+    "risk": 50.9,
+    "technical": 50.0,
+    "industry": 38.8,
     "leading": 50.0
   },
   "leading": {
@@ -42,13 +42,18 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-20 22:05:21"
+    "updated_at": "2026-11-23 17:33:34"
   },
   "nale_network": {
     "sector_name": "工业母机",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "159663",
+      "name": "机床ETF",
+      "change_pct": 6.153846153846142,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -70,14 +75,14 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 56.41,
+    "annualized_volatility_20d_pct": 61.37,
     "max_drawdown_60d_pct": -35.64,
-    "atr14_pct": 5.38,
+    "atr14_pct": 5.32,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 58.4,
-        "value": 56.41
+        "score": 64.2,
+        "value": 61.37
       },
       {
         "name": "60日最大回撤",
@@ -86,13 +91,13 @@
       },
       {
         "name": "ATR百分比",
-        "score": 56.1,
-        "value": 5.38
+        "score": 53.8,
+        "value": 5.32
       },
       {
         "name": "量价异常",
-        "score": 38.2,
-        "value": 1.15
+        "score": 56.1,
+        "value": 1.2
       },
       {
         "name": "行业波动",
@@ -118,19 +123,19 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 0.688,
-    "ma10": 0.73,
-    "ma20": 0.7455,
-    "ma60": 0.8628333333333333,
-    "rsi14": 29.9,
-    "macd_dif": -0.04106901461717272,
-    "macd_dea": -0.03597225000259513,
-    "macd_hist": -0.010193529229155174,
-    "atr14_pct": 5.376841938451672,
-    "boll_position": -0.09785666452361301,
-    "return_5d_pct": -13.33333333333333,
-    "return_20d_pct": -19.753086419753085,
-    "volume_ratio_5d": 1.15
+    "ma5": 0.6839999999999999,
+    "ma10": 0.7230000000000001,
+    "ma20": 0.7405,
+    "ma60": 0.8576666666666666,
+    "rsi14": 38.5,
+    "macd_dif": -0.04049566788558556,
+    "macd_dea": -0.03687693355229408,
+    "macd_hist": -0.007237468666582966,
+    "atr14_pct": 5.32446318262985,
+    "boll_position": 0.18678820102018923,
+    "return_5d_pct": -2.8169014084507116,
+    "return_20d_pct": -12.658227848101278,
+    "volume_ratio_5d": 1.2
   },
   "industry": {
     "name": "工业母机",
@@ -139,7 +144,7 @@
     "return_5d_pct": -6.49,
     "return_20d_pct": -12.14,
     "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": -7.61
+    "relative_strength_20d_pct": -1.58
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +152,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 63.3,
-      "average_return_pct": 1.84,
-      "median_return_pct": 3.3,
-      "best_return_pct": 11.11,
-      "worst_return_pct": -8.7
+      "up_probability_pct": 60.0,
+      "average_return_pct": 0.28,
+      "median_return_pct": 1.28,
+      "best_return_pct": 12.22,
+      "worst_return_pct": -10.53
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.37,
-      "median_return_pct": 2.7,
-      "best_return_pct": 17.09,
-      "worst_return_pct": -11.22
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.34,
+      "median_return_pct": -0.42,
+      "best_return_pct": 15.38,
+      "worst_return_pct": -18.33
     }
   },
   "fundamental": null,
@@ -182,15 +187,9 @@
       "contribution": -7.0
     },
     {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=29.9，短期超卖。",
-      "contribution": -5.0
-    },
-    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 56.4%，波动偏高。",
+      "detail": "20日年化波动率 61.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

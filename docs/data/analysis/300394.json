@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-20 22:05:57+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23 17:34:11+08:00",
+  "trade_date": "2026-11-23",
   "code": "300394",
   "name": "天孚通信",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 45.3,
-    "risk": 75.6,
-    "technical": 60.0,
+    "risk_adjusted": 47.7,
+    "risk": 75.7,
+    "technical": 73.0,
     "industry": 27.0,
     "leading": 50.0
   },
@@ -46,13 +46,18 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-20 22:04:21"
+    "updated_at": "2026-11-23 17:32:27"
   },
   "nale_network": {
     "sector_name": "光器件",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 100.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "300394",
+      "name": "天孚通信",
+      "change_pct": 13.818751223331367,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
@@ -74,14 +79,14 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 126.28,
+    "annualized_volatility_20d_pct": 139.2,
     "max_drawdown_60d_pct": -64.1,
-    "atr14_pct": 13.75,
+    "atr14_pct": 12.32,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 97.1,
-        "value": 126.28
+        "score": 98.8,
+        "value": 139.2
       },
       {
         "name": "60日最大回撤",
@@ -91,12 +96,12 @@
       {
         "name": "ATR百分比",
         "score": 97.7,
-        "value": 13.75
+        "value": 12.32
       },
       {
         "name": "量价异常",
-        "score": 22.5,
-        "value": 0.92
+        "score": 18.5,
+        "value": 0.95
       },
       {
         "name": "行业波动",
@@ -122,19 +127,19 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 107.218,
-    "ma10": 119.471,
-    "ma20": 137.21,
-    "ma60": 211.88683333333333,
-    "rsi14": 28.9,
-    "macd_dif": -27.58577775263774,
-    "macd_dea": -27.752810820498865,
-    "macd_hist": 0.33406613572225297,
-    "atr14_pct": 13.75173893909269,
-    "boll_position": 0.19627983378042588,
-    "return_5d_pct": -18.24945995679653,
-    "return_20d_pct": -49.11607987650017,
-    "volume_ratio_5d": 0.92
+    "ma5": 108.43800000000002,
+    "ma10": 118.81899999999999,
+    "ma20": 133.176,
+    "ma60": 209.28216666666668,
+    "rsi14": 36.5,
+    "macd_dif": -26.04372070605477,
+    "macd_dea": -27.410992805750386,
+    "macd_hist": 2.7345441993912303,
+    "atr14_pct": 12.318501980511646,
+    "boll_position": 0.33557265071294234,
+    "return_5d_pct": 5.535390199637025,
+    "return_20d_pct": -40.958472941415366,
+    "volume_ratio_5d": 0.95
   },
   "industry": {
     "name": "光器件",
@@ -143,7 +148,7 @@
     "return_5d_pct": -6.49,
     "return_20d_pct": -12.14,
     "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": -36.97
+    "relative_strength_20d_pct": -29.88
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -151,18 +156,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 3.92,
-      "median_return_pct": 4.91,
-      "best_return_pct": 26.88,
-      "worst_return_pct": -23.51
+      "up_probability_pct": 46.7,
+      "average_return_pct": -1.12,
+      "median_return_pct": -0.36,
+      "best_return_pct": 24.88,
+      "worst_return_pct": -29.63
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 1.66,
-      "median_return_pct": 2.01,
-      "best_return_pct": 35.0,
-      "worst_return_pct": -24.57
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.34,
+      "median_return_pct": 1.68,
+      "best_return_pct": 31.06,
+      "worst_return_pct": -32.48
     }
   },
   "fundamental": {
@@ -306,15 +311,9 @@
       "contribution": -7.0
     },
     {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=28.9，短期超卖。",
-      "contribution": -5.0
-    },
-    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 126.3%，波动偏高。",
+      "detail": "20日年化波动率 139.2%，波动偏高。",
       "contribution": -5.0
     }
   ],
