@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-23",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-24",
   "code": "601689",
   "name": "拓普集团",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 58.8,
-    "risk": 38.3,
-    "technical": 85.0,
+    "risk_adjusted": 60.6,
+    "risk": 43.6,
+    "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,21 +42,16 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:32:45"
+    "updated_at": "2026-11-24 17:32:59"
   },
   "nale_network": {
     "sector_name": "底盘/机器人执行器",
     "sector_breadth_pct": 100.0,
-    "tier_role": "leader",
-    "leader_stock": {
-      "code": "601689",
-      "name": "拓普集团",
-      "change_pct": 9.997921430056127,
-      "is_limit_up": true
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": true,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
     "leader_corr_with_stock": null,
@@ -65,44 +60,44 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.557,
-      "dynamic_alpha_physical_peak": 0.564
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 57.8,
+    "annualized_volatility_20d_pct": 58.05,
     "max_drawdown_60d_pct": -20.7,
-    "atr14_pct": 4.88,
+    "atr14_pct": 4.86,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 59.0,
-        "value": 57.8
+        "score": 61.3,
+        "value": 58.05
       },
       {
         "name": "60日最大回撤",
-        "score": 34.1,
+        "score": 32.9,
         "value": -20.7
       },
       {
         "name": "ATR百分比",
         "score": 45.7,
-        "value": 4.88
+        "value": 4.86
       },
       {
         "name": "量价异常",
-        "score": 28.9,
-        "value": 1.09
+        "score": 77.5,
+        "value": 1.26
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.16
+        "value": 31.47
       }
     ]
   },
@@ -117,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.564
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 49.43599999999999,
-    "ma10": 49.733,
-    "ma20": 47.294,
-    "ma60": 45.3615,
-    "rsi14": 65.7,
-    "macd_dif": 1.6459742264198454,
-    "macd_dea": 1.301978217603023,
-    "macd_hist": 0.6879920176336447,
-    "atr14_pct": 4.8800943642462915,
-    "boll_position": 1.0067689023156103,
-    "return_5d_pct": 6.586102719033238,
-    "return_20d_pct": 20.272727272727288,
-    "volume_ratio_5d": 1.09
+    "ma5": 50.577999999999996,
+    "ma10": 50.321999999999996,
+    "ma20": 47.797000000000004,
+    "ma60": 45.495000000000005,
+    "rsi14": 68.2,
+    "macd_dif": 1.9587086977690973,
+    "macd_dea": 1.433324313636238,
+    "macd_hist": 1.0507687682657187,
+    "atr14_pct": 4.860075385783832,
+    "boll_position": 1.0297285985651832,
+    "return_5d_pct": 11.748971193415647,
+    "return_20d_pct": 22.73446327683617,
+    "volume_ratio_5d": 1.26
   },
   "industry": {
     "name": "底盘/机器人执行器",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
-    "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 31.35
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
+    "return_60d_pct": -25.82,
+    "relative_strength_20d_pct": 29.77
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -152,17 +147,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -1.67,
-      "median_return_pct": -0.63,
-      "best_return_pct": 8.24,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -2.69,
+      "median_return_pct": -2.72,
+      "best_return_pct": 8.02,
       "worst_return_pct": -12.33
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -1.92,
-      "median_return_pct": -1.39,
-      "best_return_pct": 12.49,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -2.42,
+      "median_return_pct": -1.96,
+      "best_return_pct": 18.35,
       "worst_return_pct": -15.33
     }
   },
@@ -315,7 +310,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 57.8%，波动偏高。",
+      "detail": "20日年化波动率 58.0%，波动偏高。",
       "contribution": -5.0
     }
   ],

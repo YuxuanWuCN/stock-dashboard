@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-23",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-24",
   "code": "159981",
   "name": "能源化工ETF",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 69.6,
-    "risk": 24.5,
-    "technical": 50.0,
-    "industry": 42.0,
+    "risk_adjusted": 71.9,
+    "risk": 24.4,
+    "technical": 58.0,
+    "industry": 34.2,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:33:34"
+    "updated_at": "2026-11-24 17:33:44"
   },
   "nale_network": {
     "sector_name": "能化商品",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,14 +70,14 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 33.4,
+    "annualized_volatility_20d_pct": 33.42,
     "max_drawdown_60d_pct": -12.37,
-    "atr14_pct": 2.69,
+    "atr14_pct": 2.61,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 24.9,
-        "value": 33.4
+        "score": 25.4,
+        "value": 33.42
       },
       {
         "name": "60日最大回撤",
@@ -86,18 +86,18 @@
       },
       {
         "name": "ATR百分比",
-        "score": 21.4,
-        "value": 2.69
+        "score": 20.8,
+        "value": 2.61
       },
       {
         "name": "量价异常",
-        "score": 96.0,
-        "value": 0.5
+        "score": 95.4,
+        "value": 0.57
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.16
+        "value": 31.47
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "range",
-    "ma5": 1.722,
-    "ma10": 1.7449999999999999,
-    "ma20": 1.8104999999999998,
-    "ma60": 1.7714999999999999,
-    "rsi14": 39.3,
-    "macd_dif": -0.027491950041576008,
-    "macd_dea": -0.012802094556702611,
-    "macd_hist": -0.029379710969746793,
-    "atr14_pct": 2.6925055263894273,
-    "boll_position": 0.17544329552647966,
-    "return_5d_pct": -4.49438202247191,
-    "return_20d_pct": -10.994764397905755,
-    "volume_ratio_5d": 0.5
+    "ma5": 1.714,
+    "ma10": 1.7440000000000002,
+    "ma20": 1.8,
+    "ma60": 1.7736666666666667,
+    "rsi14": 40.8,
+    "macd_dif": -0.029171391505603772,
+    "macd_dea": -0.016075953946482844,
+    "macd_hist": -0.026190875118241856,
+    "atr14_pct": 2.610876028955988,
+    "boll_position": 0.2318386467746827,
+    "return_5d_pct": -2.285714285714291,
+    "return_20d_pct": -10.9375,
+    "volume_ratio_5d": 0.57
   },
   "industry": {
     "name": "能化商品",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
-    "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 0.09
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
+    "return_60d_pct": -25.82,
+    "relative_strength_20d_pct": -3.9
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -154,22 +154,15 @@
       "worst_return_pct": -4.3
     },
     "horizon_5d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 1.81,
+      "up_probability_pct": 66.7,
+      "average_return_pct": 1.87,
       "median_return_pct": 2.2,
-      "best_return_pct": 15.48,
-      "worst_return_pct": -5.75
+      "best_return_pct": 14.84,
+      "worst_return_pct": -5.38
     }
   },
   "fundamental": null,
-  "reasons": [
-    {
-      "type": "warning",
-      "title": "成交缩量",
-      "detail": "近5日量能仅为前期0.50倍。",
-      "contribution": -3.0
-    }
-  ],
+  "reasons": [],
   "kline_file": "../kline/159981.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

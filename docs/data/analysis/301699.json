@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-23",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-24",
   "code": "301699",
   "name": "洛轴股份",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": null
   },
   "scores": {
-    "risk_adjusted": 47.4,
-    "risk": 72.0,
-    "technical": 71.0,
-    "industry": 39.7,
+    "risk_adjusted": 45.4,
+    "risk": 70.5,
+    "technical": 66.0,
+    "industry": 34.9,
     "leading": 50.0
   },
   "leading": {
@@ -42,30 +42,30 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:33:51"
+    "updated_at": "2026-11-24 17:34:00"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 97.4,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 38.5,
+    "tier_role": "neutral",
     "leader_stock": {
-      "code": "688137",
-      "name": "近岸蛋白",
-      "change_pct": 11.628865979381445,
+      "code": "301716",
+      "name": "N鸿富诚",
+      "change_pct": 10.126802153899591,
       "is_limit_up": false
     },
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": -0.04,
+    "leader_corr_with_stock": 0.25,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -75,14 +75,14 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 66.71,
+    "annualized_volatility_20d_pct": 65.38,
     "max_drawdown_60d_pct": null,
-    "atr14_pct": 7.98,
+    "atr14_pct": 8.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 69.4,
-        "value": 66.71
+        "score": 68.8,
+        "value": 65.38
       },
       {
         "name": "60日最大回撤",
@@ -91,18 +91,18 @@
       },
       {
         "name": "ATR百分比",
-        "score": 78.6,
-        "value": 7.98
+        "score": 80.3,
+        "value": 8.14
       },
       {
         "name": "量价异常",
-        "score": 82.1,
-        "value": 0.69
+        "score": 65.9,
+        "value": 0.79
       },
       {
         "name": "行业波动",
         "score": 98.3,
-        "value": 66.71
+        "value": 65.38
       }
     ]
   },
@@ -117,34 +117,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "range",
-    "ma5": 28.062,
-    "ma10": 29.753999999999998,
-    "ma20": 30.6735,
+    "ma5": 28.224,
+    "ma10": 29.281,
+    "ma20": 30.503500000000003,
     "ma60": null,
-    "rsi14": 46.6,
-    "macd_dif": -0.8201627922129084,
-    "macd_dea": -0.5008840830374472,
-    "macd_hist": -0.6385574183509224,
-    "atr14_pct": 7.977150862266407,
-    "boll_position": 0.38465535471423856,
-    "return_5d_pct": 2.8344279294849617,
-    "return_20d_pct": -12.24188790560472,
-    "volume_ratio_5d": 0.69
+    "rsi14": 43.8,
+    "macd_dif": -0.8279142162267377,
+    "macd_dea": -0.5662901096753054,
+    "macd_hist": -0.5232482131028646,
+    "atr14_pct": 8.138436323783482,
+    "boll_position": 0.27767043629078075,
+    "return_5d_pct": 2.9032258064516148,
+    "return_20d_pct": -10.58860168171909,
+    "volume_ratio_5d": 0.79
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
     "return_60d_pct": null,
-    "relative_strength_20d_pct": -1.16
+    "relative_strength_20d_pct": -3.55
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -291,7 +291,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 66.7%，波动偏高。",
+      "detail": "20日年化波动率 65.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

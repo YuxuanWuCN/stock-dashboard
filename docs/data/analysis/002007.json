@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-23",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-24",
   "code": "002007",
   "name": "华兰生物",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 63.6,
-    "risk": 16.8,
-    "technical": 50.0,
-    "industry": 42.0,
+    "risk_adjusted": 57.4,
+    "risk": 18.1,
+    "technical": 42.0,
+    "industry": 32.3,
     "leading": 50.0
   },
   "leading": {
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:32:51"
+    "updated_at": "2026-11-24 17:33:04"
   },
   "nale_network": {
     "sector_name": "血制品/流感疫苗",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 26.53,
-    "max_drawdown_60d_pct": -13.23,
-    "atr14_pct": 2.19,
+    "annualized_volatility_20d_pct": 26.52,
+    "max_drawdown_60d_pct": -14.83,
+    "atr14_pct": 2.29,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 14.5,
-        "value": 26.53
+        "score": 15.0,
+        "value": 26.52
       },
       {
         "name": "60日最大回撤",
-        "score": 14.5,
-        "value": -13.23
+        "score": 20.2,
+        "value": -14.83
       },
       {
         "name": "ATR百分比",
-        "score": 14.5,
-        "value": 2.19
+        "score": 15.6,
+        "value": 2.29
       },
       {
         "name": "量价异常",
-        "score": 58.4,
-        "value": 0.79
+        "score": 53.8,
+        "value": 0.82
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.16
+        "value": 31.47
       }
     ]
   },
@@ -118,28 +118,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 11.608,
-    "ma10": 11.693999999999999,
-    "ma20": 11.9115,
-    "ma60": 12.554833333333333,
-    "rsi14": 31.6,
-    "macd_dif": -0.28964253891547465,
-    "macd_dea": -0.2606215678733644,
-    "macd_hist": -0.05804194208422053,
-    "atr14_pct": 2.188202179272505,
-    "boll_position": 0.1019394943674917,
-    "return_5d_pct": -2.3116438356164393,
-    "return_20d_pct": -11.89189189189188,
-    "volume_ratio_5d": 0.79
+    "ma5": 11.501999999999999,
+    "ma10": 11.617,
+    "ma20": 11.836,
+    "ma60": 12.530833333333334,
+    "rsi14": 28.2,
+    "macd_dif": -0.3116791891146846,
+    "macd_dea": -0.2708330921216284,
+    "macd_hist": -0.08169219398611238,
+    "atr14_pct": 2.29321447226716,
+    "boll_position": -0.039265073007447034,
+    "return_5d_pct": -4.518329070758753,
+    "return_20d_pct": -11.880409126671921,
+    "volume_ratio_5d": 0.82
   },
   "industry": {
     "name": "血制品/流感疫苗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
-    "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": -0.81
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
+    "return_60d_pct": -25.82,
+    "relative_strength_20d_pct": -4.84
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.05,
-      "median_return_pct": -0.11,
+      "up_probability_pct": 66.7,
+      "average_return_pct": 0.58,
+      "median_return_pct": 0.9,
       "best_return_pct": 5.75,
       "worst_return_pct": -7.0
     },
     "horizon_5d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 0.11,
-      "median_return_pct": 0.36,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.23,
+      "median_return_pct": 0.29,
       "best_return_pct": 8.29,
-      "worst_return_pct": -5.16
+      "worst_return_pct": -5.18
     }
   },
   "fundamental": {
@@ -288,6 +288,12 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=28.2，短期超卖。",
+      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/002007.json",

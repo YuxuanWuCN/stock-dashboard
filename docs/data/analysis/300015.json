@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-23",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-24",
   "code": "300015",
   "name": "爱尔眼科",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 76.4,
-    "risk": 13.6,
-    "technical": 100.0,
+    "risk_adjusted": 77.6,
+    "risk": 15.5,
+    "technical": 85.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,41 +42,36 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:32:10"
+    "updated_at": "2026-11-24 17:32:33"
   },
   "nale_network": {
     "sector_name": "医药",
-    "sector_breadth_pct": 83.3,
-    "tier_role": "core_mid",
-    "leader_stock": {
-      "code": "603259",
-      "name": "药明康德",
-      "change_pct": 4.0838068181818175,
-      "is_limit_up": false
-    },
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
         "code": "300760",
         "name": "迈瑞医疗",
-        "corr": 0.6
+        "corr": 0.61
       },
       {
         "code": "300122",
         "name": "智飞生物",
-        "corr": 0.44
+        "corr": 0.45
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": 0.19,
+    "leader_corr_with_stock": null,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -86,34 +81,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 25.3,
+    "annualized_volatility_20d_pct": 26.31,
     "max_drawdown_60d_pct": -8.91,
-    "atr14_pct": 2.42,
+    "atr14_pct": 2.58,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 12.7,
-        "value": 25.3
+        "score": 14.5,
+        "value": 26.31
       },
       {
         "name": "60日最大回撤",
-        "score": 5.2,
+        "score": 4.6,
         "value": -8.91
       },
       {
         "name": "ATR百分比",
-        "score": 19.1,
-        "value": 2.42
+        "score": 20.2,
+        "value": 2.58
       },
       {
         "name": "量价异常",
-        "score": 46.2,
-        "value": 0.84
+        "score": 59.0,
+        "value": 0.81
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.16
+        "value": 31.47
       }
     ]
   },
@@ -128,34 +123,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "uptrend",
-    "ma5": 9.05,
-    "ma10": 8.926,
-    "ma20": 8.7915,
-    "ma60": 8.326,
-    "rsi14": 63.6,
-    "macd_dif": 0.213749300204908,
-    "macd_dea": 0.21031558370274445,
-    "macd_hist": 0.006867433004327128,
-    "atr14_pct": 2.4227804027225974,
-    "boll_position": 0.7195758499639592,
-    "return_5d_pct": 0.6674082313681939,
-    "return_20d_pct": 7.482185273159159,
-    "volume_ratio_5d": 0.84
+    "trend": "rebound",
+    "ma5": 8.98,
+    "ma10": 8.921,
+    "ma20": 8.818999999999999,
+    "ma60": 8.333666666666666,
+    "rsi14": 53.6,
+    "macd_dif": 0.1890242883833526,
+    "macd_dea": 0.20605732463886609,
+    "macd_hist": -0.034066072511026946,
+    "atr14_pct": 2.5814944349051427,
+    "boll_position": 0.4821997473667691,
+    "return_5d_pct": -3.825136612021851,
+    "return_20d_pct": 6.666666666666665,
+    "volume_ratio_5d": 0.81
   },
   "industry": {
     "name": "医药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
-    "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 18.56
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
+    "return_60d_pct": -25.82,
+    "relative_strength_20d_pct": 13.7
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -163,16 +158,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 26.7,
-      "average_return_pct": -0.91,
-      "median_return_pct": -1.72,
-      "best_return_pct": 8.64,
-      "worst_return_pct": -7.69
+      "up_probability_pct": 56.7,
+      "average_return_pct": 0.39,
+      "median_return_pct": 1.07,
+      "best_return_pct": 7.73,
+      "worst_return_pct": -8.23
     },
     "horizon_5d": {
-      "up_probability_pct": 33.3,
-      "average_return_pct": -0.91,
-      "median_return_pct": -1.73,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.3,
+      "median_return_pct": -0.68,
       "best_return_pct": 12.64,
       "worst_return_pct": -9.78
     }
@@ -307,9 +302,9 @@
   "reasons": [
     {
       "type": "positive",
-      "title": "中短期趋势向上",
-      "detail": "收盘价位于20日和60日均线上方。",
-      "contribution": 8.0
+      "title": "短期反弹中",
+      "detail": "价格站上20日均线，关注持续性。",
+      "contribution": 5.0
     }
   ],
   "kline_file": "../kline/300015.json",

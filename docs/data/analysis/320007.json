@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-23",
   "code": "320007",
   "name": "诺安成长混合",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 65.5,
-    "risk": 35.3,
-    "technical": 58.0,
-    "industry": 57.0,
+    "risk_adjusted": 64.3,
+    "risk": 35.4,
+    "technical": 63.0,
+    "industry": 53.5,
     "leading": 50.0
   },
   "leading": {
@@ -45,15 +45,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:33:35"
+    "updated_at": "2026-11-24 17:33:44"
   },
   "nale_network": {
     "sector_name": "公募半导体",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -63,7 +63,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -73,24 +73,24 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 37.11,
+    "annualized_volatility_20d_pct": 37.31,
     "max_drawdown_60d_pct": -16.54,
-    "atr14_pct": 1.65,
+    "atr14_pct": 1.59,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 29.5,
-        "value": 37.11
+        "score": 31.2,
+        "value": 37.31
       },
       {
         "name": "60日最大回撤",
-        "score": 25.4,
+        "score": 24.9,
         "value": -16.54
       },
       {
         "name": "ATR百分比",
-        "score": 4.0,
-        "value": 1.65
+        "score": 2.3,
+        "value": 1.59
       },
       {
         "name": "量价异常",
@@ -100,7 +100,7 @@
       {
         "name": "行业波动",
         "score": 95.4,
-        "value": 31.16
+        "value": 32.31
       }
     ]
   },
@@ -115,34 +115,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
     "ma5": 2.24,
-    "ma10": 2.281,
-    "ma20": 2.279,
-    "ma60": 2.39,
-    "rsi14": 40.1,
-    "macd_dif": -0.03127372518001792,
-    "macd_dea": -0.02962237107368081,
-    "macd_hist": -0.00330270821267422,
-    "atr14_pct": 1.6543528364868116,
-    "boll_position": 0.19875601010884233,
-    "return_5d_pct": -3.493449781659397,
-    "return_20d_pct": -7.14285714285714,
+    "ma10": 2.2729999999999997,
+    "ma20": 2.2725,
+    "ma60": 2.384,
+    "rsi14": 42.6,
+    "macd_dif": -0.0321560067072455,
+    "macd_dea": -0.030129098200393747,
+    "macd_hist": -0.004053817013703505,
+    "atr14_pct": 1.5864688338329953,
+    "boll_position": 0.30693781140022874,
+    "return_5d_pct": 0.0,
+    "return_20d_pct": -5.508474576271183,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "公募半导体",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
-    "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 5.0
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
+    "return_60d_pct": -25.82,
+    "relative_strength_20d_pct": 3.85
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -150,18 +150,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.04,
-      "median_return_pct": 0.25,
-      "best_return_pct": 7.28,
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.83,
+      "median_return_pct": -1.83,
+      "best_return_pct": 9.52,
       "worst_return_pct": -10.18
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.55,
-      "median_return_pct": -1.55,
+      "up_probability_pct": 40.0,
+      "average_return_pct": 0.34,
+      "median_return_pct": -1.45,
       "best_return_pct": 16.86,
-      "worst_return_pct": -5.93
+      "worst_return_pct": -6.37
     }
   },
   "fundamental": null,

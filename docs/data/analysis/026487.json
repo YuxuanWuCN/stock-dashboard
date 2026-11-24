@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-23",
   "code": "026487",
   "name": "大成竞先成长混合C",
   "type": "etf",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 43.8,
+    "risk_adjusted": 43.9,
     "risk": 36.2,
-    "technical": 52.0,
-    "industry": 52.2,
+    "technical": 60.0,
+    "industry": 54.7,
     "leading": 50.0
   },
   "leading": {
@@ -42,19 +42,24 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:32:13"
+    "updated_at": "2026-11-24 17:32:37"
   },
   "nale_network": {
     "sector_name": "通用",
-    "sector_breadth_pct": 42.9,
+    "sector_breadth_pct": 47.6,
     "tier_role": "neutral",
-    "leader_stock": null,
+    "leader_stock": {
+      "code": "513520",
+      "name": "日经ETF",
+      "change_pct": 4.1666666666666705,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.06,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
@@ -70,24 +75,24 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 24.03,
+    "annualized_volatility_20d_pct": 23.58,
     "max_drawdown_60d_pct": -31.13,
-    "atr14_pct": 1.3,
+    "atr14_pct": 1.29,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 9.8,
-        "value": 24.03
+        "score": 10.4,
+        "value": 23.58
       },
       {
         "name": "60日最大回撤",
-        "score": 53.8,
+        "score": 53.2,
         "value": -31.13
       },
       {
         "name": "ATR百分比",
         "score": 0.6,
-        "value": 1.3
+        "value": 1.29
       },
       {
         "name": "量价异常",
@@ -97,7 +102,7 @@
       {
         "name": "行业波动",
         "score": 97.7,
-        "value": 31.16
+        "value": 32.31
       }
     ]
   },
@@ -118,46 +123,46 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 0.742,
-    "ma10": 0.754,
-    "ma20": 0.7635,
-    "ma60": 0.9036666666666667,
-    "rsi14": 23.1,
-    "macd_dif": -0.03777572387806516,
-    "macd_dea": -0.0420468607206227,
-    "macd_hist": 0.008542273685115079,
-    "atr14_pct": 1.3008677833579305,
-    "boll_position": -0.026792075867380475,
-    "return_5d_pct": -2.6666666666666727,
-    "return_20d_pct": -8.750000000000002,
+    "ma5": 0.74,
+    "ma10": 0.7510000000000001,
+    "ma20": 0.7615000000000001,
+    "ma60": 0.8986666666666666,
+    "rsi14": 28.9,
+    "macd_dif": -0.036222020275682665,
+    "macd_dea": -0.04088189263163469,
+    "macd_hist": 0.009319744711904054,
+    "atr14_pct": 1.2881501220141662,
+    "boll_position": 0.16840566206944305,
+    "return_5d_pct": -1.3333333333333308,
+    "return_20d_pct": -5.128205128205132,
     "volume_ratio_5d": null
   },
   "industry": {
     "name": "通用",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
-    "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 3.39
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
+    "return_60d_pct": -25.82,
+    "relative_strength_20d_pct": 4.24
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 13,
+    "sample_size": 15,
     "minimum_sample_size": 15,
-    "confidence": "low",
+    "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.2,
-      "average_return_pct": -1.91,
-      "median_return_pct": 0.0,
-      "best_return_pct": 6.19,
+      "up_probability_pct": 26.7,
+      "average_return_pct": -3.91,
+      "median_return_pct": -2.91,
+      "best_return_pct": 1.92,
       "worst_return_pct": -12.84
     },
     "horizon_5d": {
-      "up_probability_pct": 38.5,
-      "average_return_pct": -2.17,
-      "median_return_pct": -1.0,
-      "best_return_pct": 8.25,
+      "up_probability_pct": 20.0,
+      "average_return_pct": -3.62,
+      "median_return_pct": -3.88,
+      "best_return_pct": 3.92,
       "worst_return_pct": -11.01
     }
   },
@@ -184,7 +189,7 @@
     {
       "type": "warning",
       "title": "RSI偏低",
-      "detail": "RSI14=23.1，短期超卖。",
+      "detail": "RSI14=28.9，短期超卖。",
       "contribution": -5.0
     }
   ],

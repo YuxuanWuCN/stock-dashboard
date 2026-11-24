@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-23",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-24",
   "code": "512760",
   "name": "芯片ETF",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 52.8,
-    "risk": 45.5,
-    "technical": 73.0,
+    "risk_adjusted": 55.2,
+    "risk": 45.6,
+    "technical": 81.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,25 +42,30 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:32:17"
+    "updated_at": "2026-11-24 17:32:40"
   },
   "nale_network": {
     "sector_name": "通用",
-    "sector_breadth_pct": 42.9,
+    "sector_breadth_pct": 47.6,
     "tier_role": "neutral",
-    "leader_stock": null,
+    "leader_stock": {
+      "code": "513520",
+      "name": "日经ETF",
+      "change_pct": 4.1666666666666705,
+      "is_limit_up": false
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [
       {
-        "code": "510500",
-        "name": "中证500ETF",
-        "corr": 0.88
-      },
-      {
         "code": "159915",
         "name": "创业板ETF",
+        "corr": 0.87
+      },
+      {
+        "code": "510500",
+        "name": "中证500ETF",
         "corr": 0.87
       },
       {
@@ -76,11 +81,11 @@
       {
         "code": "512660",
         "name": "军工ETF",
-        "corr": 0.62
+        "corr": 0.63
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.35,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
@@ -96,34 +101,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 56.88,
+    "annualized_volatility_20d_pct": 54.7,
     "max_drawdown_60d_pct": -32.14,
-    "atr14_pct": 5.23,
+    "atr14_pct": 5.14,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 58.4,
-        "value": 56.88
+        "score": 57.8,
+        "value": 54.7
       },
       {
         "name": "60日最大回撤",
-        "score": 56.6,
+        "score": 56.1,
         "value": -32.14
       },
       {
         "name": "ATR百分比",
-        "score": 52.0,
-        "value": 5.23
+        "score": 49.7,
+        "value": 5.14
       },
       {
         "name": "量价异常",
-        "score": 32.9,
-        "value": 0.91
+        "score": 41.6,
+        "value": 0.87
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.16
+        "value": 31.47
       }
     ]
   },
@@ -144,28 +149,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 0.82,
-    "ma10": 0.833,
+    "ma5": 0.8219999999999998,
+    "ma10": 0.8310000000000001,
     "ma20": 0.8234999999999999,
-    "ma60": 0.9506666666666667,
-    "rsi14": 40.9,
-    "macd_dif": -0.026792392454300096,
-    "macd_dea": -0.03245949524676511,
-    "macd_hist": 0.011334205584930035,
-    "atr14_pct": 5.226817876207886,
-    "boll_position": 0.37779677451645927,
-    "return_5d_pct": 0.0,
-    "return_20d_pct": -5.813953488372081,
-    "volume_ratio_5d": 0.91
+    "ma60": 0.9465,
+    "rsi14": 43.1,
+    "macd_dif": -0.02544806457563631,
+    "macd_dea": -0.031057209112539355,
+    "macd_hist": 0.011218289073806093,
+    "atr14_pct": 5.14271709376908,
+    "boll_position": 0.4683176822820451,
+    "return_5d_pct": 1.2345679012345512,
+    "return_20d_pct": 0.0,
+    "volume_ratio_5d": 0.87
   },
   "industry": {
     "name": "通用",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
-    "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 5.27
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
+    "return_60d_pct": -25.82,
+    "relative_strength_20d_pct": 7.04
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -174,15 +179,15 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 36.7,
-      "average_return_pct": -0.51,
+      "average_return_pct": -0.85,
       "median_return_pct": -2.02,
       "best_return_pct": 11.86,
       "worst_return_pct": -9.68
     },
     "horizon_5d": {
       "up_probability_pct": 40.0,
-      "average_return_pct": -1.36,
-      "median_return_pct": -2.68,
+      "average_return_pct": -1.44,
+      "median_return_pct": -2.4,
       "best_return_pct": 18.8,
       "worst_return_pct": -20.0
     }
@@ -210,7 +215,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 56.9%，波动偏高。",
+      "detail": "20日年化波动率 54.7%，波动偏高。",
       "contribution": -5.0
     }
   ],

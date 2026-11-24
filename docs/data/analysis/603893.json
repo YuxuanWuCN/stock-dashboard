@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-23 17:34:11+08:00",
-  "trade_date": "2026-11-23",
+  "generated_at": "2026-11-24 17:34:20+08:00",
+  "trade_date": "2026-11-24",
   "code": "603893",
   "name": "瑞芯微",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 50.7,
-    "risk": 52.5,
-    "technical": 63.0,
+    "risk_adjusted": 57.3,
+    "risk": 52.0,
+    "technical": 88.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -45,21 +45,16 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-23 17:32:32"
+    "updated_at": "2026-11-24 17:32:54"
   },
   "nale_network": {
     "sector_name": "AIoT芯片",
     "sector_breadth_pct": 100.0,
-    "tier_role": "leader",
-    "leader_stock": {
-      "code": "603893",
-      "name": "瑞芯微",
-      "change_pct": 9.997831273042724,
-      "is_limit_up": true
-    },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": true,
+    "tier_role": "core_mid",
+    "leader_stock": null,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
+    "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
     "leader_corr_with_stock": null,
@@ -68,44 +63,44 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.557,
-      "dynamic_alpha_physical_peak": 0.564
+      "dynamic_alpha_sentiment_t0": 0.2,
+      "dynamic_alpha_physical_peak": 0.2
     }
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 95.56,
+    "annualized_volatility_20d_pct": 90.97,
     "max_drawdown_60d_pct": -23.32,
-    "atr14_pct": 6.82,
+    "atr14_pct": 6.61,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 90.2,
-        "value": 95.56
+        "score": 89.0,
+        "value": 90.97
       },
       {
         "name": "60日最大回撤",
-        "score": 38.7,
+        "score": 38.2,
         "value": -23.32
       },
       {
         "name": "ATR百分比",
-        "score": 69.9,
-        "value": 6.82
+        "score": 68.2,
+        "value": 6.61
       },
       {
         "name": "量价异常",
-        "score": 17.3,
-        "value": 0.95
+        "score": 20.2,
+        "value": 1.04
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.16
+        "value": 31.47
       }
     ]
   },
@@ -120,34 +115,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.564
+    "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 195.856,
-    "ma10": 209.461,
-    "ma20": 203.2365,
-    "ma60": 196.68333333333334,
-    "rsi14": 50.2,
-    "macd_dif": 0.2036620929887647,
-    "macd_dea": 2.6930364225282597,
-    "macd_hist": -4.97874865907899,
-    "atr14_pct": 6.819487310945982,
-    "boll_position": 0.49454533767214776,
-    "return_5d_pct": -2.7420901246404616,
-    "return_20d_pct": -3.4823977164605058,
-    "volume_ratio_5d": 0.95
+    "trend": "uptrend",
+    "ma5": 196.362,
+    "ma10": 206.89000000000001,
+    "ma20": 203.96099999999998,
+    "ma60": 197.23149999999998,
+    "rsi14": 52.1,
+    "macd_dif": 0.5757544020509897,
+    "macd_dea": 2.269580018432806,
+    "macd_hist": -3.3876512327636323,
+    "atr14_pct": 6.60788768249808,
+    "boll_position": 0.5544940489257988,
+    "return_5d_pct": 1.2343871975019516,
+    "return_20d_pct": 7.5077720207253895,
+    "volume_ratio_5d": 1.04
   },
   "industry": {
     "name": "AIoT芯片",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -6.49,
-    "return_20d_pct": -12.14,
-    "return_60d_pct": -26.6,
-    "relative_strength_20d_pct": 7.6
+    "return_5d_pct": -2.21,
+    "return_20d_pct": -9.36,
+    "return_60d_pct": -25.82,
+    "relative_strength_20d_pct": 14.54
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -155,16 +150,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": -0.52,
-      "median_return_pct": -1.44,
+      "up_probability_pct": 40.0,
+      "average_return_pct": -1.0,
+      "median_return_pct": -2.55,
       "best_return_pct": 17.35,
       "worst_return_pct": -13.64
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.64,
-      "median_return_pct": -1.55,
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.85,
+      "median_return_pct": -1.77,
       "best_return_pct": 18.69,
       "worst_return_pct": -17.45
     }
@@ -298,6 +293,12 @@
   },
   "reasons": [
     {
+      "type": "positive",
+      "title": "中短期趋势向上",
+      "detail": "收盘价位于20日和60日均线上方。",
+      "contribution": 8.0
+    },
+    {
       "type": "negative",
       "title": "近期回撤较大",
       "detail": "近60日最大回撤 23.3%，风险偏高。",
@@ -310,15 +311,9 @@
       "contribution": -7.0
     },
     {
-      "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
-    },
-    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 95.6%，波动偏高。",
+      "detail": "20日年化波动率 91.0%，波动偏高。",
       "contribution": -5.0
     }
   ],
