@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-24 17:34:20+08:00",
-  "trade_date": "2026-11-24",
+  "generated_at": "2026-11-25 17:34:09+08:00",
+  "trade_date": "2026-11-25",
   "code": "002007",
   "name": "华兰生物",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 57.4,
-    "risk": 18.1,
-    "technical": 42.0,
-    "industry": 32.3,
+    "risk_adjusted": 56.8,
+    "risk": 10.9,
+    "technical": 50.0,
+    "industry": 52.3,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-24 17:33:04"
+    "updated_at": "2026-11-25 17:32:54"
   },
   "nale_network": {
     "sector_name": "血制品/流感疫苗",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 26.52,
+    "annualized_volatility_20d_pct": 21.17,
     "max_drawdown_60d_pct": -14.83,
-    "atr14_pct": 2.29,
+    "atr14_pct": 2.24,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 15.0,
-        "value": 26.52
+        "score": 6.9,
+        "value": 21.17
       },
       {
         "name": "60日最大回撤",
-        "score": 20.2,
+        "score": 18.5,
         "value": -14.83
       },
       {
         "name": "ATR百分比",
-        "score": 15.6,
-        "value": 2.29
+        "score": 13.9,
+        "value": 2.24
       },
       {
         "name": "量价异常",
-        "score": 53.8,
-        "value": 0.82
+        "score": 13.3,
+        "value": 0.97
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.47
+        "value": 30.26
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 11.501999999999999,
-    "ma10": 11.617,
-    "ma20": 11.836,
-    "ma60": 12.530833333333334,
-    "rsi14": 28.2,
-    "macd_dif": -0.3116791891146846,
-    "macd_dea": -0.2708330921216284,
-    "macd_hist": -0.08169219398611238,
-    "atr14_pct": 2.29321447226716,
-    "boll_position": -0.039265073007447034,
-    "return_5d_pct": -4.518329070758753,
-    "return_20d_pct": -11.880409126671921,
-    "volume_ratio_5d": 0.82
+    "ma5": 11.411999999999999,
+    "ma10": 11.565000000000001,
+    "ma20": 11.8015,
+    "ma60": 12.504500000000002,
+    "rsi14": 33.7,
+    "macd_dif": -0.3134266595252768,
+    "macd_dea": -0.27935180584052893,
+    "macd_hist": -0.06814970736949577,
+    "atr14_pct": 2.2397232708212402,
+    "boll_position": 0.13469295541425172,
+    "return_5d_pct": -3.8135593220339103,
+    "return_20d_pct": -5.730897009966773,
+    "volume_ratio_5d": 0.97
   },
   "industry": {
     "name": "血制品/流感疫苗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.21,
-    "return_20d_pct": -9.36,
-    "return_60d_pct": -25.82,
-    "relative_strength_20d_pct": -4.84
+    "return_5d_pct": -2.02,
+    "return_20d_pct": -7.31,
+    "return_60d_pct": -24.44,
+    "relative_strength_20d_pct": 3.42
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +147,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 0.58,
-      "median_return_pct": 0.9,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 0.01,
+      "median_return_pct": -0.11,
       "best_return_pct": 5.75,
       "worst_return_pct": -7.0
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.23,
-      "median_return_pct": 0.29,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.3,
+      "median_return_pct": -0.77,
       "best_return_pct": 8.29,
-      "worst_return_pct": -5.18
+      "worst_return_pct": -4.61
     }
   },
   "fundamental": {
@@ -288,12 +288,6 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=28.2，短期超卖。",
-      "contribution": -5.0
     }
   ],
   "kline_file": "../kline/002007.json",

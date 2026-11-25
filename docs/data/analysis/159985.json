@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-24 17:34:20+08:00",
-  "trade_date": "2026-11-24",
+  "generated_at": "2026-11-25 17:34:09+08:00",
+  "trade_date": "2026-11-25",
   "code": "159985",
   "name": "豆粕ETF",
   "type": "etf",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 85.2,
-    "risk": 10.9,
-    "technical": 91.0,
+    "risk_adjusted": 76.8,
+    "risk": 8.5,
+    "technical": 73.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-24 17:33:42"
+    "updated_at": "2026-11-25 17:33:31"
   },
   "nale_network": {
     "sector_name": "农产品大宗",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 20.49,
+    "annualized_volatility_20d_pct": 21.46,
     "max_drawdown_60d_pct": -14.69,
-    "atr14_pct": 1.65,
+    "atr14_pct": 1.73,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 6.4,
-        "value": 20.49
+        "score": 7.5,
+        "value": 21.46
       },
       {
         "name": "60日最大回撤",
-        "score": 19.7,
+        "score": 17.9,
         "value": -14.69
       },
       {
         "name": "ATR百分比",
-        "score": 4.6,
-        "value": 1.65
+        "score": 5.8,
+        "value": 1.73
       },
       {
         "name": "量价异常",
-        "score": 30.6,
-        "value": 1.09
+        "score": 5.2,
+        "value": 1.01
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.47
+        "value": 30.26
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "range",
-    "ma5": 2.1199999999999997,
-    "ma10": 2.144,
-    "ma20": 2.1424999999999996,
-    "ma60": 2.2404999999999995,
-    "rsi14": 49.6,
-    "macd_dif": -0.023739485314847375,
-    "macd_dea": -0.026626234531822304,
-    "macd_hist": 0.005773498433949857,
-    "atr14_pct": 1.650225141987502,
-    "boll_position": 0.641294536424735,
-    "return_5d_pct": 2.369668246445511,
-    "return_20d_pct": -0.4608294930875445,
-    "volume_ratio_5d": 1.09
+    "trend": "downtrend",
+    "ma5": 2.118,
+    "ma10": 2.137,
+    "ma20": 2.14,
+    "ma60": 2.239333333333333,
+    "rsi14": 43.9,
+    "macd_dif": -0.02336328835086743,
+    "macd_dea": -0.025973645309641046,
+    "macd_hist": 0.0052207139175472345,
+    "atr14_pct": 1.7297278309542239,
+    "boll_position": 0.3369179817365916,
+    "return_5d_pct": -0.46948356807510194,
+    "return_20d_pct": -2.304147465437778,
+    "volume_ratio_5d": 1.01
   },
   "industry": {
     "name": "农产品大宗",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.21,
-    "return_20d_pct": -9.36,
-    "return_60d_pct": -25.82,
-    "relative_strength_20d_pct": 6.58
+    "return_5d_pct": -2.02,
+    "return_20d_pct": -7.31,
+    "return_60d_pct": -24.44,
+    "relative_strength_20d_pct": 6.84
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,22 +147,29 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.38,
-      "median_return_pct": -0.48,
-      "best_return_pct": 5.83,
+      "up_probability_pct": 46.7,
+      "average_return_pct": -0.11,
+      "median_return_pct": -0.25,
+      "best_return_pct": 6.0,
       "worst_return_pct": -7.11
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.14,
-      "median_return_pct": 0.04,
-      "best_return_pct": 8.25,
+      "up_probability_pct": 46.7,
+      "average_return_pct": 0.31,
+      "median_return_pct": 0.0,
+      "best_return_pct": 9.0,
       "worst_return_pct": -7.59
     }
   },
   "fundamental": null,
-  "reasons": [],
+  "reasons": [
+    {
+      "type": "negative",
+      "title": "趋势偏弱",
+      "detail": "价格低于主要均线，短期承压。",
+      "contribution": -8.0
+    }
+  ],
   "kline_file": "../kline/159985.json",
   "disclaimer": "基于历史日线的统计分析，仅用于学习和研究，不构成投资建议或收益保证。"
 }

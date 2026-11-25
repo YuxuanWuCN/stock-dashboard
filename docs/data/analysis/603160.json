@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-24 17:34:20+08:00",
-  "trade_date": "2026-11-24",
+  "generated_at": "2026-11-25 17:34:09+08:00",
+  "trade_date": "2026-11-25",
   "code": "603160",
   "name": "汇顶科技",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 58.7,
-    "risk": 39.2,
-    "technical": 58.0,
-    "industry": 42.0,
+    "risk_adjusted": 53.1,
+    "risk": 39.9,
+    "technical": 42.0,
+    "industry": 27.0,
     "leading": 50.0
   },
   "leading": {
@@ -45,15 +45,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-24 17:32:56"
+    "updated_at": "2026-11-25 17:32:48"
   },
   "nale_network": {
     "sector_name": "指纹芯片",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -63,7 +63,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -73,34 +73,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 51.48,
-    "max_drawdown_60d_pct": -17.69,
-    "atr14_pct": 5.52,
+    "annualized_volatility_20d_pct": 51.95,
+    "max_drawdown_60d_pct": -19.83,
+    "atr14_pct": 6.07,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 49.1,
-        "value": 51.48
+        "score": 50.3,
+        "value": 51.95
       },
       {
         "name": "60日最大回撤",
-        "score": 27.2,
-        "value": -17.69
+        "score": 30.6,
+        "value": -19.83
       },
       {
         "name": "ATR百分比",
-        "score": 56.6,
-        "value": 5.52
+        "score": 59.0,
+        "value": 6.07
       },
       {
         "name": "量价异常",
-        "score": 62.4,
-        "value": 0.79
+        "score": 52.6,
+        "value": 0.85
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.47
+        "value": 30.26
       }
     ]
   },
@@ -115,34 +115,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
-    "trend": "rebound",
-    "ma5": 53.434000000000005,
-    "ma10": 55.888,
-    "ma20": 58.4175,
-    "ma60": 54.17966666666667,
-    "rsi14": 45.7,
-    "macd_dif": -0.4433399136244702,
-    "macd_dea": 0.6157441465759071,
-    "macd_hist": -2.118168120400755,
-    "atr14_pct": 5.5228588573857955,
-    "boll_position": 0.22602763963846986,
-    "return_5d_pct": -1.4290882778581704,
-    "return_20d_pct": -6.454935622317592,
-    "volume_ratio_5d": 0.79
+    "trend": "range",
+    "ma5": 52.884,
+    "ma10": 54.835,
+    "ma20": 57.886,
+    "ma60": 54.225166666666674,
+    "rsi14": 38.5,
+    "macd_dif": -0.8128109760929974,
+    "macd_dea": 0.3300331206411264,
+    "macd_hist": -2.2856881934682476,
+    "atr14_pct": 6.07350813373772,
+    "boll_position": 0.04032485696362729,
+    "return_5d_pct": -5.1401869158878455,
+    "return_20d_pct": -17.318344737699576,
+    "volume_ratio_5d": 0.85
   },
   "industry": {
     "name": "指纹芯片",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.21,
-    "return_20d_pct": -9.36,
-    "return_60d_pct": -25.82,
-    "relative_strength_20d_pct": 0.58
+    "return_5d_pct": -2.02,
+    "return_20d_pct": -7.31,
+    "return_60d_pct": -24.44,
+    "relative_strength_20d_pct": -8.17
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -150,17 +150,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": -0.19,
-      "median_return_pct": 0.09,
-      "best_return_pct": 6.49,
-      "worst_return_pct": -9.51
+      "up_probability_pct": 63.3,
+      "average_return_pct": 1.92,
+      "median_return_pct": 1.07,
+      "best_return_pct": 13.44,
+      "worst_return_pct": -8.21
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.14,
-      "median_return_pct": 0.51,
-      "best_return_pct": 22.12,
+      "up_probability_pct": 63.3,
+      "average_return_pct": 1.2,
+      "median_return_pct": 1.76,
+      "best_return_pct": 15.93,
       "worst_return_pct": -9.33
     }
   },
@@ -295,25 +295,19 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 17.7%，风险偏高。",
+      "detail": "近60日最大回撤 19.8%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 17.7%，风险扣分。",
+      "detail": "近60日最大回撤 19.8%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "positive",
-      "title": "短期反弹中",
-      "detail": "价格站上20日均线，关注持续性。",
-      "contribution": 5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 51.5%，波动偏高。",
+      "detail": "20日年化波动率 52.0%，波动偏高。",
       "contribution": -5.0
     }
   ],

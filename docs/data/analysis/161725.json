@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-24 17:34:20+08:00",
-  "trade_date": "2026-11-24",
+  "generated_at": "2026-11-25 17:34:09+08:00",
+  "trade_date": "2026-11-25",
   "code": "161725",
   "name": "招商中证白酒指数A",
   "type": "etf",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 69.2,
-    "risk": 20.9,
+    "risk_adjusted": 56.7,
+    "risk": 19.9,
     "technical": 70.0,
     "industry": 57.0,
     "leading": 50.0
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-24 17:33:45"
+    "updated_at": "2026-11-25 17:33:35"
   },
   "nale_network": {
     "sector_name": "公募白酒",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,14 +70,14 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 33.73,
+    "annualized_volatility_20d_pct": 33.28,
     "max_drawdown_60d_pct": -7.14,
-    "atr14_pct": 2.16,
+    "atr14_pct": 2.1,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 26.6,
-        "value": 33.73
+        "score": 24.3,
+        "value": 33.28
       },
       {
         "name": "60日最大回撤",
@@ -86,18 +86,18 @@
       },
       {
         "name": "ATR百分比",
-        "score": 12.7,
-        "value": 2.16
+        "score": 11.0,
+        "value": 2.1
       },
       {
         "name": "量价异常",
         "score": 97.1,
-        "value": 0.46
+        "value": 0.45
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.47
+        "value": 30.26
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "rebound",
     "ma5": 0.5700000000000001,
-    "ma10": 0.5720000000000001,
-    "ma20": 0.571,
-    "ma60": 0.5483333333333333,
-    "rsi14": 48.2,
-    "macd_dif": 0.006407821789297996,
-    "macd_dea": 0.008859879860463726,
-    "macd_hist": -0.004904116142331459,
-    "atr14_pct": 2.161096442416799,
-    "boll_position": 0.32912331434959025,
-    "return_5d_pct": -3.44827586206895,
-    "return_20d_pct": 3.703703703703698,
-    "volume_ratio_5d": 0.46
+    "ma10": 0.573,
+    "ma20": 0.573,
+    "ma60": 0.5486666666666667,
+    "rsi14": 53.0,
+    "macd_dif": 0.005900857989301844,
+    "macd_dea": 0.00826807548623135,
+    "macd_hist": -0.004734434993859012,
+    "atr14_pct": 2.0968398622549236,
+    "boll_position": 0.44264606653239186,
+    "return_5d_pct": 0.0,
+    "return_20d_pct": 7.547169811320731,
+    "volume_ratio_5d": 0.45
   },
   "industry": {
     "name": "公募白酒",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.21,
-    "return_20d_pct": -9.36,
-    "return_60d_pct": -25.82,
-    "relative_strength_20d_pct": 10.74
+    "return_5d_pct": -2.02,
+    "return_20d_pct": -7.31,
+    "return_60d_pct": -24.44,
+    "relative_strength_20d_pct": 16.7
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,16 +147,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.56,
-      "median_return_pct": 0.0,
+      "up_probability_pct": 26.7,
+      "average_return_pct": -0.19,
+      "median_return_pct": -0.68,
       "best_return_pct": 9.43,
-      "worst_return_pct": -3.64
+      "worst_return_pct": -4.35
     },
     "horizon_5d": {
-      "up_probability_pct": 26.7,
-      "average_return_pct": 0.01,
-      "median_return_pct": 0.0,
+      "up_probability_pct": 23.3,
+      "average_return_pct": -0.82,
+      "median_return_pct": -1.85,
       "best_return_pct": 9.43,
       "worst_return_pct": -6.45
     }
@@ -172,7 +172,7 @@
     {
       "type": "warning",
       "title": "成交缩量",
-      "detail": "近5日量能仅为前期0.46倍。",
+      "detail": "近5日量能仅为前期0.45倍。",
       "contribution": -3.0
     }
   ],

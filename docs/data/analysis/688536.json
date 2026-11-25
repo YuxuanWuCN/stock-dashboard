@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-24 17:34:20+08:00",
-  "trade_date": "2026-11-24",
+  "generated_at": "2026-11-25 17:34:09+08:00",
+  "trade_date": "2026-11-25",
   "code": "688536",
   "name": "思瑞浦",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 48.2,
-    "risk": 72.2,
-    "technical": 58.0,
+    "risk_adjusted": 39.7,
+    "risk": 85.4,
+    "technical": 42.0,
     "industry": 27.0,
     "leading": 50.0
   },
@@ -45,15 +45,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-24 17:32:55"
+    "updated_at": "2026-11-25 17:32:47"
   },
   "nale_network": {
     "sector_name": "模拟芯片",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -63,7 +63,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -73,34 +73,34 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 115.62,
-    "max_drawdown_60d_pct": -43.01,
-    "atr14_pct": 9.31,
+    "annualized_volatility_20d_pct": 109.63,
+    "max_drawdown_60d_pct": -43.82,
+    "atr14_pct": 9.98,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 94.8,
-        "value": 115.62
+        "score": 95.4,
+        "value": 109.63
       },
       {
         "name": "60日最大回撤",
-        "score": 78.0,
-        "value": -43.01
+        "score": 75.1,
+        "value": -43.82
       },
       {
         "name": "ATR百分比",
         "score": 88.4,
-        "value": 9.31
+        "value": 9.98
       },
       {
         "name": "量价异常",
-        "score": 65.3,
-        "value": 0.79
+        "score": 63.6,
+        "value": 0.81
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 31.47
+        "score": 93.1,
+        "value": 30.26
       }
     ]
   },
@@ -115,53 +115,53 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 216.06800000000004,
-    "ma10": 228.148,
-    "ma20": 244.83,
-    "ma60": 283.78049999999996,
-    "rsi14": 39.4,
-    "macd_dif": -17.763393526557536,
-    "macd_dea": -15.63607933537066,
-    "macd_hist": -4.2546283823737525,
-    "atr14_pct": 9.307179246574469,
-    "boll_position": 0.22850183772732902,
-    "return_5d_pct": 1.1784355572051597,
-    "return_20d_pct": -15.7992277992278,
-    "volume_ratio_5d": 0.79
+    "ma5": 211.96800000000002,
+    "ma10": 221.529,
+    "ma20": 240.48450000000003,
+    "ma60": 281.8763333333333,
+    "rsi14": 35.2,
+    "macd_dif": -18.685575114766095,
+    "macd_dea": -16.245978494728007,
+    "macd_hist": -4.879193240076177,
+    "atr14_pct": 9.978768732719308,
+    "boll_position": 0.09472192095285278,
+    "return_5d_pct": -9.25090252707581,
+    "return_20d_pct": -30.176035554321036,
+    "volume_ratio_5d": 0.81
   },
   "industry": {
     "name": "模拟芯片",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.21,
-    "return_20d_pct": -9.36,
-    "return_60d_pct": -25.82,
-    "relative_strength_20d_pct": -8.76
+    "return_5d_pct": -2.02,
+    "return_20d_pct": -7.31,
+    "return_60d_pct": -24.44,
+    "relative_strength_20d_pct": -21.03
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 29,
+    "sample_size": 30,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 58.6,
-      "average_return_pct": 1.67,
-      "median_return_pct": 3.16,
-      "best_return_pct": 21.15,
-      "worst_return_pct": -22.57
+      "up_probability_pct": 60.0,
+      "average_return_pct": 2.37,
+      "median_return_pct": 2.43,
+      "best_return_pct": 19.37,
+      "worst_return_pct": -20.53
     },
     "horizon_5d": {
-      "up_probability_pct": 55.2,
-      "average_return_pct": 1.33,
-      "median_return_pct": 0.87,
-      "best_return_pct": 18.92,
-      "worst_return_pct": -17.43
+      "up_probability_pct": 53.3,
+      "average_return_pct": 2.5,
+      "median_return_pct": 1.29,
+      "best_return_pct": 20.61,
+      "worst_return_pct": -21.78
     }
   },
   "fundamental": {
@@ -295,19 +295,19 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 43.0%，风险偏高。",
+      "detail": "近60日最大回撤 43.8%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 43.0%，风险扣分。",
+      "detail": "近60日最大回撤 43.8%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 115.6%，波动偏高。",
+      "detail": "20日年化波动率 109.6%，波动偏高。",
       "contribution": -5.0
     }
   ],

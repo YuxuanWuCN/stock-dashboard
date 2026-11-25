@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-24 17:34:20+08:00",
-  "trade_date": "2026-11-24",
+  "generated_at": "2026-11-25 17:34:09+08:00",
+  "trade_date": "2026-11-25",
   "code": "301308",
   "name": "江波龙",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 34.0,
-    "risk": 65.9,
-    "technical": 60.0,
+    "risk_adjusted": 40.3,
+    "risk": 67.1,
+    "technical": 52.0,
     "industry": 27.0,
     "leading": 50.0
   },
@@ -45,7 +45,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-24 17:31:59"
+    "updated_at": "2026-11-25 17:31:47"
   },
   "nale_network": {
     "sector_name": "存储",
@@ -97,36 +97,36 @@
     }
   },
   "risk": {
-    "level": "medium",
-    "label": "中等风险",
-    "annualized_volatility_20d_pct": 74.63,
-    "max_drawdown_60d_pct": -51.53,
-    "atr14_pct": 7.33,
+    "level": "high",
+    "label": "高风险",
+    "annualized_volatility_20d_pct": 74.13,
+    "max_drawdown_60d_pct": -53.55,
+    "atr14_pct": 7.77,
     "factors": [
       {
         "name": "20日波动率",
         "score": 76.9,
-        "value": 74.63
+        "value": 74.13
       },
       {
         "name": "60日最大回撤",
         "score": 91.3,
-        "value": -51.53
+        "value": -53.55
       },
       {
         "name": "ATR百分比",
-        "score": 73.4,
-        "value": 7.33
+        "score": 75.1,
+        "value": 7.77
       },
       {
         "name": "量价异常",
-        "score": 52.6,
+        "score": 61.3,
         "value": 0.83
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.47
+        "value": 30.26
       }
     ]
   },
@@ -147,28 +147,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 194.494,
-    "ma10": 204.154,
-    "ma20": 210.47899999999998,
-    "ma60": 278.6168333333333,
-    "rsi14": 32.9,
-    "macd_dif": -18.773009556713134,
-    "macd_dea": -19.811662776370618,
-    "macd_hist": 2.0773064393149667,
-    "atr14_pct": 7.328850980020498,
-    "boll_position": 0.1317724581178253,
-    "return_5d_pct": -3.924828698105598,
-    "return_20d_pct": -15.594015580736542,
+    "ma5": 189.73,
+    "ma10": 199.082,
+    "ma20": 207.54749999999999,
+    "ma60": 275.4653333333334,
+    "rsi14": 29.2,
+    "macd_dif": -19.365776225680463,
+    "macd_dea": -19.72248546976314,
+    "macd_hist": 0.7134184881653525,
+    "atr14_pct": 7.770260132175055,
+    "boll_position": -0.0312817079380902,
+    "return_5d_pct": -11.7792503214321,
+    "return_20d_pct": -24.735265578196852,
     "volume_ratio_5d": 0.83
   },
   "industry": {
     "name": "存储",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.21,
-    "return_20d_pct": -9.36,
-    "return_60d_pct": -25.82,
-    "relative_strength_20d_pct": -8.56
+    "return_5d_pct": -2.02,
+    "return_20d_pct": -7.31,
+    "return_60d_pct": -24.44,
+    "relative_strength_20d_pct": -15.59
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -177,17 +177,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 43.3,
-      "average_return_pct": -0.1,
-      "median_return_pct": -0.35,
+      "average_return_pct": 0.42,
+      "median_return_pct": -1.08,
       "best_return_pct": 17.38,
-      "worst_return_pct": -13.19
+      "worst_return_pct": -17.01
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -1.81,
-      "median_return_pct": -3.07,
-      "best_return_pct": 29.23,
-      "worst_return_pct": -25.32
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.24,
+      "median_return_pct": 1.47,
+      "best_return_pct": 19.75,
+      "worst_return_pct": -32.73
     }
   },
   "fundamental": {
@@ -327,19 +327,25 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 51.5%，风险偏高。",
+      "detail": "近60日最大回撤 53.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 51.5%，风险扣分。",
+      "detail": "近60日最大回撤 53.5%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=29.2，短期超卖。",
+      "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 74.6%，波动偏高。",
+      "detail": "20日年化波动率 74.1%，波动偏高。",
       "contribution": -5.0
     }
   ],

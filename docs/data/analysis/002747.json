@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-24 17:34:20+08:00",
-  "trade_date": "2026-11-24",
+  "generated_at": "2026-11-25 17:34:09+08:00",
+  "trade_date": "2026-11-25",
   "code": "002747",
   "name": "埃斯顿",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 54.3,
-    "risk": 56.2,
-    "technical": 71.0,
-    "industry": 50.3,
+    "risk_adjusted": 57.6,
+    "risk": 53.6,
+    "technical": 66.0,
+    "industry": 32.8,
     "leading": 50.0
   },
   "leading": {
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-24 17:33:01"
+    "updated_at": "2026-11-25 17:32:52"
   },
   "nale_network": {
     "sector_name": "工业机器人整机",
-    "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
+    "sector_breadth_pct": 0.0,
+    "tier_role": "neutral",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 72.63,
+    "annualized_volatility_20d_pct": 70.64,
     "max_drawdown_60d_pct": -24.27,
-    "atr14_pct": 6.96,
+    "atr14_pct": 7.15,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 75.1,
-        "value": 72.63
+        "score": 74.0,
+        "value": 70.64
       },
       {
         "name": "60日最大回撤",
-        "score": 42.8,
+        "score": 38.7,
         "value": -24.27
       },
       {
         "name": "ATR百分比",
-        "score": 70.5,
-        "value": 6.96
+        "score": 68.2,
+        "value": 7.15
       },
       {
         "name": "量价异常",
-        "score": 87.9,
-        "value": 0.67
+        "score": 80.3,
+        "value": 0.73
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 31.47
+        "value": 30.26
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 25.728,
-    "ma10": 27.262,
-    "ma20": 28.234500000000004,
-    "ma60": 28.583833333333335,
-    "rsi14": 48.0,
-    "macd_dif": -0.6440385827572079,
-    "macd_dea": -0.3468321227718961,
-    "macd_hist": -0.5944129199706236,
-    "atr14_pct": 6.95893669908835,
-    "boll_position": 0.3689009191267717,
-    "return_5d_pct": 3.969465648854964,
-    "return_20d_pct": -4.2530755711775114,
-    "volume_ratio_5d": 0.67
+    "ma5": 25.848000000000003,
+    "ma10": 26.73,
+    "ma20": 28.027500000000003,
+    "ma60": 28.489166666666666,
+    "rsi14": 44.1,
+    "macd_dif": -0.6840877554229863,
+    "macd_dea": -0.41428324947023726,
+    "macd_hist": -0.539609011905498,
+    "atr14_pct": 7.154666661859404,
+    "boll_position": 0.23366004864385267,
+    "return_5d_pct": 2.3622047244094446,
+    "return_20d_pct": -13.735899137358999,
+    "volume_ratio_5d": 0.73
   },
   "industry": {
     "name": "工业机器人整机",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.21,
-    "return_20d_pct": -9.36,
-    "return_60d_pct": -25.82,
-    "relative_strength_20d_pct": 2.78
+    "return_5d_pct": -2.02,
+    "return_20d_pct": -7.31,
+    "return_60d_pct": -24.44,
+    "relative_strength_20d_pct": -4.59
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,17 +147,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 36.7,
-      "average_return_pct": -0.71,
-      "median_return_pct": -1.76,
-      "best_return_pct": 27.26,
+      "up_probability_pct": 43.3,
+      "average_return_pct": -0.83,
+      "median_return_pct": -1.79,
+      "best_return_pct": 15.28,
       "worst_return_pct": -21.21
     },
     "horizon_5d": {
       "up_probability_pct": 50.0,
-      "average_return_pct": -0.4,
-      "median_return_pct": 0.21,
-      "best_return_pct": 20.53,
+      "average_return_pct": 1.6,
+      "median_return_pct": -0.36,
+      "best_return_pct": 39.21,
       "worst_return_pct": -26.21
     }
   },
@@ -316,7 +316,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 72.6%，波动偏高。",
+      "detail": "20日年化波动率 70.6%，波动偏高。",
       "contribution": -5.0
     }
   ],
