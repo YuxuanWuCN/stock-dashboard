@@ -1,0 +1,15 @@
+# R-FOF SE 平台本地运行产物（不入库）
+data/*.sqlite3
+data/*.sqlite3-wal
+data/*.sqlite3-shm
+exports/
+__pycache__/
+.pytest_cache/
+
+# 任何超过 20MB 的二进制数据库缓存都不允许提交（Issue #14 纪律）
+*.db
+*.parquet
+
+# 本地离线采集导出包
+rfof_ab_offline_*.json
+rfof_ab_offline_*.csv

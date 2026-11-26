@@ -46,6 +46,11 @@
         "name": "稳健组合选股字段修复测试",
         "argv": ["{python}", "-m", "pytest", "-q", "tests/test_rebalance_selection.py"],
         "timeout": 300
+      },
+      {
+        "name": "R-FOF SE 平台双库与 A/B 埋点单元测试",
+        "argv": ["{python}", "-m", "pytest", "-q", "research-outputs/rfof_next_cycle/member3_se_platform/tests", "tests/test_rfof_se_platform_integration.py"],
+        "timeout": 300
       }
     ],
     "medium": [
