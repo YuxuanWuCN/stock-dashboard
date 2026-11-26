@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-25 17:34:09+08:00",
-  "trade_date": "2026-11-25",
+  "generated_at": "2026-11-26 17:35:35+08:00",
+  "trade_date": "2026-11-26",
   "code": "301598",
   "name": "博科测试",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 45.9,
-    "risk": 31.3,
+    "risk_adjusted": 45.6,
+    "risk": 33.2,
     "technical": 42.0,
-    "industry": 27.2,
+    "industry": 27.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,36 +42,41 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-25 17:33:04"
+    "updated_at": "2026-11-26 17:34:13"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 2.6,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 30.8,
+    "tier_role": "divergent",
+    "leader_stock": {
+      "code": "301190",
+      "name": "善水科技",
+      "change_pct": 19.99999999999999,
+      "is_limit_up": true
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
+    "has_limit_up_resonance": true,
     "co_movement_peers": [
       {
         "code": "300004",
         "name": "南风股份",
-        "corr": 0.67
+        "corr": 0.66
       },
       {
         "code": "688598",
         "name": "金博股份",
-        "corr": 0.65
-      },
-      {
-        "code": "300128",
-        "name": "锦富技术",
-        "corr": 0.63
+        "corr": 0.64
       },
       {
         "code": "300382",
         "name": "斯莱克",
         "corr": 0.63
+      },
+      {
+        "code": "300128",
+        "name": "锦富技术",
+        "corr": 0.61
       },
       {
         "code": "300588",
@@ -80,7 +85,7 @@
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.16,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
@@ -89,41 +94,41 @@
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.2,
-      "dynamic_alpha_physical_peak": 0.2
+      "dynamic_alpha_sentiment_t0": 0.557,
+      "dynamic_alpha_physical_peak": 0.564
     }
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 40.56,
-    "max_drawdown_60d_pct": -18.32,
-    "atr14_pct": 4.58,
+    "annualized_volatility_20d_pct": 40.37,
+    "max_drawdown_60d_pct": -19.56,
+    "atr14_pct": 4.66,
     "factors": [
       {
         "name": "20日波动率",
         "score": 35.3,
-        "value": 40.56
+        "value": 40.37
       },
       {
         "name": "60日最大回撤",
-        "score": 26.0,
-        "value": -18.32
+        "score": 28.3,
+        "value": -19.56
       },
       {
         "name": "ATR百分比",
-        "score": 38.7,
-        "value": 4.58
+        "score": 39.3,
+        "value": 4.66
       },
       {
         "name": "量价异常",
-        "score": 64.2,
-        "value": 0.8
+        "score": 75.7,
+        "value": 0.78
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 30.26
+        "value": 30.6
       }
     ]
   },
@@ -140,32 +145,32 @@
     "peak_horizon_days": 14,
     "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.2
+    "dynamic_alpha_peak": 0.564
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 45.522,
-    "ma10": 48.065999999999995,
-    "ma20": 49.8155,
-    "ma60": 50.43483333333333,
-    "rsi14": 30.3,
-    "macd_dif": -1.3856577062206838,
-    "macd_dea": -0.566980018870153,
-    "macd_hist": -1.6373553747010616,
-    "atr14_pct": 4.579790517073694,
-    "boll_position": -0.07106930072307445,
-    "return_5d_pct": -12.605042016806722,
-    "return_20d_pct": -16.52971526848843,
-    "volume_ratio_5d": 0.8
+    "ma5": 44.596,
+    "ma10": 47.2,
+    "ma20": 49.3415,
+    "ma60": 50.27283333333333,
+    "rsi14": 28.9,
+    "macd_dif": -1.6587695158411506,
+    "macd_dea": -0.7853379172836492,
+    "macd_hist": -1.7468631971150028,
+    "atr14_pct": 4.659939308427047,
+    "boll_position": -0.028604578045064073,
+    "return_5d_pct": -9.716684155299049,
+    "return_20d_pct": -18.05714285714285,
+    "volume_ratio_5d": 0.78
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.02,
-    "return_20d_pct": -7.31,
-    "return_60d_pct": -24.44,
-    "relative_strength_20d_pct": -7.38
+    "return_5d_pct": -5.38,
+    "return_20d_pct": -12.09,
+    "return_60d_pct": -26.62,
+    "relative_strength_20d_pct": -8.61
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -173,18 +178,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 73.3,
-      "average_return_pct": 1.72,
-      "median_return_pct": 2.15,
+      "up_probability_pct": 76.7,
+      "average_return_pct": 1.43,
+      "median_return_pct": 1.98,
       "best_return_pct": 17.52,
-      "worst_return_pct": -10.56
+      "worst_return_pct": -8.0
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.07,
-      "median_return_pct": 0.1,
+      "up_probability_pct": 53.3,
+      "average_return_pct": 0.05,
+      "median_return_pct": 0.31,
       "best_return_pct": 11.76,
-      "worst_return_pct": -10.69
+      "worst_return_pct": -12.61
     }
   },
   "fundamental": {
@@ -318,19 +323,25 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 18.3%，风险偏高。",
+      "detail": "近60日最大回撤 19.6%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 18.3%，风险扣分。",
+      "detail": "近60日最大回撤 19.6%，风险扣分。",
       "contribution": -7.0
+    },
+    {
+      "type": "warning",
+      "title": "RSI偏低",
+      "detail": "RSI14=28.9，短期超卖。",
+      "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 40.6%，波动偏高。",
+      "detail": "20日年化波动率 40.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

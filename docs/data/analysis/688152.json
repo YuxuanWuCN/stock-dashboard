@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-25 17:34:09+08:00",
-  "trade_date": "2026-11-25",
+  "generated_at": "2026-11-26 17:35:35+08:00",
+  "trade_date": "2026-11-26",
   "code": "688152",
   "name": "麒麟信安",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 41.8,
-    "risk": 60.3,
+    "risk_adjusted": 39.4,
+    "risk": 61.8,
     "technical": 42.0,
     "industry": 27.0,
     "leading": 50.0
@@ -42,16 +42,21 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-25 17:33:49"
+    "updated_at": "2026-11-26 17:35:08"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 2.6,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
+    "sector_breadth_pct": 30.8,
+    "tier_role": "follower_catchup",
+    "leader_stock": {
+      "code": "301190",
+      "name": "善水科技",
+      "change_pct": 19.99999999999999,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 2.2,
+    "spillover_prob_5d_pct": 5.0,
+    "has_limit_up_resonance": true,
     "co_movement_peers": [
       {
         "code": "000503",
@@ -66,7 +71,7 @@
       {
         "code": "300214",
         "name": "日科化学",
-        "corr": 0.58
+        "corr": 0.57
       },
       {
         "code": "300588",
@@ -74,98 +79,98 @@
         "corr": 0.49
       },
       {
-        "code": "301152",
-        "name": "天力锂能",
-        "corr": 0.47
+        "code": "301177",
+        "name": "迪阿股份",
+        "corr": 0.49
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.44,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
-      "optimal_holding_days": 5.0,
+      "peak_spillover_return_pct": 1.9,
+      "optimal_holding_days": 14,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.2,
-      "dynamic_alpha_physical_peak": 0.2
+      "dynamic_alpha_sentiment_t0": 0.557,
+      "dynamic_alpha_physical_peak": 0.564
     }
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 69.17,
-    "max_drawdown_60d_pct": -45.75,
-    "atr14_pct": 9.03,
+    "annualized_volatility_20d_pct": 64.52,
+    "max_drawdown_60d_pct": -46.42,
+    "atr14_pct": 8.94,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 71.7,
-        "value": 69.17
+        "score": 65.9,
+        "value": 64.52
       },
       {
         "name": "60日最大回撤",
-        "score": 80.3,
-        "value": -45.75
+        "score": 81.5,
+        "value": -46.42
       },
       {
         "name": "ATR百分比",
-        "score": 82.7,
-        "value": 9.03
+        "score": 83.2,
+        "value": 8.94
       },
       {
         "name": "量价异常",
-        "score": 20.8,
-        "value": 0.95
+        "score": 49.1,
+        "value": 0.87
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 30.26
+        "value": 30.6
       }
     ]
   },
   "forecast": {
     "return_3d_pct": -0.02,
-    "return_5d_pct": -0.18,
+    "return_5d_pct": 2.02,
     "up_probability_3d_pct": 40.0,
-    "up_probability_5d_pct": 40.0,
+    "up_probability_5d_pct": 45.0,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.2
+    "peak_spillover_return_pct": 1.9,
+    "optimal_holding_days": 14,
+    "dynamic_alpha_peak": 0.564
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 26.113999999999997,
-    "ma10": 27.762999999999998,
-    "ma20": 29.496499999999997,
-    "ma60": 35.24033333333333,
-    "rsi14": 31.1,
-    "macd_dif": -2.73210854191926,
-    "macd_dea": -2.4036228023321082,
-    "macd_hist": -0.6569714791743033,
-    "atr14_pct": 9.034096248631302,
-    "boll_position": 0.04049417132308539,
-    "return_5d_pct": -10.447761194029859,
-    "return_20d_pct": -30.540242557883136,
-    "volume_ratio_5d": 0.95
+    "ma5": 25.651999999999997,
+    "ma10": 27.119999999999997,
+    "ma20": 29.0815,
+    "ma60": 35.13883333333333,
+    "rsi14": 30.5,
+    "macd_dif": -2.782531213621777,
+    "macd_dea": -2.4794044814377942,
+    "macd_hist": -0.6062534643679651,
+    "atr14_pct": 8.938098859107551,
+    "boll_position": 0.05996811674428397,
+    "return_5d_pct": -8.492647058823522,
+    "return_20d_pct": -25.00753238927387,
+    "volume_ratio_5d": 0.87
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.02,
-    "return_20d_pct": -7.31,
-    "return_60d_pct": -24.44,
-    "relative_strength_20d_pct": -21.39
+    "return_5d_pct": -5.38,
+    "return_20d_pct": -12.09,
+    "return_60d_pct": -26.62,
+    "relative_strength_20d_pct": -15.56
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -173,16 +178,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 66.7,
-      "average_return_pct": 3.34,
-      "median_return_pct": 2.77,
+      "up_probability_pct": 60.0,
+      "average_return_pct": 2.17,
+      "median_return_pct": 0.9,
       "best_return_pct": 23.82,
       "worst_return_pct": -14.25
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.69,
-      "median_return_pct": 0.65,
+      "up_probability_pct": 50.0,
+      "average_return_pct": 0.37,
+      "median_return_pct": -0.09,
       "best_return_pct": 25.81,
       "worst_return_pct": -15.38
     }
@@ -310,6 +315,12 @@
   },
   "reasons": [
     {
+      "title": "T-NALE·热点龙头时空时滞共振",
+      "detail": "同板块龙头【善水科技】封板催化，经产业链物理传导（时滞τ≈14天），注入 +2.2% 溢出预期及 +5.0% 看涨胜率（波峰前瞻+1.9%）",
+      "impact": "positive",
+      "score_delta": 4.5
+    },
+    {
       "type": "negative",
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
@@ -318,19 +329,19 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 45.7%，风险偏高。",
+      "detail": "近60日最大回撤 46.4%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 45.8%，风险扣分。",
+      "detail": "近60日最大回撤 46.4%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 69.2%，波动偏高。",
+      "detail": "20日年化波动率 64.5%，波动偏高。",
       "contribution": -5.0
     }
   ],

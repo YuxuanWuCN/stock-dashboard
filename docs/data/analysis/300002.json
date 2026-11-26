@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-25 17:34:09+08:00",
-  "trade_date": "2026-11-25",
+  "generated_at": "2026-11-26 17:35:35+08:00",
+  "trade_date": "2026-11-26",
   "code": "300002",
   "name": "神州泰岳",
   "type": "stock",
@@ -17,8 +17,8 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 46.9,
-    "risk": 28.3,
+    "risk_adjusted": 48.5,
+    "risk": 29.9,
     "technical": 42.0,
     "industry": 42.0,
     "leading": 50.0
@@ -42,7 +42,7 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-25 17:32:45"
+    "updated_at": "2026-11-26 17:33:36"
   },
   "nale_network": {
     "sector_name": "游戏/软件",
@@ -70,34 +70,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 39.47,
-    "max_drawdown_60d_pct": -14.02,
-    "atr14_pct": 3.81,
+    "annualized_volatility_20d_pct": 39.74,
+    "max_drawdown_60d_pct": -15.55,
+    "atr14_pct": 3.9,
     "factors": [
       {
         "name": "20日波动率",
         "score": 34.7,
-        "value": 39.47
+        "value": 39.74
       },
       {
         "name": "60日最大回撤",
-        "score": 14.5,
-        "value": -14.02
+        "score": 19.7,
+        "value": -15.55
       },
       {
         "name": "ATR百分比",
-        "score": 31.2,
-        "value": 3.81
+        "score": 32.4,
+        "value": 3.9
       },
       {
         "name": "量价异常",
-        "score": 79.2,
-        "value": 0.74
+        "score": 79.8,
+        "value": 0.76
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 30.26
+        "value": 30.6
       }
     ]
   },
@@ -118,28 +118,28 @@
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 7.545999999999999,
-    "ma10": 7.7700000000000005,
-    "ma20": 7.978500000000001,
-    "ma60": 8.012833333333335,
-    "rsi14": 34.4,
-    "macd_dif": -0.14188897420388358,
-    "macd_dea": -0.049148305531323544,
-    "macd_hist": -0.18548133734512007,
-    "atr14_pct": 3.8124769505295357,
-    "boll_position": -0.021287432109870736,
-    "return_5d_pct": -6.887755102040815,
-    "return_20d_pct": -8.863920099875156,
-    "volume_ratio_5d": 0.74
+    "ma5": 7.422,
+    "ma10": 7.673,
+    "ma20": 7.939,
+    "ma60": 7.999666666666667,
+    "rsi14": 32.3,
+    "macd_dif": -0.17803685366109523,
+    "macd_dea": -0.07492601498915775,
+    "macd_hist": -0.20622167734387495,
+    "atr14_pct": 3.9032084382725665,
+    "boll_position": -0.01942578019213709,
+    "return_5d_pct": -7.958921694480104,
+    "return_20d_pct": -9.92462311557789,
+    "volume_ratio_5d": 0.76
   },
   "industry": {
     "name": "游戏/软件",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.02,
-    "return_20d_pct": -7.31,
-    "return_60d_pct": -24.44,
-    "relative_strength_20d_pct": 0.28
+    "return_5d_pct": -5.38,
+    "return_20d_pct": -12.09,
+    "return_60d_pct": -26.62,
+    "relative_strength_20d_pct": -0.48
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -148,14 +148,14 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 53.3,
-      "average_return_pct": 1.57,
+      "average_return_pct": 1.53,
       "median_return_pct": 0.9,
       "best_return_pct": 12.27,
-      "worst_return_pct": -8.4
+      "worst_return_pct": -9.41
     },
     "horizon_5d": {
       "up_probability_pct": 46.7,
-      "average_return_pct": -0.24,
+      "average_return_pct": -0.09,
       "median_return_pct": -0.43,
       "best_return_pct": 10.84,
       "worst_return_pct": -14.19
@@ -294,6 +294,18 @@
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
       "contribution": -8.0
+    },
+    {
+      "type": "negative",
+      "title": "近期回撤较大",
+      "detail": "近60日最大回撤 15.5%，风险偏高。",
+      "contribution": -7.0
+    },
+    {
+      "type": "negative",
+      "title": "回撤风险",
+      "detail": "近60日最大回撤 15.6%，风险扣分。",
+      "contribution": -7.0
     }
   ],
   "kline_file": "../kline/300002.json",

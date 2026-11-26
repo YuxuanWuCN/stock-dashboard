@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-25 17:34:09+08:00",
-  "trade_date": "2026-11-25",
+  "generated_at": "2026-11-26 17:35:35+08:00",
+  "trade_date": "2026-11-26",
   "code": "688536",
   "name": "思瑞浦",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 39.7,
+    "risk_adjusted": 42.7,
     "risk": 85.4,
-    "technical": 42.0,
+    "technical": 50.0,
     "industry": 27.0,
     "leading": 50.0
   },
@@ -45,15 +45,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-25 17:32:47"
+    "updated_at": "2026-11-26 17:33:42"
   },
   "nale_network": {
     "sector_name": "模拟芯片",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -63,7 +63,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -73,34 +73,34 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 109.63,
+    "annualized_volatility_20d_pct": 110.76,
     "max_drawdown_60d_pct": -43.82,
-    "atr14_pct": 9.98,
+    "atr14_pct": 9.43,
     "factors": [
       {
         "name": "20日波动率",
         "score": 95.4,
-        "value": 109.63
+        "value": 110.76
       },
       {
         "name": "60日最大回撤",
-        "score": 75.1,
+        "score": 74.0,
         "value": -43.82
       },
       {
         "name": "ATR百分比",
         "score": 88.4,
-        "value": 9.98
+        "value": 9.43
       },
       {
         "name": "量价异常",
-        "score": 63.6,
-        "value": 0.81
+        "score": 65.9,
+        "value": 0.83
       },
       {
         "name": "行业波动",
         "score": 93.1,
-        "value": 30.26
+        "value": 30.6
       }
     ]
   },
@@ -115,34 +115,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 211.96800000000002,
-    "ma10": 221.529,
-    "ma20": 240.48450000000003,
-    "ma60": 281.8763333333333,
-    "rsi14": 35.2,
-    "macd_dif": -18.685575114766095,
-    "macd_dea": -16.245978494728007,
-    "macd_hist": -4.879193240076177,
-    "atr14_pct": 9.978768732719308,
-    "boll_position": 0.09472192095285278,
-    "return_5d_pct": -9.25090252707581,
-    "return_20d_pct": -30.176035554321036,
-    "volume_ratio_5d": 0.81
+    "ma5": 209.496,
+    "ma10": 216.36999999999998,
+    "ma20": 236.9065,
+    "ma60": 280.1786666666667,
+    "rsi14": 38.0,
+    "macd_dif": -18.664656695916847,
+    "macd_dea": -16.72971413315101,
+    "macd_hist": -3.869885125531674,
+    "atr14_pct": 9.427710190950664,
+    "boll_position": 0.19077173976825096,
+    "return_5d_pct": -5.615374131116269,
+    "return_20d_pct": -25.620278543553752,
+    "volume_ratio_5d": 0.83
   },
   "industry": {
     "name": "模拟芯片",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.02,
-    "return_20d_pct": -7.31,
-    "return_60d_pct": -24.44,
-    "relative_strength_20d_pct": -21.03
+    "return_5d_pct": -5.38,
+    "return_20d_pct": -12.09,
+    "return_60d_pct": -26.62,
+    "relative_strength_20d_pct": -16.18
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -150,18 +150,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 60.0,
-      "average_return_pct": 2.37,
-      "median_return_pct": 2.43,
-      "best_return_pct": 19.37,
-      "worst_return_pct": -20.53
+      "up_probability_pct": 63.3,
+      "average_return_pct": 1.27,
+      "median_return_pct": 2.51,
+      "best_return_pct": 18.96,
+      "worst_return_pct": -22.57
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 2.5,
-      "median_return_pct": 1.29,
-      "best_return_pct": 20.61,
-      "worst_return_pct": -21.78
+      "up_probability_pct": 56.7,
+      "average_return_pct": 2.28,
+      "median_return_pct": 1.42,
+      "best_return_pct": 18.92,
+      "worst_return_pct": -17.43
     }
   },
   "fundamental": {
@@ -307,7 +307,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 109.6%，波动偏高。",
+      "detail": "20日年化波动率 110.8%，波动偏高。",
       "contribution": -5.0
     }
   ],

@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-25 17:34:09+08:00",
-  "trade_date": "2026-11-25",
+  "generated_at": "2026-11-26 17:35:35+08:00",
+  "trade_date": "2026-11-26",
   "code": "688111",
   "name": "金山办公",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 62.1,
-    "risk": 26.4,
-    "technical": 81.0,
+    "risk_adjusted": 60.5,
+    "risk": 28.2,
+    "technical": 73.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,16 +42,21 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-25 17:32:24"
+    "updated_at": "2026-11-26 17:32:56"
   },
   "nale_network": {
     "sector_name": "科技",
-    "sector_breadth_pct": 11.1,
-    "tier_role": "neutral",
-    "leader_stock": null,
+    "sector_breadth_pct": 38.9,
+    "tier_role": "divergent",
+    "leader_stock": {
+      "code": "003040",
+      "name": "楚天龙",
+      "change_pct": 10.039761431411529,
+      "is_limit_up": true
+    },
     "spillover_return_5d_pct": 0.0,
     "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
+    "has_limit_up_resonance": true,
     "co_movement_peers": [
       {
         "code": "600570",
@@ -70,7 +75,7 @@
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.18,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
@@ -79,41 +84,41 @@
       "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.2,
-      "dynamic_alpha_physical_peak": 0.2
+      "dynamic_alpha_sentiment_t0": 0.551,
+      "dynamic_alpha_physical_peak": 0.555
     }
   },
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 38.74,
+    "annualized_volatility_20d_pct": 39.12,
     "max_drawdown_60d_pct": -17.19,
-    "atr14_pct": 3.7,
+    "atr14_pct": 3.67,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 32.9,
-        "value": 38.74
+        "score": 33.5,
+        "value": 39.12
       },
       {
         "name": "60日最大回撤",
-        "score": 24.9,
+        "score": 24.3,
         "value": -17.19
       },
       {
         "name": "ATR百分比",
-        "score": 30.6,
-        "value": 3.7
+        "score": 30.1,
+        "value": 3.67
       },
       {
         "name": "量价异常",
-        "score": 40.5,
-        "value": 0.89
+        "score": 60.1,
+        "value": 0.84
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 30.26
+        "value": 30.6
       }
     ]
   },
@@ -130,32 +135,32 @@
     "peak_horizon_days": 18,
     "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.2
+    "dynamic_alpha_peak": 0.555
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 220.57600000000002,
-    "ma10": 218.679,
-    "ma20": 221.73899999999998,
-    "ma60": 228.7131666666667,
-    "rsi14": 46.9,
-    "macd_dif": -2.863366687867199,
-    "macd_dea": -2.9904559206632486,
-    "macd_hist": 0.25417846559209956,
-    "atr14_pct": 3.7012718431602933,
-    "boll_position": 0.4695531529900821,
-    "return_5d_pct": 2.982292637465056,
-    "return_20d_pct": -0.9324009324009341,
-    "volume_ratio_5d": 0.89
+    "ma5": 220.11599999999999,
+    "ma10": 218.63899999999998,
+    "ma20": 221.404,
+    "ma60": 228.451,
+    "rsi14": 43.6,
+    "macd_dif": -2.9381786052879306,
+    "macd_dea": -2.980000447599043,
+    "macd_hist": 0.08364368462222505,
+    "atr14_pct": 3.66831701101151,
+    "boll_position": 0.3323149804955662,
+    "return_5d_pct": -1.047358834244072,
+    "return_20d_pct": -2.9910714285714235,
+    "volume_ratio_5d": 0.84
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.02,
-    "return_20d_pct": -7.31,
-    "return_60d_pct": -24.44,
-    "relative_strength_20d_pct": 8.22
+    "return_5d_pct": -5.38,
+    "return_20d_pct": -12.09,
+    "return_60d_pct": -26.62,
+    "relative_strength_20d_pct": 6.45
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -164,17 +169,17 @@
     "confidence": "medium",
     "horizon_3d": {
       "up_probability_pct": 40.0,
-      "average_return_pct": -1.37,
-      "median_return_pct": -1.84,
-      "best_return_pct": 6.14,
-      "worst_return_pct": -8.58
+      "average_return_pct": -0.87,
+      "median_return_pct": -1.51,
+      "best_return_pct": 13.5,
+      "worst_return_pct": -14.45
     },
     "horizon_5d": {
-      "up_probability_pct": 40.0,
-      "average_return_pct": -0.79,
-      "median_return_pct": -1.99,
-      "best_return_pct": 13.79,
-      "worst_return_pct": -9.22
+      "up_probability_pct": 36.7,
+      "average_return_pct": -0.35,
+      "median_return_pct": -1.64,
+      "best_return_pct": 18.79,
+      "worst_return_pct": -9.39
     }
   },
   "fundamental": {

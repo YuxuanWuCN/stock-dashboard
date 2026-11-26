@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-25 17:34:09+08:00",
-  "trade_date": "2026-11-25",
+  "generated_at": "2026-11-26 17:35:35+08:00",
+  "trade_date": "2026-11-26",
   "code": "603799",
   "name": "华友钴业",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 49.6,
-    "risk": 41.5,
-    "technical": 73.0,
+    "risk_adjusted": 56.5,
+    "risk": 42.0,
+    "technical": 96.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,15 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-25 17:32:50"
+    "updated_at": "2026-11-26 17:33:46"
   },
   "nale_network": {
     "sector_name": "钴镍能源金属",
-    "sector_breadth_pct": 0.0,
-    "tier_role": "neutral",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "core_mid",
     "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 0.3,
+    "spillover_prob_5d_pct": 2.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +60,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
+      "peak_spillover_return_pct": 0.26,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +70,34 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 49.66,
+    "annualized_volatility_20d_pct": 48.93,
     "max_drawdown_60d_pct": -29.07,
-    "atr14_pct": 4.65,
+    "atr14_pct": 4.64,
     "factors": [
       {
         "name": "20日波动率",
         "score": 46.8,
-        "value": 49.66
+        "value": 48.93
       },
       {
         "name": "60日最大回撤",
-        "score": 48.6,
+        "score": 46.2,
         "value": -29.07
       },
       {
         "name": "ATR百分比",
-        "score": 40.5,
-        "value": 4.65
+        "score": 38.7,
+        "value": 4.64
       },
       {
         "name": "量价异常",
-        "score": 71.1,
-        "value": 1.22
+        "score": 85.5,
+        "value": 1.26
       },
       {
         "name": "行业波动",
         "score": 0.6,
-        "value": 30.26
+        "value": 30.6
       }
     ]
   },
@@ -112,34 +112,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
+    "peak_spillover_return_pct": 0.26,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 29.936,
-    "ma10": 30.366000000000003,
-    "ma20": 31.110500000000002,
-    "ma60": 33.965666666666664,
-    "rsi14": 43.2,
-    "macd_dif": -0.8391614426684306,
-    "macd_dea": -0.8732686473274363,
-    "macd_hist": 0.06821440931801126,
-    "atr14_pct": 4.653165647759539,
-    "boll_position": 0.3111591124911271,
-    "return_5d_pct": -0.9871668311944748,
-    "return_20d_pct": -2.4635332252836317,
-    "volume_ratio_5d": 1.22
+    "ma5": 30.096000000000004,
+    "ma10": 30.253999999999998,
+    "ma20": 31.127499999999998,
+    "ma60": 33.80616666666667,
+    "rsi14": 44.8,
+    "macd_dif": -0.7961887116444792,
+    "macd_dea": -0.8578526589019245,
+    "macd_hist": 0.12332789451489057,
+    "atr14_pct": 4.643277273609767,
+    "boll_position": 0.36424928027080133,
+    "return_5d_pct": 2.7027027027026973,
+    "return_20d_pct": 1.1310711909514382,
+    "volume_ratio_5d": 1.26
   },
   "industry": {
     "name": "钴镍能源金属",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -2.02,
-    "return_20d_pct": -7.31,
-    "return_60d_pct": -24.44,
-    "relative_strength_20d_pct": 6.68
+    "return_5d_pct": -5.38,
+    "return_20d_pct": -12.09,
+    "return_60d_pct": -26.62,
+    "relative_strength_20d_pct": 10.57
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,17 +147,17 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -2.3,
-      "median_return_pct": -1.75,
+      "up_probability_pct": 23.3,
+      "average_return_pct": -2.76,
+      "median_return_pct": -2.06,
       "best_return_pct": 6.82,
       "worst_return_pct": -10.63
     },
     "horizon_5d": {
-      "up_probability_pct": 30.0,
-      "average_return_pct": -2.97,
-      "median_return_pct": -4.52,
-      "best_return_pct": 10.76,
+      "up_probability_pct": 23.3,
+      "average_return_pct": -3.59,
+      "median_return_pct": -4.36,
+      "best_return_pct": 9.94,
       "worst_return_pct": -15.9
     }
   },
@@ -304,7 +304,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 49.7%，波动偏高。",
+      "detail": "20日年化波动率 48.9%，波动偏高。",
       "contribution": -5.0
     }
   ],
