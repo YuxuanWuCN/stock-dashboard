@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>R-FOF 去焦虑双模 A/B 实验 · 养老安全垫体验台</title>
+<meta name="description" content="R-FOF 下周期去焦虑双模 A/B 实验原型：对照组常规波动视图 vs 实验组适老去焦虑视图，内置暴跌情景决策与规则理解测验。">
+<!--
+  设计约束（与 docs/index_wealth.html 同一套视觉语言，禁 K 线 / 禁构建工具）
+  1. 单文件零构建：HTML + CSS + 原生 ES6，无 CDN、无 npm 依赖，file:// 可直接打开；
+  2. 离线优先：所有事件先进 localStorage 队列，联网后批量补传 /api/events；
+  3. 组间设计：参与者只看自己被分配的实验臂；评审模式（?role=reviewer）可并排对比；
+  4. 适老化：正文 18px 起、交互热区 ≥ 44px、等宽数字（tabular-nums）、对比度达 WCAG AA。
+-->
+<style>
+    :root {
+        --bg: #F6F8FA;
+        --card: #FFFFFF;
+        --card-radius: 16px;
+        --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        --gold: #C59B27;
+        --gold-bg: rgba(197, 155, 39, 0.08);
+        --gold-border: rgba(197, 155, 39, 0.25);
+        --gold-gradient: linear-gradient(135deg, #E6C158 0%, #C59B27 100%);
+        --blue: #1677FF;
+        --blue-bg: rgba(22, 119, 255, 0.08);
+        --green: #10B981;
+        --green-bg: rgba(16, 185, 129, 0.1);
+        --benchmark: #94A3B8;
+        --text-title: #0F172A;
+        --text-body: #334155;
+        --text-sub: #64748B;
+        --text-muted: #94A3B8;
+        --danger: #D92D20;
+        --danger-bg: rgba(217, 45, 32, 0.08);
+        --warn: #B54708;
+        --warm-bg: #FFF9F0;
+        --warm-border: rgba(197, 155, 39, 0.35);
+        --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                       "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+                     "Liberation Mono", "Courier New", monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+        background: var(--bg);
+        color: var(--text-body);
+        font-family: var(--font-family);
+        font-size: 18px;
+        line-height: 1.6;
+        overflow-x: hidden;
+        padding: 24px 16px 64px;
+    }
+
+    .page { max-width: 1080px; margin: 0 auto; }
+
+    header.hero { text-align: center; margin-bottom: 20px; }
+
+    .hero h1 {
+        font-size: clamp(24px, 4vw, 34px);
+        color: var(--text-title);
+        line-height: 1.35;
+        letter-spacing: 0.5px;
+    }
+
+    .hero p { color: var(--text-sub); margin-top: 8px; font-size: 17px; }
+
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+
+    .badge {
+        font-size: 13px; padding: 4px 10px; border-radius: 999px;
+        background: var(--gold-bg); color: #8A6A14; border: 1px solid var(--gold-border);
+        white-space: nowrap;
+    }
+
+    .badge.blue { background: var(--blue-bg); color: #0E65DE; border-color: rgba(22, 119, 255, 0.2); }
+    .badge.green { background: var(--green-bg); color: #047857; border-color: rgba(16, 185, 129, 0.25); }
+
+    .card {
+        background: var(--card); border-radius: var(--card-radius);
+        box-shadow: var(--card-shadow); border: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 24px; margin-bottom: 20px;
+    }
+
+    .card h2 { font-size: 21px; color: var(--text-title); margin-bottom: 4px; }
+    .card .hint { color: var(--text-sub); font-size: 16px; margin-bottom: 16px; }
+
+    .field { margin-bottom: 18px; }
+    .field > label, .field-label { display: block; font-weight: 600; color: var(--text-title); margin-bottom: 8px; }
+
+    .choice-grid { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .choice {
+        min-height: 56px; min-width: 128px; padding: 12px 22px;
+        border-radius: 12px; border: 2px solid rgba(15, 23, 42, 0.12);
+        background: #FFF; color: var(--text-title); font-size: 18px; font-weight: 600;
+        cursor: pointer; transition: border-color .15s, background .15s, transform .05s;
+    }
+
+    .choice:hover { border-color: var(--gold); background: var(--gold-bg); }
+    .choice:active { transform: translateY(1px); }
+    .choice[aria-pressed="true"], .choice.active {
+        border-color: var(--gold); background: var(--gold-bg); color: #7A5C0F;
+        box-shadow: 0 0 0 3px rgba(197, 155, 39, 0.15);
+    }
+
+    .choice.small { min-height: 44px; padding: 8px 16px; font-size: 16px; font-weight: 500; }
+
+    .consent {
+        display: flex; gap: 12px; align-items: flex-start;
+        background: var(--bg); border-radius: 12px; padding: 14px 16px; font-size: 16px;
+    }
+
+    .consent input { width: 22px; height: 22px; margin-top: 2px; flex: 0 0 auto; accent-color: var(--gold); }
+
+    .btn-primary {
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 100%; min-height: 56px; padding: 12px 24px; border: 0; border-radius: 12px;
+        background: var(--gold-gradient); color: #FFFFFF; font-size: 19px; font-weight: 700;
+        letter-spacing: .5px; cursor: pointer; box-shadow: 0 6px 16px rgba(197, 155, 39, 0.25);
+    }
+
+    .btn-primary:disabled { background: #E2E8F0; color: var(--text-muted); box-shadow: none; cursor: not-allowed; }
+
+    .btn-ghost {
+        min-height: 44px; padding: 8px 16px; border-radius: 10px; cursor: pointer;
+        border: 1px solid rgba(15, 23, 42, 0.15); background: #FFF;
+        color: var(--text-body); font-size: 16px;
+    }
+
+    .panel-head {
+        display: flex; align-items: center; justify-content: space-between;
+        gap: 12px; flex-wrap: wrap; margin-bottom: 12px;
+    }
+
+    .arm-tag {
+        font-size: 14px; font-weight: 700; padding: 4px 12px; border-radius: 999px;
+        background: var(--blue-bg); color: #0E65DE; border: 1px solid rgba(22, 119, 255, 0.2);
+    }
+
+    .arm-tag.b { background: var(--green-bg); color: #047857; border-color: rgba(16, 185, 129, 0.25); }
+    .arm-tag.hidden { background: #EEF2F7; color: var(--text-sub); border-color: rgba(15, 23, 42, 0.1); }
+
+    .scenario-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    .scenario-row .choice { min-height: 48px; font-size: 16px; font-weight: 500; padding: 10px 16px; }
+
+    .big-number {
+        font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+        font-size: clamp(28px, 5vw, 40px); font-weight: 700; line-height: 1.25;
+        color: var(--text-title); letter-spacing: -0.5px;
+    }
+
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+
+    .metric { background: var(--bg); border-radius: 12px; padding: 14px 16px; }
+    .metric .label { font-size: 15px; color: var(--text-sub); }
+    .metric .value { margin-top: 4px; }
+    .value.up { color: var(--green); }
+    .value.down, .a-down { color: var(--danger); }
+    .muted { color: var(--text-sub); font-size: 16px; }
+
+    /* ---------------- 对照组 A：常规波动视图（高频红绿 = 焦虑源） ---------------- */
+    #arm-a-panel { border-left: 4px solid rgba(217, 45, 32, 0.35); }
+    #a-trend-svg { width: 100%; height: 168px; display: block; background: #FFFCFC; border-radius: 10px; }
+    #a-trend-svg .vol-line { fill: none; stroke: var(--danger); stroke-width: 2; }
+    #a-trend-svg .vol-area { fill: rgba(217, 45, 32, 0.12); }
+    #a-trend-svg .vol-benchmark { fill: none; stroke: var(--benchmark); stroke-width: 1.5; stroke-dasharray: 5 5; }
+    #a-trend-svg .tick { stroke: rgba(217, 45, 32, 0.18); stroke-width: 1; }
+    .a-strip { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .a-strip .a-caption { color: var(--danger); font-size: 15px; font-weight: 600; }
+    .a-ticker { font-family: var(--font-mono); font-size: 14px; color: var(--text-muted); }
+
+    /* ---------------- 实验组 B：适老去焦虑视图（暖色大字 + 棘轮） ---------------- */
+    #arm-b-panel {
+        background: var(--warm-bg); border: 1px solid var(--warm-border);
+        border-left: 4px solid var(--gold);
+    }
+    #arm-b-panel h3 { color: #7A5C0F; }
+    .b-number { font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+                font-size: clamp(32px, 6vw, 48px); font-weight: 700; color: #7A5C0F; line-height: 1.2; }
+    .b-sub { font-size: 17px; color: #6B5A2E; }
+
+    .thermometer {
+        display: flex; align-items: center; gap: 14px; background: #FFFFFF;
+        border-radius: 14px; padding: 14px 16px; border: 1px solid var(--gold-border); margin: 14px 0;
+    }
+    .thermo-track { flex: 1; height: 14px; border-radius: 999px;
+        background: linear-gradient(90deg, #93C5FD 0%, #BBF7D0 45%, #FDE68A 75%, #FCA5A5 100%); position: relative; }
+    .thermo-marker { position: absolute; top: -5px; width: 6px; height: 24px; border-radius: 3px;
+        background: #0F172A; box-shadow: 0 0 0 3px rgba(255,255,255,.8); transform: translateX(-3px); }
+    .thermo-text { font-size: 17px; color: #6B5A2E; min-width: 128px; }
+
+    .ratchet-box { background: #FFFFFF; border-radius: 14px; padding: 16px; border: 1px solid var(--gold-border); }
+    .ratchet-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .ratchet-title { font-size: 17px; font-weight: 700; color: #7A5C0F; }
+    .ratchet-amount { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 22px; font-weight: 700; color: #7A5C0F; }
+    .progress-track { height: 20px; border-radius: 999px; background: #F1F5F9; margin: 12px 0 8px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 999px; background: var(--gold-gradient); transition: width .4s ease; }
+    .ratchet-note { font-size: 16px; color: #6B5A2E; }
+
+    .decision-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+    .btn-hold, .btn-redeem {
+        min-height: 60px; border-radius: 14px; border: 2px solid transparent;
+        font-size: 19px; font-weight: 700; cursor: pointer;
+    }
+    .btn-hold { background: var(--green-bg); color: #047857; border-color: rgba(16, 185, 129, 0.35); }
+    .btn-redeem { background: var(--danger-bg); color: var(--danger); border-color: rgba(217, 45, 32, 0.3); }
+    .btn-hold:hover { background: rgba(16, 185, 129, 0.18); }
+    .btn-redeem:hover { background: rgba(217, 45, 32, 0.14); }
+
+    /* ---------------- 测验 ---------------- */
+    .quiz-item { border-top: 1px dashed rgba(15, 23, 42, 0.12); padding-top: 16px; margin-top: 16px; }
+    .quiz-item:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
+    .quiz-q { font-weight: 600; color: var(--text-title); margin-bottom: 10px; }
+    .quiz-options { display: grid; gap: 10px; }
+    .quiz-option {
+        display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 14px;
+        border-radius: 10px; border: 1px solid rgba(15, 23, 42, 0.12); background: #FFF;
+        font-size: 17px; cursor: pointer;
+    }
+    .quiz-option:has(input:checked) { border-color: var(--gold); background: var(--gold-bg); }
+    .quiz-option input { width: 20px; height: 20px; accent-color: var(--gold); flex: 0 0 auto; }
+
+    /* ---------------- 状态与工具条 ---------------- */
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+    .toolbar .left { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+    #sync-status {
+        display: inline-flex; align-items: center; gap: 8px; font-size: 15px; color: var(--text-sub);
+    }
+    #sync-status::before {
+        content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--text-muted);
+    }
+    #sync-status.online::before { background: var(--green); }
+    #sync-status.offline::before { background: var(--warn); }
+    #sync-status.error::before { background: var(--danger); }
+
+    .toast {
+        position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+        background: rgba(15, 23, 42, 0.92); color: #FFF; padding: 10px 18px; border-radius: 999px;
+        font-size: 15px; max-width: 90vw; text-align: center; opacity: 0; pointer-events: none;
+        transition: opacity .2s; z-index: 50;
+    }
+    .toast.show { opacity: 1; }
+
+    .hidden { display: none !important; }
+
+    .footer-note { color: var(--text-muted); font-size: 14px; text-align: center; margin-top: 24px; line-height: 1.7; }
+
+    .reviewer-only { display: none; }
+    body.reviewer .reviewer-only { display: block; }
+    body.reviewer label.reviewer-only { display: inline-flex; align-items: center; gap: 8px; }
+
+    @media (max-width: 900px) {
+        body { padding: 18px 12px 56px; }
+        .card { padding: 18px; }
+        .decision-row { grid-template-columns: 1fr; }
+        .choice { min-width: 104px; }
+    }
+
+    @media (max-width: 600px) {
+        body { font-size: 17px; }
+        .hero h1 { font-size: 24px; }
+        .metric-grid { grid-template-columns: 1fr; }
+        .thermo-text { min-width: 96px; font-size: 15px; }
+    }
+
+    @media (max-width: 393px) {
+        body { padding: 14px 10px 48px; }
+        .card { padding: 16px; }
+        .choice { width: 100%; }
+        .btn-primary { font-size: 18px; }
+    }
+
+    @media (min-width: 1440px) {
+        .page { max-width: 1180px; }
+    }
+
+    @media (min-width: 1920px) {
+        .page { max-width: 1280px; }
+        body { font-size: 19px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; animation: none !important; }
+    }
+
+    :focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="page">
+    <header class="hero">
+        <h1>养老安全垫 · 去焦虑双模体验台</h1>
+        <p>R-FOF 单向棘轮实验版本 · 匿名采集，不记录姓名与联系方式</p>
+        <div class="badge-row">
+            <span class="badge">本金安全级</span>
+            <span class="badge blue">自动避险中</span>
+            <span class="badge green">无需盯盘</span>
+            <span class="badge">自动防御大跌</span>
+            <span class="badge green">零未来函数实测</span>
+        </div>
+    </header>
+
+    <!-- ============================ 入场：同意 + 分群 ============================ -->
+    <section id="entry-screen" class="card" aria-labelledby="entry-title">
+        <h2 id="entry-title">第 1 步：开始前请确认</h2>
+        <p class="hint">我们只采集匿名会话编号、年龄段、点击与答题结果，用于比较两种界面是否更让人安心。</p>
+
+        <div class="field">
+            <span class="field-label">您的年龄段</span>
+            <div class="choice-grid" role="group" aria-label="年龄段">
+                <button type="button" class="choice" data-age-group="youth" aria-pressed="false">18–44 岁（青年）</button>
+                <button type="button" class="choice" data-age-group="elder" aria-pressed="false">60 岁以上（长者）</button>
+                <button type="button" class="choice" data-age-group="unspecified" aria-pressed="false">暂不申明</button>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="cohort-select">体验场景</label>
+            <select id="cohort-select" class="choice" style="width:100%;min-height:56px;">
+                <option value="campus">校园预实验</option>
+                <option value="community">社区体验</option>
+                <option value="online">线上体验</option>
+                <option value="lab">实验室测试</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label class="consent" for="consent-checkbox">
+                <input type="checkbox" id="consent-checkbox">
+                <span>我已知晓本页面不采集真实姓名、身份证号、手机号与住址；匿名数据仅用于本项目 A/B 实验统计与学术研究引用。</span>
+            </label>
+        </div>
+
+        <button type="button" id="start-btn" class="btn-primary" disabled>开始体验</button>
+        <p class="muted" style="margin-top:10px;">体验约 3 分钟。您会随机进入两种界面中的一种（组间设计，不会告知分组以免影响作答）。</p>
+    </section>
+
+    <!-- ============================ 实验主体 ============================ -->
+    <section id="experiment-screen" class="hidden" aria-live="polite">
+        <div class="card">
+            <div class="panel-head">
+                <div>
+                    <h2>第 2 步：市场波动来了，您会怎么做？</h2>
+                    <p class="hint" style="margin-bottom:0;">您的养老储备本金 ¥300,000，当前账户 ¥330,000（+10%）。请在每个情景下做一次选择。</p>
+                </div>
+                <span id="arm-badge" class="arm-tag hidden">实验臂已隐藏</span>
+                <label class="btn-ghost reviewer-only">
+                    <input type="checkbox" id="reviewer-toggle"> 评审模式：并排对比两组
+                </label>
+            </div>
+
+            <div class="scenario-row" role="group" aria-label="情景选择" id="scenario-row">
+                <button type="button" class="choice" data-scenario="0" aria-pressed="true">平稳市况（0%）</button>
+                <button type="button" class="choice" data-scenario="-10" aria-pressed="false">模拟暴跌 −10%</button>
+                <button type="button" class="choice" data-scenario="-20" aria-pressed="false">模拟暴跌 −20%</button>
+            </div>
+
+            <div class="arm-tag hidden" id="participant-arm-notice">您当前看到的界面由系统随机分配。</div>
+
+            <!-- 对照组 A -->
+            <div id="arm-a-panel" class="card" style="margin-top:14px;box-shadow:none;">
+                <div class="a-strip">
+                    <span class="a-caption" id="a-caption">高频行情：每 3 秒刷新</span>
+                    <span class="a-ticker" id="a-ticker">实时盯盘中</span>
+                </div>
+                <svg id="a-trend-svg" viewBox="0 0 640 168" preserveAspectRatio="none"
+                     role="img" aria-label="近 30 个交易日的红绿波动折线"></svg>
+                <div class="metric-grid" style="margin-top:14px;">
+                    <div class="metric">
+                        <div class="label">当前账面金额</div>
+                        <div class="value big-number" id="a-balance">¥300,000</div>
+                    </div>
+                    <div class="metric">
+                        <div class="label">账面浮亏</div>
+                        <div class="value big-number a-down" id="a-float-loss">¥0</div>
+                    </div>
+                    <div class="metric">
+                        <div class="label">今日波动</div>
+                        <div class="value big-number a-down" id="a-day-change">-0.00%</div>
+                    </div>
+                </div>
+                <p class="muted" style="margin-top:12px;">红色为下跌，绿色为上涨；颜色越深，波动越剧烈。</p>
+            </div>
+
+            <!-- 实验组 B -->
+            <div id="arm-b-panel" class="card" style="margin-top:14px;box-shadow:none;">
+                <h3 style="font-size:21px;margin-bottom:6px;">市场温度计：正在为您降温</h3>
+                <p class="b-sub">温度越低，说明市场越冷；此时系统会启动防守层，而不是让您盯盘。</p>
+                <div class="thermometer">
+                    <span class="thermo-text" id="b-thermometer-text">市场温度 12°C · 低温防御区</span>
+                    <div class="thermo-track" role="img" aria-label="市场温度计">
+                        <div class="thermo-marker" id="b-thermo-marker" style="left: 18%;"></div>
+                    </div>
+                </div>
+
+                <div class="ratchet-box">
+                    <div class="ratchet-top">
+                        <span class="ratchet-title">已锁定养老安全垫</span>
+                        <span class="ratchet-amount" id="b-safe-floor">¥255,000</span>
+                    </div>
+                    <div class="progress-track" role="progressbar" aria-label="安全垫锁定进度"
+                         aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" id="b-locked-progress">
+                        <div class="progress-fill" id="b-locked-fill" style="width:100%;"></div>
+                    </div>
+                    <p class="ratchet-note" id="b-ratchet-note">收益率每创新高一次，安全垫就上锁一次；市场下跌时，安全垫<b>只升不降</b>。</p>
+                </div>
+
+                <div class="metric-grid" style="margin-top:14px;">
+                    <div class="metric" style="background:#FFFFFF;">
+                        <div class="label">您的养老账户（受保护）</div>
+                        <div class="value b-number" id="b-balance">¥300,000</div>
+                    </div>
+                    <div class="metric" style="background:#FFFFFF;">
+                        <div class="label">今天不需要做的事</div>
+                        <div class="value b-sub" style="font-size:18px;padding-top:6px;">无需盯盘 · 无需操作</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="decision-row">
+                <button type="button" id="decision-hold" class="btn-hold">我会继续持有，不动养老钱</button>
+                <button type="button" id="decision-redeem" class="btn-redeem">我会赎回，先把钱拿出来</button>
+            </div>
+            <p class="muted" id="decision-feedback" style="margin-top:12px;" aria-live="polite"></p>
+        </div>
+
+        <!-- ============================ 测验 ============================ -->
+        <div class="card" id="quiz-panel">
+            <h2>第 3 步：3 道小测试</h2>
+            <p class="hint">看看您是否理解了“养老安全垫只升不降”的规则，答对几题都不影响体验。</p>
+
+            <div class="quiz-item" data-quiz-index="1">
+                <p class="quiz-q">1. 市场下跌 20% 时，已锁定的养老安全垫会怎样？</p>
+                <div class="quiz-options">
+                    <label class="quiz-option"><input type="radio" name="quiz-1" value="A"> 跟着下跌，需要您盯盘</label>
+                    <label class="quiz-option"><input type="radio" name="quiz-1" value="B"> 只升不降，由防守层补足</label>
+                    <label class="quiz-option"><input type="radio" name="quiz-1" value="C"> 全部赎回，退出市场</label>
+                </div>
+            </div>
+
+            <div class="quiz-item" data-quiz-index="2">
+                <p class="quiz-q">2. “单向棘轮”最准确的解释是？</p>
+                <div class="quiz-options">
+                    <label class="quiz-option"><input type="radio" name="quiz-2" value="A"> 收益创新高才上锁，锁定的部分不再下调</label>
+                    <label class="quiz-option"><input type="radio" name="quiz-2" value="B"> 涨跌都按同样比例调整</label>
+                    <label class="quiz-option"><input type="radio" name="quiz-2" value="C"> 每天自动买卖一次</label>
+                </div>
+            </div>
+
+            <div class="quiz-item" data-quiz-index="3">
+                <p class="quiz-q">3. 市场温度计的用途是？</p>
+                <div class="quiz-options">
+                    <label class="quiz-option"><input type="radio" name="quiz-3" value="A"> 预测明天的涨跌点位</label>
+                    <label class="quiz-option"><input type="radio" name="quiz-3" value="B"> 告诉您市场冷热，提示防守姿态</label>
+                    <label class="quiz-option"><input type="radio" name="quiz-3" value="C"> 展示每只股票的分时行情</label>
+                </div>
+            </div>
+
+            <button type="button" id="quiz-submit" class="btn-primary" style="margin-top:18px;">提交测验</button>
+            <p class="muted" id="quiz-score" style="margin-top:12px;" aria-live="polite"></p>
+        </div>
+
+        <!-- ============================ 采集状态与离线导出 ============================ -->
+        <div class="card">
+            <div class="toolbar">
+                <div class="left">
+                    <span id="sync-status">等待采集</span>
+                    <button type="button" class="btn-ghost" id="export-json">导出离线 JSON</button>
+                    <button type="button" class="btn-ghost" id="export-csv">导出离线 CSV</button>
+                    <button type="button" class="btn-ghost" id="retry-sync">立即补传</button>
+                </div>
+                <span class="muted" id="queue-count">本地待传 0 条</span>
+            </div>
+            <p class="muted" style="margin-top:12px;">
+                离线（社区平板）模式下，所有记录会先存在本机浏览器；联网后自动补传，重复上传不会重复计数。
+            </p>
+        </div>
+    </section>
+
+    <p class="footer-note">
+        本页面是研究用交互原型，不构成任何投资建议。<br>
+        数据口径：<code>ui_ab_events</code>（session_id / ab_group / age_group / scenario_dd /
+        panic_redeem_clicked / decision_latency_ms / comprehension_score）。
+    </p>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+(function () {
+    "use strict";
+
+    var API_BASE = (window.location.protocol === "file:") ? "http://127.0.0.1:8000" : window.location.origin;
+    var OFFLINE = window.location.protocol === "file:";
+    var STORAGE_SESSION = "rfof_ab_session_v1";
+    var STORAGE_QUEUE = "rfof_ab_queue_v1";
+    var SALT = "rfof-ab-v1:";
+    var BATCH = 50;
+
+    var state = {
+        session: null,
+        ageGroup: null,
+        cohort: "campus",
+        abGroup: null,
+        scenario: 0,
+        scenarioShownAt: null,
+        decisions: {},
+        quizAnswers: {},
+        quizScore: null,
+        queue: []
+    };
+
+    /* ------------------------------------------------------------------ 工具 */
+    function $(id) { return document.getElementById(id); }
+
+    function toast(message) {
+        var node = $("toast");
+        node.textContent = message;
+        node.classList.add("show");
+        window.clearTimeout(toast._timer);
+        toast._timer = window.setTimeout(function () { node.classList.remove("show"); }, 2400);
+    }
+
+    function hex(buffer) {
+        var bytes = new Uint8Array(buffer);
+        var out = "";
+        for (var i = 0; i < bytes.length; i++) {
+            out += ("0" + bytes[i].toString(16)).slice(-2);
+        }
+        return out;
+    }
+
+    /* 纯 JS SHA-256：file:// / 非安全上下文下 crypto.subtle 不可用时仍能复现服务端分组。 */
+    var SHA256 = (function () {
+        var K = [
+            0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+            0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+            0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+            0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+            0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+            0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+            0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+            0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
+        ];
+        function rotr(x, n) { return (x >>> n) | (x << (32 - n)); }
+        function add() {
+            var sum = 0;
+            for (var i = 0; i < arguments.length; i++) { sum = (sum + arguments[i]) | 0; }
+            return sum;
+        }
+        function utf8(text) {
+            if (typeof TextEncoder !== "undefined") { return new TextEncoder().encode(text); }
+            var out = [];
+            for (var i = 0; i < text.length; i++) {
+                var code = text.charCodeAt(i);
+                if (code < 0x80) { out.push(code); }
+                else if (code < 0x800) { out.push(0xc0 | (code >> 6), 0x80 | (code & 63)); }
+                else if (code < 0xd800 || code >= 0xe000) { out.push(0xe0 | (code >> 12), 0x80 | ((code >> 6) & 63), 0x80 | (code & 63)); }
+                else {
+                    i++;
+                    var pair = 0x10000 + (((code & 0x3ff) << 10) | (text.charCodeAt(i) & 0x3ff));
+                    out.push(0xf0 | (pair >> 18), 0x80 | ((pair >> 12) & 63), 0x80 | ((pair >> 6) & 63), 0x80 | (pair & 63));
+                }
+            }
+            return out;
+        }
+        return function (text) {
+            // TextEncoder 返回 Uint8Array，转成普通数组后才能 push 填充位。
+            var bytes = Array.prototype.slice.call(utf8(text));
+            var bitLength = bytes.length * 8;
+            bytes.push(0x80);
+            while (bytes.length % 64 !== 56) { bytes.push(0); }
+            var high = Math.floor(bitLength / 0x100000000);
+            var low = bitLength >>> 0;
+            bytes.push((high >>> 24) & 255, (high >>> 16) & 255, (high >>> 8) & 255, high & 255);
+            bytes.push((low >>> 24) & 255, (low >>> 16) & 255, (low >>> 8) & 255, low & 255);
+
+            var h0 = 0x6a09e667, h1 = 0xbb67ae85, h2 = 0x3c6ef372, h3 = 0xa54ff53a,
+                h4 = 0x510e527f, h5 = 0x9b05688c, h6 = 0x1f83d9ab, h7 = 0x5be0cd19;
+            var w = new Array(64);
+            for (var offset = 0; offset < bytes.length; offset += 64) {
+                var i, j;
+                for (i = 0; i < 16; i++) {
+                    j = offset + i * 4;
+                    w[i] = ((bytes[j] << 24) | (bytes[j + 1] << 16) | (bytes[j + 2] << 8) | bytes[j + 3]) | 0;
+                }
+                for (i = 16; i < 64; i++) {
+                    var s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+                    var s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+                    w[i] = add(w[i - 16], s0, w[i - 7], s1);
+                }
+                var a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
+                for (i = 0; i < 64; i++) {
+                    var S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+                    var ch = (e & f) ^ (~e & g);
+                    var t1 = add(h, S1, ch, K[i], w[i]);
+                    var S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+                    var maj = (a & b) ^ (a & c) ^ (b & c);
+                    var t2 = add(S0, maj);
+                    h = g; g = f; f = e; e = add(d, t1);
+                    d = c; c = b; b = a; a = add(t1, t2);
+                }
+                h0 = add(h0, a); h1 = add(h1, b); h2 = add(h2, c); h3 = add(h3, d);
+                h4 = add(h4, e); h5 = add(h5, f); h6 = add(h6, g); h7 = add(h7, h);
+            }
+            function word(x) { return ("00000000" + (x >>> 0).toString(16)).slice(-8); }
+            return word(h0) + word(h1) + word(h2) + word(h3) + word(h4) + word(h5) + word(h6) + word(h7);
+        };
+    })();
+
+    /* 与 db/dao.py:assign_ab_group 完全一致：sha256("rfof-ab-v1:" + session_id) 首字节奇偶。 */
+    function assignAbGroup(sessionId) {
+        var digest = SHA256(SALT + sessionId);
+        return (parseInt(digest.slice(0, 2), 16) % 2 === 0) ? "A" : "B";
+    }
+
+    function randomHex(byteLength) {
+        var bytes = new Uint8Array(byteLength);
+        if (window.crypto && window.crypto.getRandomValues) {
+            window.crypto.getRandomValues(bytes);
+            return hex(bytes.buffer);
+        }
+        for (var i = 0; i < byteLength; i++) { bytes[i] = Math.floor(Math.random() * 256); }
+        return hex(bytes.buffer);
+    }
+
+    function eventUuid() {
+        if (window.crypto && typeof window.crypto.randomUUID === "function") {
+            return window.crypto.randomUUID();
+        }
+        return "evt-" + randomHex(16);
+    }
+
+    function nowIso() { return new Date().toISOString(); }
+
+    /* ------------------------------------------------------------------ 存储 */
+    function loadQueue() {
+        try {
+            var raw = window.localStorage.getItem(STORAGE_QUEUE);
+            state.queue = raw ? JSON.parse(raw) : [];
+        } catch (error) { state.queue = []; }
+        if (!Array.isArray(state.queue)) { state.queue = []; }
+        renderQueue();
+    }
+
+    function saveQueue() {
+        try { window.localStorage.setItem(STORAGE_QUEUE, JSON.stringify(state.queue)); }
+        catch (error) { /* 隐私模式禁用存储时只保留内存队列 */ }
+        renderQueue();
+    }
+
+    function renderQueue() {
+        var node = $("queue-count");
+        if (node) { node.textContent = "本地待传 " + state.queue.length + " 条"; }
+    }
+
+    function loadSession() {
+        try {
+            var raw = window.localStorage.getItem(STORAGE_SESSION);
+            return raw ? JSON.parse(raw) : null;
+        } catch (error) { return null; }
+    }
+
+    /* ------------------------------------------------------------------ 网络 */
+    function api(path, options) {
+        options = options || {};
+        options.headers = options.headers || {};
+        if (options.body) { options.headers["Content-Type"] = "application/json"; }
+        var target = /^https?:/.test(path) ? path : API_BASE + path;
+        return fetch(target, options).then(function (response) {
+            return response.json().catch(function () { return {}; }).then(function (body) {
+                if (!response.ok) {
+                    var error = new Error(body.error || ("HTTP " + response.status));
+                    error.status = response.status;
+                    error.body = body;
+                    throw error;
+                }
+                return body;
+            });
+        });
+    }
+
+    function setStatus(kind, text) {
+        var node = $("sync-status");
+        if (!node) { return; }
+        node.className = kind;
+        node.textContent = text;
+    }
+
+    /* ------------------------------------------------------------------ 事件入队 */
+    function enqueue(event) {
+        var payload = Object.assign({}, event, {
+            event_uuid: event.event_uuid || eventUuid(),
+            session_id: state.session ? state.session.session_id : event.session_id,
+            ab_group: state.abGroup || undefined,
+            age_group: state.ageGroup || "unspecified",
+            client_ts: nowIso()
+        });
+        Object.keys(payload).forEach(function (key) {
+            if (payload[key] === undefined) { delete payload[key]; }
+        });
+        state.queue.push(payload);
+        saveQueue();
+        flushQueue();
+        return payload;
+    }
+
+    function flushQueue() {
+        if (!state.queue.length || OFFLINE) {
+            setStatus(OFFLINE ? "offline" : "idle", OFFLINE ? "离线模式：记录已存在本机" : "等待采集");
+            return Promise.resolve();
+        }
+        var batch = state.queue.slice(0, BATCH);
+        return api("/api/events", { method: "POST", body: JSON.stringify({ events: batch }) })
+            .then(function () {
+                var sent = batch.length;
+                state.queue = state.queue.slice(sent);
+                saveQueue();
+                setStatus("online", "已同步（" + (state.queue.length ? "剩余 " + state.queue.length + " 条" : "全部已上传") + "）");
+                if (state.queue.length) { return flushQueue(); }
+            })
+            .catch(function (error) {
+                setStatus("error", "同步失败，已保留在本地队列：" + error.message);
+            });
+    }
+
+    /* ------------------------------------------------------------------ 入场 */
+    function selectAgeGroup(button) {
+        state.ageGroup = button.getAttribute("data-age-group");
+        var buttons = document.querySelectorAll("[data-age-group]");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute("aria-pressed", buttons[i] === button ? "true" : "false");
+        }
+        syncStartButton();
+    }
+
+    function syncStartButton() {
+        var consent = $("consent-checkbox").checked;
+        $("start-btn").disabled = !(state.ageGroup && consent);
+    }
+
+    function startExperiment() {
+        var cohort = $("cohort-select").value;
+        state.cohort = cohort;
+        var stored = loadSession();
+        var sessionId = stored && stored.session_id ? stored.session_id : randomHex(16);
+        var ageGroup = state.ageGroup;
+        var localGroup = assignAbGroup(sessionId);
+
+        state.session = { session_id: sessionId, age_group: ageGroup, cohort: cohort };
+        state.abGroup = localGroup;
+        try { window.localStorage.setItem(STORAGE_SESSION, JSON.stringify(state.session)); } catch (error) {}
+
+        // 本地已能确定分组（与服务端同一算法），但先让服务端登记会话再开始采集，
+        // 这样首屏事件不会因为“会话尚不存在”而反复补传失败；断网时退回离线分组。
+        var enter = function (kind, text) {
+            enterArena();
+            setStatus(kind, text);
+            flushQueue();
+        };
+        api("/api/session", {
+            method: "POST",
+            body: JSON.stringify({
+                session_id: sessionId,
+                age_group: ageGroup,
+                cohort: cohort,
+                consent_scope: "analytics_and_research",
+                device_class: detectDevice()
+            })
+        }).then(function (body) {
+            state.abGroup = body.ab_group;
+            try {
+                window.localStorage.setItem(STORAGE_SESSION, JSON.stringify({
+                    session_id: sessionId, age_group: ageGroup,
+                    cohort: cohort, ab_group: body.ab_group
+                }));
+            } catch (error) {}
+            enter("online", "会话已登记");
+        }).catch(function () {
+            enter("offline", "离线模式：使用本机分组 " + localGroup + "，稍后可补传");
+        });
+    }
+
+    function detectDevice() {
+        var width = window.innerWidth;
+        if (/iPad|Tablet/i.test(navigator.userAgent) || (width >= 600 && width <= 1100 && "ontouchstart" in window)) {
+            return "tablet";
+        }
+        if (width < 600) { return "phone"; }
+        return "desktop";
+    }
+
+    function enterArena() {
+        $("entry-screen").classList.add("hidden");
+        $("experiment-screen").classList.remove("hidden");
+        applyArm();
+        enqueue({
+            event_type: "page_load",
+            scenario_dd: 0,
+            panic_redeem_clicked: 0,
+            decision_latency_ms: 0,
+            comprehension_score: 0
+        });
+        setScenario(0);
+    }
+
+    function isReviewer() {
+        var params = new URLSearchParams(window.location.search);
+        return params.get("role") === "reviewer";
+    }
+
+    function applyArm() {
+        var reviewer = isReviewer();
+        var panelA = $("arm-a-panel");
+        var panelB = $("arm-b-panel");
+        var badge = $("arm-badge");
+        var notice = $("participant-arm-notice");
+
+        if (reviewer) {
+            document.body.classList.add("reviewer");
+            panelA.classList.remove("hidden");
+            panelB.classList.remove("hidden");
+            badge.classList.remove("hidden");
+            badge.classList.add("b");
+            badge.textContent = "评审模式：并排显示 A / B";
+            notice.classList.add("hidden");
+            return;
+        }
+        var group = state.abGroup || "A";
+        panelA.classList.toggle("hidden", group !== "A");
+        panelB.classList.toggle("hidden", group !== "B");
+        // 参与者看不到分组标签，避免需求特征影响作答（近似双盲）。
+        badge.classList.add("hidden");
+        badge.classList.remove("b");
+        badge.textContent = "实验臂已隐藏";
+        notice.classList.remove("hidden");
+    }
+
+    /* ------------------------------------------------------------------ 情景 */
+    // 演示口径（界面示意，非回测结论）：
+    //   本金 300,000 → 账户峰值 330,000（+10%），单向棘轮按峰值的 85% 上锁 = 280,500；
+    //   −10%：330,000 × 0.9 = 297,000（仍在安全垫之上）；
+    //   −20%：330,000 × 0.8 = 264,000（低于安全垫，由防守层补足至 280,500）。
+    var SCENARIO = {
+        "0": { dd: 0, peak: 330000, balance: 330000, floor: 280500, temp: 12, tempPercent: 18, label: "平稳市况" },
+        "-10": { dd: -10, peak: 330000, balance: 297000, floor: 280500, temp: 8, tempPercent: 12, label: "模拟暴跌 −10%" },
+        "-20": { dd: -20, peak: 330000, balance: 280500, rawBalance: 264000, floor: 280500, temp: 4, tempPercent: 6, label: "模拟暴跌 −20%" }
+    };
+
+    function formatMoney(value) {
+        return "¥" + Math.round(value).toLocaleString("en-US");
+    }
+
+    function setScenario(value) {
+        var config = SCENARIO[String(value)];
+        if (!config) { return; }
+        state.scenario = config.dd;
+        state.scenarioShownAt = Date.now();
+
+        var buttons = document.querySelectorAll("[data-scenario]");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute("aria-pressed", buttons[i].getAttribute("data-scenario") === String(value) ? "true" : "false");
+        }
+
+        renderArmA(config);
+        renderArmB(config);
+        $("decision-feedback").textContent = "";
+        enqueue({
+            event_type: "scenario_view",
+            scenario_dd: config.dd,
+            panic_redeem_clicked: 0,
+            decision_latency_ms: 0,
+            comprehension_score: 0
+        });
+    }
+
+    /* 用确定性伪随机序列画出“高频抖动”曲线：同一会话同一情景刷新结果一致。 */
+    function pseudoSeries(seedText, count) {
+        var digest = SHA256(seedText);
+        var values = [];
+        var value = 100;
+        for (var i = 0; i < count; i++) {
+            var chunk = digest.substr((i * 2) % 60, 2);
+            var n = (parseInt(chunk, 16) / 255) - 0.5;
+            value = Math.max(60, value * (1 + n * 0.035));
+            values.push(value);
+        }
+        return values;
+    }
+
+    function renderArmA(config) {
+        // 对照组不做防守：账户随市场 1:1 下跌，浮亏按本金口径展示。
+        var raw = config.rawBalance || config.balance;
+        var loss = config.peak - raw;
+        $("a-balance").textContent = formatMoney(raw);
+        $("a-float-loss").textContent = "−" + formatMoney(loss);
+        $("a-float-loss").className = "value big-number a-down";
+        $("a-day-change").textContent = config.dd.toFixed(2) + "%";
+        $("a-caption").textContent = "高频行情：每 3 秒刷新 · " + config.label;
+        $("a-ticker").textContent = config.dd === 0 ? "实时盯盘中" : "恐慌指数上升";
+
+        var svg = $("a-trend-svg");
+        var series = pseudoSeries("a:" + (state.session ? state.session.session_id : "anon") + ":" + config.dd, 30);
+        var width = 640, height = 168, pad = 8;
+        var min = Math.min.apply(null, series), max = Math.max.apply(null, series);
+        var span = Math.max(0.0001, max - min);
+        var points = series.map(function (value, index) {
+            var x = pad + index * (width - pad * 2) / (series.length - 1);
+            var y = pad + (max - value) / span * (height - pad * 2);
+            return x.toFixed(1) + "," + y.toFixed(1);
+        });
+        var line = points.join(" ");
+        var area = "M" + points[0] + " L" + points.join(" L") + " L" + (width - pad) + "," + (height - pad) + " L" + pad + "," + (height - pad) + " Z";
+        svg.innerHTML =
+            '<path class="vol-area" d="' + area + '"></path>' +
+            '<polyline class="vol-benchmark" points="0,' + (height * 0.45) + " " + width + "," + (height * 0.45) + '"></polyline>' +
+            '<polyline class="vol-line" points="' + line + '"></polyline>';
+    }
+
+    function renderArmB(config) {
+        $("b-balance").textContent = formatMoney(config.balance);
+        $("b-safe-floor").textContent = formatMoney(config.floor);
+        $("b-thermometer-text").textContent = "市场温度 " + config.temp + "°C · " + (config.temp <= 8 ? "低温防御区" : "温和观察区");
+        $("b-thermo-marker").style.left = config.tempPercent + "%";
+        var progress = $("b-locked-progress");
+        progress.setAttribute("aria-valuenow", "100");
+        $("b-locked-fill").style.width = "100%";
+        $("b-ratchet-note").innerHTML = config.dd === 0
+            ? "收益率每创新高一次，安全垫就上锁一次；市场下跌时，安全垫<b>只升不降</b>。"
+            : "本次下跌只影响浮动收益；防守层会从现金储备补足到安全垫 <b>" + formatMoney(config.floor) +
+              "</b>，您的养老本金不受影响。";
+    }
+
+    /* ------------------------------------------------------------------ 决策 */
+    function recordDecision(choice) {
+        var latency = state.scenarioShownAt ? Math.max(0, Date.now() - state.scenarioShownAt) : 0;
+        var payload = enqueue({
+            event_type: "decision",
+            scenario_dd: state.scenario,
+            panic_redeem_clicked: choice === "redeem" ? 1 : 0,
+            decision_latency_ms: latency,
+            comprehension_score: state.quizScore === null ? 0 : state.quizScore
+        });
+        state.decisions[state.scenario] = choice;
+        $("decision-feedback").textContent = (choice === "redeem" ? "已记录：赎回" : "已记录：继续持有") +
+            " · 用时 " + (latency / 1000).toFixed(1) + " 秒";
+        return payload;
+    }
+
+    /* ------------------------------------------------------------------ 测验 */
+    var QUIZ_KEY = { 1: "B", 2: "A", 3: "B" };
+
+    function collectQuiz() {
+        var answers = {};
+        for (var index = 1; index <= 3; index++) {
+            var picked = document.querySelector('input[name="quiz-' + index + '"]:checked');
+            answers[index] = picked ? picked.value : null;
+        }
+        return answers;
+    }
+
+    function submitQuiz() {
+        var answers = collectQuiz();
+        var score = 0;
+        for (var index = 1; index <= 3; index++) {
+            if (answers[index] === QUIZ_KEY[index]) { score += 1; }
+        }
+        state.quizScore = score;
+        state.quizAnswers = answers;
+        $("quiz-score").textContent = "答对 " + score + " / 3 题。" +
+            (score === 3 ? "您已完全理解安全垫规则。" : "答错不影响体验，规则就在上方说明里。");
+        enqueue({
+            event_type: "quiz_submit",
+            scenario_dd: state.scenario,
+            panic_redeem_clicked: 0,
+            decision_latency_ms: 0,
+            comprehension_score: score
+        });
+        api("/api/survey", {
+            method: "POST",
+            body: JSON.stringify({
+                session_id: state.session ? state.session.session_id : null,
+                instrument: "rules_quiz",
+                items: [1, 2, 3].map(function (index) {
+                    return {
+                        item_code: "q" + index,
+                        item_value: answers[index] === QUIZ_KEY[index] ? 1 : 0,
+                        sequence: index
+                    };
+                })
+            })
+        }).catch(function () { /* 离线时测验结果仍已在事件队列中，可补传 */ });
+    }
+
+    /* ------------------------------------------------------------------ 离线导出 */
+    function download(filename, content, mime) {
+        var blob = new Blob([content], { type: mime || "text/plain;charset=utf-8" });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        window.setTimeout(function () { URL.revokeObjectURL(link.href); link.remove(); }, 0);
+    }
+
+    function csvEscape(value) {
+        if (value === null || value === undefined) { return ""; }
+        var text = String(value);
+        return /[",\n]/.test(text) ? '"' + text.replace(/"/g, '""') + '"' : text;
+    }
+
+    function exportCsv() {
+        var columns = ["event_uuid", "session_id", "ab_group", "age_group", "scenario_dd",
+                       "event_type", "panic_redeem_clicked", "decision_latency_ms",
+                       "comprehension_score", "client_ts"];
+        var lines = [columns.join(",")];
+        state.queue.forEach(function (event) {
+            lines.push(columns.map(function (column) { return csvEscape(event[column]); }).join(","));
+        });
+        download("rfof_ab_offline_" + Date.now() + ".csv", "\ufeff" + lines.join("\n"), "text/csv;charset=utf-8");
+        toast("已导出 " + state.queue.length + " 条离线 CSV");
+    }
+
+    function exportJson() {
+        var bundle = {
+            schema_version: "1",
+            exported_at: nowIso(),
+            profiles: state.session ? [{
+                session_id: state.session.session_id,
+                age_group: state.ageGroup || "unspecified",
+                cohort: state.cohort,
+                device_class: detectDevice(),
+                consent_scope: "analytics_and_research"
+            }] : [],
+            events: state.queue
+        };
+        download("rfof_ab_offline_" + Date.now() + ".json", JSON.stringify(bundle, null, 2), "application/json");
+        toast("已导出离线 JSON 包，可交给组织者导入");
+    }
+
+    /* ------------------------------------------------------------------ 绑定 */
+    function bind() {
+        var ageButtons = document.querySelectorAll("[data-age-group]");
+        for (var i = 0; i < ageButtons.length; i++) {
+            (function (button) {
+                button.addEventListener("click", function () { selectAgeGroup(button); });
+            })(ageButtons[i]);
+        }
+        $("consent-checkbox").addEventListener("change", syncStartButton);
+        $("start-btn").addEventListener("click", startExperiment);
+
+        var scenarioButtons = document.querySelectorAll("[data-scenario]");
+        for (var j = 0; j < scenarioButtons.length; j++) {
+            (function (button) {
+                button.addEventListener("click", function () { setScenario(button.getAttribute("data-scenario")); });
+            })(scenarioButtons[j]);
+        }
+
+        $("decision-hold").addEventListener("click", function () { recordDecision("hold"); });
+        $("decision-redeem").addEventListener("click", function () { recordDecision("redeem"); });
+        $("quiz-submit").addEventListener("click", submitQuiz);
+        $("export-json").addEventListener("click", exportJson);
+        $("export-csv").addEventListener("click", exportCsv);
+        $("retry-sync").addEventListener("click", function () { flushQueue(); });
+
+        var reviewerToggle = $("reviewer-toggle");
+        if (reviewerToggle) {
+            reviewerToggle.addEventListener("change", function () {
+                document.body.classList.toggle("reviewer", reviewerToggle.checked);
+                applyArm();
+            });
+        }
+
+        window.addEventListener("online", function () { flushQueue(); });
+    }
+
+    function boot() {
+        loadQueue();
+        bind();
+        if (isReviewer()) { document.body.classList.add("reviewer"); }
+        if (OFFLINE) {
+            setStatus("offline", "离线模式：可用 file:// 直接体验，记录后导出 JSON / CSV");
+        }
+        // 已完成的会话恢复：直接进入实验区（避免刷新后重复作答）。
+        var stored = loadSession();
+        if (stored && stored.session_id) {
+            state.session = stored;
+            state.ageGroup = stored.age_group;
+            state.cohort = stored.cohort;
+            state.abGroup = assignAbGroup(stored.session_id);
+            $("experiment-screen").classList.remove("hidden");
+            $("entry-screen").classList.add("hidden");
+            applyArm();
+            setScenario(0);
+            flushQueue();
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", boot);
+})();
+</script>
+</body>
+</html>
