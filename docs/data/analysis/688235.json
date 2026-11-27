@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-26 17:35:35+08:00",
-  "trade_date": "2026-11-26",
+  "generated_at": "2026-11-27 17:41:00+08:00",
+  "trade_date": "2026-11-27",
   "code": "688235",
   "name": "百济神州",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 64.4,
-    "risk": 28.4,
-    "technical": 88.0,
+    "risk_adjusted": 78.6,
+    "risk": 23.3,
+    "technical": 100.0,
     "industry": 57.0,
     "leading": 50.0
   },
@@ -42,15 +42,20 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-26 17:33:55"
+    "updated_at": "2026-11-27 17:39:50"
   },
   "nale_network": {
     "sector_name": "抗肿瘤创新药",
     "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "688235",
+      "name": "百济神州",
+      "change_pct": 6.281021897810211,
+      "is_limit_up": false
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
     "has_limit_up_resonance": false,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
@@ -60,7 +65,7 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.2,
@@ -70,34 +75,34 @@
   "risk": {
     "level": "low",
     "label": "低风险",
-    "annualized_volatility_20d_pct": 45.8,
-    "max_drawdown_60d_pct": -14.21,
-    "atr14_pct": 4.14,
+    "annualized_volatility_20d_pct": 49.32,
+    "max_drawdown_60d_pct": -13.19,
+    "atr14_pct": 4.11,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 42.8,
-        "value": 45.8
+        "score": 35.3,
+        "value": 49.32
       },
       {
         "name": "60日最大回撤",
-        "score": 13.9,
-        "value": -14.21
+        "score": 12.7,
+        "value": -13.19
       },
       {
         "name": "ATR百分比",
         "score": 35.3,
-        "value": 4.14
+        "value": 4.11
       },
       {
         "name": "量价异常",
-        "score": 49.7,
-        "value": 0.87
+        "score": 22.0,
+        "value": 0.96
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 30.6
+        "score": 1.7,
+        "value": 29.49
       }
     ]
   },
@@ -112,34 +117,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
     "dynamic_alpha_peak": 0.2
   },
   "technical": {
     "trend": "uptrend",
-    "ma5": 270.942,
-    "ma10": 273.20500000000004,
-    "ma20": 271.728,
-    "ma60": 263.8661666666667,
-    "rsi14": 53.2,
-    "macd_dif": 2.615284466469518,
-    "macd_dea": 3.429685165045392,
-    "macd_hist": -1.628801397151748,
-    "atr14_pct": 4.135888005232412,
-    "boll_position": 0.5460481535411715,
-    "return_5d_pct": 0.25979728493541465,
-    "return_20d_pct": 8.005833891757664,
-    "volume_ratio_5d": 0.87
+    "ma5": 276.64,
+    "ma10": 274.30600000000004,
+    "ma20": 273.8265,
+    "ma60": 264.05716666666666,
+    "rsi14": 63.5,
+    "macd_dif": 3.886351209911197,
+    "macd_dea": 3.5210183818641463,
+    "macd_hist": 0.7306656560941018,
+    "atr14_pct": 4.107745772493753,
+    "boll_position": 0.8654211773209907,
+    "return_5d_pct": 10.844244823386084,
+    "return_20d_pct": 16.839191141068845,
+    "volume_ratio_5d": 0.96
   },
   "industry": {
     "name": "抗肿瘤创新药",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.38,
-    "return_20d_pct": -12.09,
-    "return_60d_pct": -26.62,
-    "relative_strength_20d_pct": 17.45
+    "return_5d_pct": -4.72,
+    "return_20d_pct": -9.46,
+    "return_60d_pct": -27.15,
+    "relative_strength_20d_pct": 23.76
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +152,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": -0.69,
-      "median_return_pct": -1.35,
-      "best_return_pct": 11.64,
-      "worst_return_pct": -10.16
+      "up_probability_pct": 20.0,
+      "average_return_pct": -2.62,
+      "median_return_pct": -3.61,
+      "best_return_pct": 7.66,
+      "worst_return_pct": -9.64
     },
     "horizon_5d": {
       "up_probability_pct": 40.0,
-      "average_return_pct": -0.7,
-      "median_return_pct": -1.2,
-      "best_return_pct": 11.67,
-      "worst_return_pct": -17.18
+      "average_return_pct": -1.45,
+      "median_return_pct": -3.04,
+      "best_return_pct": 13.5,
+      "worst_return_pct": -10.29
     }
   },
   "fundamental": {
@@ -292,7 +297,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 45.8%，波动偏高。",
+      "detail": "20日年化波动率 49.3%，波动偏高。",
       "contribution": -5.0
     }
   ],

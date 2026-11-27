@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-26 17:35:35+08:00",
-  "trade_date": "2026-11-26",
+  "generated_at": "2026-11-27 17:41:00+08:00",
+  "trade_date": "2026-11-27",
   "code": "000977",
   "name": "浪潮信息",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 47.5,
-    "risk": 55.0,
-    "technical": 42.0,
-    "industry": 27.0,
+    "risk_adjusted": 43.0,
+    "risk": 56.0,
+    "technical": 63.0,
+    "industry": 28.6,
     "leading": 50.0
   },
   "leading": {
@@ -42,16 +42,21 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-26 17:33:24"
+    "updated_at": "2026-11-27 17:39:32"
   },
   "nale_network": {
     "sector_name": "AI服务器",
     "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "000977",
+      "name": "浪潮信息",
+      "change_pct": 10.011750881316111,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": true,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
     "leader_corr_with_stock": null,
@@ -60,44 +65,44 @@
       "physical_lag_tau_days": 28.0,
       "physical_lag_sigma_days": 6.5,
       "peak_horizon_days": 28,
-      "peak_spillover_return_pct": 0.28,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.2,
-      "dynamic_alpha_physical_peak": 0.2
+      "dynamic_alpha_sentiment_t0": 0.55,
+      "dynamic_alpha_physical_peak": 0.551
     }
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 58.68,
+    "annualized_volatility_20d_pct": 69.96,
     "max_drawdown_60d_pct": -51.24,
-    "atr14_pct": 6.35,
+    "atr14_pct": 6.01,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 60.7,
-        "value": 58.68
+        "score": 62.4,
+        "value": 69.96
       },
       {
         "name": "60日最大回撤",
-        "score": 88.4,
+        "score": 89.0,
         "value": -51.24
       },
       {
         "name": "ATR百分比",
-        "score": 60.1,
-        "value": 6.35
+        "score": 59.5,
+        "value": 6.01
       },
       {
         "name": "量价异常",
-        "score": 26.0,
-        "value": 1.07
+        "score": 28.9,
+        "value": 1.05
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 30.6
+        "score": 1.7,
+        "value": 29.49
       }
     ]
   },
@@ -112,34 +117,34 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 28.0,
     "peak_horizon_days": 28,
-    "peak_spillover_return_pct": 0.28,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.2
+    "dynamic_alpha_peak": 0.551
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 43.209999999999994,
-    "ma10": 46.974000000000004,
-    "ma20": 51.052,
-    "ma60": 62.17616666666667,
-    "rsi14": 25.8,
-    "macd_dif": -4.55380567257528,
-    "macd_dea": -3.8277460969800288,
-    "macd_hist": -1.4521191511905016,
-    "atr14_pct": 6.346707163768199,
-    "boll_position": 0.08339468203334903,
-    "return_5d_pct": -9.54506802721089,
-    "return_20d_pct": -24.26130295478819,
-    "volume_ratio_5d": 1.07
+    "ma5": 43.922000000000004,
+    "ma10": 46.245000000000005,
+    "ma20": 50.6835,
+    "ma60": 61.651833333333336,
+    "rsi14": 38.9,
+    "macd_dif": -4.253791962013807,
+    "macd_dea": -3.912955268809939,
+    "macd_hist": -0.681673386407736,
+    "atr14_pct": 6.007081920719305,
+    "boll_position": 0.3111888966493563,
+    "return_5d_pct": 8.231213872832367,
+    "return_20d_pct": -13.602805463270574,
+    "volume_ratio_5d": 1.05
   },
   "industry": {
     "name": "AI服务器",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.38,
-    "return_20d_pct": -12.09,
-    "return_60d_pct": -26.62,
-    "relative_strength_20d_pct": -14.82
+    "return_5d_pct": -4.72,
+    "return_20d_pct": -9.46,
+    "return_60d_pct": -27.15,
+    "relative_strength_20d_pct": -6.68
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -147,18 +152,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.4,
-      "median_return_pct": 0.89,
-      "best_return_pct": 16.89,
+      "up_probability_pct": 33.3,
+      "average_return_pct": -1.12,
+      "median_return_pct": -3.38,
+      "best_return_pct": 25.98,
       "worst_return_pct": -13.87
     },
     "horizon_5d": {
-      "up_probability_pct": 46.7,
-      "average_return_pct": 1.63,
-      "median_return_pct": -1.36,
-      "best_return_pct": 34.8,
-      "worst_return_pct": -17.89
+      "up_probability_pct": 43.3,
+      "average_return_pct": -1.81,
+      "median_return_pct": -1.58,
+      "best_return_pct": 19.55,
+      "worst_return_pct": -21.46
     }
   },
   "fundamental": {
@@ -308,15 +313,9 @@
       "contribution": -7.0
     },
     {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=25.8，短期超卖。",
-      "contribution": -5.0
-    },
-    {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 58.7%，波动偏高。",
+      "detail": "20日年化波动率 70.0%，波动偏高。",
       "contribution": -5.0
     }
   ],

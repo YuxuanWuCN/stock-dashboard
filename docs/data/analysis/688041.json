@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-26 17:35:35+08:00",
-  "trade_date": "2026-11-26",
+  "generated_at": "2026-11-27 17:41:00+08:00",
+  "trade_date": "2026-11-27",
   "code": "688041",
   "name": "海光信息",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 39.4,
-    "risk": 57.9,
-    "technical": 42.0,
-    "industry": 30.8,
+    "risk_adjusted": 53.3,
+    "risk": 61.1,
+    "technical": 96.0,
+    "industry": 57.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,57 +42,57 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-26 17:33:04"
+    "updated_at": "2026-11-27 17:39:09"
   },
   "nale_network": {
     "sector_name": "科技",
-    "sector_breadth_pct": 38.9,
-    "tier_role": "divergent",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "follower_catchup",
     "leader_stock": {
-      "code": "003040",
-      "name": "楚天龙",
-      "change_pct": 10.039761431411529,
+      "code": "688012",
+      "name": "中微公司",
+      "change_pct": 20.00000000000001,
       "is_limit_up": true
     },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 3.0,
+    "spillover_prob_5d_pct": 7.2,
     "has_limit_up_resonance": true,
     "co_movement_peers": [
       {
-        "code": "000021",
-        "name": "深科技",
-        "corr": 0.73
-      },
-      {
-        "code": "688008",
-        "name": "澜起科技",
-        "corr": 0.73
+        "code": "688256",
+        "name": "寒武纪",
+        "corr": 0.8
       },
       {
         "code": "688525",
         "name": "佰维存储",
-        "corr": 0.72
+        "corr": 0.79
       },
       {
-        "code": "688256",
-        "name": "寒武纪",
-        "corr": 0.71
+        "code": "688008",
+        "name": "澜起科技",
+        "corr": 0.79
+      },
+      {
+        "code": "000021",
+        "name": "深科技",
+        "corr": 0.77
       },
       {
         "code": "000063",
         "name": "中兴通讯",
-        "corr": 0.64
+        "corr": 0.74
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": 0.36,
+    "leader_corr_with_stock": 0.72,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 18.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 18,
-      "peak_spillover_return_pct": 0.0,
-      "optimal_holding_days": 5.0,
+      "peak_spillover_return_pct": 2.93,
+      "optimal_holding_days": 18,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.551,
       "dynamic_alpha_physical_peak": 0.555
@@ -101,14 +101,14 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 72.6,
+    "annualized_volatility_20d_pct": 92.43,
     "max_drawdown_60d_pct": -38.33,
-    "atr14_pct": 7.68,
+    "atr14_pct": 7.2,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 75.7,
-        "value": 72.6
+        "score": 83.2,
+        "value": 92.43
       },
       {
         "name": "60日最大回撤",
@@ -117,60 +117,60 @@
       },
       {
         "name": "ATR百分比",
-        "score": 74.6,
-        "value": 7.68
+        "score": 75.1,
+        "value": 7.2
       },
       {
         "name": "量价异常",
-        "score": 39.9,
-        "value": 1.11
+        "score": 46.8,
+        "value": 1.1
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 30.6
+        "score": 1.7,
+        "value": 29.49
       }
     ]
   },
   "forecast": {
     "return_3d_pct": 1.79,
-    "return_5d_pct": 6.62,
+    "return_5d_pct": 9.62,
     "up_probability_3d_pct": 53.3,
-    "up_probability_5d_pct": 76.7,
+    "up_probability_5d_pct": 83.9,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
     "model": "knn_v1",
     "physical_lag_tau_days": 18.0,
     "peak_horizon_days": 18,
-    "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0,
+    "peak_spillover_return_pct": 2.93,
+    "optimal_holding_days": 18,
     "dynamic_alpha_peak": 0.555
   },
   "technical": {
-    "trend": "downtrend",
-    "ma5": 161.418,
-    "ma10": 175.20300000000003,
-    "ma20": 180.9815,
-    "ma60": 209.6205,
-    "rsi14": 31.7,
-    "macd_dif": -11.27689482044957,
-    "macd_dea": -9.083364277305103,
-    "macd_hist": -4.387061086288934,
-    "atr14_pct": 7.680512605562393,
-    "boll_position": 0.09189255865304598,
-    "return_5d_pct": -12.288888888888893,
-    "return_20d_pct": -15.063481816225522,
-    "volume_ratio_5d": 1.11
+    "trend": "range",
+    "ma5": 165.842,
+    "ma10": 173.51,
+    "ma20": 181.79000000000002,
+    "ma60": 208.62716666666665,
+    "rsi14": 50.5,
+    "macd_dif": -9.393188351329115,
+    "macd_dea": -9.14532908420829,
+    "macd_hist": -0.49571853424165013,
+    "atr14_pct": 7.197966913680906,
+    "boll_position": 0.5819418053174186,
+    "return_5d_pct": 13.467275494672748,
+    "return_20d_pct": 9.50058754406582,
+    "volume_ratio_5d": 1.1
   },
   "industry": {
     "name": "科技",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.38,
-    "return_20d_pct": -12.09,
-    "return_60d_pct": -26.62,
-    "relative_strength_20d_pct": -5.62
+    "return_5d_pct": -4.72,
+    "return_20d_pct": -9.46,
+    "return_60d_pct": -27.15,
+    "relative_strength_20d_pct": 16.42
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -178,18 +178,18 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 0.24,
-      "median_return_pct": 0.75,
-      "best_return_pct": 12.86,
-      "worst_return_pct": -13.08
+      "up_probability_pct": 30.0,
+      "average_return_pct": -3.92,
+      "median_return_pct": -3.54,
+      "best_return_pct": 4.28,
+      "worst_return_pct": -14.71
     },
     "horizon_5d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.05,
-      "median_return_pct": -0.07,
-      "best_return_pct": 16.9,
-      "worst_return_pct": -14.35
+      "up_probability_pct": 40.0,
+      "average_return_pct": -3.3,
+      "median_return_pct": -4.91,
+      "best_return_pct": 15.31,
+      "worst_return_pct": -20.08
     }
   },
   "fundamental": {
@@ -309,10 +309,10 @@
   },
   "reasons": [
     {
-      "type": "negative",
-      "title": "趋势偏弱",
-      "detail": "价格低于主要均线，短期承压。",
-      "contribution": -8.0
+      "title": "T-NALE·科技时空时滞共振",
+      "detail": "同板块龙头【中微公司】封板催化，经产业链物理传导（时滞τ≈18天），注入 +3.0% 溢出预期及 +7.2% 看涨胜率（波峰前瞻+2.93%）",
+      "impact": "positive",
+      "score_delta": 4.5
     },
     {
       "type": "negative",
@@ -329,7 +329,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 72.6%，波动偏高。",
+      "detail": "20日年化波动率 92.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

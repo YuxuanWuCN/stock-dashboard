@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-26 17:35:35+08:00",
-  "trade_date": "2026-11-26",
+  "generated_at": "2026-11-27 17:41:00+08:00",
+  "trade_date": "2026-11-27",
   "code": "600667",
   "name": "太极实业",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 46.5,
-    "risk": 64.4,
-    "technical": 42.0,
-    "industry": 27.0,
+    "risk_adjusted": 62.8,
+    "risk": 61.3,
+    "technical": 81.0,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,16 +42,21 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-26 17:34:32"
+    "updated_at": "2026-11-27 17:40:13"
   },
   "nale_network": {
     "sector_name": "长鑫概念",
     "sector_breadth_pct": 100.0,
-    "tier_role": "core_mid",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.3,
-    "spillover_prob_5d_pct": 2.0,
-    "has_limit_up_resonance": false,
+    "tier_role": "leader",
+    "leader_stock": {
+      "code": "600667",
+      "name": "太极实业",
+      "change_pct": 10.018382352941174,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 0.0,
+    "spillover_prob_5d_pct": 0.0,
+    "has_limit_up_resonance": true,
     "co_movement_peers": [],
     "corr_missing_evidence_count": 0,
     "leader_corr_with_stock": null,
@@ -60,24 +65,24 @@
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.26,
+      "peak_spillover_return_pct": 0.0,
       "optimal_holding_days": 5.0,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.2,
-      "dynamic_alpha_physical_peak": 0.2
+      "dynamic_alpha_sentiment_t0": 0.557,
+      "dynamic_alpha_physical_peak": 0.564
     }
   },
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 71.3,
+    "annualized_volatility_20d_pct": 77.47,
     "max_drawdown_60d_pct": -48.27,
-    "atr14_pct": 7.73,
+    "atr14_pct": 7.17,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 75.1,
-        "value": 71.3
+        "score": 71.7,
+        "value": 77.47
       },
       {
         "name": "60日最大回撤",
@@ -86,18 +91,18 @@
       },
       {
         "name": "ATR百分比",
-        "score": 75.1,
-        "value": 7.73
+        "score": 74.0,
+        "value": 7.17
       },
       {
         "name": "量价异常",
-        "score": 52.0,
-        "value": 0.86
+        "score": 31.8,
+        "value": 0.94
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 30.6
+        "score": 1.7,
+        "value": 29.49
       }
     ]
   },
@@ -112,51 +117,51 @@
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.26,
+    "peak_spillover_return_pct": 0.0,
     "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.2
+    "dynamic_alpha_peak": 0.564
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 11.2,
-    "ma10": 11.663,
-    "ma20": 12.284,
-    "ma60": 15.6675,
-    "rsi14": 32.5,
-    "macd_dif": -1.0576269118891393,
-    "macd_dea": -1.053372017059756,
-    "macd_hist": -0.008509789658766476,
-    "atr14_pct": 7.72654087904706,
-    "boll_position": 0.04976090425358778,
-    "return_5d_pct": -10.526315789473683,
-    "return_20d_pct": -21.102248005801293,
-    "volume_ratio_5d": 0.86
+    "ma5": 11.346,
+    "ma10": 11.609,
+    "ma20": 12.242,
+    "ma60": 15.531666666666666,
+    "rsi14": 43.1,
+    "macd_dif": -0.964551824581303,
+    "macd_dea": -1.0356079782418357,
+    "macd_hist": 0.1421123073210655,
+    "atr14_pct": 7.171750466537451,
+    "boll_position": 0.4119984202204454,
+    "return_5d_pct": 6.494661921708178,
+    "return_20d_pct": -6.5573770491803245,
+    "volume_ratio_5d": 0.94
   },
   "industry": {
     "name": "长鑫概念",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.38,
-    "return_20d_pct": -12.09,
-    "return_60d_pct": -26.62,
-    "relative_strength_20d_pct": -11.66
+    "return_5d_pct": -4.72,
+    "return_20d_pct": -9.46,
+    "return_60d_pct": -27.15,
+    "relative_strength_20d_pct": 0.36
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 29,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 2.69,
-      "median_return_pct": 2.58,
+      "up_probability_pct": 27.6,
+      "average_return_pct": -0.91,
+      "median_return_pct": -3.54,
       "best_return_pct": 28.6,
       "worst_return_pct": -20.33
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": 1.99,
-      "median_return_pct": 1.1,
+      "up_probability_pct": 44.8,
+      "average_return_pct": 0.5,
+      "median_return_pct": -6.0,
       "best_return_pct": 39.92,
       "worst_return_pct": -33.31
     }
@@ -184,7 +189,7 @@
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 71.3%，波动偏高。",
+      "detail": "20日年化波动率 77.5%，波动偏高。",
       "contribution": -5.0
     }
   ],

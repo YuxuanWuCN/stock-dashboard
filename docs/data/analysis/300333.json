@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-26 17:35:35+08:00",
-  "trade_date": "2026-11-26",
+  "generated_at": "2026-11-27 17:41:00+08:00",
+  "trade_date": "2026-11-27",
   "code": "300333",
   "name": "兆日科技",
   "type": "stock",
@@ -17,10 +17,10 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 44.5,
-    "risk": 54.4,
-    "technical": 42.0,
-    "industry": 27.0,
+    "risk_adjusted": 54.0,
+    "risk": 55.5,
+    "technical": 71.0,
+    "industry": 42.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,57 +42,57 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-26 17:34:18"
+    "updated_at": "2026-11-27 17:39:58"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 30.8,
-    "tier_role": "divergent",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "follower_catchup",
     "leader_stock": {
-      "code": "301190",
-      "name": "善水科技",
-      "change_pct": 19.99999999999999,
+      "code": "688419",
+      "name": "耐科装备",
+      "change_pct": 20.000000000000004,
       "is_limit_up": true
     },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 2.85,
+    "spillover_prob_5d_pct": 5.7,
     "has_limit_up_resonance": true,
     "co_movement_peers": [
       {
         "code": "301177",
         "name": "迪阿股份",
-        "corr": 0.52
+        "corr": 0.63
       },
       {
-        "code": "301152",
-        "name": "天力锂能",
-        "corr": 0.46
+        "code": "688152",
+        "name": "麒麟信安",
+        "corr": 0.62
       },
       {
-        "code": "688419",
-        "name": "耐科装备",
-        "corr": 0.45
-      },
-      {
-        "code": "688328",
-        "name": "深科达",
-        "corr": 0.44
+        "code": "300214",
+        "name": "日科化学",
+        "corr": 0.6
       },
       {
         "code": "300588",
         "name": "熙菱信息",
-        "corr": 0.43
+        "corr": 0.59
+      },
+      {
+        "code": "688419",
+        "name": "耐科装备",
+        "corr": 0.57
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": 0.38,
+    "leader_corr_with_stock": 0.57,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
-      "optimal_holding_days": 5.0,
+      "peak_spillover_return_pct": 2.46,
+      "optimal_holding_days": 14,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.557,
       "dynamic_alpha_physical_peak": 0.564
@@ -101,95 +101,95 @@
   "risk": {
     "level": "medium",
     "label": "中等风险",
-    "annualized_volatility_20d_pct": 49.54,
-    "max_drawdown_60d_pct": -42.24,
-    "atr14_pct": 7.01,
+    "annualized_volatility_20d_pct": 67.41,
+    "max_drawdown_60d_pct": -40.11,
+    "atr14_pct": 6.62,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 48.0,
-        "value": 49.54
+        "score": 59.5,
+        "value": 67.41
       },
       {
         "name": "60日最大回撤",
-        "score": 71.1,
-        "value": -42.24
+        "score": 68.2,
+        "value": -40.11
       },
       {
         "name": "ATR百分比",
-        "score": 66.5,
-        "value": 7.01
+        "score": 67.1,
+        "value": 6.62
       },
       {
         "name": "量价异常",
-        "score": 87.9,
-        "value": 0.72
+        "score": 68.8,
+        "value": 0.83
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 30.6
+        "score": 1.7,
+        "value": 29.49
       }
     ]
   },
   "forecast": {
     "return_3d_pct": 0.68,
-    "return_5d_pct": 0.67,
+    "return_5d_pct": 3.52,
     "up_probability_3d_pct": 43.3,
-    "up_probability_5d_pct": 40.0,
+    "up_probability_5d_pct": 45.7,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0,
+    "peak_spillover_return_pct": 2.46,
+    "optimal_holding_days": 14,
     "dynamic_alpha_peak": 0.564
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 8.132000000000001,
-    "ma10": 8.524,
-    "ma20": 9.185500000000001,
-    "ma60": 10.917666666666666,
-    "rsi14": 29.0,
-    "macd_dif": -0.766632942994665,
-    "macd_dea": -0.6811139278930736,
-    "macd_hist": -0.17103803020318287,
-    "atr14_pct": 7.0071689193509705,
-    "boll_position": 0.09531827953977515,
-    "return_5d_pct": -7.00934579439253,
-    "return_20d_pct": -19.433198380566807,
-    "volume_ratio_5d": 0.72
+    "ma5": 8.304,
+    "ma10": 8.481,
+    "ma20": 9.155,
+    "ma60": 10.837166666666665,
+    "rsi14": 44.3,
+    "macd_dif": -0.6869260644805184,
+    "macd_dea": -0.6822763557550001,
+    "macd_hist": -0.009299417451036573,
+    "atr14_pct": 6.616934065647816,
+    "boll_position": 0.43199801135167154,
+    "return_5d_pct": 10.630407911001228,
+    "return_20d_pct": -6.380753138075324,
+    "volume_ratio_5d": 0.83
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.38,
-    "return_20d_pct": -12.09,
-    "return_60d_pct": -26.62,
-    "relative_strength_20d_pct": -9.99
+    "return_5d_pct": -4.72,
+    "return_20d_pct": -9.46,
+    "return_60d_pct": -27.15,
+    "relative_strength_20d_pct": 0.54
   },
   "similarity": {
     "method": "standardized_knn_v1",
-    "sample_size": 30,
+    "sample_size": 28,
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 56.7,
-      "average_return_pct": 1.49,
-      "median_return_pct": 1.04,
-      "best_return_pct": 36.98,
-      "worst_return_pct": -8.25
+      "up_probability_pct": 25.0,
+      "average_return_pct": -1.15,
+      "median_return_pct": -3.85,
+      "best_return_pct": 52.64,
+      "worst_return_pct": -15.51
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 0.97,
-      "median_return_pct": -2.24,
-      "best_return_pct": 29.11,
-      "worst_return_pct": -13.63
+      "up_probability_pct": 32.1,
+      "average_return_pct": -0.93,
+      "median_return_pct": -4.27,
+      "best_return_pct": 59.81,
+      "worst_return_pct": -18.29
     }
   },
   "fundamental": {
@@ -315,6 +315,12 @@
   },
   "reasons": [
     {
+      "title": "T-NALE·热点龙头时空时滞共振",
+      "detail": "同板块龙头【耐科装备】封板催化，经产业链物理传导（时滞τ≈14天），注入 +2.85% 溢出预期及 +5.7% 看涨胜率（波峰前瞻+2.46%）",
+      "impact": "positive",
+      "score_delta": 4.5
+    },
+    {
       "type": "negative",
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
@@ -323,25 +329,19 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 42.2%，风险偏高。",
+      "detail": "近60日最大回撤 40.1%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 42.2%，风险扣分。",
+      "detail": "近60日最大回撤 40.1%，风险扣分。",
       "contribution": -7.0
-    },
-    {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=29.0，短期超卖。",
-      "contribution": -5.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 49.5%，波动偏高。",
+      "detail": "20日年化波动率 67.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

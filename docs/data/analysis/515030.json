@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-26 17:35:35+08:00",
-  "trade_date": "2026-11-26",
+  "generated_at": "2026-11-27 17:41:00+08:00",
+  "trade_date": "2026-11-27",
   "code": "515030",
   "name": "新能源车ETF",
   "type": "etf",
@@ -18,9 +18,9 @@
   },
   "scores": {
     "risk_adjusted": 50.1,
-    "risk": 25.6,
-    "technical": 42.0,
-    "industry": 39.2,
+    "risk": 43.5,
+    "technical": 66.0,
+    "industry": 47.0,
     "leading": 50.0
   },
   "leading": {
@@ -42,130 +42,135 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-26 17:33:19"
+    "updated_at": "2026-11-27 17:39:30"
   },
   "nale_network": {
     "sector_name": "通用",
-    "sector_breadth_pct": 42.9,
-    "tier_role": "neutral",
-    "leader_stock": null,
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
-    "has_limit_up_resonance": false,
+    "sector_breadth_pct": 95.2,
+    "tier_role": "follower_catchup",
+    "leader_stock": {
+      "code": "159915",
+      "name": "创业板ETF",
+      "change_pct": 11.26126126126126,
+      "is_limit_up": true
+    },
+    "spillover_return_5d_pct": 2.22,
+    "spillover_prob_5d_pct": 7.9,
+    "has_limit_up_resonance": true,
     "co_movement_peers": [
-      {
-        "code": "510300",
-        "name": "沪深300ETF",
-        "corr": 0.76
-      },
       {
         "code": "159919",
         "name": "沪深300ETF易方达",
-        "corr": 0.76
+        "corr": 0.82
+      },
+      {
+        "code": "510300",
+        "name": "沪深300ETF",
+        "corr": 0.81
       },
       {
         "code": "510500",
         "name": "中证500ETF",
-        "corr": 0.75
+        "corr": 0.81
       },
       {
         "code": "159915",
         "name": "创业板ETF",
-        "corr": 0.71
+        "corr": 0.79
       },
       {
         "code": "513180",
         "name": "恒生科技ETF",
-        "corr": 0.63
+        "corr": 0.68
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": null,
+    "leader_corr_with_stock": 0.79,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
-      "optimal_holding_days": 5.0,
+      "peak_spillover_return_pct": 1.91,
+      "optimal_holding_days": 14,
       "is_temporal_enhanced": true,
-      "dynamic_alpha_sentiment_t0": 0.2,
-      "dynamic_alpha_physical_peak": 0.2
+      "dynamic_alpha_sentiment_t0": 0.557,
+      "dynamic_alpha_physical_peak": 0.564
     }
   },
   "risk": {
-    "level": "low",
-    "label": "低风险",
-    "annualized_volatility_20d_pct": 33.45,
+    "level": "medium",
+    "label": "中等风险",
+    "annualized_volatility_20d_pct": 42.41,
     "max_drawdown_60d_pct": -29.45,
-    "atr14_pct": 3.53,
+    "atr14_pct": 3.64,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 25.4,
-        "value": 33.45
+        "score": 30.6,
+        "value": 42.41
       },
       {
         "name": "60日最大回撤",
-        "score": 46.8,
+        "score": 47.4,
         "value": -29.45
       },
       {
         "name": "ATR百分比",
-        "score": 28.3,
-        "value": 3.53
+        "score": 28.9,
+        "value": 3.64
       },
       {
         "name": "量价异常",
-        "score": 5.2,
-        "value": 1.01
+        "score": 40.5,
+        "value": 1.08
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 30.6
+        "score": 84.4,
+        "value": 63.78
       }
     ]
   },
   "forecast": {
     "return_3d_pct": -0.29,
-    "return_5d_pct": -0.02,
+    "return_5d_pct": 2.2,
     "up_probability_3d_pct": 53.3,
-    "up_probability_5d_pct": 40.0,
+    "up_probability_5d_pct": 47.9,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0,
-    "dynamic_alpha_peak": 0.2
+    "peak_spillover_return_pct": 1.91,
+    "optimal_holding_days": 14,
+    "dynamic_alpha_peak": 0.564
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 1.198,
-    "ma10": 1.2349999999999999,
-    "ma20": 1.2875,
-    "ma60": 1.3993333333333335,
-    "rsi14": 25.9,
-    "macd_dif": -0.05155734497999531,
-    "macd_dea": -0.040596827415863866,
-    "macd_hist": -0.021921035128262892,
-    "atr14_pct": 3.5279123158254273,
-    "boll_position": -0.019478564403980242,
-    "return_5d_pct": -8.000000000000007,
-    "return_20d_pct": -10.852713178294582,
-    "volume_ratio_5d": 1.01
+    "ma5": 1.202,
+    "ma10": 1.229,
+    "ma20": 1.285,
+    "ma60": 1.3926666666666667,
+    "rsi14": 41.6,
+    "macd_dif": -0.04842226360153967,
+    "macd_dea": -0.04216191468101893,
+    "macd_hist": -0.012520697841041484,
+    "atr14_pct": 3.643570790618658,
+    "boll_position": 0.2958195989739207,
+    "return_5d_pct": 1.6528925619834656,
+    "return_20d_pct": -3.90625,
+    "volume_ratio_5d": 1.08
   },
   "industry": {
     "name": "通用",
-    "reference_type": "index",
-    "benchmark_code": "399001",
-    "return_5d_pct": -5.38,
-    "return_20d_pct": -12.09,
-    "return_60d_pct": -26.62,
-    "relative_strength_20d_pct": -1.41
+    "reference_type": "industry",
+    "benchmark_code": "BK1448",
+    "return_5d_pct": 8.39,
+    "return_20d_pct": -3.02,
+    "return_60d_pct": -11.57,
+    "relative_strength_20d_pct": -0.88
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -173,22 +178,28 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 0.59,
-      "median_return_pct": 0.28,
+      "up_probability_pct": 23.3,
+      "average_return_pct": -1.67,
+      "median_return_pct": -1.73,
       "best_return_pct": 8.37,
-      "worst_return_pct": -4.72
+      "worst_return_pct": -8.51
     },
     "horizon_5d": {
-      "up_probability_pct": 53.3,
-      "average_return_pct": -0.07,
-      "median_return_pct": 0.63,
-      "best_return_pct": 9.5,
-      "worst_return_pct": -7.77
+      "up_probability_pct": 30.0,
+      "average_return_pct": -1.94,
+      "median_return_pct": -2.5,
+      "best_return_pct": 5.21,
+      "worst_return_pct": -11.17
     }
   },
   "fundamental": null,
   "reasons": [
+    {
+      "title": "T-NALE·通用时空时滞共振",
+      "detail": "同板块龙头【创业板ETF】封板催化，经产业链物理传导（时滞τ≈14天），注入 +2.22% 溢出预期及 +7.9% 看涨胜率（波峰前瞻+1.91%）",
+      "impact": "positive",
+      "score_delta": 4.5
+    },
     {
       "type": "negative",
       "title": "趋势偏弱",
@@ -208,9 +219,9 @@
       "contribution": -7.0
     },
     {
-      "type": "warning",
-      "title": "RSI偏低",
-      "detail": "RSI14=25.9，短期超卖。",
+      "type": "negative",
+      "title": "波动较大",
+      "detail": "20日年化波动率 42.4%，波动偏高。",
       "contribution": -5.0
     }
   ],

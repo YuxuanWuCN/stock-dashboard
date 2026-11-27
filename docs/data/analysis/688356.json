@@ -1,7 +1,7 @@
 {
   "schema_version": "2.0",
-  "generated_at": "2026-11-26 17:35:35+08:00",
-  "trade_date": "2026-11-26",
+  "generated_at": "2026-11-27 17:41:00+08:00",
+  "trade_date": "2026-11-27",
   "code": "688356",
   "name": "键凯科技",
   "type": "stock",
@@ -17,9 +17,9 @@
     "window_end": "2026-08-28"
   },
   "scores": {
-    "risk_adjusted": 43.2,
-    "risk": 72.7,
-    "technical": 42.0,
+    "risk_adjusted": 52.6,
+    "risk": 70.5,
+    "technical": 71.0,
     "industry": 27.0,
     "leading": 50.0
   },
@@ -42,20 +42,20 @@
       "latest_value": 100.0,
       "confidence": "low"
     },
-    "updated_at": "2026-11-26 17:34:05"
+    "updated_at": "2026-11-27 17:39:53"
   },
   "nale_network": {
     "sector_name": "热点龙头",
-    "sector_breadth_pct": 30.8,
-    "tier_role": "divergent",
+    "sector_breadth_pct": 100.0,
+    "tier_role": "follower_catchup",
     "leader_stock": {
-      "code": "301190",
-      "name": "善水科技",
-      "change_pct": 19.99999999999999,
+      "code": "688419",
+      "name": "耐科装备",
+      "change_pct": 20.000000000000004,
       "is_limit_up": true
     },
-    "spillover_return_5d_pct": 0.0,
-    "spillover_prob_5d_pct": 0.0,
+    "spillover_return_5d_pct": 2.5,
+    "spillover_prob_5d_pct": 5.0,
     "has_limit_up_resonance": true,
     "co_movement_peers": [
       {
@@ -66,33 +66,33 @@
       {
         "code": "300016",
         "name": "北陆药业",
-        "corr": 0.72
-      },
-      {
-        "code": "688137",
-        "name": "近岸蛋白",
-        "corr": 0.62
+        "corr": 0.75
       },
       {
         "code": "301177",
         "name": "迪阿股份",
-        "corr": 0.61
+        "corr": 0.7
       },
       {
         "code": "300162",
         "name": "雷曼光电",
-        "corr": 0.56
+        "corr": 0.62
+      },
+      {
+        "code": "688137",
+        "name": "近岸蛋白",
+        "corr": 0.6
       }
     ],
     "corr_missing_evidence_count": 0,
-    "leader_corr_with_stock": 0.33,
+    "leader_corr_with_stock": 0.5,
     "leader_corr_missing": false,
     "temporal_dynamics": {
       "physical_lag_tau_days": 14.0,
       "physical_lag_sigma_days": 5.0,
       "peak_horizon_days": 14,
-      "peak_spillover_return_pct": 0.0,
-      "optimal_holding_days": 5.0,
+      "peak_spillover_return_pct": 2.16,
+      "optimal_holding_days": 14,
       "is_temporal_enhanced": true,
       "dynamic_alpha_sentiment_t0": 0.557,
       "dynamic_alpha_physical_peak": 0.564
@@ -101,76 +101,76 @@
   "risk": {
     "level": "high",
     "label": "高风险",
-    "annualized_volatility_20d_pct": 71.18,
-    "max_drawdown_60d_pct": -56.26,
-    "atr14_pct": 10.3,
+    "annualized_volatility_20d_pct": 83.83,
+    "max_drawdown_60d_pct": -48.83,
+    "atr14_pct": 9.45,
     "factors": [
       {
         "name": "20日波动率",
-        "score": 74.6,
-        "value": 71.18
+        "score": 76.3,
+        "value": 83.83
       },
       {
         "name": "60日最大回撤",
-        "score": 95.4,
-        "value": -56.26
+        "score": 86.7,
+        "value": -48.83
       },
       {
         "name": "ATR百分比",
-        "score": 91.9,
-        "value": 10.3
+        "score": 92.5,
+        "value": 9.45
       },
       {
         "name": "量价异常",
-        "score": 80.3,
-        "value": 0.76
+        "score": 72.3,
+        "value": 0.82
       },
       {
         "name": "行业波动",
-        "score": 0.6,
-        "value": 30.6
+        "score": 1.7,
+        "value": 29.49
       }
     ]
   },
   "forecast": {
     "return_3d_pct": 2.32,
-    "return_5d_pct": 5.61,
+    "return_5d_pct": 8.11,
     "up_probability_3d_pct": 60.0,
-    "up_probability_5d_pct": 62.7,
+    "up_probability_5d_pct": 67.7,
     "confidence": "medium",
     "sample_size": 30,
     "source": "knn_fallback",
     "model": "knn_v1",
     "physical_lag_tau_days": 14.0,
     "peak_horizon_days": 14,
-    "peak_spillover_return_pct": 0.0,
-    "optimal_holding_days": 5.0,
+    "peak_spillover_return_pct": 2.16,
+    "optimal_holding_days": 14,
     "dynamic_alpha_peak": 0.564
   },
   "technical": {
     "trend": "downtrend",
-    "ma5": 57.926,
-    "ma10": 61.849000000000004,
-    "ma20": 69.335,
-    "ma60": 82.46266666666666,
-    "rsi14": 30.7,
-    "macd_dif": -7.102039221980718,
-    "macd_dea": -6.023869300853871,
-    "macd_hist": -2.1563398422536935,
-    "atr14_pct": 10.303844348981993,
-    "boll_position": 0.09357888451017995,
-    "return_5d_pct": -8.541392904073597,
-    "return_20d_pct": -29.28625857251714,
-    "volume_ratio_5d": 0.76
+    "ma5": 59.06,
+    "ma10": 60.842999999999996,
+    "ma20": 68.59049999999999,
+    "ma60": 81.37283333333333,
+    "rsi14": 40.2,
+    "macd_dif": -6.691099447827938,
+    "macd_dea": -6.1573153324482846,
+    "macd_hist": -1.0675682307593064,
+    "atr14_pct": 9.447279113808674,
+    "boll_position": 0.3003365171086125,
+    "return_5d_pct": 10.08179231863442,
+    "return_20d_pct": -19.38802083333333,
+    "volume_ratio_5d": 0.82
   },
   "industry": {
     "name": "热点龙头",
     "reference_type": "index",
     "benchmark_code": "399001",
-    "return_5d_pct": -5.38,
-    "return_20d_pct": -12.09,
-    "return_60d_pct": -26.62,
-    "relative_strength_20d_pct": -19.84
+    "return_5d_pct": -4.72,
+    "return_20d_pct": -9.46,
+    "return_60d_pct": -27.15,
+    "relative_strength_20d_pct": -12.47
   },
   "similarity": {
     "method": "standardized_knn_v1",
@@ -178,16 +178,16 @@
     "minimum_sample_size": 15,
     "confidence": "medium",
     "horizon_3d": {
-      "up_probability_pct": 50.0,
-      "average_return_pct": 3.03,
-      "median_return_pct": 0.05,
+      "up_probability_pct": 43.3,
+      "average_return_pct": 2.16,
+      "median_return_pct": -0.95,
       "best_return_pct": 66.35,
-      "worst_return_pct": -7.88
+      "worst_return_pct": -13.93
     },
     "horizon_5d": {
-      "up_probability_pct": 43.3,
-      "average_return_pct": 2.24,
-      "median_return_pct": -2.12,
+      "up_probability_pct": 40.0,
+      "average_return_pct": 1.44,
+      "median_return_pct": -1.63,
       "best_return_pct": 71.72,
       "worst_return_pct": -15.34
     }
@@ -315,6 +315,12 @@
   },
   "reasons": [
     {
+      "title": "T-NALE·热点龙头时空时滞共振",
+      "detail": "同板块龙头【耐科装备】封板催化，经产业链物理传导（时滞τ≈14天），注入 +2.5% 溢出预期及 +5.0% 看涨胜率（波峰前瞻+2.16%）",
+      "impact": "positive",
+      "score_delta": 4.5
+    },
+    {
       "type": "negative",
       "title": "趋势偏弱",
       "detail": "价格低于主要均线，短期承压。",
@@ -323,19 +329,19 @@
     {
       "type": "negative",
       "title": "近期回撤较大",
-      "detail": "近60日最大回撤 56.3%，风险偏高。",
+      "detail": "近60日最大回撤 48.8%，风险偏高。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "回撤风险",
-      "detail": "近60日最大回撤 56.3%，风险扣分。",
+      "detail": "近60日最大回撤 48.8%，风险扣分。",
       "contribution": -7.0
     },
     {
       "type": "negative",
       "title": "波动较大",
-      "detail": "20日年化波动率 71.2%，波动偏高。",
+      "detail": "20日年化波动率 83.8%，波动偏高。",
       "contribution": -5.0
     }
   ],
